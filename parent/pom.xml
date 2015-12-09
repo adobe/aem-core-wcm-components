@@ -166,6 +166,8 @@
                         <exclude>maven-eclipse.xml</exclude>
                         <!-- Ignore VLT .content.xml files + dialog configurations -->
                         <exclude>**/jcr_root/**/*.xml</exclude>
+                        <!-- Ignore auto-generated VLT file -->
+                        <exclude>**/META-INF/vault/settings.xml</exclude>
                         <!-- Ignore .vltignore files -->
                         <exclude>**/.vltignore</exclude>
                         <!-- Exclude all JSON files -->
