@@ -35,7 +35,7 @@ import com.day.cq.i18n.I18n;
  * for its rendering.
  */
 @Model(adaptables = SlingHttpServletRequest.class)
-public final class Text {
+public class Text {
 
     public static final String PROP_TEXT = "text";
     public static final String PROP_RICH_FORMAT = "textIsRich";
