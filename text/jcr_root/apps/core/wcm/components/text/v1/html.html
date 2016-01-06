@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<p data-sly-use.text="com.adobe.cq.wcm.core.components.text.Text" data-sly-unwrap="${text.xssContext == text.CONTEXT_HTML}"
+<p data-sly-use.text="Text" data-sly-unwrap="${text.xssContext == text.CONTEXT_HTML}"
    class="${text.hasContent ? '' : text.cssClass}" data-emptytext="${text.hasContent ? '' : 'Text'}">
     ${text.text @ context=text.xssContext}
 </p>

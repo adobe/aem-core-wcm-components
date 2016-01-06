@@ -15,9 +15,12 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- ====================================================================== -->
+    <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
+    <!-- ====================================================================== -->
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>com.adobe.cq.wcm.core.components.parent</artifactId>
@@ -25,21 +28,179 @@
         <relativePath/>
     </parent>
 
-    <artifactId>text-reactor</artifactId>
+    <!-- ====================================================================== -->
+    <!-- P R O J E C T  D E S C R I P T I O N                                   -->
+    <!-- ====================================================================== -->
+    <artifactId>com.adobe.cq.wcm.core.components.text.content</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>Adobe Experience Manager Core WCM Text Component Reactor</name>
-    <description>Parent project for Adobe Experience Manager Core WCM Components</description>
+    <packaging>content-package</packaging>
+    <name>Adobe Experience Manager Core WCM Text Component Content</name>
 
     <scm>
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/text</url>
+        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/text/content</url>
         <tag>HEAD</tag>
     </scm>
 
-    <modules>
-        <module>bundles/com.adobe.cq.wcm.core.components.text</module>
-        <module>content</module>
-    </modules>
+    <!-- ====================================================================== -->
+    <!-- B U I L D   D E F I N I T I O N                                        -->
+    <!-- ====================================================================== -->
+    <build>
+        <resources>
+            <!-- define the resources that will go into the package -->
+            <resource>
+                <!--
+                    we want to keep some of the META-INF files and not configure
+                    everything in the plugin.
+                -->
+                <directory>${basedir}/META-INF</directory>
+                <targetPath>../vault-work/META-INF</targetPath>
+            </resource>
+            <resource>
+                <directory>${basedir}/jcr_root</directory>
+                <excludes>
+                    <!-- exclude .vlt control files in the package -->
+                    <exclude>**/.vlt</exclude>
+                    <exclude>**/.vltignore</exclude>
+                    <exclude>**/.gitignore</exclude>
+                    <exclude>**/*.iml</exclude>
+                    <exclude>**/.classpath</exclude>
+                    <exclude>**/.project</exclude>
+                    <exclude>**/.settings</exclude>
+                    <exclude>**/.DS_Store</exclude>
+                    <exclude>**/target/**</exclude>
+                    <exclude>**/pom.xml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <includeEmptyDirs>true</includeEmptyDirs>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>copy-metainf-vault-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/vault-work/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/META-INF</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.day.jcr.vault</groupId>
+                <artifactId>content-package-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <filterSource>${basedir}/META-INF/vault/filter.xml</filterSource>
+                    <verbose>true</verbose>
+                    <failOnError>true</failOnError>
+                    <group>adobe/cq60</group>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- ====================================================================== -->
+    <!-- P R O F I L E S                                                        -->
+    <!-- ====================================================================== -->
+    <profiles>
+        <profile>
+            <id>autoInstallPackage</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.day.jcr.vault</groupId>
+                        <artifactId>content-package-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-package</id>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <targetURL>http://${aem.host}:${aem.port}/crx/packmgr/service.jsp</targetURL>
+                            <failOnError>true</failOnError>
+                            <failOnMissingEmbed>true</failOnMissingEmbed>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>autoInstallPackagePublish</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.day.jcr.vault</groupId>
+                        <artifactId>content-package-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-package</id>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <targetURL>http://${aem.publish.host}:${aem.publish.port}/crx/packmgr/service.jsp</targetURL>
+                            <failOnError>true</failOnError>
+                            <failOnMissingEmbed>true</failOnMissingEmbed>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <!-- ====================================================================== -->
+    <!-- D E P E N D E N C I E S                                                -->
+    <!-- ====================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>com.adobe.cq.wcm.core.components.commons</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.aem</groupId>
+            <artifactId>uber-jar</artifactId>
+            <classifier>obfuscated-apis</classifier>
+        </dependency>
+    </dependencies>
 </project>

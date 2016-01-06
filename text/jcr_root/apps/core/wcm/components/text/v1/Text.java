@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2015 Adobe Systems Incorporated
+ * Copyright 2016 Adobe Systems Incorporated
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package com.adobe.cq.wcm.core.components.text;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.models.annotations.Default;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
-import org.apache.sling.models.annotations.Via;
+import org.apache.sling.api.resource.ValueMap;
 
-import com.adobe.cq.wcm.core.components.commons.AuthoringUtils;
 import com.adobe.cq.sightly.SightlyWCMMode;
+import com.adobe.cq.sightly.WCMUsePojo;
+import com.adobe.cq.wcm.core.components.commons.AuthoringUtils;
 import com.day.cq.i18n.I18n;
 
-/**
- * The {@code Text} model represents the Sightly Use-API object that will be used by the {@code /apps/core/wcm/components/text} component
- * for its rendering.
- */
-@Model(adaptables = SlingHttpServletRequest.class)
-public class Text {
+public class Text extends WCMUsePojo {
 
     public static final String PROP_TEXT = "text";
     public static final String PROP_RICH_FORMAT = "textIsRich";
@@ -44,31 +31,12 @@ public class Text {
     public static final String CSS_CLASS_TOUCH = "cq-placeholder";
     public static final String CSS_CLASS_CLASSIC = "cq-text-placeholder-ipe";
 
-    @Inject
-    @Via("resource")
-    @Named(PROP_TEXT)
-    @Optional
     private String text;
-
-    @Inject
-    @Via("resource")
-    @Named(PROP_RICH_FORMAT)
-    @Default(booleanValues = false)
-    @Optional
     private Boolean textIsRich;
-
-    @Inject
-    @Named("wcmmode")
-    private SightlyWCMMode wcmMode;
-
     private String cssClass;
-    private SlingHttpServletRequest request;
     private String xssContext;
     private boolean hasContent;
 
-    public Text(SlingHttpServletRequest request) {
-        this.request = request;
-    }
 
     /**
      * Retrieves the value of the {@link #PROP_TEXT} resource property.
@@ -116,9 +84,11 @@ public class Text {
         return hasContent;
     }
 
-    @PostConstruct
-    protected void process() {
-
+    public void activate() {
+        SlingHttpServletRequest request = getRequest();
+        ValueMap properties = getProperties();
+        text = properties.get(PROP_TEXT, "");
+        textIsRich = properties.get(PROP_RICH_FORMAT, false);
         xssContext = textIsRich ? CONTEXT_HTML : CONTEXT_TEXT;
         hasContent = true;
         if (StringUtils.isEmpty(text)) {
@@ -126,6 +96,7 @@ public class Text {
             boolean isTouch = AuthoringUtils.isTouch(request);
             cssClass = isTouch ? CSS_CLASS_TOUCH : CSS_CLASS_CLASSIC;
             xssContext = CONTEXT_TEXT;
+            SightlyWCMMode wcmMode = getWcmMode();
             if (wcmMode != null && wcmMode.isEdit()) {
                 text = isTouch ? "" : I18n.get(request, "Edit text");
             } else {
