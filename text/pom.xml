@@ -59,7 +59,7 @@
                 <targetPath>../vault-work/META-INF</targetPath>
             </resource>
             <resource>
-                <directory>${build.sourceDirectory}</directory>
+                <directory>${project.build.sourceDirectory}</directory>
                 <excludes>
                     <!-- exclude .vlt control files in the package -->
                     <exclude>**/.vlt</exclude>
