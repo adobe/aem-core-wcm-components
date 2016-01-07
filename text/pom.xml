@@ -31,15 +31,15 @@
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>com.adobe.cq.wcm.core.components.text.content</artifactId>
+    <artifactId>com.adobe.cq.wcm.core.components.text</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>content-package</packaging>
-    <name>Adobe Experience Manager Core WCM Text Component Content</name>
+    <name>Adobe Experience Manager Core WCM Text Component</name>
 
     <scm>
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/text/content</url>
+        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/text</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -47,6 +47,7 @@
     <!-- B U I L D   D E F I N I T I O N                                        -->
     <!-- ====================================================================== -->
     <build>
+        <sourceDirectory>src/content/jcr_root</sourceDirectory>
         <resources>
             <!-- define the resources that will go into the package -->
             <resource>
@@ -54,11 +55,11 @@
                     we want to keep some of the META-INF files and not configure
                     everything in the plugin.
                 -->
-                <directory>${basedir}/META-INF</directory>
+                <directory>${basedir}/src/content/META-INF</directory>
                 <targetPath>../vault-work/META-INF</targetPath>
             </resource>
             <resource>
-                <directory>${basedir}/jcr_root</directory>
+                <directory>${build.sourceDirectory}</directory>
                 <excludes>
                     <!-- exclude .vlt control files in the package -->
                     <exclude>**/.vlt</exclude>
@@ -92,7 +93,7 @@
                             <outputDirectory>${project.build.directory}/vault-work/META-INF</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/META-INF</directory>
+                                    <directory>${basedir}/src/content/META-INF</directory>
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
@@ -106,7 +107,7 @@
                 <artifactId>content-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <filterSource>${basedir}/META-INF/vault/filter.xml</filterSource>
+                    <filterSource>${basedir}/src/content/META-INF/vault/filter.xml</filterSource>
                     <verbose>true</verbose>
                     <failOnError>true</failOnError>
                     <group>adobe/cq60</group>
@@ -198,9 +199,53 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.annotations</artifactId>
+        </dependency>
+        <!--
+            We need to explicitly define the cq-wcm-sightly-extension dependency in order to be able to write our unit tests. This
+            dependency should be defined before the obfuscated uber-jar.
+        -->
+        <dependency>
+            <groupId>com.adobe.cq.sightly</groupId>
+            <artifactId>cq-wcm-sightly-extension</artifactId>
+            <version>1.3.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
             <classifier>obfuscated-apis</classifier>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.testing.aem-mock</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
         </dependency>
     </dependencies>
 </project>

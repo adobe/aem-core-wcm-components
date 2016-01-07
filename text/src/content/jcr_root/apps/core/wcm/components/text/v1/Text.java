@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+package apps.core.wcm.components.text.v1;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
@@ -85,7 +87,6 @@ public class Text extends WCMUsePojo {
     }
 
     public void activate() {
-        SlingHttpServletRequest request = getRequest();
         ValueMap properties = getProperties();
         text = properties.get(PROP_TEXT, "");
         textIsRich = properties.get(PROP_RICH_FORMAT, false);
@@ -93,6 +94,7 @@ public class Text extends WCMUsePojo {
         hasContent = true;
         if (StringUtils.isEmpty(text)) {
             hasContent = false;
+            SlingHttpServletRequest request = getRequest();
             boolean isTouch = AuthoringUtils.isTouch(request);
             cssClass = isTouch ? CSS_CLASS_TOUCH : CSS_CLASS_CLASSIC;
             xssContext = CONTEXT_TEXT;

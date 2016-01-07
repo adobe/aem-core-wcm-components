@@ -15,10 +15,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
-    <filter root="/apps/core/wcm/components">
-        <include pattern="/apps/core/wcm/components/text(/.*)?"/>
-    </filter>
-    <filter root="/apps/core/wcm/install">
-        <include pattern="/apps/core/wcm/install/com.adobe.cq.wcm.core.components.text-(.*).jar"/>
+    <filter root="/apps/core/wcm/components/text">
+        <exclude pattern=".*\.class" />
     </filter>
 </workspaceFilter>
