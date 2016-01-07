@@ -3,4 +3,5 @@
     jcr:description="Core WCM Text Component (v1) - Sightly"
     jcr:primaryType="cq:Component"
     jcr:title="Core WCM Text Component"
+    allowedParents="[*/parsys]"
     componentGroup="Core"/>

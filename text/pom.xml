@@ -73,6 +73,7 @@
                     <exclude>**/target/**</exclude>
                     <exclude>**/pom.xml</exclude>
                 </excludes>
+                <targetPath>../${project.artifactId}</targetPath>
             </resource>
         </resources>
         <plugins>
@@ -107,6 +108,7 @@
                 <artifactId>content-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <builtContentDirectory>target/${project.artifactId}</builtContentDirectory>
                     <filterSource>${basedir}/src/content/META-INF/vault/filter.xml</filterSource>
                     <verbose>true</verbose>
                     <failOnError>true</failOnError>
