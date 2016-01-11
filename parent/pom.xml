@@ -42,7 +42,7 @@
         <vault.user>admin</vault.user>
         <vault.password>admin</vault.password>
         <slf4j.version>1.7.6</slf4j.version>
-        <aem.java.version>6</aem.java.version>
+        <aem.java.version>7</aem.java.version>
     </properties>
 
     <!-- ======================================================================= -->
@@ -438,7 +438,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.5.11</version>
+                <version>${slf4j.version}</version>
                 <scope>provided</scope>
             </dependency>
             <!-- Apache Sling Dependencies -->
@@ -512,7 +512,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
-                <version>1.5.11</version>
+                <version>${slf4j.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
