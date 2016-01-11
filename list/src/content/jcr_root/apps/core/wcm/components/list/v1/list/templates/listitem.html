@@ -1,0 +1,50 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2015 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<template data-sly-template.default="${@ renderItem}">
+    <p>
+        <a href="${renderItem.path}.html"
+           onclick="CQ_Analytics.record({event: 'listItemClicked', values: { listItemPath: '${renderItem.path @ context='scriptString'}'
+           }, collect:  false, options: { obj: this }, componentPath: '${resource.resourceType @ context='scriptString'}'})">${renderItem.name}</a>
+    </p>
+</template>
+<template data-sly-template.news="${@ renderItem}">
+    <p>
+        <a href="${renderItem.path}.html"
+           onclick="CQ_Analytics.record({event: 'listNewsItemClicked', values: { listItemPath: '${renderItem.path @ context='scriptString'}' }, collect:  false, options: { obj: this }, componentPath: '${resource.resourceType @ context='scriptString'}'})">
+            <span data-sly-test="${renderItem.modifiedDate}" class="news-date">${renderItem.modifiedDate}:&nbsp;</span>
+            <span class="news-title">${renderItem.name}</span></a>
+        <sly data-sly-test="${renderItem.description}">
+            <br/>
+            <span class="news-description">${renderItem.description}</span>
+        </sly>
+    </p>
+</template>
+<template data-sly-template.teaser="${@ renderItem}">
+    <p>
+        <a href="${renderItem.path}.html"
+           onclick="CQ_Analytics.record({event: 'listTeaserItemClicked', values: { listItemPath: '${renderItem.path @ context='scriptString'}' }, collect:  false, options: { obj: this }, componentPath: '${resource.resourceType @ context='scriptString'}'})">
+            <img data-sly-test="${renderItem.hasimage}" class="teaser" src="${renderItem.path}/jcr:content.thumbnail.48.48.jpg" alt=""/>
+            <span class="teaser-title">${renderItem.name}</span>
+        </a>
+        <sly data-sly-test="${renderItem.description}">
+            <br/>
+            <span class="teaser-description">${renderItem.description}</span>
+        </sly>
+    </p>
+</template>
+<template data-sly-template.customItemType="${@ renderItem, resourceType}">
+    <sly data-sly-resource="${renderItem.path @ resourceType = resourceType}"></sly>
+</template>
