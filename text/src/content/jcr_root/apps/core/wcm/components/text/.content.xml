@@ -3,6 +3,6 @@
     jcr:description="Core WCM Text Component - Sightly"
     jcr:primaryType="cq:Component"
     jcr:title="Core WCM Text Component"
-    sling:resourceSuperType="core/wcm/components/text/v1"
+    sling:resourceSuperType="core/wcm/components/text/v1/text"
     allowedParents="[*/parsys]"
     componentGroup="Core"/>
