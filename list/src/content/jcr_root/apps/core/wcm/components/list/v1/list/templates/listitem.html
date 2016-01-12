@@ -36,7 +36,7 @@
     <p>
         <a href="${renderItem.path}.html"
            onclick="CQ_Analytics.record({event: 'listTeaserItemClicked', values: { listItemPath: '${renderItem.path @ context='scriptString'}' }, collect:  false, options: { obj: this }, componentPath: '${resource.resourceType @ context='scriptString'}'})">
-            <img data-sly-test="${renderItem.hasimage}" class="teaser" src="${renderItem.path}/jcr:content.thumbnail.48.48.jpg" alt=""/>
+            <img data-sly-test="${renderItem.hasImage}" class="teaser" src="${renderItem.path}/jcr:content.thumbnail.48.48.jpg" alt=""/>
             <span class="teaser-title">${renderItem.name}</span>
         </a>
         <sly data-sly-test="${renderItem.description}">

@@ -111,18 +111,18 @@
             "cq:lastModifiedBy" : "admin"
         }
     },
-    "jcr:content" : {
-        "jcr:primaryType": "cq:PageContent",
-        "jcr:createdBy": "admin",
-        "jcr:title": "Activities",
-        "jcr:created": "Tue Jan 05 2016 17:17:38 GMT+0100",
-        "cq:lastModified": "Mon Jan 11 2016 16:21:45 GMT+0100",
+    "jcr:content"            : {
+        "jcr:primaryType"   : "cq:PageContent",
+        "jcr:createdBy"     : "admin",
+        "jcr:title"         : "Activities",
+        "jcr:created"       : "Tue Jan 05 2016 17:17:38 GMT+0100",
+        "cq:lastModified"   : "Mon Jan 11 2016 16:21:45 GMT+0100",
         "sling:resourceType": "geometrixx-outdoors/components/page_sidebar",
-        "cq:lastModifiedBy": "admin",
-        "sidebar": {
-            "jcr:primaryType"   : "nt:unstructured",
-            "sling:resourceType": "foundation/components/parsys",
-            "list"              : {
+        "cq:lastModifiedBy" : "admin",
+        "sidebar"           : {
+            "jcr:primaryType"        : "nt:unstructured",
+            "sling:resourceType"     : "foundation/components/parsys",
+            "list-children"          : {
                 "jcr:primaryType"   : "nt:unstructured",
                 "jcr:createdBy"     : "admin",
                 "tagsMatch"         : "any",
@@ -134,6 +134,92 @@
                 "limit"             : "0",
                 "displayAs"         : "default",
                 "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+                "sling:resourceType": "core/wcm/components/list/v1/list",
+                "listFrom"          : "children"
+            },
+            "list-static"            : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "tagsMatch"         : "any",
+                "orderBy"           : "jcr:title",
+                "jcr:lastModifiedBy": "admin",
+                "feedEnabled"       : true,
+                "pageMax"           : "0",
+                "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+                "limit"             : "0",
+                "pages"             : [
+                    "/content/list/cajamara-biking",
+                    "/content/list/jola-summer-surfing"
+                ],
+                "displayAs"         : "default",
+                "jcr:lastModified"  : "Tue Jan 12 2016 11:46:28 GMT+0100",
+                "sling:resourceType": "core/wcm/components/list/v1/list",
+                "listFrom"          : "static"
+            },
+            "list-search"            : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "tagsMatch"         : "any",
+                "orderBy"           : "jcr:title",
+                "jcr:lastModifiedBy": "admin",
+                "feedEnabled"       : true,
+                "pageMax"           : "0",
+                "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+                "limit"             : "0",
+                "query"             : "biking",
+                "displayAs"         : "default",
+                "searchIn"          : "/content/list",
+                "jcr:lastModified"  : "Tue Jan 12 2016 13:26:45 GMT+0100",
+                "sling:resourceType": "core/wcm/components/list/v1/list",
+                "listFrom"          : "search"
+            },
+            "list-query"             : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "tagsMatch"         : "any",
+                "orderBy"           : "jcr:title",
+                "jcr:lastModifiedBy": "admin",
+                "feedEnabled"       : true,
+                "pageMax"           : "0",
+                "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+                "limit"             : "0",
+                "displayAs"         : "default",
+                "jcr:lastModified"  : "Tue Jan 12 2016 15:04:47 GMT+0100",
+                "sling:resourceType": "core/wcm/components/list/v1/list",
+                "listFrom"          : "querybuilder",
+                "savedquery"        : "type=cq:Page path=/content/list"
+            },
+            "list-tags"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "tagsMatch"         : "any",
+                "orderBy"           : "jcr:title",
+                "jcr:lastModifiedBy": "admin",
+                "feedEnabled"       : true,
+                "pageMax"           : "0",
+                "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+                "tagsSearchRoot"    : "/content/list",
+                "tags"              : [
+                    "geometrixx-outdoors:activity/biking"
+                ],
+                "limit"             : "0",
+                "displayAs"         : "default",
+                "jcr:lastModified"  : "Tue Jan 12 2016 15:23:58 GMT+0100",
+                "sling:resourceType": "core/wcm/components/list/v1/list",
+                "listFrom"          : "tags"
+            },
+            "list-children-paginated": {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:createdBy"     : "admin",
+                "tagsMatch"         : "any",
+                "orderBy"           : "cq:lastModified",
+                "jcr:lastModifiedBy": "admin",
+                "feedEnabled"       : true,
+                "pageMax"           : "2",
+                "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+                "limit"             : "0",
+                "displayAs"         : "default",
+                "jcr:lastModified"  : "Tue Jan 12 2016 15:40:55 GMT+0100",
                 "sling:resourceType": "core/wcm/components/list/v1/list",
                 "listFrom"          : "children"
             }

@@ -6,7 +6,8 @@
     helpPath="http://www.adobe.com/go/aem6_1_docs_component_en#List - Sightly">
     <content
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/foundation/container">
+        sling:resourceType="granite/ui/components/foundation/container"
+        class="core-wcm-list-v1">
         <layout
             jcr:primaryType="nt:unstructured"
             sling:resourceType="granite/ui/components/foundation/layouts/tabs"
@@ -263,6 +264,12 @@
                                     </well>
                                 </items>
                             </setTags>
+                            <itemType
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                fieldDescription="Defines a component with which the list items will be rendered"
+                                fieldLabel="List Item Type"
+                                name="./itemType"/>
                             <displayAs
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/foundation/form/select"
@@ -338,6 +345,11 @@
                                 fieldLabel="Paginate after"
                                 min="{Long}0"
                                 name="./pageMax"/>
+                            <style
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                fieldDescription="The CSS class to be added to the list"
+                                fieldLabel="Style"/>
                         </items>
                     </column>
                 </items>

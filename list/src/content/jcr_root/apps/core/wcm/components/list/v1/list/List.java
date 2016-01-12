@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.sightly.WCMUsePojo;
+import com.adobe.cq.wcm.core.components.commons.AuthoringUtils;
 import com.day.cq.commons.RangeIterator;
 import com.day.cq.search.Predicate;
 import com.day.cq.search.Query;
@@ -51,7 +52,6 @@ import com.day.cq.search.result.SearchResult;
 import com.day.cq.tagging.TagManager;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageFilter;
 import com.day.cq.wcm.api.PageManager;
 
 public class List extends WCMUsePojo {
@@ -194,7 +194,10 @@ public class List extends WCMUsePojo {
             String[] pagesPaths = properties.get(PROP_PAGES, new String[0]);
             java.util.List<Page> pages = new ArrayList<Page>(pagesPaths.length);
             for (String path : pagesPaths) {
-                pages.add(pageManager.getContainingPage(path));
+                Page page = pageManager.getContainingPage(path);
+                if (page != null) {
+                    pages.add(page);
+                }
             }
             pageIterator = pages.iterator();
         }
@@ -303,6 +306,10 @@ public class List extends WCMUsePojo {
         return style;
     }
 
+    public boolean isTouch() {
+        return AuthoringUtils.isTouch(request);
+    }
+
     /**
      * A {@link List} is composed of one or more {@code ListItems}, usually backed by a {@link Page} or a {@link Resource}.
      */
@@ -346,7 +353,7 @@ public class List extends WCMUsePojo {
             return description;
         }
 
-        public boolean isHasImage() {
+        public boolean hasImage() {
             return hasImage;
         }
     }
@@ -372,10 +379,6 @@ public class List extends WCMUsePojo {
                 }
             }
             return null;
-        }
-
-        public String getValue() {
-            return value;
         }
     }
 

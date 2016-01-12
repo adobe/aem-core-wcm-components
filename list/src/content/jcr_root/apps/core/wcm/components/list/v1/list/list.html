@@ -16,11 +16,10 @@
 <div data-sly-use.list="List"
      data-sly-use.emptyRenderer="templates/emptylist.html"
      data-sly-use.itemTemplate="templates/listitem.html"
-     data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}"
+     data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
      id="${list.listId}"
-     class="cq-dd-pages ${list.isEmpty ? 'cq-placeholder' : ''}"
-     data-emptytext="${list.isEmpty ? 'List' : ''}">
-    <sly data-sly-call="${clientLib.all @ categories='wcm.foundation.components.list'}" />
+     class="cq-dd-pages">
+    <sly data-sly-call="${clientLib.all @ categories='core.wcm.components.list'}" />
     <sly data-sly-call="${emptyRenderer.emptylisttemplate @ list=list}" />
     <link data-sly-test="${list.isFeedEnabled}" rel="alternate" type="application/atom+xml" title="Atom 1.0 (List)"
           href="${resource.path}.feed" />

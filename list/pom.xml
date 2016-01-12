@@ -223,6 +223,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.day.cq</groupId>
+            <artifactId>cq-search</artifactId>
+            <version>5.9.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
             <classifier>obfuscated-apis</classifier>
