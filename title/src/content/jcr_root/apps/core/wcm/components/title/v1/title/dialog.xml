@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Dialog"
+    helpPath="en/cq/current/wcm/default_components.html#Title"
+    title="Title Component"
+    xtype="panel">
+    <items jcr:primaryType="cq:WidgetCollection">
+        <title
+            jcr:primaryType="cq:Widget"
+            fieldDescription="Leave empty to use the page title."
+            fieldLabel="Title"
+            name="./jcr:title"
+            xtype="textfield"/>
+        <type
+            jcr:primaryType="cq:Widget"
+            defaultValue="h1"
+            fieldLabel="Type / Size"
+            name="./type"
+            type="select"
+            xtype="selection">
+            <options jcr:primaryType="cq:WidgetCollection">
+                <h1
+                    jcr:primaryType="nt:unstructured"
+                    text="H1"
+                    value="h1"/>
+                <h2
+                    jcr:primaryType="nt:unstructured"
+                    text="H2"
+                    value="h2"/>
+                <h3
+                    jcr:primaryType="nt:unstructured"
+                    text="H3"
+                    value="h3"/>
+                <h4
+                    jcr:primaryType="nt:unstructured"
+                    text="H4"
+                    value="h4"/>
+            </options>
+        </type>
+    </items>
+</jcr:root>
