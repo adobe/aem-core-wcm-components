@@ -21,33 +21,40 @@
           LIST_ITEM_TYPE_NAME     = './itemType',
           LIST_DISPLAY_AS_NAME    = './displayAs';
 
+    function toggleDialogField($field, shouldDisable) {
+        if ($field) {
+            if (shouldDisable) {
+                $field.parent().parent().hide();
+                /**
+                 * delete the property through the Sling POST Servlet
+                 */
+                $field.attr('name', LIST_DISPLAY_AS_NAME + '@Delete');
+            } else {
+                $field.parent().parent().show();
+                $field.attr('name', LIST_DISPLAY_AS_NAME);
+            }
+        }
+
+    }
+
+    function getDialogFieldSelector(fieldName) {
+        return 'form > div.' + LIST_COMPONENT_V1_CLASS + ' [name="' + fieldName + '"]';
+    }
+
     $(document).on('foundation-contentloaded', function () {
 
         var $itemTypeField  = $(getDialogFieldSelector(LIST_ITEM_TYPE_NAME)),
             $displayAsField = $(getDialogFieldSelector(LIST_DISPLAY_AS_NAME));
 
-        function handleDisplayAsField(shouldDisable) {
-            if (shouldDisable) {
-                $displayAsField.parent().parent().hide();
-                /**
-                 * delete the property through the Sling POST Servlet
-                 */
-                $displayAsField.attr('name', LIST_DISPLAY_AS_NAME + '@Delete');
-            } else {
-                $displayAsField.parent().parent().show();
-                $displayAsField.attr('name', LIST_DISPLAY_AS_NAME);
-            }
+        if ($itemTypeField.length > 0 && $displayAsField.length > 0) {
+            toggleDialogField($displayAsField, $itemTypeField.val() !== '');
+
+            $itemTypeField.on('change focusout', function () {
+                toggleDialogField($displayAsField, $itemTypeField.val() !== '');
+            });
         }
-
-        handleDisplayAsField($itemTypeField.val() !== '');
-
-        $itemTypeField.on('change focusout', function () {
-            handleDisplayAsField($itemTypeField.val() !== '');
-        });
     });
 
-    function getDialogFieldSelector(fieldName) {
-        return 'form > div.' + LIST_COMPONENT_V1_CLASS + ' [name="' + fieldName + '"]';
-    }
+
 
 })(document, Granite.$);
