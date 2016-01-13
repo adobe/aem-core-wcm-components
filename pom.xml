@@ -36,5 +36,6 @@
         <module>commons</module>
         <module>text</module>
         <module>list</module>
+        <module>title</module>
     </modules>
 </project>
