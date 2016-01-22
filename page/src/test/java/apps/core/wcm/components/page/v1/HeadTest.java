@@ -26,6 +26,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import apps.core.wcm.components.page.v1.page.Head;
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.testing.WCMUsePojoBaseTest;
 import com.day.cq.wcm.api.designer.Design;
 
 import static org.junit.Assert.assertEquals;
@@ -54,7 +55,7 @@ public class HeadTest extends WCMUsePojoBaseTest<Head> {
     }
 
     @Test
-    public void testHead() throws Exception {
+    public void testHead() {
         Head head = getSpiedObject();
         Bindings bindings = getResourceBackedBindings(TEMPLATED_PAGE);
         Design design = mock(Design.class);

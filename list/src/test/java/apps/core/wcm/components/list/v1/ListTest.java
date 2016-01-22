@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.jcr.Session;
+import javax.script.Bindings;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -34,6 +35,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import apps.core.wcm.components.list.v1.list.List;
 
+import com.adobe.cq.wcm.core.components.testing.WCMUsePojoBaseTest;
 import com.day.cq.commons.RangeIterator;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
@@ -49,30 +51,24 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
 @PrepareForTest(List.class)
-public class ListTest {
+public class ListTest extends WCMUsePojoBaseTest<List> {
 
-    public static final String LIST_ROOT = "/content/list";
-    public static final String CHILDREN_LIST = LIST_ROOT + "/jcr:content/sidebar/list-children";
-    public static final String CHILDREN_LIST_PAGINATED = LIST_ROOT + "/jcr:content/sidebar/list-children-paginated";
-    public static final String STATIC_LIST = LIST_ROOT + "/jcr:content/sidebar/list-static";
-    public static final String SEARCH_LIST = LIST_ROOT + "/jcr:content/sidebar/list-search";
-    public static final String QUERY_LIST = LIST_ROOT + "/jcr:content/sidebar/list-query";
-    public static final String TAGS_LIST = LIST_ROOT + "/jcr:content/sidebar/list-tags";
-
-    @Rule
-    public final AemContext context = new AemContext();
-
-    @Before
-    public void setUp() {
-        context.load().json("/test-content.json", LIST_ROOT);
+    static {
+        TEST_ROOT = "/content/list";
     }
+    
+    
+    public static final String CHILDREN_LIST = TEST_ROOT + "/jcr:content/sidebar/list-children";
+    public static final String CHILDREN_LIST_PAGINATED = TEST_ROOT + "/jcr:content/sidebar/list-children-paginated";
+    public static final String STATIC_LIST = TEST_ROOT + "/jcr:content/sidebar/list-static";
+    public static final String SEARCH_LIST = TEST_ROOT + "/jcr:content/sidebar/list-search";
+    public static final String QUERY_LIST = TEST_ROOT + "/jcr:content/sidebar/list-query";
+    public static final String TAGS_LIST = TEST_ROOT + "/jcr:content/sidebar/list-tags";
 
     @Test
     public void testListFromChildrenPages() {
-        List list = setupListObject(CHILDREN_LIST);
-        list.activate();
+        List list = getSpiedObject(CHILDREN_LIST);
         checkListConsistency(list, new String[]{"Biking", "Hiking", "Running", "Skiing", "Surfing"});
     }
 
@@ -81,8 +77,7 @@ public class ListTest {
         context.request().setParameterMap(new HashMap<String, Object>(){{
             put("sidebar_list-children-paginated_start", 2);
         }});
-        List list = setupListObject(CHILDREN_LIST_PAGINATED);
-        list.activate();
+        List list = getSpiedObject(CHILDREN_LIST_PAGINATED);
         checkListConsistency(list, new String[]{"Running", "Skiing"});
         assertEquals("/content/list/jcr:content/sidebar/list-children-paginated.html?sidebar_list-children-paginated_start=4", list
                 .nextLink());
@@ -97,17 +92,15 @@ public class ListTest {
 
     @Test
     public void testListFromStaticPages() {
-        List list = setupListObject(STATIC_LIST);
-        list.activate();
+        List list = getSpiedObject(STATIC_LIST);
         checkListConsistency(list, new String[]{"Biking", "Surfing"});
     }
 
     @Test
     public void testListFromSearch() throws Exception {
         final Resource resource = context.resourceResolver().getResource(SEARCH_LIST);
-        ValueMap properties = resource.adaptTo(ValueMap.class);
-        List list = new List();
-        List listSpy = PowerMockito.spy(list);
+        Bindings bindings = getResourceBackedBindings(SEARCH_LIST);
+        List list = getSpiedObject();
         Resource resourceSpy = PowerMockito.spy(resource);
         SimpleSearch simpleSearch = Mockito.mock(SimpleSearch.class);
         SearchResult searchResult = Mockito.mock(SearchResult.class);
@@ -117,20 +110,16 @@ public class ListTest {
         }};
         when(searchResult.getHits()).thenReturn(hits);
         doReturn(simpleSearch).when(resourceSpy).adaptTo(SimpleSearch.class);
-        doReturn(resourceSpy).when(listSpy).getResource();
-        doReturn(properties).when(listSpy).getProperties();
-        doReturn(context.request()).when(listSpy).getRequest();
-        doReturn(context.pageManager()).when(listSpy).getPageManager();
-        listSpy.activate();
-        checkListConsistency(listSpy, new String[]{"Biking"});
+        doReturn(resourceSpy).when(list).getResource();
+        list.init(bindings);
+        checkListConsistency(list, new String[]{"Biking"});
     }
 
     @Test
     public void testListFromQuery() throws Exception {
         final Resource resource = context.resourceResolver().getResource(QUERY_LIST);
-        ValueMap properties = resource.adaptTo(ValueMap.class);
-        List list = new List();
-        List listSpy = PowerMockito.spy(list);
+        Bindings bindings = getResourceBackedBindings(QUERY_LIST);
+        List list = getSpiedObject();
         Resource resourceSpy = PowerMockito.spy(resource);
         final ResourceResolver resourceResolverSpy = PowerMockito.spy(context.resourceResolver());
         QueryBuilder queryBuilder = Mockito.mock(QueryBuilder.class);
@@ -150,21 +139,17 @@ public class ListTest {
         when(queryBuilder.loadQuery(resource.getPath() + "/" + List.PROP_SAVED_QUERY, session)).thenReturn(query);
         when(query.getResult()).thenReturn(searchResult);
         when(searchResult.getHits()).thenReturn(hits);
-        doReturn(resourceSpy).when(listSpy).getResource();
+        doReturn(resourceSpy).when(list).getResource();
         doReturn(resourceResolverSpy).when(resourceSpy).getResourceResolver();
-        doReturn(properties).when(listSpy).getProperties();
-        doReturn(context.request()).when(listSpy).getRequest();
-        doReturn(context.pageManager()).when(listSpy).getPageManager();
-        listSpy.activate();
-        checkListConsistency(listSpy, new String[]{"Biking", "Hiking", "Running", "Skiing", "Surfing"});
+        list.init(bindings);
+        checkListConsistency(list, new String[]{"Biking", "Hiking", "Running", "Skiing", "Surfing"});
     }
 
     @Test
     public void testListFromTags() throws Exception {
         final Resource resource = context.resourceResolver().getResource(TAGS_LIST);
-        ValueMap properties = resource.adaptTo(ValueMap.class);
-        List list = new List();
-        List listSpy = PowerMockito.spy(list);
+        Bindings bindings = getResourceBackedBindings(TAGS_LIST);
+        List list = getSpiedObject();
         final ResourceResolver resourceResolverSpy = PowerMockito.spy(context.resourceResolver());
         Resource resourceSpy = PowerMockito.spy(resource);
         TagManager tagManager = Mockito.mock(TagManager.class);
@@ -199,25 +184,10 @@ public class ListTest {
         };
         when(tagManager.find("/content/list", new String[] {"geometrixx-outdoors:activity/biking"}, true)).thenReturn(iterator);
         doReturn(tagManager).when(resourceResolverSpy).adaptTo(TagManager.class);
-        doReturn(resourceSpy).when(listSpy).getResource();
+        doReturn(resourceSpy).when(list).getResource();
         doReturn(resourceResolverSpy).when(resourceSpy).getResourceResolver();
-        doReturn(properties).when(listSpy).getProperties();
-        doReturn(context.request()).when(listSpy).getRequest();
-        doReturn(context.pageManager()).when(listSpy).getPageManager();
-        listSpy.activate();
-        checkListConsistency(listSpy, new String[]{"Biking"});
-    }
-
-    private List setupListObject(String resourcePath) {
-        final Resource resource = context.resourceResolver().getResource(resourcePath);
-        ValueMap properties = resource.adaptTo(ValueMap.class);
-        List list = new List();
-        List spy = PowerMockito.spy(list);
-        doReturn(resource).when(spy).getResource();
-        doReturn(properties).when(spy).getProperties();
-        doReturn(context.request()).when(spy).getRequest();
-        doReturn(context.pageManager()).when(spy).getPageManager();
-        return spy;
+        list.init(bindings);
+        checkListConsistency(list, new String[]{"Biking"});
     }
 
     private void checkListConsistency(List list, String[] expectedPages) {

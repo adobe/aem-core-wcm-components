@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package apps.core.wcm.components.page.v1;
 
+import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.script.Bindings;
@@ -26,6 +27,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import apps.core.wcm.components.page.v1.page.Author;
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.testing.WCMUsePojoBaseTest;
 import com.day.cq.wcm.api.AuthoringUIMode;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.EditContext;
@@ -46,7 +48,7 @@ public class AuthorTest extends WCMUsePojoBaseTest<Author> {
     public static final String TEMPLATED_PAGE = TEST_ROOT + "/templated-page";
 
     @Test
-    public void testAuthor() throws Exception {
+    public void testAuthor() throws IOException {
         context.request().setAttribute(AuthoringUIMode.REQUEST_ATTRIBUTE_NAME, AuthoringUIMode.TOUCH);
         UndoConfigService undoConfigService = mock(UndoConfigService.class);
         doAnswer(new Answer<Void>() {

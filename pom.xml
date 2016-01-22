@@ -34,6 +34,7 @@
     <modules>
         <module>parent</module>
         <module>commons</module>
+        <module>commons-testing</module>
         <module>text</module>
         <module>list</module>
         <module>title</module>

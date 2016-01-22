@@ -13,7 +13,8 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package apps.core.wcm.components.page.v1;
+package com.adobe.cq.wcm.core.components.testing;
+
 
 import java.lang.reflect.ParameterizedType;
 import javax.script.Bindings;
@@ -30,6 +31,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.sightly.WCMUsePojo;
 import com.day.cq.wcm.api.Page;
@@ -39,6 +41,12 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.powermock.api.mockito.PowerMockito.spy;
 
+/**
+ * The {@code WCMUsePojoBaseTest} class provides a set of utility methods for helping in testing Sightly use objects based on
+ * {@link WCMUsePojo}.
+ *
+ * @param <T> the use object class to test
+ */
 @RunWith(PowerMockRunner.class)
 public abstract class WCMUsePojoBaseTest<T extends WCMUsePojo> {
 
@@ -65,14 +73,18 @@ public abstract class WCMUsePojoBaseTest<T extends WCMUsePojo> {
      * Provides a spied object that can be used for further mocking.
      *
      * @return the spied object
-     * @throws Exception if an object of type {@code T} cannot be instantiated
+     * @throws IllegalArgumentException if an object of type {@code T} cannot be instantiated
      */
-    protected T getSpiedObject() throws Exception {
+    protected T getSpiedObject() {
         ParameterizedType superClass = (ParameterizedType) getClass().getGenericSuperclass();
         Class<T> type = (Class<T>) superClass.getActualTypeArguments()[0];
-        T real = type.newInstance();
-        T spy = spy(real);
-        return spy;
+        T real;
+        try {
+            real = type.newInstance();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Cannot instantiate object of class " + type.getName(), e);
+        }
+        return spy(real);
     }
 
     /**
@@ -80,9 +92,8 @@ public abstract class WCMUsePojoBaseTest<T extends WCMUsePojo> {
      *
      * @param resourcePath the path to the {@link Resource}
      * @return the spied object
-     * @throws Exception if an object of type {@code T} cannot be instantiated
      */
-    protected T getSpiedObject(String resourcePath) throws Exception {
+    protected T getSpiedObject(String resourcePath) {
         T object = getSpiedObject();
         object.init(getResourceBackedBindings(resourcePath));
         return object;
@@ -108,15 +119,15 @@ public abstract class WCMUsePojoBaseTest<T extends WCMUsePojo> {
      * WCMUsePojo}:
      * </p>
      * <ul>
-     *     <li>{@link SlingBindings#RESOURCE}</li>
-     *     <li>{@link SlingBindings#REQUEST}</li>
-     *     <li>{@link SlingBindings#RESPONSE}</li>
-     *     <li>{@link WCMBindings#PROPERTIES}</li>
-     *     <li>{@link WCMBindings#WCM_MODE}</li>
-     *     <li>{@link WCMBindings#PAGE_MANAGER}</li>
-     *     <li>{@link WCMBindings#RESOURCE_PAGE}</li>
-     *     <li>{@link WCMBindings#CURRENT_PAGE}</li>
-     *     <li>{@link WCMBindings#PAGE_PROPERTIES}</li>
+     * <li>{@link SlingBindings#RESOURCE}</li>
+     * <li>{@link SlingBindings#REQUEST}</li>
+     * <li>{@link SlingBindings#RESPONSE}</li>
+     * <li>{@link WCMBindings#PROPERTIES}</li>
+     * <li>{@link WCMBindings#WCM_MODE}</li>
+     * <li>{@link WCMBindings#PAGE_MANAGER}</li>
+     * <li>{@link WCMBindings#RESOURCE_PAGE}</li>
+     * <li>{@link WCMBindings#CURRENT_PAGE}</li>
+     * <li>{@link WCMBindings#PAGE_PROPERTIES}</li>
      * </ul>
      *
      * @param resourcePath the path to a resource already loaded in the testing context
@@ -125,13 +136,14 @@ public abstract class WCMUsePojoBaseTest<T extends WCMUsePojo> {
     protected Bindings getResourceBackedBindings(String resourcePath) {
         Bindings bindings = getDefaultSlingBindings();
         Resource resource = context.resourceResolver().getResource(resourcePath);
-        ValueMap properties = resource.adaptTo(ValueMap.class);
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(WCMBindings.PROPERTIES, properties);
-        bindings.put(WCMBindings.WCM_MODE, WCMMode.fromRequest(context.request()));
-        PageManager pageManager = context.pageManager();
-        bindings.put(WCMBindings.PAGE_MANAGER, pageManager);
         if (resource != null) {
+            ValueMap properties = resource.adaptTo(ValueMap.class);
+            bindings.put(SlingBindings.RESOURCE, resource);
+            bindings.put(WCMBindings.PROPERTIES, properties);
+            bindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(context.request()));
+            PageManager pageManager = context.pageManager();
+            bindings.put(WCMBindings.PAGE_MANAGER, pageManager);
+
             context.request().setResource(resource);
             Page resourcePage = pageManager.getContainingPage(resource);
             if (resourcePage != null) {
@@ -139,10 +151,17 @@ public abstract class WCMUsePojoBaseTest<T extends WCMUsePojo> {
                 bindings.put(WCMBindings.CURRENT_PAGE, resourcePage);
                 bindings.put(WCMBindings.PAGE_PROPERTIES, properties);
             }
+        } else {
+            throw new IllegalArgumentException("Cannot find a resource at " + resourcePath);
         }
         return bindings;
     }
 
+    /**
+     * Sets the {@link WCMMode} for the mocked request.
+     *
+     * @param wcmMode the WCMMode to set
+     */
     protected void setWCMMode(WCMMode wcmMode) {
         context.request().setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, wcmMode);
     }

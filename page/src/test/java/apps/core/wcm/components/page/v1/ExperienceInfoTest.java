@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package apps.core.wcm.components.page.v1;
 
+import java.io.IOException;
 import java.util.Calendar;
 import javax.script.Bindings;
 
@@ -27,6 +28,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 
 import apps.core.wcm.components.page.v1.page.ExperienceInfo;
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.testing.WCMUsePojoBaseTest;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.NameConstants;
 
@@ -45,7 +47,7 @@ public class ExperienceInfoTest extends WCMUsePojoBaseTest<ExperienceInfo> {
     public static final String TESTED_RESOURCE = TEMPLATED_PAGE + "/" + JcrConstants.JCR_CONTENT;
 
     @Test
-    public void testExperience() throws Exception {
+    public void testExperience() {
         ExperienceInfo experienceInfo = getSpiedObject();
         Bindings bindings = getResourceBackedBindings(TESTED_RESOURCE);
         /**

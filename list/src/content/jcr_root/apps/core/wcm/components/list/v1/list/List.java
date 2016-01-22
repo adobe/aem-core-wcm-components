@@ -106,11 +106,6 @@ public class List extends WCMUsePojo {
     private Integer pageMax;
     private String ordered;
     private boolean feedEnabled;
-    private String savedquery;
-    private String tagsSearchRoot;
-    private String tags;
-    private String tagsMatch;
-    private String pages;
     private String itemType;
     private String style;
 
@@ -118,7 +113,7 @@ public class List extends WCMUsePojo {
     private String listId;
     private Integer pageStart = 0;
     private java.util.List<Page> resultPages;
-    private java.util.List<ListItem> listItems = new ArrayList<ListItem>();
+    private java.util.List<ListItem> listItems = new ArrayList<>();
 
     public void activate() {
         request = getRequest();
@@ -183,7 +178,7 @@ public class List extends WCMUsePojo {
             if (startPage != null && tags.length > 0) {
                 TagManager tagManager = resourceResolver.adaptTo(TagManager.class);
                 RangeIterator<Resource> rangeIterator = tagManager.find(startPage.getPath(), tags, matchAny);
-                java.util.List<Page> taggedPages = new ArrayList<Page>();
+                java.util.List<Page> taggedPages = new ArrayList<>();
                 while (rangeIterator.hasNext()) {
                     Resource r = rangeIterator.next();
                     taggedPages.add(pageManager.getContainingPage(r));
@@ -192,7 +187,7 @@ public class List extends WCMUsePojo {
             }
         } else if (source == Source.STATIC) {
             String[] pagesPaths = properties.get(PROP_PAGES, new String[0]);
-            java.util.List<Page> pages = new ArrayList<Page>(pagesPaths.length);
+            java.util.List<Page> pages = new ArrayList<>(pagesPaths.length);
             for (String path : pagesPaths) {
                 Page page = pageManager.getContainingPage(path);
                 if (page != null) {
@@ -204,7 +199,7 @@ public class List extends WCMUsePojo {
         if (!pageIterator.hasNext() && LOGGER.isDebugEnabled()) {
             LOGGER.debug("Cannot find any elements for this list.");
         } else {
-            resultPages = new ArrayList<Page>();
+            resultPages = new ArrayList<>();
             while (pageIterator.hasNext()) {
                 Page page = pageIterator.next();
                 resultPages.add(page);

@@ -17,6 +17,7 @@ package apps.core.wcm.components.title.v1;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.script.Bindings;
 import javax.script.SimpleBindings;
 
 import org.apache.sling.api.resource.Resource;
@@ -34,6 +35,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import apps.core.wcm.components.title.v1.title.Title;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.commons.AuthoringUtils;
+import com.adobe.cq.wcm.core.components.testing.WCMUsePojoBaseTest;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -43,46 +45,36 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
 @PrepareForTest({Title.class, AuthoringUtils.class})
-public class TitleTest {
+public class TitleTest extends WCMUsePojoBaseTest<Title> {
 
-    public static final String TITLE_ROOT = "/content/title";
-    public static final String TITLE_RESOURCE_JCR_TITLE = TITLE_ROOT + "/jcr:content/par/title-jcr-title";
-    public static final String TITLE_RESOURCE_JCR_TITLE_TYPE = TITLE_ROOT + "/jcr:content/par/title-jcr-title-type";
-    public static final String TITLE_NOPROPS = TITLE_ROOT + "/jcr:content/par/title-noprops";
-    public static final String TITLE_WRONGTYPE = TITLE_ROOT + "/jcr:content/par/title-wrongtype";
-
-    @Rule
-    public final AemContext context = new AemContext();
-
-    @Before
-    public void setUp() {
-        context.load().json("/test-content.json", TITLE_ROOT);
+    static {
+        TEST_ROOT = "/content/title";
     }
+
+    public static final String TITLE_RESOURCE_JCR_TITLE = TEST_ROOT + "/jcr:content/par/title-jcr-title";
+    public static final String TITLE_RESOURCE_JCR_TITLE_TYPE = TEST_ROOT + "/jcr:content/par/title-jcr-title-type";
+    public static final String TITLE_NOPROPS = TEST_ROOT + "/jcr:content/par/title-noprops";
+    public static final String TITLE_WRONGTYPE = TEST_ROOT + "/jcr:content/par/title-wrongtype";
 
     @Test
     public void testGetTitleFromResource() {
-        Title title = setupTitleObject(TITLE_RESOURCE_JCR_TITLE);
-        SimpleBindings bindings = new SimpleBindings();
-        title.init(bindings);
+        Title title = getSpiedObject(TITLE_RESOURCE_JCR_TITLE);
         assertEquals("Hello World", title.getText());
         assertNull(title.getElement());
     }
 
     @Test
     public void testGetTitleFromResourceWithElementInfo() {
-        Title title = setupTitleObject(TITLE_RESOURCE_JCR_TITLE_TYPE);
-        SimpleBindings bindings = new SimpleBindings();
-        title.init(bindings);
+        Title title = getSpiedObject(TITLE_RESOURCE_JCR_TITLE_TYPE);
         assertEquals("Hello World", title.getText());
         assertEquals("h2", title.getElement());
     }
 
     @Test
     public void testGetTitleResourcePageStyleType() {
-        Title title = setupTitleObject(TITLE_NOPROPS);
-        SimpleBindings bindings = new SimpleBindings();
+        Title title = getSpiedObject();
+        Bindings bindings = getResourceBackedBindings(TITLE_NOPROPS);
         Page resourcePage = Mockito.mock(Page.class);
         Map<String, Object> rpp = new HashMap<String, Object>(){{
             put(Title.PROP_TITLE, "Resource Page Title");
@@ -100,8 +92,8 @@ public class TitleTest {
 
     @Test
     public void testGetTitleFromCurrentPageWithWrongElementInfo() {
-        Title title = setupTitleObject(TITLE_WRONGTYPE);
-        SimpleBindings bindings = new SimpleBindings();
+        Title title = getSpiedObject();
+        Bindings bindings = getResourceBackedBindings(TITLE_WRONGTYPE);
         Map<String, Object> cpp = new HashMap<String, Object>(){{
             put(Title.PROP_TITLE, "Current Page Title");
         }};
@@ -114,8 +106,8 @@ public class TitleTest {
 
     @Test
     public void testGetTitleFromCurrentPageWithWrongElementInfo2() {
-        Title title = setupTitleObject(TITLE_WRONGTYPE);
-        SimpleBindings bindings = new SimpleBindings();
+        Title title = getSpiedObject();
+        Bindings bindings = getResourceBackedBindings(TITLE_WRONGTYPE);
         Map<String, Object> cpp = new HashMap<String, Object>(){{
             put(Title.PROP_PAGE_TITLE, "Current Page Title");
         }};
@@ -128,8 +120,8 @@ public class TitleTest {
 
     @Test
     public void testGetTitleFromCurrentPageName() {
-        Title title = setupTitleObject(TITLE_WRONGTYPE);
-        SimpleBindings bindings = new SimpleBindings();
+        Title title = getSpiedObject();
+        Bindings bindings = getResourceBackedBindings(TITLE_WRONGTYPE);
         Page currentPage = Mockito.mock(Page.class);
         when(currentPage.getName()).thenReturn("a-page");
         bindings.put(WCMBindings.CURRENT_PAGE, currentPage);
@@ -137,16 +129,4 @@ public class TitleTest {
         assertEquals("a-page", title.getText());
         assertNull(title.getElement());
     }
-
-    private Title setupTitleObject(String resourcePath) {
-        final Resource resource = context.resourceResolver().getResource(resourcePath);
-        final ValueMap properties = resource.adaptTo(ValueMap.class);
-        Title title = new Title();
-        Title spy = PowerMockito.spy(title);
-        doReturn(resource).when(spy).getResource();
-        doReturn(properties).when(spy).getProperties();
-        return spy;
-    }
-
-
 }
