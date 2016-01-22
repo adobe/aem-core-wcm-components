@@ -37,5 +37,6 @@
         <module>text</module>
         <module>list</module>
         <module>title</module>
+        <module>page</module>
     </modules>
 </project>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Panel"
+    title="Advanced">
+    <items jcr:primaryType="cq:WidgetCollection">
+        <advanced
+            jcr:primaryType="cq:Widget"
+            collapsed="{Boolean}false"
+            collapsible="{Boolean}false"
+            xtype="dialogfieldset">
+            <items jcr:primaryType="cq:WidgetCollection">
+                <language
+                    jcr:primaryType="cq:Widget"
+                    cls="cq-propsdialog-pagelanguage"
+                    fieldLabel="Language"
+                    name="./jcr:language"
+                    optionsProvider="CQ.utils.WCM.getLanguageOptions"
+                    type="select"
+                    xtype="selection"/>
+                <redirect
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Redirect"
+                    name="./redirectTarget"
+                    xtype="pathfield"/>
+                <designpath
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Design"
+                    name="./cq:designPath"
+                    predicate="hierarchyNotFile"
+                    rootPath="/etc/designs"
+                    xtype="pathfield"/>
+                <alias
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Alias"
+                    name="./sling:alias"
+                    xtype="textfield"/>
+            </items>
+        </advanced>
+        <site-structure
+            jcr:primaryType="cq:Widget"
+            script="fieldset_sitestructure.json.jsp"
+            xtype="slingscriptinclude"/>
+        <cug
+            jcr:primaryType="cq:Widget"
+            collapsed="{Boolean}true"
+            collapsible="{Boolean}true"
+            title="Closed User Group"
+            xtype="dialogfieldset">
+            <items jcr:primaryType="cq:WidgetCollection">
+                <enabled
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Enabled"
+                    inputValue="true"
+                    name="./cq:cugEnabled"
+                    type="checkbox"
+                    xtype="selection"/>
+                <loginPage
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Login Page"
+                    name="./cq:cugLoginPage"
+                    suffix=".html"
+                    xtype="pathfield"/>
+                <principals
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Admitted Groups"
+                    name="./cq:cugPrincipals"
+                    xtype="multifield">
+                    <fieldConfig
+                        jcr:primaryType="nt:unstructured"
+                        displayField="principal"
+                        filter="groups"
+                        xtype="authselection"/>
+                </principals>
+                <realm
+                    jcr:primaryType="cq:Widget"
+                    fieldDescription="Leave empty to use the page title."
+                    fieldLabel="Realm"
+                    name="./cq:cugRealm"
+                    xtype="textfield"/>
+            </items>
+        </cug>
+        <export
+            jcr:primaryType="cq:Widget"
+            collapsed="{Boolean}true"
+            collapsible="{Boolean}true"
+            title="Export"
+            xtype="dialogfieldset">
+            <items jcr:primaryType="cq:WidgetCollection">
+                <template
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Export Configuration"
+                    name="./cq:exportTemplate"
+                    predicate="nosystem"
+                    rootPath="/etc/contentsync/templates"
+                    rootTitle="Templates"
+                    xtype="pathfield"/>
+            </items>
+        </export>
+    </items>
+</jcr:root>

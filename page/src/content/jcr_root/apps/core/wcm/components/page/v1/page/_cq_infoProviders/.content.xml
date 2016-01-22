@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured">
+    <status
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.core.impl.DefaultPageStatusProvider"/>
+    <liverelation
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.msm.impl.LiveRelationshipInfoProvider"/>
+    <launches
+        jcr:primaryType="nt:unstructured"
+        className="com.adobe.cq.wcm.launches.impl.LaunchesInfoProvider"/>
+    <language
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.core.impl.servlets.ContentLanguageServlet"/>
+    <workflowinfo
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.workflow.impl.WorkflowStatusProvider"/>
+    <workflowPackageInfo
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.workflow.impl.WorkflowPackageInfoProvider"/>
+    <emulatorInfo
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.emulator.impl.EmulatorInfoProvider"/>
+    <annotations
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.core.impl.AnnotationsInfoProvider"/>
+    <permissions
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.core.impl.PermissionsInfoProvider"/>
+    <targetInfo
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.personalization.impl.TargetModeInfoProvider"/>
+    <responsive
+        jcr:primaryType="nt:unstructured"
+        className="com.day.cq.wcm.core.impl.ResponsiveInfoProvider"/>
+</jcr:root>
