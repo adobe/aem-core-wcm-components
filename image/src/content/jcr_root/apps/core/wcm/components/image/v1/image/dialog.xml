@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Dialog"
+    activeTab="{Long}0"
+    helpPath="en/cq/current/wcm/default_components.html#Image"
+    xtype="tabpanel">
+    <items jcr:primaryType="cq:WidgetCollection">
+        <image
+            jcr:primaryType="cq:Widget"
+            cropParameter="./imageCrop"
+            ddGroups="[media]"
+            fileNameParameter="./fileName"
+            fileReferenceParameter="./fileReference"
+            mapParameter="./imageMap"
+            name="./file"
+            requestSuffix=".img.png"
+            rotateParameter="./imageRotate"
+            title="Image"
+            xtype="html5smartimage"/>
+        <advanced
+            jcr:primaryType="cq:Widget"
+            title="Advanced"
+            xtype="panel">
+            <items jcr:primaryType="cq:WidgetCollection">
+                <title
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Title"
+                    name="./jcr:title"
+                    xtype="textfield"/>
+                <linkURL
+                    jcr:primaryType="cq:Widget"
+                    fieldDescription="Drop files or pages from the Content Finder"
+                    fieldLabel="Link to"
+                    name="./linkURL"
+                    xtype="pathfield"/>
+                <description
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Description"
+                    name="./jcr:description"
+                    xtype="textarea"/>
+                <size
+                    jcr:primaryType="cq:Widget"
+                    fieldLabel="Size"
+                    heightParameter="./height"
+                    widthParameter="./width"
+                    xtype="sizefield"/>
+            </items>
+        </advanced>
+        <accessibility
+            jcr:primaryType="cq:Widget"
+            title="Accessibility"
+            xtype="panel">
+            <items jcr:primaryType="cq:WidgetCollection">
+                <alt
+                    jcr:primaryType="cq:Widget"
+                    fieldDescription="Provide a textual alternative of the content and function of the image."
+                    fieldLabel="Alternative Text"
+                    name="./alt"
+                    xtype="textfield"/>
+                <decorative
+                    jcr:primaryType="cq:Widget"
+                    boxLabel="Image is decorative"
+                    fieldDescription="Check if the image should be ignored by assistive technology. This applies to decorative images only."
+                    inputValue="true"
+                    name="./isDecorative"
+                    type="checkbox"
+                    xtype="selection"/>
+            </items>
+        </accessibility>
+    </items>
+</jcr:root>

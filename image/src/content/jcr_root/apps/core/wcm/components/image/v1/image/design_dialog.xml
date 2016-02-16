@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="cq:Dialog"
+          title="Image (Design)"
+          xtype="panel">
+    <items jcr:primaryType="cq:WidgetCollection">
+        <allowedRenditionWidths
+                jcr:primaryType="cq:Widget"
+                fieldDescription="A subset of the widths configured for com.day.cq.wcm.foundation.impl.AdaptiveImageComponentServlet."
+                fieldLabel="Allowed Rendition Widths"
+                name="./allowedRenditionWidths"
+                xtype="multifield">
+            <fieldConfig
+                    jcr:primaryType="nt:unstructured"
+                    allowBlank="{Boolean}false"
+                    allowDecimals="{Boolean}false"
+                    allowNegative="{Boolean}false"
+                    xtype="numberfield"/>
+        </allowedRenditionWidths>
+        <allowCropping
+                jcr:primaryType="cq:Widget"
+                checkboxBoolTypeHint="{Boolean}true"
+                defaultValue="true"
+                fieldDescription="If checked it will allow the image to be cropped."
+                fieldLabel="Allow Cropping"
+                name="./allowCropping"
+                type="checkbox"
+                value="true"
+                xtype="selection"/>
+        <allowCropping_x0040_DefaultValue
+                jcr:primaryType="cq:Widget"
+                defaultValue="false"
+                name="./allowCropping@DefaultValue"
+                value="false"
+                xtype="hidden"/>
+        <allowCropping_x0040_UseDefaultWhenMissing
+                jcr:primaryType="cq:Widget"
+                defaultValue="true"
+                name="./allowCropping@UseDefaultWhenMissing"
+                value="true"
+                xtype="hidden"/>
+        <allowRotating
+                jcr:primaryType="cq:Widget"
+                checkboxBoolTypeHint="{Boolean}true"
+                defaultValue="true"
+                fieldDescription="If checked it will allow the image to be rotated."
+                fieldLabel="Allow Rotating"
+                name="./allowRotating"
+                type="checkbox"
+                value="true"
+                xtype="selection"/>
+        <allowRotating_x0040_DefaultValue
+                jcr:primaryType="cq:Widget"
+                defaultValue="false"
+                name="./allowRotating@DefaultValue"
+                value="false"
+                xtype="hidden"/>
+        <allowRotating_x0040_UseDefaultWhenMissing
+                jcr:primaryType="cq:Widget"
+                defaultValue="true"
+                name="./allowRotating@UseDefaultWhenMissing"
+                value="true"
+                xtype="hidden"/>
+        <allowImageMaps
+                jcr:primaryType="cq:Widget"
+                checkboxBoolTypeHint="{Boolean}true"
+                defaultValue="true"
+                fieldDescription="If checked it will allow defining image maps."
+                fieldLabel="Allow Image Maps"
+                name="./allowImageMaps"
+                type="checkbox"
+                value="true"
+                xtype="selection"/>
+        <allowImageMaps_x0040_DefaultValue
+                jcr:primaryType="cq:Widget"
+                defaultValue="false"
+                name="./allowImageMaps@DefaultValue"
+                value="false"
+                xtype="hidden"/>
+        <allowImageMaps_x0040_UseDefaultWhenMissing
+                jcr:primaryType="cq:Widget"
+                defaultValue="true"
+                name="./allowImageMaps@UseDefaultWhenMissing"
+                value="true"
+                xtype="hidden"/>
+        <allowLinking
+                jcr:primaryType="cq:Widget"
+                checkboxBoolTypeHint="{Boolean}true"
+                defaultValue="true"
+                fieldDescription="If checked it will allow to define a link for the image."
+                fieldLabel="Allow Linking"
+                name="./allowLinking"
+                type="checkbox"
+                value="true"
+                xtype="selection"/>
+        <allowLinking_x0040_DefaultValue
+                jcr:primaryType="cq:Widget"
+                defaultValue="false"
+                name="./allowLinking@DefaultValue"
+                value="false"
+                xtype="hidden"/>
+        <allowLinking_x0040_UseDefaultWhenMissing
+                jcr:primaryType="cq:Widget"
+                defaultValue="true"
+                name="./allowLinking@UseDefaultWhenMissing"
+                value="true"
+                xtype="hidden"/>
+        <allowCaptionText
+                jcr:primaryType="cq:Widget"
+                checkboxBoolTypeHint="{Boolean}true"
+                defaultValue="false"
+                fieldDescription="If checked it will allow to define an image caption."
+                fieldLabel="Allow Caption Text"
+                name="./allowCaptionText"
+                type="checkbox"
+                value="false"
+                xtype="selection"/>
+        <allowCaptionText_x0040_DefaultValue
+                jcr:primaryType="cq:Widget"
+                defaultValue="false"
+                name="./allowCaptionText@DefaultValue"
+                value="false"
+                xtype="hidden"/>
+        <allowCaptionText_x0040_UseDefaultWhenMissing
+                jcr:primaryType="cq:Widget"
+                defaultValue="true"
+                name="./allowCaptionText@UseDefaultWhenMissing"
+                value="true"
+                xtype="hidden"/>
+        <displayCaptionAsPopup
+                jcr:primaryType="cq:Widget"
+                checkboxBoolTypeHint="{Boolean}true"
+                defaultValue="false"
+                fieldDescription="If checked it will allow displaying the image's caption as a popup."
+                fieldLabel="Display caption text as popup"
+                name="./displayCaptionAsPopup"
+                type="checkbox"
+                value="false"
+                xtype="selection"/>
+        <displayCaptionAsPopup_x0040_DefaultValue
+                jcr:primaryType="cq:Widget"
+                defaultValue="false"
+                name="./displayCaptionAsPopup@DefaultValue"
+                value="false"
+                xtype="hidden"/>
+        <displayCaptionAsPopup_x0040_UseDefaultWhenMissing
+                jcr:primaryType="cq:Widget"
+                defaultValue="true"
+                name="./displayCaptionAsPopup@UseDefaultWhenMissing"
+                value="true"
+                xtype="hidden"/>
+        <allowedStyles
+                jcr:primaryType="cq:Widget"
+                fieldDescription="Defines the list of allowed styles for this image."
+                fieldLabel="Allowed Styles"
+                name="./allowedStyles"
+                xtype="multifield"/>
+    </items>
+</jcr:root>
