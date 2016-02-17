@@ -1,15 +1,49 @@
 {
-    "rich-text" : {
-        "jcr:primaryType": "nt:unstructured",
-        "text"           : "<p>rich</p>",
-        "textIsRich"     : true
+    "imageDefaultDesignFileReference": {
+        "jcr:primaryType"   : "nt:unstructured",
+        "jcr:createdBy"     : "admin",
+        "jcr:title"         : "Title",
+        "fileReference"     : "/content/dam/geometrixx-instore/cover-images/mens.jpg",
+        "height"            : "0",
+        "jcr:lastModifiedBy": "admin",
+        "imageMap"          : "[rect(314,172,409,389)\"https://www.adobe.com\"|\"_blank\"|\"Adobe\"]",
+        "jcr:created"       : "Thu Feb 25 2016 14:22:31 GMT+0100",
+        "alt"               : "Alt",
+        "width"             : "0",
+        "linkURL"           : "https://www.adobe.com",
+        "jcr:description"   : "Description",
+        "jcr:lastModified"  : "Thu Feb 25 2016 15:28:03 GMT+0100",
+        "sling:resourceType": "core/wcm/components/image",
+        "imageRotate"       : "0"
     },
-    "plain-text": {
-        "jcr:primaryType": "nt:unstructured",
-        "text"           : "plain",
-        "textIsRich"     : false
-    },
-    "empty-text": {
-        "jcr:primaryType": "nt:unstructured",
+    "imageDefaultDesignFile": {
+        "jcr:primaryType"   : "nt:unstructured",
+        "jcr:createdBy"     : "admin",
+        "jcr:title"         : "Title",
+        "height"            : "0",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:created"       : "Thu Feb 25 2016 14:22:31 GMT+0100",
+        "alt"               : "Alt",
+        "width"             : "0",
+        "linkURL"           : "https://www.adobe.com",
+        "jcr:description"   : "Description",
+        "jcr:lastModified"  : "Thu Feb 25 2016 15:28:03 GMT+0100",
+        "sling:resourceType": "core/wcm/components/image",
+        "imageRotate"       : "0",
+        "file"              : {
+            "jcr:primaryType": "nt:file",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Thu Feb 25 2016 17:09:33 GMT+0100",
+            "jcr:content"    : {
+                "jcr:primaryType"   : "nt:resource",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:mimeType"      : "image/jpeg",
+                "jcr:lastModified"  : "Thu Feb 25 2016 17:09:33 GMT+0100",
+                "jcr:data"          : 11445708,
+                "jcr:uuid"          : "91909c30-9dbf-419e-a7ce-040a47401709"
+            }
+        }
     }
 }
+
+

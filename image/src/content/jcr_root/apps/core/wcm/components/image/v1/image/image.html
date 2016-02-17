@@ -13,36 +13,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<!--/*
-<a
-    data-sly-use.image="Image"
-    data-sly-unwrap="${!image.link}"
-    href="${image.link}"
-    onclick="CQ_Analytics.record({event: 'imageClick', values: { imageLink: '${image.link @ context='scriptString'}', imageAsset:
-    '${image.fileReference @ context='scriptString'}', imageTitle: '${image.fileName @ context='scriptString'}' }, collect: false, options: { obj: this }, componentPath: '${resource.resourceType @ context='scriptString'}'})">
-    <img
-        src="${image.src}"
-        alt="${image.alt}"
-        title="${image.title}"
-        width="${image.width > 0 ? image.width : false}"
-        height="${image.height > 0 ? image.height : false}"
-        class="${image.cssClass}"
-        data-emptytext="Image"
-        usemap="${image.imageMaps.hash}"/>
-</a>
-<small data-sly-test.caption="${image.caption}">${caption}</small>
-<map
-    data-sly-list="${image.imageMaps.maps}"
-    name="${image.imageMaps.name}">
-    <area
-        shape="${item.type}"
-        coords="${item.coords}"
-        href="${item.href}"
-        target="${item.target}"
-        alt="${item.alt}"
-        title="${item.title}"/>
-</map>
-*/-->
 <a
         data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
         data-sly-use.image="Image"
@@ -50,28 +20,29 @@
         href="${image.link}"
         onclick="CQ_Analytics.record({event: 'imageClick', values: { imageLink: '${image.link @ context='scriptString'}', imageAsset:
     '${image.fileReference @ context='scriptString'}', imageTitle: '${image.fileName @ context='scriptString'}' }, collect: false, options: { obj: this }, componentPath: '${resource.resourceType @ context='scriptString'}'})">
-    <div class="smart-image" data-component='{"component":"cqImage","smartSizes":[${image.smartSizes}],"smartImages":[${image.smartImages}]}'>
+    <div class="smart-image"
+         data-component='{"component":"cqImage","smartSizes":[${image.smartSizes}],"smartImages":[${image.smartImages}]}'>
         <noscript>
-            <img src="${image.src}"
+            <img data-emptytext="Image"
+                 src="${image.src}"
                  alt="${image.alt}"
-                 title="${image.title}"
+                 title="${image.shouldDisplayCaptionPopup ? image.caption || image.title : image.title}"
                  class="${image.cssClass}"
-                 data-emptytext="Image"
                  width="${image.width > 0 ? image.width : false}"
                  height="${image.height > 0 ? image.height : false}"
-                 usemap="${image.imageMaps.hash}"
+                 usemap="${image.imageMap.id}"
             />
         </noscript>
     </div>
 </a>
+<small data-sly-test="${!image.shouldDisplayCaptionPopup && image.caption}">${image.caption}</small>
+<map data-sly-list.area="${image.imageMap.areas}" name="${image.imageMap.name}">
+    <area shape="${area.type}"
+          coords="${area.coordinates}"
+          href="${area.href}"
+          alt="${area.text}"
+          title="${area.text}"
+          target="${area.target}"
+    />
+</map>
 <sly data-sly-call="${clientLib.all @ categories='core.wcm.components.image.v1'}" />
-<!--<img data-sly-test="${wcmmode.edit}"-->
-     <!--src="${image.src}"-->
-     <!--alt="${image.alt}"-->
-     <!--title="${image.title}"-->
-     <!--class="${image.cssClass}"-->
-     <!--data-emptytext="Image"-->
-     <!--width="${image.width > 0 ? image.width : false}"-->
-     <!--height="${image.height > 0 ? image.height : false}"-->
-     <!--usemap="${image.imageMaps.hash}"-->
-<!--/>-->

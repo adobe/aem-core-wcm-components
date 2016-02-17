@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 (function ($) {
-    "use strict";
+    'use strict';
 
     function cqComponent(elements, options) {
         options = $.extend({}, cqComponent.defaults, options);
@@ -28,20 +28,20 @@
             if (componentName in cqComponent.fn) {
                 var component = new cqComponent.fn[componentName](componentElement, componentOptions);
 
-                componentElement.data("component", component);
+                componentElement.data(options.dataAttribute, component);
             }
         });
     }
 
     cqComponent.defaults = {
-        componentSelector: "[data-component]",
-        dataAttribute: "component"
+        componentSelector: '[data-component]',
+        dataAttribute: 'component'
     };
 
     cqComponent.fn = {};
 
     cqComponent.update = function () {
-        $(window).trigger("update");
+        $(window).trigger('update');
     };
 
     window.cqComponent = cqComponent;

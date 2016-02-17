@@ -15,7 +15,8 @@
                     allowBlank="{Boolean}false"
                     allowDecimals="{Boolean}false"
                     allowNegative="{Boolean}false"
-                    xtype="numberfield"/>
+                    xtype="combo"
+                    store="[320,467,480,620]"/>
         </allowedRenditionWidths>
         <allowCropping
                 jcr:primaryType="cq:Widget"
@@ -108,12 +109,12 @@
         <allowCaptionText
                 jcr:primaryType="cq:Widget"
                 checkboxBoolTypeHint="{Boolean}true"
-                defaultValue="false"
+                defaultValue="true"
                 fieldDescription="If checked it will allow to define an image caption."
                 fieldLabel="Allow Caption Text"
                 name="./allowCaptionText"
                 type="checkbox"
-                value="false"
+                value="true"
                 xtype="selection"/>
         <allowCaptionText_x0040_DefaultValue
                 jcr:primaryType="cq:Widget"
@@ -127,26 +128,26 @@
                 name="./allowCaptionText@UseDefaultWhenMissing"
                 value="true"
                 xtype="hidden"/>
-        <displayCaptionAsPopup
+        <displayCaptionPopup
                 jcr:primaryType="cq:Widget"
                 checkboxBoolTypeHint="{Boolean}true"
                 defaultValue="false"
                 fieldDescription="If checked it will allow displaying the image's caption as a popup."
                 fieldLabel="Display caption text as popup"
-                name="./displayCaptionAsPopup"
+                name="./displayCaptionPopup"
                 type="checkbox"
                 value="false"
                 xtype="selection"/>
-        <displayCaptionAsPopup_x0040_DefaultValue
+        <displayCaptionPopup_x0040_DefaultValue
                 jcr:primaryType="cq:Widget"
                 defaultValue="false"
-                name="./displayCaptionAsPopup@DefaultValue"
+                name="./displayCaptionPopup@DefaultValue"
                 value="false"
                 xtype="hidden"/>
-        <displayCaptionAsPopup_x0040_UseDefaultWhenMissing
+        <displayCaptionPopup_x0040_UseDefaultWhenMissing
                 jcr:primaryType="cq:Widget"
                 defaultValue="true"
-                name="./displayCaptionAsPopup@UseDefaultWhenMissing"
+                name="./displayCaptionPopup@UseDefaultWhenMissing"
                 value="true"
                 xtype="hidden"/>
         <allowedStyles
