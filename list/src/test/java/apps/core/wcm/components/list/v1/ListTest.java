@@ -181,6 +181,11 @@ public class ListTest extends WCMUsePojoBaseTest<List> {
             public Resource next() {
                 return resultsIterator.next();
             }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
         };
         when(tagManager.find("/content/list", new String[] {"geometrixx-outdoors:activity/biking"}, true)).thenReturn(iterator);
         doReturn(tagManager).when(resourceResolverSpy).adaptTo(TagManager.class);
