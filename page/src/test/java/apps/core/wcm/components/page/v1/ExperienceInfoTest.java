@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package apps.core.wcm.components.page.v1;
 
-import java.io.IOException;
 import java.util.Calendar;
 import javax.script.Bindings;
 
@@ -64,7 +63,8 @@ public class ExperienceInfoTest extends WCMUsePojoBaseTest<ExperienceInfo> {
         }).when(spiedProperties).get(NameConstants.PN_PAGE_LAST_MOD, String.class);
         bindings.put(WCMBindings.PROPERTIES, spiedProperties);
         experienceInfo.init(bindings);
-        assertEquals("2016-01-20T10:33:36.000+01:00", experienceInfo.getLastModifiedDate());
+        assertEquals(ISO8601.parse("2016-01-20T10:33:36.000+01:00").getTime(),
+                ISO8601.parse(experienceInfo.getLastModifiedDate()).getTime());
         assertEquals(TEMPLATED_PAGE, experienceInfo.getAnalyzeUrl());
         assertEquals("Templated Page", experienceInfo.getExperienceTitle());
         assertEquals("Description", experienceInfo.getDescription());
