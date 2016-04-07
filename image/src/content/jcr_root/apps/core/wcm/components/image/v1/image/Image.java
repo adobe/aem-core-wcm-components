@@ -215,7 +215,10 @@ public class Image extends WCMUsePojo {
         }
         SightlyWCMMode wcmMode = getWcmMode();
         if (wcmMode.isEdit()) {
-            cssClass = "cq-dd-image " + (AuthoringUtils.isTouch(request) ? PLACEHOLDER_TOUCH : PLACEHOLDER_CLASSIC);
+            cssClass = "cq-dd-image ";
+            if (StringUtils.isEmpty(src)) {
+                cssClass += (AuthoringUtils.isTouch(request) ? PLACEHOLDER_TOUCH : PLACEHOLDER_CLASSIC);
+            }
         }
     }
 

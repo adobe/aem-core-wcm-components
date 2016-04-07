@@ -97,7 +97,7 @@ public class ImageTest extends WCMUsePojoBaseTest<Image> {
         assertEquals("Title", image.getTitle());
         assertEquals("Alt", image.getAlt());
         assertEquals("Description", image.getCaption());
-        assertEquals("cq-dd-image " + Image.PLACEHOLDER_TOUCH, image.getCssClass());
+        assertEquals("cq-dd-image ", image.getCssClass());
     }
 
 }
