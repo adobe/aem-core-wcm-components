@@ -39,5 +39,6 @@
         <module>list</module>
         <module>title</module>
         <module>page</module>
+        <module>image</module>
     </modules>
 </project>
