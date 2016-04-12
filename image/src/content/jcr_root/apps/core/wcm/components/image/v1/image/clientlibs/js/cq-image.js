@@ -25,10 +25,18 @@
             image,
             updateMode;
 
+        function unescapeHTML(html) {
+            var text = $('<textarea />').html(html).text()
+            if (text === html) {
+                return text;
+            }
+            return unescapeHTML(text);
+        }
+
         function init() {
             var $noscript = element.find(options.noscriptSelector);
             if ($noscript && $noscript.length === 1) {
-                var $image = $($noscript.text().trim());
+                var $image = $(unescapeHTML($noscript.text().trim()));
                 var source = $image.attr(options.sourceAttribute);
                 $image.removeAttr(options.sourceAttribute);
                 $image.attr('data-src-disabled', source);
