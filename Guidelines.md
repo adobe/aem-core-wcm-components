@@ -45,7 +45,7 @@ Whether the component matches the basic requirements to be used in production fo
 
 #### Fast
 - [ ] Cacheable output (eg. no user-specific data in the response, no GET attributes).
-- [ ] No JCR queries, servlet filters or binding values providers.
+- [ ] No JCR queries, no servlet filters, and no custom binding values providers.
 - [ ] No server-side event handling without limited scope and clear documentation.
 - [ ] JavaScript and CSS placed in client libraries that can loaded as desired on the page.
 - [ ] No known significant performance bottleneck that isn't documented.
