@@ -21,7 +21,7 @@ The below guidelines should serve as checklist and quality measure for component
 - [Tested](#tested)
 
 ## Supported
-Whether the documented capabilities of the component are supported by the vendor/creator of the component for production usage.
+Whether the documented capabilities are supported by the vendor/creator of the component for production usage.
 - [ ] Link to contact support for the component.
 - [ ] Description of the conditions to get or purchase support.
 - [ ] Support for the documented intended use and options.
