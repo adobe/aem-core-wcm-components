@@ -2,7 +2,7 @@
 
 # Component Guidelines
 
-The below guidelines should serve as checklist and quality measure for components released for the Experience Manager community, allowing an easy overview of the status of components and comparison among them.
+The below guidelines should serve as checklist and quality measure for components that are intended to be used by the Experience Manager community, allowing to quickly understand the status of components and to compare them.
 
 **Table of Content**
 - [Supported](#supported)
