@@ -1,8 +1,8 @@
-**Work in progress:** This page is a tech preview and being worked on.
+**Work in progress:** This page is a tech preview and is being worked on.
 
-# Component Guidelines
+# Component Checklist
 
-The below guidelines should serve as checklist and quality measure for components that are intended to be used by the Experience Manager community, allowing to quickly understand the status of components and to compare them.
+The elements listed here will serve as checklist to certify Components built, so that Experience Manager project implementations can compare them and know which ones fit their needs and requirements and can be safely used. Some exceptions to the checklist are possible, but there must be a valid reason for it and an explicit note in the documentation.
 
 **Table of Content**
 - [Supported](#supported)
@@ -21,13 +21,18 @@ The below guidelines should serve as checklist and quality measure for component
 - [Tested](#tested)
 
 ## Supported
-Whether the documented capabilities are supported by the vendor/creator of the component for production usage.
+
+Whether the documented capabilities are supported by the vendor/author of the component for production usage.
+
 - [ ] Link to contact support for the component.
 - [ ] Description of the conditions to get or purchase support.
 - [ ] Support for the documented intended use and options.
 
 ## Documented
+
 Whether the capabilities and intended use are described.
+
+- [ ] Code License (ideally Apache License).
 - [ ] Description of the intended use.
 - [ ] Features and edit/design dialog options.
 - [ ] Content structure and properties.
@@ -92,7 +97,8 @@ Whether the component will fit into a project that follows best practice and wil
 #### Standard
 - [ ] No deprecated APIs.
 
-Follows coding, naming and formatting conventions:
+Follows naming, formatting and coding conventions:
+- [ ] Documentation
 - [ ] Maven
 - [ ] Bundles
 - [ ] JCR
