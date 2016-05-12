@@ -9,21 +9,21 @@ The items of the component checklist will serve to certify [AEM Components](http
 
 ## The Checklist
 
-1. [Supported](#supported)
-2. [Documented](#documented)
-3. [Available](#available)
-4. [Production Ready](#production-ready)
-    1. [Secure](#secure)
-    2. [Fast](#fast)
-    3. [Mobile-friendly](#mobile-friendly)
-    4. [Internationalized](#internationalized)
-    5. [Accessible](#accessible)
-5. [Blends In](#blends-in)
-    1. [Compatible](#compatible)
-    2. [Lean](#lean)
-    3. [Separated concerns](#separated-concerns)
-    4. [Standard](#standard)
-6. [Tested](#tested)
+1. [Supported](#1-supported)
+2. [Documented](#2-documented)
+3. [Available](#3-available)
+4. [Production Ready](#4-production-ready)
+    1. [Secure](#4i-secure)
+    2. [Fast](#4ii-fast)
+    3. [Mobile-friendly](#4iii-mobile-friendly)
+    4. [Internationalized](#4iv-internationalized)
+    5. [Accessible](#4v-accessible)
+5. [Blends In](#5-blends-in)
+    1. [Compatible](#5i-compatible)
+    2. [Lean](#5ii-lean)
+    3. [Separated concerns](#5iii-separated-concerns)
+    4. [Standard](#5iv-standard)
+6. [Tested](#6-tested)
 
 ### 1. Supported
 
