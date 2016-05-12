@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The items of the component checklist will serve to certify [AEM Components](https://docs.adobe.com/docs/en/aem/6-2/develop/components.html), so that AEM project implementations can compare them and know which ones fit their needs and requirements. This checklist applies to AEM Components that render parts of a cq:Page, including all their dependencies (Java classes, client libraries, etc.). Exceptions to the checklist are possible, but for each there must be an explicit note in the documentation.
+The items of the component checklist will serve to certify [AEM Components](https://docs.adobe.com/docs/en/aem/6-2/develop/components.html), so that AEM project implementations can compare them and know which ones fit their needs and requirements. This checklist applies to AEM Components that render parts of a cq:Page, including their dependencies (Java classes, client libraries, etc.). Exceptions to the checklist are possible, but for each there must be an explicit note in the documentation.
 
 
 ## The Checklist
