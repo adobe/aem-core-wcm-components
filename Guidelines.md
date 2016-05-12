@@ -115,9 +115,9 @@ Follows naming, formatting and coding conventions:
 - [ ] Documentation
 - [ ] Maven
 - [ ] Bundles
+- [ ] Java
 - [ ] JCR
 - [ ] URL
-- [ ] Java
 - [ ] Sightly/Handlebars (no JSP)
 - [ ] HTML
 - [ ] JavaScript
