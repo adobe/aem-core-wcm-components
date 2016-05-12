@@ -49,7 +49,7 @@ Whether the capabilities and intended use are described.
 Whether the component's code can be accessed and added as dependency on an AEM implementation project.
 
 - [ ] [Apache License](http://www.apache.org/licenses/LICENSE-2.0) or [similar in terms](http://www.apache.org/legal/resolved.html#category-a). 
-- [ ] Publicly browseable and downloadable source code.
+- [ ] Discoverable, publicly browseable and downloadable source code.
 - [ ] Maven project that can be used as dependency.
 
 ### 4. Production Ready
@@ -59,11 +59,11 @@ Whether the component matches the basic requirements to be used in production fo
 - [ ] No known security vulnerability.
 - [ ] No hard-coded or stored clear-text passwords.
 - [ ] Systematic XSS protection and string/URL encoding (as enforced by Sightly).
-- [ ] Outgoing network connections must be explicitly enabled and documented accordingly.
+- [ ] Outgoing network connections are disabled by default and duly documented.
 - [ ] Use service users for background processes (no loginAdministrative).
 
 #### 4.ii. Fast
-- [ ] Features that can have a global performance impact or performance bottlenecks must be explicitly enabled and documented accordingly.
+- [ ] Features that can have a global performance impact or performance bottlenecks are disabled by default and duly documented.
 - [ ] Cacheable output (eg. no user-specific data in the response, no query parameters).
 - [ ] No JCR queries, no servlet filters, and no custom binding values providers.
 - [ ] No server-side event handling without limited scope and explicit documentation.
