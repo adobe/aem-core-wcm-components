@@ -37,9 +37,10 @@ Whether the documented capabilities are supported by the vendor/author of the co
 
 Whether the capabilities and intended use are described.
 
-- [ ] Description of the intended use.
+- [ ] Description and intended use of the component.
+- [ ] List of exceptions to this checklist (possibly with some justification).
+- [ ] List of dependencies on back-end and front-end libraries and frameworks.
 - [ ] Features and edit/design dialog options (possibly with screenshots).
-- [ ] List of the exceptions to this checklist (possibly with some justification).
 - [ ] Content structure and properties.
 - [ ] Exported APIs and extension points.
 
@@ -97,9 +98,8 @@ Whether the component will fit into a project that follows best practice and wil
 - [ ] Namespaced CSS and JS selectors to apply only to the one component.
 
 #### 5.ii. Lean
-- [ ] No dependencies on back-end or front-end frameworks.
-- [ ] No abstraction layers that aren’t absolutely necessary.
 - [ ] No functionality that isn’t deemed necessary.
+- [ ] No abstraction layers that aren’t absolutely necessary.
 - [ ] No styles or scripts that are design or site specific (keep them to the bare minimum).
 
 #### 5.iii. Separated concerns
