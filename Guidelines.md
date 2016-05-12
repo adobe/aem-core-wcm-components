@@ -48,7 +48,7 @@ Whether the capabilities and intended use are described.
 
 Whether the component's code can be accessed and added as dependency on an AEM implementation project.
 
-- [ ] [Apache License](http://www.apache.org/licenses/LICENSE-2.0) or [similar in terms](http://www.apache.org/legal/resolved.html#category-a). 
+- [ ] [Apache License](http://www.apache.org/licenses/LICENSE-2.0) or [similar in terms](http://www.apache.org/legal/resolved.html#category-a) with corresponding code headers.
 - [ ] Discoverable, publicly browseable and downloadable source code.
 - [ ] Maven project that can be used as dependency.
 
