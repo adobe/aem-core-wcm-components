@@ -10,9 +10,9 @@ The items of the checklist will serve to certify [AEM Components](https://docs.a
 
 ## The Checklist
 
-1. [Supported](#1-supported)
+1. [Available](#1-available)
 2. [Documented](#2-documented)
-3. [Available](#3-available)
+3. [Supported](#3-supported)
 4. [Production Ready](#4-production-ready)
     1. [Secure](#4i-secure)
     2. [Fast](#4ii-fast)
@@ -27,13 +27,13 @@ The items of the checklist will serve to certify [AEM Components](https://docs.a
 6. [Tested](#6-tested)
 
 
-### 1. Supported
+### 1. Available
 
-Whether the documented capabilities are supported by the vendor/author of the component for production usage.
+Whether the component's code can be accessed and added as dependency on an AEM implementation project.
 
-- [ ] Link to contact support for the component.
-- [ ] Description of the conditions to get or purchase support.
-- [ ] Support for the documented intended use and options.
+- [ ] [Apache License](http://www.apache.org/licenses/LICENSE-2.0) or [similar in terms](http://www.apache.org/legal/resolved.html#category-a) with corresponding code headers.
+- [ ] Discoverable, publicly browseable and downloadable source code.
+- [ ] Maven project that can be used as dependency.
 
 
 ### 2. Documented
@@ -48,13 +48,13 @@ Whether the capabilities and intended use are described.
 - [ ] Exported APIs and extension points.
 
 
-### 3. Available
+### 3. Supported
 
-Whether the component's code can be accessed and added as dependency on an AEM implementation project.
+Whether the documented capabilities are supported by the vendor/author of the component for production usage.
 
-- [ ] [Apache License](http://www.apache.org/licenses/LICENSE-2.0) or [similar in terms](http://www.apache.org/legal/resolved.html#category-a) with corresponding code headers.
-- [ ] Discoverable, publicly browseable and downloadable source code.
-- [ ] Maven project that can be used as dependency.
+- [ ] Link to contact support for the component.
+- [ ] Description of the conditions to get or purchase support.
+- [ ] Support for the documented intended use and options.
 
 
 ### 4. Production Ready
