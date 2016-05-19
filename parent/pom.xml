@@ -498,8 +498,8 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.1.0</version>
-                <classifier>obfuscated-apis</classifier>
+                <version>6.2.0</version>
+                <classifier>apis</classifier>
                 <scope>provided</scope>
             </dependency>
 
@@ -537,7 +537,7 @@
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock</artifactId>
-                <version>1.6.4</version>
+                <version>1.7.0</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

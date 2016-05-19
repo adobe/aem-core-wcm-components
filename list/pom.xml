@@ -212,26 +212,10 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr.annotations</artifactId>
         </dependency>
-        <!--
-           We need to explicitly define the cq-wcm-sightly-extension dependency in order to be able to write our unit tests. This
-           dependency should be defined before the obfuscated uber-jar.
-       -->
-        <dependency>
-            <groupId>com.adobe.cq.sightly</groupId>
-            <artifactId>cq-wcm-sightly-extension</artifactId>
-            <version>1.3.4</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.day.cq</groupId>
-            <artifactId>cq-search</artifactId>
-            <version>5.9.4</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>
-            <classifier>obfuscated-apis</classifier>
+            <classifier>apis</classifier>
         </dependency>
         <!-- Testing -->
         <dependency>
