@@ -25,7 +25,7 @@
         <groupId>com.adobe.cq</groupId>
         <artifactId>com.adobe.cq.wcm.core.components.parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <!-- ====================================================================== -->
