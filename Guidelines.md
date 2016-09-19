@@ -120,6 +120,7 @@ Whether the component will fit into a project that follows best practice and wil
 
 #### 5.ii. Lean
 
+- [ ] No page reload required when being dropped into a paragraph system.
 - [ ] No functionality that isn’t deemed necessary.
 - [ ] No abstraction layers that aren’t absolutely necessary.
 - [ ] No styles or scripts that are design or site specific (keep them to the bare minimum).
