@@ -1,0 +1,81 @@
+{
+    "jcr:primaryType": "sling:Folder",
+    "we-retail"      : {
+        "jcr:primaryType": "sling:OrderedFolder",
+        "jcr:title"      : "Core",
+        "settings"       : {
+            "jcr:primaryType": "sling:Folder",
+            "wcm"            : {
+                "jcr:primaryType": "cq:Page",
+                "policies"       : {
+                    "jcr:primaryType": "cq:Page",
+                    "weretail"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "nt:unstructured",
+                        "components"        : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "sling:resourceType": "nt:unstructured",
+                            "content"           : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "sling:resourceType": "nt:unstructured",
+                                "image"             : {
+                                    "jcr:primaryType"     : "nt:unstructured",
+                                    "policy_1478854677326": {
+                                        "jcr:primaryType"       : "nt:unstructured",
+                                        "jcr:title"             : "images",
+                                        "allowedRenditionWidths": [
+                                            600,
+                                            700,
+                                            800
+                                        ],
+                                        "allowUpload"           : "true",
+                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
+                                        "jcr:content"           : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        },
+                                        "plugins"               : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        }
+                                    },
+                                    "policy_1478854677327": {
+                                        "jcr:primaryType"       : "nt:unstructured",
+                                        "jcr:title"             : "images",
+                                        "allowedRenditionWidths": [
+                                            "600",
+                                            "700",
+                                            "invalid"
+                                        ],
+                                        "allowUpload"           : "true",
+                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
+                                        "jcr:content"           : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        },
+                                        "plugins"               : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        }
+                                    },
+                                    "policy_1478854677328": {
+                                        "jcr:primaryType"       : "nt:unstructured",
+                                        "jcr:title"             : "images",
+                                        "allowedRenditionWidths": [
+                                            600
+                                        ],
+                                        "disableLazyLoading"    : "true",
+                                        "allowUpload"           : "true",
+                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
+                                        "jcr:content"           : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        },
+                                        "plugins"               : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:description="Breadcrumb Design Dialog"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Breadcrumb Design"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="en/cq/current/wcm/default_components.html#Breadcrumb">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <fixedcolums
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <startLevel
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldDescription="(eg: 1 for /content/site)"
+                                fieldLabel="Navigation-Level to start"
+                                max="100"
+                                min="1"
+                                name="./startLevel"
+                                step="1"
+                                value="2"/>
+                            <showHidden
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="Show hidden navigation items in breadcrumb"
+                                name="./showHidden"
+                                text="Show Hidden"
+                                uncheckedValue="false"
+                                value="true"/>
+                            <hideCurrent
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="Don't display current page in breadcrumb"
+                                name="./hideCurrent"
+                                text="Hide Current"
+                                uncheckedValue="false"
+                                value="true"/>
+                        </items>
+                    </properties>
+                </items>
+            </fixedcolums>
+        </items>
+    </content>
+</jcr:root>

@@ -1,0 +1,92 @@
+{
+  "jcr:primaryType": "cq:Page",
+  "jcr:createdBy": "admin",
+  "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+  "jcr:content": {
+    "jcr:primaryType": "cq:PageContent",
+    "jcr:createdBy": "admin",
+    "jcr:title": "demo-page",
+    "cq:template": "/conf/we-retail/settings/wcm/templates/content-page",
+    "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+    "cq:lastModified": "Thu Oct 06 2016 12:49:10 GMT+0530",
+    "sling:resourceType": "weretail/components/structure/page",
+    "cq:lastModifiedBy": "admin",
+    "root": {
+      "jcr:primaryType": "nt:unstructured",
+      "sling:resourceType": "wcm/foundation/components/responsivegrid",
+      "responsivegrid": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:created": "Tue Sep 20 2016 20:35:34 GMT+0200",
+        "jcr:lastModified": "Tue Sep 20 2016 20:35:53 GMT+0200",
+        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+        "cq:responsive": {
+          "jcr:primaryType": "nt:unstructured"
+        },
+        "breadcrumb": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "jcr:lastModifiedBy": "admin",
+          "relParent": "1",
+          "jcr:created": "Tue Sep 20 2016 23:26:30 GMT+0200",
+          "jcr:lastModified": "Tue Sep 20 2016 23:26:47 GMT+0200",
+          "absParent": "5",
+          "sling:resourceType": "weretail/components/structure/breadcrumb"
+        },
+        "title": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "jcr:lastModifiedBy": "admin",
+          "jcr:created": "Tue Sep 20 2016 23:26:52 GMT+0200",
+          "jcr:lastModified": "Tue Sep 20 2016 23:26:52 GMT+0200",
+          "sling:resourceType": "weretail/components/content/title"
+        },
+        "container": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "enctype": "application/x-www-form-urlencoded",
+          "jcr:lastModifiedBy": "admin",
+          "method": "GET",
+          "jcr:created": "Wed Oct 05 2016 16:05:53 GMT+0530",
+          "jcr:lastModified": "Thu Oct 06 2016 12:49:10 GMT+0530",
+          "sling:resourceType": "core/wcm/components/form/container",
+          "loadPath": "/content/we-retail/demo-page/formPrefillData",
+          "actionType": "foundation/components/form/actions/store",
+          "text": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:createdBy": "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
+            "jcr:lastModified": "Thu Oct 06 2016 12:47:08 GMT+0530",
+            "sling:resourceType": "core/wcm/components/form/text"
+          },
+          "text_185087333": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:title": "Custom title",
+            "jcr:createdBy": "admin",
+            "jcr:created": "Wed Oct 05 2016 16:28:06 GMT+0530",
+            "constraintMessage": "The value should be a valid email address",
+            "showHideExpression": "((givenName.equals(\"\"Referees\"\")))",
+            "readOnly": true,
+            "helpMessage": "Custom help/placeholder message",
+            "required": true,
+            "name": "Custom Name",
+            "type": "email",
+            "useTextarea": true,
+            "value": "Prefilled Sample Input",
+            "sling:resourceType": "core/wcm/components/form/text",
+            "requiredMessage": "please fill the field",
+            "usePlaceholder": "true",
+            "rows": 3,
+            "hideTitle": true
+          }
+        }
+      }
+    }
+  },
+  "formPrefillData": {
+    "jcr:primaryType": "nt:unstructured",
+    "input-field-2": "Prefilled Sample Input"
+  }
+}

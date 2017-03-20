@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:description="List Design Dialog"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="List Design"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="en/cq/current/wcm/default_components.html#List">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <taps
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                <items jcr:primaryType="nt:unstructured">
+                    <general
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="List Settings"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <dateFormat
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                        emptyText="yyyy-MM-dd"
+                                        fieldDescription="Format to use for the display of the last modification Date"
+                                        fieldLabel="Date Format"
+                                        name="./dateFormat"/>
+                                    <listTypeHeading
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/heading"
+                                        level="{Long}4"
+                                        text="Available list types"/>
+                                    <disableChildren
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Disable children list type"
+                                        name="./disableChildren"
+                                        text="Disable Children"
+                                        uncheckedValue="false"
+                                        value="true"/>
+                                    <disableStatic
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Disable static list type"
+                                        name="./disableStatic"
+                                        text="Disable Static"
+                                        uncheckedValue="false"
+                                        value="true"/>
+                                    <disableSearch
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Disable search list type"
+                                        name="./disableSearch"
+                                        text="Disable Search"
+                                        uncheckedValue="false"
+                                        value="true"/>
+                                    <disableTags
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Disable tags list type"
+                                        name="./disableTags"
+                                        text="Disable Tags"
+                                        uncheckedValue="false"
+                                        value="true"/>
+                                </items>
+                            </column>
+                        </items>
+                    </general>
+                    <listItem
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Item Settings"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <linkItems
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Link items to the corresponding page"
+                                        name="./linkItems"
+                                        text="Link Items"
+                                        uncheckedValue="false"
+                                        value="true"/>
+                                    <showDescription
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Show descriptions of the link item"
+                                        name="./showDescription"
+                                        text="Show Description"
+                                        uncheckedValue="false"
+                                        value="true"/>
+                                    <showModificationDate
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        fieldDescription="Show modification date of the link item"
+                                        name="./showModificationDate"
+                                        text="Show Date"
+                                        uncheckedValue="false"
+                                        value="true"/>
+                                </items>
+                            </column>
+                        </items>
+                    </listItem>
+                </items>
+            </taps>
+        </items>
+    </content>
+</jcr:root>

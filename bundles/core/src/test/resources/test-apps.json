@@ -1,0 +1,219 @@
+
+{
+    "jcr:primaryType": "cq:Component",
+    "jcr:createdBy": "admin",
+    "allowedParents": ["*/parsys"],
+    "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+    "sling:resourceSuperType": "core/wcm/components/list/v1/list",
+    "jcr:description": "Core WCM List Component - Sightly",
+    "componentGroup": "Core",
+    "v1": {
+        "jcr:primaryType": "nt:unstructured",
+        "list": {
+            "jcr:primaryType": "cq:Component",
+            "jcr:createdBy": "admin",
+            "jcr:title": "List Component",
+            "allowedParents": ["*/parsys"],
+            "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+            "jcr:description": "Core WCM List Component (v1) - Sightly",
+            "componentGroup": "Core",
+            "List.java": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:mimeType": "text/x-java-source",
+                    "jcr:lastModified": "Thu Sep 15 2016 10:09:14 GMT+0200",
+                    ":jcr:data": 23684,
+                    "jcr:uuid": "f102b9a8-d71c-4209-a01d-de994065f730"
+                }
+            },
+            "cq:editConfig": {
+                "jcr:primaryType": "cq:EditConfig",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                "cq:dropTargets": {
+                    "jcr:primaryType": "cq:DropTargetConfig",
+                    "pages": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "accept": ["*"],
+                        "groups": ["page"],
+                        "propertyName": "./pages"
+                    }
+                }
+            },
+            "cq:dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "List",
+                "helpPath": "http://www.adobe.com/go/aem6_1_docs_component_en#List - Sightly",
+                "sling:resourceType": "cq/gui/components/authoring/dialog",
+                "content": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "granite:class": "core-wcm-list-v1",
+                    "sling:resourceType": "granite/ui/components/coral/foundation/container",
+                    "items": {"jcr:primaryType": "nt:unstructured"}
+                }
+            },
+            "dialog": {
+                "jcr:primaryType": "cq:Dialog",
+                "manageTabs": "function(tab,noSwitch){var tabs=['props','children','descendants','static','search','querybuilder','tags'];var index=tabs.indexOf(tab);if(index==-1) return;for(var i=1;i<tabs.length;i++){if(index==i){this.unhideTabStripItem(i);}else{this.hideTabStripItem(i);}}this.doLayout();if(!noSwitch)this.activate(index);}",
+                "helpPath": "en/cq/current/wcm/default_components.html#List",
+                "title": "List",
+                "xtype": "tabpanel",
+                "items": {
+                    "jcr:primaryType": "cq:WidgetCollection",
+                    "list": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "List",
+                        "xtype": "panel"
+                    },
+                    "children": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "Child pages",
+                        "xtype": "panel"
+                    },
+                    "descendants": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "Descendant pages",
+                        "xtype": "panel"
+                    },
+                    "static": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "Fixed list",
+                        "xtype": "panel"
+                    },
+                    "search": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "Search",
+                        "xtype": "panel"
+                    },
+                    "querybuilder": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "Advanced Search",
+                        "xtype": "panel"
+                    },
+                    "tags": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "Tags",
+                        "xtype": "panel"
+                    },
+                    "accessibility": {
+                        "jcr:primaryType": "cq:Widget",
+                        "title": "Accessibility",
+                        "xtype": "panel"
+                    }
+                }
+            },
+            "icon.png": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:mimeType": "image/png",
+                    "jcr:lastModified": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                    ":jcr:data": 547,
+                    "jcr:uuid": "e1500821-f7c1-4998-a318-22564ecbb91a"
+                }
+            },
+            "clientlibs": {
+                "jcr:primaryType": "sling:Folder",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                "wcm": {
+                    "jcr:primaryType": "cq:ClientLibraryFolder",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                    "categories": ["core.wcm.components.list"],
+                    "js.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy": "admin",
+                        "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200"
+                    },
+                    "list.js": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy": "admin",
+                        "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200"
+                    }
+                },
+                "editor": {
+                    "jcr:primaryType": "cq:ClientLibraryFolder",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                    "dependencies": ["cq.authoring.editor"],
+                    "categories": ["cq.authoring.editor.hook"],
+                    "js.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy": "admin",
+                        "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200"
+                    },
+                    "list.js": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy": "admin",
+                        "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200"
+                    }
+                }
+            },
+            "list.html": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:mimeType": "text/html",
+                    "jcr:lastModified": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                    ":jcr:data": 3060,
+                    "jcr:uuid": "0238cfaf-8ab9-4797-a35b-e21b56fbf935"
+                }
+            },
+            "templates": {
+                "jcr:primaryType": "sling:Folder",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                "list_element.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "text/html",
+                        "jcr:lastModified": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                        ":jcr:data": 1431,
+                        "jcr:uuid": "f4c3c98c-de13-47df-83e9-02ae153831c8"
+                    }
+                },
+                "empty_list.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "text/html",
+                        "jcr:lastModified": "Thu Sep 15 2016 08:37:23 GMT+0200",
+                        ":jcr:data": 1213,
+                        "jcr:uuid": "4dabbb82-ad7d-4d8c-804d-132d3f4e5212"
+                    }
+                },
+                "list_item.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "text/html",
+                        "jcr:lastModified": "Mon Sep 12 2016 15:05:07 GMT+0200",
+                        ":jcr:data": 2858,
+                        "jcr:uuid": "075722aa-231c-4d57-abb8-e74b409ce531"
+                    }
+                }
+            }
+        }
+    }
+}

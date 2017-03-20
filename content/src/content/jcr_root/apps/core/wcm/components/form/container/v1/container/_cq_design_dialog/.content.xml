@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:description="Form Container Design Dialog"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Form Container Design"
+    sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                <items jcr:primaryType="nt:unstructured">
+                    <allowedcomponents
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Allowed Components"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <components
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="cq/gui/components/authoring/allowedcomponents"
+                                name="./components"/>
+                        </items>
+                    </allowedcomponents>
+                    <assetmapping
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Default Components"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <header
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <addmapping
+                                        granite:class="js-cq-AssetToComponentMapper-addMapping"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/button"
+                                        text="Add mapping"/>
+                                </items>
+                            </header>
+                            <assetmapper
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="cq/gui/components/authoring/allowedcomponents/assettocomponent/mapper"/>
+                        </items>
+                    </assetmapping>
+                    <responsivesettings
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Responsive Settings"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                defaultValue=""
+                                fieldDescription="Number of columns in the grid"
+                                fieldLabel="Columns"
+                                min="1"
+                                name="./columns"
+                                step="1"/>
+                        </items>
+                    </responsivesettings>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

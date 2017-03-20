@@ -1,0 +1,137 @@
+{
+    "checkbox"       : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "jcr:createdBy"     : "admin",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:created"       : "Wed Nov 02 2016 15:32:37 GMT+0100",
+        "name"              : "name1",
+        "jcr:title"           : "jcr:title1",
+        "helpMessage"       : "helpMessage1",
+        "type"              : "checkbox",
+        "jcr:lastModified"  : "Wed Nov 09 2016 14:50:06 GMT+0100",
+        "sling:resourceType": "core/wcm/components/form/options",
+        "items"       : {
+            "jcr:primaryType": "nt:unstructured",
+            "item0"          : {
+                "jcr:primaryType": "nt:unstructured",
+                "text"           : "t1",
+                "value"          : "v1",
+                "selected"       : "true",
+                "disabled"       : "true"
+            },
+            "item1"          : {
+                "jcr:primaryType": "nt:unstructured",
+                "text"           : "t2",
+                "value"          : "v2",
+                "selected"       : "true"
+            },
+            "item2"          : {
+                "jcr:primaryType": "nt:unstructured",
+                "text"           : "t3",
+                "value"          : "v3"
+            }
+        }
+    },
+    "drop-down": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:created": "Wed Nov 02 2016 15:32:37 GMT+0100",
+        "name": "name1",
+        "jcr:title": "jcr:title1",
+        "helpMessage" : "helpMessage1",
+        "type" : "drop-down",
+        "jcr:lastModified": "Wed Nov 09 2016 14:50:06 GMT+0100",
+        "sling:resourceType": "core/wcm/components/form/options",
+        "items": {
+            "jcr:primaryType": "nt:unstructured",
+            "item0": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t1",
+                "value": "v1",
+                "selected": "true",
+                "disabled": "true"
+            },
+            "item1": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t2",
+                "value": "v2",
+                "selected": "true"
+            },
+            "item2": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t3",
+                "value": "v3"
+            }
+        }
+    },
+    "radio": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:created": "Wed Nov 02 2016 15:32:37 GMT+0100",
+        "name": "name1",
+        "jcr:title": "jcr:title1",
+        "helpMessage" : "helpMessage1",
+        "type" : "radio",
+        "jcr:lastModified": "Wed Nov 09 2016 14:50:06 GMT+0100",
+        "sling:resourceType": "core/wcm/components/form/options",
+        "items": {
+            "jcr:primaryType": "nt:unstructured",
+            "item0": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t1",
+                "value": "v1",
+                "selected": "true",
+                "disabled": "true"
+            },
+            "item1": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t2",
+                "value": "v2",
+                "selected": "true"
+            },
+            "item2": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t3",
+                "value": "v3"
+            }
+        }
+    },
+    "multi-drop-down": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:createdBy": "admin",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:created": "Wed Nov 02 2016 15:32:37 GMT+0100",
+        "name": "name1",
+        "jcr:title": "jcr:title1",
+        "helpMessage" : "helpMessage1",
+        "type" : "multi-drop-down",
+        "jcr:lastModified": "Wed Nov 09 2016 14:50:06 GMT+0100",
+        "sling:resourceType": "core/wcm/components/form/options",
+        "items": {
+            "jcr:primaryType": "nt:unstructured",
+            "item0": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t1",
+                "value": "v1",
+                "selected": "true",
+                "disabled": "true"
+            },
+            "item1": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t2",
+                "value": "v2",
+                "selected": "true"
+            },
+            "item2": {
+                "jcr:primaryType": "nt:unstructured",
+                "text": "t3",
+                "value": "v3"
+            }
+        }
+    },
+    "jcr:primaryType": "nt:unstructured",
+
+}
+

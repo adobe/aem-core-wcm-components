@@ -14,11 +14,20 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.adobe.cq</groupId>
-    <artifactId>com.adobe.cq.wcm.core.components.reactor</artifactId>
+
+    <!-- ====================================================================== -->
+    <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
+    <!-- ====================================================================== -->
+    <parent>
+        <groupId>com.adobe.cq</groupId>
+        <artifactId>core.wcm.components.parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>core.wcm.components.reactor</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
@@ -26,19 +35,18 @@
 
     <scm>
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
+        <developerConnection>scm:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
         <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components</url>
         <tag>HEAD</tag>
     </scm>
-
     <modules>
         <module>parent</module>
-        <module>commons</module>
-        <module>commons-testing</module>
-        <module>text</module>
-        <module>list</module>
-        <module>title</module>
-        <module>page</module>
-        <module>image</module>
+        <module>bundles/core</module>
+        <module>testing/junit/core</module>
+        <module>testing/it/ui-js</module>
+        <module>content</module>
+        <module>config</module>
+        <module>all</module>
     </modules>
+
 </project>
