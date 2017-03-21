@@ -127,7 +127,7 @@
                 <configuration>
                     <scmCommentPrefix>@releng [maven-scm] :</scmCommentPrefix>
                     <preparationGoals>clean install</preparationGoals>
-                    <goals>install</goals>
+                    <goals>deploy</goals>
                     <releaseProfiles>release</releaseProfiles>
                     <projectVersionPolicyId>OddEvenVersionPolicy</projectVersionPolicyId>
                 </configuration>

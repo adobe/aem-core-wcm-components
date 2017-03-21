@@ -60,6 +60,37 @@
                     "linkURL"           : "https://www.adobe.com",
                     "alt"               : "Adobe Logo"
                 },
+                "image5"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "https://www.adobe.com",
+                    "fileName"          : "Adobe_Systems_logo_and_wordmark.svg.gif",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/gif",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1089"
+                        }
+                    }
+                },
+                "image6": {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.gif",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test"
+                }
             }
         }
     }

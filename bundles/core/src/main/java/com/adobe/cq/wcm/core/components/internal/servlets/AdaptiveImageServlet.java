@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,8 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
@@ -107,6 +110,29 @@ public class AdaptiveImageServlet extends AbstractImageServlet {
                 LOGGER.error("The image from {} does not have a valid file reference.", imageResource.getPath());
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
+            }
+            if ("image/gif".equals(getImageType(request.getRequestPathInfo().getExtension()))) {
+                if (checkModifiedSince(request, response)) {
+                    return;
+                } else {
+                    response.setContentType("image/gif");
+                    try {
+                        String fileReference = image.getFileReference();
+                        if (StringUtils.isNotEmpty(fileReference)) {
+                            String damOriginalRendition = fileReference + "/jcr:content/renditions/original";
+                            response.getOutputStream().write(IOUtils.toByteArray(request.getResourceResolver().getResource
+                                    (damOriginalRendition).adaptTo(InputStream.class)));
+                        } else {
+                            response.getOutputStream().write(IOUtils.toByteArray(image.getData().getBinary().getStream()));
+                        }
+
+                        return;
+                    } catch (Exception e) {
+                        LOGGER.error("Cannot write GIF image stream.", e);
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                        return;
+                    }
+                }
             }
             String widthSelector = selectors[selectors.length - 1];
             if (!DEFAULT_SELECTOR.equals(widthSelector)) {

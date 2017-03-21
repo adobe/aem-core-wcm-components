@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -25,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.mime.MimeTypeService;
@@ -51,6 +53,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class AdaptiveImageServletTest {
@@ -66,8 +69,13 @@ public class AdaptiveImageServletTest {
     private static final String IMAGE0_PATH = PAGE + "/jcr:content/root/image0";
     private static final String IMAGE1_PATH = PAGE + "/jcr:content/root/image1";
     private static final String IMAGE2_PATH = PAGE + "/jcr:content/root/image2";
-    private static final String IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg.png";
-    private static final String ASSET_PATH = "/content/dam/core/images/" + IMAGE_BINARY_NAME;
+    private static final String IMAGE5_PATH = PAGE + "/jcr:content/root/image5";
+    private static final String IMAGE6_PATH = PAGE + "/jcr:content/root/image6";
+    private static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg.png";
+    private static final String GIF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg.gif";
+    private static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
+    private static final String GIF_ASSET_PATH = "/content/dam/core/images/" + GIF_IMAGE_BINARY_NAME;
+    private static final String GIF_FILE_PATH = IMAGE5_PATH + "/file";
     private static final int ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH = 1280;
 
 
@@ -83,7 +91,10 @@ public class AdaptiveImageServletTest {
         when(mockedMimeTypeService.getMimeType("gif")).thenReturn("image/gif");
         when(mockedMimeTypeService.getExtension("image/tif")).thenReturn(ImageImpl.DEFAULT_EXTENSION);
         aemContext.load().json("/image/test-conf.json", "/conf");
-        aemContext.load().binaryFile("/image/" + IMAGE_BINARY_NAME, ASSET_PATH);
+        aemContext.load().json("/image/test-content-dam.json", GIF_ASSET_PATH);
+        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH);
+        aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF_FILE_PATH);
+        aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH + "/jcr:content/renditions/original");
         aemContext.registerInjectActivateService(new MockAdapterFactory());
         resourceResolver = spy(aemContext.resourceResolver());
         contentPolicyManager = mock(ContentPolicyManager.class);
@@ -227,6 +238,48 @@ public class AdaptiveImageServletTest {
         assertEquals("Expected a 404 response when the image does not have a valid file reference.",
                 HttpServletResponse.SC_NOT_FOUND, response.getStatus());
         assertArrayEquals("Expected an empty response output.", new byte[0], response.getOutput());
+    }
+
+    @Test
+    public void testGIFFileDirectStream() throws Exception {
+        MockSlingHttpServletResponse response = spy(aemContext.response());
+        MockSlingHttpServletRequest request = prepareRequest(IMAGE5_PATH, "img", "gif");
+        servlet.doGet(request, response);
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream =
+                this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg.gif");
+        assertTrue(IOUtils.contentEquals(stream, directStream));
+    }
+
+    @Test
+    public void testGIFFileBrowserCached() throws Exception {
+        MockSlingHttpServletResponse response = spy(aemContext.response());
+        MockSlingHttpServletRequest request = prepareRequest(IMAGE5_PATH, "img", "gif");
+        // 1 millisecond less than the jcr:lastModified value from test-conf.json
+        request.addDateHeader("If-Modified-Since", 1489998822137L);
+        servlet.doGet(request, response);
+        assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
+    }
+
+    @Test
+    public void testGIFUploadedToDAM() throws Exception {
+        MockSlingHttpServletResponse response = spy(aemContext.response());
+        MockSlingHttpServletRequest request = prepareRequest(IMAGE6_PATH, "img", "gif");
+        servlet.doGet(request, response);
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream =
+                this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg.gif");
+        assertTrue(IOUtils.contentEquals(stream, directStream));
+    }
+
+    @Test
+    public void testGIFUploadedToDAMBrowserCached() throws Exception {
+        MockSlingHttpServletResponse response = spy(aemContext.response());
+        MockSlingHttpServletRequest request = prepareRequest(IMAGE6_PATH, "img", "gif");
+        // 1 millisecond less than the jcr:lastModified value from test-conf.json
+        request.addDateHeader("If-Modified-Since", 1489998822137L);
+        servlet.doGet(request, response);
+        assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
     }
 
     private MockSlingHttpServletRequest prepareRequest(String resourcePath, String selectorString, String extension) {
