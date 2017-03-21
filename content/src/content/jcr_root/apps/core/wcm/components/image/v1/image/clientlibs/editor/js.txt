@@ -16,4 +16,3 @@
 
 #base=js
 decorative.click.js
-lazyload.check.js

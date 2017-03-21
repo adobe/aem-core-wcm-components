@@ -45,8 +45,7 @@
                                         fieldDescription="Don't defer the loading of images until they become visible."
                                         name="./disableLazyLoading"
                                         text="Disable lazy loading"
-                                        value="{Boolean}true"
-                                        wrapperClass="core-image-disable-lazy"/>
+                                        value="{Boolean}true"/>
                                 </items>
                             </content>
                         </items>
