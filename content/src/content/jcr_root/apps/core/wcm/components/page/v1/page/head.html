@@ -13,10 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.head="${ @ page }">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"
-          data-sly-use.headlibRenderer="headlibs.html"
-          data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"/>
+<template data-sly-template.head="${ @ page }" data-sly-use.headlibRenderer="headlibs.html"
+          data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html">
+    <meta charset="UTF-8">
+    <title>${page.title}</title>
     <meta data-sly-test.keywords="${page.keywords}" name="keywords" content="${keywords}"/>
     <meta data-sly-test.description="${properties['jcr:description']}" name="description" content="${description}"/>
     <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
@@ -49,5 +49,4 @@
     <link data-sly-test.touchIcon152="${page.favicons['touchIcon152']}"
           rel="apple-touch-icon" sizes="152x152" href="${touchIcon152}"/>
 
-    <title>${page.title}</title>
 </template>

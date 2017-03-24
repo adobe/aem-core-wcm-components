@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 
+import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -79,7 +80,7 @@ public class PageImpl implements Page {
     private static final String DEFAULT_TEMPLATE_EDITOR_CLIENT_LIB = "wcm.foundation.components.parsys.allowedcomponents";
     private static final String PN_CLIENTLIBS = "clientlibs";
 
-    private Map<String, String> favicons;
+    private Map<String, String> favicons = new HashMap<>();
 
     @PostConstruct
     private void initModel() {
@@ -95,13 +96,13 @@ public class PageImpl implements Page {
         }
         if (currentDesign != null) {
             String designPath = currentDesign.getPath();
-            if (StringUtils.isNotEmpty(designPath)) {
+            if (!Designer.DEFAULT_DESIGN_PATH.equals(designPath)) {
                 designPathCSS = designPath + ".css";
+                if (resolver.getResource(designPath + "/static.css") != null) {
+                    staticDesignPath = designPath + "/static.css";
+                }
+                loadFavicons(designPath);
             }
-            if (resolver.getResource(designPath + "/static.css") != null) {
-                staticDesignPath = designPath + "/static.css";
-            }
-            loadFavicons(designPath);
         }
         populateClientLibCategories();
         templateName = extractTemplateName();
@@ -169,7 +170,6 @@ public class PageImpl implements Page {
     }
 
     private void loadFavicons(String designPath) {
-        favicons = new HashMap<>();
         favicons.put(PN_FAVICON_ICO, getFaviconPath(designPath, FN_FAVICON_ICO));
         favicons.put(PN_FAVICON_PNG, getFaviconPath(designPath, FN_FAVICON_PNG));
         favicons.put(PN_TOUCH_ICON_120, getFaviconPath(designPath, FN_TOUCH_ICON_120));

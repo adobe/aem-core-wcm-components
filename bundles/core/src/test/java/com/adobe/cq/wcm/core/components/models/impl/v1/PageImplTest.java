@@ -23,31 +23,31 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.adobe.cq.wcm.core.components.context.MockStyle;
-import com.day.cq.wcm.api.designer.Style;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
-import com.adobe.cq.sightly.WCMBindings;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
-import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.api.designer.Design;
-import io.wcm.testing.mock.aem.junit.AemContext;
 import org.mockito.Matchers;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.context.MockStyle;
+import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.designer.Design;
+import com.day.cq.wcm.api.designer.Designer;
+import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyMapping;
+import io.wcm.testing.mock.aem.junit.AemContext;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class PageImplTest {
@@ -73,13 +73,11 @@ public class PageImplTest {
     private static final String PN_TOUCH_ICON_120 = "touchIcon120";
     private static final String PN_TOUCH_ICON_152 = "touchIcon152";
 
-    private SlingBindings slingBindings;
+    @Rule
+    public AemContext aemContext = CoreComponentTestContext.createContext("/page", ROOT);
 
-    @ClassRule
-    public final static AemContext aemContext = CoreComponentTestContext.createContext("/page", ROOT);
-
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         aemContext.load().json(TEST_BASE + "/test-conf.json", "/conf/coretest/settings");
         aemContext.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_ICO, DESIGN_PATH + "/" + FN_FAVICON_ICO);
         aemContext.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_PNG, DESIGN_PATH + "/" + FN_FAVICON_PNG);
@@ -134,6 +132,14 @@ public class PageImplTest {
     }
 
     @Test
+    public void testDefaultDesign() {
+        Page page = getPageUnderTest(PAGE, null);
+        assertNull(page.getDesignPath());
+        assertNull(page.getStaticDesignPath());
+        assertTrue(page.getFavicons().isEmpty());
+    }
+
+    @Test
     public void testKeywords() {
         Page page = getPageUnderTest(PAGE);
         String[] keywordsArray = page.getKeywords();
@@ -156,12 +162,19 @@ public class PageImplTest {
     }
 
     private Page getPageUnderTest(String pagePath) {
+        return getPageUnderTest(pagePath, DESIGN_PATH);
+    }
+
+    private Page getPageUnderTest(String pagePath, String designPath) {
         Resource resource = aemContext.currentResource(pagePath);
         com.day.cq.wcm.api.Page page = spy(aemContext.currentPage(pagePath));
-        slingBindings = (SlingBindings) aemContext.request().getAttribute(SlingBindings.class.getName());
+        SlingBindings slingBindings = (SlingBindings) aemContext.request().getAttribute(SlingBindings.class.getName());
         Design design = mock(Design.class);
-        when(design.getPath()).thenReturn(DESIGN_PATH);
-
+        if (designPath != null) {
+            when(design.getPath()).thenReturn(designPath);
+        } else {
+            when(design.getPath()).thenReturn(Designer.DEFAULT_DESIGN_PATH);
+        }
         Resource templateResource = aemContext.resourceResolver().getResource("/conf/coretest/settings/wcm/templates/product-page");
         Template template = mock(Template.class);
         when(template.hasStructureSupport()).thenReturn(true);
