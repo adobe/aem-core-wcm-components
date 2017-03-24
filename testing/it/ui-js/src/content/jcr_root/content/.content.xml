@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:oak="http://jackrabbit.apache.org/oak/ns/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:rep="internal"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:mixinTypes="[mix:lockable,rep:AccessControllable,sling:Redirect]"
-    jcr:primaryType="sling:OrderedFolder"
-    jcr:title="Start Page"
-    sling:resourceType="sling:redirect"
-    sling:target="/content/we-retail">
-    <projects/>
-    <dam/>
-    <start/>
-    <usergenerated/>
-    <rep:policy/>
-    <campaigns/>
-    <phonegap/>
-    <mobileapps/>
-    <launches/>
-    <publications/>
-    <experience-fragments/>
-    <forms/>
-    <screens/>
-    <communities/>
-    <sites/>
-    <community-components/>
-    <catalogs/>
-    <we-retail/>
-    <oak:index/>
+    jcr:primaryType="sling:OrderedFolder">
     <core-components/>
 </jcr:root>

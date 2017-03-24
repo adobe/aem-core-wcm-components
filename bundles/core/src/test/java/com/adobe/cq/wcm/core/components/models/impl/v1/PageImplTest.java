@@ -80,7 +80,7 @@ public class PageImplTest {
 
     @BeforeClass
     public static void setUp() {
-        aemContext.load().json(TEST_BASE + "/test-conf.json", "/conf/we-retail/settings");
+        aemContext.load().json(TEST_BASE + "/test-conf.json", "/conf/coretest/settings");
         aemContext.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_ICO, DESIGN_PATH + "/" + FN_FAVICON_ICO);
         aemContext.load().binaryFile(TEST_BASE + "/" + FN_FAVICON_PNG, DESIGN_PATH + "/" + FN_FAVICON_PNG);
         aemContext.load().binaryFile(TEST_BASE + "/" + FN_TOUCH_ICON_60, DESIGN_PATH + "/" + FN_TOUCH_ICON_60);
@@ -146,7 +146,7 @@ public class PageImplTest {
     @Test
     public void testGetClientLibCategories() throws Exception {
         Page page = getPageUnderTest(PAGE);
-        assertEquals("we-retail.product-page", page.getClientLibCategories()[0]);
+        assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class PageImplTest {
         Design design = mock(Design.class);
         when(design.getPath()).thenReturn(DESIGN_PATH);
 
-        Resource templateResource = aemContext.resourceResolver().getResource("/conf/we-retail/settings/wcm/templates/product-page");
+        Resource templateResource = aemContext.resourceResolver().getResource("/conf/coretest/settings/wcm/templates/product-page");
         Template template = mock(Template.class);
         when(template.hasStructureSupport()).thenReturn(true);
         when(template.adaptTo(Resource.class)).thenReturn(templateResource);

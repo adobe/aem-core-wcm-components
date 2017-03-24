@@ -8,7 +8,7 @@
             "jcr:createdBy"     : "admin",
             "jcr:title"         : "Templated Page",
             "jcr:description"   : "Description",
-            "cq:template"       : "/conf/we-retail/settings/wcm/templates/product-page",
+            "cq:template"       : "/conf/coretest/settings/wcm/templates/product-page",
             "jcr:created"       : "Wed Jan 20 2016 10:29:36 GMT+0100",
             "jcr:language"      : "en_GB",
             "cq:lastModified"   : "Wed Jan 20 2016 10:33:36 GMT+0100",

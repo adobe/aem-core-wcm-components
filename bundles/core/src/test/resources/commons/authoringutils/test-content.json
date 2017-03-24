@@ -22,9 +22,9 @@
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
             "jcr:createdBy"     : "admin",
-            "cq:template"       : "/conf/we-retail/settings/wcm/templates/product-page",
+            "cq:template"       : "/conf/coretest/settings/wcm/templates/product-page",
             "jcr:created"       : "Tue Oct 18 2016 11:56:34 GMT+0200",
-            "sling:resourceType": "weretail/components/structure/page",
+            "sling:resourceType": "coretest/components/structure/page",
             "root"              : {
                 "jcr:primaryType"      : "nt:unstructured",
                 "sling:resourceType"   : "wcm/foundation/components/responsivegrid",
@@ -34,7 +34,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 14:56:20 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 14:56:31 GMT+0100",
-                    "sling:resourceType": "weretail/components/content/breadcrumb"
+                    "sling:resourceType": "coretest/components/content/breadcrumb"
                 },
                 "product"              : {
                     "jcr:primaryType"   : "nt:unstructured",
@@ -42,7 +42,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 14:56:42 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 14:56:45 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/product",
+                    "sling:resourceType": "coretest/components/structure/product",
                     "cq:commerceType"   : "product"
                 },
                 "responsivegrid"       : {
@@ -60,7 +60,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:28:45 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:30:31 GMT+0100",
-                    "sling:resourceType": "weretail/components/content/title"
+                    "sling:resourceType": "coretest/components/content/title"
                 },
                 "reviews"              : {
                     "jcr:primaryType"   : "nt:unstructured",
@@ -68,7 +68,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:28:59 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:29:32 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/productreviews"
+                    "sling:resourceType": "coretest/components/structure/productreviews"
                 },
                 "similar_section_title": {
                     "jcr:primaryType"   : "nt:unstructured",
@@ -77,7 +77,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:29:10 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:30:44 GMT+0100",
-                    "sling:resourceType": "weretail/components/content/title"
+                    "sling:resourceType": "coretest/components/content/title"
                 },
                 "similar_products"     : {
                     "jcr:primaryType"   : "nt:unstructured",
@@ -85,7 +85,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:29:16 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:29:37 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/productrecommendation"
+                    "sling:resourceType": "coretest/components/structure/productrecommendation"
                 }
             }
         }
@@ -97,7 +97,7 @@
         "status"           : "enabled",
         "jcr:created"      : "Tue Oct 18 2016 11:56:34 GMT+0200",
         "cq:lastModified"  : "Wed Jan 13 2016 15:57:47 GMT+0100",
-        "cq:templateType"  : "/conf/we-retail/settings/wcm/template-types/empty-page",
+        "cq:templateType"  : "/conf/coretest/settings/wcm/template-types/empty-page",
         "cq:lastModifiedBy": "admin"
     },
     "structure"      : {
@@ -107,12 +107,12 @@
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
             "jcr:createdBy"     : "admin",
-            "cq:template"       : "/conf/we-retail/settings/wcm/templates/product-page",
+            "cq:template"       : "/conf/coretest/settings/wcm/templates/product-page",
             "jcr:created"       : "Tue Oct 18 2016 11:56:34 GMT+0200",
             "cq:deviceGroups"   : [
                 "/etc/mobile/groups/responsive"
             ],
-            "sling:resourceType": "weretail/components/structure/page",
+            "sling:resourceType": "coretest/components/structure/page",
             "root"              : {
                 "jcr:primaryType"      : "nt:unstructured",
                 "sling:resourceType"   : "wcm/foundation/components/responsivegrid",
@@ -122,7 +122,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Wed Jan 13 2016 15:58:00 GMT+0100",
                     "jcr:lastModified"  : "Wed Jan 13 2016 15:58:22 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/header"
+                    "sling:resourceType": "coretest/components/structure/header"
                 },
                 "breadcrumb"           : {
                     "jcr:primaryType"   : "nt:unstructured",
@@ -130,7 +130,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 14:56:20 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 14:56:20 GMT+0100",
-                    "sling:resourceType": "weretail/components/content/breadcrumb",
+                    "sling:resourceType": "coretest/components/content/breadcrumb",
                     "editable"          : false
                 },
                 "product"              : {
@@ -139,7 +139,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 14:56:42 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 14:56:42 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/product",
+                    "sling:resourceType": "coretest/components/structure/product",
                     "editable"          : true
                 },
                 "responsivegrid"       : {
@@ -158,7 +158,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:28:45 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:28:45 GMT+0100",
-                    "sling:resourceType": "weretail/components/content/title",
+                    "sling:resourceType": "coretest/components/content/title",
                     "editable"          : false
                 },
                 "reviews"              : {
@@ -167,7 +167,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:28:59 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:28:59 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/productreviews",
+                    "sling:resourceType": "coretest/components/structure/productreviews",
                     "editable"          : false
                 },
                 "similar_section_title": {
@@ -177,18 +177,18 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:29:10 GMT+0100",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:29:10 GMT+0100",
-                    "sling:resourceType": "weretail/components/content/title",
+                    "sling:resourceType": "coretest/components/content/title",
                     "editable"          : false
                 },
                 "similar_products"     : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "relationshipType"  : "relatedproducts:info.we-retail.similar-to-current",
+                    "relationshipType"  : "relatedproducts:info.coretest.similar-to-current",
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Mar 08 2016 15:29:16 GMT+0100",
                     "max"               : "6",
                     "jcr:lastModified"  : "Tue Mar 08 2016 15:29:16 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/productrecommendation",
+                    "sling:resourceType": "coretest/components/structure/productrecommendation",
                     "editable"          : false
                 },
                 "footer"               : {
@@ -197,7 +197,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Wed Jan 13 2016 15:58:16 GMT+0100",
                     "jcr:lastModified"  : "Wed Jan 13 2016 15:58:16 GMT+0100",
-                    "sling:resourceType": "weretail/components/structure/footer"
+                    "sling:resourceType": "coretest/components/structure/footer"
                 }
             },
             "cq:responsive"     : {
@@ -225,26 +225,26 @@
         "jcr:content"    : {
             "jcr:primaryType"   : "nt:unstructured",
             "jcr:lastModifiedBy": "admin",
-            "cq:policy"         : "weretail/components/structure/page/we-retail-product-page",
+            "cq:policy"         : "coretest/components/structure/page/coretest-product-page",
             "jcr:lastModified"  : "Thu Mar 03 2016 18:46:02 GMT+0100",
             "sling:resourceType": "wcm/core/components/policies/mappings",
             "root"              : {
                 "jcr:primaryType"   : "nt:unstructured",
                 "jcr:lastModifiedBy": "admin",
-                "cq:policy"         : "wcm/foundation/components/responsivegrid/we-retail-structure",
+                "cq:policy"         : "wcm/foundation/components/responsivegrid/coretest-structure",
                 "jcr:lastModified"  : "Tue Feb 16 2016 21:38:49 GMT+0100",
                 "sling:resourceType": "wcm/core/components/policies/mapping",
                 "breadcrumb"        : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:lastModifiedBy": "admin",
-                    "cq:policy"         : "weretail/components/content/breadcrumb/we-retail-product-page",
+                    "cq:policy"         : "coretest/components/content/breadcrumb/coretest-product-page",
                     "jcr:lastModified"  : "Tue Feb 16 2016 21:39:02 GMT+0100",
                     "sling:resourceType": "wcm/core/components/policies/mapping"
                 },
                 "responsivegrid"    : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:lastModifiedBy": "admin",
-                    "cq:policy"         : "wcm/foundation/components/responsivegrid/we-retail-default",
+                    "cq:policy"         : "wcm/foundation/components/responsivegrid/coretest-default",
                     "jcr:lastModified"  : "Tue Feb 16 2016 21:39:02 GMT+0100",
                     "sling:resourceType": "wcm/core/components/policies/mapping"
                 }

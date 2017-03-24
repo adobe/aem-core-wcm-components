@@ -60,8 +60,8 @@
     /**
      * Creates a CQ page via POST request, the same as send by the create page wizard.
      *
-     * @param templatePath Mandatory. Path to the template e.g. "/conf/we-retail/settings/wcm/templates/content-page"
-     * @param parentPath Mandatory. Path to the parent page e.g. "/content/we-retail/language-masters/en"
+     * @param templatePath Mandatory. Path to the template e.g. "/conf/coretest/settings/wcm/templates/content-page"
+     * @param parentPath Mandatory. Path to the parent page e.g. "/content/coretest/language-masters/en"
      * @param pageName Mandatory. Page name to be set for the page.
      * @param dynParName Optional. Hobbes dynamic param to store the generated page path.
      * @param done Mandatory. Callback to be executed when async method has finished.

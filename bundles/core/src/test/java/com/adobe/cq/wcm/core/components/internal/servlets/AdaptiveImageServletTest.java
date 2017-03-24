@@ -226,7 +226,7 @@ public class AdaptiveImageServletTest {
         verify(logger).warn(
                 "One of the configured widths ({}) from the {} content policy is not a valid Integer.",
                 "invalid",
-                "/conf/we-retail/settings/wcm/policies/weretail/components/content/image/policy_1478854677327"
+                "/conf/coretest/settings/wcm/policies/coretest/components/content/image/policy_1478854677327"
         );
     }
 

@@ -20,7 +20,7 @@
                 "jcr:language"      : "en",
                 "jcr:primaryType"   : "cq:PageContent",
                 "jcr:title"         : "Devi Sleeveless Shirt",
-                "sling:resourceType": "we-retail/components/structure/page",
+                "sling:resourceType": "coretest/components/structure/page",
                 "header"            : {
                     "jcr:primaryType"        : "nt:unstructured",
                     "sling:resourceType"     : "foundation/components/parsys",
@@ -82,7 +82,7 @@
             "jcr:primaryType"   : "cq:PageContent",
             "jcr:title"         : "Shirts",
             "hideInNav"         : "true",
-            "sling:resourceType": "we-retail/components/structure/page"
+            "sling:resourceType": "coretest/components/structure/page"
         },
         "jcr:created"          : "Mon Jul 18 2016 14:30:46 GMT+0200",
         "jcr:createdBy"        : "admin",

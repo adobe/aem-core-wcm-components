@@ -52,20 +52,13 @@ public abstract class WCMUsePojoBaseTest<T extends WCMUsePojo> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WCMUsePojoBaseTest.class);
 
-    protected static String TEST_CONTENT_ROOT;
-    protected static String TEST_APPS_ROOT;
     protected static String TEST_BASE = StringUtils.EMPTY;
 
     @Rule
     protected final AemContext context = new AemContext();
 
-    public static final String TEST_CONTENT = "/test-content.json";
-    public static final String TEST_APPS = "/test-apps.json";
-
     @Before
     public void setUp() {
-        initTestResources(TEST_CONTENT_ROOT, TEST_CONTENT);
-        initTestResources(TEST_APPS_ROOT, TEST_APPS);
         context.registerInjectActivateService(new MockAdapterFactory());
     }
 

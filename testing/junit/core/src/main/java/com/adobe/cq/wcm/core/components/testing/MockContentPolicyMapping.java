@@ -55,7 +55,7 @@ public class MockContentPolicyMapping extends SlingAdaptable implements ContentP
         if (valueMap.containsKey("cq:policy")) {
             String policyPath = valueMap.get("cq:policy", StringUtils.EMPTY);
             if (StringUtils.isNotEmpty(policyPath)) {
-                policyPath = "/conf/we-retail/settings/wcm/policies/" + policyPath;
+                policyPath = "/conf/coretest/settings/wcm/policies/" + policyPath;
                 Resource policyResource = contentPolicyResource.getResourceResolver().getResource(policyPath);
                 if (policyResource != null) {
                     return new MockContentPolicy(policyResource);

@@ -1,6 +1,6 @@
 {
     "jcr:primaryType": "sling:Folder",
-    "we-retail"      : {
+    "coretest"      : {
         "jcr:primaryType": "sling:OrderedFolder",
         "jcr:title"      : "Core",
         "settings"       : {
@@ -9,7 +9,7 @@
                 "jcr:primaryType": "cq:Page",
                 "policies"       : {
                     "jcr:primaryType": "cq:Page",
-                    "weretail"       : {
+                    "coretest"       : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "nt:unstructured",
                         "components"        : {

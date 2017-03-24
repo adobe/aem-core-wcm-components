@@ -6,10 +6,10 @@
         "jcr:primaryType"   : "cq:PageContent",
         "jcr:createdBy"     : "admin",
         "jcr:title"         : "demo-page",
-        "cq:template"       : "/conf/we-retail/settings/wcm/templates/content-page",
+        "cq:template"       : "/conf/coretest/settings/wcm/templates/content-page",
         "jcr:created"       : "Wed Oct 05 2016 16:05:02 GMT+0530",
         "cq:lastModified"   : "Wed Oct 05 2016 16:49:14 GMT+0530",
-        "sling:resourceType": "weretail/components/structure/page",
+        "sling:resourceType": "coretest/components/structure/page",
         "cq:lastModifiedBy" : "admin",
         "root"              : {
             "jcr:primaryType"   : "nt:unstructured",
@@ -32,7 +32,7 @@
                     "jcr:created"       : "Tue Sep 20 2016 23:26:30 GMT+0200",
                     "jcr:lastModified"  : "Tue Sep 20 2016 23:26:47 GMT+0200",
                     "absParent"         : "5",
-                    "sling:resourceType": "weretail/components/structure/breadcrumb"
+                    "sling:resourceType": "coretest/components/structure/breadcrumb"
                 },
                 "title"                  : {
                     "jcr:primaryType"   : "nt:unstructured",
@@ -40,7 +40,7 @@
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Tue Sep 20 2016 23:26:52 GMT+0200",
                     "jcr:lastModified"  : "Tue Sep 20 2016 23:26:52 GMT+0200",
-                    "sling:resourceType": "weretail/components/content/title"
+                    "sling:resourceType": "coretest/components/content/title"
                 },
                 "container"          : {
                     "jcr:primaryType"   : "nt:unstructured",
