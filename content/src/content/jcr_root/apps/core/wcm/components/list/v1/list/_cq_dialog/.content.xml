@@ -197,7 +197,7 @@
                                                         rootPath="/content"/>
                                                     <tags
                                                         jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="cq/gui/components/common/tagspicker"
+                                                        sling:resourceType="cq/gui/components/coral/common/form/tagfield"
                                                         fieldLabel="Tags"
                                                         name="./tags"/>
                                                     <match
