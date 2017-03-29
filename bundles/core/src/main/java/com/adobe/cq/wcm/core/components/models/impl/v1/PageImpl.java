@@ -24,8 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 
-import com.day.cq.wcm.api.designer.Designer;
-import com.day.cq.wcm.api.designer.Style;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -43,6 +41,8 @@ import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Design;
+import com.day.cq.wcm.api.designer.Designer;
+import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = Page.class, resourceType = PageImpl.RESOURCE_TYPE)
@@ -70,7 +70,7 @@ public class PageImpl implements Page {
     private ResourceResolver resolver;
 
     private String[] keywords = new String[0];
-    private String designPathCSS;
+    private String designPath;
     private String staticDesignPath;
     private String title;
     private String[] clientLibCategories = new String[0];
@@ -97,7 +97,7 @@ public class PageImpl implements Page {
         if (currentDesign != null) {
             String designPath = currentDesign.getPath();
             if (!Designer.DEFAULT_DESIGN_PATH.equals(designPath)) {
-                designPathCSS = designPath + ".css";
+                this.designPath = designPath;
                 if (resolver.getResource(designPath + "/static.css") != null) {
                     staticDesignPath = designPath + "/static.css";
                 }
@@ -141,7 +141,7 @@ public class PageImpl implements Page {
 
     @Override
     public String getDesignPath() {
-        return designPathCSS;
+        return designPath;
     }
 
     @Override

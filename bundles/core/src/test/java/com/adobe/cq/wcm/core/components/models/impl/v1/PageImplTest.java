@@ -127,7 +127,7 @@ public class PageImplTest {
     @Test
     public void testDesign() {
         Page page = getPageUnderTest(PAGE);
-        assertEquals(DESIGN_PATH + ".css", page.getDesignPath());
+        assertEquals(DESIGN_PATH, page.getDesignPath());
         assertEquals(DESIGN_PATH + "/static.css", page.getStaticDesignPath());
     }
 
