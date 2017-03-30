@@ -28,11 +28,11 @@
                         <wideLandscape
                             jcr:primaryType="nt:unstructured"
                             name="Wide Landscape"
-                            ratio="0.8284"/>
+                            ratio="0.6180"/>
                         <landscape
                             jcr:primaryType="nt:unstructured"
                             name="Landscape"
-                            ratio="0.6180"/>
+                            ratio="0.8284"/>
                         <square
                             jcr:primaryType="nt:unstructured"
                             name="Square"
