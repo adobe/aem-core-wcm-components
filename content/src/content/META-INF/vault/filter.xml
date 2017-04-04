@@ -16,5 +16,4 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
     <filter root="/apps/core/wcm/components"/>
-    <filter root="/apps/settings/wcm/template-types/coreCmpPage"/>
 </workspaceFilter>
