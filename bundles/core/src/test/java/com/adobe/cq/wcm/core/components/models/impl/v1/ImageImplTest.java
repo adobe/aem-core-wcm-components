@@ -84,7 +84,8 @@ public class ImageImplTest {
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image0.img.600.png\"," +
                 "\"/core/content/test/jcr%3acontent/root/image0.img.700.png\",\"/core/content/test/jcr%3acontent/root/image0" +
-                ".img.800.png\"],\"smartSizes\":[600,700,800],\"lazyEnabled\":true}";
+                ".img.800.png\",\"/core/content/test/jcr%3acontent/root/image0.img.2000.png\", " +
+                "\"/core/content/test/jcr%3acontent/root/image0.img.2500.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
         assertEquals("/content/test-image.html", image.getLink());

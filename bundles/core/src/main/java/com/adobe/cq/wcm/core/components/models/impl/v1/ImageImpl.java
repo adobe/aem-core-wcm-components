@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -144,7 +145,7 @@ public class ImageImpl implements Image {
             String escapedResourcePath = Text.escapePath(resource.getPath());
             for (Integer width : supportedRenditionWidths) {
                 smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                        width + DOT + extension;
+                        width + DOT + extension + (wcmmode.isEdit() ? "?" + System.currentTimeMillis() : "");
                 smartSizes[index] = width;
                 index++;
             }

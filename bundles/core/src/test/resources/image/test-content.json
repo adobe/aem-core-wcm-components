@@ -81,7 +81,7 @@
                         }
                     }
                 },
-                "image6": {
+                "image6"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
@@ -90,6 +90,114 @@
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "/content/test"
+                },
+                "image7"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677329",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "https://www.adobe.com",
+                    "fileName"          : "Adobe_Systems_logo_and_wordmark.svg.png",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image8"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677329"
+                },
+                "image9"            : {
+                    "imageCrop"         : "186,950,1076,1280",
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+                },
+                "image10"           : {
+                    "imageCrop"         : "290,1470,1680,1985",
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image11"           : {
+                    "imageCrop"         : "0,0,1280,1280",
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+                },
+                "image12"           : {
+                    "imageCrop"         : "0,0,2000,2000",
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
+                },
+                "image13"           : {
+                    "imageCrop"         : "186,950,1076,1280",
+                    "imageRotate"       : 90,
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+                },
+                "image14"           : {
+                    "imageCrop"         : "290,1470,1680,1985",
+                    "imageRotate"       : 90,
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 10453365,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
+                        }
+                    }
                 }
             }
         }

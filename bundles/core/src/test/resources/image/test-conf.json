@@ -1,6 +1,6 @@
 {
     "jcr:primaryType": "sling:Folder",
-    "coretest"      : {
+    "coretest"       : {
         "jcr:primaryType": "sling:OrderedFolder",
         "jcr:title"      : "Core",
         "settings"       : {
@@ -26,7 +26,9 @@
                                         "allowedRenditionWidths": [
                                             600,
                                             700,
-                                            800
+                                            800,
+                                            2000,
+                                            2500
                                         ],
                                         "allowUpload"           : "true",
                                         "sling:resourceType"    : "wcm/core/components/policy/policy",
@@ -61,6 +63,45 @@
                                             600
                                         ],
                                         "disableLazyLoading"    : "true",
+                                        "allowUpload"           : "true",
+                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
+                                        "jcr:content"           : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        },
+                                        "plugins"               : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        }
+                                    },
+                                    "policy_1478854677329": {
+                                        "jcr:primaryType"       : "nt:unstructured",
+                                        "jcr:title"             : "images",
+                                        "allowedRenditionWidths": [
+                                            -1
+                                        ],
+                                        "disableLazyLoading"    : "true",
+                                        "allowUpload"           : "true",
+                                        "sling:resourceType"    : "wcm/core/components/policy/policy",
+                                        "jcr:content"           : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        },
+                                        "plugins"               : {
+                                            "jcr:primaryType": "nt:unstructured"
+                                        }
+                                    },
+                                    "policy_1478854677330": {
+                                        "jcr:primaryType"       : "nt:unstructured",
+                                        "jcr:title"             : "images",
+                                        "allowedRenditionWidths": [
+                                            128,
+                                            256,
+                                            512,
+                                            1024,
+                                            1280,
+                                            1440,
+                                            1920,
+                                            2048
+                                        ],
+                                        "disableLazyLoading"    : "false",
                                         "allowUpload"           : "true",
                                         "sling:resourceType"    : "wcm/core/components/policy/policy",
                                         "jcr:content"           : {
