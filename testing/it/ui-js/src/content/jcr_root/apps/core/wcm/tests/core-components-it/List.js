@@ -347,9 +347,9 @@
         .simulate("foundation-autocomplete[name='./tagsSearchRoot'] input[type!='hidden']", "key-sequence",
         {sequence: "%parentPath%{enter}"})
         // search for 2 tags
-        .simulate("span[data-property-path='./tags'] input[type!='hidden']", "key-sequence",
+        .simulate("foundation-autocomplete[name='./tags'] input[is='coral-textfield']", "key-sequence",
         {sequence: tag1 + "{enter}"})
-        .simulate("span[data-property-path='./tags'] input[type!='hidden']", "key-sequence",
+        .simulate("foundation-autocomplete[name='./tags'] input[is='coral-textfield']", "key-sequence",
         {sequence: tag2 + "{enter}"})
         // set the content path
         .execTestCase(c.tcUseDialogSelect("./tagsMatch", "any"))
@@ -383,9 +383,9 @@
         .simulate("foundation-autocomplete[name='./tagsSearchRoot'] input[type!='hidden']", "key-sequence",
         {sequence: "%parentPath%{enter}"})
         // search for 2 tags
-        .simulate("span[data-property-path='./tags'] input[type!='hidden']", "key-sequence",
+        .simulate("foundation-autocomplete[name='./tags'] input[is='coral-textfield']", "key-sequence",
         {sequence: tag1 + "{enter}"})
-        .simulate("span[data-property-path='./tags'] input[type!='hidden']", "key-sequence",
+        .simulate("foundation-autocomplete[name='./tags'] input[is='coral-textfield']", "key-sequence",
         {sequence: tag2 + "{enter}"})
         // set the content path
         .execTestCase(c.tcUseDialogSelect("./tagsMatch", "all"))
