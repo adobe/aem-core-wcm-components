@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models.impl.v1;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -25,11 +26,11 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.commons.mime.MimeTypeService;
@@ -52,6 +53,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
@@ -135,6 +137,17 @@ public class ImageImpl implements Image {
             }
         }
         if (hasContent) {
+            long lastModifiedDate = 0;
+            if (!wcmmode.isDisabled()) {
+                ValueMap properties = resource.getValueMap();
+                Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+                if (lastModified == null) {
+                    lastModified = properties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
+                }
+                if (lastModified != null) {
+                    lastModifiedDate = lastModified.getTimeInMillis();
+                }
+            }
             if (extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
                 extension = DEFAULT_EXTENSION;
             }
@@ -145,20 +158,16 @@ public class ImageImpl implements Image {
             String escapedResourcePath = Text.escapePath(resource.getPath());
             for (Integer width : supportedRenditionWidths) {
                 smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                        width + DOT + extension + (wcmmode.isEdit() ? "?" + System.currentTimeMillis() : "");
+                        width + DOT + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate  + DOT : "") + extension;
                 smartSizes[index] = width;
                 index++;
             }
             if (smartSizes.length == 0 || smartSizes.length >= 2) {
-                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + extension;
+                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
+                        (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate + DOT : "") + extension;
             } else if (smartSizes.length == 1) {
                 src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + smartSizes[0] +
-                        DOT + extension;
-            }
-
-            // cache breaker for edit mode to refresh image after drag-and-drop
-            if(wcmmode.isEdit()) {
-                src = src + "?" + System.currentTimeMillis();
+                        DOT + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate + DOT : "") + extension;
             }
 
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);

@@ -56,6 +56,7 @@ import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
 import com.day.cq.wcm.api.NameConstants;
+import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.image.Layer;
@@ -113,8 +114,14 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response) throws ServletException,
             IOException {
         String[] selectors = request.getRequestPathInfo().getSelectors();
-        if (selectors.length != 1 && selectors.length != 2) {
-            LOGGER.error("Expected 1 or 2 selectors, instead got: {}.", Arrays.toString(selectors));
+        WCMMode wcmmode = WCMMode.fromRequest(request);
+        int minSelectors = 1;
+        if (wcmmode != WCMMode.DISABLED) {
+            minSelectors = 2;
+        }
+        int maxSelectors = minSelectors + 1;
+        if (selectors.length != minSelectors && selectors.length != maxSelectors) {
+            LOGGER.error("Expected {} or {} selectors, instead got: {}.", minSelectors, maxSelectors, Arrays.toString(selectors));
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -127,7 +134,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 return;
             }
             int resizeWidth = defaultResizeWidth;
-            String widthSelector = selectors[selectors.length - 1];
+            int selectorBackShift = (wcmmode == WCMMode.DISABLED) ? 1 : 2;
+            String widthSelector = selectors[selectors.length - selectorBackShift];
             if (!DEFAULT_SELECTOR.equals(widthSelector)) {
                 try {
                     Integer width = Integer.parseInt(widthSelector);
