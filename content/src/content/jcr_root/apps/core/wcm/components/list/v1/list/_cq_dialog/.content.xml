@@ -199,6 +199,7 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="cq/gui/components/coral/common/form/tagfield"
                                                         fieldLabel="Tags"
+                                                        multiple="{Boolean}true"
                                                         name="./tags"/>
                                                     <match
                                                         jcr:primaryType="nt:unstructured"
