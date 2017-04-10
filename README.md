@@ -27,8 +27,7 @@ The core components are build on top of the Sling Models API 1.3, which is part 
 
 To install everything the [released all package as released aggregate package](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
 
-For more information about the Package Manager please have a look at [How to Work With Packages](https://docs.adobe
-.com/docs/en/aem/6-2/administer/content/package-manager.html) documentation page.
+For more information about the Package Manager please have a look at [How to Work With Packages](https://docs.adobe.com/docs/en/aem/6-2/administer/content/package-manager.html) documentation page.
 
 ## Build
 
