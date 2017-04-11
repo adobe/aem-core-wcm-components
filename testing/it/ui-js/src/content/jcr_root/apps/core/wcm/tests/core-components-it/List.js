@@ -25,6 +25,7 @@
     var searchValue = "Victor Sullivan";
     var tag1 = "ellie";
     var tag2 = "joel";
+    var description = "This is a child page"
 
     /**
      * Before Test Case
@@ -54,6 +55,7 @@
         .execFct(function (opts, done) {
             var data = {};
             data['cq:tags'] = tag1;
+            data['jcr:description'] = description;
             c.editNodeProperties(h.param("page1Path")() + "/jcr:content", data, done);
         })
         // add page 2
@@ -626,6 +628,85 @@
             return h.find("div.cmp-list li span:eq(1)", "#ContentFrame").text().trim()=="Modified Page 3";
         });
 
+    /**
+     * Test: item settings - link items option
+     */
+    var linkItemsForList = new h.TestCase('Link the items from a list', {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+        // open the configuration dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // set parent page
+            // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
+            .simulate("foundation-autocomplete[name='./parentPage'] input[type!='hidden']", "key-sequence",
+                {sequence: "%parentPath%{enter}"})
+
+            .click("coral-tab-label:contains('Item Settings')")
+            .click("input[name='./linkItems']")
+
+            // close the dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+
+            .asserts.isTrue(function () {
+                return h.find("a[href*='page_1.html']", "#ContentFrame").size() == 1
+            })
+        ;
+
+    /**
+     * Test: item settings - show description
+     */
+    var showDescriptionForList = new h.TestCase("Show the list items's description", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+        // open the configuration dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // set parent page
+            // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
+            .simulate("foundation-autocomplete[name='./parentPage'] input[type!='hidden']", "key-sequence",
+                {sequence: "%parentPath%{enter}"})
+
+            .click("coral-tab-label:contains('Item Settings')")
+            .click("input[name='./showDescription']")
+
+            // close the dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+
+            .asserts.isTrue(function () {
+                return h.find("span:contains('This is a child page')", "#ContentFrame").size() == 1
+            })
+        ;
+
+    /**
+     * Test: item settings - show date
+     */
+    var showDateForList = new h.TestCase("Show the list items's date", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+        // open the configuration dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // set parent page
+            // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
+            .simulate("foundation-autocomplete[name='./parentPage'] input[type!='hidden']", "key-sequence",
+                {sequence: "%parentPath%{enter}"})
+
+            .click("coral-tab-label:contains('Item Settings')")
+            .click("input[name='./showModificationDate']")
+
+            // close the dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+
+            .asserts.isTrue(function () {
+                var date = new Date().toISOString().slice(0,10)
+                return h.find("span:contains('"+date+"')", "#ContentFrame").size() >= 1
+            })
+        ;
+
 
     /**
      * The main test suite for Text Component
@@ -646,5 +727,8 @@
         .addTestCase(orderByLastModifiedDate)
         .addTestCase(changeOrderingDate)
         .addTestCase(setMaxItems)
+        .addTestCase(linkItemsForList) 
+        .addTestCase(showDescriptionForList) 
+        .addTestCase(showDateForList)
     ;
 }(hobs, jQuery));
