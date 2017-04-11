@@ -134,12 +134,12 @@
         // open the dialog
         .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
         // check if all default title sizes are there
-        .assert.exist(".coral3-SelectList-item[value='h1']")
-        .assert.exist(".coral3-SelectList-item[value='h2']")
-        .assert.exist(".coral3-SelectList-item[value='h3']")
-        .assert.exist(".coral3-SelectList-item[value='h4']")
-        .assert.exist(".coral3-SelectList-item[value='h5']")
-        .assert.exist(".coral3-SelectList-item[value='h6']");
+        .assert.exist("coral-selectlist-item[value='h1']")
+        .assert.exist("coral-selectlist-item[value='h2']")
+        .assert.exist("coral-selectlist-item[value='h3']")
+        .assert.exist("coral-selectlist-item[value='h4']")
+        .assert.exist("coral-selectlist-item[value='h5']")
+        .assert.exist("coral-selectlist-item[value='h6']");
 
     /**
      * Test: Check if setting the title type works.
@@ -150,7 +150,7 @@
 
         /// open the edit dialog
         .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-        .click(".coral3-SelectList-item[value='h5']")
+        .click("coral-selectlist-item[value='h5']")
         .execTestCase(c.tcSaveConfigureDialog)
 
         .assert.isTrue(function () {

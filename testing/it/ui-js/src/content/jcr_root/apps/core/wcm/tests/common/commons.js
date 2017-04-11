@@ -59,7 +59,7 @@
     // configuration dialog
     c.selConfigDialog = ".cq-dialog.foundation-form.foundation-layout-form";
     // save button on a configuration dialog
-    c.selSaveConfDialogButton = ".cq-dialog-actions .coral-Button[title='Done']";
+    c.selSaveConfDialogButton = ".cq-dialog-actions button[is='coral-button'][title='Done']";
 
     /**
      * Creates a CQ page via POST request, the same as send by the create page wizard.
@@ -484,7 +484,7 @@
             // make sure its visible
             .asserts.visible("#EditableToolbar")
             // click on the 'configure' button
-            .click(".coral-Button.cq-editable-action[title='Configure']")
+            .click("button.cq-editable-action[is='coral-button'][title='Configure']")
             // verify the dialog has become visible
             .asserts.visible(c.selConfigDialog);
     };
@@ -550,7 +550,7 @@
             // check if its there
             .asserts.visible("#EditableToolbar")
             // click on the 'Edit' button
-            .click(".coral-Button.cq-editable-action[title='Edit']")
+            .click("button.cq-editable-action[is='coral-button'][title='Edit']")
             // go to the content frame
             .config.changeContext(c.getContentFrame)
             // wait for editable attribute to appear
@@ -564,32 +564,7 @@
      */
     c.tcSaveInlineEditor = new TestCase("Save Inline Editor")
         //click on the component to see the Editable Toolbar
-        .click(".coral-Button[title='Save']");
-
-    /**
-     * sets the edit mode for the editor page. If its already in this mode , nothing happens.
-     * If not, it will set the mode and do a reload.
-     *
-     * @param mode  Mandatory Allowed values : Edit, Layouting, Scaffolding, Developer, Targeting
-     */
-    c.tcSetEditMode = function(mode){
-
-        // check the correct mode is already set
-        if (h.find("button.editor-GlobalBar-layerCurrent.is-selected[data-layer='" + mode + "'") == 1){
-            return new TestCase("Edit mode is already set to "   + mode);
-        }
-        return new TestCase("Setting Edit Mode to " + mode)
-            // set the new edit mode
-            .config.resetContext()
-            // open the dropdown
-            .click("a.editor-GlobalBar-layerSwitcher")
-            // wait for the mode to appear in the drop down
-            .assert.visible(".coral-BasicList-item-content:contains('" + mode + "')")
-            // click it, some mode changes make a reload, so wait for it
-            .click(".coral-BasicList-item-content:contains('" + mode + "')",{expectNav: true})
-            // to be on the save side we reload again (thats why timewarp mode is not an option for this method)
-            .reload();
-    };
+        .click("button[is='coral-button'][title='Save']");
 
     c.closeSidePanel = new hobs.TestCase("Close side panel", {timeout: 2000})
         .ifElse(function (opts) {

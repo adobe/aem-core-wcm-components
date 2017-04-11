@@ -76,8 +76,8 @@
         // Open the edit dialog
         .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
         //change the type of the button
-        .click(".coral-Button:contains('Submit')")
-        .click(".coral3-SelectList-item:contains('Button')")
+        .click("button[is='coral-button']:contains('Submit')")
+        .click("coral-selectlist-item:contains('Button')")
         //set the button text
         .fillInput("[name='./jcr:title']","BUTTON")
         // close the edit dialog
