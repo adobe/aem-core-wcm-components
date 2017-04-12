@@ -81,7 +81,7 @@
 
         // verify that the surrounding script tag has been removed and the img tag is there
         .asserts.isTrue(function () {
-            return h.find("div.cmp-image img[src^='"+ h.param("testPagePath")() +
+            return h.find("div.cmp-image img[src*='"+ h.param("testPagePath")() +
                 "/_jcr_content/root/responsivegrid/image.img.']", "#ContentFrame").size() == 1;
         });
 
