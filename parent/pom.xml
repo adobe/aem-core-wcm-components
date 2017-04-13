@@ -42,7 +42,7 @@
         <vault.user>admin</vault.user>
         <vault.password>admin</vault.password>
         <slf4j.version>1.7.6</slf4j.version>
-        <aem.java.version>7</aem.java.version>
+        <aem.java.version>8</aem.java.version>
     </properties>
 
     <!-- ======================================================================= -->
@@ -81,7 +81,7 @@
         <defaultGoal>clean install</defaultGoal>
 
         <plugins>
-            <!-- Require Java 6 or higher for building -->
+            <!-- Require Java 8 or higher for building -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -94,11 +94,11 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>[2.2.1,)</version>
+                                    <version>[3.3.1,)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <message>Project must be compiled with Java 6 or higher</message>
-                                    <version>1.6.0</version>
+                                    <message>Project must be compiled with Java ${aem.java.version} or higher</message>
+                                    <version>1.${aem.java.version}</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
@@ -288,6 +288,11 @@
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>3.2.0</version>
                     <inherited>true</inherited>
+                    <configuration>
+                        <instructions>
+                            <Bundle-RequiredExecutionEnvironment>JavaSE-1.${aem.java.version}</Bundle-RequiredExecutionEnvironment>
+                        </instructions>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>baseline</id>

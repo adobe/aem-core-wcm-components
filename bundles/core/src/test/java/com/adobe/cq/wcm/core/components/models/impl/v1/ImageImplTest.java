@@ -140,12 +140,9 @@ public class ImageImplTest {
 
         } else {
             style = mock(Style.class);
-            when(style.get(anyString(), Matchers.anyObject())).thenAnswer(new Answer<Object>() {
-                @Override
-                public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-                    return invocationOnMock.getArguments()[1];
-                }
-            });
+            when(style.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
+                    invocationOnMock -> invocationOnMock.getArguments()[1]
+            );
         }
         slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         slingBindings.put(SlingBindings.RESOURCE, resource);

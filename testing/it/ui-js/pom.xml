@@ -33,7 +33,7 @@
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.it.ui-js</artifactId>
     <packaging>content-package</packaging>
-    <name>Core Components JS Tests</name>
+    <name>Adobe Experience Manager Core WCM Components JS Tests</name>
     <version>6.3.31-SNAPSHOT</version>
 
     <!-- ====================================================================== -->
