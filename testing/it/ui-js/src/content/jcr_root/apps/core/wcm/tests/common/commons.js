@@ -27,6 +27,10 @@
     c.template = "/conf/core-components/settings/wcm/templates/core-components";
     // relative path from page node to the root layout container
     c.relParentCompPath = "/jcr:content/root/responsivegrid/";
+    // the path to the policies
+    c.policyPath = "/conf/core-components/settings/wcm/policies/core/wcm/components";
+    // the policy assignment path
+    c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core/wcm/components";
 
     // core component resource types
     // text component
@@ -48,7 +52,7 @@
     // form option
     c.rtFormOptions = "core/wcm/components/form/options/v1/options";
     // hidden field
-    c.rtFormHidden = "core/wcm/components/form/hidden/v1/hidden"
+    c.rtFormHidden = "core/wcm/components/form/hidden/v1/hidden";
 
     // selectors
 
@@ -244,6 +248,67 @@
         })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 done(false, "addTag failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
+    /**
+     * Create a policy
+     *
+     * @param component_path   Mandatory. the path to the component policy
+     * @param data Tha policy's data
+     * @param done  Mandatory. the callback to execute when post returns
+     */
+    c.createPolicy = function (component_path, data, dynParName, done) {
+        // mandatory check
+        if (component_path == null || data == null || done == null) {
+            if (done) done(false, "createPolicy failed! Mandatory param(s) missing.");
+            return;
+            }
+            jQuery.ajax({
+                url: c.policyPath+component_path,
+                method: "POST",
+                data: data
+            })
+            .done(function (data, textStatus, jqXHR) {
+                // extract the component path from the returned HTML
+                if (dynParName != null) {
+                    h.param(dynParName, jQuery(data).find("#Path").text());
+                }
+            })
+
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "createPolicy failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
+    /**
+     * Assign a policy to a core component
+     *
+     * @param component_path   Mandatory. the path to the component policy
+     * @param data Tha policy's data
+     * @param done  Mandatory. the callback to execute when post returns
+     */
+    c.assignPolicy = function (component_path, data, done) {
+        // mandatory check
+        if (component_path == null || data == null || done == null) {
+            if (done) done(false, "assignPolicy failed! Mandatory param(s) missing.");
+            return;
+        }
+        jQuery.ajax({
+            url: c.policyAssignmentPath+component_path,
+            method: "POST",
+            data: data
+        })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "assignPolicy failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
             .then(function () {
