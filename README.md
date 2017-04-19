@@ -65,14 +65,14 @@ Please note that
 
 ## Include core components as subpackage into your own project maven build
 
-The released version of the core components are available on the public maven repository at http://repo.adobe.com. To include the 
+The released version of the core components are available on the public maven repository at https://repo.adobe.com. To include the 
 core components package into your own project maven build you can add the dependency
  ```
  <dependency>
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>1.0.0</version>
+     <version>1.0.2</version>
      <scope>provided</scope>
  </dependency>
  ```
@@ -88,5 +88,5 @@ core components package into your own project maven build you can add the depend
  
  to the `content-package-maven-plugin`.
  
- For more information how to setup the Adobe Maven Repository (repo.adobe.com) for your maven build, please have a look at the 
+ For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the 
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)
