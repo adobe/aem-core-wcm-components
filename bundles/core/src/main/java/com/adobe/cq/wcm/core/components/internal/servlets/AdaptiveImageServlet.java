@@ -136,21 +136,27 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             int resizeWidth = defaultResizeWidth;
             int selectorBackShift = (wcmmode == WCMMode.DISABLED) ? 1 : 2;
             String widthSelector = selectors[selectors.length - selectorBackShift];
+            List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(request);
             if (!DEFAULT_SELECTOR.equals(widthSelector)) {
                 try {
                     Integer width = Integer.parseInt(widthSelector);
                     boolean isRequestedWidthAllowed = false;
-                    for (Integer allowedWidth : getAllowedRenditionWidths(request)) {
-                        if (width.equals(allowedWidth)) {
-                            isRequestedWidthAllowed = true;
-                            resizeWidth = width;
-                            break;
+                    if (!allowedRenditionWidths.isEmpty()) {
+                        for (Integer allowedWidth : allowedRenditionWidths) {
+                            if (width.equals(allowedWidth)) {
+                                isRequestedWidthAllowed = true;
+                                resizeWidth = width;
+                                break;
+                            }
                         }
-                    }
-                    if (isRequestedWidthAllowed) {
-                        resizeAndStream(request, response, image, imageProperties, resizeWidth);
+                        if (isRequestedWidthAllowed) {
+                            resizeAndStream(request, response, image, imageProperties, resizeWidth);
+                        } else {
+                            LOGGER.error("The requested width ({}) is not allowed by the content policy.", width);
+                            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                        }
                     } else {
-                        LOGGER.error("The requested width ({}) is not allowed by the content policy.", width);
+                        LOGGER.error("There's no content policy defined and the request provides a width selector ({}).", width);
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     }
                 } catch (NumberFormatException e) {
@@ -158,7 +164,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
             } else {
-                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(request);
                 if (!allowedRenditionWidths.isEmpty()) {
                     // resize to the first value of the allowedRenditionWidths
                     int size = allowedRenditionWidths.get(0);

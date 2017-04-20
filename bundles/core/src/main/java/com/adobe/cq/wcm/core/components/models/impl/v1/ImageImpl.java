@@ -30,6 +30,7 @@ import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONObject;
@@ -56,7 +57,8 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = Image.class, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = Constants.EXPORTER_NAME, extensions = Constants.EXPORTER_EXTENSION)
@@ -74,9 +76,6 @@ public class ImageImpl implements Image {
 
     @Inject
     private Resource resource;
-
-    @ScriptVariable
-    private Style currentStyle;
 
     @ScriptVariable
     private PageManager pageManager;
@@ -114,8 +113,6 @@ public class ImageImpl implements Image {
     private int[] smartSizes = new int[0];
     private String json;
 
-    // content policy settings
-    private Set<Integer> allowedRenditionWidths;
     private boolean disableLazyLoading;
 
     @PostConstruct
@@ -151,14 +148,20 @@ public class ImageImpl implements Image {
             if (extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
                 extension = DEFAULT_EXTENSION;
             }
-            Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
+            ResourceResolver resourceResolver = request.getResourceResolver();
+            ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
+            ContentPolicy contentPolicy = policyManager.getPolicy(resource);
+            if (contentPolicy != null) {
+                disableLazyLoading = contentPolicy.getProperties().get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+            }
+            Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths(contentPolicy);
             smartImages = new String[supportedRenditionWidths.size()];
             smartSizes = new int[supportedRenditionWidths.size()];
             int index = 0;
             String escapedResourcePath = Text.escapePath(resource.getPath());
             for (Integer width : supportedRenditionWidths) {
                 smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                        width + DOT + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate  + DOT : "") + extension;
+                        width + DOT + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate + DOT : "") + extension;
                 smartSizes[index] = width;
                 index++;
             }
@@ -169,8 +172,6 @@ public class ImageImpl implements Image {
                 src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + smartSizes[0] +
                         DOT + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate + DOT : "") + extension;
             }
-
-            disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
             if (!isDecorative) {
                 Page page = pageManager.getPage(linkURL);
                 if (page != null) {
@@ -227,10 +228,10 @@ public class ImageImpl implements Image {
         json = new JSONObject(objectMap).toString();
     }
 
-    private Set<Integer> getSupportedRenditionWidths() {
-        if (allowedRenditionWidths == null) {
-            allowedRenditionWidths = new TreeSet<>();
-            String[] supportedWidthsConfig = currentStyle.get(PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
+    private Set<Integer> getSupportedRenditionWidths(ContentPolicy contentPolicy) {
+        Set<Integer> allowedRenditionWidths = new TreeSet<>();
+        if (contentPolicy != null) {
+            String[] supportedWidthsConfig = contentPolicy.getProperties().get(PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
             for (String width : supportedWidthsConfig) {
                 try {
                     allowedRenditionWidths.add(Integer.parseInt(width));

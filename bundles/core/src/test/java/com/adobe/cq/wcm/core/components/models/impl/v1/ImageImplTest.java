@@ -19,27 +19,26 @@ import java.util.Map;
 
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.Matchers;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.context.MockStyle;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.*;
@@ -49,8 +48,8 @@ import static org.mockito.Mockito.when;
 
 public class ImageImplTest {
 
-    @Rule
-    public final AemContext aemContext = CoreComponentTestContext.createContext("/image", "/content");
+    @ClassRule
+    public static final AemContext aemContext = CoreComponentTestContext.createContext("/image", "/content");
 
     private static final String TEST_ROOT = "/content";
     private static final String PAGE = TEST_ROOT + "/test";
@@ -62,17 +61,15 @@ public class ImageImplTest {
     private static final String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png";
     private static final String IMAGE_LINK = "https://www.adobe.com";
 
-    private SlingBindings slingBindings;
+    private static final ContentPolicyManager contentPolicyManager = mock(ContentPolicyManager.class);
 
-    @Before
-    public void setUp() {
-        aemContext.load().json("/image/test-conf.json", "/conf");
+    @BeforeClass
+    public static void init() {
         aemContext.registerInjectActivateService(new MockAdapterFactory());
-        Page page = aemContext.currentPage(PAGE);
-        slingBindings = (SlingBindings) aemContext.request().getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.CURRENT_PAGE, page);
-        slingBindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(aemContext.request()));
-        slingBindings.put(WCMBindings.PAGE_MANAGER, aemContext.pageManager());
+        aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
+                (Function<ResourceResolver, ContentPolicyManager>) resourceResolver -> contentPolicyManager
+        );
+        aemContext.load().json("/image/test-conf.json", "/conf");
     }
 
     @Test
@@ -130,25 +127,29 @@ public class ImageImplTest {
     }
 
     private Image getImageUnderTest(String resourcePath) {
-        Resource resource = aemContext.currentResource(resourcePath);
+        Resource resource = aemContext.resourceResolver().getResource(resourcePath);
         ContentPolicyMapping mapping = resource.adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        Style style;
-        if (contentPolicy != null) {
-            Resource contentPolicyResource = aemContext.resourceResolver().getResource(contentPolicy.getPath());
-            style = new MockStyle(contentPolicyResource, contentPolicyResource.adaptTo(ValueMap.class));
 
-        } else {
-            style = mock(Style.class);
-            when(style.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
-                    invocationOnMock -> invocationOnMock.getArguments()[1]
-            );
+        SlingBindings slingBindings = new SlingBindings();
+        if (contentPolicy != null) {
+            when(contentPolicyManager.getPolicy(resource)).thenReturn(contentPolicy);
         }
-        slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         slingBindings.put(SlingBindings.RESOURCE, resource);
-        MockSlingHttpServletRequest request = aemContext.request();
+        final MockSlingHttpServletRequest request =
+                new MockSlingHttpServletRequest(aemContext.resourceResolver(), aemContext.bundleContext());
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
+        Page page = aemContext.pageManager().getPage(PAGE);
+        slingBindings.put(WCMBindings.CURRENT_PAGE, page);
+        slingBindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(request));
+        slingBindings.put(WCMBindings.PAGE_MANAGER, aemContext.pageManager());
+        Style style = mock(Style.class);
+        when(style.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
+                invocationOnMock -> invocationOnMock.getArguments()[1]
+        );
+        slingBindings.put(WCMBindings.CURRENT_STYLE, style);
+        request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Image.class);
     }
 
