@@ -159,7 +159,13 @@
                     initSmart();
                 }
             } else if (updateMode === 'smart' && (options.loadHidden || container.offsetParent !== null)) {
-                var optimalSize = container.clientWidth * devicePixelRatio,
+                var containerWidth = 0;
+                if (container.tagName.toLowerCase() === 'a') {
+                    containerWidth = container.parentElement.clientWidth;
+                } else {
+                    containerWidth = container.clientWidth;
+                }
+                var optimalSize = containerWidth * devicePixelRatio,
                     len = options.smartSizes.length,
                     key = 0;
 
@@ -181,7 +187,7 @@
             if(dropContainer) {
                 container = dropContainer;
             }
-            anchor = container.querySelector('a');
+            anchor = container.querySelector('a.cmp-image-link');
             if(anchor !== null) {
                 container = anchor;
             }
