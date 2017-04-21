@@ -161,16 +161,17 @@ public class ImageImpl implements Image {
             String escapedResourcePath = Text.escapePath(resource.getPath());
             for (Integer width : supportedRenditionWidths) {
                 smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                        width + DOT + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate + DOT : "") + extension;
+                        width + DOT + extension + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension
+                        : "");
                 smartSizes[index] = width;
                 index++;
             }
             if (smartSizes.length == 0 || smartSizes.length >= 2) {
-                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                        (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate + DOT : "") + extension;
+                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + extension +
+                        (!wcmmode.isDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
             } else if (smartSizes.length == 1) {
                 src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + smartSizes[0] +
-                        DOT + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? lastModifiedDate + DOT : "") + extension;
+                        DOT + extension + (!wcmmode.isDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
             }
             if (!isDecorative) {
                 Page page = pageManager.getPage(linkURL);
