@@ -14,7 +14,7 @@
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Default Page"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        clientlibs="[wcm.foundation.components.page.responsive,core.wcm.components]">
+                        clientlibs="[wcm.foundation.components.page.responsive]">
                         <jcr:content
                             jcr:primaryType="nt:unstructured"
                             mergeList="{Boolean}true"/>
