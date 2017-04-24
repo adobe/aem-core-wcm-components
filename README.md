@@ -19,7 +19,7 @@ A set of standardized components that can be used to speed up development of web
   * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v1/hidden)
   * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v1/button)
 
-The components' versioning scheme is documented on the [[AEM Core WCM Components' versioning policies]] wiki page
+The components' versioning scheme is documented on the [[AEM Core WCM Components' versioning policies|AEM Core WCM Components' versioning policies]] wiki page
 
 ## System Requirements
 
