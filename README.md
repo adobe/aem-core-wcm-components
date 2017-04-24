@@ -19,9 +19,11 @@ A set of standardized components that can be used to speed up development of web
   * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v1/hidden)
   * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v1/button)
 
+The components' versioning scheme is documented [here](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/AEM-Core-WCM-Components'-versioning-policies).
+
 ## System Requirements
 
-The core components are build on top of the Sling Models API 1.3, which is part of `AEM 6.3`
+The core components are built on top of the Sling Models API 1.3, which is part of `AEM 6.3`. From version 1.0.4 the project requires Java 1.8 as an execution environment.
 
 ## Installation
 
@@ -30,6 +32,10 @@ To install everything the [released all package as released aggregate package](h
 For more information about the Package Manager please have a look at [How to Work With Packages](https://docs.adobe.com/docs/en/aem/6-2/administer/content/package-manager.html) documentation page.
 
 ## Build
+
+The project has the following minimal requirements:
+* Java SE Development Kit 8 or newer
+* Apache Maven 3.3.1 or newer
 
 For ease of build and installation the following profiles are provided:
 
