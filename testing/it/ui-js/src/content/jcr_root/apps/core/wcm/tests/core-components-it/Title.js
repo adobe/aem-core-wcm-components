@@ -48,6 +48,13 @@
         // delete the test page we created
         .execFct(function (opts, done) {
             c.deletePage(h.param("testPagePath")(opts), done);
+        })
+
+        .execFct(function (opts, done) {
+            c.deletePolicy("/title", done);
+        })
+        .execFct(function (opts, done) {
+            c.deletePolicyAssignment("/title", done);
         });
 
     /**
@@ -187,6 +194,8 @@
 
         //check if the default value is selected
         .assert.exist("coral-selectlist-item[value='h2'].is-selected")
+
+        .execTestCase(c.tcSaveConfigureDialog)
     ;
 
     /**

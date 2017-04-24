@@ -317,6 +317,62 @@
     };
 
     /**
+     * Deletes a policy.
+     *
+     * @param policyPath Mandatory. policyPath path to the policy to be deleted
+     * @param done Optional. callback to be executed when the async method has finished.
+     */
+    c.deletePolicy = function (component_path, done) {
+        // mandatory check
+        if (component_path == null || done == null) {
+            if (done) done(false, "deletePolicy failed! mandatory parameter(s) missing!");
+            return;
+        }
+        jQuery.ajax({
+            url: c.policyPath+component_path,
+            method: "POST",
+            data: {
+                ":operation": "delete"
+            }
+        })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "deletePolicy failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
+    /**
+     * Deletes a policy allocation.
+     *
+     * @param policyAllocationPath Mandatory. policyAllocatiionPath path to the policy allocation to be deleted
+     * @param done Optional. callback to be executed when the async method has finished.
+     */
+    c.deletePolicyAssignment = function (component_path, done) {
+        // mandatory check
+        if (component_path == null || done == null) {
+            if (done) done(false, "deletePolicyAllocation failed! mandatory parameter(s) missing!");
+            return;
+        }
+        jQuery.ajax({
+            url: c.policyAssignmentPath+component_path,
+            method: "POST",
+            data: {
+                ":operation": "delete"
+            }
+        })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "deletePolicyAllocation failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
+    /**
      * returns the content frame.
      */
     c.getContentFrame = function () {
