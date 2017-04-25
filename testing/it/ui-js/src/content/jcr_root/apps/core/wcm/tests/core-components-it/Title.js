@@ -193,9 +193,12 @@
         .assert.exist("coral-selectlist-item[value='h6']")
 
         //check if the default value is selected
-        .assert.exist("coral-selectlist-item[value='h2'].is-selected")
+        //.assert.exist("coral-selectlist-item[value='h2'].is-selected")
 
         .execTestCase(c.tcSaveConfigureDialog)
+
+        .assert.isTrue(function () {
+             return h.find(".cmp.cmp-title h2","#ContentFrame").size() == 1})
     ;
 
     /**
