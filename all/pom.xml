@@ -145,13 +145,13 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.core</artifactId>
-            <version>1.0.2</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.content</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
@@ -159,7 +159,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.config</artifactId>
             <type>zip</type>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
