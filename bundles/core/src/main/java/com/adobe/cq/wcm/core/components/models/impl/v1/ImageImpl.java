@@ -181,6 +181,7 @@ public class ImageImpl implements Image {
                 }
             } else {
                 linkURL = null;
+                alt = null;
             }
             buildJson();
         }

@@ -108,7 +108,7 @@ public class ImageImplTest {
     public void testSimpleDecorativeImage() throws Exception {
         String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
         Image image = getImageUnderTest(IMAGE4_PATH);
-        assertEquals(IMAGE_TITLE_ALT, image.getAlt());
+        assertNull("Did not expect a value for the alt attribute, since the image is marked as decorative.", image.getAlt());
         assertNull("Did not expect a title for this image.", image.getTitle());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertNull("Did not expect a link for this image, since it's marked as decorative.", image.getLink());
