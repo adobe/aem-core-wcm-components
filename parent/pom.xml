@@ -587,9 +587,9 @@
                 Jar can be used as dependencies.
              -->
             <dependency>
-                <groupId>com.day.cq</groupId>
-                <artifactId>cq-quickstart-beta</artifactId>
-                <version>6.3.0-load20b</version>
+                <groupId>com.adobe.aem</groupId>
+                <artifactId>uber-jar</artifactId>
+                <version>6.3.0</version>
                 <classifier>apis</classifier>
                 <scope>provided</scope>
             </dependency>
