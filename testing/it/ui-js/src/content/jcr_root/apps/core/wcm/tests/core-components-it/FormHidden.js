@@ -149,7 +149,7 @@
 
     new h.TestSuite('Core Components - Form Hidden', {path: '/apps/core/wcm/tests/core-components-it/FormHidden.js',
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(checkMandatoryFields)
         .addTestCase(setElementName)

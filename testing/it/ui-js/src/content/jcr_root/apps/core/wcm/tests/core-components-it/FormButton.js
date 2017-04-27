@@ -155,7 +155,7 @@
      */
     new h.TestSuite("Core Components - Form Button",{path:"/apps/core/wcm/tests/core-components-it/FormButton.js",
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(checkDefaultButtonAttributes)
         .addTestCase(createButton)

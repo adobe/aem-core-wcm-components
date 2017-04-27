@@ -578,7 +578,7 @@
      */
     new h.TestSuite('Core Components - Form Text', {path: '/apps/core/wcm/tests/core-components-it/FormText.js',
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(checkLabelMandatory)
         .addTestCase(setLabel)

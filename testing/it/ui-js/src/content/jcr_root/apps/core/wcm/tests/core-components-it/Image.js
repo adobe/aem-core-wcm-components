@@ -207,7 +207,7 @@
      */
     new h.TestSuite('Core Components - Image', {path: '/apps/core/wcm/tests/core-components-it/Image.js',
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(addImage)
         .addTestCase(addAltText)

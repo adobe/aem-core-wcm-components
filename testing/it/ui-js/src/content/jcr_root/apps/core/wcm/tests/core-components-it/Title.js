@@ -242,7 +242,7 @@
      */
     new h.TestSuite("Core Components - Title", {path:"/apps/core/wcm/tests/core-components-it/Title.js",
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(setTitleValueUsingInlineEditor)
         .addTestCase(setTitleValueUsingConfigDialog)

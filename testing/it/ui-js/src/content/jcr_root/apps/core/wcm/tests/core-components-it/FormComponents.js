@@ -170,7 +170,7 @@
      */
     new h.TestSuite("Core Components - Form Submit",{path:"/apps/core/wcm/tests/core-components-it/FormComponents.js",
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(storeContent)
     ;

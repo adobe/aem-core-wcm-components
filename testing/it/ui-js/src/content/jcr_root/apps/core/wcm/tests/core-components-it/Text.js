@@ -107,7 +107,7 @@
      */
     new h.TestSuite('Core Components - Text', {path: '/apps/core/wcm/tests/core-components-it/Text.js',
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(setTextValueUsingInlineEditor)
     ;

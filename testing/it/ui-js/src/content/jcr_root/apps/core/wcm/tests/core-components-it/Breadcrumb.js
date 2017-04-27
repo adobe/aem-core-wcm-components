@@ -216,7 +216,7 @@
      */
     new h.TestSuite("Core Components - Breadcrumb", {path:"/apps/core/wcm/tests/core-components-it/Breadcrumb.js",
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(testHideCurrent)
         .addTestCase(testShowHidden)

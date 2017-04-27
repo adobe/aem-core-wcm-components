@@ -713,7 +713,7 @@
      */
     new h.TestSuite('Core Components - List', {path: '/apps/core/wcm/tests/core-components-it/List.js',
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(createListDirectChildren)
         .addTestCase(createListChildren)

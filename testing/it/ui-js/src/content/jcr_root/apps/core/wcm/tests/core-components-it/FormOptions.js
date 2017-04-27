@@ -451,7 +451,7 @@
 
     new h.TestSuite('Core Components - Form Options', {path: '/apps/core/wcm/tests/core-components-it/FormOptions.js',
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(checkMandatoryFields)
         .addTestCase(setTitle)

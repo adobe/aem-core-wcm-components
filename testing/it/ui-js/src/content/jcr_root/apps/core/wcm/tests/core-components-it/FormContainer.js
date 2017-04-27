@@ -268,19 +268,13 @@
      */
     new h.TestSuite("Core Components - Form Container",{path:"/apps/core/wcm/tests/core-components-it/FormContainer.js",
         execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow : true})
 
         .addTestCase(storeContent)
         .addTestCase(setMailAction)
         .addTestCase(setContextPath)
         .addTestCase(setThankYouPage)
-        //The View Data button can't be tested because it tries to open a new window and this can't be tested with hobbes
-        // NOTE: its not possible to test reliably if the test workflow has been started so no workflow test
-        //.addTestCase(startWorkflow)
-        // See https://jira.corp.adobe.com/browse/CQ-106130
-        // TODO : setting form identifier is going to be replaced by css styles
-        // TODO : client validation not implemented yet
-    ;
+   ;
 
 }(hobs, jQuery));
 
