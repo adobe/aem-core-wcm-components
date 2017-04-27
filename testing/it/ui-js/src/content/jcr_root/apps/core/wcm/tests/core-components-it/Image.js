@@ -191,6 +191,7 @@
         .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
         // set image and alt text (to see if its not rendered)
         .execTestCase(tcSetMinimalProps)
+        .click("input[type='checkbox'][name='./isDecorative']")
         // save the dialog
         .execTestCase(c.tcSaveConfigureDialog)
 
@@ -199,7 +200,7 @@
         // check if the image is rendered without alt text even if it is set in the edit dialog
 
         .asserts.isTrue(function () {
-            return h.find("div.cmp-image > img[alt='"+altText +"']", "#ContentFrame").size() == 0;
+            return h.find('div.cmp-image img').attr('alt') === '';
         });
 
     /**
