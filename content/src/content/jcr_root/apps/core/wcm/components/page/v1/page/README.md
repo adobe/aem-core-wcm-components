@@ -34,6 +34,7 @@ The page component automatically loads certain client libraries in the head sect
 Client Library Category or Path | Condition | Type | Head or Body
 --- | --- | --- | --- 
 `cq.pagetypes.html5page`,`cq.authoring.page`,`cq.wcm.foundation-main`,`cq.shared` | only for `WCMMode`!=`Disabled` | JS and CSS | Head
+libsScript from all referenced [cloud service configurations](https://docs.adobe.com/docs/en/aem/6-3/develop/extending/cloud-service-configurations.html), by default `headlibs.jsp` | only in case there is a lib script found for the referenced cloud service config | anything | Head
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set | CSS | Head
 `<designpath>.css` | only if design is set for current page | CSS | Head
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set | JS | Body
