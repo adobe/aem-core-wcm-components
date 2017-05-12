@@ -28,6 +28,16 @@ Extensible page component written in HTL.
 * Closed user groups and permissions
 * Cloud services
 
+## Loading of CSS/JS
+The page component automatically loads certain client libraries in the head section and at the end of the body section
+
+Client Library Category or Path | Condition | Type | Head or Body
+--- | --- | --- | --- 
+`cq.pagetypes.html5page`,`cq.authoring.page`,`cq.wcm.foundation-main`,`cq.shared` | only for `WCMMode`!=`Disabled` | JS and CSS | Head
+`<clientlibs>` being set in component policy | only if `<clientlibs>` is set | CSS | Head
+`<designpath>.css` | only if design is set for current page | CSS | Head
+`<clientlibs>` being set in component policy | only if `<clientlibs>` is set | JS | Body
+
 ### Use Object
 The Page component uses the following use objects:
 * `com.adobe.cq.wcm.core.components.models.Page`
