@@ -219,7 +219,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             imageFile = image.getChild(DownloadResource.NN_FILE);
             if ("gif".equalsIgnoreCase(extension)) {
                 LOGGER.debug("GIF file detected; will render the original file.");
-                stream(response, imageFile.adaptTo(InputStream.class), imageType);
+                InputStream is = imageFile.adaptTo(InputStream.class);
+                if (is != null) {
+                    stream(response, is, imageType);
+                }
                 return;
             }
         }
@@ -551,17 +554,19 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         List<Integer> list = new ArrayList<>();
         ResourceResolver resourceResolver = request.getResourceResolver();
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
-        ContentPolicy contentPolicy = policyManager.getPolicy(request.getResource());
-        if (contentPolicy != null) {
-            String[] allowedRenditionWidths = contentPolicy.getProperties()
-                    .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
-            for (String width : allowedRenditionWidths) {
-                try {
-                    list.add(Integer.parseInt(width));
-                } catch (NumberFormatException e) {
-                    LOGGER.warn("One of the configured widths ({}) from the {} content policy is not a valid Integer.", width,
-                            contentPolicy.getPath());
-                    return list;
+        if (policyManager != null) {
+            ContentPolicy contentPolicy = policyManager.getPolicy(request.getResource());
+            if (contentPolicy != null) {
+                String[] allowedRenditionWidths = contentPolicy.getProperties()
+                        .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
+                for (String width : allowedRenditionWidths) {
+                    try {
+                        list.add(Integer.parseInt(width));
+                    } catch (NumberFormatException e) {
+                        LOGGER.warn("One of the configured widths ({}) from the {} content policy is not a valid Integer.", width,
+                                contentPolicy.getPath());
+                        return list;
+                    }
                 }
             }
         }

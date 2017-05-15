@@ -15,32 +15,44 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.form.impl.v1;
 
+import java.io.IOException;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
-import com.adobe.cq.sightly.WCMBindings;
+import org.apache.sling.api.request.RequestDispatcherOptions;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.form.OptionItem;
+import com.adobe.cq.wcm.core.components.models.form.Options;
+import com.adobe.cq.wcm.core.components.models.form.Options.Type;
+import com.adobe.granite.ui.components.ds.DataSource;
+import com.adobe.granite.ui.components.ds.SimpleDataSource;
+
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.sling.api.resource.Resource;
-
-import com.adobe.cq.wcm.core.components.models.form.OptionItem;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.form.Options;
-
 public class OptionsImplTest {
 
     private static final String RESOURCE_PROPERTY = "resource";
 
+    private static final String CONTENT_ROOT = "/content/options";
+
     @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/form/options", "/content/options");
+    public AemContext context = CoreComponentTestContext.createContext("/form/options", CONTENT_ROOT);
 
     private SlingBindings slingBindings;
 
@@ -49,9 +61,102 @@ public class OptionsImplTest {
         slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
     }
 
+    private void setUpMockDataSource() {
+        Resource dataSourceResource = context.resourceResolver().getResource(CONTENT_ROOT + "/dataDatasource/datasource/items");
+        SimpleDataSource dataSource = new SimpleDataSource(dataSourceResource.listChildren());
+        context.request().setAttribute(DataSource.class.getName(), dataSource);
+    }
+
+    private void setUpMockRequestDispatcher() {
+        context.request().setRequestDispatcherFactory(new MockRequestDispatcherFactory() {
+            @Override
+            public RequestDispatcher getRequestDispatcher(String s, RequestDispatcherOptions requestDispatcherOptions) {
+                return null;
+            }
+
+            @Override
+            public RequestDispatcher getRequestDispatcher(Resource resource, RequestDispatcherOptions requestDispatcherOptions) {
+                return new MockRequestDispatcher(resource, requestDispatcherOptions);
+            }
+        });
+    }
+
+    @Test
+    public void testOptionsDefaultAttributes() {
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/optionsDefault");
+        slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
+        slingBindings.put(RESOURCE_PROPERTY, optionsRes);
+        Options options = context.request().adaptTo(Options.class);
+        assertEquals(Type.CHECKBOX, options.getType());
+
+        String id = "form-options" + "-" + String.valueOf(Math.abs(optionsRes.getPath().hashCode() - 1));
+        assertEquals(id, options.getId());
+
+        assertEquals(null, options.getName());
+        assertEquals(null, options.getValue());
+        assertEquals(null, options.getTitle());
+        assertEquals(null, options.getHelpMessage());
+
+        List<OptionItem> optionItems = options.getItems();
+        assertNotNull(optionItems);
+        assertTrue(optionItems.size() == 0);
+    }
+
+    @Test
+    public void testLocalAsOptionsSource() {
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/optionsWithLocalSource");
+        slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
+        slingBindings.put(RESOURCE_PROPERTY, optionsRes);
+        Options options = context.request().adaptTo(Options.class);
+        assertEquals(Type.CHECKBOX, options.getType());
+
+        String id = "form-options" + "-" + String.valueOf(Math.abs(optionsRes.getPath().hashCode() - 1));
+        assertEquals(id, options.getId());
+
+        assertEquals("local-name", options.getName());
+        assertEquals("local-title", options.getTitle());
+        assertEquals("local-helpMessage", options.getHelpMessage());
+
+        List<OptionItem> optionItems = options.getItems();
+        assertNotNull(optionItems);
+        assertTrue(optionItems.size() == 2);
+
+        evaluateOptionItem(optionItems.get(0), "local-item1-name", "local-item1-value", true, false);
+        evaluateOptionItem(optionItems.get(1), "local-item2-name", "local-item2-value", false, true);
+    }
+
+    @Test
+    public void testDatasourceAsOptionsSource() {
+        setUpMockRequestDispatcher();
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/optionsWithDatasourceSource");
+        slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
+        slingBindings.put(RESOURCE_PROPERTY, optionsRes);
+        Options options = context.request().adaptTo(Options.class);
+        List<OptionItem> optionItems = options.getItems();
+        assertNotNull(optionItems);
+        assertTrue(optionItems.size() == 2);
+
+        evaluateOptionItem(optionItems.get(0), "datasource-item1-name", "datasource-item1-value", true, false);
+        evaluateOptionItem(optionItems.get(1), "datasource-item2-name", "datasource-item2-value", false, true);
+    }
+
+    @Test
+    public void testListAsOptionsSource() {
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/optionsWithListSource");
+        slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
+        slingBindings.put(RESOURCE_PROPERTY, optionsRes);
+        Options options = context.request().adaptTo(Options.class);
+        List<OptionItem> optionItems = options.getItems();
+        assertNotNull(optionItems);
+        assertTrue(optionItems.size() == 2);
+
+        evaluateOptionItem(optionItems.get(0), "list-item1-name", "list-item1-value", true, false);
+        evaluateOptionItem(optionItems.get(1), "list-item2-name", "list-item2-value", false, true);
+    }
+
     @Test
     public void testCheckboxOptionsType() throws Exception {
-        Resource optionsRes = context.currentResource("/content/options/checkbox");
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/checkbox");
         slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
         slingBindings.put(RESOURCE_PROPERTY, optionsRes);
         Options options = context.request().adaptTo(Options.class);
@@ -59,7 +164,7 @@ public class OptionsImplTest {
         assertEquals("name1", options.getName());
         assertEquals("jcr:title1", options.getTitle());
         assertEquals("helpMessage1", options.getHelpMessage());
-        assertEquals(Options.Type.CHECKBOX, options.getType());
+        assertEquals(Type.CHECKBOX, options.getType());
 
         assertNotNull(optionItems);
         assertTrue(optionItems.size() == 3);
@@ -75,29 +180,29 @@ public class OptionsImplTest {
 
     @Test
     public void testRadioOptionsType() throws Exception {
-        Resource optionsRes = context.currentResource("/content/options/radio");
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/radio");
         slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
         slingBindings.put(RESOURCE_PROPERTY, optionsRes);
         Options options = context.request().adaptTo(Options.class);
-        assertEquals(Options.Type.RADIO, options.getType());
+        assertEquals(Type.RADIO, options.getType());
     }
 
     @Test
     public void testDropDownOptionsType() throws Exception {
-        Resource optionsRes = context.currentResource("/content/options/drop-down");
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/drop-down");
         slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
         slingBindings.put(RESOURCE_PROPERTY, optionsRes);
         Options options = context.request().adaptTo(Options.class);
-        assertEquals(Options.Type.DROP_DOWN, options.getType());
+        assertEquals(Type.DROP_DOWN, options.getType());
     }
 
     @Test
     public void testMulitDropDownOptionsType() throws Exception {
-        Resource optionsRes = context.currentResource("/content/options/multi-drop-down");
+        Resource optionsRes = context.currentResource(CONTENT_ROOT + "/multi-drop-down");
         slingBindings.put(WCMBindings.PROPERTIES, optionsRes.adaptTo(ValueMap.class));
         slingBindings.put(RESOURCE_PROPERTY, optionsRes);
         Options options = context.request().adaptTo(Options.class);
-        assertEquals(Options.Type.MULTI_DROP_DOWN, options.getType());
+        assertEquals(Type.MULTI_DROP_DOWN, options.getType());
     }
 
     private void evaluateOptionItem(OptionItem item, String text, String value, boolean selected, boolean disabled) {
@@ -107,4 +212,27 @@ public class OptionsImplTest {
         assertEquals(disabled, item.isDisabled());
     }
 
+    private class MockRequestDispatcher implements RequestDispatcher {
+
+        private Resource resource;
+
+        private RequestDispatcherOptions options;
+
+        MockRequestDispatcher(Resource resource, RequestDispatcherOptions options) {
+            this.resource = resource;
+            this.options = options;
+        }
+
+        @Override
+        public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+            String forcedResourceType = options.getForceResourceType();
+            assertEquals(CONTENT_ROOT + "/dataDatasource/datasource", forcedResourceType);
+            setUpMockDataSource();
+        }
+    }
 }

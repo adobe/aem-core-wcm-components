@@ -89,8 +89,6 @@ public class CoreFormHandlingServlet
     static final String EXTENSION = "html";
     private static final Boolean PROP_ALLOW_EXPRESSION_DEFAULT = true;
 
-    private Set<String> formResourceTypes = new HashSet<String>(Arrays.asList(FormConstants.RT_ALL_CORE_FORM_CONTAINER));
-
     private String[] dataNameWhitelist;
 
     private FormsHandlingServletHelper formsHandlingServletHelper;
@@ -108,7 +106,7 @@ public class CoreFormHandlingServlet
 
         dataNameWhitelist = PropertiesUtil.toStringArray(configuration.name_whitelist());
         allowExpressions = PropertiesUtil.toBoolean(configuration.allow_expressions(), PROP_ALLOW_EXPRESSION_DEFAULT);
-        formsHandlingServletHelper = new FormsHandlingServletHelper(dataNameWhitelist, validator, formResourceTypes,
+        formsHandlingServletHelper = new FormsHandlingServletHelper(dataNameWhitelist, validator, FormConstants.RT_ALL_CORE_FORM_CONTAINER,
                 allowExpressions, formStructureHelperFactory);
     }
 

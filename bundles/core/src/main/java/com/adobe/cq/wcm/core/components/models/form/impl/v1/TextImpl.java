@@ -66,8 +66,6 @@ public class TextImpl extends AbstractFieldImpl implements Text {
 
     private String[] prefillValues;
 
-    private String id = null;
-
     @ValueMapValue
     @Default(values = PROP_HELP_MESSAGE_DEFAULT)
     private String helpMessage;

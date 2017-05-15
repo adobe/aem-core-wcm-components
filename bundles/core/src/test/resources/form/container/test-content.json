@@ -52,6 +52,8 @@
                     "jcr:lastModified"  : "Wed Oct 05 2016 16:05:53 GMT+0530",
                     "sling:resourceType": "core/wcm/components/form/container/v1/container",
                     "actionType"        : "foundation/components/form/actions/store",
+                    "id"                : "my-id",
+                    "redirect"          : "/content/we-retail/home",
                     "text"              : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:createdBy"     : "admin",

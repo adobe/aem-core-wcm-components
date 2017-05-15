@@ -125,7 +125,6 @@ public class AdaptiveImageServletTest {
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG10_FILE_PATH);
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG12_FILE_PATH);
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG14_FILE_PATH);
-        aemContext.registerInjectActivateService(new MockAdapterFactory());
         contentPolicyManager = mock(ContentPolicyManager.class);
         aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
                 new Function<ResourceResolver, ContentPolicyManager>() {

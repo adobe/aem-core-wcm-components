@@ -15,8 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.impl.v1;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
-
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.i18n.ResourceBundleProvider;
 import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
@@ -28,6 +27,8 @@ import org.mockito.Mockito;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.form.Button;
 
+import io.wcm.testing.mock.aem.junit.AemContext;
+
 import static org.junit.Assert.assertEquals;
 
 public class ButtonImplTest {
@@ -37,6 +38,8 @@ public class ButtonImplTest {
     private static String EMPTY_BUTTON_PATH = ROOT_PATH + "/button";
 
     private static String BUTTON1_PATH = ROOT_PATH + "/button1";
+
+    private static final String ID_PREFIX = "form-button";
 
     @Rule
     public AemContext context = CoreComponentTestContext.createContext("/form/button", "/content/buttons");
@@ -59,12 +62,15 @@ public class ButtonImplTest {
      */
     @Test
     public void testEmptyButton() throws Exception {
-        context.currentResource(EMPTY_BUTTON_PATH);
+        Resource resource = context.currentResource(EMPTY_BUTTON_PATH);
         Button button = context.request().adaptTo(Button.class);
         assertEquals(Button.Type.SUBMIT, button.getType());
         assertEquals("Submit", button.getTitle());
         assertEquals("", button.getName());
         assertEquals("", button.getValue());
+        assertEquals(null, button.getHelpMessage());
+        String id = ID_PREFIX + "-" + String.valueOf(Math.abs(resource.getPath().hashCode() - 1));
+        assertEquals(id, button.getId());
     }
 
     /**
@@ -81,6 +87,8 @@ public class ButtonImplTest {
         assertEquals("button title", button.getTitle());
         assertEquals("name1", button.getName());
         assertEquals("value1", button.getValue());
+        assertEquals("button-id", button.getId());
+        assertEquals(null, button.getHelpMessage());
     }
 
 }

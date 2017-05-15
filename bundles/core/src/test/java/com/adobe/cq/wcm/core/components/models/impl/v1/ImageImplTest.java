@@ -33,10 +33,12 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
+import com.day.cq.wcm.commons.WCMUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -56,6 +58,8 @@ public class ImageImplTest {
     private static final String IMAGE0_PATH = PAGE + "/jcr:content/root/image0";
     private static final String IMAGE3_PATH = PAGE + "/jcr:content/root/image3";
     private static final String IMAGE4_PATH = PAGE + "/jcr:content/root/image4";
+    private static final String IMAGE15_PATH = PAGE + "/jcr:content/root/image15";
+    private static final String IMAGE16_PATH = PAGE + "/jcr:content/root/image16";
     private static final String CONTEXT_PATH = "/core";
     private static final String IMAGE_TITLE_ALT = "Adobe Logo";
     private static final String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png";
@@ -65,7 +69,6 @@ public class ImageImplTest {
 
     @BeforeClass
     public static void init() {
-        aemContext.registerInjectActivateService(new MockAdapterFactory());
         aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
                 (Function<ResourceResolver, ContentPolicyManager>) resourceResolver -> contentPolicyManager
         );
@@ -119,6 +122,24 @@ public class ImageImplTest {
                 image.getJson());
     }
 
+    @Test
+    public void testImageCacheKiller() throws Exception {
+        String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
+        Image image = getImageUnderTest(IMAGE4_PATH, WCMMode.EDIT);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
+
+        escapedResourcePath = Text.escapePath(IMAGE15_PATH);
+        image = getImageUnderTest(IMAGE15_PATH, WCMMode.EDIT);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
+    }
+
+    @Test
+    public void testTIFFImage() throws Exception {
+        String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
+        Image image = getImageUnderTest(IMAGE16_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg", image.getSrc());
+    }
+
     private void compareJSON(String expectedJson, String json) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Map expectedMap = objectMapper.readValue(expectedJson, Map.class);
@@ -127,6 +148,10 @@ public class ImageImplTest {
     }
 
     private Image getImageUnderTest(String resourcePath) {
+        return getImageUnderTest(resourcePath, null);
+    }
+
+    private Image getImageUnderTest(String resourcePath, WCMMode wcmMode) {
         Resource resource = aemContext.resourceResolver().getResource(resourcePath);
         ContentPolicyMapping mapping = resource.adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
@@ -142,6 +167,9 @@ public class ImageImplTest {
         request.setResource(resource);
         Page page = aemContext.pageManager().getPage(PAGE);
         slingBindings.put(WCMBindings.CURRENT_PAGE, page);
+        if (wcmMode != null) {
+            request.setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, wcmMode);
+        }
         slingBindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(request));
         slingBindings.put(WCMBindings.PAGE_MANAGER, aemContext.pageManager());
         Style style = mock(Style.class);

@@ -76,7 +76,7 @@ public class FormActionTypeDataSourceServlet extends SlingSafeMethodsServlet {
         return actionTypeResources;
     }
 
-    public class ActionTypeResource extends TextValueDataResourceSource {
+    private static class ActionTypeResource extends TextValueDataResourceSource {
 
         private final FormsManager.ComponentDescription description;
 

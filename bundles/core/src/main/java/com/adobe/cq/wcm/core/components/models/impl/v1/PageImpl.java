@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models.impl.v1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
@@ -136,7 +137,7 @@ public class PageImpl implements Page {
 
     @Override
     public String[] getKeywords() {
-        return keywords;
+        return Arrays.copyOf(keywords, keywords.length);
     }
 
     @Override
@@ -166,7 +167,7 @@ public class PageImpl implements Page {
 
     @Override
     public String[] getClientLibCategories() {
-        return clientLibCategories;
+        return Arrays.copyOf(clientLibCategories, clientLibCategories.length);
     }
 
     private void loadFavicons(String designPath) {
