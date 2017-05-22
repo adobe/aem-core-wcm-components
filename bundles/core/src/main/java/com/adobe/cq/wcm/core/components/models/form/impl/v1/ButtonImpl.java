@@ -19,9 +19,11 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
@@ -30,14 +32,14 @@ import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.models.form.Button;
 import com.day.cq.i18n.I18n;
 
-@Model(adaptables = SlingHttpServletRequest.class,
+@Model(adaptables = {SlingHttpServletRequest.class, Resource.class},
        adapters = Button.class,
        resourceType = ButtonImpl.RESOURCE_TYPE)
 @Exporter(name = Constants.EXPORTER_NAME,
           extensions = Constants.EXPORTER_EXTENSION)
 public class ButtonImpl extends AbstractFieldImpl implements Button {
 
-    protected static final String RESOURCE_TYPE = FormConstants.RT_CORE_FORM_BUTTON + "/v1/button";
+    public static final String RESOURCE_TYPE = FormConstants.RT_CORE_FORM_BUTTON + "/v1/button";
 
     private static final String PROP_TYPE_DEFAULT = "submit";
     private static final String PN_TYPE = "type";
@@ -49,14 +51,16 @@ public class ButtonImpl extends AbstractFieldImpl implements Button {
 
     private Type type;
 
-    @Self
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SlingHttpServletRequest request;
 
     private I18n i18n;
 
     @PostConstruct
     private void initModel() {
-        i18n = new I18n(request);
+        if (request != null) {
+            i18n = new I18n(request);
+        }
         type = Type.fromString(typeString);
     }
 
@@ -78,7 +82,7 @@ public class ButtonImpl extends AbstractFieldImpl implements Button {
     @Override
     public String getTitle() {
         if (StringUtils.isBlank(this.title)) {
-            this.title = i18n.getVar(StringUtils.capitalize(this.typeString));
+            this.title = (i18n != null ? i18n.getVar(StringUtils.capitalize(this.typeString)) : StringUtils.capitalize(this.typeString));
         }
         return this.title;
     }
@@ -90,7 +94,7 @@ public class ButtonImpl extends AbstractFieldImpl implements Button {
 
     @Override
     protected String getDefaultValue() {
-        return  "";
+        return "";
     }
 
     @Override

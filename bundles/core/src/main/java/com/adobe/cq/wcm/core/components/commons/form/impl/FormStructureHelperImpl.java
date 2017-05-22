@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.commons.form.internal.FormConstants;
 import com.adobe.cq.wcm.core.components.models.form.Button;
+import com.adobe.cq.wcm.core.components.models.form.impl.v1.ButtonImpl;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormsConstants;
 
@@ -86,7 +87,7 @@ public class FormStructureHelperImpl implements FormStructureHelper {
     }
 
     private void filterFormElements(Resource resource, List<Resource> list) {
-        if (isFormResource(resource) && isNoButtonElement(resource)) {
+        if (isFormResource(resource) && !isButtonElement(resource)) {
             list.add(resource);
         } else {
             for (Resource child : resource.getChildren()) {
@@ -95,19 +96,17 @@ public class FormStructureHelperImpl implements FormStructureHelper {
         }
     }
 
-    private boolean isNoButtonElement(Resource resource) {
-        String resourceSuperType = resource.getResourceSuperType();
-        if (resource.getResourceType().startsWith(FormConstants.RT_CORE_FORM_BUTTON) ||
-                resourceSuperType != null && resourceSuperType.startsWith(FormConstants.RT_CORE_FORM_BUTTON)) {
+    private boolean isButtonElement(Resource resource) {
+        if(resource.isResourceType(ButtonImpl.RESOURCE_TYPE)) {
             Button button = resource.adaptTo(Button.class);
             if (button != null) {
                 Button.Type type = button.getType();
                 if (type != null && type == Button.Type.SUBMIT) {
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     private boolean isFormResource(Resource resource) {
