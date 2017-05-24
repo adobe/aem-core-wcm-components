@@ -303,32 +303,36 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 stream(response, asset.getOriginal().getStream(), imageType);
             }
         } else if (imageFile != null) {
-            InputStream is = imageFile.adaptTo(InputStream.class);
-            int rotationAngle = getRotation(image, imageProperties);
-            Rectangle rectangle = getCropRect(image, imageProperties);
-            if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
-                Layer layer = null;
-                if (rectangle != null) {
-                    layer = new Layer(is);
-                    layer.crop(rectangle);
-                    LOGGER.debug("Applied cropping transformation.");
-                }
-                if (rotationAngle != 0) {
+            InputStream is = null;
+            try {
+                is = imageFile.adaptTo(InputStream.class);
+                int rotationAngle = getRotation(image, imageProperties);
+                Rectangle rectangle = getCropRect(image, imageProperties);
+                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
+                    Layer layer = null;
+                    if (rectangle != null) {
+                        layer = new Layer(is);
+                        layer.crop(rectangle);
+                        LOGGER.debug("Applied cropping transformation.");
+                    }
+                    if (rotationAngle != 0) {
+                        if (layer == null) {
+                            layer = new Layer(is);
+                        }
+                        layer.rotate(rotationAngle);
+                        LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                    }
                     if (layer == null) {
                         layer = new Layer(is);
                     }
-                    layer.rotate(rotationAngle);
-                    LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                    resizeAndStreamLayer(response, layer, imageType, resizeWidth);
+                } else {
+                    LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
+                    stream(response, is, imageType);
                 }
-                if (layer == null) {
-                    layer = new Layer(is);
-                }
-                resizeAndStreamLayer(response, layer, imageType, resizeWidth);
-            } else {
-                LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
-                stream(response, is, imageType);
+            } finally {
+                IOUtils.closeQuietly(is);
             }
-            IOUtils.closeQuietly(is);
         }
     }
 
@@ -378,8 +382,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void stream(@Nonnull SlingHttpServletResponse response, @Nonnull InputStream inputStream, @Nonnull String contentType)
             throws IOException {
         response.setContentType(contentType);
-        IOUtils.copy(inputStream, response.getOutputStream());
-        IOUtils.closeQuietly(inputStream);
+        try {
+            IOUtils.copy(inputStream, response.getOutputStream());
+        }  finally {
+            IOUtils.closeQuietly(inputStream);
+        }
     }
 
     /**
