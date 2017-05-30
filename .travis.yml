@@ -1,0 +1,15 @@
+language: java
+
+jdk: oraclejdk8
+
+sudo: false
+
+install: true
+
+env:
+- MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=512m"
+
+script: mvn verify -B
+
+notifications:
+  email: false
