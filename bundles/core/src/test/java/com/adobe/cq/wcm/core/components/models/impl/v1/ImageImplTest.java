@@ -20,6 +20,7 @@ import java.util.Map;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.BeforeClass;
@@ -31,14 +32,12 @@ import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
-import com.day.cq.wcm.commons.WCMUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -177,6 +176,7 @@ public class ImageImplTest {
                 invocationOnMock -> invocationOnMock.getArguments()[1]
         );
         slingBindings.put(WCMBindings.CURRENT_STYLE, style);
+        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Image.class);
     }
