@@ -359,7 +359,7 @@
                                             uploadUrl="will_be_replaced">
                                             <granite:data
                                                 jcr:primaryType="nt:unstructured"
-                                                cq-msm-lockable="./image"/>
+                                                cq-msm-lockable="/image"/>
                                         </upload>
                                         <preview
                                             jcr:primaryType="nt:unstructured"
