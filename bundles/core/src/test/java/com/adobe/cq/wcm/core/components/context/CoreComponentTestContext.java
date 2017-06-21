@@ -15,15 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.context;
 
-import java.io.IOException;
-
 import org.apache.commons.lang.StringUtils;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 
-import com.day.cq.wcm.foundation.forms.FormStructureHelper;
+import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.aem.junit.AemContextCallback;
@@ -48,23 +45,18 @@ public final class CoreComponentTestContext {
      * @return New instance of {@link AemContext}
      */
     public static AemContext createContext(final String testBase, final String contentRoot) {
-        return new AemContext(new AemContextCallback() {
-            @Override
-            public void execute(AemContext context) throws IOException {
-                context.registerService(FormStructureHelperFactory.class, new FormStructureHelperFactory() {
-                    @Override
-                    public FormStructureHelper getFormStructureHelper(Resource formElement) {
-                        return null;
+        return new AemContext(
+                (AemContextCallback) context -> {
+                    context.registerService(FormStructureHelperFactory.class, resource -> null);
+                    context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
+                    if (StringUtils.isNotEmpty(testBase)) {
+                        context.load().json(testBase + "/test-content.json", contentRoot);
+                    } else {
+                        context.load().json("/test-content.json", contentRoot);
                     }
-                });
-                context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
-                context.addModelsForPackage("com.adobe.cq.wcm.core.components.models");
-                if (StringUtils.isNotEmpty(testBase)) {
-                    context.load().json(testBase + "/test-content.json", contentRoot);
-                } else {
-                    context.load().json("/test-content.json", contentRoot);
-                }
-            }
-        }, ResourceResolverType.JCR_MOCK);
+                    context.registerInjectActivateService(new MockAdapterFactory());
+                },
+                ResourceResolverType.JCR_MOCK
+        );
     }
 }

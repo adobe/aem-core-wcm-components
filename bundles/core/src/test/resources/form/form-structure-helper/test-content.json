@@ -1,0 +1,139 @@
+{
+  "jcr:primaryType": "sling:OrderedFolder",
+  "we-retail": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy": "admin",
+    "jcr:created": "Mon May 15 2017 16:31:21 GMT+0530",
+    "demo-page": {
+      "jcr:primaryType": "cq:Page",
+      "jcr:createdBy": "admin",
+      "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+      "jcr:content": {
+        "jcr:primaryType": "cq:PageContent",
+        "jcr:createdBy": "admin",
+        "jcr:title": "demo-page",
+        "cq:template": "/conf/coretest/settings/wcm/templates/content-page",
+        "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+        "cq:lastModified": "Wed Oct 05 2016 16:49:14 GMT+0530",
+        "sling:resourceType": "coretest/components/structure/page",
+        "cq:lastModifiedBy": "admin",
+        "root": {
+          "jcr:primaryType": "nt:unstructured",
+          "sling:resourceType": "wcm/foundation/components/responsivegrid",
+          "responsivegrid": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:createdBy": "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created": "Tue Sep 20 2016 20:35:34 GMT+0200",
+            "jcr:lastModified": "Tue Sep 20 2016 20:35:53 GMT+0200",
+            "sling:resourceType": "wcm/foundation/components/responsivegrid",
+            "cq:responsive": {
+              "jcr:primaryType": "nt:unstructured"
+            },
+            "title": {
+              "jcr:primaryType": "nt:unstructured",
+              "jcr:createdBy": "admin",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:created": "Tue Sep 20 2016 23:26:52 GMT+0200",
+              "jcr:lastModified": "Tue Sep 20 2016 23:26:52 GMT+0200",
+              "sling:resourceType": "coretest/components/content/title"
+            },
+            "container": {
+              "jcr:primaryType": "nt:unstructured",
+              "jcr:createdBy": "admin",
+              "enctype": "application/x-www-form-urlencoded",
+              "jcr:lastModifiedBy": "admin",
+              "method": "GET",
+              "jcr:created": "Wed Oct 05 2016 16:05:53 GMT+0530",
+              "jcr:lastModified": "Wed Oct 05 2016 16:05:53 GMT+0530",
+              "sling:resourceType": "core/wcm/components/form/container/v1/container",
+              "redirect": "/content/we-retail/home",
+              "text": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
+                "name": "input-field-1",
+                "jcr:lastModified": "Wed Oct 05 2016 16:28:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/form/text/v1/text"
+              },
+              "hidden": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
+                "jcr:lastModified": "Wed Oct 05 2016 16:28:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/form/hidden/v1/hidden"
+              },
+              "button_submit": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
+                "jcr:lastModified": "Wed Oct 05 2016 16:28:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/form/button/v1/button",
+                "type": "submit"
+              },
+              "button_button": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
+                "jcr:lastModified": "Wed Oct 05 2016 16:28:14 GMT+0530",
+                "sling:resourceType": "core/wcm/components/form/button/v1/button",
+                "type": "button"
+              },
+              "button_submit_inherited": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
+                "jcr:lastModified": "Wed Oct 05 2016 16:28:14 GMT+0530",
+                "sling:resourceType": "we-retail/components/form/button",
+                "type": "submit"
+              },
+              "button_button_inherited": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
+                "jcr:lastModified": "Wed Oct 05 2016 16:28:14 GMT+0530",
+                "sling:resourceType": "we-retail/components/form/button",
+                "type": "button"
+              },
+              "responsivegrid": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:createdBy": "admin",
+                "jcr:lastModifiedBy": "admin",
+                "jcr:created": "Tue May 23 2017 11:42:31 GMT+0530",
+                "jcr:lastModified": "Tue May 23 2017 11:42:31 GMT+0530",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "cq:responsive": {
+                  "jcr:primaryType": "nt:unstructured"
+                },
+                "text_inside_non_form_node": {
+                  "jcr:primaryType": "nt:unstructured",
+                  "jcr:createdBy": "admin",
+                  "jcr:lastModifiedBy": "admin",
+                  "jcr:created": "Tue May 23 2017 11:42:44 GMT+0530",
+                  "jcr:lastModified": "Tue May 23 2017 11:42:44 GMT+0530",
+                  "sling:resourceType": "core/wcm/components/form/text/v1/text"
+                }
+              }
+            },
+            "start": {
+              "jcr:primaryType": "nt:unstructured",
+              "jcr:createdBy": "admin",
+              "jcr:lastModifiedBy": "admin",
+              "jcr:created": "Wed Oct 05 2016 16:05:53 GMT+0530",
+              "jcr:lastModified": "Wed Oct 05 2016 16:05:53 GMT+0530",
+              "sling:resourceType": "foundation/components/form/start",
+              "id": "my-id"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

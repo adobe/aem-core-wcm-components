@@ -60,6 +60,7 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
@@ -89,20 +90,18 @@ public class ImageImpl implements Image {
     @ScriptVariable
     private SightlyWCMMode wcmmode;
 
+    @ScriptVariable
+    private Style currentStyle;
+
+    @ScriptVariable
+    private ValueMap properties;
+
     @Inject
     @Source("osgi-services")
     private MimeTypeService mimeTypeService;
 
     @ValueMapValue(name = DownloadResource.PN_REFERENCE, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String fileReference;
-
-    @ValueMapValue(name = PN_IS_DECORATIVE, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Default(booleanValues = false)
-    private boolean isDecorative;
-
-    @ValueMapValue(name = PN_DISPLAY_POPUP_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Default(booleanValues = false)
-    private boolean displayPopupTitle;
 
     @ValueMapValue(name = ImageResource.PN_ALT, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String alt;
@@ -117,6 +116,8 @@ public class ImageImpl implements Image {
     private String[] smartImages = new String[]{};
     private int[] smartSizes = new int[0];
     private String json;
+    private boolean displayPopupTitle;
+    private boolean isDecorative;
 
     private boolean disableLazyLoading;
 
@@ -124,6 +125,9 @@ public class ImageImpl implements Image {
     private void initModel() {
         boolean hasContent = false;
         String mimeType = MIME_TYPE_IMAGE_JPEG;
+        displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
+        isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
+
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);

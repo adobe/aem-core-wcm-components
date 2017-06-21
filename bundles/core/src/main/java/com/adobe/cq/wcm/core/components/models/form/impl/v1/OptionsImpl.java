@@ -246,10 +246,6 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
             }
             return null;
         }
-
-        private String getElement() {
-            return element;
-        }
     }
 
 }

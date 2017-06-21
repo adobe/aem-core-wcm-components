@@ -1,4 +1,6 @@
 # AEM Core WCM Components
+[![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=master)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
+[![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
 
 A set of standardized components that can be used to speed up development of web sites.
 
@@ -78,16 +80,15 @@ core components package into your own project maven build you can add the depend
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>1.0.2</version>
-     <scope>provided</scope>
+     <version>1.0.4</version
  </dependency>
  ```
  
  and sub package section
  ```
  <subPackage>
-     <groupId>${project.groupId}</groupId>
-     <artifactId>core.wcm.components.config</artifactId>
+     <groupId>com.adobe.cq</groupId>
+     <artifactId>core.wcm.components.all</artifactId>
      <filter>true</filter>
  </subPackage>
  ```

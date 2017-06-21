@@ -219,7 +219,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             imageFile = image.getChild(DownloadResource.NN_FILE);
             if ("gif".equalsIgnoreCase(extension)) {
                 LOGGER.debug("GIF file detected; will render the original file.");
-                stream(response, imageFile.adaptTo(InputStream.class), imageType);
+                InputStream is = imageFile.adaptTo(InputStream.class);
+                if (is != null) {
+                    stream(response, is, imageType);
+                }
                 return;
             }
         }
@@ -303,32 +306,36 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 stream(response, asset.getOriginal().getStream(), imageType);
             }
         } else if (imageFile != null) {
-            InputStream is = imageFile.adaptTo(InputStream.class);
-            int rotationAngle = getRotation(image, imageProperties);
-            Rectangle rectangle = getCropRect(image, imageProperties);
-            if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
-                Layer layer = null;
-                if (rectangle != null) {
-                    layer = new Layer(is);
-                    layer.crop(rectangle);
-                    LOGGER.debug("Applied cropping transformation.");
-                }
-                if (rotationAngle != 0) {
+            InputStream is = null;
+            try {
+                is = imageFile.adaptTo(InputStream.class);
+                int rotationAngle = getRotation(image, imageProperties);
+                Rectangle rectangle = getCropRect(image, imageProperties);
+                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
+                    Layer layer = null;
+                    if (rectangle != null) {
+                        layer = new Layer(is);
+                        layer.crop(rectangle);
+                        LOGGER.debug("Applied cropping transformation.");
+                    }
+                    if (rotationAngle != 0) {
+                        if (layer == null) {
+                            layer = new Layer(is);
+                        }
+                        layer.rotate(rotationAngle);
+                        LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                    }
                     if (layer == null) {
                         layer = new Layer(is);
                     }
-                    layer.rotate(rotationAngle);
-                    LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                    resizeAndStreamLayer(response, layer, imageType, resizeWidth);
+                } else {
+                    LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
+                    stream(response, is, imageType);
                 }
-                if (layer == null) {
-                    layer = new Layer(is);
-                }
-                resizeAndStreamLayer(response, layer, imageType, resizeWidth);
-            } else {
-                LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
-                stream(response, is, imageType);
+            } finally {
+                IOUtils.closeQuietly(is);
             }
-            IOUtils.closeQuietly(is);
         }
     }
 
@@ -378,8 +385,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void stream(@Nonnull SlingHttpServletResponse response, @Nonnull InputStream inputStream, @Nonnull String contentType)
             throws IOException {
         response.setContentType(contentType);
-        IOUtils.copy(inputStream, response.getOutputStream());
-        IOUtils.closeQuietly(inputStream);
+        try {
+            IOUtils.copy(inputStream, response.getOutputStream());
+        }  finally {
+            IOUtils.closeQuietly(inputStream);
+        }
     }
 
     /**
@@ -544,17 +554,19 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         List<Integer> list = new ArrayList<>();
         ResourceResolver resourceResolver = request.getResourceResolver();
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
-        ContentPolicy contentPolicy = policyManager.getPolicy(request.getResource());
-        if (contentPolicy != null) {
-            String[] allowedRenditionWidths = contentPolicy.getProperties()
-                    .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
-            for (String width : allowedRenditionWidths) {
-                try {
-                    list.add(Integer.parseInt(width));
-                } catch (NumberFormatException e) {
-                    LOGGER.warn("One of the configured widths ({}) from the {} content policy is not a valid Integer.", width,
-                            contentPolicy.getPath());
-                    return list;
+        if (policyManager != null) {
+            ContentPolicy contentPolicy = policyManager.getPolicy(request.getResource());
+            if (contentPolicy != null) {
+                String[] allowedRenditionWidths = contentPolicy.getProperties()
+                        .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
+                for (String width : allowedRenditionWidths) {
+                    try {
+                        list.add(Integer.parseInt(width));
+                    } catch (NumberFormatException e) {
+                        LOGGER.warn("One of the configured widths ({}) from the {} content policy is not a valid Integer.", width,
+                                contentPolicy.getPath());
+                        return list;
+                    }
                 }
             }
         }

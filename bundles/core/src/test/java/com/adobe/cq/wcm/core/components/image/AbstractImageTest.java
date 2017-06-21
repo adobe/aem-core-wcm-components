@@ -56,6 +56,8 @@ public class AbstractImageTest {
     protected static final String IMAGE14_PATH = PAGE + "/jcr:content/root/image14";
     protected static final String IMAGE15_PATH = PAGE + "/jcr:content/root/image15";
     protected static final String IMAGE16_PATH = PAGE + "/jcr:content/root/image16";
+    protected static final String IMAGE17_PATH = PAGE + "/jcr:content/root/image17";
+    protected static final String IMAGE18_PATH = PAGE + "/jcr:content/root/image18";
     protected static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg.png";
     protected static final String GIF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg.gif";
     protected static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;

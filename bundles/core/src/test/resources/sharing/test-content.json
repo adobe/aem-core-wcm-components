@@ -1,0 +1,1316 @@
+{
+    "experience-fragments": {
+        "jcr:primaryType"         : "sling:Folder",
+        "about-us-xf"             : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Thu May 18 2017 16:57:04 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"   : "cq:PageContent",
+                "jcr:createdBy"     : "admin",
+                "jcr:title"         : "About Us XF",
+                "cq:template"       : "/libs/cq/experience-fragments/components/experiencefragment/template",
+                "jcr:created"       : "Thu May 18 2017 16:57:04 GMT+0200",
+                "cq:lastModified"   : "Thu May 18 2017 16:57:04 GMT+0200",
+                "cq:tags"           : [],
+                "sling:resourceType": "cq/experience-fragments/components/experiencefragment",
+                "cq:lastModifiedBy" : "admin"
+            },
+            "master"         : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:createdBy"  : "admin",
+                "jcr:created"    : "Thu May 18 2017 16:57:04 GMT+0200",
+                "jcr:content"    : {
+                    "jcr:primaryType"     : "cq:PageContent",
+                    "jcr:createdBy"       : "admin",
+                    "jcr:title"           : "About Us XF",
+                    "cq:template"         : "/conf/we-retail/settings/wcm/templates/experience-fragment-web-variation",
+                    "cq:xfMasterVariation": true,
+                    "jcr:created"         : "Thu May 18 2017 16:57:04 GMT+0200",
+                    "cq:lastModified"     : "Thu May 18 2017 16:57:04 GMT+0200",
+                    "cq:xfVariantType"    : "web",
+                    "cq:tags"             : [],
+                    "sling:resourceType"  : "weretail/components/structure/xfpage",
+                    "cq:lastModifiedBy"   : "admin",
+                    "root"                : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:lastModified"  : "Tue Nov 22 2016 17:31:48 GMT+0200",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                    }
+                }
+            },
+            "pinterest"      : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:createdBy"  : "admin",
+                "jcr:created"    : "Thu May 18 2017 16:57:16 GMT+0200",
+                "jcr:content"    : {
+                    "jcr:primaryType"     : "cq:PageContent",
+                    "jcr:createdBy"       : "admin",
+                    "jcr:title"           : "Pinterest",
+                    "cq:xfShowInEditor"   : "false",
+                    "cq:template"         : "/libs/settings/experience-fragments/templates/experience-fragment-template-pinterest",
+                    "jcr:created"         : "Thu May 18 2017 16:57:16 GMT+0200",
+                    "cq:lastModified"     : "Thu May 18 2017 16:58:31 GMT+0200",
+                    "cq:xfVariantType"    : "pinterest",
+                    "cq:xfSocialVariation": "true",
+                    "cq:tags"             : [],
+                    "sling:resourceType"  : "cq/experience-fragments/components/xfpinterest",
+                    "cq:lastModifiedBy"   : "admin",
+                    "root"                : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:lastModified"  : "Thu Jul 28 2016 10:30:18 GMT+0300",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "image"             : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "fileReference"     : "/content/dam/we-retail/en/activities/hiking-camping/trekker-khumbu-valley.jpg",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Thu Jul 14 2016 15:22:41 GMT+0300",
+                            "width"             : "628",
+                            "jcr:lastModified"  : "Thu May 18 2017 16:58:15 GMT+0200",
+                            "sling:resourceType": "wcm/foundation/components/image"
+                        },
+                        "text"              : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Thu Jul 14 2016 15:22:56 GMT+0300",
+                            "text"              : "<p>About Us XF description</p>",
+                            "jcr:lastModified"  : "Thu May 18 2017 16:58:31 GMT+0200",
+                            "sling:resourceType": "wcm/foundation/components/text",
+                            "textIsRich"        : "true"
+                        },
+                        "contentfragment"   : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Wed Jul 27 2016 16:17:43 GMT+0300",
+                            "jcr:lastModified"  : "Wed Jul 27 2016 16:17:43 GMT+0300",
+                            "sling:resourceType": "dam/cfm/components/contentfragment"
+                        }
+                    }
+                }
+            }
+        },
+        "eton-short-sleeveshirtxf": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Thu May 18 2017 17:41:19 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"   : "cq:PageContent",
+                "jcr:createdBy"     : "admin",
+                "jcr:title"         : "Eton Short-Sleeve Shirt XF",
+                "cq:template"       : "/libs/cq/experience-fragments/components/experiencefragment/template",
+                "jcr:created"       : "Thu May 18 2017 17:41:19 GMT+0200",
+                "cq:lastModified"   : "Thu May 18 2017 17:41:19 GMT+0200",
+                "cq:tags"           : [],
+                "sling:resourceType": "cq/experience-fragments/components/experiencefragment",
+                "cq:lastModifiedBy" : "admin"
+            },
+            "master"         : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:createdBy"  : "admin",
+                "jcr:created"    : "Thu May 18 2017 17:41:19 GMT+0200",
+                "jcr:content"    : {
+                    "jcr:primaryType"     : "cq:PageContent",
+                    "jcr:createdBy"       : "admin",
+                    "jcr:title"           : "Eton Short-Sleeve Shirt XF",
+                    "cq:template"         : "/conf/we-retail/settings/wcm/templates/experience-fragment-web-variation",
+                    "cq:xfMasterVariation": true,
+                    "jcr:created"         : "Thu May 18 2017 17:41:19 GMT+0200",
+                    "cq:lastModified"     : "Thu May 18 2017 17:41:19 GMT+0200",
+                    "cq:xfVariantType"    : "web",
+                    "cq:tags"             : [],
+                    "sling:resourceType"  : "weretail/components/structure/xfpage",
+                    "cq:lastModifiedBy"   : "admin",
+                    "root"                : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:lastModified"  : "Tue Nov 22 2016 17:31:48 GMT+0200",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                    }
+                }
+            },
+            "pinterest"      : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:createdBy"  : "admin",
+                "jcr:created"    : "Thu May 18 2017 17:41:35 GMT+0200",
+                "jcr:content"    : {
+                    "jcr:primaryType"     : "cq:PageContent",
+                    "jcr:createdBy"       : "admin",
+                    "jcr:title"           : "Pinterest",
+                    "cq:xfShowInEditor"   : "false",
+                    "cq:template"         : "/libs/settings/experience-fragments/templates/experience-fragment-template-pinterest",
+                    "jcr:created"         : "Thu May 18 2017 17:41:35 GMT+0200",
+                    "cq:lastModified"     : "Thu May 18 2017 17:42:16 GMT+0200",
+                    "cq:xfVariantType"    : "pinterest",
+                    "cq:xfSocialVariation": "true",
+                    "cq:tags"             : [],
+                    "sling:resourceType"  : "cq/experience-fragments/components/xfpinterest",
+                    "cq:lastModifiedBy"   : "admin",
+                    "root"                : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:lastModified"  : "Thu Jul 28 2016 10:30:18 GMT+0300",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "image"             : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Thu Jul 14 2016 15:22:41 GMT+0300",
+                            "width"             : "628",
+                            "jcr:lastModified"  : "Thu May 18 2017 17:41:50 GMT+0200",
+                            "sling:resourceType": "wcm/foundation/components/image"
+                        },
+                        "text"              : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Thu Jul 14 2016 15:22:56 GMT+0300",
+                            "text"              : "<p>Blue Polo T-Shirt</p>",
+                            "jcr:lastModified"  : "Thu May 18 2017 17:42:16 GMT+0200",
+                            "sling:resourceType": "wcm/foundation/components/text",
+                            "textIsRich"        : "true"
+                        },
+                        "contentfragment"   : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Wed Jul 27 2016 16:17:43 GMT+0300",
+                            "jcr:lastModified"  : "Wed Jul 27 2016 16:17:43 GMT+0300",
+                            "sling:resourceType": "dam/cfm/components/contentfragment"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sharing-tests"       : {
+        "jcr:primaryType"   : "sling:Folder",
+        "basic-sharing-page-1": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Fri May 12 2017 12:15:37 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"       : "cq:PageContent",
+                "jcr:mixinTypes"        : [
+                    "cq:LiveRelationship",
+                    "cq:PropertyLiveSyncCancelled"
+                ],
+                "jcr:createdBy"         : "admin",
+                "socialMedia"           : [
+                    "facebook",
+                    "pinterest"
+                ],
+                "jcr:title"             : "About Us",
+                "jcr:description"       : "About Us Page",
+                "cq:template"           : "/conf/we-retail/settings/wcm/templates/hero-page",
+                "cq:lastRolledout"      : "Wed Jun 29 2016 14:20:45 GMT+0200",
+                "jcr:created"           : "Fri May 12 2017 12:15:37 GMT+0200",
+                "cq:lastModified"       : "Thu May 18 2017 10:49:06 GMT+0200",
+                "cq:cloudserviceconfigs": [
+                    "/etc/cloudservices/translation/default_translation"
+                ],
+                "sling:resourceType"    : "core/wcm/components/page/v1/page",
+                "cq:lastRolledoutBy"    : "admin",
+                "cq:lastModifiedBy"     : "admin",
+                "root"                  : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:mixinTypes"    : [
+                        "cq:LiveRelationship"
+                    ],
+                    "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "cq:lastRolledoutBy": "admin",
+                    "hero_image"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "fileReference"     : "/content/dam/we-retail/en/activities/hiking-camping/trekker-ama-dablam.jpg",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "useFullWidth"      : "true",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:04 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "weretail/components/content/heroimage",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "responsivegrid"    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:09 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "cq:lastRolledoutBy": "admin",
+                        "sharing"           : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "jcr:lastModified"  : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "sling:resourceType": "core/wcm/components/sharing/v1/sharing"
+                        }
+                    }
+                },
+                "image"                 : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "file"           : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:created"    : "Thu May 18 2017 10:48:52 GMT+0200",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            "jcr:lastModified"  : "Thu May 18 2017 10:49:01 GMT+0200",
+                            ":jcr:data"         : 16821,
+                            "jcr:uuid"          : "a9dfe43a-6b5f-4b5d-9e34-18f11aed0339"
+                        }
+                    }
+                }
+            }
+        },
+        "basic-sharing-page-2": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Fri May 12 2017 12:15:37 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"       : "cq:PageContent",
+                "jcr:mixinTypes"        : [
+                    "cq:LiveRelationship",
+                    "cq:PropertyLiveSyncCancelled"
+                ],
+                "jcr:createdBy"         : "admin",
+                "socialMedia"           : [
+                    "facebook",
+                    "pinterest"
+                ],
+                "jcr:title"             : "About Us",
+                "jcr:description"       : "About Us Page",
+                "cq:template"           : "/conf/we-retail/settings/wcm/templates/hero-page",
+                "cq:lastRolledout"      : "Wed Jun 29 2016 14:20:45 GMT+0200",
+                "jcr:created"           : "Fri May 12 2017 12:15:37 GMT+0200",
+                "cq:cloudserviceconfigs": [
+                    "/etc/cloudservices/translation/default_translation"
+                ],
+                "sling:resourceType"    : "core/wcm/components/page/v1/page",
+                "cq:lastRolledoutBy"    : "admin",
+                "cq:lastModifiedBy"     : "admin",
+                "root"                  : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:mixinTypes"    : [
+                        "cq:LiveRelationship"
+                    ],
+                    "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "cq:lastRolledoutBy": "admin",
+                    "hero_image"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "fileReference"     : "/content/dam/we-retail/en/activities/hiking-camping/trekker-ama-dablam.jpg",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "useFullWidth"      : "true",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:04 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "weretail/components/content/heroimage",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "responsivegrid"    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:09 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "cq:lastRolledoutBy": "admin",
+                        "sharing"           : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "jcr:lastModified"  : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "sling:resourceType": "core/wcm/components/sharing/v1/sharing"
+                        }
+                    }
+                },
+                "image"                 : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "file"           : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:created"    : "Thu May 18 2017 10:48:52 GMT+0200",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            "jcr:lastModified"  : "Thu May 18 2017 10:49:01 GMT+0200",
+                            ":jcr:data"         : 16821,
+                            "jcr:uuid"          : "a9dfe43a-6b5f-4b5d-9e34-18f11aed0339"
+                        }
+                    }
+                }
+            }
+        },
+        "basic-sharing-page-3": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Fri May 12 2017 12:15:37 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"       : "cq:PageContent",
+                "jcr:mixinTypes"        : [
+                    "cq:LiveRelationship",
+                    "cq:PropertyLiveSyncCancelled"
+                ],
+                "jcr:createdBy"         : "admin",
+                "socialMedia"           : [
+                    "facebook",
+                    "pinterest"
+                ],
+                "jcr:title"             : "About Us",
+                "jcr:description"       : "About Us Page",
+                "cq:template"           : "/conf/we-retail/settings/wcm/templates/hero-page",
+                "cq:lastRolledout"      : "Wed Jun 29 2016 14:20:45 GMT+0200",
+                "jcr:created"           : "Fri May 12 2017 12:15:37 GMT+0200",
+                "cq:lastModified"       : "Thu May 18 2017 10:49:01 GMT+0200",
+                "cq:cloudserviceconfigs": [
+                    "/etc/cloudservices/translation/default_translation"
+                ],
+                "sling:resourceType"    : "core/wcm/components/page/v1/page",
+                "cq:lastRolledoutBy"    : "admin",
+                "cq:lastModifiedBy"     : "admin",
+                "root"                  : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:mixinTypes"    : [
+                        "cq:LiveRelationship"
+                    ],
+                    "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "cq:lastRolledoutBy": "admin",
+                    "hero_image"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "fileReference"     : "/content/dam/we-retail/en/activities/hiking-camping/trekker-ama-dablam.jpg",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "useFullWidth"      : "true",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:04 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "weretail/components/content/heroimage",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "responsivegrid"    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:09 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "cq:lastRolledoutBy": "admin",
+                        "sharing"           : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "jcr:lastModified"  : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "sling:resourceType": "core/wcm/components/sharing/v1/sharing"
+                        }
+                    }
+                },
+                "image"                 : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "file"           : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:created"    : "Thu May 18 2017 10:48:52 GMT+0200",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 16821,
+                            "jcr:uuid"          : "a9dfe43a-6b5f-4b5d-9e34-18f11aed0339"
+                        }
+                    }
+                }
+            }
+        },
+        "product-page"      : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Fri May 12 2017 12:15:39 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"                : "cq:PageContent",
+                "jcr:mixinTypes"                 : [
+                    "cq:LiveRelationship",
+                    "cq:PropertyLiveSyncCancelled"
+                ],
+                "jcr:createdBy"                  : "admin",
+                "socialMedia"                    : [
+                    "facebook",
+                    "pinterest"
+                ],
+                "jcr:title"                      : "Eton Short-Sleeve Shirt",
+                "jcr:description"                : "Express yourself around town or at play with our rugby-inspired Eton shirt.",
+                "cq:propertyInheritanceCancelled": [
+                    "socialMedia"
+                ],
+                "cq:template"                    : "/conf/we-retail/settings/wcm/templates/product-page",
+                "jcr:language"                   : "en",
+                "cq:lastRolledout"               : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                "jcr:created"                    : "Fri May 12 2017 12:15:39 GMT+0200",
+                "cq:lastModified"                : "Wed May 17 2017 11:41:10 GMT+0200",
+                "cq:cloudserviceconfigs"         : [
+                    "/etc/cloudservices/translation/default_translation"
+                ],
+                "cq:tags"                        : [
+                    "we-retail:gender/men",
+                    "we-retail:season/summer",
+                    "we-retail:activity/others",
+                    "we-retail:apparel/shirt"
+                ],
+                "cq:productMaster"               : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                "sling:resourceType"             : "weretail/components/structure/page",
+                "cq:lastRolledoutBy"             : "admin",
+                "cq:lastModifiedBy"              : "admin",
+                "root"                           : {
+                    "jcr:primaryType"      : "nt:unstructured",
+                    "jcr:mixinTypes"       : [
+                        "cq:LiveRelationship"
+                    ],
+                    "cq:lastRolledout"     : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                    "sling:resourceType"   : "wcm/foundation/components/responsivegrid",
+                    "cq:lastRolledoutBy"   : "admin",
+                    "breadcrumb"           : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/content/breadcrumb",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "product"              : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:CatalogSyncAction",
+                            "cq:LiveRelationship"
+                        ],
+                        "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "jcr:lastModified"  : "Tue Apr 12 2016 01:19:38 GMT+0200",
+                        "sling:resourceType": "weretail/components/structure/product",
+                        "cq:commerceType"   : "product",
+                        "cq:lastRolledoutBy": "admin",
+                        "meotsuett-s"       : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-s",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-m"       : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-m",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-l"       : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-l",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-xl"      : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xl",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-xxl"     : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxl",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-xxxl"    : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxxl",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "image"             : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                            "jcr:lastModifiedBy": "admin",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                            "sling:resourceType": "commerce/components/product/image",
+                            "cq:lastRolledoutBy": "admin"
+                        },
+                        "assets"            : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product/assets",
+                            "cq:lastRolledoutBy": "admin"
+                        }
+                    },
+                    "responsivegrid"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship",
+                            "cq:LiveSyncCancelled"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "cq:lastRolledoutBy": "admin",
+                        "sharing"           : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Wed May 17 2017 11:40:48 GMT+0200",
+                            "jcr:lastModified"  : "Wed May 17 2017 11:40:48 GMT+0200",
+                            "sling:resourceType": "core/wcm/components/sharing/v1/sharing"
+                        }
+                    },
+                    "reviews_section_title": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:title"         : "Reviews",
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/content/title",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "reviews"              : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/structure/productreviews",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "similar_section_title": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:title"         : "You may also like",
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/content/title",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "similar_products"     : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/structure/productrecommendation",
+                        "cq:lastRolledoutBy": "admin"
+                    }
+                },
+                "image"                          : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:mixinTypes"    : [
+                        "cq:LiveRelationship"
+                    ],
+                    "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                    "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                    "cq:lastRolledoutBy": "admin"
+                }
+            }
+        },
+        "xf-sharing-page"   : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Fri May 12 2017 12:15:37 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"                : "cq:PageContent",
+                "jcr:mixinTypes"                 : [
+                    "cq:LiveRelationship",
+                    "cq:PropertyLiveSyncCancelled"
+                ],
+                "jcr:createdBy"                  : "admin",
+                "socialMedia"                    : [
+                    "facebook",
+                    "pinterest"
+                ],
+                "jcr:title"                      : "About Us",
+                "cq:propertyInheritanceCancelled": [
+                    "socialMedia",
+                    "fragmentPath"
+                ],
+                "variantPath"                    : "/content/experience-fragments/about-us-xf/pinterest",
+                "cq:template"                    : "/conf/we-retail/settings/wcm/templates/hero-page",
+                "cq:lastRolledout"               : "Wed Jun 29 2016 14:20:45 GMT+0200",
+                "jcr:created"                    : "Fri May 12 2017 12:15:37 GMT+0200",
+                "cq:lastModified"                : "Thu May 18 2017 15:51:02 GMT+0200",
+                "cq:cloudserviceconfigs"         : [
+                    "/etc/cloudservices/translation/default_translation"
+                ],
+                "sling:resourceType"             : "core/wcm/components/page/v1/page",
+                "cq:lastRolledoutBy"             : "admin",
+                "cq:lastModifiedBy"              : "admin",
+                "root"                           : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:mixinTypes"    : [
+                        "cq:LiveRelationship"
+                    ],
+                    "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "cq:lastRolledoutBy": "admin",
+                    "hero_image"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "fileReference"     : "/content/dam/we-retail/en/activities/hiking-camping/trekker-ama-dablam.jpg",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "useFullWidth"      : "true",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:04 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "weretail/components/content/heroimage",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "responsivegrid"    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:createdBy"     : "admin",
+                        "jcr:lastModifiedBy": "admin",
+                        "cq:lastRolledout"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "jcr:created"       : "Wed Jan 13 2016 15:58:09 GMT+0100",
+                        "jcr:lastModified"  : "Mon Mar 14 2016 22:18:58 GMT+0100",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "cq:lastRolledoutBy": "admin",
+                        "sharing"           : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "jcr:lastModified"  : "Tue May 16 2017 17:12:24 GMT+0200",
+                            "sling:resourceType": "core/wcm/components/sharing/v1/sharing"
+                        }
+                    }
+                },
+                "image"                          : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "file"           : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:created"    : "Thu May 18 2017 10:48:52 GMT+0200",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:mixinTypes"    : [
+                                "dam:Thumbnails"
+                            ],
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            "jcr:lastModified"  : "Thu May 18 2017 10:49:01 GMT+0200",
+                            ":jcr:data"         : 16821,
+                            "jcr:uuid"          : "a9dfe43a-6b5f-4b5d-9e34-18f11aed0339",
+                            "dam:thumbnails"    : {
+                                "jcr:primaryType"      : "nt:folder",
+                                "jcr:createdBy"        : "admin",
+                                "jcr:created"          : "Thu May 18 2017 15:37:48 GMT+0200",
+                                "dam:thumbnail_319.png": {
+                                    "jcr:primaryType": "nt:file",
+                                    "jcr:createdBy"  : "admin",
+                                    "jcr:created"    : "Thu May 18 2017 15:37:48 GMT+0200",
+                                    "jcr:content"    : {
+                                        "jcr:primaryType"   : "nt:resource",
+                                        "jcr:lastModifiedBy": "admin",
+                                        "jcr:mimeType"      : "image/png",
+                                        "jcr:lastModified"  : "Thu May 18 2017 15:37:48 GMT+0200",
+                                        ":jcr:data"         : 10864,
+                                        "jcr:uuid"          : "a2cb93aa-6fba-4382-a06e-09fa69733523"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "xf-product-page"   : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Fri May 12 2017 12:15:39 GMT+0200",
+            "jcr:content"    : {
+                "jcr:primaryType"                : "cq:PageContent",
+                "jcr:mixinTypes"                 : [
+                    "cq:LiveRelationship",
+                    "cq:PropertyLiveSyncCancelled"
+                ],
+                "jcr:createdBy"                  : "admin",
+                "socialMedia"                    : [
+                    "facebook",
+                    "pinterest"
+                ],
+                "jcr:title"                      : "Eton Short-Sleeve Shirt",
+                "cq:propertyInheritanceCancelled": [
+                    "socialMedia",
+                    "fragmentPath"
+                ],
+                "variantPath"                    : "/content/experience-fragments/eton-short-sleeveshirtxf/pinterest",
+                "cq:template"                    : "/conf/we-retail/settings/wcm/templates/product-page",
+                "jcr:language"                   : "en",
+                "cq:lastRolledout"               : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                "jcr:created"                    : "Fri May 12 2017 12:15:39 GMT+0200",
+                "cq:lastModified"                : "Thu May 18 2017 17:42:48 GMT+0200",
+                "cq:cloudserviceconfigs"         : [
+                    "/etc/cloudservices/translation/default_translation"
+                ],
+                "cq:tags"                        : [
+                    "we-retail:gender/men",
+                    "we-retail:season/summer",
+                    "we-retail:activity/others",
+                    "we-retail:apparel/shirt"
+                ],
+                "cq:productMaster"               : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                "sling:resourceType"             : "weretail/components/structure/page",
+                "cq:lastRolledoutBy"             : "admin",
+                "cq:lastModifiedBy"              : "admin",
+                "root"                           : {
+                    "jcr:primaryType"      : "nt:unstructured",
+                    "jcr:mixinTypes"       : [
+                        "cq:LiveRelationship"
+                    ],
+                    "cq:lastRolledout"     : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                    "sling:resourceType"   : "wcm/foundation/components/responsivegrid",
+                    "cq:lastRolledoutBy"   : "admin",
+                    "breadcrumb"           : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/content/breadcrumb",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "product"              : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:CatalogSyncAction",
+                            "cq:LiveRelationship"
+                        ],
+                        "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "jcr:lastModified"  : "Tue Apr 12 2016 01:19:38 GMT+0200",
+                        "sling:resourceType": "weretail/components/structure/product",
+                        "cq:commerceType"   : "product",
+                        "cq:lastRolledoutBy": "admin",
+                        "meotsuett-s"       : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-s",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-m"       : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-m",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-l"       : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-l",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-xl"      : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xl",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-xxl"     : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxl",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "meotsuett-xxxl"    : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxxl",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product",
+                            "cq:commerceType"   : "variant",
+                            "cq:lastRolledoutBy": "admin",
+                            "image"             : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                                "jcr:lastModifiedBy": "admin",
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                                "sling:resourceType": "commerce/components/product/image",
+                                "cq:lastRolledoutBy": "admin"
+                            },
+                            "assets"            : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:mixinTypes"    : [
+                                    "cq:CatalogSyncAction",
+                                    "cq:LiveRelationship"
+                                ],
+                                "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                                "sling:resourceType": "weretail/components/structure/product/assets",
+                                "cq:lastRolledoutBy": "admin"
+                            }
+                        },
+                        "image"             : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                            "jcr:lastModifiedBy": "admin",
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "jcr:lastModified"  : "Mon Jan 11 2016 16:13:17 GMT-0800",
+                            "sling:resourceType": "commerce/components/product/image",
+                            "cq:lastRolledoutBy": "admin"
+                        },
+                        "assets"            : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:mixinTypes"    : [
+                                "cq:CatalogSyncAction",
+                                "cq:LiveRelationship"
+                            ],
+                            "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                            "sling:resourceType": "weretail/components/structure/product/assets",
+                            "cq:lastRolledoutBy": "admin"
+                        }
+                    },
+                    "responsivegrid"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship",
+                            "cq:LiveSyncCancelled"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                        "cq:lastRolledoutBy": "admin",
+                        "sharing"           : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:createdBy"     : "admin",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:created"       : "Wed May 17 2017 11:40:48 GMT+0200",
+                            "jcr:lastModified"  : "Wed May 17 2017 11:40:48 GMT+0200",
+                            "sling:resourceType": "core/wcm/components/sharing/v1/sharing"
+                        }
+                    },
+                    "reviews_section_title": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:title"         : "Reviews",
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/content/title",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "reviews"              : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/structure/productreviews",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "similar_section_title": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "jcr:title"         : "You may also like",
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/content/title",
+                        "cq:lastRolledoutBy": "admin"
+                    },
+                    "similar_products"     : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:mixinTypes"    : [
+                            "cq:LiveRelationship"
+                        ],
+                        "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                        "sling:resourceType": "weretail/components/structure/productrecommendation",
+                        "cq:lastRolledoutBy": "admin"
+                    }
+                },
+                "image"                          : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:mixinTypes"    : [
+                        "cq:LiveRelationship"
+                    ],
+                    "fileReference"     : "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
+                    "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
+                    "cq:lastRolledoutBy": "admin"
+                }
+            }
+        }
+    }
+}

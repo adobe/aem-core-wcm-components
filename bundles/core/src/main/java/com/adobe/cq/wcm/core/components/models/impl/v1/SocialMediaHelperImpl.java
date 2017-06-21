@@ -63,14 +63,14 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(SocialMediaHelperImpl.class);
 
     //Open Graph metadata property names
-    private static final String OG_TITLE = "og:title";
-    private static final String OG_URL = "og:url";
-    private static final String OG_TYPE = "og:type";
-    private static final String OG_SITE_NAME = "og:site_name";
-    private static final String OG_IMAGE = "og:image";
-    private static final String OG_DESCRIPTION = "og:description";
-    private static final String OG_PRODUCT_PRICE_AMOUNT = "product:price:amount";
-    private static final String OG_PRODUCT_PRICE_CURRENCY = "product:price:currency";
+    static final String OG_TITLE = "og:title";
+    static final String OG_URL = "og:url";
+    static final String OG_TYPE = "og:type";
+    static final String OG_SITE_NAME = "og:site_name";
+    static final String OG_IMAGE = "og:image";
+    static final String OG_DESCRIPTION = "og:description";
+    static final String OG_PRODUCT_PRICE_AMOUNT = "product:price:amount";
+    static final String OG_PRODUCT_PRICE_CURRENCY = "product:price:currency";
 
     @ScriptVariable
     private Page currentPage = null;
@@ -329,21 +329,19 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         public String getSiteName() {
             Page page = findRootPage();
 
-            if (page == null)
-                return null;
-
             String pageTitle = page.getPageTitle();
-            if (StringUtils.isNotBlank(pageTitle))
+            if (StringUtils.isNotBlank(pageTitle)) {
                 return pageTitle;
+            }
 
             Resource content = page.getContentResource();
-            if (content == null)
+            if (content == null) {
                 return null;
-
+            }
             String title = content.getValueMap().get(JcrConstants.JCR_TITLE, String.class);
-            if (StringUtils.isBlank(title))
+            if (StringUtils.isBlank(title)) {
                 return null;
-
+            }
             return title;
         }
 
@@ -435,11 +433,16 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         private void initPriceInfo() throws CommerceException {
-            CommerceService commerceService = resourceResolver.getResource(product.getPath()).adaptTo(CommerceService.class);
-            CommerceSession commerceSession = commerceService.login(request, response);
-            List<PriceInfo> priceInfoList = commerceSession.getProductPriceInfo(product, new PriceFilter("UNIT"));
-            if (!priceInfoList.isEmpty()) {
-                priceInfo = priceInfoList.get(0);
+            Resource productResource = resourceResolver.getResource(product.getPath());
+            if (productResource != null) {
+                CommerceService commerceService = productResource.adaptTo(CommerceService.class);
+                if (commerceService != null) {
+                    CommerceSession commerceSession = commerceService.login(request, response);
+                    List<PriceInfo> priceInfoList = commerceSession.getProductPriceInfo(product, new PriceFilter("UNIT"));
+                    if (!priceInfoList.isEmpty()) {
+                        priceInfo = priceInfoList.get(0);
+                    }
+                }
             }
         }
     }

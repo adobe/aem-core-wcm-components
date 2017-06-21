@@ -87,7 +87,6 @@ public class PageImplTest {
         aemContext.load().binaryFile(TEST_BASE + "/" + FN_TOUCH_ICON_152, DESIGN_PATH + "/" + FN_TOUCH_ICON_152);
         aemContext.load().binaryFile(TEST_BASE + "/static.css", DESIGN_PATH + "/static.css");
         aemContext.load().json(TEST_BASE + "/default-tags.json", "/etc/tags/default");
-        aemContext.registerInjectActivateService(new MockAdapterFactory());
     }
 
     @Test

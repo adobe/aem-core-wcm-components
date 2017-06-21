@@ -70,7 +70,7 @@ public class WorkflowModelDataSourceServlet extends SlingSafeMethodsServlet {
         }
     }
 
-    public class WorkflowModelResource extends TextValueDataResourceSource {
+    private static class WorkflowModelResource extends TextValueDataResourceSource {
 
         private final WorkflowModel model;
 

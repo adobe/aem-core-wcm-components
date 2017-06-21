@@ -26,8 +26,10 @@ import java.util.Map;
 
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
 
@@ -36,6 +38,7 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.image.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
@@ -49,6 +52,7 @@ public class ImageImplTest extends AbstractImageTest {
     private static final String IMAGE_TITLE_ALT = "Adobe Logo";
     private static final String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png";
     private static final String IMAGE_LINK = "https://www.adobe.com";
+
 
     @Test
     public void testImageWithTwoOrMoreSmartSizes() throws Exception {
@@ -99,17 +103,36 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     public void testInvalidAssetTypeImage() throws Exception {
-        Image image = getImageUnderTest(IMAGE15_PATH);
+        Image image = getImageUnderTest(IMAGE17_PATH);
         assertNull(image.getSrc());
     }
 
     @Test
     public void testExtensionDeterminedFromMimetype() throws Exception {
-        String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
-        Image image = getImageUnderTest(IMAGE16_PATH);
+        String escapedResourcePath = Text.escapePath(IMAGE18_PATH);
+        Image image = getImageUnderTest(IMAGE18_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
     }
-    
+
+    @Test
+    public void testImageCacheKiller() throws Exception {
+        String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
+        Image image = getImageUnderTest(IMAGE4_PATH, WCMMode.EDIT);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
+
+        escapedResourcePath = Text.escapePath(IMAGE15_PATH);
+        image = getImageUnderTest(IMAGE15_PATH, WCMMode.EDIT);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
+    }
+
+    @Test
+    @Ignore("Fixme by adding the referenced file in the test DAM")
+    public void testTIFFImage() throws Exception {
+        String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
+        Image image = getImageUnderTest(IMAGE16_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg", image.getSrc());
+    }
+
     private void compareJSON(String expectedJson, String json) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Map expectedMap = objectMapper.readValue(expectedJson, Map.class);
@@ -118,6 +141,10 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     private Image getImageUnderTest(String resourcePath) {
+        return getImageUnderTest(resourcePath, null);
+    }
+
+    private Image getImageUnderTest(String resourcePath, WCMMode wcmMode) {
         Resource resource = aemContext.resourceResolver().getResource(resourcePath);
         ContentPolicyMapping mapping = resource.adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
@@ -133,6 +160,9 @@ public class ImageImplTest extends AbstractImageTest {
         request.setResource(resource);
         Page page = aemContext.pageManager().getPage(PAGE);
         slingBindings.put(WCMBindings.CURRENT_PAGE, page);
+        if (wcmMode != null) {
+            request.setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, wcmMode);
+        }
         slingBindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(request));
         slingBindings.put(WCMBindings.PAGE_MANAGER, aemContext.pageManager());
         Style style = mock(Style.class);
@@ -140,6 +170,7 @@ public class ImageImplTest extends AbstractImageTest {
                 invocationOnMock -> invocationOnMock.getArguments()[1]
         );
         slingBindings.put(WCMBindings.CURRENT_STYLE, style);
+        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Image.class);
     }

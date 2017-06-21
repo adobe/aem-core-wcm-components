@@ -59,7 +59,7 @@ public abstract class AbstractFieldImpl implements Field {
     @Override
     public String getId() {
         if (id == null) {
-            id = getIDPrefix() + "-" + String.valueOf(Math.abs(resource.getPath().hashCode()));
+            id = getIDPrefix() + "-" + String.valueOf(Math.abs(resource.getPath().hashCode() - 1));
         }
         return id;
     }

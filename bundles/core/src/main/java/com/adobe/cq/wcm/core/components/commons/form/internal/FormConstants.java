@@ -15,6 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.commons.form.internal;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Some constants for the form components.
  */
@@ -34,7 +38,9 @@ public final class FormConstants {
     public final static String RT_CORE_FORM_CONTAINER_DATASOURCE_V1 = RT_CORE_FORM_PREFIX + "container/v1/datasource";
 
     /** Array of all resource types for the form container, including versions */
-    public final static String[] RT_ALL_CORE_FORM_CONTAINER = { RT_CORE_FORM_CONTAINER_V1 };
+    public final static Set<String> RT_ALL_CORE_FORM_CONTAINER = Collections.unmodifiableSet(new HashSet<String>() {{
+        add(RT_CORE_FORM_CONTAINER_V1);
+    }});
 
     /** Node-name of the touch based dialog for form actions */
     public static final String NN_DIALOG = "cq:dialog";

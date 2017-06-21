@@ -1,0 +1,23 @@
+{
+  "we-retail": {
+    "jcr:createdBy": "admin",
+    "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+    "jcr:primaryType": "nt:Folder",
+    "components": {
+      "jcr:createdBy": "admin",
+      "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+      "jcr:primaryType": "nt:Folder",
+      "form": {
+        "jcr:createdBy": "admin",
+        "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+        "jcr:primaryType": "nt:Folder",
+        "button": {
+          "jcr:createdBy": "admin",
+          "jcr:created": "Wed Oct 05 2016 16:05:02 GMT+0530",
+          "jcr:title": "Form Button",
+          "sling:resourceSuperType": "core/wcm/components/form/button/v1/button"
+        }
+      }
+    }
+  }
+}

@@ -15,9 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.impl.v1;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import javax.annotation.PostConstruct;
@@ -170,8 +170,7 @@ public class ListImpl implements List {
 
     private Source getListType() {
         String listFromValue = properties.get(PN_SOURCE, currentStyle.get(PN_SOURCE, StringUtils.EMPTY));
-        Source listType = Source.fromString(listFromValue);
-        return listType;
+        return Source.fromString(listFromValue);
     }
 
     private void populateListItems(Source listType) {
@@ -235,12 +234,14 @@ public class ListImpl implements List {
             Page rootPage = getRootPage(PN_TAGS_PARENT_PAGE);
             if (rootPage != null) {
                 TagManager tagManager = resourceResolver.adaptTo(TagManager.class);
-                RangeIterator<Resource> resourceRangeIterator = tagManager.find(rootPage.getPath(), tags, matchAny);
-                if (resourceRangeIterator != null) {
-                    while (resourceRangeIterator.hasNext()) {
-                        Page containingPage = pageManager.getContainingPage(resourceRangeIterator.next());
-                        if (containingPage != null) {
-                            listItems.add(containingPage);
+                if (tagManager != null) {
+                    RangeIterator<Resource> resourceRangeIterator = tagManager.find(rootPage.getPath(), tags, matchAny);
+                    if (resourceRangeIterator != null) {
+                        while (resourceRangeIterator.hasNext()) {
+                            Page containingPage = pageManager.getContainingPage(resourceRangeIterator.next());
+                            if (containingPage != null) {
+                                listItems.add(containingPage);
+                            }
                         }
                     }
                 }
@@ -277,7 +278,7 @@ public class ListImpl implements List {
 
     private void sortListItems() {
         if (orderBy != null) {
-            Collections.sort(listItems, new ListSort(orderBy, sortOrder));
+            listItems.sort(new ListSort(orderBy, sortOrder));
         }
     }
 
@@ -364,12 +365,14 @@ public class ListImpl implements List {
         }
     }
 
-    private class ListSort implements Comparator<Page> {
+    private static class ListSort implements Comparator<Page>, Serializable {
 
+
+        private static final long serialVersionUID = 204096578105548876L;
         private SortOrder sortOrder;
         private OrderBy orderBy;
 
-        public ListSort(OrderBy orderBy, SortOrder sortOrder) {
+        ListSort(OrderBy orderBy, SortOrder sortOrder) {
             this.orderBy = orderBy;
             this.sortOrder = sortOrder;
         }

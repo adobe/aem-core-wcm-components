@@ -54,6 +54,7 @@
                 "image4"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "2017-05-15T17:56:17.756+01:00",
                     "sling:resourceType": "core/wcm/components/image",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png",
                     "isDecorative"      : true,
@@ -199,7 +200,27 @@
                         }
                     }
                 },
-                "image15"            : {
+                "image15"           : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "cq:lastModified"   : "2017-05-15T17:56:17.756+01:00",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png",
+                    "isDecorative"      : true,
+                    "linkURL"           : "https://www.adobe.com",
+                    "alt"               : "Adobe Logo"
+                },
+                "image16"           : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "cq:lastModified"   : "2017-05-15T17:56:17.756+01:00",
+                    "sling:resourceType": "core/wcm/components/image",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.tiff",
+                    "isDecorative"      : true,
+                    "linkURL"           : "https://www.adobe.com",
+                    "alt"               : "Adobe Logo"
+                },
+                "image17"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "sling:resourceType": "core/wcm/components/image",
@@ -220,7 +241,7 @@
                         }
                     }
                 },
-                "image16"           : {
+                "image18"           : {
                     "imageCrop"         : "186,950,1076,1280",
                     "imageRotate"       : 90,
                     "jcr:primaryType"   : "nt:unstructured",
