@@ -15,62 +15,40 @@
  ******************************************************************************/
 package com.adobe.cq.wcm.core.components.models.impl.v1;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Map;
 
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.Matchers;
 
 import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.sightly.WCMBindings;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.image.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Function;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-public class ImageImplTest {
-
-    @ClassRule
-    public static final AemContext aemContext = CoreComponentTestContext.createContext("/image", "/content");
+public class ImageImplTest extends AbstractImageTest {
 
     private static final String TEST_ROOT = "/content";
     private static final String PAGE = TEST_ROOT + "/test";
-    private static final String IMAGE0_PATH = PAGE + "/jcr:content/root/image0";
-    private static final String IMAGE3_PATH = PAGE + "/jcr:content/root/image3";
-    private static final String IMAGE4_PATH = PAGE + "/jcr:content/root/image4";
     private static final String CONTEXT_PATH = "/core";
     private static final String IMAGE_TITLE_ALT = "Adobe Logo";
     private static final String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.svg.png";
     private static final String IMAGE_LINK = "https://www.adobe.com";
-
-    private static final ContentPolicyManager contentPolicyManager = mock(ContentPolicyManager.class);
-
-    @BeforeClass
-    public static void init() {
-        aemContext.registerInjectActivateService(new MockAdapterFactory());
-        aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
-                (Function<ResourceResolver, ContentPolicyManager>) resourceResolver -> contentPolicyManager
-        );
-        aemContext.load().json("/image/test-conf.json", "/conf");
-    }
 
     @Test
     public void testImageWithTwoOrMoreSmartSizes() throws Exception {
@@ -119,6 +97,19 @@ public class ImageImplTest {
                 image.getJson());
     }
 
+    @Test
+    public void testInvalidAssetTypeImage() throws Exception {
+        Image image = getImageUnderTest(IMAGE15_PATH);
+        assertNull(image.getSrc());
+    }
+
+    @Test
+    public void testExtensionDeterminedFromMimetype() throws Exception {
+        String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
+        Image image = getImageUnderTest(IMAGE16_PATH);
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
+    }
+    
     private void compareJSON(String expectedJson, String json) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Map expectedMap = objectMapper.readValue(expectedJson, Map.class);

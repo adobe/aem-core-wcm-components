@@ -15,7 +15,17 @@
  ******************************************************************************/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.awt.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,23 +33,19 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import javax.annotation.Nullable;
+
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.invocation.InvocationOnMock;
@@ -47,95 +53,18 @@ import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
+import com.adobe.cq.wcm.core.components.image.AbstractImageTest;
 import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
 import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
-import com.google.common.base.Function;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+public class AdaptiveImageServletTest extends AbstractImageTest {
 
-public class AdaptiveImageServletTest {
-
-    @ClassRule
-    public static final AemContext aemContext = CoreComponentTestContext.createContext("/image", "/content");
-
-    private static ContentPolicyManager contentPolicyManager;
-    private static MimeTypeService mockedMimeTypeService;
     private AdaptiveImageServlet servlet;
-    private ResourceResolver resourceResolver;
 
-    private static final String TEST_ROOT = "/content";
-    private static final String PAGE = TEST_ROOT + "/test";
-    private static final String IMAGE0_PATH = PAGE + "/jcr:content/root/image0";
-    private static final String IMAGE1_PATH = PAGE + "/jcr:content/root/image1";
-    private static final String IMAGE2_PATH = PAGE + "/jcr:content/root/image2";
-    private static final String IMAGE3_PATH = PAGE + "/jcr:content/root/image3";
-    private static final String IMAGE5_PATH = PAGE + "/jcr:content/root/image5";
-    private static final String IMAGE6_PATH = PAGE + "/jcr:content/root/image6";
-    private static final String IMAGE7_PATH = PAGE + "/jcr:content/root/image7";
-    private static final String IMAGE8_PATH = PAGE + "/jcr:content/root/image8";
-    private static final String IMAGE9_PATH = PAGE + "/jcr:content/root/image9";
-    private static final String IMAGE10_PATH = PAGE + "/jcr:content/root/image10";
-    private static final String IMAGE11_PATH = PAGE + "/jcr:content/root/image11";
-    private static final String IMAGE12_PATH = PAGE + "/jcr:content/root/image12";
-    private static final String IMAGE13_PATH = PAGE + "/jcr:content/root/image13";
-    private static final String IMAGE14_PATH = PAGE + "/jcr:content/root/image14";
-    private static final String PNG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg.png";
-    private static final String GIF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg.gif";
-    private static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
-    private static final String GIF_ASSET_PATH = "/content/dam/core/images/" + GIF_IMAGE_BINARY_NAME;
-    private static final String GIF5_FILE_PATH = IMAGE5_PATH + "/file";
-    private static final String PNG3_FILE_PATH = IMAGE3_PATH + "/file";
-    private static final String PNG10_FILE_PATH = IMAGE10_PATH + "/file";
-    private static final String PNG12_FILE_PATH = IMAGE12_PATH + "/file";
-    private static final String PNG14_FILE_PATH = IMAGE14_PATH + "/file";
     private static final int ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH = 1280;
-
-
-    @BeforeClass
-    public static void setUp() throws IOException {
-        mockedMimeTypeService = mock(MimeTypeService.class);
-        when(mockedMimeTypeService.getMimeType("tif")).thenReturn("image/jpeg");
-        when(mockedMimeTypeService.getMimeType("tiff")).thenReturn("image/jpeg");
-        when(mockedMimeTypeService.getMimeType("png")).thenReturn("image/png");
-        when(mockedMimeTypeService.getMimeType("jpg")).thenReturn("image/jpeg");
-        when(mockedMimeTypeService.getMimeType("jpeg")).thenReturn("image/jpeg");
-        when(mockedMimeTypeService.getMimeType("gif")).thenReturn("image/gif");
-        when(mockedMimeTypeService.getExtension("image/tif")).thenReturn("tiff");
-        when(mockedMimeTypeService.getExtension("image/jpeg")).thenReturn("jpeg");
-        when(mockedMimeTypeService.getExtension("image/png")).thenReturn("png");
-        when(mockedMimeTypeService.getExtension("image/gif")).thenReturn("gif");
-        aemContext.load().json("/image/test-conf.json", "/conf");
-        aemContext.load().json("/image/test-content-dam.json", "/content/dam/core/images");
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
-        aemContext.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
-                "/jcr:content/renditions/cq5dam.web.1280.1280.png");
-        aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH + "/jcr:content/renditions/original");
-        aemContext.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH +
-                "/jcr:content/renditions/cq5dam.web.1280.1280.gif");
-        aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF5_FILE_PATH);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG3_FILE_PATH);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG10_FILE_PATH);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG12_FILE_PATH);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG14_FILE_PATH);
-        aemContext.registerInjectActivateService(new MockAdapterFactory());
-        contentPolicyManager = mock(ContentPolicyManager.class);
-        aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
-                new Function<ResourceResolver, ContentPolicyManager>() {
-                    @Nullable
-                    @Override
-                    public ContentPolicyManager apply(@Nullable ResourceResolver resolver) {
-                        return contentPolicyManager;
-                    }
-                });
-    }
 
     @Before
     public void init() throws IOException {
