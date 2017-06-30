@@ -26,7 +26,7 @@
                                 fieldLabel="Image asset"
                                 fileNameParameter="./fileName"
                                 fileReferenceParameter="./fileReference"
-                                mimeTypes="[image]"
+                                mimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
                                 multiple="{Boolean}false"
                                 name="./file"
                                 title="Upload Image Asset"
