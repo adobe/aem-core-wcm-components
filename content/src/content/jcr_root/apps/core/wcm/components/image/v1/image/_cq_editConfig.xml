@@ -66,7 +66,7 @@
                 <fullscreen jcr:primaryType="nt:unstructured">
                     <toolbar
                         jcr:primaryType="nt:unstructured"
-                        left="[crop#launchwithratio,rotate#right,map#launch,flip#horizontal,flip#vertical,zoom#reset100,zoom#popupslider]"
+                        left="[crop#launchwithratio,rotate#right,flip#horizontal,flip#vertical,zoom#reset100,zoom#popupslider]"
                         right="[history#undo,history#redo,fullscreen#fullscreenexit]"/>
                     <replacementToolbars jcr:primaryType="nt:unstructured">
                         <crop
