@@ -74,7 +74,6 @@ public class ImageImpl implements Image {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
     private static final String DOT = ".";
     private static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
-    private static final String PN_DAM_METADATA_MIME_TYPE = "dam:MIMEtype";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
     private static final List<String> NON_SUPPORTED_IMAGE_MIMETYPE = Arrays.asList("image/svg+xml");
 
@@ -134,7 +133,7 @@ public class ImageImpl implements Image {
             if (assetResource != null) {
                 Asset asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
-                    mimeType = PropertiesUtil.toString(asset.getMetadata().get(PN_DAM_METADATA_MIME_TYPE), MIME_TYPE_IMAGE_JPEG);
+                    mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
                     hasContent = true;
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
