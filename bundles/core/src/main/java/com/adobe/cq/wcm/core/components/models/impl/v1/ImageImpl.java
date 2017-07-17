@@ -18,10 +18,10 @@ package com.adobe.cq.wcm.core.components.models.impl.v1;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -54,6 +54,7 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -71,6 +72,8 @@ public class ImageImpl implements Image {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
     private static final String DOT = ".";
     private static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
+    private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
+    private static final List<String> NON_SUPPORTED_IMAGE_MIMETYPE = Arrays.asList("image/svg+xml");
 
     @Self
     private SlingHttpServletRequest request;
@@ -106,7 +109,6 @@ public class ImageImpl implements Image {
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
 
-    private String extension;
     private String src;
     private String[] smartImages = new String[]{};
     private int[] smartSizes = new int[0];
@@ -119,25 +121,42 @@ public class ImageImpl implements Image {
     @PostConstruct
     private void initModel() {
         boolean hasContent = false;
+        String mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
 
         if (StringUtils.isNotEmpty(fileReference)) {
-            int dotIndex;
-            if ((dotIndex = fileReference.lastIndexOf(DOT)) != -1) {
-                extension = fileReference.substring(dotIndex + 1);
+            // the image is coming from DAM
+            final Resource assetResource = request.getResourceResolver().getResource(fileReference);
+            if (assetResource != null) {
+                Asset asset = assetResource.adaptTo(Asset.class);
+                if (asset != null) {
+                    mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
+                    hasContent = true;
+                } else {
+                    LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
+                }
+            } else {
+                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, resource.getPath());
             }
-            hasContent = true;
         } else {
             Resource file = resource.getChild(DownloadResource.NN_FILE);
             if (file != null) {
-                extension = mimeTypeService.getExtension(
-                        PropertiesUtil.toString(file.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), MIME_TYPE_IMAGE_JPEG)
-                );
+                mimeType = PropertiesUtil.toString(file.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), MIME_TYPE_IMAGE_JPEG);
                 hasContent = true;
             }
         }
         if (hasContent) {
+            // validate if correct mime type (i.e. rasterized image)
+            if (!mimeType.startsWith(MIME_TYPE_IMAGE_PREFIX)) {
+                LOGGER.error("Image at {} uses a binary with a non-image mime type ({})", resource.getPath(), mimeType);
+                return;
+            }
+            if (NON_SUPPORTED_IMAGE_MIMETYPE.contains(mimeType)) {
+                LOGGER.error("Image at {} uses binary with a non-supported image mime type ({})", resource.getPath(), mimeType);
+                return;
+            }
+            String extension = mimeTypeService.getExtension(mimeType);
             long lastModifiedDate = 0;
             if (!isWcmModeDisabled()) {
                 ValueMap properties = resource.getValueMap();
@@ -192,10 +211,7 @@ public class ImageImpl implements Image {
     }
 
     private boolean isWcmModeDisabled() {
-      if (wcmmode == null) {
-        return true;
-      }
-      return wcmmode.isDisabled();
+        return wcmmode == null || wcmmode.isDisabled();
     }
 
     @Override

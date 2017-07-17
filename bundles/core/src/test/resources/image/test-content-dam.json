@@ -1,5 +1,5 @@
 {
-    "Adobe_Systems_logo_and_wordmark.svg.gif": {
+    "Adobe_Systems_logo_and_wordmark.gif": {
         "jcr:primaryType": "dam:Asset",
         "jcr:mixinTypes" : [
             "mix:referenceable"
@@ -12,12 +12,12 @@
             "jcr:lastModifiedBy": "admin",
             "dam:assetState"    : "processed",
             "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
-            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark.svg.gif",
+            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark.gif",
             "renditions"        : {
-                "jcr:primaryType"             : "nt:folder",
-                "jcr:createdBy"               : "admin",
-                "jcr:created"                 : "Mon Mar 20 2017 11:20:37 GMT+0100",
-                "cq5dam.web.1280.1280.gif"    : {
+                "jcr:primaryType"         : "nt:folder",
+                "jcr:createdBy"           : "admin",
+                "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                "cq5dam.web.1280.1280.gif": {
                     "jcr:primaryType": "nt:file",
                     "jcr:createdBy"  : "workflow-process-service",
                     "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
@@ -29,7 +29,7 @@
                         ":jcr:data"         : 27795
                     }
                 },
-                "original"                    : {
+                "original"                : {
                     "jcr:primaryType": "nt:file",
                     "jcr:createdBy"  : "admin",
                     "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
@@ -69,7 +69,7 @@
             }
         }
     },
-    "Adobe_Systems_logo_and_wordmark.svg.png": {
+    "Adobe_Systems_logo_and_wordmark.png": {
         "jcr:primaryType": "dam:Asset",
         "jcr:mixinTypes" : [
             "mix:referenceable"
@@ -82,12 +82,12 @@
             "jcr:lastModifiedBy": "admin",
             "dam:assetState"    : "processed",
             "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
-            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark.svg.png",
+            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark.png",
             "renditions"        : {
-                "jcr:primaryType"             : "nt:folder",
-                "jcr:createdBy"               : "admin",
-                "jcr:created"                 : "Mon Mar 20 2017 11:20:37 GMT+0100",
-                "cq5dam.web.1280.1280.png"    : {
+                "jcr:primaryType"         : "nt:folder",
+                "jcr:createdBy"           : "admin",
+                "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                "cq5dam.web.1280.1280.png": {
                     "jcr:primaryType": "nt:file",
                     "jcr:createdBy"  : "workflow-process-service",
                     "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
@@ -99,7 +99,7 @@
                         ":jcr:data"         : 27795
                     }
                 },
-                "original"                    : {
+                "original"                : {
                     "jcr:primaryType": "nt:file",
                     "jcr:createdBy"  : "admin",
                     "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
@@ -136,6 +136,203 @@
                 "tiff:ImageWidth"            : 2000,
                 "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
                 "dam:size"                   : 49069
+            }
+        }
+    },
+    "Adobe_Systems_logo_and_wordmark"        : {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes" : [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+        "jcr:uuid"       : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState"    : "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark.png",
+            "renditions"        : {
+                "jcr:primaryType"         : "nt:folder",
+                "jcr:createdBy"           : "admin",
+                "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                "cq5dam.web.1280.1280.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "workflow-process-service",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        ":jcr:data"         : 27795
+                    }
+                },
+                "original"                : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                        ":jcr:data"         : 49069
+                    }
+                }
+            },
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata"          : {
+                "jcr:primaryType"            : "nt:unstructured",
+                "jcr:mixinTypes"             : [
+                    "cq:Taggable"
+                ],
+                "dam:Physicalheightininches" : "27.77777862548828",
+                "dam:Physicalwidthininches"  : "27.77777862548828",
+                "dam:Fileformat"             : "PNG",
+                "dam:Progressive"            : "no",
+                "tiff:ImageLength"           : 2000,
+                "dam:extracted"              : "Mon Mar 20 2017 11:20:38 GMT+0100",
+                "dc:format"                  : "image/png",
+                "dam:Bitsperpixel"           : 8,
+                "dam:MIMEtype"               : "image/png",
+                "dam:Physicalwidthindpi"     : 72,
+                "dam:Physicalheightindpi"    : 72,
+                "dam:Numberofimages"         : 1,
+                "dam:Numberoftextualcomments": 0,
+                "tiff:ImageWidth"            : 2000,
+                "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
+                "dam:size"                   : 49069
+            }
+        }
+    },
+    "Adobe_Systems_logo_and_wordmark.tiff" : {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes": [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy": "admin",
+        "jcr:created": "Mon Jul 17 2017 15:59:48 GMT+0200",
+        "jcr:uuid": "ef64bc65-fb1b-4c31-9582-c177001eba0d",
+        "jcr:content": {
+            "jcr:primaryType": "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState": "processed",
+            "jcr:lastModified": "Mon Jul 17 2017 15:59:49 GMT+0200",
+            "dam:relativePath": "core/images/Adobe_Systems_logo_and_wordmark.tiff",
+            "renditions": {
+                "jcr:primaryType": "nt:folder",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Mon Jul 17 2017 15:59:48 GMT+0200",
+                "original": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Mon Jul 17 2017 15:59:48 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/tiff",
+                        "jcr:lastModified": "Mon Jul 17 2017 15:59:48 GMT+0200",
+                        ":jcr:data": 254204
+                    }
+                }
+            },
+            "related": {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:mixinTypes": [
+                    "cq:Taggable"
+                ],
+                "exif:ExifOffset": 254160,
+                "dam:Physicalheightininches": "27.77777862548828",
+                "tiff:Compression": 7,
+                "dam:Physicalwidthininches": "27.77777862548828",
+                "dam:Fileformat": "TIFF",
+                "dam:Progressive": "no",
+                "tiff:YCbCrSubSampling": [
+                    1,
+                    1
+                ],
+                "dam:RowsPerStrip": 174,
+                "tiff:PlanarConfiguration": 1,
+                "tiff:ImageLength": 2000,
+                "tiff:YResolution": "72",
+                "exif:ColorSpace": -1,
+                "xmp:CreatorTool": "Adobe Photoshop CC 2017 (Macintosh)",
+                "dam:NewSubfileType": 0,
+                "dam:extracted": "Mon Jul 17 2017 15:59:48 GMT+0200",
+                "dc:format": "image/tiff",
+                "dam:Bitsperpixel": 24,
+                "tiff:YCbCrSubSampling_xmpArrayType": "rdf:Seq",
+                "tiff:YCbCrPositioning": 2,
+                "xmpMM:DocumentID": "adobe:docid:photoshop:04b3364a-ab81-117a-b332-dc28f75d784e",
+                "dam:MIMEtype": "image/tiff",
+                "tiff:Orientation": 1,
+                "dam:Comments": "254 (0xfe: NewSubfileType): 0 (1 Long)\n256 (0x100: ImageWidth): 2000 (1 Short)\n257 (0x101: ImageLength): 2000 (1 Short)\n258 (0x102: BitsPerSample): 8, 8, 8 (3 Short)\n259 (0x103: Compression): 7 (1 Short)\n262 (0x106: PhotometricInterpretation): 6 (1 Short)\n273 (0x111: PreviewImageStart): 23894, 48218, 67856, 84364, 104394, 124406, 145226, 165182, 179662, 192018, 216906, 242044 (12 Long)\n274 (0x112: Orientation): 1 (1 Short)\n277 (0x115: SamplesPerPixel): 3 (1 Short)\n278 (0x116: RowsPerStrip): 174 (1 Short)\n279 (0x117: PreviewImageLength): 24324, 19637, 16508, 20030, 20012, 20819, 19955, 14479, 12356, 24888, 25138, 12115 (12 Long)\n282 (0x11a: XResolution): 72 (1 Rational)\n283 (0x11b: YResolution): 72 (1 Rational)\n284 (0x11c: PlanarConfiguration): 1 (1 Short)\n296 (0x128: ResolutionUnit): 2 (1 Short)\n305 (0x131: Software): 'Adobe Photoshop CC 2017 (Macintosh)' (36 ASCII)\n306 (0x132: DateTime): '2017:07:17 15:21:11' (20 ASCII)\n347 (0x15b: JPEGTables): -1, -40, -1, -37, 0, -124, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 3, 4, 3, 2, 2, 3, 4, 5, 4, 4, 4, 4, 4, 5, 6, 5, 5, 5, 5, 5, 5, 6, 6, 7, 7, 8, 7, 7, 6, 9... (558) (558 Undefined)\n530 (0x212: YCbCrSubSampling): 1, 1 (2 Short)\n531 (0x213: YCbCrPositioning): 2 (1 Short)\n700 (0x2bc: XMP): 60, 63, 120, 112, 97, 99, 107, 101, 116, 32, 98, 101, 103, 105, 110, 61, 34, -17, -69, -65, 34, 32, 105, 100, 61, 34, 87, 53, 77, 48, 77, 112, 67, 101, 104, 105, 72, 122, 114, 101, 83, 122, 78, 84, 99, 122, 107, 99, 57, 100, 34... (14534) (14534 Byte)\n34377 (0x8649: PhotoshopSettings): 56, 66, 73, 77, 4, 37, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 66, 73, 77, 4, 58, 0, 0, 0, 0, 1, 15, 0, 0, 0, 16, 0, 0, 0, 1, 0, 0, 0... (8338) (8338 Byte)\n34665 (0x8769: ExifOffset): 254160 (1 Long)\n",
+                "dam:Physicalwidthindpi": 72,
+                "dam:Physicalheightindpi": 72,
+                "tiff:ResolutionUnit": 2,
+                "xmpMM:OriginalDocumentID": "xmp.did:2e96d6f7-c156-43b1-8cca-c63d1d20f2e2",
+                "photoshop:ColorMode": 3,
+                "dam:Numberofimages": 2,
+                "tiff:XResolution": "72",
+                "exif:PixelYDimension": 2000,
+                "xmp:MetadataDate": "Mon Jul 17 2017 15:21:11 GMT+0200",
+                "dam:PreviewImageStart": "[I@3ab00ab6",
+                "exif:PixelXDimension": 2000,
+                "dam:Numberoftextualcomments": 23,
+                "tiff:BitsPerSample_xmpArrayType": "rdf:Seq",
+                "xmpMM:InstanceID": "xmp.iid:abab797a-9b92-4be4-a3b2-606db44a285d",
+                "xmp:ModifyDate": "Mon Jul 17 2017 15:21:11 GMT+0200",
+                "tiff:BitsPerSample": [
+                    8,
+                    8,
+                    8,
+                    8,
+                    8,
+                    8
+                ],
+                "xmp:CreateDate": "Sat Jul 01 2017 13:47:39 GMT+0200",
+                "tiff:ImageWidth": 2000,
+                "dam:sha1": "be9a8f99f2e057031bee1d8f4d159d803b2316ff",
+                "dam:size": 254204,
+                "tiff:SamplesPerPixel": 3,
+                "tiff:PhotometricInterpretation": 6,
+                "dam:PreviewImageLength": "[I@7c2fee6f",
+                "xmpMM:History": {
+                    "1": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "stEvt:action": "created",
+                        "xmpNodeType": "xmpStruct",
+                        "stEvt:softwareAgent": "Adobe Photoshop CC 2017 (Macintosh)",
+                        "stEvt:when": "Sat Jul 01 2017 13:47:39 GMT+0200",
+                        "stEvt:instanceID": "xmp.iid:2e96d6f7-c156-43b1-8cca-c63d1d20f2e2"
+                    },
+                    "2": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "stEvt:action": "converted",
+                        "xmpNodeType": "xmpStruct",
+                        "stEvt:parameters": "from image/png to image/tiff"
+                    },
+                    "3": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "stEvt:action": "saved",
+                        "xmpNodeType": "xmpStruct",
+                        "stEvt:softwareAgent": "Adobe Photoshop CC 2017 (Macintosh)",
+                        "stEvt:when": "Mon Jul 17 2017 15:21:11 GMT+0200",
+                        "stEvt:changed": "/",
+                        "stEvt:instanceID": "xmp.iid:abab797a-9b92-4be4-a3b2-606db44a285d"
+                    },
+                    "jcr:primaryType": "nt:unstructured",
+                    "xmpNodeType": "xmpArray",
+                    "xmpArraySize": 3,
+                    "xmpArrayType": "rdf:Seq"
+                }
             }
         }
     }
