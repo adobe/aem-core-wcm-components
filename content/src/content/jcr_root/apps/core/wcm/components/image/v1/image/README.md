@@ -46,6 +46,50 @@ The following properties are written to JCR for this Image component and are exp
 6. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
 otherwise a caption will be rendered
 
+## Rendering logic
+
+The HTML markup for the image component looks like this
+
+```
+<div class="cmp cmp-image">
+  <div class="cq-dd-image"><!-- this surrounding "div" is only rendered for wcmmode!=disabled -->
+    <a href="..." class="cmp-image--link"><!-- this surrounding "a" is only rendered for images with a link -->
+      <noscript data-cmp-image="...">
+        <img src="..." alt="..." title="..."/><!-- used as fallback in case no javascript is enabled or in case no image widths are configured in the component's policy -->
+      </noscript>
+    </a>
+  </div>
+</div>
+```
+
+There is some javascript logic bound to this markup which extracts the image urls from the `data-cmp-image` JSON attribute. Then the most appropriate url is being picked and ends up in a dynamically added `img` element. The most appropriate url is the image url specifying the server rendition with the closest width which is at least as wide as the image's container! The new `img` element is placed in the DOM as first child below the container with class `cmp-image`.
+
+### data-cmp-image Attribute Format
+The following JSON format is expected in the attribute `data-cmp-image` of the `noscript` element.
+
+```
+{
+  smartImages: [<image urls per width given in smartSizes>],
+  smartSizes: [<image widths from component's policy configuration>],
+  lazyEnabled: <false in case disableLazyLoading from the component's policy configuration is set to true, otherwise true>
+}
+```
+
+### Necessary attributes for the javascript logic
+1. `cmp-image` class attribute is necessary to select the right container below which to create the new `img` element. Make sure to manually place this container in the markup of composed components (`data-sly-resource` with a `resourceType` override).
+2. `data-cmp-image` attribute must contain all necessary image URLs in the format described above.
+
+
+## Extending from this component
+
+1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section above).
+2. In case your own component does not only render an image but does also render something else, use the following approach
+  1. `resourceSuperType` should be set to `core/wcm/components/image/v1/image` (to make sure the image rendering servlet is being used)
+  2. Your HTL script should include the image markup via `<div class="cmp-image" data-sly-include="image.html"></div>`
+  3. You derived component should reset `cq:htmlTags`
+  4. You component's dialog should overwrite the dialog fully from the image component via `sling:hideResource="true"` on the node `cq:dialog/content/items/image`
+
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
