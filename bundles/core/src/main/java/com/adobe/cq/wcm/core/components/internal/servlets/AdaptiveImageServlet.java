@@ -240,10 +240,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     Rendition webRendition = getAWebRendition(asset);
                     double renditionWidth;
                     if (webRendition != null) {
-                        Layer rendition = new Layer(webRendition.getStream());
-                        renditionWidth = rendition.getWidth();
-                        LOGGER.debug("Found rendition {} with width {}px; assuming the cropping rectangle was calculated using this " +
-                                "rendition.", webRendition.getPath(), renditionWidth);
+                        try (InputStream renditionStream = webRendition.getStream()) {
+                            Layer rendition = new Layer(renditionStream);
+                            renditionWidth = rendition.getWidth();
+                            LOGGER.debug("Found rendition {} with width {}px; assuming the cropping rectangle was calculated using this " +
+                                    "rendition.", webRendition.getPath(), renditionWidth);
+                        }
                     } else {
                         renditionWidth = originalWidth;
                     }
