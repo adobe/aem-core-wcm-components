@@ -90,6 +90,18 @@ The following JSON format is expected in the attribute `data-cmp-image` of the `
   4. You component's dialog should overwrite the dialog fully from the image component via `sling:hideResource="true"` on the node `cq:dialog/content/items/image`
 
 
+## URL formats
+The images are loaded through the `com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet`, therefore their URLs have the following patterns:
+
+```
+Author:
+/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>/<timestamp>.<extension>
+
+Publish:
+/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>
+```
+
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
