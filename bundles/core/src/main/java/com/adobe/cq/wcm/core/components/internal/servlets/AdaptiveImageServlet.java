@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -238,15 +238,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (rectangle != null) {
                     double scaling;
                     Rendition webRendition = getAWebRendition(asset);
-                    double renditionWidth = 1280D;
+                    double renditionWidth;
                     if (webRendition != null) {
-                        try {
-                            renditionWidth = Double.parseDouble(webRendition.getName().split("\\.")[2]);
-                            LOGGER.debug("Found rendition {} with width {}px; assuming the cropping rectangle was calculated using this " +
-                                    "rendition.", webRendition.getPath(), renditionWidth);
-                        } catch (NumberFormatException e) {
-                            LOGGER.warn("Cannot determine rendition width for {}. Will fallback to 1280px.", webRendition.getPath());
-                        }
+                        Layer rendition = new Layer(webRendition.getStream());
+                        renditionWidth = rendition.getWidth();
+                        LOGGER.debug("Found rendition {} with width {}px; assuming the cropping rectangle was calculated using this " +
+                                "rendition.", webRendition.getPath(), renditionWidth);
                     } else {
                         renditionWidth = originalWidth;
                     }
