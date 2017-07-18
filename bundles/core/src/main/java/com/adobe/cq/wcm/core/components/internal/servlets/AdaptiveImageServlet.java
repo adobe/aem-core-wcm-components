@@ -200,13 +200,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
             if (assetResource == null) {
-                LOGGER.error(String.format("Unable to find resource %s used by image %s.", fileReference, image.getPath()));
+                LOGGER.error("Unable to find resource {} used by image {}.", fileReference, image.getPath());
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
             asset = assetResource.adaptTo(Asset.class);
             if (asset == null) {
-                LOGGER.error(String.format("Unable to adapt resource %s used by image %s to an asset.", fileReference, image.getPath()));
+                LOGGER.error("Unable to adapt resource {} used by image {} to an asset.", fileReference, image.getPath());
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
