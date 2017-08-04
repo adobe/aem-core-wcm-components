@@ -20,7 +20,7 @@
     "use strict";
 
     $(document).on("foundation-contentloaded", function (e) {
-        $(".core-wcm-list-v1 coral-select.cq-dialog-dropdown-showhide", e.target).each(function (i, element) {
+        $(".cmp-list--editor coral-select.cq-dialog-dropdown-showhide", e.target).each(function (i, element) {
             var target = $(element).data("cqDialogDropdownShowhideTarget");
             if (target) {
                 Coral.commons.ready(element, function (component) {

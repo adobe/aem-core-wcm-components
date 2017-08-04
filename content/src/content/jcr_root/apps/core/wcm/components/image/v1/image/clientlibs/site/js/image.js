@@ -25,23 +25,22 @@
             container,
             anchor,
             dropContainer,
-            updateMode,
             initDone = false;
 
-            that.defaults = {
-                loadHidden: false,
-                imageSelector: 'img',
-                containerSelector: '.cmp-image',
-                sourceAttribute: 'src',
-                lazyEnabled: true,
-                lazyThreshold: 0,
-                lazyEmptyPixel: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-                lazyLoaderClass: 'loading',
-                lazyLoaderStyle: {
-                    'height': 0,
-                    'padding-bottom': '' // will get replaced with ratio in %
-                }
-            };
+        that.defaults = {
+            loadHidden: false,
+            imageSelector: 'img',
+            containerSelector: '.cmp-image',
+            sourceAttribute: 'src',
+            lazyEnabled: true,
+            lazyThreshold: 0,
+            lazyEmptyPixel: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+            lazyLoaderClass: 'loading',
+            lazyLoaderStyle: {
+                'height': 0,
+                'padding-bottom': '' // will get replaced with ratio in %
+            }
+        };
 
         function init() {
             var tmp = document.createElement('div');
@@ -62,59 +61,62 @@
             that.container = container;
             that.options = options;
             that.image = image;
-            initLazy();
+            if (options.lazyEnabled) {
+                addLazyLoader();
+            }
             window.addEventListener('scroll', that.update);
             window.addEventListener('resize', that.update);
             window.addEventListener('update', that.update);
+            image.addEventListener('cmp-image-redraw', that.update);
+            that.update();
         }
 
-        function initLazy() {
-            if (options.lazyEnabled) {
-                addLazyLoader();
-                if (isLazyVisible()) {
-                    initSmart();
-                } else {
-                    image.classList.add(options.lazyLoaderClass);
-                    updateMode = 'lazy';
-                    setTimeout(that.update, 200);
-                }
-            } else {
-                initSmart();
-            }
-        }
-
-        function initSmart() {
-            if (initDone) {
-                return;
-            }
-
+        function loadImage() {
             if (options.smartSizes && options.smartImages && options.smartSizes.length > 0) {
                 if (console && options.smartSizes.length !== options.smartImages.length) {
                     console.warn('The size of the smartSizes and of the smartImages arrays do not match!');
                 } else {
-                    updateMode = 'smart';
-                    that.update();
+                    var containerWidth = 0;
+                    if (container.tagName.toLowerCase() === 'a') {
+                        containerWidth = container.parentElement.clientWidth;
+                    } else {
+                        containerWidth = container.clientWidth;
+                    }
+                    var optimalSize = containerWidth * devicePixelRatio,
+                        len = options.smartSizes.length,
+                        key = 0;
+
+                    while ((key < len-1) && (options.smartSizes[key] < optimalSize)) {
+                        key++;
+                    }
+
+                    if (image.getAttribute(options.sourceAttribute) !== options.smartImages[key]) {
+                        image.setAttribute(options.sourceAttribute, options.smartImages[key]);
+                        image.removeAttribute('data-src-disabled');
+                        window.removeEventListener('scroll', that.update);
+                    }
+
                 }
-            } else if (options.loadHidden || container.offsetParent !== null) {
-                image.setAttribute(options.sourceAttribute, image.getAttribute('data-src-disabled'));
-                image.removeAttribute('data-src-disabled');
+            } else {
+                if (!initDone) {
+                    image.setAttribute(options.sourceAttribute, image.getAttribute('data-src-disabled'));
+                    image.removeAttribute('data-src-disabled');
+                    window.removeEventListener('scroll', that.update);
+                    initDone = true;
+                }
             }
 
             if (showsLazyLoader) {
                 image.addEventListener('load', removeLazyLoader);
             }
-
-            initDone = true;
         }
 
         function addLazyLoader() {
             var width = image.getAttribute('width'),
                 height = image.getAttribute('height');
-
             if (width && height) {
                 var ratio = (height / width) * 100,
                     styles = options.lazyLoaderStyle;
-
                 styles['padding-bottom'] = ratio + '%';
                 for (var s in styles) {
                     if (styles.hasOwnProperty(s)) {
@@ -122,8 +124,8 @@
                     }
                 }
             }
-
             image.setAttribute(options.sourceAttribute, options.lazyEmptyPixel);
+            image.classList.add(options.lazyLoaderClass);
             showsLazyLoader = true;
         }
 
@@ -139,6 +141,7 @@
         }
 
         function isLazyVisible() {
+
             if (container.offsetParent === null) {
                 return false;
             }
@@ -152,82 +155,67 @@
         }
 
         that.update = function () {
-            if (updateMode === 'lazy') {
-                if (isLazyVisible()) {
-                    window.removeEventListener('scroll', that.update);
-                    initSmart();
+            if (options.lazyEnabled) {
+                if (isLazyVisible() || options.loadHidden) {
+                    loadImage();
                 }
-            } else if (updateMode === 'smart' && (options.loadHidden || container.offsetParent !== null)) {
-                var containerWidth = 0;
-                if (container.tagName.toLowerCase() === 'a') {
-                    containerWidth = container.parentElement.clientWidth;
-                } else {
-                    containerWidth = container.clientWidth;
-                }
-                var optimalSize = containerWidth * devicePixelRatio,
-                    len = options.smartSizes.length,
-                    key = 0;
-
-                while ((key < len-1) && (options.smartSizes[key] < optimalSize)) {
-                    key++;
-                }
-
-                if (image.getAttribute(options.sourceAttribute) !== options.smartImages[key]) {
-                    image.setAttribute(options.sourceAttribute, options.smartImages[key]);
-                }
-                image.removeAttribute('data-src-disabled');
+            } else {
+                loadImage();
             }
         };
 
         options = Object.assign(that.defaults, options);
-        
+
         container = noScriptElement.closest(options.containerSelector);
-        if(container) {
+        if (container) {
             dropContainer = noScriptElement.closest('.cq-dd-image');
-            if(dropContainer) {
+            if (dropContainer) {
                 container = dropContainer;
             }
-            anchor = container.querySelector('a.cmp-image--link');
-            if(anchor !== null) {
+            anchor = container.querySelector('.cmp-image--link');
+            if (anchor !== null) {
                 container = anchor;
             }
             init();
         }
     }
 
-    var imageElements = document.querySelectorAll('[data-cmp-image]');
-    var images = [];
-    for (var index = 0; index < imageElements.length; index++) {
-        var noScriptElement = imageElements[index];
-        var imageOptions = noScriptElement.dataset.cmpImage;
-        noScriptElement.removeAttribute('data-cmp-image');
-        images.push(new SmartImage(noScriptElement, JSON.parse(imageOptions)));
-    }
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-    var body = document.querySelector('body');
-    var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            // needed for IE
-            var nodesArray = [].slice.call(mutation.addedNodes);
-            if (nodesArray.length > 0) {
-                nodesArray.forEach(function (addedNode) {
-                    if(addedNode.querySelectorAll) {
-                        var noScriptArray = [].slice.call(addedNode.querySelectorAll('noscript[data-cmp-image]'));
-                        noScriptArray.forEach(function (noScriptElement) {
-                            var imageOptions = JSON.parse(noScriptElement.dataset.cmpImage);
-                            noScriptElement.removeAttribute('data-cmp-image');
-                            images.push(new SmartImage(noScriptElement, imageOptions));
-                        });
-                    }
-                });
-            }
-        });
-    });
+    document.addEventListener('DOMContentLoaded', function () {
 
-    observer.observe(body, {
-        subtree: true,
-        childList: true,
-        characterData: true
+        var imageElements = document.querySelectorAll('noscript[data-cmp-image]');
+        var images        = [];
+        for (var index = 0; index < imageElements.length; index++) {
+            var noScriptElement = imageElements[index];
+            var imageOptions    = noScriptElement.dataset.cmpImage;
+            noScriptElement.removeAttribute('data-cmp-image');
+            images.push(new SmartImage(noScriptElement, JSON.parse(imageOptions)));
+        }
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var body             = document.querySelector('body');
+        var observer         = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                // needed for IE
+                var nodesArray = [].slice.call(mutation.addedNodes);
+                if (nodesArray.length > 0) {
+                    nodesArray.forEach(function (addedNode) {
+                        if (addedNode.querySelectorAll) {
+                            var noScriptArray = [].slice.call(addedNode.querySelectorAll('noscript[data-cmp-image]'));
+                            noScriptArray.forEach(function (noScriptElement) {
+                                var imageOptions = JSON.parse(noScriptElement.dataset.cmpImage);
+                                noScriptElement.removeAttribute('data-cmp-image');
+                                images.push(new SmartImage(noScriptElement, imageOptions));
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(body, {
+            subtree      : true,
+            childList    : true,
+            characterData: true
+        });
     });
 
     /*

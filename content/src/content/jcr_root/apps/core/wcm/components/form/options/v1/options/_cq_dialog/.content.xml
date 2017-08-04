@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="nt:unstructured"
     jcr:title="Form Options"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="https://www.adobe.com/go/aem_cmp_form_options_v1">
+    helpPath="https://www.adobe.com/go/aem_cmp_form_options_v1"
+    extraClientlibs="[core.wcm.components.form.options.v1.editor]">
     <content
-        granite:class="core-wcm-form-options-v1"
+        granite:class="cmp-options--editor-v1"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
@@ -24,7 +25,7 @@
                                 level="{Long}3"
                                 text="Main"/>
                             <optionTypes
-                                granite:class="cmp-form-options-type"
+                                granite:class="cmp-options--editor-type-v1"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                 fieldDescription="Set the type of the form field."
@@ -136,12 +137,13 @@
                                         fieldLabel="Options"
                                         renderReadOnly="{Boolean}true">
                                         <field
+                                            granite:class="cmp-options--editor-item-multifield-composite-item coral-Well"
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/container"
                                             name="./items">
                                             <items jcr:primaryType="nt:unstructured">
                                                 <option
-                                                    granite:class="cmp-form-option-item-multifield-composite-item"
+                                                    granite:class="cmp-options--editor-item-multifield-composite-item-container"
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="granite/ui/components/coral/foundation/container">
                                                     <items jcr:primaryType="nt:unstructured">
@@ -156,8 +158,7 @@
                                                         <selected
                                                             jcr:primaryType="nt:unstructured"
                                                             sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
-                                                            name="./selected"
-                                                            vertical="{Boolean}true">
+                                                            name="./selected">
                                                             <items jcr:primaryType="nt:unstructured">
                                                                 <active
                                                                     jcr:primaryType="nt:unstructured"

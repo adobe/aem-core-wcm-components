@@ -3,7 +3,8 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Form Container"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="https://www.adobe.com/go/aem_cmp_form_container_v1">
+    helpPath="https://www.adobe.com/go/aem_cmp_form_container_v1"
+    extraClientlibs="[core.wcm.components.form.container.v1.editor]">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">

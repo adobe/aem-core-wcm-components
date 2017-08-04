@@ -13,34 +13,28 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-.core-wcm-form-options-v1 .multifield-composite-item {
-  display: inline-block;
-  margin-left: 5px;
+// allows the Well to render correctly
+.cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item {
+    box-sizing: border-box;
 }
 
-.core-wcm-form-options-v1 .coral-Multifield-remove,
-.core-wcm-form-options-v1 .coral-Multifield-move {
-  margin-top: 25px;
+.cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item-container {
+    display: block;
 }
 
-.core-wcm-form-options-v1 .coral-Checkbox-checkmark,
-.core-wcm-form-options-v1 .coral-Checkbox-description,
-.core-wcm-form-options-v1 .coral-Radio-checkmark,
-.core-wcm-form-options-v1 .coral-Radio-description {
-  margin-bottom: 5px;
-  vertical-align: inherit;
+// aligns all the fields inside the container
+.cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item-container > .coral-Form-field {
+    display: inline-block;
 }
 
-.coral-Form--aligned .coral-Checkbox.cmp-form-option-item-disabled,
-.coral-Form--aligned .coral-Checkbox.cmp-form-option-item-active {
-  margin-left: 0;
-}
+// @cloudui - correctly separates the items
+.cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item > .coral-Form-fieldwrapper {
+    display: inline-block;
 
-.cmp-form-option-item-multifield-composite-item {
-  display: table;
-}
+    // we need to escape the calc so that the contents are passed directly
+    width: ~"calc(50% - 5px)";
 
-.cmp-form-option-item-multifield-composite-item .coral-Form-fieldwrapper {
-  display: table-cell;
+    + .coral-Form-fieldwrapper {
+        padding-left: 10px;
+    }
 }
-
