@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,46 +19,72 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A base interface to be extended by all the different types of form fields.
- * It contains commons attributes to be present in  all the form fields.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
 @ConsumerType
 public interface Field {
 
     /**
-     * @return unique identifier for the field
+     * Returns an unique identifier for this field.
+     *
+     * @return an unique identifier for the field
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getId();
+    default String getId() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return value of the HTML <code>name</code> attribute.
+     * Returns the value of the HTML <code>name</code> attribute.
+     *
+     * @return the value of the HTML <code>name</code> attribute
      * <p>
      * Note: <code>{'name':'value'}</code> is sent as a request parameter when POST-ing the form
      * </p>
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getName();
+    default String getName() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return value of the HTML <code>value</code> attribute.
+     * Returns the value of the HTML <code>value</code> attribute.
+     *
+     * @return the value of the HTML <code>value</code> attribute
      * <p>
      * Note: <code>{'name':'value'}</code> is sent as a request parameter when POST-ing the form
      * </p>
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getValue();
+    default String getValue() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return the title of the field (text displayed on the field).
+     * Returns the title of the field (text displayed on the field).
+     *
+     * @return the title of the field (text displayed on the field)
      * <p>
-     * Implementations can return null if title is not required.
+     * Implementations can return <code>null</code> if the title is not required.
      * </p>
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getTitle();
+    default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return the message for the help block.
+     * Returns the message for the help block.
+     *
+     * @return the message for the help block
      * <p>
-     * Implementations can return null if help message is not required.
+     * Implementations can return <code>null</code> if the help message is not required.
      * </p>
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getHelpMessage();
+    default String getHelpMessage() {
+        throw new UnsupportedOperationException();
+    }
 
 }

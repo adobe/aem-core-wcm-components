@@ -19,7 +19,8 @@
     <filter root="/conf/core-components"/>
     <filter root="/content/core-components"/>
     <filter root="/content/dam/core-components"/>
-
+    <filter root="/home/users/core-component"/>
     <!-- Hobbes IT folder -->
     <filter root="/apps/core/wcm/tests"/>
+    <filter root="/apps/core/wcm/sandbox/tests"/>
 </workspaceFilter>

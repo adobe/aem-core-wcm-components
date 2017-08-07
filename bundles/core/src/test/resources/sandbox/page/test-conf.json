@@ -1,0 +1,1310 @@
+{
+    "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+    "jcr:createdBy": "admin",
+    "jcr:mixinTypes": [
+        "rep:AccessControllable"
+    ],
+    "jcr:primaryType": "sling:Folder",
+    "wcm": {
+        "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+        "jcr:createdBy": "admin",
+        "jcr:mixinTypes": [
+            "rep:AccessControllable"
+        ],
+        "jcr:primaryType": "cq:Page",
+        "policies": {
+            "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+            "jcr:createdBy": "admin",
+            "jcr:mixinTypes": [
+                "rep:AccessControllable"
+            ],
+            "jcr:primaryType": "cq:Page",
+            "rep:policy": {
+                "allow": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "everyone",
+                    "rep:privileges": [
+                        "jcr:read"
+                    ]
+                },
+                "allow0": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "content-authors",
+                    "rep:privileges": [
+                        "crx:replicate"
+                    ]
+                },
+                "allow1": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "template-authors",
+                    "rep:privileges": [
+                        "jcr:versionManagement",
+                        "crx:replicate",
+                        "rep:write",
+                        "jcr:lockManagement"
+                    ]
+                },
+                "allow2": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "version-manager-service",
+                    "rep:privileges": [
+                        "jcr:versionManagement",
+                        "rep:write"
+                    ]
+                },
+                "jcr:primaryType": "rep:ACL"
+            },
+            "coretest": {
+                "components": {
+                    "content": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "nt:unstructured"
+                    },
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "nt:unstructured",
+                    "structure": {
+                        "breadcrumb": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "nt:unstructured",
+                            "coretest-experience-page": {
+                                "absParent": "3",
+                                "delim": "/",
+                                "jcr:description": "Policy for breadcrumb on experience pages",
+                                "jcr:lastModified": "Thu Mar 03 2016 18:52:44 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "jcr:title": "CoreTest Experience Page Breadcrumb",
+                                "relParent": "1",
+                                "sling:resourceType": "wcm/core/components/policy/policy"
+                            },
+                            "coretest-product-page": {
+                                "absParent": "5",
+                                "delim": "/",
+                                "jcr:description": "Policy for breadcrumb on product pages",
+                                "jcr:lastModified": "Fri Jul 22 2016 09:57:27 GMT+0200",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "jcr:title": "CoreTest Product Page Breadcrumb",
+                                "relParent": "1",
+                                "sling:resourceType": "wcm/core/components/policy/policy"
+                            }
+                        },
+                        "jcr:primaryType": "nt:unstructured",
+                        "page": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "nt:unstructured",
+                            "coretest-product-page": {
+                                "clientlibs": [
+                                    "coretest.product-page"
+                                ],
+                                "jcr:description": "Policy for product pages",
+                                "jcr:lastModified": "Thu Mar 03 2016 18:52:44 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "jcr:title": "CoreTest Product Page",
+                                "sling:resourceType": "wcm/core/components/policy/policy"
+                            }
+                        },
+                        "sling:resourceType": "nt:unstructured"
+                    }
+                },
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "nt:unstructured"
+            }
+        },
+        "template-types": {
+            "empty-page": {
+                "initial": {
+                    "jcr:content": {
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "jcr:content": {
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:description": "Generic template for web pages",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "CoreTest Empty Page"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:mixinTypes": [
+                    "mix:lockable"
+                ],
+                "jcr:primaryType": "cq:Template",
+                "policies": {
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "root": {
+                            "cq:policy": "wcm/foundation/components/responsivegrid/coretest-structure",
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "wcm/core/components/policies/mapping"
+                        },
+                        "sling:resourceType": "wcm/core/components/policies/mappings"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "ranking": 1,
+                "structure": {
+                    "jcr:content": {
+                        "cq:deviceGroups": [
+                            "/etc/mobile/groups/responsive"
+                        ],
+                        "cq:responsive": {
+                            "breakpoints": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "phone": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Smaller Screen",
+                                    "width": 650
+                                },
+                                "tablet": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Tablet",
+                                    "width": 1200
+                                }
+                            },
+                            "jcr:primaryType": "nt:unstructured"
+                        },
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "thumbnail.png": {
+                    "jcr:content": {
+                        ":jcr:data": 95174,
+                        "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:uuid": "8d20bc47-6ac6-4bb4-b189-97f9cdddc66c"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "nt:file"
+                }
+            },
+            "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+            "jcr:createdBy": "admin",
+            "jcr:mixinTypes": [
+                "rep:AccessControllable"
+            ],
+            "jcr:primaryType": "cq:Page",
+            "redirect-page": {
+                "initial": {
+                    "jcr:content": {
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "sling:redirect": true,
+                        "sling:redirectStatus": 302,
+                        "sling:resourceType": "foundation/components/redirect"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "jcr:content": {
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:description": "Template for pages that redirect",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "CoreTest Redirect Page",
+                    "status": "enabled"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:primaryType": "cq:Template",
+                "policies": {
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "wcm/core/components/policies/mappings"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "structure": {
+                    "jcr:content": {
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "sling:resourceType": "foundation/components/redirect"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "thumbnail.png": {
+                    "jcr:content": {
+                        ":jcr:data": 101785,
+                        "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:uuid": "81e433d6-d59b-45a6-8668-1aa9f6bab6f8"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "nt:file"
+                }
+            },
+            "rep:policy": {
+                "allow": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "everyone",
+                    "rep:privileges": [
+                        "jcr:read"
+                    ]
+                },
+                "allow0": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "content-authors",
+                    "rep:privileges": [
+                        "crx:replicate"
+                    ]
+                },
+                "allow1": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "version-manager-service",
+                    "rep:privileges": [
+                        "jcr:versionManagement",
+                        "rep:write"
+                    ]
+                },
+                "allow2": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "template-authors",
+                    "rep:privileges": [
+                        "jcr:read"
+                    ]
+                },
+                "jcr:primaryType": "rep:ACL"
+            }
+        },
+        "templates": {
+            "experience-page": {
+                "initial": {
+                    "jcr:content": {
+                        "cq:template": "/conf/coretest/settings/wcm/templates/experience-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "hero_image": {
+                                "jcr:lastModified": "Sat Mar 12 2016 23:51:14 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/content/heroimage",
+                                "useFullWidth": "true"
+                            },
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "content_fragment": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "sling:resourceType": "coretest/components/content/content-fragment"
+                                },
+                                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "2016-01-13T15:58:50.877+01:00",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "jcr:content": {
+                    "cq:lastModified": "Wed Jan 13 2016 15:57:47 GMT+0100",
+                    "cq:lastModifiedBy": "admin",
+                    "cq:templateType": "/conf/coretest/settings/wcm/template-types/empty-page",
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Experience Page",
+                    "status": "enabled"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:primaryType": "cq:Template",
+                "policies": {
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "root": {
+                            "breadcrumb": {
+                                "cq:policy": "coretest/components/structure/breadcrumb/coretest-experience-page",
+                                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/core/components/policies/mapping"
+                            },
+                            "cq:policy": "wcm/foundation/components/responsivegrid/coretest-structure",
+                            "jcr:lastModified": "Tue Feb 16 2016 21:38:49 GMT+0100",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "cq:policy": "wcm/foundation/components/responsivegrid/coretest-default",
+                                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/core/components/policies/mapping"
+                            },
+                            "sling:resourceType": "wcm/core/components/policies/mapping"
+                        },
+                        "sling:resourceType": "wcm/core/components/policies/mappings"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "structure": {
+                    "jcr:content": {
+                        "cq:deviceGroups": [
+                            "/etc/mobile/groups/responsive"
+                        ],
+                        "cq:responsive": {
+                            "breakpoints": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "phone": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Smaller Screen",
+                                    "width": 650
+                                },
+                                "tablet": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Tablet",
+                                    "width": 1200
+                                }
+                            },
+                            "jcr:primaryType": "nt:unstructured"
+                        },
+                        "cq:template": "/conf/coretest/settings/wcm/templates/experience-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "breadcrumb": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/breadcrumb"
+                            },
+                            "footer": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/footer"
+                            },
+                            "header": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/header",
+                                "theme": "inverse"
+                            },
+                            "hero_image": {
+                                "editable": true,
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/content/heroimage",
+                                "useFullWidth": true
+                            },
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "editable": true,
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "thumbnail.png": {
+                    "jcr:content": {
+                        ":jcr:data": 65930,
+                        "dam:thumbnails": {
+                            "dam:thumbnail_48.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 3924,
+                                    "jcr:lastModified": "Thu Jul 21 2016 09:36:37 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "fb598f1e-46c6-4b8c-bd55-64a9c34fffd5"
+                                },
+                                "jcr:created": "Thu Jul 21 2016 09:36:37 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "dam:thumbnail_480.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 90025,
+                                    "jcr:lastModified": "Wed Jul 20 2016 18:35:56 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "b2ebcd14-d21a-401b-b566-ee07e3cf7c2b"
+                                },
+                                "jcr:created": "Wed Jul 20 2016 18:35:56 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "jcr:created": "Wed Jul 20 2016 18:35:56 GMT+0200",
+                            "jcr:createdBy": "admin",
+                            "jcr:primaryType": "nt:folder"
+                        },
+                        "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:mixinTypes": [
+                            "dam:Thumbnails"
+                        ],
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:uuid": "fbff88e5-b9eb-4346-82bd-02a1ca3ce107"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "nt:file"
+                }
+            },
+            "hero-page": {
+                "initial": {
+                    "jcr:content": {
+                        "cq:template": "/conf/coretest/settings/wcm/templates/hero-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "hero_image": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:04 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Sat Mar 12 2016 23:51:43 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/content/heroimage",
+                                "useFullWidth": "true"
+                            },
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "2016-01-13T15:58:50.877+01:00",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "jcr:content": {
+                    "cq:lastModified": "Wed Jan 13 2016 15:57:47 GMT+0100",
+                    "cq:lastModifiedBy": "admin",
+                    "cq:templateType": "/conf/coretest/settings/wcm/template-types/empty-page",
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Hero Page",
+                    "status": "enabled"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:primaryType": "cq:Template",
+                "policies": {
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "root": {
+                            "cq:policy": "wcm/foundation/components/responsivegrid/coretest-structure",
+                            "jcr:lastModified": "Tue Feb 16 2016 21:38:49 GMT+0100",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "cq:policy": "wcm/foundation/components/responsivegrid/coretest-default",
+                                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/core/components/policies/mapping"
+                            },
+                            "sling:resourceType": "wcm/core/components/policies/mapping"
+                        },
+                        "sling:resourceType": "wcm/core/components/policies/mappings"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "structure": {
+                    "jcr:content": {
+                        "cq:deviceGroups": [
+                            "/etc/mobile/groups/responsive"
+                        ],
+                        "cq:responsive": {
+                            "breakpoints": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "phone": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Smaller Screen",
+                                    "width": 650
+                                },
+                                "tablet": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Tablet",
+                                    "width": 1200
+                                }
+                            },
+                            "jcr:primaryType": "nt:unstructured"
+                        },
+                        "cq:template": "/conf/coretest/settings/wcm/templates/hero-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "footer": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:16 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:16 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/footer"
+                            },
+                            "header": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:00 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:22 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/header",
+                                "theme": "inverse"
+                            },
+                            "hero_image": {
+                                "editable": true,
+                                "jcr:created": "Wed Jan 13 2016 15:58:04 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:04 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/content/heroimage",
+                                "useFullWidth": true
+                            },
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "editable": true,
+                                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "thumbnail.png": {
+                    "jcr:content": {
+                        ":jcr:data": 59357,
+                        "dam:thumbnails": {
+                            "dam:thumbnail_300.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 104236,
+                                    "jcr:lastModified": "Mon Jul 18 2016 14:32:59 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "98683892-ebda-4050-b574-4b558aab59ac"
+                                },
+                                "jcr:created": "Mon Jul 18 2016 14:32:59 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "dam:thumbnail_48.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 4252,
+                                    "jcr:lastModified": "Mon Jul 18 2016 14:32:57 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "18dee2a9-4fbd-4500-962c-4b40efbda588"
+                                },
+                                "jcr:created": "Mon Jul 18 2016 14:32:57 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "dam:thumbnail_480.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 77660,
+                                    "jcr:lastModified": "Mon Jul 18 2016 14:34:36 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "7686253f-066f-4814-a585-6d21ab3d5e92"
+                                },
+                                "jcr:created": "Mon Jul 18 2016 14:34:36 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "jcr:created": "Mon Jul 18 2016 14:32:57 GMT+0200",
+                            "jcr:createdBy": "admin",
+                            "jcr:primaryType": "nt:folder"
+                        },
+                        "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:mixinTypes": [
+                            "dam:Thumbnails"
+                        ],
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:uuid": "ab8f0f68-d401-4cfe-8c3d-f897c4ad48cb"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "nt:file"
+                }
+            },
+            "jcr:created": "Mon Jul 18 2016 12:07:37 GMT+0200",
+            "jcr:createdBy": "admin",
+            "jcr:mixinTypes": [
+                "rep:AccessControllable"
+            ],
+            "jcr:primaryType": "cq:Page",
+            "product-page": {
+                "initial": {
+                    "jcr:content": {
+                        "cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "breadcrumb": {
+                                "jcr:created": "Tue Mar 08 2016 14:56:20 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 14:56:31 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/breadcrumb"
+                            },
+                            "jcr:primaryType": "nt:unstructured",
+                            "product": {
+                                "cq:commerceType": "product",
+                                "jcr:created": "Tue Mar 08 2016 14:56:42 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 14:56:45 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/product"
+                            },
+                            "responsivegrid": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "2016-01-13T15:58:50.877+01:00",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "reviews": {
+                                "jcr:created": "Tue Mar 08 2016 15:28:59 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:29:32 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/product-reviews"
+                            },
+                            "reviews_section_title": {
+                                "jcr:created": "Tue Mar 08 2016 15:28:45 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:30:31 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "jcr:title": "Reviews",
+                                "sling:resourceType": "coretest/components/content/title"
+                            },
+                            "similar_products": {
+                                "jcr:created": "Tue Mar 08 2016 15:29:16 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:29:37 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/product-recommendation"
+                            },
+                            "similar_section_title": {
+                                "jcr:created": "Tue Mar 08 2016 15:29:10 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:30:44 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "jcr:title": "You may also like",
+                                "sling:resourceType": "coretest/components/content/title"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "jcr:content": {
+                    "cq:lastModified": "Wed Jan 13 2016 15:57:47 GMT+0100",
+                    "cq:lastModifiedBy": "admin",
+                    "cq:templateType": "/conf/coretest/settings/wcm/template-types/empty-page",
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Product Page",
+                    "status": "enabled"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:primaryType": "cq:Template",
+                "policies": {
+                    "jcr:content": {
+                        "cq:policy": "coretest/components/structure/page/coretest-product-page",
+                        "jcr:lastModified": "Thu Mar 03 2016 18:46:02 GMT+0100",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:primaryType": "nt:unstructured",
+                        "root": {
+                            "breadcrumb": {
+                                "cq:policy": "coretest/components/structure/breadcrumb/coretest-product-page",
+                                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/core/components/policies/mapping"
+                            },
+                            "cq:policy": "wcm/foundation/components/responsivegrid/coretest-structure",
+                            "jcr:lastModified": "Tue Feb 16 2016 21:38:49 GMT+0100",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "cq:policy": "wcm/foundation/components/responsivegrid/coretest-default",
+                                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/core/components/policies/mapping"
+                            },
+                            "sling:resourceType": "wcm/core/components/policies/mapping"
+                        },
+                        "sling:resourceType": "wcm/core/components/policies/mappings"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "structure": {
+                    "jcr:content": {
+                        "cq:deviceGroups": [
+                            "/etc/mobile/groups/responsive"
+                        ],
+                        "cq:responsive": {
+                            "breakpoints": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "phone": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Smaller Screen",
+                                    "width": 650
+                                },
+                                "tablet": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Tablet",
+                                    "width": 1200
+                                }
+                            },
+                            "jcr:primaryType": "nt:unstructured"
+                        },
+                        "cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "breadcrumb": {
+                                "editable": false,
+                                "jcr:created": "Tue Mar 08 2016 14:56:20 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 14:56:20 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/breadcrumb"
+                            },
+                            "footer": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:16 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:16 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/footer"
+                            },
+                            "header": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:00 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:22 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/header"
+                            },
+                            "jcr:primaryType": "nt:unstructured",
+                            "product": {
+                                "editable": true,
+                                "jcr:created": "Tue Mar 08 2016 14:56:42 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 14:56:42 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/product"
+                            },
+                            "responsivegrid": {
+                                "editable": true,
+                                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "reviews": {
+                                "editable": false,
+                                "jcr:created": "Tue Mar 08 2016 15:28:59 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:28:59 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/product-reviews"
+                            },
+                            "reviews_section_title": {
+                                "editable": false,
+                                "jcr:created": "Tue Mar 08 2016 15:28:45 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:28:45 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "jcr:title": "Reviews",
+                                "sling:resourceType": "coretest/components/content/title"
+                            },
+                            "similar_products": {
+                                "editable": false,
+                                "jcr:created": "Tue Mar 08 2016 15:29:16 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:29:16 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "max": "6",
+                                "relationshipType": "relatedproducts:info.coretest.similar-to-current",
+                                "sling:resourceType": "coretest/components/structure/product-recommendation"
+                            },
+                            "similar_section_title": {
+                                "editable": false,
+                                "jcr:created": "Tue Mar 08 2016 15:29:10 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 15:29:10 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "jcr:title": "You may also like",
+                                "sling:resourceType": "coretest/components/content/title"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "thumbnail.png": {
+                    "jcr:content": {
+                        ":jcr:data": 13416,
+                        "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:uuid": "946d6c1e-1f8f-4257-9940-5185688f3ac5"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "nt:file"
+                }
+            },
+            "redirect-page": {
+                "initial": {
+                    "jcr:content": {
+                        "cq:template": "/conf/coretest/settings/wcm/templates/redirect-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "sling:redirect": true,
+                        "sling:redirectStatus": 302,
+                        "sling:resourceType": "foundation/components/redirect"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "jcr:content": {
+                    "cq:lastModified": "Mon Mar 07 2016 15:00:12 GMT+0100",
+                    "cq:lastModifiedBy": "admin",
+                    "cq:templateType": "/conf/coretest/settings/wcm/template-types/empty-page",
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Redirect Page",
+                    "status": "enabled"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:primaryType": "cq:Template",
+                "policies": {
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "wcm/core/components/policies/mappings"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "structure": {
+                    "jcr:content": {
+                        "cq:template": "/conf/coretest/settings/wcm/templates/redirect-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "sling:resourceType": "foundation/components/redirect"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "thumbnail.png": {
+                    "jcr:content": {
+                        ":jcr:data": 101785,
+                        "dam:thumbnails": {
+                            "dam:thumbnail_48.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 5839,
+                                    "jcr:lastModified": "Mon Jul 18 2016 14:32:54 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "94acefa5-e5c2-481b-8a63-f6ef552b4645"
+                                },
+                                "jcr:created": "Mon Jul 18 2016 14:32:54 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "dam:thumbnail_480.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 128535,
+                                    "jcr:lastModified": "Mon Jul 18 2016 16:33:19 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "24ed9e09-7b50-4d06-9eca-50ddcd9c92b9"
+                                },
+                                "jcr:created": "Mon Jul 18 2016 16:33:19 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "jcr:created": "Mon Jul 18 2016 14:32:54 GMT+0200",
+                            "jcr:createdBy": "admin",
+                            "jcr:primaryType": "nt:folder"
+                        },
+                        "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:mixinTypes": [
+                            "dam:Thumbnails"
+                        ],
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:uuid": "f7fd12e7-e2ac-40ce-9f00-4edc0f93646f"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "nt:file"
+                }
+            },
+            "rep:policy": {
+                "allow": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "everyone",
+                    "rep:privileges": [
+                        "jcr:read"
+                    ]
+                },
+                "allow0": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "content-authors",
+                    "rep:privileges": [
+                        "crx:replicate"
+                    ]
+                },
+                "allow1": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "template-authors",
+                    "rep:privileges": [
+                        "jcr:versionManagement",
+                        "crx:replicate",
+                        "rep:write",
+                        "jcr:lockManagement"
+                    ]
+                },
+                "allow2": {
+                    "jcr:primaryType": "rep:GrantACE",
+                    "rep:principalName": "version-manager-service",
+                    "rep:privileges": [
+                        "jcr:versionManagement",
+                        "rep:write"
+                    ]
+                },
+                "jcr:primaryType": "rep:ACL"
+            },
+            "section-page": {
+                "initial": {
+                    "jcr:content": {
+                        "cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "2016-01-13T15:58:50.877+01:00",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "jcr:content": {
+                    "cq:lastModified": "Wed Jan 13 2016 15:57:47 GMT+0100",
+                    "cq:lastModifiedBy": "admin",
+                    "cq:templateType": "/conf/coretest/settings/wcm/template-types/empty-page",
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title": "Section Page",
+                    "status": "enabled"
+                },
+                "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                "jcr:createdBy": "admin",
+                "jcr:primaryType": "cq:Template",
+                "policies": {
+                    "jcr:content": {
+                        "cq:policy": "coretest/components/structure/page/coretest-product-page",
+                        "jcr:lastModified": "Thu Mar 03 2016 18:46:02 GMT+0100",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:primaryType": "nt:unstructured",
+                        "root": {
+                            "breadcrumb": {
+                                "cq:policy": "coretest/components/structure/breadcrumb/coretest-product-page",
+                                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/core/components/policies/mapping"
+                            },
+                            "cq:policy": "wcm/foundation/components/responsivegrid/coretest-structure",
+                            "jcr:lastModified": "Tue Feb 16 2016 21:38:49 GMT+0100",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:primaryType": "nt:unstructured",
+                            "responsivegrid": {
+                                "cq:policy": "wcm/foundation/components/responsivegrid/coretest-default",
+                                "jcr:lastModified": "Tue Feb 16 2016 21:39:02 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/core/components/policies/mapping"
+                            },
+                            "sling:resourceType": "wcm/core/components/policies/mapping"
+                        },
+                        "sling:resourceType": "wcm/core/components/policies/mappings"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "structure": {
+                    "jcr:content": {
+                        "cq:deviceGroups": [
+                            "/etc/mobile/groups/responsive"
+                        ],
+                        "cq:responsive": {
+                            "breakpoints": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "phone": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Smaller Screen",
+                                    "width": 650
+                                },
+                                "tablet": {
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "title": "Tablet",
+                                    "width": 1200
+                                }
+                            },
+                            "jcr:primaryType": "nt:unstructured"
+                        },
+                        "cq:template": "/conf/coretest/settings/wcm/templates/product-page",
+                        "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:createdBy": "admin",
+                        "jcr:primaryType": "cq:PageContent",
+                        "root": {
+                            "breadcrumb": {
+                                "editable": false,
+                                "jcr:created": "Tue Mar 08 2016 14:56:20 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Tue Mar 08 2016 14:56:20 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/breadcrumb"
+                            },
+                            "filters_grid": {
+                                "editable": true,
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "footer": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:16 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:16 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/footer"
+                            },
+                            "header": {
+                                "jcr:created": "Wed Jan 13 2016 15:58:00 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:22 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/structure/header"
+                            },
+                            "jcr:primaryType": "nt:unstructured",
+                            "product-grid": {
+                                "cq:responsive": {
+                                    "default": {
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "width": "10"
+                                    },
+                                    "jcr:primaryType": "nt:unstructured"
+                                },
+                                "displayAs": "products",
+                                "editable": true,
+                                "jcr:primaryType": "nt:unstructured",
+                                "listFrom": "children",
+                                "orderBy": "jcr:title",
+                                "pageMax": "0",
+                                "sling:resourceType": "coretest/components/content/product-grid"
+                            },
+                            "responsivegrid": {
+                                "editable": true,
+                                "jcr:created": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:createdBy": "admin",
+                                "jcr:lastModified": "Wed Jan 13 2016 15:58:09 GMT+0100",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                            },
+                            "section_title": {
+                                "cq:responsive": {
+                                    "default": {
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "width": "12"
+                                    },
+                                    "jcr:primaryType": "nt:unstructured",
+                                    "phone": {
+                                        "jcr:primaryType": "nt:unstructured",
+                                        "width": "12"
+                                    }
+                                },
+                                "editable": false,
+                                "jcr:primaryType": "nt:unstructured",
+                                "sling:resourceType": "coretest/components/content/title"
+                            },
+                            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                        },
+                        "sling:resourceType": "coretest/components/structure/page"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "cq:Page"
+                },
+                "thumbnail.png": {
+                    "jcr:content": {
+                        ":jcr:data": 20986,
+                        "dam:thumbnails": {
+                            "dam:thumbnail_48.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 2087,
+                                    "jcr:lastModified": "Mon Jul 18 2016 14:32:58 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "6d738729-168d-48f7-badb-8a1de99cb0e8"
+                                },
+                                "jcr:created": "Mon Jul 18 2016 14:32:58 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "dam:thumbnail_480.png": {
+                                "jcr:content": {
+                                    ":jcr:data": 30317,
+                                    "jcr:lastModified": "Tue Jul 19 2016 17:46:25 GMT+0200",
+                                    "jcr:lastModifiedBy": "admin",
+                                    "jcr:mimeType": "image/png",
+                                    "jcr:primaryType": "nt:resource",
+                                    "jcr:uuid": "25f8194f-ca5e-4ef2-9782-60f4ed490336"
+                                },
+                                "jcr:created": "Tue Jul 19 2016 17:46:25 GMT+0200",
+                                "jcr:createdBy": "admin",
+                                "jcr:primaryType": "nt:file"
+                            },
+                            "jcr:created": "Mon Jul 18 2016 14:32:58 GMT+0200",
+                            "jcr:createdBy": "admin",
+                            "jcr:primaryType": "nt:folder"
+                        },
+                        "jcr:lastModified": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/png",
+                        "jcr:mixinTypes": [
+                            "dam:Thumbnails"
+                        ],
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:uuid": "30d2bc81-eb0e-4927-a7f2-0a4f547bfdd9"
+                    },
+                    "jcr:created": "Mon Jul 18 2016 14:30:39 GMT+0200",
+                    "jcr:createdBy": "admin",
+                    "jcr:primaryType": "nt:file"
+                }
+            }
+        }
+    }
+}

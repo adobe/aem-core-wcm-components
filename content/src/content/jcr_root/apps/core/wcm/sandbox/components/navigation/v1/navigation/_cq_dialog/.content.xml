@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2017 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+          jcr:description="Navigation Dialog"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Navigation"
+          extraClientlibs="[core.wcm.sandbox.components.navigation.v1.editor]"
+          sling:resourceType="cq/gui/components/authoring/dialog"
+          helpPath="https://www.adobe.com/go/aem_cmp_navigation_v1">
+    <content
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Properties"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <siteRoot
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                    fieldDescription="The root of the website."
+                                    fieldLabel="Site Root"
+                                    rootPath="/content"
+                                    forceSelection="{Boolean}true"
+                                    name="./siteRoot"
+                                    value="${not empty cqDesign.siteRoot ? cqDesign.siteRoot : ''}"
+                                    required="{Boolean}true"/>
+                            <startLevel
+                                    wrapperClass="cmp-navigation__editor-startLevel"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                    fieldDescription="The start level, relative to the site root; the site root is level 0."
+                                    fieldLabel="Start level"
+                                    max="100"
+                                    min="0"
+                                    name="./startLevel"
+                                    step="1"
+                                    value="${not empty cqDesign.startLevel ? cqDesign.startLevel : 0}"/>
+                            <currentPageTreeOnly
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                    fieldDescription="When selected, the Navigation component will collect only the child pages that have a common parent with the current page."
+                                    text="Collect only pages from the current page's tree"
+                                    name="./currentPageTreeOnly"
+                                    value="{Boolean}true"
+                                    checked="${not empty cqDesign.currentPageTreeOnly ? cqDesign.currentPageTreeOnly : true}"
+                                    uncheckedValue="{Boolean}false"/>
+                            <collectAllPages
+                                    granite:class="cmp-navigation__editor-collect"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                    fieldDescription="When selected, the Navigation component will collect all child pages."
+                                    text="Collect all child pages"
+                                    value="{Boolean}true"
+                                    checked="${cqDesign.maxDepth == -1 ? true : false}"/>
+                            <maxDepth
+                                    wrapperClass="cmp-navigation__editor-maxDepth"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                    fieldDescription="The maximum depth level in the content tree for searching pages, relative to the site root; the site root is level 0. A value of -1 means that all child pages of the site root will be provided in the Navigation."
+                                    fieldLabel="Maximum depth level"
+                                    max="100"
+                                    min="-1"
+                                    name="./maxDepth"
+                                    step="1"
+                                    value="${not empty cqDesign.maxDepth ? cqDesign.maxDepth : -1}"/>
+                        </items>
+                    </properties>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_edit/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

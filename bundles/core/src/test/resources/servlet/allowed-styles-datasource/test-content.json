@@ -1,0 +1,37 @@
+{
+  "page": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "sling:resourceType": "core/wcm/components/page/v1/page",
+      "par": {
+        "jcr:primaryType": "nt:unstructured",
+        "sling:resourceType": "wcm/foundation/components/parsys",
+        "title": {
+          "jcr:primaryType": "nt:unstructured",
+          "sling:resourceType": "core/wcm/components/title"
+        }
+      }
+    }
+  },
+  "no-style-policy": {
+    "jcr:primaryType": "nt:unstructured",
+    "allowNoStyle": true
+  },
+  "foobar-style-policy": {
+    "jcr:primaryType": "nt:unstructured",
+    "styles": {
+      "jcr:primaryType": "nt:unstructured",
+      "foo1": {
+        "jcr:primaryType": "nt:unstructured",
+        "name": "foo1",
+        "styleID": "bar1"
+      },
+      "foo2": {
+        "jcr:primaryType": "nt:unstructured",
+        "name": "foo2",
+        "styleID": "bar2"
+      }
+    }
+  }
+}

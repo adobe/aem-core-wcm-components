@@ -1,98 +1,139 @@
-/*******************************************************************************
- * Copyright 2016 Adobe Systems Incorporated
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2017 Adobe Systems Incorporated
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the {@code Image} Sling Model used for the {@code /apps/core/wcm/components/image} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
 public interface Image {
 
     /**
      * Name of the configuration policy property that will store the allowed rendition widths for an image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_DESIGN_ALLOWED_RENDITION_WIDTHS = "allowedRenditionWidths";
 
     /**
      * Name of the configuration policy property that will indicate if lazy loading should be disabled.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_DESIGN_LAZY_LOADING_ENABLED = "disableLazyLoading";
 
     /**
      * Name of the resource property that will indicate if the image is decorative.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_IS_DECORATIVE = "isDecorative";
 
     /**
      * Name of the resource property that will indicate if the image's caption will be rendered as a popup.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_DISPLAY_POPUP_TITLE = "displayPopupTitle";
 
     /**
      * Name of the JSON property that will store the smart sizes for smart loading.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String JSON_SMART_SIZES = "smartSizes";
 
     /**
      * Name of the JSON property that will store the smart images for smart loading.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String JSON_SMART_IMAGES = "smartImages";
 
     /**
      * Name of the JSON property that will indicate if the image should be loaded lazily.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String JSON_LAZY_ENABLED = "lazyEnabled";
 
     /**
-     * Gets the value for the {@code src} attribute of the image.
+     * Returns the value for the {@code src} attribute of the image.
      *
      * @return the image's URL
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getSrc();
+    default String getSrc() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
+     * Returns the value for the {@code alt} attribute of the image.
+     *
      * @return the value for the image's {@code alt} attribute, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getAlt();
+    default String getAlt() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
+     * Returns the value for the image's {@code title} attribute, if one was set.
+     *
      * @return the value for the image's {@code title} attribute, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getTitle();
+    default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
+     * Returns the image's link URL, if one was set.
+     *
      * @return the image's link URL, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getLink();
+    default String getLink() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Checks if the image should display its caption as a popup (through the <code>&lt;img&gt;</code> {@code title}
      * attribute).
      *
-     * @return {@code true} if the caption should be displayed as a popup,
-     * <br>{@code false} otherwise
+     * @return {@code true} if the caption should be displayed as a popup, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    boolean displayPopupTitle();
+    default boolean displayPopupTitle() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
+     * Returns the file reference of the current image, if one exists.
+     *
      * @return the file reference of the current image, if one exists, {@code null} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getFileReference();
+    default String getFileReference() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns a JSON object used for the smart image functionality. The object provides the following properties:
@@ -104,7 +145,10 @@ public interface Image {
      * </ul>
      *
      * @return the JSON for the smart image functionality
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getJson();
+    default String getJson() {
+        throw new UnsupportedOperationException();
+    }
 
 }

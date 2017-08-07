@@ -1,0 +1,147 @@
+{
+    "navigation": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title"      : "Navigation",
+            "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+            "root"           : {
+                "jcr:primaryType"       : "nt:unstructured",
+                "navigation-component-1": {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation",
+                    "siteRoot"          : "/content/navigation"
+                }
+            }
+        },
+        "navigation-1"   : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "Navigation 1",
+                "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                "sling:vanityPath": "/navigation-1-vanity"
+            },
+            "navigation-1-1" : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Navigation 1.1",
+                    "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                    "root"           : {
+                        "jcr:type"              : "nt:unstructured",
+                        "navigation-component-2": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation",
+                            "siteRoot"          : "/content/navigation",
+                            "startLevel"        : 1,
+                            "maxDepth"          : 2
+                        },
+                        "navigation-component-7": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation",
+                            "siteRoot"          : "/content/navigation",
+                            "startLevel"        : 1,
+                            "maxDepth"          : 2,
+                            "currentPageTreeOnly": false
+                        }
+                    }
+                },
+                "navigation-1-1-1": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title"      : "Navigation 1.1.1",
+                        "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                        "redirectTarget" : "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2"
+                    }
+                },
+                "navigation-1-1-2": {
+                    "jcr:primaryType" : "cq:Page",
+                    "jcr:content"     : {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title"      : "Navigation 1.1.2",
+                        "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                        "redirectTarget" : "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1"
+                    },
+                    "navigation-1-1-2-1": {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content"    : {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title"      : "Navigation 1.1.2.1",
+                            "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                            "redirectTarget" : "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1"
+                        }
+                    },
+                    "navigation-1-1-2-2": {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content"    : {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title"      : "Navigation 1.1.2.2",
+                            "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                            "hideInNav"      : true
+                        },
+                        "navigation-1-1-2-2-1": {
+                            "jcr:primaryType": "cq:Page",
+                            "jcr:content"    : {
+                                "jcr:primaryType": "cq:PageContent",
+                                "jcr:title"      : "Navigation 1.1.2.2.1",
+                                "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200"
+                            }
+                        }
+                    },
+                    "navigation-1-1-2-3": {
+                        "jcr:primaryType": "cq:Page",
+                        "jcr:content"    : {
+                            "jcr:primaryType": "cq:PageContent",
+                            "jcr:title"      : "Navigation 1.1.2.3",
+                            "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                            "root"           : {
+                                "jcr:primaryType"       : "nt:unstructured",
+                                "navigation-component-3": {
+                                    "cq:policy"         : "coretest/components/content/navigation/policy_1",
+                                    "jcr:primaryType"   : "nt:unstructured",
+                                    "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation"
+                                },
+                                "navigation-component-8": {
+                                    "cq:policy"         : "coretest/components/content/navigation/policy_2",
+                                    "jcr:primaryType"   : "nt:unstructured",
+                                    "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "navigation-2"   : {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "Navigation 2",
+                "jcr:created"    : "Thu Jun 29 2017 12:13:52 GMT+0200",
+                "root"           : {
+                    "jcr:primaryType"       : "nt:unstructured",
+                    "navigation-component-4": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation",
+                        "siteRoot": "/nothing"
+                    },
+                    "navigation-component-5": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation",
+                        "siteRoot": "/content/navigation",
+                        "startLevel": 2
+                    },
+                    "navigation-component-6": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation",
+                        "siteRoot": "/content/navigation",
+                        "startLevel": 2,
+                        "maxDepth": 1
+                    }
+                }
+            }
+        }
+    }
+}

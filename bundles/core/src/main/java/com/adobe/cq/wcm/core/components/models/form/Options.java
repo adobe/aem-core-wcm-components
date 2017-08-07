@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -22,14 +22,16 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the form {@code Options} Sling Model used for the {@code /apps/core/wcm/components/form/options} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
 @ConsumerType
 public interface Options extends Field {
 
     /**
-     * Defines the Options type.
-     * <br>
-     * Possible values: checkbox, radio, drop-down, multi-drop-down
+     * Defines the Options type. Possible values: {@code checkbox}, {@code radio}, {@code drop-down}, {@code multi-drop-down}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
      */
     enum Type {
         CHECKBOX("checkbox"),
@@ -43,6 +45,14 @@ public interface Options extends Field {
             this.value = value;
         }
 
+        /**
+         * Given a {@link String} <code>value</code>, this method returns the enum's value that corresponds to the provided string
+         * representation. If no representation is found, {@link #CHECKBOX} will be returned.
+         *
+         * @param value the string representation for which an enum value should be returned
+         * @return the corresponding enum value, if one was found, or {@link #CHECKBOX}
+         * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
+         */
         public static Type fromString(String value) {
             for (Type type : Type.values()) {
                 if (StringUtils.equals(value, type.value)) {
@@ -52,6 +62,12 @@ public interface Options extends Field {
             return CHECKBOX;
         }
 
+        /**
+         * Returns the string value of this enum constant.
+         *
+         * @return the string value of this enum constant
+         * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
+         */
         public String getValue() {
             return value;
         }
@@ -60,15 +76,23 @@ public interface Options extends Field {
     /**
      * Returns the list of all the options.
      *
-     * @return {@link List} of {@link OptionItem}s
+     * @return the list of all the options
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    List<OptionItem> getItems();
+    default List<OptionItem> getItems() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return the type of the options element.
+     * Returns the type of the options element.
+     *
+     * @return the type of the options element
      * <br>
-     * Possible values: checkbox, radio, drop-down, multi-drop-down
+     * Possible values: {@code checkbox}, {@code radio}, {@code drop-down}, {@code multi-drop-down}
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    Type getType();
+    default Type getType() {
+        throw new UnsupportedOperationException();
+    }
 
 }

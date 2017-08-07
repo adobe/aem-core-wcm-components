@@ -1,0 +1,33 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2016 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
+     data-sly-use.templates="core/wcm/sandbox/components/commons/v2/templates.html"
+     data-sly-test="${image.src}"
+     class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}">
+    <a data-sly-unwrap="${!image.link}"
+       class="cmp-image__link"
+       href="${image.link}"
+       data-title="${image.title || image.alt}" data-asset="${image.fileReference}">
+        <noscript data-sly-unwrap="${!image.json}" data-cmp-image="${image.json}">
+            <img class="cmp-image__image"
+                 src="${image.src}"
+                 alt="${image.alt || true}"
+                 title="${image.displayPopupTitle && image.title}"/>
+        </noscript>
+    </a>
+    <span class="cmp-image__title" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>
+</div>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>

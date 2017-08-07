@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -22,19 +22,29 @@ import com.day.cq.wcm.api.Page;
 
 /**
  * Interface for a single item of the {@link Breadcrumb} model
+ *
+ * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
 public interface NavigationItem {
 
     /**
+     * Returns the {@link Page} contained by this navigation item.
+     *
      * @return The {@link Page} contained in this navigation item.
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    Page getPage();
+    default Page getPage() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * Gets the active information of the current page
+     * Returns {@code true} if the page contained by this navigation item is active.
      *
      * @return true if it is the current page, otherwise false
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    boolean isActive();
+    default boolean isActive() {
+        throw new UnsupportedOperationException();
+    }
 }

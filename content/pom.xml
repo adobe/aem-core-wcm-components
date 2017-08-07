@@ -22,23 +22,23 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>com.adobe.cq</groupId>
-        <artifactId>core.wcm.components.parent</artifactId>
-        <version>1.0.7-SNAPSHOT</version>
+        <artifactId>core.wcm.components.sandbox.parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>core.wcm.components.content</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <artifactId>core.wcm.components.sandbox.content</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>content-package</packaging>
-    <name>Adobe Experience Manager Core WCM Components Content Package</name>
+    <name>Adobe Experience Manager Core WCM Components Content Package - Sandbox</name>
 
     <scm>
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/content</url>
+        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development/content</url>
         <tag>HEAD</tag>
     </scm>
 

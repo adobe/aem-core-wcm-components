@@ -21,17 +21,17 @@
     <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
     <!-- ====================================================================== -->
     <parent>
-        <artifactId>core.wcm.components.parent</artifactId>
+        <artifactId>core.wcm.components.sandbox.parent</artifactId>
         <groupId>com.adobe.cq</groupId>
-        <version>1.0.7-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>core.wcm.components.all</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <artifactId>core.wcm.components.sandbox.all</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>content-package</packaging>
 
     <name>Adobe Experience Manager Core WCM Components Full Package</name>
@@ -39,7 +39,7 @@
     <scm>
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/all</url>
+        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development/all</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -57,7 +57,7 @@
                     <embeddeds>
                         <embedded>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>core.wcm.components.core</artifactId>
+                            <artifactId>core.wcm.components.sandbox.bundle</artifactId>
                             <target>/apps/core/wcm/install</target>
                             <filter>true</filter>
                         </embedded>
@@ -66,12 +66,12 @@
                     <subPackages>
                         <subPackage>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>core.wcm.components.content</artifactId>
+                            <artifactId>core.wcm.components.sandbox.content</artifactId>
                             <filter>true</filter>
                         </subPackage>
                         <subPackage>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>core.wcm.components.config</artifactId>
+                            <artifactId>core.wcm.components.sandbox.config</artifactId>
                             <filter>true</filter>
                         </subPackage>
                     </subPackages>
@@ -144,20 +144,20 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.core</artifactId>
+            <artifactId>core.wcm.components.sandbox.bundle</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.content</artifactId>
+            <artifactId>core.wcm.components.sandbox.content</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.config</artifactId>
+            <artifactId>core.wcm.components.sandbox.config</artifactId>
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>

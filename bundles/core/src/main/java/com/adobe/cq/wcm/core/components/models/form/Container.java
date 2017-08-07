@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,47 +19,83 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the form {@code Container} Sling Model used for the {@code /apps/core/wcm/components/form/container} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
 @ConsumerType
 public interface Container {
 
     /**
-     * @return form submit method (method attribute of form).
+     * Returns the form's submit method (the value of the form's HTML <code>method</code> attribute).
+     *
+     * @return form submit method (method attribute of form)
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getMethod();
+    default String getMethod() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return form submit action (used in action attribute of form).
+     * Returns the form's submit method (the value of the form's HTML <code>action</code> attribute).
+     *
+     * @return form submit action (used in action attribute of form)
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getAction();
+    default String getAction() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return form id (used in id attribute of form).
+     * Returns the form's id (the value of the form's HTML <code>id</code> attribute).
+     *
+     * @return form id (used in id attribute of form)
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getId();
+    default String getId() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return form name (used in name attribute of form).
+     * Returns the form's name (the value of the form's HTML <code>name</code> attribute).
+     *
+     * @return form name (used in name attribute of form)
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getName();
+    default String getName() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return form data enctype (used in enctype attribute of form).
+     * Returns the form's encoding type (the value of the form's HTML <code>enctype</code> attribute).
+     *
+     * @return form data enctype (used in enctype attribute of form)
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getEnctype();
+    default String getEnctype() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return resource type for the "new" section in form container where other input components will
+     * Returns the resource type for the "new" section in the form container where other input components will
      * be dropped.
+     *
+     * @return resource type for the "new" section in form container where other input components will
+     * be dropped
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getResourceTypeForDropArea();
+    default String getResourceTypeForDropArea() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * This method returns the redirect url property of this form. If the current sling request has a non-blank context path, the context
      * path is prepended to the redirect url if the redirect is an absolute path starting with '/'. This method also appends ".html" to the
      * redirect path.
      * 
-     * @return The form redirect url (used in the :redirect hidden input field of the form).
+     * @return The form redirect url (used in the :redirect hidden input field of the form)
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getRedirect();
+    default String getRedirect() {
+        throw new UnsupportedOperationException();
+    }
 }

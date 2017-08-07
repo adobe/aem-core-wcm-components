@@ -1,6 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -32,7 +31,7 @@ import org.apache.sling.api.resource.NonExistingResource;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-import com.adobe.cq.wcm.core.components.commons.form.internal.FormConstants;
+import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.day.cq.wcm.foundation.forms.FormsManager;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;

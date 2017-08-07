@@ -1,37 +1,36 @@
-# AEM Core WCM Components
-[![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=master)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
-[![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
+# AEM Core WCM Components Sandbox
 
-A set of standardized components that can be used to speed up development of web sites.
+[![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=development)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
+[![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
+
+**The Sandbox represents a space where work-in-progress versions of the Core Components are developed. They provide _beta features_ and *should not be used in production*. When the components become stable, they will be promoted to new production-ready releases and moved out of sandbox.**
 
 ## Available Components
 
 * Page authoring components:
-  * [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v1/page)
-  * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v1/breadcrumb)
-  * [Title component](content/src/content/jcr_root/apps/core/wcm/components/title/v1/title)
-  * [Text component](content/src/content/jcr_root/apps/core/wcm/components/text/v1/text)
-  * [Image component](content/src/content/jcr_root/apps/core/wcm/components/image/v1/image)
-  * [List component](content/src/content/jcr_root/apps/core/wcm/components/list/v1/list)
-  * [Sharing component](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+  * [Page component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/page/v2/page)
+  * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/breadcrumb/v2/breadcrumb)
+  * [Title component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/title/v1/title)
+  * [Text component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/text/v1/text)
+  * [Image component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/image/v1/image)
+  * [List component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/list/v1/list)
+  * [Sharing component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/sharing/v1/sharing)
+  * [Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/navigation/v1/navigation)
+  * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/languagenavigation/v1/languagenavigation)
 * Form components:
-  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v1/container)
-  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v1/text)
-  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v1/options)
-  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v1/hidden)
-  * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v1/button)
+  * [Form container](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/container/v1/container)
+  * [Form text field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/text/v1/text)
+  * [Form options field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/options/v1/options)
+  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/hidden/v1/hidden)
+  * [Form button](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/button/v1/button)
 
-The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/AEM-Core-WCM-Components'-versioning-policies) wiki page
+The components' versioning scheme is documented on the [Versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
 ## System Requirements
 
 The core components are built on top of the Sling Models API 1.3, which is part of `AEM 6.3`. From version 1.0.4 the project requires Java 1.8 as an execution environment.
 
-## Installation
-
-To install everything the [released all package as released aggregate package](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
-
-For more information about the Package Manager please have a look at [How to Work With Packages](https://docs.adobe.com/docs/en/aem/6-2/administer/content/package-manager.html) documentation page.
+The Sandbox components depend on the `cq-6.3.0-featurepack-18678-1.0` Feature Pack. This Feature Pack is a tech preview, meaning that changes might happen to it that could break compatibility. It is therefore recommended to not install it on production environments and instead wait until these capabilities are consolidated in a Service Pack.
 
 ## Build
 
@@ -70,30 +69,3 @@ Please note that
 
  * ``-pl/-projects`` option specifies the list of projects that you want to install
  * ``-am/-also-make`` options specifies that dependencies should also be built
-
-## Include core components as subpackage into your own project maven build
-
-The released version of the core components are available on the public maven repository at https://repo.adobe.com. To include the 
-core components package into your own project maven build you can add the dependency
- ```
- <dependency>
-     <groupId>com.adobe.cq</groupId>
-     <artifactId>core.wcm.components.all</artifactId>
-     <type>zip</type>
-     <version>1.0.4</version
- </dependency>
- ```
- 
- and sub package section
- ```
- <subPackage>
-     <groupId>com.adobe.cq</groupId>
-     <artifactId>core.wcm.components.all</artifactId>
-     <filter>true</filter>
- </subPackage>
- ```
- 
- to the `content-package-maven-plugin`.
- 
- For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the 
- related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)

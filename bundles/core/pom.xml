@@ -22,21 +22,21 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>com.adobe.cq</groupId>
-        <artifactId>core.wcm.components.parent</artifactId>
-        <version>1.0.7-SNAPSHOT</version>
+        <artifactId>core.wcm.components.sandbox.parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>core.wcm.components.core</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <artifactId>core.wcm.components.sandbox.bundle</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>Adobe Experience Manager Core WCM Components Core Bundle</name>
+    <name>Adobe Experience Manager Core WCM Components Core Bundle - Sandbox</name>
 
     <scm>
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/bundles/core</url>
+        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development/bundles/core</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -57,7 +57,8 @@
                 </executions>
                 <configuration>
                     <instructions>
-                        <Sling-Model-Packages>com.adobe.cq.wcm.core.components.models</Sling-Model-Packages>
+                        <!-- The Sling-Model-Packages instruction needs to point to the implementation package -->
+                        <Sling-Model-Packages>com.adobe.cq.wcm.core.components.internal.models,com.adobe.cq.wcm.core.components.sandbox.internal.models</Sling-Model-Packages>
                     </instructions>
                 </configuration>
             </plugin>
@@ -83,7 +84,7 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <haltOnFailure>false</haltOnFailure>
+                            <haltOnFailure>true</haltOnFailure>
                             <dataFile>${project.build.directory}/coverage.exec</dataFile>
                             <rules>
                                 <rule>
@@ -193,6 +194,82 @@
                             <slingUrl>http://${aem.publish.host}:${aem.publish.port}/system/console</slingUrl>
                             <failOnError>true</failOnError>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-instrument</id>
+                                <goals>
+                                    <goal>instrument</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>default-restore-instrumented-classes</id>
+                                <goals>
+                                    <goal>restore-instrumented-classes</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>check-coverage</id>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                                <configuration>
+                                    <haltOnFailure>true</haltOnFailure>
+                                    <dataFile>${project.build.directory}/coverage.exec</dataFile>
+                                    <rules>
+                                        <rule>
+                                            <element>BUNDLE</element>
+                                            <limits>
+                                                <limit>
+                                                    <counter>INSTRUCTION</counter>
+                                                    <value>COVEREDRATIO</value>
+                                                    <minimum>0.80</minimum>
+                                                </limit>
+                                            </limits>
+                                        </rule>
+                                        <rule>
+                                            <element>CLASS</element>
+                                            <limits>
+                                                <limit>
+                                                    <counter>INSTRUCTION</counter>
+                                                    <value>COVEREDRATIO</value>
+                                                    <minimum>0.80</minimum>
+                                                </limit>
+                                            </limits>
+                                        </rule>
+                                    </rules>
+                                    <excludes>
+                                        <!-- private enum; cannot test valueOf / values -->
+                                        <exclude>**/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
+                                        <exclude>**/com/adobe/cq/wcm/core/components/models/**/*.class</exclude>
+                                        <exclude>**/com/adobe/cq/wcm/core/components/sandbox/models/**/*.class</exclude>
+                                    </excludes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                                <configuration>
+                                    <dataFile>${project.build.directory}/coverage.exec</dataFile>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -308,7 +385,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.junit.core</artifactId>
+            <artifactId>core.wcm.components.sandbox.junit.core</artifactId>
             <scope>test</scope>
             <version>${project.version}</version>
         </dependency>
