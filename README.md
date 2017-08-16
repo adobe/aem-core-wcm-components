@@ -97,3 +97,7 @@ core components package into your own project maven build you can add the depend
  
  For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the 
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)
+
+## Development
+If you're curious about how the next generation of components looks like, a tech preview is made available in the
+[`development`](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development) branch.
