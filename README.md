@@ -10,19 +10,19 @@
 * Page authoring components:
   * [Page component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/page/v2/page)
   * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/breadcrumb/v2/breadcrumb)
-  * [Title component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/title/v1/title)
-  * [Text component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/text/v1/text)
-  * [Image component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/image/v1/image)
-  * [List component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/list/v1/list)
-  * [Sharing component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/sharing/v1/sharing)
+  * [Title component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/title/v2/title)
+  * [Text component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/text/v2/text)
+  * [Image component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/image/v2/image)
+  * [List component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/list/v2/list)
+  * [Sharing component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/sharing/v2/sharing)
   * [Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/navigation/v1/navigation)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/languagenavigation/v1/languagenavigation)
 * Form components:
-  * [Form container](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/container/v1/container)
-  * [Form text field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/text/v1/text)
-  * [Form options field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/options/v1/options)
-  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/hidden/v1/hidden)
-  * [Form button](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/button/v1/button)
+  * [Form container](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/container/v2/container)
+  * [Form text field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/text/v2/text)
+  * [Form options field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/options/v2/options)
+  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/hidden/v2/hidden)
+  * [Form button](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/button/v2/button)
 
 The components' versioning scheme is documented on the [Versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
