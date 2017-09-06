@@ -19,6 +19,7 @@ Extensible page component written in HTL.
 
 ## Features
 * Editable templates
+* SEO meta title, tagging and language definition
 * Page title, subtitle, description and thumbnail
 * Navigation title, or hide from navigation
 * Vanity URL, page alias and redirection
@@ -53,28 +54,35 @@ The following configuration properties are used:
 ### Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:
 
-1. `./jcr:title` - defines the title for this page
-2. `pageName` - defines the page name for this page
-3. `./cq:tags` - defines the tags for this page
-4. `./hideInNav` - if set to `true` then this page will be hidden from navigation
-5. `./pageTitle` - defines an alternate title for this page
-6. `./navTitle` - defines the navigation title for this page
-7. `./subtitle` - defines a subtitle for this page
-8. `./jcr:description` - defines a description for this page
-9.  `./onTime` - defines when the page should become available
-10. `./offTime` - defines when the page should not be available any more
-11. `./sling:vanityPath` - defines a vanity URL at which this page could be accessed
-12. `./sling:redirect` - if set to `true`, then this page will redirect to its defined vanity URL
-13. `./jcr:language` - defines the language set for this page, to help with `i18n`
-14. `./cq:designPath` - defines where the design for this page is stored
-15. `./sling:alias` - defines a Sling alias for this page, so that the page can be accessed at a different resource path
-16. `./cq:allowedTemplates` - defines a template or a list of templates that the page should use
-17. `./cq:exportTemplate` - defines the template used for exporting this page for content synchronisation
-18. `./socialMedia` - defines the enabled social media configurations
-19. `./variantPath` - allows defining the social media variation experience fragment to be used for generating page meta data for social
+1. `./jcr:title` - defines the page title, used for the page SEO meta title and on-page title (unless an overriding `./pageTitle` is defined).
+2. `pageName` - defines the page name.
+3. `./cq:tags` - defines the page SEO meta tags.
+4. `./hideInNav` - if `true`, the page will be hidden in a navigation context (breadcrumb, navigation etc.).
+5. `./pageTitle` - defines an alternative page title. Used for overriding the `./jcr:title` in an on-page context.
+6. `./navTitle` - defines the page navigation title. Overrides other page titles, when the page is displayed in a navigation context (breadcrumb, navigation etc.).
+7. `./subtitle` - defines the page subtitle.
+8. `./jcr:description` - defines the page description.
+9.  `./onTime` - defines when the page should become available.
+10. `./offTime` - defines when the page should not be available any more.
+11. `./sling:vanityPath` - defines a vanity URL at which the page could be accessed.
+12. `./sling:redirect` - if `true`, the page will redirect to its defined vanity URL.
+13. `./jcr:language` - defines the language set for this page, to help with `i18n`.
+14. `./cq:designPath` - defines where the design for the page is stored.
+15. `./sling:alias` - defines a Sling alias for the page, so that it can be accessed at a different resource path.
+16. `./cq:allowedTemplates` - defines a template or a list of templates that the page should use.
+17. `./cq:exportTemplate` - defines the template used for exporting the page for content synchronisation.
+18. `./socialMedia` - defines the enabled social media configurations.
+19. `./variantPath` - allows defining the social media variation experience fragment to be used for generating page meta data for social.
 media
-20. `./cq:contextHubPath` - defines the Context Path configuration used by this page
-21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path
+20. `./cq:contextHubPath` - defines the Context Path configuration used by this page.
+21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path.
+
+## Client Libraries
+The component provides a `core.wcm.components.page.v1.sharing` client library category that contains the JavaScript
+required to enable social sharing. It should be added to a relevant site client library using the `embed` property.
+
+It also provides a `core.wcm.components.page.v1.editor` editor client library category that includes
+JavaScript handling for dialog interaction. It is already included by its edit dialog.
 
 ## Client Libraries
 The component provides a `core.wcm.components.page.v1.sharing` client library category that contains the JavaScript

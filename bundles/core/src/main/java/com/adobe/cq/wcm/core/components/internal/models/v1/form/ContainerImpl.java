@@ -32,10 +32,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -87,14 +84,14 @@ public class ContainerImpl implements Container {
     @Default(values = "")
     private String id;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String actionType;
 
     @ValueMapValue(name = ResourceResolver.PROPERTY_RESOURCE_TYPE)
     @Default(values = "")
     private String dropAreaResourceType;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String redirect;
 
     private String name;
@@ -137,15 +134,19 @@ public class ContainerImpl implements Container {
     }
 
     private void runActionTypeInit(FormStructureHelper formStructureHelper) {
-        final RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        if (response != null && !StringUtils.equals(requestPathInfo.getSelectorString(),
-                SCRIPT_FORM_SERVER_VALIDATION) && StringUtils.isNotEmpty(actionType)) {
-            final Resource formStart = formStructureHelper.getFormResource(request.getResource());
-            try {
-                FormsHelper.runAction(actionType, INIT_SCRIPT, formStart, request, response);
-            } catch (IOException | ServletException e) {
-                LOGGER.error("Unable to initialise form " + resource.getPath(), e);
+        if ((request.getAttribute(FormsHelper.REQ_ATTR_IS_INIT) == null)) {
+            request.setAttribute(FormsHelper.REQ_ATTR_IS_INIT, "true");
+            final RequestPathInfo requestPathInfo = request.getRequestPathInfo();
+            if (response != null && !StringUtils.equals(requestPathInfo.getSelectorString(),
+                    SCRIPT_FORM_SERVER_VALIDATION) && StringUtils.isNotEmpty(actionType)) {
+                final Resource formStart = formStructureHelper.getFormResource(request.getResource());
+                try {
+                    FormsHelper.runAction(actionType, INIT_SCRIPT, formStart, request, response);
+                } catch (IOException | ServletException e) {
+                    LOGGER.error("Unable to initialise form " + resource.getPath(), e);
+                }
             }
+            request.removeAttribute(FormsHelper.REQ_ATTR_IS_INIT);
         }
     }
 

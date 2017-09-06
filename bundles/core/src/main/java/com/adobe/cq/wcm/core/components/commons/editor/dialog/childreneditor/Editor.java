@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -62,11 +63,13 @@ public class Editor {
             container = resolver.getResource(containerPath);
             if (container != null) {
                 ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
-                for (Resource resource : container.getChildren()) {
-                    if (resource != null) {
-                        Component component = componentManager.getComponentOfResource(resource);
-                        if (component != null) {
-                            items.add(new Item(request, resource));
+                if(componentManager != null){
+                    for (Resource resource : container.getChildren()) {
+                        if (resource != null) {
+                            Component component = componentManager.getComponentOfResource(resource);
+                            if (component != null) {
+                                items.add(new Item(request, resource));
+                            }
                         }
                     }
                 }
@@ -80,7 +83,7 @@ public class Editor {
      * @return a list of child items
      */
     public List<Item> getItems() {
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     /**

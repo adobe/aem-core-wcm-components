@@ -64,7 +64,7 @@ public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
     private final static String PN_COMPONENT_PATH = "componentPath";
 
     @Reference
-    private ExpressionResolver expressionResolver;
+    private transient ExpressionResolver expressionResolver;
 
     /**
      * Defines a parameter name and property name whose value decides whether dialog field would be displayed or not.

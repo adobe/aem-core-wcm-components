@@ -86,7 +86,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
                 items = Collections.emptyList();
             }
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     @NotNull

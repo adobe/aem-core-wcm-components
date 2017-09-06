@@ -40,12 +40,27 @@
             titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector);
             descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
 
-            var $linkURLField = $dialogContent.find(linkURLSelector);
-            linkURL = $linkURLField.adaptTo("foundation-field").getValue();
-            $linkURLField.on("change", function() {
-                linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+            var rteInstance = $(descriptionTextfieldSelector).data("rteinstance");
+            // wait for the description textfield rich text editor to signal start before initializing.
+            // Ensures that any state adjustments made here will not be overridden.
+            if (rteInstance && rteInstance.isActive) {
+                toggleInputs($dialogContent);
                 retrievePageInfo($dialogContent);
-            });
+            } else {
+                $(descriptionTextfieldSelector).on("editing-start", function() {
+                    toggleInputs($dialogContent);
+                    retrievePageInfo($dialogContent);
+                });
+            }
+
+            var $linkURLField = $dialogContent.find(linkURLSelector);
+            if ($linkURLField.length) {
+                linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+                $linkURLField.on("change", function() {
+                    linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+                    retrievePageInfo($dialogContent);
+                });
+            }
 
             var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
             if ($actionsEnabledCheckbox.size() > 0) {
@@ -69,9 +84,6 @@
                     retrievePageInfo($dialogContent);
                 });
             }
-
-            toggleInputs($dialogContent);
-            retrievePageInfo($dialogContent);
         }
     });
 
@@ -79,29 +91,31 @@
         var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
         var linkURLField = dialogContent.find(linkURLSelector).adaptTo("foundation-field");
         var actions = $actionsMultifield.adaptTo("foundation-field");
-        if (actionsEnabled) {
-            linkURLField.setDisabled(true);
-            actions.setDisabled(false);
-            if ($actionsMultifield.size() > 0) {
-                var actionsMultifield = $actionsMultifield[0];
-                if (actionsMultifield.items.length < 1) {
-                    var newMultifieldItem = new Coral.Multifield.Item();
-                    actionsMultifield.items.add(newMultifieldItem);
-                    Coral.commons.ready(newMultifieldItem, function(element) {
-                        var linkField = $(element).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']");
-                        if (linkField) {
-                            linkField.val(linkURL);
-                            linkField.trigger("change");
-                        }
-                    });
-                } else {
-                    toggleActionItems($actionsMultifield, false);
+        if (linkURLField && actions) {
+            if (actionsEnabled) {
+                linkURLField.setDisabled(true);
+                actions.setDisabled(false);
+                if ($actionsMultifield.size() > 0) {
+                    var actionsMultifield = $actionsMultifield[0];
+                    if (actionsMultifield.items.length < 1) {
+                        var newMultifieldItem = new Coral.Multifield.Item();
+                        actionsMultifield.items.add(newMultifieldItem);
+                        Coral.commons.ready(newMultifieldItem, function(element) {
+                            var linkField = $(element).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']");
+                            if (linkField) {
+                                linkField.val(linkURL);
+                                linkField.trigger("change");
+                            }
+                        });
+                    } else {
+                        toggleActionItems($actionsMultifield, false);
+                    }
                 }
+            } else {
+                linkURLField.setDisabled(false);
+                actions.setDisabled(true);
+                toggleActionItems($actionsMultifield, true);
             }
-        } else {
-            linkURLField.setDisabled(false);
-            actions.setDisabled(true);
-            toggleActionItems($actionsMultifield, true);
         }
     }
 

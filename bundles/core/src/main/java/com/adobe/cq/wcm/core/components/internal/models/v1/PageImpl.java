@@ -136,7 +136,7 @@ public class PageImpl implements Page {
         String templateName = null;
         String templatePath = pageProperties.get(NameConstants.PN_TEMPLATE, String.class);
         if (StringUtils.isNotEmpty(templatePath)) {
-            int i = templatePath.lastIndexOf("/");
+            int i = templatePath.lastIndexOf('/');
             if (i > 0) {
                 templateName = templatePath.substring(i + 1);
             }
@@ -176,6 +176,7 @@ public class PageImpl implements Page {
 
     @Override
     @JsonIgnore
+    @Deprecated
     public Map<String, String> getFavicons() {
         return favicons;
     }

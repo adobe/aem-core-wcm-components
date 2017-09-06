@@ -15,11 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -139,7 +135,7 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
     @Nullable
     @Override
     public List<DAMContentElement> getElements() {
-        return elements;
+        return Collections.unmodifiableList(elements);
     }
 
     @NotNull

@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +48,9 @@ public class OEmbedXMLResponseImpl implements OEmbedResponse, Serializable {
     private String height;
     private String html;
     private String url;
-    protected List<Object> any = new ArrayList<>();
+
+    @SuppressFBWarnings(justification = "This field need to be transient")
+    protected transient List<Object> any = new ArrayList<>();
 
     @Override
     public @NotNull String getType() {

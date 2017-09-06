@@ -161,16 +161,6 @@
                                                                     ref="paraformat"/>
                                                             </popovers>
                                                         </inline>
-                                                        <dialogFullScreen
-                                                            jcr:primaryType="nt:unstructured"
-                                                            toolbar="[format#bold,format#italic,format#underline,justify#justifyleft,justify#justifycenter,justify#justifyright,lists#unordered,lists#ordered,lists#outdent,lists#indent,links#modifylink,links#unlink,table#createoredit,#paraformat,image#imageProps]">
-                                                            <popovers jcr:primaryType="nt:unstructured">
-                                                                <paraformat
-                                                                    jcr:primaryType="nt:unstructured"
-                                                                    items="paraformat:getFormats:paraformat-pulldown"
-                                                                    ref="paraformat"/>
-                                                            </popovers>
-                                                        </dialogFullScreen>
                                                         <tableEditOptions
                                                             jcr:primaryType="nt:unstructured"
                                                             toolbar="[table#insertcolumn-before,table#insertcolumn-after,table#removecolumn,-,table#insertrow-before,table#insertrow-after,table#removerow,-,table#mergecells-right,table#mergecells-down,table#mergecells,table#splitcell-horizontal,table#splitcell-vertical,-,table#selectrow,table#selectcolumn,-,table#ensureparagraph,-,table#modifytableandcell,table#removetable,-,undo#undo,undo#redo,-,table#exitTableEditing,-]">
