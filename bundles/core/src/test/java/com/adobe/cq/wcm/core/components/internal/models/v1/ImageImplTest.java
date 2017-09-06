@@ -63,7 +63,7 @@ public class ImageImplTest extends AbstractImageTest {
                 "\"/core/content/test/jcr%3acontent/root/image0.img.2500.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
-        assertEquals("/content/test-image.html", image.getLink());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
     }
 
@@ -135,11 +135,15 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(expectedMap, jsonMap);
     }
 
-    private Image getImageUnderTest(String resourcePath) {
-        return getImageUnderTest(resourcePath, null);
+    protected Image getImageUnderTest(String resourcePath) {
+        return getImageUnderTest(resourcePath, null, Image.class);
     }
 
-    private Image getImageUnderTest(String resourcePath, WCMMode wcmMode) {
+    protected Image getImageUnderTest(String resourcePath, WCMMode wcmMode) {
+        return getImageUnderTest(resourcePath, wcmMode, Image.class);
+    }
+
+    protected Image getImageUnderTest(String resourcePath, WCMMode wcmMode,  Class<? extends Image> imageClass) {
         Resource resource = aemContext.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
@@ -173,7 +177,7 @@ public class ImageImplTest extends AbstractImageTest {
         slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(Image.class);
+        return request.adaptTo(imageClass);
     }
 
 }

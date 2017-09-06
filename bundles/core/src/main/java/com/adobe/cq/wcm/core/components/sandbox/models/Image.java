@@ -15,12 +15,58 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.osgi.annotation.versioning.ConsumerType;
+
+import javax.annotation.Nonnull;
 
 /**
  * Defines the {@code Image} Sling Model used for the {@code /apps/core/wcm/sandbox/components/image} component.
  */
 @ConsumerType
 public interface Image extends com.adobe.cq.wcm.core.components.models.Image {
+
+    @Override
+    @JsonIgnore
+    default String getJson() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the available image sizes (expressed in width).
+     *
+     * @return the available image sizes (expressed in width)
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+     */
+    default int[] getSmartSizes() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the URLs for the available image renditions.
+     *
+     * @return the URLs for the available image renditions
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+     */
+    default String[] getSmartImages() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Indicates if the image should be rendered lazily or not.
+     *
+     * @return true if the image should be rendered lazily; false otherwise
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+     */
+    default boolean isLazyEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @JsonIgnore
+    default String getFileReference() {
+        throw new UnsupportedOperationException();
+    }
+
 
 }

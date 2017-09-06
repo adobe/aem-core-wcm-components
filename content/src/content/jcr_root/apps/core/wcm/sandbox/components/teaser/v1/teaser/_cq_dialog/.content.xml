@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Teaser"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="https://www.adobe.com/go/aem_cmp_teaser_v1">
+    <content jcr:primaryType="nt:unstructured">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs jcr:primaryType="nt:unstructured">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured">
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:hideChildren="[decorative,alt,caption,displayCaptionPopup]">
+                            <file
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                allowUpload="{Boolean}false"
+                                autoStart="{Boolean}false"
+                                class="cq-droptarget"
+                                fieldLabel="Image asset"
+                                fileNameParameter="./fileName"
+                                fileReferenceParameter="./fileReference"
+                                mimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+                                multiple="{Boolean}false"
+                                name="./file"
+                                title="Upload Image Asset"
+                                uploadUrl="${suffix.path}"
+                                useHTML5="{Boolean}true"/>
+                            <linkURL
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                fieldDescription="Call to action link."
+                                fieldLabel="Link"
+                                name="./linkURL"
+                                required="{Boolean}true"
+                                rootPath="/content"/>
+                            <linkText
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="Call to action text."
+                                fieldLabel="Link Text"
+                                name="./linkText"/>
+                            <title
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="The Teaser's title."
+                                fieldLabel="Title"
+                                name="./jcr:title"/>
+                            <description
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="The Teaser's description."
+                                fieldLabel="Description"
+                                name="./jcr:description"/>
+                        </items>
+                    </properties>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

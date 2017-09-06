@@ -10,7 +10,8 @@
         <items jcr:primaryType="nt:unstructured">
             <tabs
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
                     <allowedcomponents
                         jcr:primaryType="nt:unstructured"

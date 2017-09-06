@@ -14,8 +14,8 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.headlibs="${@ designPath, staticDesignPath, clientlibCategories}"
-          data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html">
-    <sly data-sly-test="${!wcmmode.disabled}" data-sly-call="${clientLib.all @ categories = [
+          data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
+    <sly data-sly-test="${!wcmmode.disabled}" data-sly-call="${clientlib.all @ categories = [
         'cq.pagetypes.html5page',
         'cq.authoring.page',
         'cq.wcm.foundation-main',
@@ -25,6 +25,6 @@
     <sly data-sly-include="/libs/cq/cloudserviceconfigs/components/servicelibs/servicelibs.jsp"></sly>
     <sly data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
     <sly data-sly-test="${clientlibCategories}"
-         data-sly-call="${clientLib.css @ categories=clientlibCategories}"></sly>
+         data-sly-call="${clientlib.css @ categories=clientlibCategories}"></sly>
     <link data-sly-test="${staticDesignPath}" href="${staticDesignPath}" rel="stylesheet" type="text/css" />
 </template>

@@ -69,3 +69,14 @@ Please note that
 
  * ``-pl/-projects`` option specifies the list of projects that you want to install
  * ``-am/-also-make`` options specifies that dependencies should also be built
+
+ ### Running the UI tests
+
+ The Sandbox components might use features not yet available on AEM 6.3. In order to correctly test the functionality that's still supported for AEM 6.3, the Hobbes UI tests
+ should be executed using the following request parameters:
+
+```
+http://localhost:4502/libs/granite/testing/hobbes.html?runId=1&autoRun=true&optin=disabled&filter=aem.core-components.testsuite.sandbox&run.options={"withMetadata":{"ignoreOn63":{"value":true,"type":"exclude"}}}
+```
+
+This will make sure that tests which would normally fail on AEM 6.3 due to platform changes are not executed.

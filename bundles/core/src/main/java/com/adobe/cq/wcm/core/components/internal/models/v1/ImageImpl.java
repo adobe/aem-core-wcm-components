@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.wcm.core.components.internal.Constants;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
@@ -56,7 +58,6 @@ import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.NameConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
@@ -67,13 +68,13 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 public class ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v1/image";
-    public static final String DEFAULT_EXTENSION = "jpeg";
+    private static final String DEFAULT_EXTENSION = "jpeg";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
     private static final String DOT = ".";
     private static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
-    private static final List<String> NON_SUPPORTED_IMAGE_MIMETYPE = Arrays.asList("image/svg+xml");
+    private static final List<String> NON_SUPPORTED_IMAGE_MIMETYPE = Collections.singletonList("image/svg+xml");
 
     @Self
     private SlingHttpServletRequest request;
@@ -110,13 +111,13 @@ public class ImageImpl implements Image {
     private String linkURL;
 
     private String src;
-    private String[] smartImages = new String[]{};
-    private int[] smartSizes = new int[0];
+    protected String[] smartImages = new String[]{};
+    protected int[] smartSizes = new int[0];
     private String json;
     private boolean displayPopupTitle;
     private boolean isDecorative;
 
-    private boolean disableLazyLoading;
+    protected boolean disableLazyLoading;
 
     @PostConstruct
     private void initModel() {
@@ -173,35 +174,33 @@ public class ImageImpl implements Image {
             }
             ResourceResolver resourceResolver = request.getResourceResolver();
             ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
-            ContentPolicy contentPolicy = policyManager.getPolicy(resource);
-            if (contentPolicy != null) {
-                disableLazyLoading = contentPolicy.getProperties().get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
-            }
-            Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths(contentPolicy);
-            smartImages = new String[supportedRenditionWidths.size()];
-            smartSizes = new int[supportedRenditionWidths.size()];
-            int index = 0;
-            String escapedResourcePath = Text.escapePath(resource.getPath());
-            for (Integer width : supportedRenditionWidths) {
-                smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                        width + DOT + extension + (!isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension
-                        : "");
-                smartSizes[index] = width;
-                index++;
-            }
-            if (smartSizes.length == 0 || smartSizes.length >= 2) {
-                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + extension +
-                        (!isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
-            } else if (smartSizes.length == 1) {
-                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + smartSizes[0] +
-                        DOT + extension + (!isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+            if (policyManager != null) {
+                ContentPolicy contentPolicy = policyManager.getPolicy(resource);
+                if (contentPolicy != null) {
+                    disableLazyLoading = contentPolicy.getProperties().get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+                }
+                Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths(contentPolicy);
+                smartImages = new String[supportedRenditionWidths.size()];
+                smartSizes = new int[supportedRenditionWidths.size()];
+                int index = 0;
+                String escapedResourcePath = Text.escapePath(resource.getPath());
+                for (Integer width : supportedRenditionWidths) {
+                    smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
+                            width + DOT + extension + (!isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension
+                            : "");
+                    smartSizes[index] = width;
+                    index++;
+                }
+                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT;
+                if (smartSizes.length == 1) {
+                    src += smartSizes[0] + DOT + extension;
+                } else {
+                    src += extension;
+                }
+                src += !isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "";
             }
             if (!isDecorative) {
-                Page page = pageManager.getPage(linkURL);
-                if (page != null) {
-                    String vanityURL = page.getVanityUrl();
-                    linkURL = (vanityURL == null ? linkURL + ".html" : vanityURL);
-                }
+                linkURL = Utils.getURL(request, pageManager, linkURL);
             } else {
                 linkURL = null;
                 alt = null;

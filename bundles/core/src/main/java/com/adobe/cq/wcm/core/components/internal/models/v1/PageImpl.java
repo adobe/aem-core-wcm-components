@@ -78,7 +78,7 @@ public class PageImpl implements Page {
     protected Calendar lastModifiedDate;
     protected String templateName;
 
-    protected static final String DEFAULT_TEMPLATE_EDITOR_CLIENT_LIB = "wcm.foundation.components.parsys.allowedcomponents";
+    protected static final String DEFAULT_TEMPLATE_EDITOR_CLIENTLIB = "wcm.foundation.components.parsys.allowedcomponents";
     protected static final String PN_CLIENTLIBS = "clientlibs";
 
     @JsonIgnore
@@ -106,7 +106,7 @@ public class PageImpl implements Page {
                 loadFavicons(designPath);
             }
         }
-        populateClientLibCategories();
+        populateClientlibCategories();
         templateName = extractTemplateName();
     }
 
@@ -188,7 +188,7 @@ public class PageImpl implements Page {
         return path;
     }
 
-    protected void populateClientLibCategories() {
+    protected void populateClientlibCategories() {
         List<String> categories = new ArrayList<>();
         Template template = currentPage.getTemplate();
         if (template != null && template.hasStructureSupport()) {
@@ -203,7 +203,7 @@ public class PageImpl implements Page {
 
     protected void addDefaultTemplateEditorClientLib(Resource templateResource, List<String> categories) {
         if (currentPage.getPath().startsWith(templateResource.getPath())) {
-            categories.add(DEFAULT_TEMPLATE_EDITOR_CLIENT_LIB);
+            categories.add(DEFAULT_TEMPLATE_EDITOR_CLIENTLIB);
         }
     }
 

@@ -15,6 +15,7 @@
                 granite:class="cq-siteadmin-admin-properties-tabs"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true"
                 size="L">
                 <items jcr:primaryType="nt:unstructured">
                     <basic

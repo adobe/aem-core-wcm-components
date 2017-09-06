@@ -10,7 +10,8 @@
         <items jcr:primaryType="nt:unstructured">
             <tabs
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
                     <plugins
                         jcr:primaryType="nt:unstructured"
@@ -352,6 +353,10 @@
                             </Characters>
                         </items>
                     </plugins>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
                 </items>
             </tabs>
         </items>

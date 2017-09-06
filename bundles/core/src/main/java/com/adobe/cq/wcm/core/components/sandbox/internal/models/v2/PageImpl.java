@@ -1,54 +1,59 @@
-/*******************************************************************************
- * Copyright 2016 Adobe Systems Incorporated
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2017 Adobe Systems Incorporated
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models.v2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.factory.ModelFactory;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.Lists;
-
+import com.adobe.cq.wcm.core.components.internal.Constants;
+import com.adobe.cq.wcm.core.components.sandbox.models.Page;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
-import com.adobe.cq.wcm.core.components.internal.Constants;
-import com.adobe.cq.wcm.core.components.sandbox.models.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = Page.class, resourceType = PageImpl.RESOURCE_TYPE)
 @Exporter(name = Constants.EXPORTER_NAME, extensions = Constants.EXPORTER_EXTENSION)
 public class PageImpl  extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/sandbox/components/page/v2/page";
+    private static final String DEFAULT_FAVICON_CLIENT_LIB = "core.wcm.components.page.v2.favicon";
 
     @OSGiService
     @JsonIgnore
-    protected HtmlLibraryManager htmlLibraryManager;
+    private HtmlLibraryManager htmlLibraryManager;
 
     @Self
     @JsonIgnore
@@ -56,12 +61,13 @@ public class PageImpl  extends com.adobe.cq.wcm.core.components.internal.models.
 
     @ScriptVariable
     @JsonIgnore
-    protected ComponentContext componentContext;
+    private ComponentContext componentContext;
 
-    protected String faviconClientLibCategory;
-    protected String faviconClientLibPath;
+    @Inject
+    private ModelFactory modelFactory;
 
-    protected static final String DEFAULT_FAVICON_CLIENT_LIB = "core.wcm.components.page.v2.favicon";
+    private String faviconClientLibCategory;
+    private String faviconClientLibPath;
 
     @PostConstruct
     protected void initModel() {
@@ -70,7 +76,7 @@ public class PageImpl  extends com.adobe.cq.wcm.core.components.internal.models.
         populateFaviconPath();
     }
 
-    protected void populateFaviconPath() {
+    private void populateFaviconPath() {
         Collection<ClientLibrary> clientLibraries =
                 htmlLibraryManager.getLibraries(new String[]{faviconClientLibCategory}, LibraryType.CSS, true, true);
         ArrayList<ClientLibrary> clientLibraryList = Lists.newArrayList(clientLibraries.iterator());
@@ -79,7 +85,7 @@ public class PageImpl  extends com.adobe.cq.wcm.core.components.internal.models.
         }
     }
 
-    protected String getProxyPath(ClientLibrary lib) {
+    private String getProxyPath(ClientLibrary lib) {
         String path = lib.getPath();
         if (lib.allowProxy() && (path.startsWith("/libs/") || path.startsWith("/apps/"))) {
             path = "/etc.clientlibs" + path.substring(5);

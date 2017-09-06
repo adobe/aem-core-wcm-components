@@ -26,6 +26,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.sandbox.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -61,11 +62,7 @@ public class NavigationItemImpl extends com.adobe.cq.wcm.core.components.interna
     @Override
     public String getURL() {
         if (url == null) {
-            url = page.getVanityUrl();
-            if (StringUtils.isEmpty(url)) {
-                url = page.getPath() + ".html";
-            }
-            url = request.getContextPath() + url;
+            url = Utils.getURL(request, page);
         }
         return url;
     }

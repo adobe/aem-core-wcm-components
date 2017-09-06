@@ -168,10 +168,6 @@
 
         container = noScriptElement.closest(options.containerSelector);
         if (container) {
-            dropContainer = noScriptElement.closest('.cq-dd-image');
-            if (dropContainer) {
-                container = dropContainer;
-            }
             anchor = container.querySelector('.cmp-image__link');
             if (anchor !== null) {
                 container = anchor;

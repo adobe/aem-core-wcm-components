@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-.cmp-breadcrumb__list {
+.cmp-breadcrumb {
     display: inline-block;
     list-style: none;
     padding: 0;
@@ -21,9 +21,10 @@
 
 .cmp-breadcrumb__item {
     display: inline-block;
+    vertical-align: top;
     padding: 0 5px;
 }
 
-.cmp-breadcrumb__item::before {
+.cmp-breadcrumb__item + .cmp-breadcrumb__item::before {
     content: "/\00a0";
 }
