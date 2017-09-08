@@ -17,6 +17,8 @@
   * [Sharing component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/sharing/v2/sharing)
   * [Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/navigation/v1/navigation)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/languagenavigation/v1/languagenavigation)
+  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/sandbox/components/search/v1/search)
+  * [Teaser](content/src/content/jcr_root/apps/core/wcm/sandbox/components/teaser/v1/teaser)
 * Form components:
   * [Form container](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/container/v2/container)
   * [Form text field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/text/v2/text)
