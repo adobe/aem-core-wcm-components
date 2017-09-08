@@ -114,6 +114,6 @@ BLOCK cmp-image
 * **Vendor**: Adobe
 * **Version**: v2 - sandbox
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: preview
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v2](https://www.adobe.com/go/aem_cmp_image_v2)
 

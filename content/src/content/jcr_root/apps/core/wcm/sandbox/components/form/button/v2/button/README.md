@@ -39,6 +39,6 @@ BLOCK cmp-form-button
 * **Vendor**: Adobe
 * **Version**: v2 - sandbox
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: preview
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_form\_button\_v2](https://www.adobe.com/go/aem_cmp_form_button_v2)
 

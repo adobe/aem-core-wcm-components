@@ -52,6 +52,6 @@ BLOCK cmp-languagenavigation
 * **Vendor**: Adobe
 * **Version**: v1 - sandbox
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: preview
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_languagenavigation\_v1](https://www.adobe.com/go/aem_cmp_languagenavigation_v1)
 

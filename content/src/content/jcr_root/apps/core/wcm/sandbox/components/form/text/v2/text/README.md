@@ -60,6 +60,6 @@ BLOCK cmp-form-text
 * **Vendor**: Adobe
 * **Version**: v2 - sandbox
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: preview
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_form\_text\_v2](https://www.adobe.com/go/aem_cmp_form_text_v2)
 

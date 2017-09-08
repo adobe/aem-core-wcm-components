@@ -49,6 +49,6 @@ BLOCK cmp-form
 * **Vendor**: Adobe
 * **Version**: v2 - sandbox
 * **Compatibility**: AEM 6.3
-* **Status**: production-ready
+* **Status**: preview
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_form\_container\_v2](https://www.adobe.com/go/aem_cmp_form_container_v2)
 
