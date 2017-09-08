@@ -80,7 +80,7 @@ core components package into your own project maven build you can add the depend
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>1.0.4</version
+     <version>1.0.4</version>
  </dependency>
  ```
  
