@@ -33,16 +33,20 @@ The following configuration properties are used:
 
 1. `./siteRoot` - defines the root of the website for which to build the navigation tree
 2. `./startLevel` - defines the start level, relative to the site root; the site root is level 0
-3. `./currentPageTreeOnly` - boolean value that enables collecting pages only from the current page's tree
-4. `./maxDepth` - defines the maximum depth level in the content tree for searching pages, relative to the site root
+3. `./skipRoot` - defines if the resulted navigation tree should skip including the navigation root, but include its children;
+  the navigation root is the same as the site root when the start level is 0
+4. `./currentPageTreeOnly` - boolean value that enables collecting pages only from the current page's tree
+5. `./maxDepth` - defines the maximum depth level in the content tree for searching pages, relative to the site root
 
 ### Edit dialog properties
 The following properties are written to JCR for the Navigation component and are expected to be available as `Resource` properties:
 
 1. `./siteRoot` - defines the root of the website for which to build the navigation tree
 2. `./startLevel` - defines the start level, relative to the site root; the site root is level 0
-3. `./currentPageTreeOnly` - boolean value that enables collecting pages only from the current page's tree
-4. `./maxDepth` - defines the maximum depth level in the content tree for searching pages, relative to the site root
+3. `./skipRoot` - defines if the resulted navigation tree should skip including the navigation root, but include its children;
+  the navigation root is the same as the site root when the start level is 0
+4. `./currentPageTreeOnly` - boolean value that enables collecting pages only from the current page's tree
+5. `./maxDepth` - defines the maximum depth level in the content tree for searching pages, relative to the site root
 
 ## BEM description
 ```

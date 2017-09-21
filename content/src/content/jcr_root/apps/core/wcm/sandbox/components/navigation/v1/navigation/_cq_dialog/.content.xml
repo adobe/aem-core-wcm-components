@@ -59,6 +59,17 @@
                                     name="./startLevel"
                                     step="1"
                                     value="${not empty cqDesign.startLevel ? cqDesign.startLevel : 0}"/>
+                            <skipRoot
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                    fieldDescription="When selected, the component will only collect the Navigation Root’s children,
+                                    excluding the actual Navigation Root Page. The Navigation Root is the same as the Site Root when the
+                                    Start Level is 0."
+                                    text="Exclude Navigation Root"
+                                    name="./skipRoot"
+                                    value="{Boolean}true"
+                                    checked="${not empty cqDesign.skipRoot ? cqDesign.skipRoot : true}"
+                                    uncheckedValue="{Boolean}false"/>
                             <currentPageTreeOnly
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

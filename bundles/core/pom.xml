@@ -40,6 +40,10 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <jacoco.data.file>${project.build.directory}/jacoco.exec</jacoco.data.file>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -85,7 +89,7 @@
                         </goals>
                         <configuration>
                             <haltOnFailure>true</haltOnFailure>
-                            <dataFile>${project.build.directory}/coverage.exec</dataFile>
+                            <dataFile>${jacoco.data.file}</dataFile>
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
@@ -121,7 +125,7 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>${project.build.directory}/coverage.exec</dataFile>
+                            <dataFile>${jacoco.data.file}</dataFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -131,7 +135,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
-                        <jacoco-agent.destfile>${project.build.directory}/coverage.exec</jacoco-agent.destfile>
+                        <jacoco-agent.destfile>${jacoco.data.file}</jacoco-agent.destfile>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
@@ -228,7 +232,7 @@
                                 </goals>
                                 <configuration>
                                     <haltOnFailure>true</haltOnFailure>
-                                    <dataFile>${project.build.directory}/coverage.exec</dataFile>
+                                    <dataFile>${jacoco.data.file}</dataFile>
                                     <rules>
                                         <rule>
                                             <element>BUNDLE</element>
@@ -266,7 +270,7 @@
                                     <goal>report</goal>
                                 </goals>
                                 <configuration>
-                                    <dataFile>${project.build.directory}/coverage.exec</dataFile>
+                                    <dataFile>${jacoco.data.file}</dataFile>
                                 </configuration>
                             </execution>
                         </executions>

@@ -14,11 +14,13 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <section class="cmp-search" role="search"
-     data-sly-use.search="com.adobe.cq.wcm.core.components.sandbox.models.Search">
+    data-results-size="${search.resultsSize}" data-search-term-minimum-length="${search.searchTermMinimumLength}"
+    data-sly-use.search="com.adobe.cq.wcm.core.components.sandbox.models.Search">
     <form method="get" action="${resource.path @ addSelectors=['result'], extension='html'}" class="cmp-search__form" autocomplete="off">
         <div class="cmp-search__field">
             <i class="cmp-search__icon"></i>
-            <input class="cmp-search__input" type="text" placeholder="${'Search term' @ i18n}" name="fulltext" role="combobox"
+            <span class="cmp-search__loading-indicator"></span>
+            <input class="cmp-search__input" type="text" placeholder="${'Search' @ i18n}" name="fulltext" role="combobox"
                    aria-autocomplete="list" aria-haspopup="true" aria-invalid="false">
             <input type="hidden" name="path" value="${search.rootPath}">
             <input type="hidden" name="type" value="cq:Page">

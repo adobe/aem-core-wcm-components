@@ -33,6 +33,15 @@ public interface Navigation {
     String PN_SITE_ROOT = "siteRoot";
 
     /**
+     * Name of the resource / configuration policy property that defines if the resulted navigation tree should skip including the
+     * navigation root, but include its children. The navigation root is the same as the site root when the start level is 0. The property
+     * should provide a Boolean value ({@code true} if the site root should be omitted, {@code false} otherwise).
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.5.0
+     */
+    String PN_SKIP_ROOT = "skipRoot";
+
+    /**
      * Name of the resource / configuration policy property that defines the start level of the website's root relative to the absolute
      * root folder. The property should provide a Long value.
      *

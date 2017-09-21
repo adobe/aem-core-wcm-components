@@ -22,10 +22,16 @@ Search component written in HTL.
 ### Use Object
 The Search component uses the `com.adobe.cq.wcm.core.components.sandbox.models.Search` Sling model as its Use-object.
 
+### Behavior
+When the user is scrolling down the results, if the hidden results below are less than the visible results, more results
+are fetched.
+
 ### Component policy configuration properties
 The following configuration properties are used:
 
 1. `./startLevel` - defines the level from which to search for results (eg: 1 for /content/site)
+2. `./resultsSize` - defines the maximal number of results fetched by a search request
+3. `./searchTermMinimumLength` - defines the minimum length of the search term to start the search
 
 ### Edit dialog properties
 The following properties are written to JCR for the Search component and are expected to be available as `Resource` properties:
@@ -39,6 +45,7 @@ BLOCK cmp-search
     ELEMENT cmp-search__field
     ELEMENT cmp-search__icon
     ELEMENT cmp-search__input
+    ELEMENT cmp-search__loading-indicator
     ELEMENT cmp-search__clear
     ELEMENT cmp-search__clear-icon
     ELEMENT cmp-search__results

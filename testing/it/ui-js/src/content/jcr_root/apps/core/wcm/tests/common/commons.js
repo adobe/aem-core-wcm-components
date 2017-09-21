@@ -61,6 +61,7 @@
     c.selConfigDialog = ".cq-dialog.foundation-form.foundation-layout-form";
     // save button on a configuration dialog
     c.selSaveConfDialogButton = ".cq-dialog-actions button[is='coral-button'][title='Done']";
+    c.selCloseConfDialogButton = 'button.cq-dialog-cancel';
 
     /**
      * Creates a CQ page via POST request, the same as send by the create page wizard.
@@ -603,6 +604,21 @@
         TestCase("Close Modal Dialog")
             .click(c.selSaveConfDialogButton,{expectNav:false})
         ,{ timeout:10 });
+
+    c.tcCloseConfigureDialog = new TestCase('Close Component Configuration Dialog')
+    // if full Screen mode was used make sure the click waits for the navigation change
+        .ifElse(
+            // check if the dialog opened in a different URL
+            function () {
+                return hobs.context().window.location.pathname.startsWith('/mnt/override')
+            },
+            TestCase('Close Fullscreen Dialog')
+            // NOTE: this will cause test to fail if the dialog can't be closed e.g. due to missing mandatory values
+                .click(c.selCloseConfDialogButton, {expectNav: true})
+            ,
+            TestCase('Close Modal Dialog')
+                .click(c.selCloseConfDialogButton, {expectNav: false}),
+            {timeout: 10});
 
 
     /**

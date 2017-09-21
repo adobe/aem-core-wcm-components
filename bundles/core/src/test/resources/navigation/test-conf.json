@@ -24,7 +24,8 @@
                                         "jcr:primaryType": "nt:unstructured",
                                         "siteRoot"       : "/content/navigation",
                                         "startLevel"     : 1,
-                                        "maxDepth"       : 2
+                                        "maxDepth"       : 2,
+                                        "skipRoot"       : true
                                     },
                                     "policy_2"       : {
                                         "jcr:primaryType"    : "nt:unstructured",

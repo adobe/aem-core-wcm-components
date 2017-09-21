@@ -35,6 +35,20 @@ public interface Search {
     String PN_START_LEVEL = "startLevel";
 
     /**
+     * Name of the configuration policy property that defines the minimum length of the search term to start the search.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.4.0
+     */
+    String PN_SEARCH_TERM_MINIMUM_LENGTH= "searchTermMinimumLength";
+
+    /**
+     * Name of the configuration policy property that defines the maximal number of results fetched by a search request.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.4.0
+     */
+    String PN_RESULTS_SIZE = "resultsSize";
+
+    /**
      * JCR Path to search for results.
      *
      * @return path for the search query
@@ -52,6 +66,26 @@ public interface Search {
      * @since com.adobe.cq.wcm.core.components.sandbox.models 2.2.0
      */
     default Collection<Resource> getResults() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * The maximal number of results fetched by a search request.
+     *
+     * @return number of results
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.4.0
+     */
+    default int getResultsSize() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * The minimum length of the search term to start the search.
+     *
+     * @return minimum length of the search term
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.4.0
+     */
+    default int getSearchTermMinimumLength() {
         throw new UnsupportedOperationException();
     }
 }

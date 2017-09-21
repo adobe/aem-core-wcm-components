@@ -105,6 +105,27 @@
                     }
                 })
             })
+
+            // create 20 pages
+            .execFct(function (opts, done) {
+                for (var i = 0; i < 20; i++) {
+                    c.createPage(c.template, h.param('page_1')(), 'page' + i, 'page' + i, done, pageRT);
+                }
+            })
+            .execFct(function (opts, done) {
+                for (var i = 0; i < 20; i++) {
+                    $.ajax({
+                        url     : h.param('page' + i)(),
+                        method  : 'POST',
+                        complete: done,
+                        data    : {
+                            '_charset_'             : 'UTF-8',
+                            './jcr:content/jcr:title': 'Page ' + i
+                        }
+                    })
+                }
+            })
+
             // level 2
             .execFct(function (opts, done) {
                 c.createPage(c.template, h.param('page_1')(), 'page_1_1_' + Date.now(), 'page_1_1', done, pageRT);
@@ -175,12 +196,19 @@
     /**
      * After Test Case
      */
-    search.tcExecuteAfterTest = function() {
+    search.tcExecuteAfterTest = function(policyPath, policyAssignmentPath) {
         return new TestCase('Clean up after test', {
-            execAfter: c.tcExecuteAfterTest
-        }).execFct(function (opts, done) {
-            c.deletePage(h.param('page_1')(opts), done);
-        });
+                execAfter: c.tcExecuteAfterTest
+            }).execFct(function (opts, done) {
+                c.deletePage(h.param('page_1')(opts), done);
+            })
+
+            .execFct(function (opts, done) {
+                c.deletePolicy("/search", done, policyPath);
+            })
+            .execFct(function (opts, done) {
+                c.deletePolicyAssignment("/search", done, policyAssignmentPath);
+            });
     };
 
     /**
@@ -258,13 +286,117 @@
             execBefore: tcExecuteBeforeTest,
             execAfter : tcExecuteAfterTest
         })
-          .config.changeContext(c.getContentFrame)
-          .assert.visible(selectors.component.clear, false)
+            .config.changeContext(c.getContentFrame)
+            .assert.visible(selectors.component.clear, false)
             .execFct(function(opts, done) {
                 pollQuery(done, c.rootPage, 'Page', h.param('page_1')());
             })
-          .fillInput(selectors.component.input, 'Page', {delay: 1000})
-          .assert.visible(selectors.component.item.mark + ':contains("Page")')
+            .fillInput(selectors.component.input, 'Page', {delay: 1000})
+            .assert.visible(selectors.component.item.mark + ':contains("Page")')
+    };
+
+    /**
+     * Test: Input Length - minimum length of the search term
+     */
+    search.testMinLength = function (tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
+        return new TestCase('Input Length', {
+            execBefore: tcExecuteBeforeTest,
+            execAfter : tcExecuteAfterTest
+        })
+
+            .execFct(function (opts,done) {
+                var data = {
+                    "searchTermMinimumLength" : "5",
+                    "jcr:title" : "New Policy",
+                    "sling:resourceType" : "wcm/core/components/policy/policy"
+                };
+
+                c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath)
+
+            })
+
+            .execFct(function (opts,done) {
+                var data = {};
+                data["cq:policy"] = policyLocation + policyName + "/new_policy";
+                data["sling:resourceType"] = "wcm/core/components/policies/mapping";
+
+                c.assignPolicy(policyName, data, done, policyAssignmentPath)
+
+            })
+
+            .config.changeContext(c.getContentFrame)
+            .fillInput(selectors.component.input, 'page', {delay: 1000})
+            .assert.isFalse(function () {
+                var $results = h.find(selectors.component.item.self);
+                return $results && $results.length > 0})
+            .fillInput(selectors.component.input, 'page ', {delay: 1000})
+            .assert.isTrue(function () {
+                var $results = h.find(selectors.component.item.self);
+                return $results && $results.length > 0})
+
+    };
+
+    /**
+     * Test: Results Size - Amount of fetched results
+     */
+    search.testResultsSize = function (tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
+        return new TestCase('Results Size', {
+            execBefore: tcExecuteBeforeTest,
+            execAfter : tcExecuteAfterTest
+        })
+
+            .execFct(function (opts,done) {
+                var data = {
+                    "resultsSize" : "3",
+                    "jcr:title" : "New Policy",
+                    "sling:resourceType" : "wcm/core/components/policy/policy"
+                };
+
+                c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath)
+
+            })
+
+            .execFct(function (opts,done) {
+                var data = {};
+                data["cq:policy"] = policyLocation + policyName + "/new_policy";
+                data["sling:resourceType"] = "wcm/core/components/policies/mapping";
+
+                c.assignPolicy(policyName, data, done, policyAssignmentPath)
+
+            })
+
+            .config.changeContext(c.getContentFrame)
+            .fillInput(selectors.component.input, 'page', {delay: 1000})
+            .assert.isTrue(function () {
+                var $results = h.find(selectors.component.item.self);
+                return $results && $results.length == 3})
+
+    };
+
+    /**
+     * Test: Scroll Down - Load more results
+     */
+    search.testScrollDown = function (tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
+        return new TestCase('Scroll Down', {
+            execBefore: tcExecuteBeforeTest
+        })
+
+            .config.changeContext(c.getContentFrame)
+            .fillInput(selectors.component.input, 'page', {delay: 1000})
+            .assert.isTrue(function () {
+                var $results = h.find(selectors.component.item.self);
+                return $results && $results.length == 10})
+
+            // scroll down
+            .execFct(function (opts,done) {
+                var resultsElt = h.find(selectors.component.results)[0];
+                resultsElt.scrollTop += 10;
+                done(true);
+            })
+            .assert.isTrue(function () {
+                var $results = h.find(selectors.component.item.self);
+                return $results && $results.length == 20})
+
     };
 
 }(hobs, jQuery));

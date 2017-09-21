@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.sandbox.internal.models.v1;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
@@ -43,6 +44,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -115,8 +117,7 @@ public class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_3);
         Map<String, NavigationItem> items = getNavigationItems(navigation);
         Object[][] expectedPages = {
-                {"/content/navigation/navigation-1", 0, true, "/navigation-1-vanity"},
-                {"/content/navigation/navigation-1/navigation-1-1", 1, true, "/content/navigation/navigation-1/navigation-1-1.html"},
+                {"/content/navigation/navigation-1/navigation-1-1", 0, true, "/content/navigation/navigation-1/navigation-1-1.html"},
         };
         verifyNavigationItems(expectedPages, items);
     }
@@ -237,7 +238,10 @@ public class NavigationImplTest {
     }
 
     private void collect(Map<String, NavigationItem> items, NavigationItem navigationItem) {
-        items.put(navigationItem.getPage().getPath(), navigationItem);
+        if (items.put(navigationItem.getPage().getPath(), navigationItem) != null) {
+            fail("NavigationItem " + navigationItem.getURL() + " seems to have already been included; invalid recursion collection in the" +
+                    " implementation?!");
+        }
         for (NavigationItem item : navigationItem.getChildren()) {
             collect(items, item);
         }

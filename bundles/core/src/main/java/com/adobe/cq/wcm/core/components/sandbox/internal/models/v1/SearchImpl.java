@@ -64,6 +64,10 @@ public class SearchImpl implements Search {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchImpl.class);
 
     protected static final int PROP_START_LEVEL_DEFAULT = 2;
+    protected static final int PROP_RESULTS_SIZE_DEFAULT = 10;
+    protected static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
+
+    private static final String PARAM_RESULTS_OFFSET = "resultsOffset";
 
     @Self
     private SlingHttpServletRequest request;
@@ -85,12 +89,16 @@ public class SearchImpl implements Search {
 
     private PageManager pageManager;
     private String path;
+    private int resultsSize;
+    private int searchTermMinimumLength;
 
     @PostConstruct
     private void initModel() {
         pageManager = resourceResolver.adaptTo(PageManager.class);
         int startLevel = properties.get(PN_START_LEVEL, currentStyle.get(PN_START_LEVEL, PROP_START_LEVEL_DEFAULT));
         path = calculatePath(startLevel);
+        resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
+        searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH, PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
     }
 
     private String calculatePath(int startLevel) {
@@ -108,8 +116,22 @@ public class SearchImpl implements Search {
     }
 
     @Override
+    public int getResultsSize() {
+        return resultsSize;
+    }
+
+    @Override
+    public int getSearchTermMinimumLength() {
+        return searchTermMinimumLength;
+    }
+
+    @Override
     public List<Resource> getResults() {
-        SearchResult searchResult = getSearchResult(request.getParameterMap(), resourceResolver);
+        long resultsOffset = 0;
+        if(request.getParameter(PARAM_RESULTS_OFFSET) != null) {
+            resultsOffset = Long.parseLong(request.getParameter(PARAM_RESULTS_OFFSET));
+        }
+        SearchResult searchResult = getSearchResult(resourceResolver, request.getParameterMap(), resultsSize, resultsOffset);
         return searchResult.getHits().stream().map(this::populateItem).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
@@ -151,9 +173,15 @@ public class SearchImpl implements Search {
         return null;
     }
 
-    private SearchResult getSearchResult(Map predicateParameters, ResourceResolver resolver) {
+    private SearchResult getSearchResult(ResourceResolver resolver, Map predicateParameters, long resultsSize, long resultsOffset) {
         PredicateGroup predicates = PredicateConverter.createPredicates(predicateParameters);
         Query query = queryBuilder.createQuery(predicates, resolver.adaptTo(Session.class));
+        if (resultsSize != 0) {
+            query.setHitsPerPage(resultsSize);
+        }
+        if (resultsOffset != 0) {
+            query.setStart(resultsOffset);
+        }
         return query.getResult();
     }
 

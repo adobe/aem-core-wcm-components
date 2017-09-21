@@ -527,10 +527,10 @@
                                         emptyText="Select ContextHub Configuration Path"
                                         fieldLabel="ContextHub Path"
                                         name="./cq:contextHubPath"
-                                        pickerSrc="/libs/cq/contexthub/content/chconfigpicker.html?_charset_=utf-8&amp;root=/etc/cloudsettings"
+                                        pickerSrc="/libs/cq/contexthub/content/chconfigpicker.html?_charset_=utf-8&amp;root=/conf"
                                         renderReadOnly="{Boolean}true"
-                                        rootPath="/etc/cloudsettings"
-                                        value="/etc/cloudsettings/default/contexthub">
+                                        rootPath="/conf"
+                                        value="">
                                         <granite:data
                                             jcr:primaryType="nt:unstructured"
                                             cq-msm-lockable="cq:contextHubPath"/>

@@ -96,7 +96,7 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
             // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
-            .execTestCase(pageV2.openPageProperties)
+            .execTestCase(pageV1.openPageProperties)
 
             .click("coral-tab-label:contains('Blueprint')", {delay: 1000})
             //check if the "Blueprint" option was selected

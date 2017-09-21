@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-@Version("2.3.0")
+@Version("2.6.0")
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
 import org.osgi.annotation.versioning.Version;

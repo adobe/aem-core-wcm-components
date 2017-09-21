@@ -22,7 +22,7 @@
 
     var tcExecuteBeforeTest = search.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtSearch_v1,
         'core/wcm/sandbox/tests/components/test-page-v2');
-    var tcExecuteAfterTest  = search.tcExecuteAfterTest(c.tcExecuteAfterTest);
+    var tcExecuteAfterTest  = search.tcExecuteAfterTest(c.policyPath_sandbox, c.policyAssignmentPath_sandbox);
 
     new h.TestSuite('Search v1', {
         path           : '/apps/core/wcm/sandbox/tests/core-components-it/v1/search.js',
@@ -34,5 +34,11 @@
         .addTestCase(search.testClearButton(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testOutsideClick(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testMark(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(search.testMinLength(tcExecuteBeforeTest, tcExecuteAfterTest, "/search/v1/search", "core/wcm/sandbox/components",
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
+        .addTestCase(search.testResultsSize(tcExecuteBeforeTest, tcExecuteAfterTest, "/search/v1/search", "core/wcm/sandbox/components",
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
+        .addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search/v1/search", "core/wcm/sandbox/components",
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
 
 }(hobs, jQuery));

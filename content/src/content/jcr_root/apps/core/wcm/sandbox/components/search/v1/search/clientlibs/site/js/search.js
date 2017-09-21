@@ -16,8 +16,9 @@
 (function () {
     'use strict';
 
-    var DELAY = 300;
-    var LIMIT = 10;
+    var DELAY = 300; // time before fetching new results when the user is typing a search string
+    var LOADING_DISPLAY_DELAY = 300; // minimum time during which the loading indicator is displayed
+    var PARAM_RESULTS_OFFSET = "resultsOffset";
 
     var keyCodes = {
         TAB: 9,
@@ -30,7 +31,10 @@
     var selectors = {
         self : '.cmp-search',
         form : '.cmp-search__form',
+        field : '.cmp-search__field',
         input : '.cmp-search__input',
+        searchIcon : '.cmp-search__icon',
+        loadingIndicator : '.cmp-search__loading-indicator',
         clear : '.cmp-search__clear',
         results : '.cmp-search__results',
         item : {
@@ -100,31 +104,52 @@
         this._form = this._el.querySelector(selectors.form);
         this._action = this._form.getAttribute('action');
         this._input = this._el.querySelector(selectors.input);
+        this._searchIcon = this._el.querySelector(selectors.searchIcon);
+        this._loadingIndicator = this._el.querySelector(selectors.loadingIndicator);
         this._clear = this._el.querySelector(selectors.clear);
         this._results = this._el.querySelector(selectors.results);
+
+        this._searchTermMinimumLength = parseFloat(this._el.dataset.searchTermMinimumLength);
+        this._resultsSize = parseFloat(this._el.dataset.resultsSize);
+        this._resultsOffset = 0;
+        this._hasMoreResults = true;
 
         this._input.addEventListener('input', this._onInput.bind(this));
         this._input.addEventListener('focus', this._onInput.bind(this));
         this._input.addEventListener('keydown', this._onKeydown.bind(this));
         this._clear.addEventListener('click', this._onClearClick.bind(this));
         document.addEventListener('click', this._onDocumentClick.bind(this));
+        this._results.addEventListener('scroll', this._onScroll.bind(this));
 
         this._makeAccessible();
     }
 
+    Search.prototype._displayResults = function() {
+        if (this._input.value.length === 0) {
+            toggleShow(this._clear, false);
+            this._cancelResults();
+        } else if (this._input.value.length < this._searchTermMinimumLength) {
+            toggleShow(this._clear, true);
+        } else {
+            this._updateResults();
+            toggleShow(this._clear, true);
+        }
+    };
+
+    Search.prototype._onScroll = function(event) {
+        // fetch new results when the results to be scrolled down are less than the visible results
+        if (this._results.scrollTop + 2 * this._results.clientHeight >= this._results.scrollHeight) {
+            this._resultsOffset += this._resultsSize;
+            this._displayResults();
+        }
+    };
+
     Search.prototype._onInput = function(event) {
         var self = this;
-
-        clearTimeout(self._timeout);
-
+        self._cancelResults();
+        // start searching when the search term reaches the minimum length
         this._timeout = setTimeout(function() {
-            if (self._input.value.length === 0) {
-                toggleShow(self._clear, false);
-                self._cancelResults();
-            } else {
-                toggleShow(self._clear, true);
-                self._updateResults();
-            }
+            self._displayResults();
         }, DELAY);
     };
 
@@ -133,7 +158,9 @@
 
         switch (event.keyCode) {
             case keyCodes.TAB:
-                self._cancelResults();
+                if (self._resultsOpen()) {
+                    event.preventDefault();
+                }
                 break;
             case keyCodes.ENTER:
                 if (!self._resultsOpen()) {
@@ -150,11 +177,13 @@
                 break;
             case keyCodes.ARROW_UP:
                 if (self._resultsOpen()) {
+                    event.preventDefault();
                     self._stepResultFocus(true);
                 }
                 break;
             case keyCodes.ARROW_DOWN:
                 if (self._resultsOpen()) {
+                    event.preventDefault();
                     self._stepResultFocus();
                 } else {
                     // test the input and if necessary fetch and display the results
@@ -198,7 +227,7 @@
         var escapedTerm = this._input.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
         var regex = new RegExp('(' + escapedTerm + ')', 'gi');
 
-        for (var i = 0; i < nodeList.length; ++i) {
+        for (var i = this._resultsOffset - 1; i < nodeList.length; ++i) {
             var result = nodeList[i];
             mark(result, regex);
         }
@@ -207,61 +236,96 @@
     Search.prototype._stepResultFocus = function(reverse) {
         var results = this._results.querySelectorAll(selectors.item.self);
         var focused = this._results.querySelector(selectors.item.focused);
+        var newFocused;
         var index = Array.prototype.indexOf.call(results, focused);
         var focusedCssClass = 'cmp-search__item--focused';
 
         if (results.length > 0) {
-            if (focused) {
-                focused.classList.remove(focusedCssClass);
-            }
 
             if (!reverse) {
-                if (index === (results.length - 1) || index < 0) {
+                // highlight the next result
+                if (index < 0) {
                     results[0].classList.add(focusedCssClass);
-                } else {
+                } else if (index + 1 < results.length) {
+                    results[index].classList.remove(focusedCssClass);
                     results[index + 1].classList.add(focusedCssClass);
                 }
+
+                // if the last visible result is partially hidden, scroll up until it's completely visible
+                newFocused = this._results.querySelector(selectors.item.focused);
+                if (newFocused) {
+                    var bottomHiddenHeight = newFocused.offsetTop + newFocused.offsetHeight - this._results.scrollTop - this._results.clientHeight;
+                    if (bottomHiddenHeight > 0) {
+                        this._results.scrollTop += bottomHiddenHeight;
+                    } else {
+                        this._onScroll();
+                    }
+                }
+
             } else {
-                if (index <= 0) {
-                    results[results.length - 1].classList.add(focusedCssClass);
-                } else {
+                // highlight the previous result
+                if (index >= 1) {
+                    results[index].classList.remove(focusedCssClass);
                     results[index - 1].classList.add(focusedCssClass);
                 }
-            }
-        }
-    };
 
-    Search.prototype._applyLimit = function() {
-        var nodeList = this._results.querySelectorAll(selectors.item.self);
-        for (var i = LIMIT; i < nodeList.length; i++) {
-            nodeList[i].parentNode.removeChild(nodeList[i]);
+                // if the first visible result is partially hidden, scroll down until it's completely visible
+                newFocused = this._results.querySelector(selectors.item.focused);
+                if (newFocused) {
+                    var topHiddenHeight = this._results.scrollTop - newFocused.offsetTop;
+                    if (topHiddenHeight > 0) {
+                        this._results.scrollTop -= topHiddenHeight;
+                    }
+                }
+            }
         }
     };
 
     Search.prototype._updateResults = function() {
         var self = this;
-        var request = new XMLHttpRequest();
-        var url = self._action + "?" + serialize(self._form);
+        if (self._hasMoreResults) {
+            var request = new XMLHttpRequest();
+            var url = self._action + "?" + serialize(self._form) + "&" + PARAM_RESULTS_OFFSET + "=" + self._resultsOffset;
 
-        request.open('GET', url, true);
-        request.onload = function() {
-            if (request.status >= 200 && request.status < 400) {
-                // success status
-                var data = request.responseText;
-                self._results.innerHTML = data;
-                self._applyLimit();
-                self._markResults();
-                toggleShow(self._results, true);
-            } else {
-                // error status
-            }
-        };
-        request.send();
+            request.open('GET', url, true);
+            request.onload = function() {
+                // when the results are loaded: hide the loading indicator and display the search icon after a minimum period
+                setTimeout(function() {
+                    toggleShow(self._loadingIndicator, false);
+                    toggleShow(self._searchIcon, true);
+                }, LOADING_DISPLAY_DELAY);
+                if (request.status >= 200 && request.status < 400) {
+                    // success status
+                    var data = request.responseText;
+                    if (data && data.trim()) {
+                        self._results.innerHTML = self._results.innerHTML + data;
+                        self._markResults();
+                        toggleShow(self._results, true);
+                    } else {
+                        self._hasMoreResults = false;
+                    }
+                    // the total number of results is not a multiple of the fetched results:
+                    // -> we reached the end of the query
+                    if (self._results.querySelectorAll(selectors.item.self).length % self._resultsSize > 0) {
+                        self._hasMoreResults = false;
+                    }
+                } else {
+                    // error status
+                }
+            };
+            // when the results are loading: display the loading indicator and hide the search icon
+            toggleShow(self._loadingIndicator, true);
+            toggleShow(self._searchIcon, false);
+            request.send();
+        }
     };
 
     Search.prototype._cancelResults = function() {
         clearTimeout(this._timeout);
-        toggleShow(this._results, false);
+        this._results.scrollTop = 0;
+        this._resultsOffset = 0;
+        this._hasMoreResults = true;
+        this._results.innerHTML = '';
     };
 
     var initSearch = function(search) {

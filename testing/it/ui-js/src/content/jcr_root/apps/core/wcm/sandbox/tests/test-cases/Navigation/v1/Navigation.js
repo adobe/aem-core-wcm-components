@@ -129,6 +129,35 @@
             .fillInput('foundation-autocomplete[name="./siteRoot"]', '%page_1%')
             .execTestCase(c.tcSaveConfigureDialog)
             .config.changeContext(c.getContentFrame)
+            .assert.isTrue(function () {
+                return h.find('.cmp-navigation__item').size() === 3;
+            })
+            .assert.exist(
+                '.cmp-navigation__item.cmp-navigation__item--level-0.cmp-navigation__item--active:contains("Page 1.1")')
+            .assert.exist('a.cmp-navigation__item-link[href$="/page_1_1_vanity"]')
+            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-1:contains("Page 1.1.1")')
+            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-1:contains("Page 1.1.2")', false)
+            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-1:contains("Page 1.1.3")');
+    };
+
+    navigation.testIncludeNavigationRoot = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new TestCase('Include Navigation Root', {
+            execBefore: tcExecuteBeforeTest,
+            execAfter : tcExecuteAfterTest
+        })
+            .execTestCase(c.tcOpenConfigureDialog('cmpPath'))
+            .assert.isTrue(function () {
+                return h.find('coral-checkbox.cmp-navigation__editor-collect').prop('checked') === true;
+            })
+            .assert.visible('.cmp-navigation__editor-maxDepth', false)
+            .fillInput('foundation-autocomplete[name="./siteRoot"]', '%page_1%')
+            // uncheck the skip root option
+            .click('coral-checkbox[name="./skipRoot"]')
+            .execTestCase(c.tcSaveConfigureDialog)
+            .config.changeContext(c.getContentFrame)
+            .assert.isTrue(function () {
+                return h.find('.cmp-navigation__item').size() === 4;
+            })
             .assert.exist(
                 '.cmp-navigation__item.cmp-navigation__item--level-0.cmp-navigation__item--active:contains("Page 1")')
             .assert.exist(
@@ -151,13 +180,14 @@
             .fillInput('coral-numberinput[name="./maxDepth"]', "1")
             .execTestCase(c.tcSaveConfigureDialog)
             .config.changeContext(c.getContentFrame)
+            .assert.isTrue(function () {
+                return h.find('.cmp-navigation__item').size() === 1;
+            })
             .assert.exist(
-                '.cmp-navigation__item.cmp-navigation__item--level-0.cmp-navigation__item--active:contains("Page 1")')
-            .assert.exist(
-                '.cmp-navigation__item.cmp-navigation__item--level-1.cmp-navigation__item--active:contains("Page 1.1")')
-            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-2:contains("Page 1.1.1")', false)
-            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-2:contains("Page 1.1.2")', false)
-            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-2:contains("Page 1.1.3")', false);
+                '.cmp-navigation__item.cmp-navigation__item--level-0.cmp-navigation__item--active:contains("Page 1.1")')
+            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-1:contains("Page 1.1.1")', false)
+            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-1:contains("Page 1.1.2")', false)
+            .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-1:contains("Page 1.1.3")', false);
     };
 
     navigation.testMaxDepthAndStartLevel = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
@@ -174,7 +204,8 @@
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function () {
                 return h.find('coral-numberinput[name="./maxDepth"]').prop('invalid') === true;
-            });
+            })
+            .execTestCase(c.tcCloseConfigureDialog);
     };
 
 }(hobs, jQuery));

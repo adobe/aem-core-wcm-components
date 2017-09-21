@@ -63,26 +63,29 @@ public class NavigationImpl implements Navigation {
     private int maxDepth;
     private String siteRoot;
     private boolean currentPageTreeOnly;
-    private Page rootPage;
     private List<NavigationItem> items;
+    private boolean skipRoot;
+    private boolean wouldIncludeNavRoot = false;
 
     @PostConstruct
     private void initModel() {
         startLevel = properties.get(PN_CONTENT_START_LEVEL, currentStyle.get(PN_CONTENT_START_LEVEL, 0));
         maxDepth = properties.get(PN_MAX_DEPTH, currentStyle.get(PN_MAX_DEPTH, -1));
-        siteRoot = properties.get(PN_SITE_ROOT, currentStyle.get(PN_SITE_ROOT, String.class));
-        currentPageTreeOnly = properties.get(PN_CURRENT_PAGE_TREE_ONLY, currentStyle.get(PN_CURRENT_PAGE_TREE_ONLY, true));
         if (startLevel > 0 && maxDepth > -1 && maxDepth < startLevel) {
             throw new IllegalStateException(
                     "The value of the " + PN_MAX_DEPTH + " property is smaller than " + PN_CONTENT_START_LEVEL + ".");
+
         }
+        siteRoot = properties.get(PN_SITE_ROOT, currentStyle.get(PN_SITE_ROOT, String.class));
+        currentPageTreeOnly = properties.get(PN_CURRENT_PAGE_TREE_ONLY, currentStyle.get(PN_CURRENT_PAGE_TREE_ONLY, true));
+        skipRoot = properties.get(PN_SKIP_ROOT, currentStyle.get(PN_SKIP_ROOT, true));
     }
 
     @Override
     public List<NavigationItem> getItems() {
         if (items == null) {
             PageManager pageManager = currentPage.getPageManager();
-            rootPage = pageManager.getPage(siteRoot);
+            Page rootPage = pageManager.getPage(siteRoot);
             if (rootPage != null) {
                 int rootPageLevel = getLevel(rootPage);
                 startLevel += rootPageLevel;
@@ -99,14 +102,14 @@ public class NavigationImpl implements Navigation {
                 // check if we're on a template
                 String template = currentPage.getProperties().get(NameConstants.PN_TEMPLATE, String.class);
                 boolean inTemplate = StringUtils.isNotEmpty(template) && currentPage.getPath().startsWith(template);
-                items = getItems(inTemplate, navigationRoot);
-                if (startLevel == getLevel(navigationRoot)) {
+                wouldIncludeNavRoot = startLevel == getLevel(navigationRoot);
+                items = getItems(navigationRoot, navigationRoot, inTemplate);
+                if (wouldIncludeNavRoot && !skipRoot) {
                     boolean isSelected =
                             currentPage.equals(navigationRoot) || currentPage.getPath().startsWith(navigationRoot.getPath() + "/");
                     NavigationItemImpl root = new NavigationItemImpl(navigationRoot, isSelected, request, 0, items);
-                    List<NavigationItem> pages = new ArrayList<>();
-                    pages.add(root);
-                    items = pages;
+                    items = new ArrayList<>();
+                    items.add(root);
                 }
             } else {
                 items = Collections.emptyList();
@@ -115,19 +118,33 @@ public class NavigationImpl implements Navigation {
         return items;
     }
 
-    private List<NavigationItem> getItems(boolean inTemplate, Page root) {
+    /**
+     * Builds the navigation tree for a {@code navigationRoot} page. The {@code navigationRoot} will be included in the returned tree
+     * only if {@link #skipRoot} is false and {@link #wouldIncludeNavRoot} is true (see {@link #getItems()}).
+     *
+     * @param navigationRoot the global navigation tree root (start page)
+     * @param subtreeRoot the current sub-tree root (changes depending on the level of recursion)
+     * @param inTemplate flag that indicates that rendering happens on a template page; when in a template, siblings of the {@code
+     * navigationRoot} will not be collected
+     * @return the list of collected navigation trees
+     */
+    private List<NavigationItem> getItems(Page navigationRoot, Page subtreeRoot, boolean inTemplate) {
         List<NavigationItem> pages = new ArrayList<>();
-        if (maxDepth == -1 || getLevel(root) < maxDepth) {
-            Iterator<Page> it = root.listChildren(new PageFilter());
+        if (maxDepth == -1 || getLevel(subtreeRoot) < maxDepth) {
+            Iterator<Page> it = subtreeRoot.listChildren(new PageFilter());
             while (it.hasNext()) {
                 Page page = it.next();
-                int level = getLevel(page) - startLevel;
+                int pageLevel = getLevel(page);
+                int level = pageLevel - startLevel;
                 if (level <= 0 && inTemplate && pages.size() > 0) {
                     break;
                 }
-                List<NavigationItem> children = getItems(inTemplate, page);
-                if (getLevel(page) >= startLevel) {
-                    boolean isSelected = currentPage.equals(page) || currentPage.getPath().startsWith(page.getPath() + "/");
+                List<NavigationItem> children = getItems(navigationRoot, page, inTemplate);
+                if (pageLevel >= startLevel && !page.equals(navigationRoot)) {
+                    boolean isSelected = this.currentPage.equals(page) || this.currentPage.getPath().startsWith(page.getPath() + "/");
+                    if (skipRoot && wouldIncludeNavRoot) {
+                        level = level -1;
+                    }
                     pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
                 } else {
                     // keep the children found below
