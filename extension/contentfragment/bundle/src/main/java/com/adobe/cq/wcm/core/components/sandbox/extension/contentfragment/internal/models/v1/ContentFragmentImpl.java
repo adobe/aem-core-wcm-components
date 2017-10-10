@@ -60,7 +60,7 @@ public class ContentFragmentImpl implements ContentFragment {
     /**
      * The resource type of the component associated with this Sling model.
      */
-    public static final String RESOURCE_TYPE = "core/wcm/sandbox/components/contentfragment/v1/contentfragment";
+    public static final String RESOURCE_TYPE = "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment";
 
     @ScriptVariable
     private ResourceResolver resolver;

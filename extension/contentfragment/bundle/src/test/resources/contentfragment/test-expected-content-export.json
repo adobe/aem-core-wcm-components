@@ -6,7 +6,7 @@
     "main",
     "second"
   ],
-  ":type": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+  ":type": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
   ":items": {
     "main": {
       "value": "<p>Main content</p>",
