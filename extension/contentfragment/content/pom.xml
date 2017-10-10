@@ -121,12 +121,12 @@
                         <dependency>
                             <group>adobe/cq60</group>
                             <name>core.wcm.components.sandbox.content</name>
-                            <version>[0.0.69,)</version>
+                            <version>[0.0.1,)</version>
                         </dependency>
                         <dependecy>
                             <group>adobe/cq630/featurepack</group>
                             <name>cq-6.3.0-featurepack-19008</name>
-                            <version>[1.0.2,)</version>
+                            <version>[1.0.6,)</version>
                         </dependecy>
                     </dependencies>
                 </configuration>
