@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,24 +21,32 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the {@code Breadcrumb} Sling Model used for the {@code /apps/core/wcm/components/breadcrumb} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
 public interface Breadcrumb {
 
     /**
      * Name of the resource property that will indicate if pages that are hidden for navigation will still be displayed.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_SHOW_HIDDEN = "showHidden";
 
     /**
      * Name of the resource property that will indicate if the current page should not be present in the collection returned by
      * {@link #getItems()}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_HIDE_CURRENT = "hideCurrent";
 
     /**
      * Name of the resource property that will indicate from which level starting from the current page the items from the collection
      * returned by {@link #getItems()} will be accumulated.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_START_LEVEL = "startLevel";
 
@@ -46,6 +54,9 @@ public interface Breadcrumb {
      * Creates collection of pages(from site hierarchy of current page) for the breadcrumb component
      *
      * @return {@link Collection} of breadcrumb items
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    Collection<NavigationItem> getItems();
+    default Collection<NavigationItem> getItems() {
+        throw new UnsupportedOperationException();
+    }
 }

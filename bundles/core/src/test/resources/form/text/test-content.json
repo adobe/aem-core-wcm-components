@@ -59,7 +59,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
             "jcr:lastModified": "Thu Oct 06 2016 12:47:08 GMT+0530",
-            "sling:resourceType": "core/wcm/components/form/text"
+            "sling:resourceType": "core/wcm/components/form/text/v1/text"
           },
           "text_185087333": {
             "jcr:primaryType": "nt:unstructured",
@@ -75,7 +75,7 @@
             "type": "email",
             "useTextarea": true,
             "value": "Prefilled Sample Input",
-            "sling:resourceType": "core/wcm/components/form/text",
+            "sling:resourceType": "core/wcm/components/form/text/v1/text",
             "requiredMessage": "please fill the field",
             "usePlaceholder": "true",
             "rows": 3,

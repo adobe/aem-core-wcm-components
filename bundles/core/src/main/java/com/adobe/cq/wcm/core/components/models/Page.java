@@ -1,18 +1,18 @@
-/*******************************************************************************
- * Copyright 2016 Adobe Systems Incorporated
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2017 Adobe Systems Incorporated
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
@@ -22,6 +22,8 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the {@code Page} Sling Model used for the {@code /apps/core/wcm/components/page} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
 public interface Page {
@@ -30,6 +32,7 @@ public interface Page {
      * Key used for the regular favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_FAVICON_ICO = "faviconIco";
 
@@ -37,6 +40,7 @@ public interface Page {
      * Key for the PNG-format favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_FAVICON_PNG = "faviconPng";
 
@@ -44,6 +48,7 @@ public interface Page {
      * Key for the touch-enabled 60px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_TOUCH_ICON_60 = "touchIcon60";
 
@@ -51,6 +56,7 @@ public interface Page {
      * Key for the touch-enabled 76px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_TOUCH_ICON_76 = "touchIcon76";
 
@@ -58,6 +64,7 @@ public interface Page {
      * Key for the touch-enabled 120px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_TOUCH_ICON_120 = "touchIcon120";
 
@@ -65,6 +72,7 @@ public interface Page {
      * Key for the touch-enabled 152px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_TOUCH_ICON_152 = "touchIcon152";
 
@@ -72,6 +80,7 @@ public interface Page {
      * Expected file name for the regular favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String FN_FAVICON_ICO = "favicon.ico";
 
@@ -79,6 +88,7 @@ public interface Page {
      * Expected file name for the PNG-format favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String FN_FAVICON_PNG = "favicon_32.png";
 
@@ -86,6 +96,7 @@ public interface Page {
      * Expected file name for the touch 60px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String FN_TOUCH_ICON_60 = "touch-icon_60.png";
 
@@ -93,6 +104,7 @@ public interface Page {
      * Expected file name for the touch 76px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String FN_TOUCH_ICON_76 = "touch-icon_76.png";
 
@@ -100,6 +112,7 @@ public interface Page {
      * Expected file name for the touch 120px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String FN_TOUCH_ICON_120 = "touch-icon_120.png";
 
@@ -107,6 +120,7 @@ public interface Page {
      * Expected file name for the touch 152px square favicon file.
      *
      * @see #getFavicons()
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String FN_TOUCH_ICON_152 = "touch-icon_152.png";
 
@@ -114,34 +128,51 @@ public interface Page {
      * Returns the language of this page, if one has been defined. Otherwise the default {@link java.util.Locale} will be used.
      *
      * @return the language code (IETF BCP 47) for this page
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getLanguage();
+    default String getLanguage() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
+     * Returns the last modified date of this page.
+     *
      * @return {@link Calendar} representing the last modified date of this page
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    Calendar getLastModifiedDate();
+    default Calendar getLastModifiedDate() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns an array with the page's keywords.
      *
      * @return an array of keywords represented as {@link String}s; the array can be empty if no keywords have been defined for the page
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String[] getKeywords();
+    default String[] getKeywords() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Retrieves the page's design path.
      *
      * @return the design path as a {@link String}
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getDesignPath();
+    default String getDesignPath() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Retrieves the static design path if {@code static.css} exists in the design path.
      *
      * @return the static design path if it exists, {@code null} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getStaticDesignPath();
+    default String getStaticDesignPath() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>
@@ -161,27 +192,41 @@ public interface Page {
      *  </ul>
      *
      * @return {@link Map} containing the names of the favicons and their corresponding paths
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    Map<String, String> getFavicons();
+    default Map<String, String> getFavicons() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
+     * Returns the title of this page.
+     *
      * @return the page's title
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getTitle();
+    default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * If this page is associated with a Template, then this method will return the Template's client libraries categories.
      *
      * @return an array of client libraries categories; the array can be empty if the page doesn't have an associated template or if the
      * template has no client libraries
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String[] getClientLibCategories();
+    default String[] getClientLibCategories() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns the template name of the currently used template.
      *
      * @return the template name of the current template
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
-    String getTemplateName();
+    default String getTemplateName() {
+        throw new UnsupportedOperationException();
+    }
 
 }

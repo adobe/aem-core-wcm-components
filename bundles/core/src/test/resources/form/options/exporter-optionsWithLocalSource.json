@@ -1,0 +1,22 @@
+{
+    "id"         : "form-options-1061267479",
+    "title"      : "local-title",
+    "name"       : "local-name",
+    "helpMessage": "local-helpMessage",
+    "type"       : "CHECKBOX",
+    "items"      : [
+        {
+            "text"    : "local-item1-name",
+            "value"   : "local-item1-value",
+            "disabled": false,
+            "selected": false
+        },
+        {
+            "text"    : "local-item2-name",
+            "value"   : "local-item2-value",
+            "disabled": true,
+            "selected": true
+        }
+    ],
+    ":type"      : "core/wcm/components/form/options"
+}

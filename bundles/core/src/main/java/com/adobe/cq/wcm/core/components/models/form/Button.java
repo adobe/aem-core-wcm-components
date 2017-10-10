@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,20 +19,29 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the {@code Button} Sling Model used for the {@code /apps/core/wcm/components/button} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
 @ConsumerType
 public interface Button extends Field {
 
     /**
      * Defines button type.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
      */
     enum Type {
         /**
          * Button type used to submit forms.
+         *
+         * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
          */
         SUBMIT("submit"),
+
         /**
          * Normal button.
+         *
+         * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
          */
         BUTTON("button");
 
@@ -42,6 +51,14 @@ public interface Button extends Field {
             this.value = value;
         }
 
+        /**
+         * Given a {@link String} <code>value</code>, this method returns the enum's value that corresponds to the provided string
+         * representation. If no representation is found, {@link #SUBMIT} will be returned.
+         *
+         * @param value the string representation for which an enum value should be returned
+         * @return the corresponding enum value, if one was found, or {@link #SUBMIT}
+         * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
+         */
         public static Type fromString(String value) {
             for (Type type : values()) {
                 if (type.value.equals(value)) {
@@ -53,11 +70,13 @@ public interface Button extends Field {
     }
 
     /**
-     * @return the type of the button.
-     * <p>
-     * Possible values: 'button', 'submit'
-     * </p>
+     * Returns this button's type.
+     *
+     * @return the type of the button; possible values: 'button', 'submit'
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    Type getType();
+    default Type getType() {
+        throw new UnsupportedOperationException();
+    }
 
 }

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -25,8 +25,11 @@ import com.day.cq.wcm.api.policies.ContentPolicy;
 
 public class MockContentPolicy extends ResourceWrapper implements ContentPolicy {
 
+    private Resource resource;
+
     public MockContentPolicy(Resource resource) {
         super(resource);
+        this.resource = resource;
     }
 
     @Override
@@ -52,5 +55,15 @@ public class MockContentPolicy extends ResourceWrapper implements ContentPolicy 
     @Override
     public String getDescription() {
         return null;
+    }
+
+    @Override
+    public <AdapterType> AdapterType adaptTo(Class<AdapterType> type) {
+        AdapterType result = super.adaptTo(type);
+        if (result == null) {
+            return (AdapterType) resource;
+        } else {
+            return result;
+        }
     }
 }

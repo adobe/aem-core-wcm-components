@@ -1,0 +1,16 @@
+{
+    "id"               : "form-text-807422708",
+    "title"            : "Custom title",
+    "name"             : "Custom Name",
+    "value"            : "Prefilled Sample Input",
+    "helpMessage"      : "Custom help/placeholder message",
+    "placeholder"      : "Custom help/placeholder message",
+    "type"             : "email",
+    "readOnly"         : true,
+    "required"         : true,
+    "requiredMessage"  : "please fill the field",
+    "constraintMessage": "The value should be a valid email address",
+    "rows"             : 3,
+    "defaultValue"     : "",
+    ":type"            : "core/wcm/components/form/text/v1/text"
+}

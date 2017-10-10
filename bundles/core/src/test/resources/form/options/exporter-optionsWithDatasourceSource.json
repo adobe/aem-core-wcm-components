@@ -1,0 +1,19 @@
+{
+    "id"   : "form-options-1196922035",
+    "type" : "CHECKBOX",
+    "items": [
+        {
+            "text"    : "datasource-item1-name",
+            "value"   : "datasource-item1-value",
+            "disabled": false,
+            "selected": true
+        },
+        {
+            "text"    : "datasource-item2-name",
+            "value"   : "datasource-item2-value",
+            "disabled": true,
+            "selected": false
+        }
+    ],
+    ":type": "core/wcm/components/form/options"
+}

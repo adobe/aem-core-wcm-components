@@ -1,6 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -20,7 +19,6 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
-import com.adobe.cq.wcm.core.components.internal.servlets.FormActionTypeSettingsDataSourceServlet;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -18,28 +18,50 @@ package com.adobe.cq.wcm.core.components.models.form;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Interface for a single item of the {@link Options} form element
+ * Interface for a single item of the {@link Options} form element.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
 @ConsumerType
 public interface OptionItem {
 
     /**
+     * Returns {@code true} if item should be initially selected, otherwise {@code false}.
+     *
      * @return {@code true} if item should be initially selected, otherwise {@code false}
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    boolean isSelected();
+    default boolean isSelected() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
+     * Returns {@code true} if item should be disabled and therefore not clickable, otherwise {@code false}.
+     *
      * @return {@code true} if item should be disabled and therefore not clickable, otherwise {@code false}
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    boolean isDisabled();
+    default boolean isDisabled() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return value of this item
+     * Returns the value of this item.
+     *
+     * @return the value of this item
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getValue();
+    default String getValue() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return text for this item
+     * Return the text for this item.
+     *
+     * @return the text for this item
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getText();
+    default String getText() {
+        throw new UnsupportedOperationException();
+    }
 }

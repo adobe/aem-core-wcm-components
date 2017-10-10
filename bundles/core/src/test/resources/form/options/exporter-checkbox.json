@@ -1,0 +1,28 @@
+{
+    "id"         : "form-options-150431208",
+    "title"      : "jcr:title1",
+    "name"       : "name1",
+    "helpMessage": "helpMessage1",
+    "type"       : "CHECKBOX",
+    "items"      : [
+        {
+            "text"    : "t1",
+            "value"   : "v1",
+            "disabled": true,
+            "selected": true
+        },
+        {
+            "text"    : "t2",
+            "value"   : "v2",
+            "disabled": false,
+            "selected": true
+        },
+        {
+            "text"    : "t3",
+            "value"   : "v3",
+            "disabled": false,
+            "selected": false
+        }
+    ],
+    ":type"      : "core/wcm/components/form/options"
+}

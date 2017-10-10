@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2016 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,64 +19,92 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the form {@code Text} Sling Model used for the {@code /apps/core/wcm/components/form/text} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
 @ConsumerType
 public interface Text extends Field {
 
     /**
-     * Checks if the user must provide input for this field.
+     * Checks if the this text field is mandatory.
      *
-     * @return {@code true} if the field must have a input
-     * <br>
-     * {@code false} otherwise
+     * @return {@code true} if the field must have a input, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    boolean isRequired();
+    default boolean isRequired() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return The message to be displayed if the field is required
-     * but has not been filled by the user
+     * Returns the message to be displayed if the field is mandatory.
+     *
+     * @return the message to be displayed if the field is mandatory but has not been filled by the user
      * @see #isRequired()
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getRequiredMessage();
+    default String getRequiredMessage() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return value of placeholder attribute.
-     */
-    String getPlaceholder();
-
-    /**
-     * checks if the field should be rendered read only on the page
+     * Returns the value of the {@code placeholder} HTML attribute.
      *
-     * @return {@code true} if the field should be read-only
-     * <br>
-     * {@code false} otherwise
+     * @return the value of placeholder attribute
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    boolean isReadOnly();
+    default String getPlaceholder() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return the message to be displayed when the constraint specified by {@link #getType()}
-     * is not fulfilled
+     * Checks if the field should be rendered read only.
+     *
+     * @return {@code true} if the field should be read-only, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getConstraintMessage();
+    default boolean isReadOnly() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * Gets the type of the input field such as text, textarea, date, email etc.
-     * The types other than textarea are as defined under HTML5.
+     * Returns the message to be displayed when the constraint specified by {@link #getType()} is not fulfilled.
+     *
+     * @return the message to be displayed when the constraint specified by {@link #getType()} is not fulfilled
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
+     */
+    default String getConstraintMessage() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the type of the input field such as {@code text}, {@code textarea}, {@code date}, {@code email} etc.
+     * The types other than {@code textarea} are defined by the HTML5 standard.
      *
      * @return the type of the field
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    String getType();
+    default String getType() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * @return the number of rows the text area should display
+     * Returns the number of rows to display in case this item's type is a {@code textarea}.
+     *
+     * @return the number of rows the {@code textarea} should display
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    int getRows();
+    default int getRows() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
-     * Checks if the title (label of the field) should be visually hidden on the page.
-     * This is required if the title is required only for accessibility purposes.
-     * @return {@code true} if the title should remain hidden <br>
-     *     {@code false} if the title should be visible on the page
+     * Checks if the title (label of the field) should be visually hidden; this is required if the title is mandatory only for
+     * accessibility purposes.
+     *
+     * @return {@code true} if the title should remain hidden, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
-    boolean hideTitle();
+    default boolean hideTitle() {
+        throw new UnsupportedOperationException();
+    }
 }

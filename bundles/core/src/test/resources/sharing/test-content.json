@@ -492,7 +492,7 @@
                     "we-retail:activity/others",
                     "we-retail:apparel/shirt"
                 ],
-                "cq:productMaster"               : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                "cq:productMaster"               : "/var/commerce/products/we-retail/me/shirts/meotsuett",
                 "sling:resourceType"             : "weretail/components/structure/page",
                 "cq:lastRolledoutBy"             : "admin",
                 "cq:lastModifiedBy"              : "admin",
@@ -519,7 +519,7 @@
                             "cq:CatalogSyncAction",
                             "cq:LiveRelationship"
                         ],
-                        "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                        "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett",
                         "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                         "jcr:lastModified"  : "Tue Apr 12 2016 01:19:38 GMT+0200",
                         "sling:resourceType": "weretail/components/structure/product",
@@ -531,7 +531,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-s",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-s",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -566,7 +566,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-m",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-m",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -601,7 +601,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-l",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-l",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -636,7 +636,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xl",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-xl",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -671,7 +671,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxl",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-xxl",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -706,7 +706,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxxl",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-xxxl",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -977,7 +977,7 @@
                     "we-retail:activity/others",
                     "we-retail:apparel/shirt"
                 ],
-                "cq:productMaster"               : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                "cq:productMaster"               : "/var/commerce/products/we-retail/me/shirts/meotsuett",
                 "sling:resourceType"             : "weretail/components/structure/page",
                 "cq:lastRolledoutBy"             : "admin",
                 "cq:lastModifiedBy"              : "admin",
@@ -1004,7 +1004,7 @@
                             "cq:CatalogSyncAction",
                             "cq:LiveRelationship"
                         ],
-                        "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett",
+                        "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett",
                         "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                         "jcr:lastModified"  : "Tue Apr 12 2016 01:19:38 GMT+0200",
                         "sling:resourceType": "weretail/components/structure/product",
@@ -1016,7 +1016,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-s",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-s",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -1051,7 +1051,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-m",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-m",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -1086,7 +1086,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-l",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-l",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -1121,7 +1121,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xl",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-xl",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -1156,7 +1156,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxl",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-xxl",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",
@@ -1191,7 +1191,7 @@
                                 "cq:CatalogSyncAction",
                                 "cq:LiveRelationship"
                             ],
-                            "productData"       : "/etc/commerce/products/we-retail/me/shirts/meotsuett/size-xxxl",
+                            "productData"       : "/var/commerce/products/we-retail/me/shirts/meotsuett/size-xxxl",
                             "cq:lastRolledout"  : "Wed Jun 29 2016 14:20:50 GMT+0200",
                             "sling:resourceType": "weretail/components/structure/product",
                             "cq:commerceType"   : "variant",

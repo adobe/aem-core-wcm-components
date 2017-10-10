@@ -1,0 +1,15 @@
+{
+    "items": [
+        {
+            "page"  : {
+                "path"       : "/content/breadcrumb/women/shirts/devi-sleeveless-shirt",
+                "pageTitle"  : null,
+                "name"       : "devi-sleeveless-shirt",
+                "description": null,
+                "title"      : "Devi Sleeveless Shirt"
+            },
+            "active": true
+        }
+    ],
+    ":type": "core/wcm/components/breadcrumb"
+}

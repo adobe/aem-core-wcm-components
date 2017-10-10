@@ -1,0 +1,5 @@
+{
+    "type": "h2",
+    "text": "Hello World",
+    ":type": "core/wcm/components/title/v1/title"
+}
