@@ -20,13 +20,15 @@ import javax.annotation.Nonnull;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Defines the {@code Page} Sling Model used for the {@code /apps/core/wcm/sandbox/components/page} component.
  */
 @ConsumerType
-public interface Page extends com.adobe.cq.wcm.core.components.models.Page {
+public interface Page extends com.adobe.cq.wcm.core.components.models.Page, ContainerExporter {
 
     /**
      * Category of client library to load favicon related resources
@@ -74,6 +76,24 @@ public interface Page extends com.adobe.cq.wcm.core.components.models.Page {
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.4.0
      */
     default String getCssClassNames() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nonnull
+    @Override
+    default String[] getExportedItemsOrder() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nonnull
+    @Override
+    default Map<String, ? extends ComponentExporter> getExportedItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nonnull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 

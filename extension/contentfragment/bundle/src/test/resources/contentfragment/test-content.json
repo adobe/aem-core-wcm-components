@@ -1,0 +1,85 @@
+{
+    "contentfragments": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Content Fragments Test",
+            "sling:resourceType": "core/wcm/sandbox/components/page/v2/page",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"                      : "nt:unstructured",
+                    "sling:resourceType"                   : "wcm/foundation/components/responsivegrid",
+                    "text-only-no-path"                    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment"
+                    },
+                    "text-only-non-existing-path"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/non-existing"
+                    },
+                    "text-only-invalid-path"               : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments"
+                    },
+                    "text-only"                            : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only"
+                    },
+                    "text-only-single-element"             : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "elementNames"      : ["second"]
+                    },
+                    "text-only-multiple-elements"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "elementNames"      : ["second", "non-existing", "main"]
+                    },
+                    "structured-no-path"                   : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment"
+                    },
+                    "structured-non-existing-path"         : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/non-existing"
+                    },
+                    "structured-invalid-path"              : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments"
+                    },
+                    "structured"                           : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured"
+                    },
+                    "structured-nested-model"              : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured-nested-model"
+                    },
+                    "structured-single-element"            : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured",
+                        "elementNames"      : ["second"]
+                    },
+                    "structured-multiple-elements"         : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured",
+                        "elementNames"      : ["second", "non-existing", "main"]
+                    }
+                }
+            }
+        }
+    }
+}

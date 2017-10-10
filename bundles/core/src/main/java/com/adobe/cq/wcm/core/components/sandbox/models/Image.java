@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -24,14 +25,14 @@ import javax.annotation.Nonnull;
  * Defines the {@code Image} Sling Model used for the {@code /apps/core/wcm/sandbox/components/image} component.
  */
 @ConsumerType
-public interface Image extends com.adobe.cq.wcm.core.components.models.Image {
+public interface Image extends com.adobe.cq.wcm.core.components.models.Image, ComponentExporter {
 
     @Override
     @JsonIgnore
     default String getJson() {
         throw new UnsupportedOperationException();
     }
-
+    
     /**
      * Returns the available image sizes (expressed in width).
      *
@@ -68,5 +69,10 @@ public interface Image extends com.adobe.cq.wcm.core.components.models.Image {
         throw new UnsupportedOperationException();
     }
 
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
 
 }

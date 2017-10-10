@@ -1,0 +1,19 @@
+{
+    "designPath"      : "/etc/designs/mysite",
+    "staticDesignPath": "/etc/designs/mysite/static.css",
+    "title"           : "Templated Page",
+    "lastModifiedDate": 1453282416000,
+    "templateName"    : "product-page",
+    "language"        : "en-GB",
+    ":type"           : "core/wcm/components/page/v1/page",
+    ":items"          : {
+        "text": {
+            "text"    : "<p>This is a test</p>",
+            "richText": true,
+            ":type"   : "core/wcm/components/text/v1/text"
+        }
+    },
+    ":itemsOrder"     : [
+        "text"
+    ]
+}

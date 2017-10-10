@@ -26,15 +26,16 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
-import com.adobe.cq.wcm.core.components.internal.Constants;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHelper;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = Field.class,
+       adapters = {Field.class, ComponentExporter.class},
        resourceType = HiddenImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME,
-          extensions = Constants.EXPORTER_EXTENSION)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class HiddenImpl extends AbstractFieldImpl {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/form/hidden/v1/hidden";
@@ -94,4 +95,5 @@ public class HiddenImpl extends AbstractFieldImpl {
     protected String getDefaultTitle() {
         return null;
     }
+
 }

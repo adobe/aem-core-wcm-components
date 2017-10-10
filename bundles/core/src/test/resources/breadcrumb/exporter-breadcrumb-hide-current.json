@@ -1,0 +1,15 @@
+{
+    "items": [
+        {
+            "page"  : {
+                "path"       : "/content/breadcrumb/women",
+                "pageTitle"  : null,
+                "name"       : "women",
+                "description": null,
+                "title"      : "Women"
+            },
+            "active": false
+        }
+    ],
+    ":type": "core/wcm/components/breadcrumb"
+}

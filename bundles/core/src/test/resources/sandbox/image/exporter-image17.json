@@ -1,0 +1,9 @@
+{
+    "smartSizes": [],
+    "smartImages": [],
+    "lazyEnabled": true,
+    "alt": "Adobe Logo",
+    "title": "Adobe Logo",
+    "link": "https://www.adobe.com",
+    ":type": "core/wcm/components/image/v1/image"
+}

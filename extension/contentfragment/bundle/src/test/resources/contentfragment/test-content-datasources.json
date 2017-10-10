@@ -1,0 +1,57 @@
+{
+    "no-config"                           : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements"
+    },
+    "fragment-path-non-existing"          : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "fragmentPath"      : "/content/dam/contentfragments/non-existing"
+    },
+    "component-path-non-existing"         : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/non-existing"
+    },
+    "fragment-path-invalid"               : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "fragmentPath"      : "/content/dam/contentfragments"
+    },
+    "component-path-invalid"              : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "componentPath"     : "/content/contentfragments"
+    },
+    "component-path-invalid-fragment-path": {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/text-only-invalid-path"
+    },
+    "fragment-path-text-only"             : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/text-only"
+    },
+    "component-path-text-only"            : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "fragmentPath"      : "/content/dam/contentfragments/text-only"
+    },
+    "fragment-path-structured"            : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/structured"
+    },
+    "component-path-structured"           : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "fragmentPath"      : "/content/dam/contentfragments/structured"
+    },
+    "fragment-path-override"              : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/sandbox/components/contentfragment/v1/datasource/elements",
+        "fragmentPath"      : "/content/dam/contentfragments/structured",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/non-existing"
+    }
+}

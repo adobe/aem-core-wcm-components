@@ -53,7 +53,7 @@
                     "sling:resourceType": "core/wcm/components/form/container/v1/container",
                     "actionType"        : "foundation/components/form/actions/store",
                     "id"                : "my-id",
-                    "redirect"          : "/content/we-retail/home",
+                    "redirect"          : "/content/coretest/home",
                     "text"              : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:createdBy"     : "admin",

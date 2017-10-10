@@ -23,10 +23,10 @@ import javassist.NotFoundException;
 
 public class FormsHelperStubber {
 
-    //the class to stub
+    // the class to stub
     private static String CLASS_NAME = "com.day.cq.wcm.foundation.forms.FormsHelper";
 
-    //the static field which is causing problems with class loadign due to missing impl class
+    // the static field which is causing problems with class loading due to missing impl class
     private static String ERROR_FIELD = "defaultFormStructureHelper";
 
     private FormsHelperStubber() {
@@ -37,20 +37,22 @@ public class FormsHelperStubber {
         CtClass ctClass;
         try {
             ctClass = classPool.get(CLASS_NAME);
-            //indicates the class has already been stubbed and loaded
+            // indicates the class has already been stubbed and loaded
             if (ctClass.isFrozen()) {
                 return;
             }
-            //set the body of all methods in the class to empty,
-            //to remove any dependencies on impl classes.
+            // set the body of all methods in the class to empty,
+            // to remove any dependencies on impl classes.
             for (CtMethod ctMethod : ctClass.getDeclaredMethods()) {
                 ctMethod.setBody(null);
             }
-            //remove the error causing static field declaration
+            // remove the error causing static field declaration
             ctClass.removeField(ctClass.getDeclaredField(ERROR_FIELD));
-            //remove the static initilizer block calling new on impl class.
+            // remove the static initializer block calling new on impl class.
             ctClass.removeConstructor(ctClass.getClassInitializer());
-            //load the stubbed class
+            // defer getValues(..) to another method call so that we can manipulate/mock return values
+            ctClass.getDeclaredMethod("getValues").setBody("return com.adobe.cq.wcm.core.components.internal.models.v1.form.FormsHelperGetValuesStubMethod.get();");
+            // load the stubbed class
             ctClass.toClass();
         } catch (NotFoundException e) {
             e.printStackTrace();
@@ -58,4 +60,5 @@ public class FormsHelperStubber {
             e.printStackTrace();
         }
     }
+
 }

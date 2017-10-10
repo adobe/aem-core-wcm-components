@@ -1,0 +1,46 @@
+{
+    "method"                 : "GET",
+    "enctype"                : "application/x-www-form-urlencoded",
+    "id"                     : "my-id",
+    "redirect"               : "/core/content/coretest/home",
+    "name"                   : "my-id",
+    "action"                 : "/core/content/coretest/demo-page.html",
+    "resourceTypeForDropArea": "core/wcm/components/form/container/v1/container/new",
+    ":itemsOrder"            : [
+        "text",
+        "text_185087333"
+    ],
+    ":type"                  : "core/wcm/components/form/container/v1/container",
+    ":items"                 : {
+        "text"          : {
+            "id"               : "form-text-1838886104",
+            "title"            : "Text input field",
+            "name"             : "input-field-1",
+            "value"            : "",
+            "helpMessage"      : "",
+            "type"             : "text",
+            "readOnly"         : false,
+            "required"         : false,
+            "requiredMessage"  : "",
+            "constraintMessage": "",
+            "rows"             : 2,
+            "defaultValue"     : "",
+            ":type"            : "core/wcm/components/form/text/v1/text"
+        },
+        "text_185087333": {
+            "id"               : "form-text-1203211035",
+            "title"            : "Text input field",
+            "name"             : "input-field-2",
+            "value"            : "",
+            "helpMessage"      : "",
+            "type"             : "text",
+            "readOnly"         : false,
+            "required"         : false,
+            "requiredMessage"  : "",
+            "constraintMessage": "",
+            "rows"             : 2,
+            "defaultValue"     : "",
+            ":type"            : "core/wcm/components/form/text/v1/text"
+        }
+    }
+}

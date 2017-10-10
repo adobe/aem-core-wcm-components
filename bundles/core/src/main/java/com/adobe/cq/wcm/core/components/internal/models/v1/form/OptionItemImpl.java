@@ -15,53 +15,56 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.api.resource.ValueMap;
 
-import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.models.form.OptionItem;
+import com.day.cq.wcm.foundation.forms.FormsHelper;
 
-@Model(adaptables = Resource.class,
-       adapters = OptionItem.class)
-@Exporter(name = Constants.EXPORTER_NAME,
-          extensions = Constants.EXPORTER_EXTENSION)
 public class OptionItemImpl implements OptionItem {
 
-    @ValueMapValue
-    private String text;
+    private static final String PN_TEXT = "text";
+    private static final String PN_SELECTED = "selected";
+    private static final String PN_DISABLED = "disabled";
+    private static final String PN_VALUE = "value";
 
-    @ValueMapValue(optional = true)
-    private String value;
+    private SlingHttpServletRequest request;
+    private Resource options;
+    private ValueMap properties;
 
-    @ValueMapValue(optional = true)
-    private boolean disabled;
-
-    @ValueMapValue(optional = true)
-    private boolean selected;
-
-    @Self
-    private Resource resource;
+    public OptionItemImpl(SlingHttpServletRequest request, Resource options, Resource option) {
+        this.request = request;
+        this.options = options;
+        this.properties = option.getValueMap();
+    }
 
     @Override
     public String getText() {
-        return text;
+        return properties.get(PN_TEXT, String.class);
     }
 
     @Override
     public boolean isSelected() {
-        return selected;
+        String[] prefillValues = FormsHelper.getValues(request, options);
+        if (prefillValues != null) {
+            for (String prefillValue : prefillValues) {
+                if (prefillValue.equals(this.getValue())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return properties.get(PN_SELECTED, false);
     }
 
     @Override
     public boolean isDisabled() {
-        return disabled;
+        return properties.get(PN_DISABLED, false);
     }
 
     @Override
     public String getValue() {
-        return value;
+        return properties.get(PN_VALUE, String.class);
     }
 }

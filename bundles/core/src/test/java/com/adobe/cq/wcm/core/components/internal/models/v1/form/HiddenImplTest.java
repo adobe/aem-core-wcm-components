@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.form.Field;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -35,14 +36,13 @@ import static org.junit.Assert.assertNull;
 
 public class HiddenImplTest {
 
+    private static final String TEST_BASE = "/form/hidden";
     private static final String CONTAINING_PAGE = "/content/we-retail/demo-page";
-
     private static final String HIDDENINPUT1_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/hidden_1";
-
     private static final String HIDDENINPUT2_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/hidden_2";
 
     @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext("/form/hidden", "/content/we-retail/demo-page");
+    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/we-retail/demo-page");
 
     @BeforeClass
     public static void setUp() {
@@ -60,6 +60,7 @@ public class HiddenImplTest {
         assertEquals(HiddenImpl.PROP_NAME_DEFAULT, ((HiddenImpl) hiddenField).getDefaultName());
         assertEquals(HiddenImpl.PROP_VALUE_DEFAULT, ((HiddenImpl) hiddenField).getDefaultValue());
         assertNull(((HiddenImpl) hiddenField).getDefaultTitle());
+        Utils.testJSONExport(hiddenField, Utils.getTestExporterJSONPath(TEST_BASE, HIDDENINPUT1_PATH));
     }
 
     @Test
@@ -72,6 +73,13 @@ public class HiddenImplTest {
         assertEquals(HiddenImpl.ID_PREFIX, ((HiddenImpl) hiddenField).getIDPrefix());
         assertEquals(HiddenImpl.PROP_NAME_DEFAULT, ((HiddenImpl) hiddenField).getDefaultName());
         assertEquals(HiddenImpl.PROP_VALUE_DEFAULT, ((HiddenImpl) hiddenField).getDefaultValue());
+        Utils.testJSONExport(hiddenField, Utils.getTestExporterJSONPath(TEST_BASE, HIDDENINPUT2_PATH));
+    }
+
+    @Test
+    public void testExportedType() {
+        Field hiddenField = prepareHiddenFieldForTest(HIDDENINPUT1_PATH);
+        assertEquals(HiddenImpl.RESOURCE_TYPE, ((HiddenImpl) hiddenField).getExportedType());
     }
 
     private Field prepareHiddenFieldForTest(String resourcePath) {

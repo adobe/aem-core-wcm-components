@@ -17,54 +17,42 @@ package com.adobe.cq.wcm.core.components.sandbox.internal.models.v2;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
-import org.apache.commons.lang.ArrayUtils;
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.factory.ModelFactory;
 
-import com.adobe.cq.wcm.core.components.internal.Constants;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.sandbox.models.Page;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = Page.class, resourceType = PageImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME, extensions = Constants.EXPORTER_EXTENSION)
-public class PageImpl  extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl implements Page {
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/sandbox/components/page/v2/page";
     private static final String DEFAULT_FAVICON_CLIENT_LIB = "core.wcm.components.page.v2.favicon";
 
     @OSGiService
-    @JsonIgnore
     private HtmlLibraryManager htmlLibraryManager;
 
     @Self
-    @JsonIgnore
     protected SlingHttpServletRequest request;
 
     @ScriptVariable
-    @JsonIgnore
     private ComponentContext componentContext;
-
-    @Inject
-    private ModelFactory modelFactory;
 
     private String faviconClientLibCategory;
     private String faviconClientLibPath;
@@ -116,5 +104,4 @@ public class PageImpl  extends com.adobe.cq.wcm.core.components.internal.models.
         Set<String> cssClassesSet = componentContext.getCssClassNames();
         return StringUtils.join(cssClassesSet, " ");
     }
-
 }

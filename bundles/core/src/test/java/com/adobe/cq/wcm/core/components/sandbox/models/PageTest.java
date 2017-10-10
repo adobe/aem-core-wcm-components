@@ -16,8 +16,12 @@
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
 import java.util.Calendar;
+import java.util.Map;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import org.junit.Test;
+
+import javax.annotation.Nonnull;
 
 import static org.junit.Assert.*;
 
@@ -73,6 +77,24 @@ public class PageTest {
 
         @Override
         public String getTemplateName() {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public Map<String, ? extends ComponentExporter> getExportedItems() {
+            return null;
+        }
+
+        @Nonnull
+        @Override
+        public String[] getExportedItemsOrder() {
+            return new String[0];
+        }
+
+        @Nonnull
+        @Override
+        public String getExportedType() {
             return null;
         }
     }

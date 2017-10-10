@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
 
@@ -40,7 +42,8 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.Constants;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.day.cq.commons.RangeIterator;
 import com.day.cq.search.Predicate;
@@ -52,13 +55,11 @@ import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = List.class,
-       resourceType = ListImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME,
-          extensions = Constants.EXPORTER_EXTENSION)
-public class ListImpl implements List {
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class ListImpl implements List, ComponentExporter {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v1/list";
 
@@ -149,16 +150,19 @@ public class ListImpl implements List {
     }
 
     @Override
+    @JsonProperty("linkItems")
     public boolean linkItems() {
         return linkItems;
     }
 
     @Override
+    @JsonProperty("showDescription")
     public boolean showDescription() {
         return showDescription;
     }
 
     @Override
+    @JsonProperty("showModificationDate")
     public boolean showModificationDate() {
         return showModificationDate;
     }
@@ -166,6 +170,12 @@ public class ListImpl implements List {
     @Override
     public String getDateFormatString() {
         return dateFormatString;
+    }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return resource.getResourceType();
     }
 
     private Source getListType() {

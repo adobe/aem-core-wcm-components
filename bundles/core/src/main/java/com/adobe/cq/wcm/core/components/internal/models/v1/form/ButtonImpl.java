@@ -27,17 +27,16 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
-import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.models.form.Button;
 import com.day.cq.i18n.I18n;
 
-@Model(adaptables = {SlingHttpServletRequest.class, Resource.class},
-       adapters = Button.class,
+@Model(adaptables = {SlingHttpServletRequest.class, Resource.class}, adapters = {Button.class, ComponentExporter.class},
        resourceType = ButtonImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME,
-          extensions = Constants.EXPORTER_EXTENSION)
-public class ButtonImpl extends AbstractFieldImpl implements Button {
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class ButtonImpl extends AbstractFieldImpl implements Button, ComponentExporter {
 
     public static final String RESOURCE_TYPE = FormConstants.RT_CORE_FORM_BUTTON + "/v1/button";
 
@@ -53,6 +52,9 @@ public class ButtonImpl extends AbstractFieldImpl implements Button {
 
     @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
     private SlingHttpServletRequest request;
+
+    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private Resource resource;
 
     private I18n i18n;
 

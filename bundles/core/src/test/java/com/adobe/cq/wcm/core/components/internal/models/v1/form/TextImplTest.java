@@ -15,61 +15,42 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
-import com.adobe.cq.wcm.core.components.models.form.Text;
-import com.day.cq.wcm.foundation.forms.FormStructureHelper;
-import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
-import io.wcm.testing.mock.aem.junit.AemContext;
-
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
-import org.junit.Before;
-import org.junit.Rule;
+import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.day.cq.wcm.api.Page;
+import com.adobe.cq.wcm.core.components.models.form.Text;
+import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class TextImplTest {
 
+    private static final String TEST_BASE = "/form/text";
     private static final String CONTAINING_PAGE = "/content/we-retail/demo-page";
+    private static final String TEXTINPUT1_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text";
+    private static final String TEXTINPUT2_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text_185087333";
 
-    private static final String TEXTINPUT1_PATH = CONTAINING_PAGE+"/jcr:content/root/responsivegrid/container/text";
 
-    private static final String TEXTINPUT2_PATH = CONTAINING_PAGE+"/jcr:content/root/responsivegrid/container/text_185087333";
+    @ClassRule
+    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTAINING_PAGE);
 
-    private static final String RESOURCE_PROPERTY = "resource";
-
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/form/text", "/content/we-retail/demo-page");
-
-    private SlingBindings slingBindings;
-
-    @Before
-    public void setUp() {
-        Page page = context.currentPage(CONTAINING_PAGE);
-        slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.CURRENT_PAGE, page);
-        context.registerService(FormStructureHelperFactory.class, new FormStructureHelperFactory() {
-            @Override
-            public FormStructureHelper getFormStructureHelper(Resource formElement) {
-                return null;
-            }
-        });
+    @BeforeClass
+    public static void setUp() {
+        CONTEXT.registerService(FormStructureHelperFactory.class, resource -> null);
         FormsHelperStubber.createStub();
     }
 
     @Test
-    public void testDefaultInput(){
-        Resource resource = context.currentResource(TEXTINPUT1_PATH);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(RESOURCE_PROPERTY, resource);
-        Text text = context.request().adaptTo(Text.class);
+    public void testDefaultInput() {
+        Text text = getTextUnderTest(TEXTINPUT1_PATH);
         assertEquals("text", text.getName());
         assertEquals("Text input field", text.getTitle());
         assertEquals(false, text.isRequired());
@@ -85,10 +66,7 @@ public class TextImplTest {
 
     @Test
     public void testInputWithCustomDataAndAttributes() {
-        Resource resource = context.currentResource(TEXTINPUT2_PATH);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(RESOURCE_PROPERTY, resource);
-        Text text = context.request().adaptTo(Text.class);
+        Text text = getTextUnderTest(TEXTINPUT2_PATH);
         assertEquals("Custom Name", text.getName());
         assertEquals("Custom title", text.getTitle());
         assertEquals(true, text.isRequired());
@@ -100,5 +78,18 @@ public class TextImplTest {
         assertEquals(3, text.getRows());
         assertEquals("Custom help/placeholder message", text.getHelpMessage());
         assertEquals(true, text.hideTitle());
+        Utils.testJSONExport(text, Utils.getTestExporterJSONPath(TEST_BASE, TEXTINPUT2_PATH));
+    }
+
+
+    private Text getTextUnderTest(String resourcePath) {
+        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
+        request.setResource(resource);
+        SlingBindings bindings = new SlingBindings();
+        bindings.put(SlingBindings.RESOURCE, resource);
+        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
+        request.setAttribute(SlingBindings.class.getName(), bindings);
+        return request.adaptTo(Text.class);
     }
 }

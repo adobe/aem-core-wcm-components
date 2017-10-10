@@ -27,62 +27,43 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ChildResource;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.granite.ui.components.ds.DataSource;
-import com.adobe.granite.ui.components.ds.SimpleDataSource;
-import com.adobe.cq.wcm.core.components.internal.Constants;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.form.OptionItem;
 import com.adobe.cq.wcm.core.components.models.form.Options;
+import com.adobe.granite.ui.components.ds.DataSource;
+import com.adobe.granite.ui.components.ds.SimpleDataSource;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = Options.class,
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Options.class, ComponentExporter.class},
        resourceType = OptionsImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME,
-          extensions = Constants.EXPORTER_EXTENSION)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class OptionsImpl extends AbstractFieldImpl implements Options {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OptionsImpl.class);
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/form/options/v1/options";
-    protected static final String PN_TYPE = "type";
-
+    private static final String PN_TYPE = "type";
     private static final String OPTION_ITEMS_PATH = "items";
-
     private static final String ID_PREFIX = "form-options";
 
-    @ChildResource(optional = true)
-    @Named(OPTION_ITEMS_PATH)
+    @ChildResource(optional = true) @Named(OPTION_ITEMS_PATH)
     private List<Resource> itemResources;
 
     @ValueMapValue(optional = true)
     private String helpMessage;
 
-    @ValueMapValue(name = OptionsImpl.PN_TYPE,
-                   optional = true)
+    @ValueMapValue(name = OptionsImpl.PN_TYPE, optional = true)
     private String typeString;
-
-    private Type type;
-
-    @SlingObject
-    private Resource resource;
-
-    private List<OptionItem> optionItems;
-    private String id;
-
-    @ValueMapValue(optional = true,
-                    name = "source")
-    private String sourceString;
-
-    private Source source;
 
     @ValueMapValue(optional = true)
     private String listPath;
@@ -90,14 +71,23 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
     @ValueMapValue(optional = true)
     private String datasourceRT;
 
+    @ValueMapValue(optional = true, name = "source")
+    private String sourceString;
+
+    @ScriptVariable
+    private Resource resource;
+
+    @ScriptVariable
+    private SlingHttpServletResponse response;
+
+    @ScriptVariable
+    private ResourceResolver resolver;
+
     @Self
     private SlingHttpServletRequest request;
 
-    @SlingObject
-    private SlingHttpServletResponse response;
-
-    @SlingObject
-    private ResourceResolver resolver;
+    private Type type;
+    private List<OptionItem> optionItems;
 
     @Override
     public List<OptionItem> getItems() {
@@ -114,7 +104,9 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
 
     @Override
     public Type getType() {
-        type = Options.Type.fromString(typeString);
+        if (type == null) {
+            type = Options.Type.fromString(typeString);
+        }
         return type;
     }
 
@@ -127,6 +119,7 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
     public String getValue() {
         return getDefaultValue();
     }
+
     @Override
     protected String getDefaultName() {
         return null;
@@ -145,11 +138,9 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
 
 
     /* ------------------------ Internal stuff -------------------------------------------- */
-
-
     private void populateOptionItems() {
         this.optionItems = new ArrayList<>();
-        source = Source.getSource(sourceString);
+        Source source = Source.getSource(sourceString);
         if (source == null) {
             populateOptionItemsFromLocal();
         } else {
@@ -169,8 +160,8 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
     private void populateOptionItemsFromLocal() {
         if (itemResources != null) {
             for (Resource itemResource : itemResources) {
-                OptionItem optionItem = itemResource.adaptTo(OptionItem.class);
-                if (optionItem != null && (optionItem.isDisabled() || StringUtils.isNotBlank(optionItem.getValue()))) {
+                OptionItem optionItem = new OptionItemImpl(request, resource, itemResource);
+                if ((optionItem.isDisabled() || StringUtils.isNotBlank(optionItem.getValue()))) {
                     optionItems.add(optionItem);
                 }
             }
@@ -184,8 +175,8 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
         Resource parent = resolver.getResource(listPath);
         if (parent != null) {
             for(Resource itemResource: parent.getChildren()) {
-                OptionItem optionItem = itemResource.adaptTo(OptionItem.class);
-                if (optionItem != null && (optionItem.isDisabled() || StringUtils.isNotBlank(optionItem.getValue()))) {
+                OptionItem optionItem = new OptionItemImpl(request, resource, itemResource);
+                if ((optionItem.isDisabled() || StringUtils.isNotBlank(optionItem.getValue()))) {
                     optionItems.add(optionItem);
                 }
             }
@@ -217,9 +208,9 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
             Iterator<Resource> itemIterator = dataSource.iterator();
             if (itemIterator != null) {
                 while (itemIterator.hasNext()) {
-                    Resource item = itemIterator.next();
-                    OptionItem optionItem = item.adaptTo(OptionItem.class);
-                    if (optionItem != null && (optionItem.isDisabled() || StringUtils.isNotBlank(optionItem.getValue()))) {
+                    Resource itemResource = itemIterator.next();
+                    OptionItem optionItem = new OptionItemImpl(request, resource, itemResource);
+                    if ((optionItem.isDisabled() || StringUtils.isNotBlank(optionItem.getValue()))) {
                         optionItems.add(optionItem);
                     }
                 }

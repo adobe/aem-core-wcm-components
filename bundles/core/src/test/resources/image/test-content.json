@@ -12,7 +12,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
@@ -22,18 +22,18 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677327"
                 },
                 "image2"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image"
+                    "sling:resourceType": "core/wcm/components/image/v1/image"
                 },
                 "image3"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
@@ -55,7 +55,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "jcr:lastModified"  : "2017-05-15T17:56:17.756+01:00",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                     "isDecorative"      : true,
                     "linkURL"           : "https://www.adobe.com",
@@ -65,7 +65,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "https://www.adobe.com",
@@ -87,7 +87,7 @@
                     "jcr:createdBy"     : "admin",
                     "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "/content/test"
@@ -95,7 +95,7 @@
                 "image7"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677329",
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
@@ -117,7 +117,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677329"
                 },
                 "image9"            : {
@@ -125,14 +125,14 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
                 },
                 "image10"           : {
                     "imageCrop"         : "290,1470,1680,1985",
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
                     "file"              : {
                         "jcr:primaryType": "nt:file",
@@ -151,14 +151,14 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
                 },
                 "image12"           : {
                     "imageCrop"         : "0,0,2000,2000",
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
                     "file"              : {
                         "jcr:primaryType": "nt:file",
@@ -178,7 +178,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
                 },
                 "image14"           : {
@@ -186,7 +186,7 @@
                     "imageRotate"       : 90,
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
                     "file"              : {
                         "jcr:primaryType": "nt:file",
@@ -204,7 +204,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "cq:lastModified"   : "2017-05-15T17:56:17.756+01:00",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                     "isDecorative"      : true,
                     "linkURL"           : "https://www.adobe.com",
@@ -214,7 +214,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "cq:lastModified"   : "2017-05-15T17:56:17.756+01:00",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.tiff",
                     "isDecorative"      : true,
                     "linkURL"           : "https://www.adobe.com",
@@ -223,7 +223,7 @@
                 "image17"           : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
@@ -247,7 +247,7 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
-                    "sling:resourceType": "core/wcm/components/image",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
                 }
             }

@@ -15,12 +15,22 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Text} Sling Model used for the {@code /apps/core/wcm/sandbox/components/text} component.
  */
 @ConsumerType
-public interface Text extends com.adobe.cq.wcm.core.components.models.Text {
+public interface Text extends com.adobe.cq.wcm.core.components.models.Text, ComponentExporter {
+
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
 
 }

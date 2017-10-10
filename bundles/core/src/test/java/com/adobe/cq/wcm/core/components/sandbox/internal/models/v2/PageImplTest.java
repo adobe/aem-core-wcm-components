@@ -15,30 +15,66 @@
  ******************************************************************************/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models.v2;
 
-import org.junit.Before;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.sandbox.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
 
-    private ClientLibrary mockClientLibrary;
+    private static ClientLibrary mockClientLibrary;
 
-    @Before
-    @Override
-    public void setUp() {
-        super.setUp();
+    static {
+        TEST_BASE = "/sandbox/page";
+    }
+
+    @BeforeClass
+    public static void setUp() {
+
+        com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest.setUp();
         pageClass = Page.class;
         mockClientLibrary = Mockito.mock(ClientLibrary.class);
+
         when(mockClientLibrary.getPath()).thenReturn("/apps/wcm/core/page/clientlibs/favicon");
         when(mockClientLibrary.allowProxy()).thenReturn(true);
-        aemContext.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
+        CONTEXT.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
+    }
+
+    @Test
+    public void testPage() throws ParseException {
+        Page page = getPageUnderTest(PAGE);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
+        assertEquals(page.getLastModifiedDate(), calendar);
+        assertEquals("en-GB", page.getLanguage());
+        assertEquals("Templated Page", page.getTitle());
+        assertEquals(DESIGN_PATH, page.getDesignPath());
+        assertNull(page.getStaticDesignPath());
+        String[] keywordsArray = page.getKeywords();
+        assertEquals(3, keywordsArray.length);
+        Set<String> keywords = new HashSet<>(keywordsArray.length);
+        keywords.addAll(Arrays.asList(keywordsArray));
+        assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
+        assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
+        assertEquals("product-page", page.getTemplateName());
+        Utils.testJSONExport(page, Utils.getTestExporterJSONPath(TEST_BASE, PAGE));
     }
 
     @Test(expected = UnsupportedOperationException.class)

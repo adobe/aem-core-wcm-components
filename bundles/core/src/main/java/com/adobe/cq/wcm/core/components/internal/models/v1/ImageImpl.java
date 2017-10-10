@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -48,8 +50,9 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.sightly.SightlyWCMMode;
-import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -62,10 +65,11 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = Image.class, resourceType = ImageImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME, extensions = Constants.EXPORTER_EXTENSION)
-public class ImageImpl implements Image {
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class ImageImpl implements Image, ComponentExporter {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v1/image";
     private static final String DEFAULT_EXTENSION = "jpeg";
@@ -200,7 +204,9 @@ public class ImageImpl implements Image {
                 src += !isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "";
             }
             if (!isDecorative) {
-                linkURL = Utils.getURL(request, pageManager, linkURL);
+                if(StringUtils.isNotEmpty(linkURL)) {
+                    linkURL = Utils.getURL(request, pageManager, linkURL);
+                }
             } else {
                 linkURL = null;
                 alt = null;
@@ -239,13 +245,21 @@ public class ImageImpl implements Image {
     }
 
     @Override
+    @JsonIgnore
     public String getFileReference() {
         return fileReference;
     }
 
     @Override
+    @JsonIgnore
     public String getJson() {
         return json;
+    }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return resource.getResourceType();
     }
 
     private void buildJson() {

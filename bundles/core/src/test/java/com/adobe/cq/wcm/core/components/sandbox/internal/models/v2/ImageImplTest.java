@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models.v2;
 
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.sandbox.models.Image;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,6 +24,16 @@ import static org.junit.Assert.assertEquals;
 
 public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
 
+    static {
+        TEST_BASE = "/sandbox/image";
+    }
+
+    @Test
+    public void testExportedType() {
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals("core/wcm/components/image/v1/image", image.getExportedType());
+    }
+
     @Test
     public void testImageWithOneSmartSize() throws Exception {
         Image image = getImageUnderTest(IMAGE3_PATH);
@@ -30,6 +41,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Assert.assertArrayEquals(new int[] { 600 }, image.getSmartSizes());
         Assert.assertArrayEquals(new String[] { "/core/content/test/jcr%3acontent/root/image3.img.600.png" }, image.getSmartImages());
         Assert.assertEquals(false, image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE3_PATH));
     }
 
     @Test
@@ -44,6 +56,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
                 "/core/content/test/jcr%3acontent/root/image0.img.2500.png" },
                 image.getSmartImages());
         Assert.assertEquals(true, image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE0_PATH));
     }
 
     @Test
@@ -53,6 +66,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Assert.assertArrayEquals(new int[] {}, image.getSmartSizes());
         Assert.assertArrayEquals(new String[] {}, image.getSmartImages());
         Assert.assertEquals(true, image.isLazyEnabled());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE4_PATH));
     }
 
     @Override

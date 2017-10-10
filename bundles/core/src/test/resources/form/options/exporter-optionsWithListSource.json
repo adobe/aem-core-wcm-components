@@ -1,0 +1,19 @@
+{
+    "id"   : "form-options-626247526",
+    "type" : "CHECKBOX",
+    "items": [
+        {
+            "text"    : "list-item1-name",
+            "value"   : "list-item1-value",
+            "disabled": false,
+            "selected": true
+        },
+        {
+            "text"    : "list-item2-name",
+            "value"   : "list-item2-value",
+            "disabled": true,
+            "selected": false
+        }
+    ],
+    ":type": "core/wcm/components/form/options"
+}

@@ -15,28 +15,37 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import javax.servlet.RequestDispatcher;
 
-import org.apache.sling.api.request.RequestDispatcherOptions;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.form.Container;
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
-
+import com.day.cq.wcm.msm.api.MSMNameConstants;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
@@ -47,20 +56,14 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ContainerImplTest {
 
-    private static final String CONTAINING_PAGE = "/content/we-retail/demo-page";
-
+    private static final String TEST_BASE = "/form/container";
+    private static final String CONTEXT_PATH = "/core";
+    private static final String CONTAINING_PAGE = "/content/coretest/demo-page";
     private static final String FORM1_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container";
-
     private static final String FORM2_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container_350773202";
 
-    private static final String formFields[] = {"text", "text_185087333"};
-
-    private static final String RESOURCE_PROPERTY = "resource";
-
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/form/container", "/content/we-retail/demo-page");
-
-    private SlingBindings slingBindings;
+    @ClassRule
+    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTAINING_PAGE);
 
     @Mock
     private FormStructureHelperFactory formStructureHelperFactory;
@@ -76,54 +79,75 @@ public class ContainerImplTest {
 
     @Before
     public void setUp() {
-        Page page = context.currentPage(CONTAINING_PAGE);
-        slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.CURRENT_PAGE, page);
-        context.registerService(FormStructureHelperFactory.class, formStructureHelperFactory);
+        when(formStructureHelperFactory.getFormStructureHelper(any(Resource.class))).thenReturn(formStructureHelper);
+        when(requestDispatcherFactory.getRequestDispatcher(any(Resource.class), any())).thenReturn(requestDispatcher);
+        CONTEXT.registerService(FormStructureHelperFactory.class, formStructureHelperFactory);
+        CONTEXT.registerService(SlingModelFilter.class, new SlingModelFilter() {
+
+            private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
+                add(NameConstants.NN_RESPONSIVE_CONFIG);
+                add(MSMNameConstants.NT_LIVE_SYNC_CONFIG);
+                add("cq:annotations");
+            }};
+
+            @Override
+            public Map<String, Object> filterProperties(Map<String, Object> map) {
+                return map;
+            }
+
+            @Override
+            public Iterable<Resource> filterChildResources(Iterable<Resource> childResources) {
+                return StreamSupport
+                        .stream(childResources.spliterator(), false)
+                        .filter(r -> !IGNORED_NODE_NAMES.contains(r.getName()))
+                        .collect(Collectors.toList());
+            }
+        });
         FormsHelperStubber.createStub();
     }
 
     @Test
-    public void testFormWithCustomAttributesAndFields() {
-        Resource resource = context.currentResource(FORM1_PATH);
-        when(formStructureHelperFactory.getFormStructureHelper(resource)).thenReturn(formStructureHelper);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(RESOURCE_PROPERTY, resource);
-        MockSlingHttpServletRequest request = context.request();
-        request.setRequestDispatcherFactory(requestDispatcherFactory);
-        when(requestDispatcherFactory.getRequestDispatcher((Resource) any(), (RequestDispatcherOptions) any()))
-                .thenReturn(requestDispatcher);
-        Container container = request.adaptTo(Container.class);
+    public void testFormWithCustomAttributesAndFields() throws IOException {
+        Container container = getContainerUnderTest(FORM1_PATH);
         assertEquals("my-id", container.getId());
         assertEquals("my-id", container.getName());
         assertEquals("application/x-www-form-urlencoded", container.getEnctype());
         assertEquals("GET", container.getMethod());
-        assertEquals(CONTAINING_PAGE + ".html", container.getAction());
+        assertEquals(CONTEXT_PATH + CONTAINING_PAGE + ".html", container.getAction());
         assertEquals("core/wcm/components/form/container/v1/container/new", container.getResourceTypeForDropArea());
-        assertEquals("/content/we-retail/home", container.getRedirect());
+        assertEquals(CONTEXT_PATH + "/content/coretest/home", container.getRedirect());
+        Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, FORM1_PATH));
     }
 
     @Test
-    public void testFormRedirectWithContextPath(){
-        Resource resource = context.currentResource(FORM1_PATH);
-        slingBindings.put(RESOURCE_PROPERTY, resource);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        context.request().setContextPath("/contextPath/test");
-        when(formStructureHelperFactory.getFormStructureHelper(resource)).thenReturn(formStructureHelper);
-        Container container = context.request().adaptTo(Container.class);
-        assertEquals("/contextPath/test/content/we-retail/home",container.getRedirect());
-    }
-
-    @Test
-    public void testFormWithoutCustomAttributesAndField() {
-        Resource resource = context.currentResource(FORM2_PATH);
-        slingBindings.put(RESOURCE_PROPERTY, resource);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        Container container = context.request().adaptTo(Container.class);
+    public void testFormWithoutCustomAttributesAndField() throws IOException {
+        Container container = getContainerUnderTest(FORM2_PATH);
         assertEquals("multipart/form-data", container.getEnctype());
         assertEquals("POST", container.getMethod());
-        assertEquals(CONTAINING_PAGE + ".html", container.getAction());
+        assertEquals(CONTEXT_PATH + CONTAINING_PAGE + ".html", container.getAction());
         assertEquals("core/wcm/components/form/container/v1/container/new", container.getResourceTypeForDropArea());
         assertNull(container.getRedirect());
+        Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, FORM2_PATH));
+    }
+
+    private Container getContainerUnderTest(String resourcePath) {
+        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+        if (resource == null) {
+            throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
+        }
+        SlingBindings bindings = new SlingBindings();
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
+        MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
+        request.setContextPath(CONTEXT_PATH);
+        request.setResource(resource);
+        bindings.put(SlingBindings.RESOURCE, resource);
+        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
+        bindings.put(SlingBindings.REQUEST, request);
+        bindings.put(SlingBindings.RESPONSE, response);
+        Page page = CONTEXT.currentPage(CONTAINING_PAGE);
+        bindings.put(WCMBindings.CURRENT_PAGE, page);
+        request.setRequestDispatcherFactory(requestDispatcherFactory);
+        request.setAttribute(SlingBindings.class.getName(), bindings);
+        return request.adaptTo(Container.class);
     }
 }

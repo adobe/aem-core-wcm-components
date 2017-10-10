@@ -15,7 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Map;
+import java.io.StringReader;
+
+import javax.json.Json;
+import javax.json.JsonReader;
 
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
@@ -27,27 +30,29 @@ import org.mockito.Matchers;
 
 import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ImageImplTest extends AbstractImageTest {
 
-    private static final String TEST_ROOT = "/content";
-    private static final String PAGE = TEST_ROOT + "/test";
-    private static final String CONTEXT_PATH = "/core";
-    private static final String IMAGE_TITLE_ALT = "Adobe Logo";
-    private static final String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
-    private static final String IMAGE_LINK = "https://www.adobe.com";
+    protected static String TEST_ROOT = "/content";
+    protected static String PAGE = TEST_ROOT + "/test";
+    protected static String CONTEXT_PATH = "/core";
+    protected static String IMAGE_TITLE_ALT = "Adobe Logo";
+    protected static String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
+    protected static String IMAGE_LINK = "https://www.adobe.com";
 
 
     @Test
@@ -65,6 +70,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertFalse(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE0_PATH));
     }
 
     @Test
@@ -80,6 +86,7 @@ public class ImageImplTest extends AbstractImageTest {
         String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image3.img.600.png\"],\"smartSizes\":[600]," +
                 "\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE3_PATH));
     }
 
     @Test
@@ -95,12 +102,14 @@ public class ImageImplTest extends AbstractImageTest {
                 "{\"" + Image.JSON_SMART_IMAGES + "\":[], \"" + Image.JSON_SMART_SIZES + "\":[], \"" + Image.JSON_LAZY_ENABLED +
                         "\":true}",
                 image.getJson());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE4_PATH));
     }
 
     @Test
     public void testInvalidAssetTypeImage() throws Exception {
         Image image = getImageUnderTest(IMAGE17_PATH);
         assertNull(image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE17_PATH));
     }
 
     @Test
@@ -108,6 +117,7 @@ public class ImageImplTest extends AbstractImageTest {
         String escapedResourcePath = Text.escapePath(IMAGE18_PATH);
         Image image = getImageUnderTest(IMAGE18_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE18_PATH));
     }
 
     @Test
@@ -119,6 +129,7 @@ public class ImageImplTest extends AbstractImageTest {
         escapedResourcePath = Text.escapePath(IMAGE15_PATH);
         image = getImageUnderTest(IMAGE15_PATH, WCMMode.EDIT);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE15_PATH));
     }
 
     @Test
@@ -126,13 +137,19 @@ public class ImageImplTest extends AbstractImageTest {
         String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
         Image image = getImageUnderTest(IMAGE16_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg", image.getSrc());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE16_PATH));
+    }
+
+    @Test
+    public void testExportedType() {
+        Image image = getImageUnderTest(IMAGE0_PATH);
+        assertEquals(ImageImpl.RESOURCE_TYPE, ((ImageImpl) image).getExportedType());
     }
 
     private void compareJSON(String expectedJson, String json) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map expectedMap = objectMapper.readValue(expectedJson, Map.class);
-        Map jsonMap = objectMapper.readValue(json, Map.class);
-        assertEquals(expectedMap, jsonMap);
+        JsonReader expected = Json.createReader(new StringReader(expectedJson));
+        JsonReader actual = Json.createReader(new StringReader(json));
+        assertEquals(expected.read(), actual.read());
     }
 
     protected Image getImageUnderTest(String resourcePath) {

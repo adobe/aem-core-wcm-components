@@ -37,8 +37,10 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class AbstractImageTest {
 
+    protected static String TEST_BASE = "/image";
+
     @ClassRule
-    public static final AemContext aemContext = CoreComponentTestContext.createContext("/image", "/content");
+    public static final AemContext aemContext = CoreComponentTestContext.createContext(TEST_BASE, "/content");
 
     protected static final String TEST_ROOT = "/content";
     protected static final String PAGE = TEST_ROOT + "/test";

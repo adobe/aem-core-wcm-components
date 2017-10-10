@@ -1,0 +1,25 @@
+{
+    "smartSizes": [
+        128,
+        256,
+        512,
+        1024,
+        1280,
+        1440,
+        1920,
+        2048
+    ],
+    "smartImages": [
+        "/core/content/test/jcr%3acontent/root/image18.img.128.png",
+        "/core/content/test/jcr%3acontent/root/image18.img.256.png",
+        "/core/content/test/jcr%3acontent/root/image18.img.512.png",
+        "/core/content/test/jcr%3acontent/root/image18.img.1024.png",
+        "/core/content/test/jcr%3acontent/root/image18.img.1280.png",
+        "/core/content/test/jcr%3acontent/root/image18.img.1440.png",
+        "/core/content/test/jcr%3acontent/root/image18.img.1920.png",
+        "/core/content/test/jcr%3acontent/root/image18.img.2048.png"
+    ],
+    "lazyEnabled": true,
+    "src": "/core/content/test/jcr%3acontent/root/image18.img.png",
+    ":type": "core/wcm/components/image/v1/image"
+}

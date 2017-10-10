@@ -15,10 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import com.adobe.cq.wcm.core.components.models.form.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Default;
@@ -26,18 +26,18 @@ import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-
-import com.adobe.cq.wcm.core.components.internal.Constants;
-import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
-import com.day.cq.wcm.foundation.forms.FormsHelper;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = Text.class,
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.models.form.Text;
+import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
+import com.day.cq.wcm.foundation.forms.FormsHelper;
+
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Text.class, ComponentExporter.class},
        resourceType = TextImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME,
-          extensions = Constants.EXPORTER_EXTENSION)
-public class TextImpl extends AbstractFieldImpl implements Text {
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class TextImpl extends AbstractFieldImpl implements Text, ComponentExporter {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/form/text/v1/text";
 
@@ -189,4 +189,5 @@ public class TextImpl extends AbstractFieldImpl implements Text {
     public boolean hideTitle() {
         return hideTitle;
     }
+
 }

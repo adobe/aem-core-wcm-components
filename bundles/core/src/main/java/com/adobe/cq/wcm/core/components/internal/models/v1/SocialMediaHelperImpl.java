@@ -22,12 +22,15 @@ import com.adobe.cq.commerce.api.PriceInfo;
 import com.adobe.cq.commerce.api.Product;
 import com.adobe.cq.commerce.common.CommerceHelper;
 import com.adobe.cq.commerce.common.PriceFilter;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.SocialMediaHelper;
 import com.adobe.cq.xf.social.ExperienceFragmentSocialVariation;
 import com.day.cq.commons.Externalizer;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +39,7 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -44,6 +48,7 @@ import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -53,10 +58,10 @@ import java.util.Map;
 /**
  * Helper class for page functionality related to page sharing by user on social media platforms.
  */
-@Model(adaptables = SlingHttpServletRequest.class,
-        adapters = SocialMediaHelper.class,
-        resourceType = SocialMediaHelperImpl.RESOURCE_TYPE)
-public class SocialMediaHelperImpl implements SocialMediaHelper {
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {SocialMediaHelper.class, ComponentExporter.class}, resourceType =
+        SocialMediaHelperImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class SocialMediaHelperImpl implements SocialMediaHelper, ComponentExporter {
 
     static final String RESOURCE_TYPE = "core/wcm/components/sharing/v1/sharing";
 
@@ -119,11 +124,13 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     }
 
     @Override
+    @JsonProperty("hasFacebookSharing")
     public boolean hasFacebookSharing() {
         return facebookEnabled && hasSharingComponent();
     }
 
     @Override
+    @JsonProperty("hasPinteresSharing")
     public boolean hasPinterestSharing() {
         return pinterestEnabled && hasSharingComponent();
     }
@@ -134,6 +141,12 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
             initMetadata();
         }
         return metadata;
+    }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return request.getResource().getResourceType();
     }
 
     //*************** IMPLEMENTATION *******************

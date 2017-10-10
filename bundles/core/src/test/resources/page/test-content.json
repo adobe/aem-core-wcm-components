@@ -21,24 +21,19 @@
                 "three"
             ],
             "cq:templateType"   : "/libs/settings/wcm/template-types/html5page",
-            "sling:resourceType": "core/wcm/components/page",
+            "sling:resourceType": "core/wcm/components/page/v1/page",
             "cq:lastModifiedBy" : "admin",
-            "root"              : {
-                "jcr:primaryType"   : "nt:unstructured",
-                "jcr:lastModifiedBy": "admin",
-                "jcr:lastModified"  : "2016-01-19T17:00:19.841+01:00",
-                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+
                 "text"              : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Mon Jan 18 2016 16:59:33 GMT+0100",
-                    "text"              : "<p>This is a test</p>\n",
+                    "text"              : "<p>This is a test</p>",
                     "jcr:lastModified"  : "Mon Jan 18 2016 16:59:43 GMT+0100",
                     "sling:resourceType": "core/wcm/components/text/v1/text",
                     "textIsRich"        : "true"
                 }
-            }
         }
     }
 }

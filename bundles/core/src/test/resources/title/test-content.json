@@ -19,7 +19,7 @@
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
                 "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
-                "sling:resourceType": "core/wcm/components/title"
+                "sling:resourceType": "core/wcm/components/title/v1/title"
             },
             "title-jcr-title-type": {
                 "jcr:primaryType"   : "nt:unstructured",
@@ -29,7 +29,7 @@
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
                 "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
-                "sling:resourceType": "core/wcm/components/title"
+                "sling:resourceType": "core/wcm/components/title/v1/title"
             },
             "title-noprops" : {
                 "jcr:primaryType"   : "nt:unstructured",
@@ -37,7 +37,7 @@
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
                 "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
-                "sling:resourceType": "core/wcm/components/title"
+                "sling:resourceType": "core/wcm/components/title/v1/title"
             },
             "title-wrongtype" : {
                 "jcr:primaryType"   : "nt:unstructured",
@@ -46,7 +46,7 @@
                 "type"              : "section",
                 "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
                 "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
-                "sling:resourceType": "core/wcm/components/title"
+                "sling:resourceType": "core/wcm/components/title/v1/title"
             }
         }
     }

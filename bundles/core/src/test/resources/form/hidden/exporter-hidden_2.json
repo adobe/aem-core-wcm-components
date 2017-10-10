@@ -1,0 +1,7 @@
+{
+    "id": "hidden-field-id",
+    "title": "Custom title",
+    "name": "Custom_Name",
+    "value": "Custom value",
+    ":type": "core/wcm/components/form/hidden/v1/hidden"
+}

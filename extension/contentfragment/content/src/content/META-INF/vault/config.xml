@@ -1,0 +1,92 @@
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2015 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<vaultfs version="1.1">
+    <!--
+        Defines the content aggregation. The order of the defined aggregates
+        is important for finding the correct aggregator.
+    -->
+    <aggregates>
+        <!--
+            Defines an aggregate that handles nt:file and nt:resource nodes.
+        -->
+        <aggregate type="file" title="File Aggregate"/>
+
+        <!--
+            Defines an aggregate that handles file/folder like nodes. It matches
+            all nt:hierarchyNode nodes that have or define a jcr:content
+            child node and excludes child nodes that are nt:hierarchyNodes.
+        -->
+        <aggregate type="filefolder" title="File/Folder Aggregate"/>
+
+        <!--
+            Defines an aggregate that handles nt:nodeType nodes and serializes
+            them into .cnd notation.
+        -->
+        <aggregate type="nodetype" title="Node Type Aggregate" />
+
+        <!--
+            Defines an aggregate that defines full coverage for certain node
+            types that cannot be covered by the default aggregator.
+        -->
+        <aggregate type="full" title="Full Coverage Aggregate">
+            <matches>
+                <include nodeType="rep:AccessControl" respectSupertype="true" />
+                <include nodeType="rep:Policy" respectSupertype="true" />
+                <include nodeType="cq:Widget" respectSupertype="true" />
+                <include nodeType="cq:EditConfig" respectSupertype="true" />
+                <include nodeType="cq:WorkflowModel" respectSupertype="true" />
+                <include nodeType="vlt:FullCoverage" respectSupertype="true" />
+                <include nodeType="mix:language" respectSupertype="true" />
+                <include nodeType="sling:OsgiConfig" respectSupertype="true" />
+            </matches>
+        </aggregate>
+
+        <!--
+            Defines an aggregate that handles nt:folder like nodes.
+        -->
+        <aggregate type="generic" title="Folder Aggregate">
+            <matches>
+                <include nodeType="nt:folder" respectSupertype="true" />
+            </matches>
+            <contains>
+                <exclude isNode="true" />
+            </contains>
+        </aggregate>
+
+        <!--
+            Defines the default aggregate
+        -->
+        <aggregate type="generic" title="Default Aggregator" isDefault="true">
+            <matches>
+                <!-- all -->
+            </matches>
+            <contains>
+                <exclude nodeType="nt:hierarchyNode" respectSupertype="true" />
+            </contains>
+        </aggregate>
+
+    </aggregates>
+
+    <!--
+      defines the input handlers
+    -->
+    <handlers>
+        <handler type="folder"/>
+        <handler type="file"/>
+        <handler type="nodetype"/>
+        <handler type="generic"/>
+    </handlers>
+</vaultfs>

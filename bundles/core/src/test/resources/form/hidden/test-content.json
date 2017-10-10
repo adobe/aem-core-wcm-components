@@ -32,7 +32,7 @@
           "method": "GET",
           "jcr:created": "Wed Oct 05 2016 16:05:53 GMT+0530",
           "jcr:lastModified": "Thu Oct 06 2016 12:49:10 GMT+0530",
-          "sling:resourceType": "core/wcm/components/form/container",
+          "sling:resourceType": "core/wcm/components/form/container/v1/container",
           "actionType": "foundation/components/form/actions/store",
           "hidden_1": {
             "jcr:primaryType": "nt:unstructured",
@@ -40,7 +40,7 @@
             "jcr:lastModifiedBy": "admin",
             "jcr:created": "Wed Oct 05 2016 16:28:03 GMT+0530",
             "jcr:lastModified": "Thu Oct 06 2016 12:47:08 GMT+0530",
-            "sling:resourceType": "core/wcm/components/form/text"
+            "sling:resourceType": "core/wcm/components/form/hidden/v1/hidden"
           },
           "hidden_2": {
             "jcr:primaryType": "nt:unstructured",
@@ -51,7 +51,7 @@
             "name": "Custom_Name",
             "id": "hidden-field-id",
             "value": "Custom value",
-            "sling:resourceType": "core/wcm/components/form/text"
+            "sling:resourceType": "core/wcm/components/form/hidden/v1/hidden"
           }
         }
       }

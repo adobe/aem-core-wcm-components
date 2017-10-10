@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -25,19 +27,19 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
-import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = Breadcrumb.class,
-       resourceType = BreadcrumbImpl.RESOURCE_TYPE)
-@Exporter(name = Constants.EXPORTER_NAME,
-          extensions = Constants.EXPORTER_EXTENSION)
-public class BreadcrumbImpl implements Breadcrumb {
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Breadcrumb.class, ComponentExporter.class}, resourceType = BreadcrumbImpl
+        .RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class BreadcrumbImpl implements Breadcrumb, ComponentExporter {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/breadcrumb/v1/breadcrumb";
 
@@ -54,6 +56,9 @@ public class BreadcrumbImpl implements Breadcrumb {
     @ScriptVariable
     private Page currentPage;
 
+    @Self
+    private SlingHttpServletRequest request;
+
     private boolean showHidden;
     private boolean hideCurrent;
     private int startLevel;
@@ -69,19 +74,20 @@ public class BreadcrumbImpl implements Breadcrumb {
     @Override
     public Collection<NavigationItem> getItems() {
         if (items == null) {
-            items = new ArrayList<>();
-            createItems();
+            items = createItems();
         }
         return items;
     }
 
-    private List<NavigationItem> createItems() {
-        int currentLevel = currentPage.getDepth();
-        addNavigationItems(currentLevel);
-        return items;
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return request.getResource().getResourceType();
     }
 
-    private void addNavigationItems(int currentLevel) {
+    private List<NavigationItem> createItems() {
+        List<NavigationItem> items = new ArrayList<>();
+        int currentLevel = currentPage.getDepth();
         while (startLevel < currentLevel) {
             Page page = currentPage.getAbsoluteParent(startLevel);
             if (page != null) {
@@ -96,6 +102,7 @@ public class BreadcrumbImpl implements Breadcrumb {
             }
             startLevel++;
         }
+        return items;
     }
 
     private boolean checkIfNotHidden(Page page) {
