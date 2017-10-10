@@ -412,14 +412,14 @@
             <properties>
                 <releaseRepository-Id>adobe-public-releases</releaseRepository-Id>
                 <releaseRepository-Name>Adobe Public Releases</releaseRepository-Name>
-                <releaseRepository-URL>https://repo.adobe.com/nexus/content/groups/public</releaseRepository-URL>
+                <releaseRepository-URL>https://repo.adobe.com/nexus/content/repositories/releases</releaseRepository-URL>
             </properties>
 
             <repositories>
                 <repository>
                     <id>adobe-public-releases</id>
                     <name>Adobe Public Repository</name>
-                    <url>https://repo.adobe.com/nexus/content/groups/public</url>
+                    <url>https://repo.adobe.com/nexus/content/repositories/releases</url>
                     <releases>
                         <enabled>true</enabled>
                         <updatePolicy>never</updatePolicy>
@@ -434,7 +434,7 @@
                 <pluginRepository>
                     <id>adobe-public-releases</id>
                     <name>Adobe Public Repository</name>
-                    <url>https://repo.adobe.com/nexus/content/groups/public</url>
+                    <url>https://repo.adobe.com/nexus/content/repositories/releases</url>
                     <releases>
                         <enabled>true</enabled>
                         <updatePolicy>never</updatePolicy>
