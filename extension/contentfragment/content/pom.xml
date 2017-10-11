@@ -118,11 +118,6 @@
                     <failOnError>true</failOnError>
                     <group>adobe/cq60</group>
                     <dependencies>
-                        <dependency>
-                            <group>adobe/cq60</group>
-                            <name>core.wcm.components.sandbox.content</name>
-                            <version>[0.0.1,)</version>
-                        </dependency>
                         <dependecy>
                             <group>adobe/cq630/featurepack</group>
                             <name>cq-6.3.0-featurepack-19008</name>

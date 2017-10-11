@@ -16,4 +16,5 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
     <filter root="/apps/core/wcm/extension/sandbox/components/contentfragment"/>
+    <filter root="/apps/weretail/sandbox/components/contentfragment"/>
 </workspaceFilter>
