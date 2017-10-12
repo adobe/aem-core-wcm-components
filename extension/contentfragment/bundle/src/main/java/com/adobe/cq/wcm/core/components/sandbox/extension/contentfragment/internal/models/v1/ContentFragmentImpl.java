@@ -65,7 +65,7 @@ public class ContentFragmentImpl implements ContentFragment {
     @ScriptVariable
     private ResourceResolver resolver;
 
-    @ValueMapValue(name = ContentFragment.PN_PATH)
+    @ValueMapValue(name = ContentFragment.PN_PATH, injectionStrategy = OPTIONAL)
     private String path;
 
     @ValueMapValue(name = ContentFragment.PN_ELEMENT_NAMES, injectionStrategy = OPTIONAL)
@@ -77,29 +77,39 @@ public class ContentFragmentImpl implements ContentFragment {
 
     @PostConstruct
     private void initialize() {
-        // get fragment resource
-        Resource fragmentResource = resolver.getResource(path);
-        if (fragmentResource == null) {
-            throw new IllegalStateException("Path does not exist");
-        }
-
-        // convert it to a content fragment
-        fragment = fragmentResource.adaptTo(com.adobe.cq.dam.cfm.ContentFragment.class);
-        if (fragment == null) {
-            throw new IllegalStateException("Path is not a content fragment");
+        if (!StringUtils.isEmpty(path)) {
+            // get fragment resource
+            Resource fragmentResource = resolver.getResource(path);
+            if (fragmentResource != null) {
+                // convert it to a content fragment
+                fragment = fragmentResource.adaptTo(com.adobe.cq.dam.cfm.ContentFragment.class);
+                if (fragment == null) {
+                    LOG.error("Content Fragment can not be initialized because '{}' is not a content fragment.", path);
+                }
+            } else {
+                LOG.error("Content Fragment can not be initialized because the '{}' does not exist.", path);
+            }
+        } else {
+            LOG.warn("Please provide a path for the content fragment component.");
         }
     }
 
     @Nullable
     @Override
     public String getTitle() {
-        return fragment.getTitle();
+        if (fragment != null) {
+            return fragment.getTitle();
+        }
+        return null;
     }
 
     @Nullable
     @Override
     public String getDescription() {
-        return fragment.getDescription();
+        if (fragment != null) {
+            return fragment.getDescription();
+        }
+        return null;
     }
 
     @Nonnull

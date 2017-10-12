@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.clients.util.ResourceUtil;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -51,6 +54,8 @@ import com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models
 import com.day.cq.commons.jcr.JcrConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit.AemContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_DATA;
@@ -62,11 +67,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
 
 public class ContentFragmentImplTest {
+
+    private Logger cfmLogger;
 
     private static final String TEST_PAGE_PATH = "/content/contentfragments";
     private static final String TEST_CONTAINER_PATH = TEST_PAGE_PATH + "/jcr:content/root/responsivegrid";
@@ -122,22 +128,38 @@ public class ContentFragmentImplTest {
         AEM_CONTEXT.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, ADAPTER);
     }
 
-    @Test
-    public void testTextOnlyNoPath() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_NO_PATH);
-        assertNull("Model should be null as no path is set", fragment);
+    @Before
+    public void setTestFixture() throws NoSuchFieldException, IllegalAccessException {
+        cfmLogger = spy(LoggerFactory.getLogger("FakeLogger"));
+        Field field = ContentFragmentImpl.class.getDeclaredField("LOG");
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        field.setAccessible(true);
+        // remove final modifier from field
+
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(null, cfmLogger);
     }
 
     @Test
-    public void testTextNonExistingPath() {
+    public void testTextOnlyNoPath() {
+        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_NO_PATH);
+        verify(cfmLogger).warn("Please provide a path for the content fragment component.");
+        assertNotNull("Model shouldn't be null when no path is set", fragment);
+    }
+
+    @Test
+    public void testTextOnlyNonExistingPath() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_NON_EXISTING_PATH);
-        assertNull("Model should be null as the path does not exist", fragment);
+        verify(cfmLogger).error("Content Fragment can not be initialized because the '{}' does not exist.", "/content/dam/contentfragments/non-existing");
+        assertNotNull("Model shouldn't be null when the path does not exist", fragment);
     }
 
     @Test
     public void testTextOnlyInvalidPath() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_INVALID_PATH);
-        assertNull("Model should be null as the path is not a content fragment", fragment);
+        verify(cfmLogger).error("Content Fragment can not be initialized because '{}' is not a content fragment.", "/content/dam/contentfragments");
+        assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
     }
 
     @Test
@@ -161,19 +183,19 @@ public class ContentFragmentImplTest {
     @Test
     public void testStructuredNoPath() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NO_PATH);
-        assertNull("Model should be null as no path is set", fragment);
+        assertNotNull("Model shouldn't be null when no path is set", fragment);
     }
 
     @Test
     public void testStructuredNonExistingPath() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NON_EXISTING_PATH);
-        assertNull("Model should be null as the path does not exist", fragment);
+        assertNotNull("Model shouldn't be null when the path does not exist", fragment);
     }
 
     @Test
     public void testStructuredOnlyInvalidPath() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_INVALID_PATH);
-        assertNull("Model should be null as the path is not a content fragment", fragment);
+        assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
     }
 
     @Test
