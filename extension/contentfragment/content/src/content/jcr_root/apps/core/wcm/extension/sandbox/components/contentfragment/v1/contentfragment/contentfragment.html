@@ -21,9 +21,9 @@
         data-sly-use.elementTemplate="element.html"
         data-path="${properties.fragmentPath}"
         data-type="${fragment.type}"
-        class="cmp-contentfragment">
+        class="cmp-contentfragment${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}">
         <sly data-sly-call="${elementTemplate.element @ element=element}"></sly>
     </dl>
 </sly>
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-call="${template.placeholder @ isEmpty=!properties.fragmentPath || fragment.elements.isEmpty}"></sly>
+     data-sly-call="${template.placeholder @ isEmpty=!properties.fragmentPath || fragment.elements.isEmpty, classAppend='cq-dd-contentfragment'}"></sly>

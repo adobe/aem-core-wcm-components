@@ -5,4 +5,15 @@
         jcr:primaryType="cq:InplaceEditingConfig"
         active="{Boolean}true"
         editorType="contentfragment"/>
+    <cq:dropTargets jcr:primaryType="nt:unstructured">
+        <contentfragment
+            jcr:primaryType="cq:DropTargetConfig"
+            accept="[application/vnd.adobe.contentfragment]"
+            groups="[media]"
+            propertyName="./fragmentPath">
+            <parameters
+                jcr:primaryType="nt:unstructured"
+                elementNames=""/>
+        </contentfragment>
+    </cq:dropTargets>
 </jcr:root>
