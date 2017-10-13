@@ -4,6 +4,18 @@
 
 A set of standardized components that can be used to speed up development of websites.
 
+## Documentation
+
+* [Tutorial to build a new site using the Core Components](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
+* AEM product documentation of Core Components
+  * [Author documentation](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
+  * [Developer documentation](https://docs.adobe.com/docs/en/aem/6-3/develop/components/core-components.html)
+* [adaptTo() 2017 presentation](https://adapt.to/2017/en/schedule/extensible-components-with-sling-models-and-htl.html)
+
+## Development
+If you're curious about how the next generation of components looks like, a tech preview is made available in the
+[`development`](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development) branch.
+
 ## Contributing
 
 Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
@@ -29,7 +41,11 @@ The components' versioning scheme is documented on the [AEM Core WCM Components'
 
 ## System Requirements
 
-The core components are built on top of the Sling Models API 1.3, which is part of `AEM 6.3`. From version 1.0.4 the project requires Java 1.8 as an execution environment.
+Core Components | AEM                       | Java
+----------------|---------------------------|-----
+1.0.0, 1.0.2    | AEM 6.3                   | 1.7
+1.0.4, 1.0.6    | AEM 6.3                   | 1.8
+1.1.0           | AEM 6.3 + FP19614 or SP 1 | 1.8
 
 ## Installation
 
@@ -101,7 +117,3 @@ core components package into your own project maven build you can add the depend
  
  For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the 
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)
-
-## Development
-If you're curious about how the next generation of components looks like, a tech preview is made available in the
-[`development`](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development) branch.
