@@ -1,9 +1,16 @@
 # AEM Core WCM Components Sandbox
-
 [![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=development)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
 [![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
 
 **The Sandbox represents a space where work-in-progress versions of the Core Components are developed. They provide _beta features_ and *should not be used in production*. When the components become stable, they will be promoted to new production-ready releases and moved out of sandbox.**
+
+## Documentation
+
+* [Tutorial to build a new site using the Core Components](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
+* AEM product documentation of Core Components
+  * [Author documentation](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
+  * [Developer documentation](https://docs.adobe.com/docs/en/aem/6-3/develop/components/core-components.html)
+* [adaptTo() 2017 presentation](https://adapt.to/2017/en/schedule/extensible-components-with-sling-models-and-htl.html)
 
 ## Contributing
 
@@ -30,11 +37,15 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/hidden/v2/hidden)
   * [Form button](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/button/v2/button)
 
-The components' versioning scheme is documented on the [Versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
+The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page
 
 ## System Requirements
 
-The core components are built on top of the Sling Models API 1.3, which is part of `AEM 6.3`. From version 1.0.4 the project requires Java 1.8 as an execution environment.
+Core Components | AEM                       | Java
+----------------|---------------------------|-----
+1.0.0, 1.0.2    | AEM 6.3                   | 1.7
+1.0.4, 1.0.6    | AEM 6.3                   | 1.8
+1.1.0           | AEM 6.3 + FP19614 or SP 1 | 1.8
 
 The Sandbox components depend on the [`cq-6.3.0-featurepack-18678`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy.html?packagePath=/content/companies/public/adobe/packages/cq630/featurepack/cq-6.3.0-featurepack-18678) Feature Pack. This Feature Pack is a tech preview, meaning that changes might happen to it that could break compatibility. It is therefore recommended to not install it on production environments and instead wait until these capabilities are consolidated in a Service Pack.
 
