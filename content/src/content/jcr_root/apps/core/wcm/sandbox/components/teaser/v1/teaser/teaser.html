@@ -18,8 +18,7 @@
      data-sly-test.hasContent="${teaser.linkURL && teaser.imageResource}"
      class="cmp-teaser${!wcmmode.disabled ? ' cq-dd-image' : ''}">
 
-    <div class="cmp-teaser__image"
-         data-sly-resource="${ teaser.imageResource @ resourceType='core/wcm/sandbox/components/image/v2/image'}"></div>
+    <div class="cmp-teaser__image" data-sly-resource="${teaser.imageResource}"></div>
 
     <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}">${title}</h2>
     <h3 class="cmp-teaser__description" data-sly-test.description="${teaser.description}">${description}</h3>

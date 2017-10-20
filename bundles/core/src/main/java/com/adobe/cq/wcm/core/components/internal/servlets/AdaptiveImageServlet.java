@@ -47,7 +47,8 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl;
+import com.adobe.cq.wcm.core.components.sandbox.internal.models.v1.AbstractImageDelegatingModel;
+import com.adobe.cq.wcm.core.components.sandbox.internal.resource.ImageResourceWrapper;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.dam.api.Asset;
@@ -56,6 +57,7 @@ import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
 import com.day.cq.wcm.api.NameConstants;
+import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.image.Layer;
@@ -66,7 +68,6 @@ import com.day.image.Layer;
         property = {
                 "sling.servlet.selectors=" + AdaptiveImageServlet.DEFAULT_SELECTOR,
                 "sling.servlet.resourceTypes=core/wcm/components/image",
-                "sling.servlet.resourceTypes=" + ImageImpl.RESOURCE_TYPE,
                 "sling.servlet.extensions=jpg",
                 "sling.servlet.extensions=jpeg",
                 "sling.servlet.extensions=png",
@@ -156,21 +157,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
             } else {
-                if (!allowedRenditionWidths.isEmpty()) {
-                    // resize to the first value of the allowedRenditionWidths
-                    int size = allowedRenditionWidths.get(0);
-                    LOGGER.debug(
-                            "The image request contains no width information, but the image's content policy defines at least one " +
-                                    "allowed width. Will resize the image to the first allowed width - {}px.", size);
-                    resizeAndStream(request, response, image, imageProperties, size);
-
-                } else {
-                    // resize to the default value
-                    LOGGER.debug(
-                            "The image request contains no width information and there's no information about the allowed widths in " +
-                                    "the image's content policy. Will resize the image to {}px.", defaultResizeWidth);
-                    resizeAndStream(request, response, image, imageProperties, defaultResizeWidth);
-                }
+                LOGGER.debug("The image request contains no width information. Will resize the image to {}px.", defaultResizeWidth);
+                resizeAndStream(request, response, image, imageProperties, defaultResizeWidth);
             }
         }
     }
@@ -217,7 +205,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         } else {
             imageFile = image.getChild(DownloadResource.NN_FILE);
-            if ("gif".equalsIgnoreCase(extension)) {
+            if (imageFile != null && "gif".equalsIgnoreCase(extension)) {
                 LOGGER.debug("GIF file detected; will render the original file.");
                 InputStream is = imageFile.adaptTo(InputStream.class);
                 if (is != null) {
@@ -310,27 +298,29 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 is = imageFile.adaptTo(InputStream.class);
                 int rotationAngle = getRotation(image, imageProperties);
                 Rectangle rectangle = getCropRect(image, imageProperties);
-                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
-                    Layer layer = null;
-                    if (rectangle != null) {
-                        layer = new Layer(is);
-                        layer.crop(rectangle);
-                        LOGGER.debug("Applied cropping transformation.");
-                    }
-                    if (rotationAngle != 0) {
+                if (is !=null) {
+                    if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
+                        Layer layer = null;
+                        if (rectangle != null) {
+                            layer = new Layer(is);
+                            layer.crop(rectangle);
+                            LOGGER.debug("Applied cropping transformation.");
+                        }
+                        if (rotationAngle != 0) {
+                            if (layer == null) {
+                                layer = new Layer(is);
+                            }
+                            layer.rotate(rotationAngle);
+                            LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                        }
                         if (layer == null) {
                             layer = new Layer(is);
                         }
-                        layer.rotate(rotationAngle);
-                        LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                        resizeAndStreamLayer(response, layer, imageType, resizeWidth);
+                    } else {
+                        LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
+                        stream(response, is, imageType);
                     }
-                    if (layer == null) {
-                        layer = new Layer(is);
-                    }
-                    resizeAndStreamLayer(response, layer, imageType, resizeWidth);
-                } else {
-                    LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
-                    stream(response, is, imageType);
                 }
             } finally {
                 IOUtils.closeQuietly(is);
@@ -554,7 +544,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         ResourceResolver resourceResolver = request.getResourceResolver();
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
-            ContentPolicy contentPolicy = policyManager.getPolicy(request.getResource());
+            ComponentManager componentManager = resourceResolver.adaptTo(ComponentManager.class);
+            Resource imageResource = request.getResource();
+            if (componentManager != null) {
+                com.day.cq.wcm.api.components.Component component = componentManager.getComponentOfResource(imageResource);
+                if (component != null && component.isAccessible()) {
+                    String delegatingResourceType = component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
+                    if (StringUtils.isNotEmpty(delegatingResourceType)) {
+                        imageResource = new ImageResourceWrapper(imageResource, delegatingResourceType);
+                    }
+                }
+            }
+            ContentPolicy contentPolicy = policyManager.getPolicy(imageResource);
             if (contentPolicy != null) {
                 String[] allowedRenditionWidths = contentPolicy.getProperties()
                         .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);

@@ -17,10 +17,12 @@ package com.adobe.cq.wcm.core.components.sandbox.internal.models.v1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -35,6 +37,7 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.*;
@@ -125,15 +128,15 @@ public class TeaserImplTest {
     @Test
     public void testEmptyFileReference() throws Exception {
         Teaser teaser = getTeaserUnderTest(TEASER_3);
-        verify(teaserLogger).warn("Please provide an asset path for the teaser component from " +
-                "/content/teasers/jcr:content/root/responsivegrid/teaser-3.");
+        verify(teaserLogger)
+                .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 requires an asset or an image file configured.");
         assertNull(teaser.getImageResource());
     }
 
     @Test
     public void testTeaserWithoutLink() throws Exception {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
-        verify(teaserLogger).warn("Please provide a link for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4.");
+        verify(teaserLogger).debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 requires a link.");
         assertNull(teaser.getLinkURL());
     }
 
@@ -149,6 +152,11 @@ public class TeaserImplTest {
         SlingBindings slingBindings = new SlingBindings();
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
+        Component component = mock(Component.class);
+        when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
+            put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/sandbox/components/image/v2/image");
+        }}));
+        slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Teaser.class);
     }

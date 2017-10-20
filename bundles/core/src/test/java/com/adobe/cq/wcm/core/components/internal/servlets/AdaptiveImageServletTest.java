@@ -148,9 +148,9 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         verify(response).setContentType("image/png");
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
         BufferedImage image = ImageIO.read(byteArrayInputStream);
-        Dimension expectedDimension = new Dimension(600, 600);
+        Dimension expectedDimension = new Dimension(ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
-        assertEquals("Expected image rendered using the first width defined in the content policy.", expectedDimension, actualDimension);
+        assertEquals("Expected image rendered with the default resize configuration width.", expectedDimension, actualDimension);
     }
 
 
