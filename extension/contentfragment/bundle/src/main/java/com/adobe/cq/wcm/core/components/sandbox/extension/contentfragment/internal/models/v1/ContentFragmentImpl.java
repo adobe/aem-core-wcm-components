@@ -112,10 +112,10 @@ public class ContentFragmentImpl implements ContentFragment {
         return null;
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public String getType() {
-        if (type == null) {
+        if (type == null && fragment != null) {
             Resource fragmentResource = fragment.adaptTo(Resource.class);
             FragmentTemplate template = fragment.getTemplate();
             Resource templateResource = template.adaptTo(Resource.class);
@@ -149,10 +149,10 @@ public class ContentFragmentImpl implements ContentFragment {
         return type;
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public List<Element> getElements() {
-        if (elements == null) {
+        if (elements == null && fragment != null) {
             // get either all elements...
             Iterator<ContentElement> iterator = fragment.getElements();
             // ...or configured elements

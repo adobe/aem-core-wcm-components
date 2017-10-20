@@ -187,7 +187,7 @@ public interface ContentFragment extends ContainerExporter {
      * @return the type of the content fragment
      * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
      */
-    @Nonnull
+    @Nullable
     @JsonProperty("model")
     default String getType() {
         throw new UnsupportedOperationException();
@@ -203,7 +203,7 @@ public interface ContentFragment extends ContainerExporter {
      * @see com.adobe.cq.dam.cfm.ContentFragment#getElements()
      * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
      */
-    @Nonnull
+    @Nullable
     @JsonIgnore
     default java.util.List<Element> getElements() {
         throw new UnsupportedOperationException();
