@@ -286,7 +286,7 @@
                                     <configuration
                                         jcr:primaryType="nt:unstructured"
                                         jcr:title="Configuration"
-                                        sling:resourceType="granite/ui/components/foundation/form/fieldset">
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
                                         <items jcr:primaryType="nt:unstructured">
                                             <cqConf
                                                 jcr:primaryType="nt:unstructured"
@@ -318,7 +318,7 @@
                                     </templates>
                                     <authenticationrequirement
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/foundation/include"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
                                         path="/mnt/overlay/foundation/components/page/cq:dialog/content/items/tabs/items/advanced/items/column/items/authenticationrequirement"/>
                                     <export
                                         cq:showOnCreate="{Boolean}false"
@@ -493,22 +493,19 @@
                         cq:showOnCreate="{Boolean}false"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Translation Services"
-                        sling:resourceType="granite/ui/components/foundation/section">
-                        <layout
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
-                            margin="{Boolean}false"/>
-                            <items jcr:primaryType="nt:unstructured">
-                                <column
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                        margin="{Boolean}false">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/foundation/container">
-                                    <items jcr:primaryType="nt:unstructured">
-                                        <configurations
+                                    sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <configurations
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="cq/translation/cloudserviceconfigs/components/configurations"/>
-                                    </items>
-                                </column>
-                            </items>
+                                </items>
+                            </column>
+                        </items>
                     </translationcloudservices  >
                     <personalization
                         cq:showOnCreate="{Boolean}false"
@@ -563,7 +560,7 @@
                     </personalization>
                     <permissions
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/foundation/include"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
                         path="/mnt/overlay/wcm/core/content/sites/properties/tabs/permissions"/>
                     <blueprint
                         cq:showOnCreate="{Boolean}false"

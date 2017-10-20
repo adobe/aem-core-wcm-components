@@ -305,7 +305,7 @@
                                     </templates>
                                     <authenticationrequirement
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/foundation/include"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
                                         path="/mnt/overlay/foundation/components/page/cq:dialog/content/items/tabs/items/advanced/items/column/items/authenticationrequirement"/>
                                     <export
                                         cq:showOnCreate="{Boolean}false"
@@ -528,7 +528,7 @@
                     </personalization>
                     <permissions
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/foundation/include"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
                         path="/mnt/overlay/wcm/core/content/sites/properties/tabs/permissions"/>
                     <blueprint
                         cq:showOnCreate="{Boolean}false"
