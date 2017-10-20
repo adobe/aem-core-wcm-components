@@ -1,0 +1,73 @@
+{
+  "items": [
+    {
+      "page": {
+        "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
+        "pageTitle": null,
+        "name": "about",
+        "description": null,
+        "title": "About Us"
+      },
+      "active": true,
+      "children": [],
+      "level": 0,
+      "url": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
+      "title": "LOCALE 1",
+      "locale": "en_US",
+      "country": "US",
+      "language": "en-US"
+    },
+    {
+      "page": {
+        "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
+        "pageTitle": null,
+        "name": "about",
+        "description": null,
+        "title": "About Us"
+      },
+      "active": false,
+      "children": [],
+      "level": 0,
+      "url": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
+      "title": "LOCALE 2",
+      "locale": "en_CA",
+      "country": "CA",
+      "language": "en-CA"
+    },
+    {
+      "page": {
+        "path": "/content/languagenavigation/LOCALE-3",
+        "pageTitle": null,
+        "name": "LOCALE-3",
+        "description": null,
+        "title": "LOCALE 3"
+      },
+      "active": false,
+      "children": [],
+      "level": 0,
+      "url": "/core/LOCALE-3-vanity",
+      "title": "LOCALE 3",
+      "locale": "de_CH",
+      "country": "CH",
+      "language": "de-CH"
+    },
+    {
+      "page": {
+        "path": "/content/languagenavigation/LOCALE-4",
+        "pageTitle": null,
+        "name": "LOCALE-4",
+        "description": null,
+        "title": "LOCALE 4"
+      },
+      "active": false,
+      "children": [],
+      "level": 0,
+      "url": "/core/content/languagenavigation/LOCALE-4.html",
+      "title": "LOCALE 4",
+      "locale": "de_DE",
+      "country": "DE",
+      "language": "de-DE"
+    }
+  ],
+  ":type": "core/wcm/sandbox/components/languagenavigation/v1/languagenavigation"
+}

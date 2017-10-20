@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models.v2;
 
+import javax.annotation.Nonnull;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -30,6 +32,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl implements Image {
 
     protected static final String RESOURCE_TYPE = "core/wcm/sandbox/components/image/v2/image";
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return RESOURCE_TYPE;
+    }
 
     @Override
     public int[] getSmartSizes() {

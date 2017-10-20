@@ -1,0 +1,6 @@
+{
+  "resultsSize": 10,
+  "searchTermMinimumLength": 3,
+  "rootPath": "/content/search",
+  ":type": "core/wcm/sandbox/components/search/v1/search"
+}

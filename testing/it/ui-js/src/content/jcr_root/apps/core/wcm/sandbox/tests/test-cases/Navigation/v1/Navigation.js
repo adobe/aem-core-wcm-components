@@ -101,9 +101,14 @@
                     }
                 })
             })
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(navigationRT, c.proxyPath_v2, "compPath", done)
+            })
+
             // add component
             .execFct(function (opts, done) {
-                c.addComponent(navigationRT, h.param("page_1_1")(opts) + c.relParentCompPath, 'cmpPath', done);
+                c.addComponent(h.param("compPath")(opts), h.param("page_1_1")(opts) + c.relParentCompPath, 'cmpPath', done);
             })
             .navigateTo("/editor.html%page_1_1%.html");
     };
@@ -113,6 +118,11 @@
             execAfter: tcExecuteAfterTest
         }).execFct(function (opts, done) {
             c.deletePage(h.param('page_1')(opts), done);
+        })
+
+        // delete the test page we created
+        .execFct(function (opts, done) {
+            c.deleteProxyComponent(h.param("compPath")(opts), done);
         });
     };
 

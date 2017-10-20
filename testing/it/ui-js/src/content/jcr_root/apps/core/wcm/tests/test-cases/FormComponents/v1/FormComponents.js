@@ -37,14 +37,24 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
                 c.createPage(c.template, c.rootPage, 'page_' + Date.now(), "testPagePath", done, pageRT)
             })
 
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formContainerRT, c.proxyPath, "compPathContainer", done)
+            })
+
             //add the form container component
             .execFct(function (opts, done) {
-                c.addComponent(formContainerRT, h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done)
+                c.addComponent(h.param("compPathContainer")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done)
+            })
+
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formTextRT, c.proxyPath, "compPathText", done)
             })
 
             //inside the form add a form text input field
             .execFct(function (opts, done) {
-                c.addComponent(formTextRT, h.param("containerPath")(opts) + "/", "inputPath", done)
+                c.addComponent(h.param("compPathText")(opts), h.param("containerPath")(opts) + "/", "inputPath", done)
             })
 
             //set name and default value for the input field
@@ -55,9 +65,14 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
                 c.editNodeProperties(h.param("inputPath")(), data, done);
             })
 
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formHihhenRT, c.proxyPath, "compPathHidden", done)
+            })
+
             //inside the form add a hidden field component
             .execFct(function (opts, done) {
-                c.addComponent(formHihhenRT, h.param("containerPath")(opts) + "/", "hiddenPath", done)
+                c.addComponent(h.param("compPathHidden")(opts), h.param("containerPath")(opts) + "/", "hiddenPath", done)
             })
 
             //set name and default value for the hidden field component
@@ -68,9 +83,14 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
                 c.editNodeProperties(h.param("hiddenPath")(), data, done);
             })
 
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formOptionsRT, c.proxyPath, "compPathOptions", done)
+            })
+
             //inside the form add a form option component
             .execFct(function (opts, done) {
-                c.addComponent(formOptionsRT, h.param("containerPath")(opts) + "/", "optionPath", done)
+                c.addComponent(h.param("compPathOptions")(opts), h.param("containerPath")(opts) + "/", "optionPath", done)
             })
 
             //create an option list items
@@ -89,9 +109,14 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
                 c.editNodeProperties(h.param("optionPath")(), data, done);
             })
 
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formBUttonRT, c.proxyPath, "compPathButton", done)
+            })
+
             //add a button to the form
             .execFct(function (opts, done) {
-                c.addComponent(formBUttonRT, h.param("containerPath")(opts) + "/", "buttonPath", done)
+                c.addComponent(h.param("compPathButton")(opts), h.param("containerPath")(opts) + "/", "buttonPath", done)
             })
 
             //make sure the button is a submit button
@@ -119,7 +144,32 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
             // delete the test page we created
             .execFct(function (opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
-            });
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathContainer")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathText")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathHidden")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathOptions")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathButton")(opts), done);
+            })
     };
 
     /**

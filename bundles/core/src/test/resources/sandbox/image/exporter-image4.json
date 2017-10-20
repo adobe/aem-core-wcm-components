@@ -3,5 +3,5 @@
     "smartImages": [],
     "lazyEnabled": true,
     "src": "/core/content/test/jcr%3acontent/root/image4.img.png",
-    ":type": "core/wcm/components/image/v1/image"
+    ":type": "core/wcm/sandbox/components/image/v2/image"
 }

@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.sandbox.models.LanguageNavigation;
 import com.adobe.cq.wcm.core.components.sandbox.models.LanguageNavigationItem;
@@ -50,8 +51,10 @@ import static org.mockito.Mockito.when;
 
 public class LanguageNavigationImplTest {
 
+    private static final String TEST_BASE = "/languagenavigation";
+
     @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext("/languagenavigation", "/content");
+    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content");
 
     private static final ContentPolicyManager contentPolicyManager = mock(ContentPolicyManager.class);
 
@@ -89,6 +92,8 @@ public class LanguageNavigationImplTest {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(SITE_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-1");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         verifyLanguageNavigationItems(EXPECTED_PAGES_DEPTH_1, items);
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation1"));
+
     }
 
     @Test
@@ -96,6 +101,7 @@ public class LanguageNavigationImplTest {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(SITE_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-2");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         verifyLanguageNavigationItems(EXPECTED_PAGES_DEPTH_2, items);
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation2"));
     }
 
     @Test
@@ -103,6 +109,8 @@ public class LanguageNavigationImplTest {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(SITE_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-3");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         verifyLanguageNavigationItems(EXPECTED_PAGES_DEPTH_2, items);
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation2"));
+
     }
 
     @Test
@@ -110,6 +118,8 @@ public class LanguageNavigationImplTest {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(SITE_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-4");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         assertEquals("Didn't expect any language navigation items.", 0, languageNavigation.getItems().size());
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation3"));
+
     }
 
     @Test
@@ -129,6 +139,7 @@ public class LanguageNavigationImplTest {
             {"/content/languagenavigation/LOCALE-4/LOCALE-9", "LOCALE 9", false, 1, "DE", "de-DE", "/content/languagenavigation/LOCALE-4/LOCALE-9.html"},
         };
         verifyLanguageNavigationItems(expectedPages, items);
+
     }
 
     private LanguageNavigation getLanguageNavigationUnderTest(String resourcePath) {

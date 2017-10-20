@@ -69,8 +69,13 @@ public class AbstractModelTest {
                         t = e.getCause();
                     }
                     if (t == null || !(t instanceof UnsupportedOperationException)) {
-                        errors.append("Expected method ").append(m.toString()).append(" to throw an ").append(UnsupportedOperationException
-                                .class.getName()).append(".\n");
+                        errors.append("Expected method ")
+                                .append(m.toString())
+                                .append("in class ")
+                                .append(clazz.getName())
+                                .append(" to throw an ")
+                                .append(UnsupportedOperationException.class.getName())
+                                .append(".\n");
                     }
                 }
             }

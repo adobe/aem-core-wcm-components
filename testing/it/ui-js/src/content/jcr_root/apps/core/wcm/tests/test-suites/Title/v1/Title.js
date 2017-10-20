@@ -40,9 +40,9 @@
         .addTestCase(title.tcSetTitleValueUsingConfigDialog(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcCheckExistenceOfTitleTypes(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcSetTitleType(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(title.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v1/title", "core/wcm/components",
+        .addTestCase(title.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/v1",
             c.policyPath, c.policyAssignmentPath))
-        .addTestCase(title.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v1/title", "core/wcm/components",
+        .addTestCase(title.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/v1",
             c.policyPath, c.policyAssignmentPath))
     ;
 }(hobs, jQuery));

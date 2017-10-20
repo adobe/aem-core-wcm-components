@@ -15,14 +15,17 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Navigation} Sling Model used for the {@code /apps/core/wcm/components/navigation} component.
  *
  * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
  */
-public interface Navigation {
+public interface Navigation extends ComponentExporter {
 
     /**
      * Name of the resource / configuration policy property that defines the site's root for which to build the navigation tree. The
@@ -72,6 +75,15 @@ public interface Navigation {
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     default List<NavigationItem> getItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 3.1.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 

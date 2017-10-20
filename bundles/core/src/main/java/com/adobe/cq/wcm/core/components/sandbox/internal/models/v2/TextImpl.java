@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models.v2;
 
+import javax.annotation.Nonnull;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -31,4 +33,9 @@ public class TextImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     protected static final String RESOURCE_TYPE = "core/wcm/sandbox/components/text/v2/text";
 
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return RESOURCE_TYPE;
+    }
 }

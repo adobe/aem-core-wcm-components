@@ -15,12 +15,25 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Breadcrumb} Sling Model used for the {@code /apps/core/wcm/components/breadcrumb} component.
  */
 @ConsumerType
-public interface Breadcrumb extends com.adobe.cq.wcm.core.components.models.Breadcrumb {
+public interface Breadcrumb extends com.adobe.cq.wcm.core.components.models.Breadcrumb, ComponentExporter {
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 3.1.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
 
 }

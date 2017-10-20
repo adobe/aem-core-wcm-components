@@ -15,16 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 import org.apache.sling.api.resource.Resource;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Search} Sling Model used for the {@code /apps/core/wcm/components/search} component.
  *
  * @since com.adobe.cq.wcm.core.components.sandbox.models 2.2.0
  */
-public interface Search {
+public interface Search extends ComponentExporter {
 
     /**
      * Name of the resource / configuration policy property that defines the search level from which to search
@@ -86,6 +89,15 @@ public interface Search {
      * @since com.adobe.cq.wcm.core.components.sandbox.models 2.4.0
      */
     default int getSearchTermMinimumLength() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 3.1.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 }

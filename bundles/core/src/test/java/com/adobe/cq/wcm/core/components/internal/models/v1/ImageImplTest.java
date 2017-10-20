@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 import javax.json.Json;
@@ -25,6 +26,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Matchers;
 
@@ -54,6 +56,12 @@ public class ImageImplTest extends AbstractImageTest {
     protected static String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
     protected static String IMAGE_LINK = "https://www.adobe.com";
 
+    protected String testBase = TEST_BASE;
+
+    @BeforeClass
+    public static void setUp() throws IOException {
+        internalSetUp(CONTEXT, TEST_BASE);
+    }
 
     @Test
     public void testImageWithTwoOrMoreSmartSizes() throws Exception {
@@ -70,7 +78,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertFalse(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE0_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE0_PATH));
     }
 
     @Test
@@ -86,7 +94,7 @@ public class ImageImplTest extends AbstractImageTest {
         String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image3.img.600.png\"],\"smartSizes\":[600]," +
                 "\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE3_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE3_PATH));
     }
 
     @Test
@@ -102,14 +110,14 @@ public class ImageImplTest extends AbstractImageTest {
                 "{\"" + Image.JSON_SMART_IMAGES + "\":[], \"" + Image.JSON_SMART_SIZES + "\":[], \"" + Image.JSON_LAZY_ENABLED +
                         "\":true}",
                 image.getJson());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE4_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE4_PATH));
     }
 
     @Test
     public void testInvalidAssetTypeImage() throws Exception {
         Image image = getImageUnderTest(IMAGE17_PATH);
         assertNull(image.getSrc());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE17_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE17_PATH));
     }
 
     @Test
@@ -117,7 +125,7 @@ public class ImageImplTest extends AbstractImageTest {
         String escapedResourcePath = Text.escapePath(IMAGE18_PATH);
         Image image = getImageUnderTest(IMAGE18_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE18_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE18_PATH));
     }
 
     @Test
@@ -129,7 +137,7 @@ public class ImageImplTest extends AbstractImageTest {
         escapedResourcePath = Text.escapePath(IMAGE15_PATH);
         image = getImageUnderTest(IMAGE15_PATH, WCMMode.EDIT);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE15_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE15_PATH));
     }
 
     @Test
@@ -137,7 +145,7 @@ public class ImageImplTest extends AbstractImageTest {
         String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
         Image image = getImageUnderTest(IMAGE16_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg", image.getSrc());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE16_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE16_PATH));
     }
 
     @Test
@@ -161,7 +169,7 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     protected Image getImageUnderTest(String resourcePath, WCMMode wcmMode,  Class<? extends Image> imageClass) {
-        Resource resource = aemContext.resourceResolver().getResource(resourcePath);
+        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
@@ -177,16 +185,16 @@ public class ImageImplTest extends AbstractImageTest {
         }
         slingBindings.put(SlingBindings.RESOURCE, resource);
         final MockSlingHttpServletRequest request =
-                new MockSlingHttpServletRequest(aemContext.resourceResolver(), aemContext.bundleContext());
+                new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
-        Page page = aemContext.pageManager().getPage(PAGE);
+        Page page = CONTEXT.pageManager().getPage(PAGE);
         slingBindings.put(WCMBindings.CURRENT_PAGE, page);
         if (wcmMode != null) {
             request.setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, wcmMode);
         }
         slingBindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(request));
-        slingBindings.put(WCMBindings.PAGE_MANAGER, aemContext.pageManager());
+        slingBindings.put(WCMBindings.PAGE_MANAGER, CONTEXT.pageManager());
         Style style = mock(Style.class);
         when(style.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
                 invocationOnMock -> invocationOnMock.getArguments()[1]

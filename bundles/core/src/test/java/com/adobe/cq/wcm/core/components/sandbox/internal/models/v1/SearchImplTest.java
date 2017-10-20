@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.sandbox.models.Search;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
@@ -45,8 +46,10 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SearchImplTest {
 
+    private static final String TEST_BASE = "/search";
+
     @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/search", "/content");
+    public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
 
     private static final String TEST_ROOT = "/content/search/page";
 
@@ -84,6 +87,7 @@ public class SearchImplTest {
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         Search search = context.request().adaptTo(Search.class);
         assertEquals("/content/search", search.getRootPath());
+        Utils.testJSONExport(search, Utils.getTestExporterJSONPath(TEST_BASE, "search"));
     }
 
 
@@ -100,5 +104,6 @@ public class SearchImplTest {
             assertEquals("search", valueMap.get("title"));
             assertEquals("/content/search/page", valueMap.get("path"));
         }
+        Utils.testJSONExport(search, Utils.getTestExporterJSONPath(TEST_BASE, "search"));
     }
 }

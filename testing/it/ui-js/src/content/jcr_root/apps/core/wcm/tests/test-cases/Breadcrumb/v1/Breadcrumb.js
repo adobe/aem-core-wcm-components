@@ -56,9 +56,14 @@ window.CQ.CoreComponentsIT.Breadcrumb.v1 = window.CQ.CoreComponentsIT.Breadcrumb
                 c.createPage(c.template, h.param("level_4")(), "level_5", "level_5", done, pageRT)
             })
 
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(breadcrumbRT, c.proxyPath, "compPath", done)
+            })
+
             // add the component to the deepest level
             .execFct(function (opts, done){
-                c.addComponent(breadcrumbRT, h.param("level_5")(opts)+c.relParentCompPath, "cmpPath", done)
+                c.addComponent(h.param("compPath")(opts), h.param("level_5")(opts)+c.relParentCompPath, "cmpPath", done)
             })
 
             // open the deepest level in the editor
@@ -75,7 +80,13 @@ window.CQ.CoreComponentsIT.Breadcrumb.v1 = window.CQ.CoreComponentsIT.Breadcrumb
             // delete the test page we created
             .execFct(function (opts, done) {
                 c.deletePage(h.param("level_1")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPath")(opts), done);
             });
+
     };
 
     /**

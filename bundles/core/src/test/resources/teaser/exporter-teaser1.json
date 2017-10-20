@@ -1,0 +1,8 @@
+{
+  "title": "Teaser",
+  "description": "Description",
+  "linkURL": "https://www.adobe.com",
+  "linkText": "Adobe",
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-1",
+  ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
+}

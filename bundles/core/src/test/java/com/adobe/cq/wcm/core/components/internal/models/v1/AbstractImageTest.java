@@ -40,7 +40,7 @@ public class AbstractImageTest {
     protected static String TEST_BASE = "/image";
 
     @ClassRule
-    public static final AemContext aemContext = CoreComponentTestContext.createContext(TEST_BASE, "/content");
+    public static final AemContext CONTEXT = CoreComponentTestContext.createContext();
 
     protected static final String TEST_ROOT = "/content";
     protected static final String PAGE = TEST_ROOT + "/test";
@@ -81,8 +81,8 @@ public class AbstractImageTest {
 
     protected ResourceResolver resourceResolver;
 
-    @BeforeClass
-    public static void setUp() throws IOException {
+    protected static void internalSetUp(AemContext aemContext, String testBase) throws IOException {
+        CONTEXT.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT);
         mockedMimeTypeService = mock(MimeTypeService.class);
         when(mockedMimeTypeService.getMimeType("tif")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);
         when(mockedMimeTypeService.getMimeType("tiff")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);

@@ -15,12 +15,45 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models.form;
 
+import javax.annotation.Nonnull;
+import java.util.Map;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
 
 /**
  * Defines the form {@code Container} Sling Model used for the {@code /apps/core/wcm/sandbox/components/form/container} component.
  */
 @ConsumerType
-public interface Container extends com.adobe.cq.wcm.core.components.models.form.Container {
+public interface Container extends com.adobe.cq.wcm.core.components.models.form.Container, ContainerExporter {
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models.form 1.1.0
+     */
+    @Nonnull
+    @Override
+    default String[] getExportedItemsOrder() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models.form 1.1.0
+     */
+    @Nonnull
+    @Override
+    default Map<String, ? extends ComponentExporter> getExportedItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models.form 1.1.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
 
 }

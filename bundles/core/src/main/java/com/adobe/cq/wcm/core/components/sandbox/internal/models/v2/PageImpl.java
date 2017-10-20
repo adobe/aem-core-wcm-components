@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +31,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.sandbox.models.Page;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
@@ -38,7 +41,7 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.google.common.collect.Lists;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = Page.class, resourceType = PageImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl implements Page {
 
@@ -103,5 +106,23 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public String getCssClassNames() {
         Set<String> cssClassesSet = componentContext.getCssClassNames();
         return StringUtils.join(cssClassesSet, " ");
+    }
+
+    @Nonnull
+    @Override
+    public String[] getExportedItemsOrder() {
+        return super.getExportedItemsOrder();
+    }
+
+    @Nonnull
+    @Override
+    public Map<String, ? extends ComponentExporter> getExportedItems() {
+        return super.getExportedItems();
+    }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return RESOURCE_TYPE;
     }
 }

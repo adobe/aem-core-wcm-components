@@ -15,13 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models.v1;
 
-import java.util.HashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
@@ -32,6 +33,7 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
@@ -39,8 +41,9 @@ import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.PageManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = Teaser.class, resourceType = TeaserImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = Constants.EXPORTER_NAME, extensions = Constants.EXPORTER_EXTENSION)
 public class TeaserImpl implements Teaser {
 
@@ -83,7 +86,9 @@ public class TeaserImpl implements Teaser {
                         " doesn't exist.");
             }
         }
-        linkURL = Utils.getURL(request, pageManager, linkURL);
+        if (StringUtils.isNotEmpty(linkURL)) {
+            linkURL = Utils.getURL(request, pageManager, linkURL);
+        }
     }
 
     @Override
@@ -106,7 +111,16 @@ public class TeaserImpl implements Teaser {
         return linkText;
     }
 
+    public String getImagePath() {
+        Resource image = getImageResource();
+        if (image == null) {
+            return null;
+        }
+        return image.getPath();
+    }
+
     @Override
+    @JsonIgnore
     public Resource getImageResource() {
         if (wrappedImageResource == null && imageResource != null) {
             wrappedImageResource = new TeaserImageResource(request.getResource());
@@ -114,6 +128,7 @@ public class TeaserImpl implements Teaser {
         return wrappedImageResource;
     }
 
+    @Exporter(name = Constants.EXPORTER_NAME, extensions = Constants.EXPORTER_EXTENSION)
     private class TeaserImageResource extends ResourceWrapper {
 
         private ValueMap valueMap;
@@ -139,5 +154,12 @@ public class TeaserImpl implements Teaser {
         public ValueMap getValueMap() {
             return valueMap;
         }
+
+    }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return RESOURCE_TYPE;
     }
 }

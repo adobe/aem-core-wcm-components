@@ -15,13 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models.form;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * A base interface to be extended by all the different types of form fields.
  * It contains commons attributes to be present in  all the form fields.
  */
 @ConsumerType
-public interface Field extends com.adobe.cq.wcm.core.components.models.form.Field {
+public interface Field extends com.adobe.cq.wcm.core.components.models.form.Field, ComponentExporter {
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models.form 1.1.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
 
 }

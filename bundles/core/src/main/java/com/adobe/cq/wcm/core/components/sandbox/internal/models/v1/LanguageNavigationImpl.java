@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +30,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.sandbox.models.LanguageNavigation;
 import com.adobe.cq.wcm.core.components.sandbox.models.NavigationItem;
@@ -38,7 +40,7 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = LanguageNavigation.class,
+       adapters = {LanguageNavigation.class, ComponentExporter.class},
        resourceType = {LanguageNavigationImpl.RESOURCE_TYPE})
 @Exporter(name = Constants.EXPORTER_NAME,
           extensions = Constants.EXPORTER_EXTENSION)
@@ -85,6 +87,12 @@ public class LanguageNavigationImpl implements LanguageNavigation {
             }
         }
         return items;
+    }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return RESOURCE_TYPE;
     }
 
     private List<NavigationItem> getItems(Page root) {

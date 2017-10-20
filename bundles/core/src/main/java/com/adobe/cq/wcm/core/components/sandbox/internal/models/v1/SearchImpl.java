@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -40,6 +41,7 @@ import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.sandbox.models.Search;
 import com.day.cq.search.PredicateConverter;
@@ -48,12 +50,14 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = Search.class,
+       adapters = {Search.class, ComponentExporter.class},
        resourceType = {SearchImpl.RESOURCE_TYPE})
 @Exporter(name = Constants.EXPORTER_NAME,
           extensions = Constants.EXPORTER_EXTENSION)
@@ -67,7 +71,11 @@ public class SearchImpl implements Search {
     protected static final int PROP_RESULTS_SIZE_DEFAULT = 10;
     protected static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
 
+    private static final String PARAM_FULLTEXT = "fulltext";
     private static final String PARAM_RESULTS_OFFSET = "resultsOffset";
+    private static final String PREDICATE_FULLTEXT = "fulltext";
+    private static final String PREDICATE_TYPE = "type";
+    private static final String PREDICATE_PATH = "path";
 
     @Self
     private SlingHttpServletRequest request;
@@ -126,12 +134,28 @@ public class SearchImpl implements Search {
     }
 
     @Override
+    @JsonIgnore
     public List<Resource> getResults() {
+        String fulltext = request.getParameter(PARAM_FULLTEXT);
         long resultsOffset = 0;
-        if(request.getParameter(PARAM_RESULTS_OFFSET) != null) {
+        if (request.getParameter(PARAM_RESULTS_OFFSET) != null) {
             resultsOffset = Long.parseLong(request.getParameter(PARAM_RESULTS_OFFSET));
         }
-        SearchResult searchResult = getSearchResult(resourceResolver, request.getParameterMap(), resultsSize, resultsOffset);
+        Map<String,String> predicatesMap = new HashMap<>();
+        predicatesMap.put(PREDICATE_FULLTEXT, fulltext);
+        predicatesMap.put(PREDICATE_PATH, path);
+        predicatesMap.put(PREDICATE_TYPE, NameConstants.NT_PAGE);
+        PredicateGroup predicates = PredicateConverter.createPredicates(predicatesMap);
+
+        Query query = queryBuilder.createQuery(predicates, resourceResolver.adaptTo(Session.class));
+        if (resultsSize != 0) {
+            query.setHitsPerPage(resultsSize);
+        }
+        if (resultsOffset != 0) {
+            query.setStart(resultsOffset);
+        }
+        SearchResult searchResult = query.getResult();
+
         return searchResult.getHits().stream().map(this::populateItem).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
@@ -173,17 +197,9 @@ public class SearchImpl implements Search {
         return null;
     }
 
-    private SearchResult getSearchResult(ResourceResolver resolver, Map predicateParameters, long resultsSize, long resultsOffset) {
-        PredicateGroup predicates = PredicateConverter.createPredicates(predicateParameters);
-        Query query = queryBuilder.createQuery(predicates, resolver.adaptTo(Session.class));
-        if (resultsSize != 0) {
-            query.setHitsPerPage(resultsSize);
-        }
-        if (resultsOffset != 0) {
-            query.setStart(resultsOffset);
-        }
-        return query.getResult();
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return RESOURCE_TYPE;
     }
-
-
 }

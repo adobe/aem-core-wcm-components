@@ -15,11 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code List} Sling Model used for the {@code /apps/core/wcm/components/list} component. This component
  * currently only supports page lists.
  */
 @ConsumerType
-public interface List extends com.adobe.cq.wcm.core.components.models.List {}
+public interface List extends com.adobe.cq.wcm.core.components.models.List, ComponentExporter {
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 3.1.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+
+}

@@ -18,5 +18,5 @@
     "title": "Adobe Logo",
     "link": "/core/content/test-image.html",
     "src": "/core/content/test/jcr%3acontent/root/image0.img.png",
-    ":type": "core/wcm/components/image/v1/image"
+    ":type": "core/wcm/sandbox/components/image/v2/image"
 }

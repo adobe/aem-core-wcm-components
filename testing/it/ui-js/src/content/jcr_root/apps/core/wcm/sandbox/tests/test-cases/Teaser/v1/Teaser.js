@@ -31,9 +31,17 @@
             execBefore: tcExecuteBeforeTest
         }).execFct(function (opts, done) {
             c.createPage(c.template, c.rootPage, 'teaser-page', 'teaser_page', done, pageRT);
-        }).execFct(function (opts, done) {
+        })
+
+        // create a proxy component
+        .execFct(function (opts, done){
+            c.createProxyComponent(h.param("compPath")(opts), c.proxyPath_v2, "compPath", done)
+        })
+
+        .execFct(function (opts, done) {
             c.addComponent(teaserRT, h.param('teaser_page')(opts) + c.relParentCompPath, 'cmpPath', done);
-        }).navigateTo('/editor.html%teaser_page%.html');
+        })
+        .navigateTo('/editor.html%teaser_page%.html');
     };
 
     teaser.tcExecuteAfterTest = function (tcExecuteAfterTest) {
@@ -41,6 +49,11 @@
             execAfter: tcExecuteAfterTest
         }).execFct(function (opts, done) {
             c.deletePage(h.param('teaser_page')(opts), done);
+        })
+
+        // delete the test page we created
+        .execFct(function (opts, done) {
+            c.deleteProxyComponent(h.param("compPath")(opts), done);
         });
     };
 

@@ -15,23 +15,34 @@
  ******************************************************************************/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models.v2;
 
+import java.io.IOException;
+
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.sandbox.models.Image;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
 
-    static {
-        TEST_BASE = "/sandbox/image";
+    protected static String TEST_BASE = "/sandbox/image";
+
+    @BeforeClass
+    public static void setUp() throws IOException {
+        internalSetUp(CONTEXT, TEST_BASE);
+    }
+
+    public ImageImplTest() {
+        testBase = TEST_BASE;
     }
 
     @Test
     public void testExportedType() {
         Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals("core/wcm/components/image/v1/image", image.getExportedType());
+        assertEquals(ImageImpl.RESOURCE_TYPE, image.getExportedType());
     }
 
     @Test
@@ -41,7 +52,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Assert.assertArrayEquals(new int[] { 600 }, image.getSmartSizes());
         Assert.assertArrayEquals(new String[] { "/core/content/test/jcr%3acontent/root/image3.img.600.png" }, image.getSmartImages());
         Assert.assertEquals(false, image.isLazyEnabled());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE3_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE3_PATH));
     }
 
     @Test
@@ -56,7 +67,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
                 "/core/content/test/jcr%3acontent/root/image0.img.2500.png" },
                 image.getSmartImages());
         Assert.assertEquals(true, image.isLazyEnabled());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE0_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE0_PATH));
     }
 
     @Test
@@ -66,7 +77,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Assert.assertArrayEquals(new int[] {}, image.getSmartSizes());
         Assert.assertArrayEquals(new String[] {}, image.getSmartImages());
         Assert.assertEquals(true, image.isLazyEnabled());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, IMAGE4_PATH));
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE4_PATH));
     }
 
     @Override

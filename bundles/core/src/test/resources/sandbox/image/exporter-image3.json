@@ -10,5 +10,5 @@
     "title": "Adobe Logo",
     "link": "https://www.adobe.com",
     "src": "/core/content/test/jcr%3acontent/root/image3.img.600.png",
-    ":type": "core/wcm/components/image/v1/image"
+    ":type": "core/wcm/sandbox/components/image/v2/image"
 }

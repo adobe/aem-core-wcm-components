@@ -34,11 +34,11 @@
         .addTestCase(search.testClearButton(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testOutsideClick(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testMark(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(search.testMinLength(tcExecuteBeforeTest, tcExecuteAfterTest, "/search/v1/search", "core/wcm/sandbox/components",
+        .addTestCase(search.testMinLength(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(search.testResultsSize(tcExecuteBeforeTest, tcExecuteAfterTest, "/search/v1/search", "core/wcm/sandbox/components",
+        .addTestCase(search.testResultsSize(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search/v1/search", "core/wcm/sandbox/components",
+        .addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
 
 }(hobs, jQuery));

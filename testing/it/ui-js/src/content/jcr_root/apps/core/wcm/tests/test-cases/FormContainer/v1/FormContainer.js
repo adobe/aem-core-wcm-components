@@ -45,15 +45,24 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             .execFct(function (opts, done) {
                 c.createPage(c.template, c.rootPage, 'page_' + Date.now(), "testPagePath", done, pageRT)
             })
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formContainerRT, c.proxyPath, "compPathContainer", done)
+            })
 
             // add the form container component
             .execFct(function (opts, done) {
-                c.addComponent(formContainerRT, h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done)
+                c.addComponent(h.param("compPathContainer")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done)
+            })
+
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formTextRT, c.proxyPath, "compPathText", done)
             })
 
             // inside the form add an form text input field
             .execFct(function (opts, done) {
-                c.addComponent(formTextRT, h.param("containerPath")(opts) + "/", "inputPath", done)
+                c.addComponent(h.param("compPathText")(opts), h.param("containerPath")(opts) + "/", "inputPath", done)
             })
 
             // set name and default value for the input field
@@ -64,9 +73,14 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
                 c.editNodeProperties(h.param("inputPath")(), data,done);
             })
 
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formButtonRT, c.proxyPath, "compPathButton", done)
+            })
+
             // add a button to the form
             .execFct(function (opts, done) {
-                c.addComponent(formButtonRT, h.param("containerPath")(opts) + "/", "buttonPath", done)
+                c.addComponent(h.param("compPathButton")(opts), h.param("containerPath")(opts) + "/", "buttonPath", done)
             })
 
             // make sure the button is a submit button
@@ -94,6 +108,21 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             // delete the test page we created
             .execFct(function (opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathContainer")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathText")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPathButton")(opts), done);
             });
     };
 

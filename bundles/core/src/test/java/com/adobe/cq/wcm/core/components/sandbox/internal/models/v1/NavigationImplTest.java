@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.mockito.Matchers;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.sandbox.models.Navigation;
 import com.adobe.cq.wcm.core.components.sandbox.models.NavigationItem;
@@ -51,8 +52,10 @@ import static org.mockito.Mockito.when;
 
 public class NavigationImplTest {
 
+    private static final String TEST_BASE = "/navigation";
+
     @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext("/navigation", "/content");
+    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content");
 
     private static final ContentPolicyManager POLICY_MANAGER = mock(ContentPolicyManager.class);
     private static final String CONTEXT_PATH = "/core";
@@ -99,6 +102,7 @@ public class NavigationImplTest {
                 {"/content/navigation/navigation-2", 1, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, items);
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation1"));
     }
 
     @Test
@@ -110,6 +114,7 @@ public class NavigationImplTest {
                 {"/content/navigation/navigation-1/navigation-1-1", 1, true, "/content/navigation/navigation-1/navigation-1-1.html"},
         };
         verifyNavigationItems(expectedPages, items);
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation2"));
     }
 
     @Test
@@ -120,12 +125,14 @@ public class NavigationImplTest {
                 {"/content/navigation/navigation-1/navigation-1-1", 0, true, "/content/navigation/navigation-1/navigation-1-1.html"},
         };
         verifyNavigationItems(expectedPages, items);
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation3"));
     }
 
     @Test
     public void testNavigationNoRoot() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_4);
         assertEquals("Didn't expect any navigation items.", 0, navigation.getItems().size());
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation4"));
     }
 
     @Test
@@ -144,6 +151,7 @@ public class NavigationImplTest {
                         "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
         };
         verifyNavigationItems(expectedPages, items);
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation5"));
     }
 
     @Test
@@ -162,6 +170,7 @@ public class NavigationImplTest {
                 {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, items);
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation7"));
     }
 
     @Test
@@ -174,6 +183,7 @@ public class NavigationImplTest {
                 {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
         };
         verifyNavigationItems(expectedPages, items);
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation8"));
     }
 
     @Test

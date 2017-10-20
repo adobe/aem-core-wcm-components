@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.resource.Resource;
@@ -45,6 +46,7 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
+import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -55,6 +57,7 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
+import com.day.cq.wcm.foundation.model.responsivegrid.ResponsiveGrid;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -69,7 +72,7 @@ import static org.mockito.Mockito.when;
 
 public class PageImplTest {
 
-    protected static String TEST_BASE = "/page";
+    private static String TEST_BASE = "/page";
     protected static final String CONTEXT_PATH = "/core";
     protected static final String ROOT = "/content/page";
     protected static final String PAGE = ROOT + "/templated-page";
@@ -94,13 +97,18 @@ public class PageImplTest {
     protected static ContentPolicyManager contentPolicyManager;
 
     @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, ROOT);
+    public static final AemContext CONTEXT = CoreComponentTestContext.createContext();
 
     @BeforeClass
     public static void setUp() {
+        internalSetUp(CONTEXT, TEST_BASE, ROOT);
+    }
+
+    protected static void internalSetUp(AemContext aemContext, String testBase, String contentRoot) {
+        aemContext.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, contentRoot);
         contentPolicyManager = mock(ContentPolicyManager.class);
-        CONTEXT.registerInjectActivateService(new MockAdapterFactory());
-        CONTEXT.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
+        aemContext.registerInjectActivateService(new MockAdapterFactory());
+        aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
                 new Function<ResourceResolver, ContentPolicyManager>() {
                     @Nullable
                     @Override
@@ -108,11 +116,12 @@ public class PageImplTest {
                         return contentPolicyManager;
                     }
                 });
-        CONTEXT.load().json(TEST_BASE + "/test-conf.json", "/conf/coretest/settings");
-        CONTEXT.load().json(TEST_BASE + "/default-tags.json", "/etc/tags/default");
+        aemContext.addModelsForClasses(MockResponsiveGrid.class);
+        aemContext.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
+        aemContext.load().json(testBase + "/default-tags.json", "/etc/tags/default");
         SlingModelFilter slingModelFilter = mock(SlingModelFilter.class);
-        CONTEXT.registerService(SlingModelFilter.class, slingModelFilter);
-        CONTEXT.registerService(SlingModelFilter.class, new SlingModelFilter() {
+        aemContext.registerService(SlingModelFilter.class, slingModelFilter);
+        aemContext.registerService(SlingModelFilter.class, new SlingModelFilter() {
 
             private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
                 add(NameConstants.NN_RESPONSIVE_CONFIG);

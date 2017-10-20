@@ -33,9 +33,9 @@
                     "jcr:createdBy"     : "admin",
                     "jcr:lastModifiedBy": "admin",
                     "jcr:created"       : "Mon Jan 18 2016 16:59:33 GMT+0100",
-                    "text"              : "<p>This is a test</p>\n",
+                    "text"              : "<p>This is a test</p>",
                     "jcr:lastModified"  : "Mon Jan 18 2016 16:59:43 GMT+0100",
-                    "sling:resourceType": "core/wcm/components/text/v1/text",
+                    "sling:resourceType": "core/wcm/sandbox/components/text/v2/text",
                     "textIsRich"        : "true"
                 }
             }

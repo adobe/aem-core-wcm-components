@@ -89,12 +89,10 @@
             </components>
         </foundation>
     </wcm>
-    <core jcr:primaryType="nt:unstructured">
-        <wcm jcr:primaryType="nt:unstructured">
-            <components jcr:primaryType="nt:unstructured"/>
-            <sandbox jcr:primaryType="nt:unstructured">
-                <components jcr:primaryType="nt:unstructured"/>
-            </sandbox>
-        </wcm>
-    </core>
+    <core-component jcr:primaryType="nt:unstructured">
+        <components jcr:primaryType="nt:unstructured">
+            <v1 jcr:primaryType="nt:unstructured"/>
+            <sandbox jcr:primaryType="nt:unstructured"/>
+        </components>
+    </core-component>
 </jcr:root>

@@ -35,6 +35,7 @@ import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.invocation.InvocationOnMock;
@@ -54,12 +55,19 @@ import static org.mockito.Mockito.*;
 
 public class AdaptiveImageServletTest extends AbstractImageTest {
 
+    private static String TEST_BASE = "/image";
+
     private AdaptiveImageServlet servlet;
     private static final int ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH = 1280;
 
+    @BeforeClass
+    public static void setUp() throws IOException {
+        internalSetUp(CONTEXT, TEST_BASE);
+    }
+
     @Before
     public void init() throws IOException {
-        resourceResolver = aemContext.resourceResolver();
+        resourceResolver = CONTEXT.resourceResolver();
         servlet = new AdaptiveImageServlet();
         Whitebox.setInternalState(servlet, "mimeTypeService", mockedMimeTypeService);
         AssetHandler assetHandler = mock(AssetHandler.class);
@@ -453,7 +461,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
                                                                                                        String selectorString,
                                                                                                        String extension) {
         final MockSlingHttpServletRequest request =
-                new MockSlingHttpServletRequest(aemContext.resourceResolver(), aemContext.bundleContext());
+                new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
         final MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
         Resource resource = resourceResolver.getResource(resourcePath);
         request.setResource(resource);
@@ -463,7 +471,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         SlingBindings bindings = new SlingBindings();
         bindings.put(SlingBindings.REQUEST, request);
         bindings.put(SlingBindings.RESPONSE, response);
-        bindings.put(SlingBindings.SLING, aemContext.slingScriptHelper());
+        bindings.put(SlingBindings.SLING, CONTEXT.slingScriptHelper());
         bindings.put(SlingBindings.RESOLVER, resourceResolver);
         request.setAttribute(SlingBindings.class.getName(), bindings);
         return new Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse>() {

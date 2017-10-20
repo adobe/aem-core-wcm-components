@@ -24,10 +24,14 @@ import static org.junit.Assert.assertEquals;
 
 public class TextImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.TextImplTest {
 
+    protected static String getTestBase() {
+        return "/sandbox/text";
+    }
+
     @Test
     public void testExportedType() {
         Text text = getTextUnderTest(Text.class, TEXT_1);
-        assertEquals("core/wcm/components/text/v1/text", text.getExportedType());
-        Utils.testJSONExport(text, Utils.getTestExporterJSONPath(TEST_BASE, TEXT_1));
+        assertEquals("core/wcm/sandbox/components/text/v2/text", text.getExportedType());
+        Utils.testJSONExport(text, Utils.getTestExporterJSONPath(getTestBase(), TEXT_1));
     }
 }

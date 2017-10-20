@@ -43,9 +43,15 @@ window.CQ.CoreComponentsIT.FormHidden.v1 = window.CQ.CoreComponentsIT.FormHidden
             .execFct(function (opts,done) {
                 c.createPage(c.template, c.rootPage ,'page_' + Date.now(),"testPagePath",done, pageRT)
             })
+
+            // create a proxy component
+            .execFct(function (opts, done){
+                c.createProxyComponent(formHiddenRT, c.proxyPath, "compPath", done)
+            })
+
             //add the component, store component path in 'hiddenPath'
             .execFct(function (opts, done){
-                c.addComponent(formHiddenRT, h.param("testPagePath")(opts)+c.relParentCompPath,"hiddenPath",done)
+                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts)+c.relParentCompPath,"hiddenPath",done)
             })
             //open the new page in the editor
             .navigateTo("/editor.html%testPagePath%.html");
@@ -61,6 +67,11 @@ window.CQ.CoreComponentsIT.FormHidden.v1 = window.CQ.CoreComponentsIT.FormHidden
             //delete the test page we created
             .execFct(function (opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
+            })
+
+            // delete the test page we created
+            .execFct(function (opts, done) {
+                c.deleteProxyComponent(h.param("compPath")(opts), done);
             });
     };
 

@@ -27,8 +27,8 @@
     /**
      * v2 specifics
      */
-    var tcExecuteBeforeTest = titleV1.tcExecuteBeforeTest(c.rtTitle_v2, "core/wcm/sandbox/tests/components/test-page-v2");
-    var tcExecuteAfterTest = titleV1.tcExecuteAfterTest(c.policyPath_sandbox, c.policyAssignmentPath_sandbox);
+    var tcExecuteBeforeTest = titleV2.tcExecuteBeforeTest(c.rtTitle_v2, "core/wcm/sandbox/tests/components/test-page-v2");
+    var tcExecuteAfterTest = titleV2.tcExecuteAfterTest(c.policyPath_sandbox, c.policyAssignmentPath_sandbox);
 
     /**
      * The main test suite for Title component
@@ -41,17 +41,17 @@
         .addTestCase(titleV1.tcSetTitleValueUsingConfigDialog(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(titleV1.tcCheckExistenceOfTitleTypes(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(titleV1.tcSetTitleType(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(titleV1.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v2/title", "core/wcm/sandbox/components",
+        .addTestCase(titleV1.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(titleV1.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v2/title", "core/wcm/sandbox/components",
+        .addTestCase(titleV1.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(titleV2.tcCheckCssClasses1(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v2/title", "core/wcm/sandbox/components",
+        .addTestCase(titleV2.tcCheckCssClasses1(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(titleV2.tcCheckCssClasses2(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v2/title", "core/wcm/sandbox/components",
+        .addTestCase(titleV2.tcCheckCssClasses2(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(titleV2.tcCheckCssClasses3(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v2/title", "core/wcm/sandbox/components",
+        .addTestCase(titleV2.tcCheckCssClasses3(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(titleV2.tcCheckCssClasses4(tcExecuteBeforeTest, tcExecuteAfterTest, "/title/v2/title", "core/wcm/sandbox/components",
+        .addTestCase(titleV2.tcCheckCssClasses4(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
     ;
 }(hobs, jQuery));

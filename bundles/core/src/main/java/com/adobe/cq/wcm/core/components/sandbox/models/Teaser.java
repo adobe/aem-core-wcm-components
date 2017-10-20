@@ -15,14 +15,18 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import javax.annotation.Nonnull;
+
 import org.apache.sling.api.resource.Resource;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Teaser} Sling Model for the {@code /apps/core/wcm/components/teaser} component.
  *
  * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
  */
-public interface Teaser {
+public interface Teaser extends ComponentExporter {
 
     /**
      * Name of the resource property that will store the link text for a {@code Teaser}.
@@ -79,6 +83,15 @@ public interface Teaser {
      * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
      */
     default Resource getImageResource() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 3.1.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 

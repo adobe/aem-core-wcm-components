@@ -16,9 +16,6 @@
 
 ;(function(h, $) {
 
-    // don't remove this setting
-    hobs.config.pacing_delay = 1;
-
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
 
@@ -29,9 +26,11 @@
     // relative path from page node to the root layout container
     c.relParentCompPath = "/jcr:content/root/responsivegrid/";
     // the path to the policies
-    c.policyPath = "/conf/core-components/settings/wcm/policies/core/wcm/components";
+    c.policyPath = "/conf/core-components/settings/wcm/policies/core-component/components/v1";
     // the policy assignment path
-    c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core/wcm/components";
+    c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core-component/components/v1";
+    // proxy components path
+    c.proxyPath = "/apps/core-component/components/v1/"
 
     // core component resource types
     // text component
@@ -250,6 +249,84 @@
                 done(true);
             })
     };
+
+    /**
+     * Adds a component to a page.
+     *
+     * @param component          mandatory components resource type
+     * @param proxyCompPath      mandatory absolute path to the parent component
+     * @param dynParName         optional name of hobbes param to store the new components absolute path
+     * @param done               mandatory call back to execute when async method has finished
+     * @param title              mandatory the title of the component
+     * @param componentGroup     optional the group of the component, if empty, 'Core' is used
+     */
+    c.createProxyComponent = function (component, proxyCompPath, dynParName, done, title, componentGroup) {
+        // mandatory check
+        if (component == null || proxyCompPath == null || done == null) {
+            if (done) done(false, "createProxyComponent failed! mandatory parameter(s) missing!");
+            return;
+        }
+
+        // default settings
+        if (title == null) title = component.substring(component.lastIndexOf("/") + 1);
+        if (componentGroup == null) componentGroup = "Core";
+
+        // the ajax call
+        jQuery.ajax({
+            url: proxyCompPath,
+            method: "POST",
+            data: {
+                "jcr:primaryType" : "cq:Component",
+                "componentGroup": componentGroup,
+                "jcr:title": title,
+                "jcr:description": title,
+                "sling:resourceSuperType": component
+            }
+        })
+            .done(function (data, textStatus, jqXHR) {
+                // extract the component path from the returned HTML
+                if (dynParName != null) {
+                    h.param(dynParName, jQuery(data).find("#Path").text());
+                }
+            })
+            // in case of failure
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "createProxyComponent failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
+    /**
+     * Deletes a proxy component.
+     *
+     * @param pagePath Mandatory. testPagePath path to the page to be deleted
+     * @param done Optional. callback to be executed when the async method has finished.
+     */
+    c.deleteProxyComponent = function (proxyPath, done) {
+        // mandatory check
+        if (proxyPath == null || done == null) {
+            if (done) done(false, "deletePage failed! mandatory parameter(s) missing!");
+            return;
+        }
+        jQuery.ajax({
+            url: proxyPath,
+            method: "POST",
+            data: {
+                ":operation": "delete"
+            }
+        })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "deletePage failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
 
     /**
      * Sets properties of a repository node.
