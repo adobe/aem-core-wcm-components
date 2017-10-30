@@ -62,11 +62,11 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Image image = getImageUnderTest(IMAGE0_PATH);
 
         Assert.assertArrayEquals(new int[] { 600,700,800,2000,2500 }, image.getSmartSizes());
-        Assert.assertArrayEquals(new String[] { "/core/content/test/jcr%3acontent/root/image0.img.600.png",
-                "/core/content/test/jcr%3acontent/root/image0.img.700.png",
-                "/core/content/test/jcr%3acontent/root/image0.img.800.png",
-                "/core/content/test/jcr%3acontent/root/image0.img.2000.png",
-                "/core/content/test/jcr%3acontent/root/image0.img.2500.png" },
+        Assert.assertArrayEquals(new String[] { "/core/content/test/jcr%3acontent/root/image0.img.600.png/1490005239000.png",
+                "/core/content/test/jcr%3acontent/root/image0.img.700.png/1490005239000.png",
+                "/core/content/test/jcr%3acontent/root/image0.img.800.png/1490005239000.png",
+                "/core/content/test/jcr%3acontent/root/image0.img.2000.png/1490005239000.png",
+                "/core/content/test/jcr%3acontent/root/image0.img.2500.png/1490005239000.png" },
                 image.getSmartImages());
         Assert.assertEquals(true, image.isLazyEnabled());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE0_PATH));
@@ -94,6 +94,6 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
 
     @Override
     protected Image getImageUnderTest(String resourcePath) {
-        return (Image) super.getImageUnderTest(resourcePath, null, Image.class);
+        return (Image) super.getImageUnderTest(resourcePath, Image.class);
     }
 }

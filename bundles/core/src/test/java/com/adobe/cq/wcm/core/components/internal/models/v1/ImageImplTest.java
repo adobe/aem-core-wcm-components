@@ -35,7 +35,6 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.WCMMode;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
@@ -70,14 +69,14 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
         assertEquals(IMAGE_TITLE_ALT, image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
-        String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image0.img.600.png\"," +
-                "\"/core/content/test/jcr%3acontent/root/image0.img.700.png\",\"/core/content/test/jcr%3acontent/root/image0" +
-                ".img.800.png\",\"/core/content/test/jcr%3acontent/root/image0.img.2000.png\", " +
-                "\"/core/content/test/jcr%3acontent/root/image0.img.2500.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image0.img.600.png/1490005239000.png\"," +
+                "\"/core/content/test/jcr%3acontent/root/image0.img.700.png/1490005239000.png\",\"/core/content/test/jcr%3acontent/root/image0" +
+                ".img.800.png/1490005239000.png\",\"/core/content/test/jcr%3acontent/root/image0.img.2000.png/1490005239000.png\", " +
+                "\"/core/content/test/jcr%3acontent/root/image0.img.2500.png/1490005239000.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1490005239000.png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE0_PATH));
     }
 
@@ -105,7 +104,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertNull("Did not expect a title for this image.", image.getTitle());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertNull("Did not expect a link for this image, since it's marked as decorative.", image.getLink());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
         compareJSON(
                 "{\"" + Image.JSON_SMART_IMAGES + "\":[], \"" + Image.JSON_SMART_SIZES + "\":[], \"" + Image.JSON_LAZY_ENABLED +
                         "\":true}",
@@ -124,18 +123,18 @@ public class ImageImplTest extends AbstractImageTest {
     public void testExtensionDeterminedFromMimetype() throws Exception {
         String escapedResourcePath = Text.escapePath(IMAGE18_PATH);
         Image image = getImageUnderTest(IMAGE18_PATH);
-        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1490005239000.png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE18_PATH));
     }
 
     @Test
     public void testImageCacheKiller() throws Exception {
         String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
-        Image image = getImageUnderTest(IMAGE4_PATH, WCMMode.EDIT);
+        Image image = getImageUnderTest(IMAGE4_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
 
         escapedResourcePath = Text.escapePath(IMAGE15_PATH);
-        image = getImageUnderTest(IMAGE15_PATH, WCMMode.EDIT);
+        image = getImageUnderTest(IMAGE15_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE15_PATH));
     }
@@ -144,7 +143,7 @@ public class ImageImplTest extends AbstractImageTest {
     public void testTIFFImage() throws Exception {
         String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
         Image image = getImageUnderTest(IMAGE16_PATH);
-        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg/1500299989000.jpeg", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE16_PATH));
     }
 
@@ -161,14 +160,10 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     protected Image getImageUnderTest(String resourcePath) {
-        return getImageUnderTest(resourcePath, null, Image.class);
+        return getImageUnderTest(resourcePath, Image.class);
     }
 
-    protected Image getImageUnderTest(String resourcePath, WCMMode wcmMode) {
-        return getImageUnderTest(resourcePath, wcmMode, Image.class);
-    }
-
-    protected Image getImageUnderTest(String resourcePath, WCMMode wcmMode,  Class<? extends Image> imageClass) {
+    protected Image getImageUnderTest(String resourcePath, Class<? extends Image> imageClass) {
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
@@ -190,9 +185,6 @@ public class ImageImplTest extends AbstractImageTest {
         request.setResource(resource);
         Page page = CONTEXT.pageManager().getPage(PAGE);
         slingBindings.put(WCMBindings.CURRENT_PAGE, page);
-        if (wcmMode != null) {
-            request.setAttribute(WCMMode.REQUEST_ATTRIBUTE_NAME, wcmMode);
-        }
         slingBindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(request));
         slingBindings.put(WCMBindings.PAGE_MANAGER, CONTEXT.pageManager());
         Style style = mock(Style.class);

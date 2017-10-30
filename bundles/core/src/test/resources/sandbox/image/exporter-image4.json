@@ -2,6 +2,6 @@
     "smartSizes": [],
     "smartImages": [],
     "lazyEnabled": true,
-    "src": "/core/content/test/jcr%3acontent/root/image4.img.png",
+    "src": "/core/content/test/jcr%3acontent/root/image4.img.png/1494867377756.png",
     ":type": "core/wcm/sandbox/components/image/v2/image"
 }

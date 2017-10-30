@@ -30,6 +30,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
@@ -276,7 +277,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         // 1 millisecond less than the jcr:lastModified value from test-conf.json
-        request.addDateHeader("If-Modified-Since", 1489998822137L);
+        request.addDateHeader("If-Modified-Since", 1490005239001L);
         servlet.doGet(request, response);
         assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
     }
@@ -455,6 +456,43 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
                 515, image.getWidth());
         assertEquals("Expected the cropped rectangle to have a 1390px height, since the servlet should not perform cropping upscaling.",
                 1390, image.getHeight());
+    }
+
+    @Test
+    public void testImageWithCorrectLastModifiedSuffix() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
+                "img.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("/1490005239000.png");
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
+        ContentPolicy contentPolicy = mapping.getPolicy();
+        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        servlet.doGet(request, response);
+        assertEquals("Expected a 200 response code.", 200, response.getStatus());
+        assertEquals("Mon, 20 Mar 2017 10:20:39 GMT", response.getHeader(HttpConstants.HEADER_LAST_MODIFIED));
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
+        BufferedImage image = ImageIO.read(byteArrayInputStream);
+        Dimension expectedDimension = new Dimension(800, 800);
+        Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
+        assertEquals("Expected image rendered at requested size.", expectedDimension, actualDimension);
+        assertEquals("Expected a PNG image.", "image/png", response.getContentType());
+    }
+
+    @Test
+    public void testImageWithIncorrectLastModifiedSuffix() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
+                "img.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("/42.png");
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
+        ContentPolicy contentPolicy = mapping.getPolicy();
+        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        servlet.doGet(request, response);
+        assertEquals("Expected a 404 response code.", 404, response.getStatus());
     }
 
     private Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> prepareRequestResponsePair(String resourcePath,

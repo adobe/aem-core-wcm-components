@@ -249,6 +249,17 @@
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+                },
+                "image19"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test",
+                    "jcr:lastModified": 42000
                 }
             }
         }
