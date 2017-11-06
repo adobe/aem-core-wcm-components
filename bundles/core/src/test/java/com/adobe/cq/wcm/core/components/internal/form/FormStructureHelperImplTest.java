@@ -15,36 +15,27 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.form;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.scripting.api.resource.ScriptingResourceResolverProvider;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FormStructureHelperImplTest {
@@ -55,28 +46,18 @@ public class FormStructureHelperImplTest {
     public AemContext context = CoreComponentTestContext.createContext("/form/form-structure-helper", "/content");
 
     @Mock
-    ResourceResolverFactory resourceResolverFactory;
+    ScriptingResourceResolverProvider scriptingResourceResolverProvider;
 
     @InjectMocks
     private FormStructureHelperImpl formStructureHelper;
 
     private ResourceResolver resourceResolver;
 
-    private static final String SLING_SCRIPTING_USER = "sling-scripting";
-
     @Before
     public void setUp() throws Exception {
-        context.load().json("/form/form-structure-helper/test-apps.json", "/apps");
         resourceResolver = context.resourceResolver();
-        final Map<String, Object> authenticationInfo = new HashMap<>();
-        authenticationInfo.put(ResourceResolverFactory.SUBSERVICE, SLING_SCRIPTING_USER);
-
-        Mockito.doAnswer(new Answer<ResourceResolver>() {
-            @Override
-            public ResourceResolver answer(InvocationOnMock invocation) throws Throwable {
-                return resourceResolver.clone(null);
-            }
-        }).when(resourceResolverFactory).getServiceResourceResolver(authenticationInfo);
+        context.load().json("/form/form-structure-helper/test-apps.json", "/apps");
+        context.registerService(ScriptingResourceResolverProvider.class, scriptingResourceResolverProvider);
     }
 
     @Test
@@ -116,8 +97,8 @@ public class FormStructureHelperImplTest {
         Resource resource = resourceResolver.getResource(CONTAINING_PAGE + "/jcr:content/root/responsivegrid");
         Iterator<Resource> formFields = formStructureHelper.getFormElements(resource).iterator();
         assertFalse(formFields.hasNext());
-
-        Set<String> allowedFields = new HashSet<>(4);
+        when(scriptingResourceResolverProvider.getRequestScopedResourceResolver()).thenReturn(resourceResolver);
+        Set<String> allowedFields = new HashSet<>();
         allowedFields.add("text");
         allowedFields.add("hidden");
         allowedFields.add("button_button");
