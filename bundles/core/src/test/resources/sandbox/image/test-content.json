@@ -249,6 +249,30 @@
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
                     "sling:resourceType": "core/wcm/sandbox/components/image/v2/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+                },
+                "image20": {
+                    "jcr:primaryType"    : "nt:unstructured",
+                    "jcr:createdBy"      : "admin",
+                    "cq:lastModified"    : "2017-05-15T17:56:17.756+01:00",
+                    "sling:resourceType" : "core/wcm/sandbox/components/image/v2/image",
+                    "fileReference"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                    "linkURL"            : "https://www.adobe.com",
+                    "alt"                : "Adobe Logo",
+                    "jcr:title"          : "Adobe Logo",
+                    "altValueFromDAM"    : "true",
+                    "titleValueFromDAM": "true"
+                },
+                "image21": {
+                    "jcr:primaryType"    : "nt:unstructured",
+                    "jcr:createdBy"      : "admin",
+                    "cq:lastModified"    : "2017-05-15T17:56:17.756+01:00",
+                    "sling:resourceType" : "core/wcm/sandbox/components/image/v2/image",
+                    "fileReference"      : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.jpg",
+                    "linkURL"            : "https://www.adobe.com",
+                    "alt"                : "Adobe Logo",
+                    "jcr:title"          : "Adobe Logo",
+                    "altValueFromDAM"    : "true",
+                    "titleValueFromDAM": "true"
                 }
             }
         }

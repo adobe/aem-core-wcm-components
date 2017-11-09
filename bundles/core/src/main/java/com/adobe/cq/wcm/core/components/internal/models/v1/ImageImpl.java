@@ -81,7 +81,7 @@ public class ImageImpl implements Image, ComponentExporter {
     private static final List<String> NON_SUPPORTED_IMAGE_MIMETYPE = Collections.singletonList("image/svg+xml");
 
     @Self
-    private SlingHttpServletRequest request;
+    protected SlingHttpServletRequest request;
 
     @Inject
     private Resource resource;
@@ -93,23 +93,23 @@ public class ImageImpl implements Image, ComponentExporter {
     private SightlyWCMMode wcmmode;
 
     @ScriptVariable
-    private Style currentStyle;
+    protected Style currentStyle;
 
     @ScriptVariable
-    private ValueMap properties;
+    protected ValueMap properties;
 
     @Inject
     @Source("osgi-services")
     private MimeTypeService mimeTypeService;
 
     @ValueMapValue(name = DownloadResource.PN_REFERENCE, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String fileReference;
+    protected String fileReference;
 
     @ValueMapValue(name = ImageResource.PN_ALT, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String alt;
+    protected String alt;
 
     @ValueMapValue(name = JcrConstants.JCR_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String title;
+    protected String title;
 
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
@@ -119,12 +119,17 @@ public class ImageImpl implements Image, ComponentExporter {
     protected int[] smartSizes = new int[0];
     private String json;
     private boolean displayPopupTitle;
-    private boolean isDecorative;
+    protected boolean isDecorative;
 
     protected boolean disableLazyLoading;
 
+    /**
+     * needs to be protected so that implementations that extend this one can optionally call super.initModel; Sling Models doesn't
+     * correctly handle this scenario, although the documentation says something else: see
+     * https://github.com/apache/sling-org-apache-sling-models-impl/commit/45570dab4818dc9f626f89f8aa6dbca6557dcc42#diff-8b70000e82308890fe104a598cd2bec2R731
+     */
     @PostConstruct
-    private void initModel() {
+    protected void initModel() {
         boolean hasContent = false;
         String mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));

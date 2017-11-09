@@ -6,4 +6,5 @@
         aem.core-components.testsuite.image,
         aem.core-components.testsuite.image.v2]"
     dependencies="[aem.core-components.tests.commons.sandbox,
-        aem.core-components.tests.image.v1]"/>
+        aem.core-components.tests.image.v1,
+        aem.core-components.tests.image.v2]"/>

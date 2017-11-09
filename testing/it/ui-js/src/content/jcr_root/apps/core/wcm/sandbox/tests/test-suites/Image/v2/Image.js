@@ -22,6 +22,7 @@
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
     var imageV1 = window.CQ.CoreComponentsIT.Image.v1;
+    var imageV2 = window.CQ.CoreComponentsIT.Image.v2;
 
     /**
      * v2 specifics
@@ -43,6 +44,6 @@
         .addTestCase(imageV1.tcSetCaption(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV1.tcSetCaptionAsPopup(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV1.tcSetImageAsDecorative(tcExecuteBeforeTest, tcExecuteAfterTest))
-
+        .addTestCase(imageV2.tcAltAndTitleFromDAM(tcExecuteBeforeTest, tcExecuteAfterTest))
     ;
 }(hobs, jQuery));

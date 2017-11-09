@@ -27,6 +27,22 @@ import javax.annotation.Nonnull;
 @ConsumerType
 public interface Image extends com.adobe.cq.wcm.core.components.models.Image, ComponentExporter {
 
+    /**
+     * Name of the configuration policy property that will indicate if the value of the {@code alt} attribute should be populated from
+     * DAM if the component is configured with a file reference.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 4.2.0
+     */
+    String PN_ALT_VALUE_FROM_DAM = "altValueFromDAM";
+
+    /**
+     * Name of the configuration policy property that will indicate if the value of the {@code title} attribute should be populated from
+     * DAM if the component is configured with a file reference.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 4.2.0
+     */
+    String PN_TITLE_VALUE_FROM_DAM = "titleValueFromDAM";
+
     @Override
     @JsonIgnore
     default String getJson() {

@@ -52,7 +52,24 @@
                                         fieldDescription="Check if the image should be ignored by assistive technology and therefore does not require an alternative text. This applies to decorative images only."
                                         name="./isDecorative"
                                         text="Image is decorative"
+                                        uncheckedValue="false"
                                         value="{Boolean}true"/>
+                                    <altValueFromDAM
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                            fieldDescription="When checked, populate the image's alt attribute with the value of the dc:description metadata in DAM."
+                                            name="./altValueFromDAM"
+                                            text="Get Alternative Text from DAM"
+                                            uncheckedValue="false"
+                                            value="{Boolean}true"/>
+                                    <titleValueFromDAM
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                            fieldDescription="When checked, populate the image's caption with the value of the dc:title metadata in DAM."
+                                            name="./titleValueFromDAM"
+                                            text="Get Caption from DAM"
+                                            uncheckedValue="false"
+                                            value="{Boolean}true"/>
                                     <displayCaptionPopup
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

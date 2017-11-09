@@ -29,6 +29,8 @@ import static org.junit.Assert.assertEquals;
 public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
 
     protected static String TEST_BASE = "/sandbox/image";
+    private static final String IMAGE20_PATH = PAGE + "/jcr:content/root/image20";
+    private static final String IMAGE21_PATH = PAGE + "/jcr:content/root/image21";
 
     @BeforeClass
     public static void setUp() throws IOException {
@@ -46,7 +48,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     @Test
-    public void testImageWithOneSmartSize() throws Exception {
+    public void testImageWithOneSmartSize() {
         Image image = getImageUnderTest(IMAGE3_PATH);
 
         Assert.assertArrayEquals(new int[] { 600 }, image.getSmartSizes());
@@ -56,7 +58,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     @Test
-    public void testImageWithMoreThanOneSmartSize() throws Exception {
+    public void testImageWithMoreThanOneSmartSize() {
         Image image = getImageUnderTest(IMAGE0_PATH);
 
         Assert.assertArrayEquals(new int[] { 600,700,800,2000,2500 }, image.getSmartSizes());
@@ -71,13 +73,23 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     @Test
-    public void testImageWithNoSmartSize() throws Exception {
+    public void testImageWithNoSmartSize() {
         Image image = getImageUnderTest(IMAGE4_PATH);
 
         Assert.assertArrayEquals(new int[] {}, image.getSmartSizes());
         Assert.assertArrayEquals(new String[] {}, image.getSmartImages());
         Assert.assertEquals(true, image.isLazyEnabled());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE4_PATH));
+    }
+
+    @Test
+    public void testImageWithAltAndTitleFromDAM() {
+        Image image = getImageUnderTest(IMAGE20_PATH);
+        assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
+        assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
+        // test fallback to dc:title if dc:description is empty
+        image = getImageUnderTest(IMAGE21_PATH);
+        assertEquals("Adobe Systems Logo and Wordmark", image.getAlt());
     }
 
     @Override
