@@ -52,16 +52,6 @@ public interface Search extends ComponentExporter {
     String PN_RESULTS_SIZE = "resultsSize";
 
     /**
-     * JCR Path to search for results.
-     *
-     * @return path for the search query
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.2.0
-     */
-    default String getRootPath() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * A collection of {@link Resource} items as search result.
      * If the search term was not found, the collection will be empty.
      *

@@ -119,11 +119,6 @@ public class SearchImpl implements Search {
     }
 
     @Override
-    public String getRootPath() {
-        return path;
-    }
-
-    @Override
     public int getResultsSize() {
         return resultsSize;
     }

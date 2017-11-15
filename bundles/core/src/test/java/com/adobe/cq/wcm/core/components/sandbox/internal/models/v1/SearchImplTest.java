@@ -80,16 +80,6 @@ public class SearchImplTest {
         slingBindings.put(WCMBindings.CURRENT_PAGE, context.currentPage("/content/search/page"));
     }
 
-    @Test
-    public void testGetRootPath() throws Exception {
-        Resource resource = context.currentResource(TEST_ROOT + "/jcr:content/search");
-        slingBindings.put(WCMBindings.CURRENT_STYLE, new MockStyle(resource));
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        Search search = context.request().adaptTo(Search.class);
-        assertEquals("/content/search", search.getRootPath());
-        Utils.testJSONExport(search, Utils.getTestExporterJSONPath(TEST_BASE, "search"));
-    }
-
 
     @Test
     public void testGetResults() throws Exception {
