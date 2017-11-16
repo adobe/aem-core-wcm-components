@@ -22,9 +22,4 @@
 .cmp-breadcrumb__item {
     display: inline-block;
     vertical-align: top;
-    padding: 0 5px;
-}
-
-.cmp-breadcrumb__item + .cmp-breadcrumb__item::before {
-    content: "/\00a0";
 }
