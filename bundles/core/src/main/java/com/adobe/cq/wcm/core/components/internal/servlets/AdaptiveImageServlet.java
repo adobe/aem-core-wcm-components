@@ -22,11 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.Servlet;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
@@ -34,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
@@ -64,6 +63,7 @@ import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.image.Layer;
+import com.google.common.base.Joiner;
 
 @Component(
         service = Servlet.class,
@@ -116,8 +116,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response) throws ServletException,
-            IOException {
+    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response) throws IOException {
         String[] selectors = request.getRequestPathInfo().getSelectors();
         if (selectors.length != 1 && selectors.length != 2) {
             LOGGER.error("Expected 1 or 2 selectors, instead got: {}.", Arrays.toString(selectors));
@@ -155,9 +154,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
         long requestLastModifiedSuffix = getRequestLastModifiedSuffix(request);
-        if (requestLastModifiedSuffix > 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
-            LOGGER.error("The last modified information present in the request ({}) is different than expected.", requestLastModifiedSuffix);
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
+            String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
+            LOGGER.info("The last modified information present in the request ({}) is different than expected. Redirect request to " +
+                    "correct suffix ({})", requestLastModifiedSuffix, redirectLocation);
+            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            response.setHeader("Location", redirectLocation);
             return;
         }
         if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
@@ -212,6 +214,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
 
     }
+
+    private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
+        RequestPathInfo requestPathInfo = request.getRequestPathInfo();
+        return Joiner.on(".").join(request.getContextPath() + requestPathInfo.getResourcePath(), requestPathInfo.getSelectorString(),
+                requestPathInfo.getExtension() + "/" + lastModifiedEpoch, requestPathInfo.getExtension());
+    }
+
     private void resizeAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, Asset asset, String
             imageType) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
