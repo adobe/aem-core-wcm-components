@@ -33,6 +33,7 @@
                 "image3"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
                     "alt"               : "Adobe Logo",
@@ -85,7 +86,7 @@
                 "image6"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
-                    "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.gif",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "alt"               : "Adobe Logo",
@@ -95,6 +96,7 @@
                 "image7"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677329",
                     "alt"               : "Adobe Logo",
@@ -132,6 +134,7 @@
                     "imageCrop"         : "290,1470,1680,1985",
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
                     "file"              : {
@@ -158,6 +161,7 @@
                     "imageCrop"         : "0,0,2000,2000",
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
                     "file"              : {
@@ -186,6 +190,7 @@
                     "imageRotate"       : 90,
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330",
                     "file"              : {
@@ -249,6 +254,17 @@
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
                     "sling:resourceType": "core/wcm/components/image/v1/image",
                     "cq:policy"         : "coretest/components/content/image/policy_1478854677330"
+                },
+                "image19"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677326",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "/content/test",
+                    "jcr:lastModified": 42000
                 }
             }
         }

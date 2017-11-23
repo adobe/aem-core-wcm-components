@@ -52,7 +52,6 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -88,9 +87,6 @@ public class ImageImpl implements Image, ComponentExporter {
 
     @ScriptVariable
     private PageManager pageManager;
-
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private SightlyWCMMode wcmmode;
 
     @ScriptVariable
     private Style currentStyle;
@@ -129,12 +125,12 @@ public class ImageImpl implements Image, ComponentExporter {
         String mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
-
+        Asset asset = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
             if (assetResource != null) {
-                Asset asset = assetResource.adaptTo(Asset.class);
+                asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
                     hasContent = true;
@@ -163,7 +159,6 @@ public class ImageImpl implements Image, ComponentExporter {
             }
             String extension = mimeTypeService.getExtension(mimeType);
             long lastModifiedDate = 0;
-            if (!isWcmModeDisabled()) {
                 ValueMap properties = resource.getValueMap();
                 Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
                 if (lastModified == null) {
@@ -171,6 +166,11 @@ public class ImageImpl implements Image, ComponentExporter {
                 }
                 if (lastModified != null) {
                     lastModifiedDate = lastModified.getTimeInMillis();
+                }
+            if (asset != null) {
+                long assetLastModifiedDate = asset.getLastModified();
+                if (assetLastModifiedDate > lastModifiedDate) {
+                    lastModifiedDate = assetLastModifiedDate;
                 }
             }
             if (extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
@@ -190,7 +190,7 @@ public class ImageImpl implements Image, ComponentExporter {
                 String escapedResourcePath = Text.escapePath(resource.getPath());
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                            width + DOT + extension + (!isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension
+                            width + DOT + extension + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension
                             : "");
                     smartSizes[index] = width;
                     index++;
@@ -201,7 +201,7 @@ public class ImageImpl implements Image, ComponentExporter {
                 } else {
                     src += extension;
                 }
-                src += !isWcmModeDisabled() && lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "";
+                src += lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "";
             }
             if (!isDecorative) {
                 if(StringUtils.isNotEmpty(linkURL)) {
@@ -213,10 +213,6 @@ public class ImageImpl implements Image, ComponentExporter {
             }
             buildJson();
         }
-    }
-
-    private boolean isWcmModeDisabled() {
-        return wcmmode == null || wcmmode.isDisabled();
     }
 
     @Override

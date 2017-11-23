@@ -30,9 +30,15 @@ import io.wcm.testing.mock.aem.junit.AemContextCallback;
  */
 public final class CoreComponentTestContext {
 
+    public static final String TEST_CONTENT_JSON = "/test-content.json";
+
 
     private CoreComponentTestContext() {
         // only static methods
+    }
+
+    public static AemContext createContext() {
+        return createContext(null, null);
     }
 
     /**
@@ -49,10 +55,12 @@ public final class CoreComponentTestContext {
                 (AemContextCallback) context -> {
                     context.registerService(FormStructureHelperFactory.class, resource -> null);
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
+                    if (testBase != null) {
                     if (StringUtils.isNotEmpty(testBase)) {
-                        context.load().json(testBase + "/test-content.json", contentRoot);
+                            context.load().json(testBase + TEST_CONTENT_JSON, contentRoot);
                     } else {
-                        context.load().json("/test-content.json", contentRoot);
+                            context.load().json(TEST_CONTENT_JSON, contentRoot);
+                        }
                     }
                     context.registerInjectActivateService(new MockAdapterFactory());
                 },

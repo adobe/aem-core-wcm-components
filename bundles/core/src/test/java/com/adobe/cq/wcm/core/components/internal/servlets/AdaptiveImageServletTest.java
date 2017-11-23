@@ -30,11 +30,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.invocation.InvocationOnMock;
@@ -54,12 +56,19 @@ import static org.mockito.Mockito.*;
 
 public class AdaptiveImageServletTest extends AbstractImageTest {
 
+    private static String TEST_BASE = "/image";
+
     private AdaptiveImageServlet servlet;
     private static final int ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH = 1280;
 
+    @BeforeClass
+    public static void setUp() throws IOException {
+        internalSetUp(CONTEXT, TEST_BASE);
+    }
+
     @Before
     public void init() throws IOException {
-        resourceResolver = aemContext.resourceResolver();
+        resourceResolver = CONTEXT.resourceResolver();
         servlet = new AdaptiveImageServlet();
         Whitebox.setInternalState(servlet, "mimeTypeService", mockedMimeTypeService);
         AssetHandler assetHandler = mock(AssetHandler.class);
@@ -229,6 +238,8 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
                 prepareRequestResponsePair(IMAGE5_PATH, "img", "gif");
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("/1489998822138.gif");
         servlet.doGet(request, response);
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
@@ -244,6 +255,8 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         // 1 millisecond less than the jcr:lastModified value from test-conf.json
         request.addDateHeader("If-Modified-Since", 1489998822137L);
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("/1489998822138.gif");
         servlet.doGet(request, response);
         assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
     }
@@ -268,7 +281,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         // 1 millisecond less than the jcr:lastModified value from test-conf.json
-        request.addDateHeader("If-Modified-Since", 1489998822137L);
+        request.addDateHeader("If-Modified-Since", 1490005239001L);
         servlet.doGet(request, response);
         assertEquals(HttpServletResponse.SC_NOT_MODIFIED, response.getStatus());
     }
@@ -449,21 +462,79 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
                 1390, image.getHeight());
     }
 
+    @Test
+    public void testImageWithCorrectLastModifiedSuffix() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
+                "img.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
+        ContentPolicy contentPolicy = mapping.getPolicy();
+        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        servlet.doGet(request, response);
+        assertEquals("Expected a 200 response code.", 200, response.getStatus());
+        assertEquals("Mon, 20 Mar 2017 10:20:39 GMT", response.getHeader(HttpConstants.HEADER_LAST_MODIFIED));
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
+        BufferedImage image = ImageIO.read(byteArrayInputStream);
+        Dimension expectedDimension = new Dimension(800, 800);
+        Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
+        assertEquals("Expected image rendered at requested size.", expectedDimension, actualDimension);
+        assertEquals("Expected a PNG image.", "image/png", response.getContentType());
+    }
+
+    @Test
+    public void testImageWithIncorrectLastModifiedSuffix() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
+                "img.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        request.setContextPath("/test");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("/42.png");
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
+        ContentPolicy contentPolicy = mapping.getPolicy();
+        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        servlet.doGet(request, response);
+        assertEquals("Expected a 301 response code.", 301, response.getStatus());
+        assertEquals("Expected redirect location with correct last modified suffix", "/test/content/test/jcr:content/root/image19.img.800.png/1490005239000.png",
+                response.getHeader("Location"));
+    }
+
+    @Test
+    public void testImageWithMissingLastModifiedSuffix() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
+                "img.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        request.setContextPath("/test");
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
+        ContentPolicy contentPolicy = mapping.getPolicy();
+        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("");
+        servlet.doGet(request, response);
+        assertEquals("Expected a 301 response code.", 301, response.getStatus());
+        assertEquals("Expected redirect location with correct last modified suffix", "/test/content/test/jcr:content/root/image19.img.800.png/1490005239000.png",
+                response.getHeader("Location"));
+    }
+
     private Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> prepareRequestResponsePair(String resourcePath,
                                                                                                        String selectorString,
                                                                                                        String extension) {
         final MockSlingHttpServletRequest request =
-                new MockSlingHttpServletRequest(aemContext.resourceResolver(), aemContext.bundleContext());
+                new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
         final MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
         Resource resource = resourceResolver.getResource(resourcePath);
         request.setResource(resource);
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("/1490005239000.png");
         requestPathInfo.setSelectorString(selectorString);
         requestPathInfo.setExtension(extension);
+        requestPathInfo.setResourcePath(resourcePath);
         SlingBindings bindings = new SlingBindings();
         bindings.put(SlingBindings.REQUEST, request);
         bindings.put(SlingBindings.RESPONSE, response);
-        bindings.put(SlingBindings.SLING, aemContext.slingScriptHelper());
+        bindings.put(SlingBindings.SLING, CONTEXT.slingScriptHelper());
         bindings.put(SlingBindings.RESOLVER, resourceResolver);
         request.setAttribute(SlingBindings.class.getName(), bindings);
         return new Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse>() {
