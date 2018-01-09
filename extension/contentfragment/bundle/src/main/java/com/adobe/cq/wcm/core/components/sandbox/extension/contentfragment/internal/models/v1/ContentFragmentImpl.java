@@ -33,11 +33,13 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.dam.cfm.ContentElement;
+import com.adobe.cq.dam.cfm.ContentVariation;
 import com.adobe.cq.dam.cfm.FragmentData;
 import com.adobe.cq.dam.cfm.FragmentTemplate;
 import com.adobe.cq.export.json.ComponentExporter;
@@ -62,6 +64,9 @@ public class ContentFragmentImpl implements ContentFragment {
      */
     public static final String RESOURCE_TYPE = "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment";
 
+    @Self
+    private SlingHttpServletRequest request;
+
     @ScriptVariable
     private ResourceResolver resolver;
 
@@ -70,6 +75,9 @@ public class ContentFragmentImpl implements ContentFragment {
 
     @ValueMapValue(name = ContentFragment.PN_ELEMENT_NAMES, injectionStrategy = OPTIONAL)
     private String[] elementNames;
+
+    @ValueMapValue(name = ContentFragment.PN_VARIATION_NAME, injectionStrategy = OPTIONAL)
+    private String variationName;
 
     private com.adobe.cq.dam.cfm.ContentFragment fragment;
     private String type;
@@ -140,7 +148,8 @@ public class ContentFragmentImpl implements ContentFragment {
                     String[] segments = Text.explode(templateResource.getPath(), '/', false);
                     // get the configuration names (e.g. for "my-project/" or "my-project/nested/")
                     for (int i = 1; i < segments.length - 5; i++) {
-                        prefix.append(segments[i] + "/");
+                        prefix.append(segments[i]);
+                        prefix.append("/");
                     }
                     type = prefix.toString() + "models/" + templateResource.getName();
                 }
@@ -169,11 +178,18 @@ public class ContentFragmentImpl implements ContentFragment {
                 iterator = elements.iterator();
             }
 
-            // wrap and return elements
+            // wrap elements and get their configured variation (if any)
             elements = new LinkedList<>();
             while (iterator.hasNext()) {
                 ContentElement element = iterator.next();
-                elements.add(new ElementImpl(element));
+                ContentVariation variation = null;
+                if (StringUtils.isNotEmpty(variationName)) {
+                    variation = element.getVariation(variationName);
+                    if (variation == null) {
+                        LOG.warn("Non-existing variation " + variationName + " of element " + element.getName());
+                    }
+                }
+                elements.add(new ElementImpl(element, variation));
             }
         }
         return elements;
@@ -182,7 +198,7 @@ public class ContentFragmentImpl implements ContentFragment {
     @Nonnull
     @Override
     public String getExportedType() {
-        return RESOURCE_TYPE;
+        return request.getResource().getResourceType();
     }
 
     @Nonnull
@@ -190,7 +206,7 @@ public class ContentFragmentImpl implements ContentFragment {
     public Map<String, ComponentExporter> getExportedItems() {
         Map<String, ComponentExporter> map = new HashMap<>();
         for (Element e : getElements()) {
-            if (map.put(e.getName(), (ComponentExporter) e) != null) {
+            if (map.put(e.getName(), e) != null) {
                 throw new IllegalStateException("Duplicate key");
             }
         }
@@ -213,8 +229,11 @@ public class ContentFragmentImpl implements ContentFragment {
 
         private ContentElement element;
 
-        ElementImpl(ContentElement element) {
+        private ContentVariation variation;
+
+        ElementImpl(@Nonnull ContentElement element, @Nullable ContentVariation variation) {
             this.element = element;
+            this.variation = variation;
         }
 
         @Nonnull
@@ -230,6 +249,9 @@ public class ContentFragmentImpl implements ContentFragment {
         }
 
         private FragmentData getData() {
+            if (variation != null) {
+                return variation.getValue();
+            }
             return element.getValue();
         }
 
@@ -269,7 +291,7 @@ public class ContentFragmentImpl implements ContentFragment {
         @Nonnull
         @Override
         public String getExportedType() {
-            final FragmentData value = element.getValue();
+            final FragmentData value = getData();
             // Mimetype for text-based datatypes
             String type = value.getContentType();
 

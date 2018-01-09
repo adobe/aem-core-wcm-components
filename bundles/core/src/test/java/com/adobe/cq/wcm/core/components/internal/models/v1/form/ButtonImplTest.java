@@ -38,6 +38,7 @@ public class ButtonImplTest {
     private static final String ROOT_PATH = "/content/buttons";
     private static final String EMPTY_BUTTON_PATH = ROOT_PATH + "/button";
     private static final String BUTTON1_PATH = ROOT_PATH + "/button1";
+    private static final String BUTTON2_PATH = ROOT_PATH + "/button2";
     private static final String ID_PREFIX = "form-button";
 
     @ClassRule
@@ -76,6 +77,12 @@ public class ButtonImplTest {
         assertEquals("button-id", button.getId());
         assertEquals(null, button.getHelpMessage());
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, BUTTON1_PATH));
+    }
+
+    @Test
+    public void testV2JSONExport() throws Exception {
+        Button button = getButtonUnderTest(BUTTON2_PATH);
+        Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, BUTTON2_PATH));
     }
 
 

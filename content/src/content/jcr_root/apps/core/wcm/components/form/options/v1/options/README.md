@@ -26,7 +26,7 @@ Options form field written in HTL.
 ### Use Object
 The Form Options component uses the `com.adobe.cq.wcm.core.components.models.form.Options` Sling Model for its Use-object.
 
-### Edit dialog properties
+### Edit Dialog Properties
 The following properties are written to JCR for this Form Options component and are expected to be available as `Resource` properties:
 
 1. `./type` - defines the type of options form; possible values: `checkbox`, `radio`, `drop-down`, `multi-drop-down`
@@ -36,7 +36,11 @@ The following properties are written to JCR for this Form Options component and 
 5. `./listPath` - defines the path of a static list for the options, if the `source` property is set to `list`
 6. `./datasourceRT` - defines the resource type of the datasource, if the `source` property is set to `datasource`
 7. `./items` - defines the option items, if the `source` property is set to `local`
-8 `./helpMessage` - defines a help message that can be rendered in the field as a hint for the user
+8. `./helpMessage` - defines a help message that can be rendered in the field as a hint for the user
+
+## Client Libraries
+The component provides a `core.wcm.components.form.options.v1.editor` editor client library category that includes
+JavaScript handling for dialog interaction. It is already included by its edit dialog.
 
 ## Information
 * **Vendor**: Adobe

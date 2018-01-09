@@ -34,7 +34,7 @@
         multiDropDown: '.form-group.multi-drop-down'
     };
 
-    var tcExecuteBeforeTest = formOptions.tcExecuteBeforeTest(c.rtFormOptions);
+    var tcExecuteBeforeTest = formOptions.tcExecuteBeforeTest(c.rtFormOptions_v1);
     var tcExecuteAfterTest = formOptions.tcExecuteAfterTest();
 
     /**

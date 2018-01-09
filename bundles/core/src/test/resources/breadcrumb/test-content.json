@@ -32,6 +32,14 @@
                         "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
                         "sling:resourceType": "core/wcm/components/breadcrumb"
                     },
+                    "breadcrumb-v2"             : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:createdBy"     : "admin",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:created"       : "Mon Jan 11 2016 15:23:53 GMT+0100",
+                        "jcr:lastModified"  : "Mon Jan 11 2016 16:21:45 GMT+0100",
+                        "sling:resourceType": "core/wcm/components/breadcrumb/v2/breadcrumb"
+                    },
                     "breadcrumb-start-level" : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:createdBy"     : "admin",

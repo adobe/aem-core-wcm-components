@@ -33,6 +33,21 @@
                                         emptyText="Enter or select Content Fragment"
                                         pickerTitle="Select Content Fragment"
                                         rootPath="/content/dam"/>
+                                    <variationName
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        name="./variationName"
+                                        fieldLabel="Variation"
+                                        fieldDescription="Specify which variation to display">
+                                        <datasource
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations"
+                                            componentPath="${requestPathInfo.suffix}"
+                                            fragmentPath="${param.fragmentPath}"/>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            field-path="${requestPathInfo.resourcePath}"/>
+                                    </variationName>
                                     <elementNames
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/multifield"

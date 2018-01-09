@@ -59,7 +59,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ListImpl implements List, ComponentExporter {
+public class ListImpl implements List {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v1/list";
 
@@ -117,7 +117,7 @@ public class ListImpl implements List, ComponentExporter {
     private boolean linkItems;
 
     private PageManager pageManager;
-    private java.util.List<Page> listItems;
+    protected java.util.List<Page> listItems;
 
     @PostConstruct
     private void initModel() {
@@ -178,12 +178,12 @@ public class ListImpl implements List, ComponentExporter {
         return resource.getResourceType();
     }
 
-    private Source getListType() {
+    protected Source getListType() {
         String listFromValue = properties.get(PN_SOURCE, currentStyle.get(PN_SOURCE, StringUtils.EMPTY));
         return Source.fromString(listFromValue);
     }
 
-    private void populateListItems(Source listType) {
+    protected void populateListItems(Source listType) {
         switch (listType) {
             case STATIC:
                 populateStaticListItems();
@@ -312,7 +312,7 @@ public class ListImpl implements List, ComponentExporter {
     }
 
 
-    private enum Source {
+    protected enum Source {
         CHILDREN("children"),
         STATIC("static"),
         SEARCH("search"),

@@ -1,0 +1,28 @@
+{
+    "designPath"      : "/etc/designs/mysite",
+    "title"           : "Templated Page",
+    "lastModifiedDate": 1453282416000,
+    "templateName"    : "product-page",
+    "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
+    "cssClassNames"   : "class1 class2",
+    "language"        : "en-GB",
+    ":itemsOrder"     : [
+        "root"
+    ],
+    ":items"          : {
+        "root": {
+            ":itemsOrder": [
+                "text"
+            ],
+            ":items"     : {
+                "text": {
+                    "text"    : "<p>This is a test</p>",
+                    "richText": true,
+                    ":type"   : "core/wcm/components/text/v2/text"
+                }
+            },
+            ":type"      : "wcm/foundation/components/responsivegrid"
+        }
+    },
+    ":type"           : "core/wcm/components/page/v2/page"
+}

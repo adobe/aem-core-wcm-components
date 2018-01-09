@@ -5,5 +5,5 @@
     jcr:primaryType="cq:Component"
     jcr:title="Teaser (v1 - sandbox)"
     sling:resourceSuperType="core/wcm/components/image"
-    imageDelegate="core/wcm/sandbox/components/image/v2/image"
+    imageDelegate="core/wcm/components/image/v2/image"
     componentGroup=".core-wcm"/>

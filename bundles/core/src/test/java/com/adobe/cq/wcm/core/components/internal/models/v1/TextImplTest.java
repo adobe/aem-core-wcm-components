@@ -36,6 +36,7 @@ public class TextImplTest {
     protected static final String TEXT_1 = ROOT + "/rich-text";
     protected static final String TEXT_2 = ROOT + "/plain-text";
     protected static final String TEXT_3 = ROOT + "/empty-text";
+    protected static final String TEXT_4 = ROOT + "/rich-text-v2";
 
     protected static String getTestBase() {
         return TEST_BASE;
@@ -72,6 +73,12 @@ public class TextImplTest {
     public void testExportedType() {
         Text text = getTextUnderTest(Text.class, TEXT_1);
         assertEquals("core/wcm/components/text/v1/text", ((TextImpl) text).getExportedType());
+    }
+
+    @Test
+    public void testV2JSONExport() {
+        Text text = getTextUnderTest(Text.class, TEXT_4);
+        Utils.testJSONExport(text, Utils.getTestExporterJSONPath(getTestBase(), TEXT_4));
     }
 
     protected <T> T getTextUnderTest(Class<T> model, String resourcePath) {

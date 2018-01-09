@@ -26,6 +26,18 @@
                         "jcr:lastModified"  : "Mon Aug 28 2017 14:39:00 GMT+0200",
                         ":jcr:data"         : 20
                     }
+                },
+                "teaser"         : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "text/html",
+                        "jcr:lastModified"  : "Mon Aug 28 2017 14:39:00 GMT+0200",
+                        ":jcr:data"         : 20
+                    }
                 }
             },
             "related"        : {
@@ -63,6 +75,15 @@
                         "name"           : "second",
                         "assetName"      : "second"
                     }
+                },
+                "variations": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "teaser"         : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:description": "Teaser variation",
+                        "jcr:title"      : "Teaser",
+                        "name"           : "teaser"
+                    }
                 }
             }
         },
@@ -99,6 +120,18 @@
                         "jcr:createdBy"  : "admin",
                         "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
                         "original"       : {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:createdBy"  : "admin",
+                            "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                            "jcr:content"    : {
+                                "jcr:primaryType"   : "oak:Resource",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:mimeType"      : "text/plain",
+                                "jcr:lastModified"  : "Mon Aug 28 2017 14:39:13 GMT+0200",
+                                ":jcr:data"         : 22
+                            }
+                        },
+                        "teaser"         : {
                             "jcr:primaryType": "nt:file",
                             "jcr:createdBy"  : "admin",
                             "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
@@ -153,6 +186,22 @@
                     "main"            : "<p>Main content</p>",
                     "main@ContentType": "text/html",
                     "second"          : ["one", "two", "three"]
+                },
+                "teaser"        : {
+                    "jcr:primaryType" : "nt:unstructured",
+                    "main"            : "<p>Main content (teaser)</p>",
+                    "main@ContentType": "text/html",
+                    "second"          : ["one (teaser)", "two (teaser)", "three (teaser)"]
+                }
+            },
+            "model"             : {
+                "jcr:primaryType": "nt:unstructured",
+                "variations"     : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "teaser"         : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:title": "Teaser"
+                    }
                 }
             }
         }

@@ -1,0 +1,16 @@
+{
+    "widths": [
+        600,
+        700,
+        800,
+        2000,
+        2500
+    ],
+    "lazyEnabled"           : false,
+    "srcUriTemplate"        : "/core/content/test/jcr%3acontent/root/image0.img{.width}.png/1490005239000.png",
+    "title"                 : "Adobe Systems Logo and Wordmark",
+    "alt"                   : "Adobe Systems Logo and Wordmark in PNG format",
+    "link"                  : "/core/content/test-image.html",
+    "src"                   : "/core/content/test/jcr%3acontent/root/image0.img.png/1490005239000.png",
+    ":type"                 : "core/wcm/components/image/v2/image"
+}

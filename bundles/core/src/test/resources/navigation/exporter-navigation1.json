@@ -1,79 +1,58 @@
 {
   "items": [
     {
-      "page": {
-        "path": "/content/navigation",
-        "pageTitle": null,
-        "name": "navigation",
-        "description": null,
-        "title": "Navigation"
-      },
+      "path": "/content/navigation",
+      "description": null,
+      "lastModified": null,
+      "title": "Navigation",
       "active": true,
       "children": [
         {
-          "page": {
-            "path": "/content/navigation/navigation-1",
-            "pageTitle": null,
-            "name": "navigation-1",
-            "description": null,
-            "title": "Navigation 1"
-          },
+          "path": "/content/navigation/navigation-1",
+          "description": null,
+          "lastModified": null,
+          "title": "Navigation 1",
           "active": false,
           "children": [
             {
-              "page": {
-                "path": "/content/navigation/navigation-1/navigation-1-1",
-                "pageTitle": null,
-                "name": "navigation-1-1",
-                "description": null,
-                "title": "Navigation 1.1"
-              },
+              "path": "/content/navigation/navigation-1/navigation-1-1",
+              "description": null,
+              "lastModified": null,
+              "title": "Navigation 1.1",
               "active": false,
               "children": [
                 {
-                  "page": {
-                    "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
-                    "pageTitle": null,
-                    "name": "navigation-1-1-1",
-                    "description": null,
-                    "title": "Navigation 1.1.1"
-                  },
+                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
+                  "description": null,
+                  "lastModified": null,
+                  "title": "Navigation 1.1.1",
                   "active": false,
                   "children": [],
                   "level": 3,
                   "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"
                 },
                 {
-                  "page": {
-                    "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
-                    "pageTitle": null,
-                    "name": "navigation-1-1-2",
-                    "description": null,
-                    "title": "Navigation 1.1.2"
-                  },
+                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
+                  "description": null,
+                  "lastModified": null,
+                  "title": "Navigation 1.1.2",
                   "active": false,
                   "children": [
                     {
-                      "page": {
-                        "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
-                        "pageTitle": null,
-                        "name": "navigation-1-1-2-2-1",
-                        "description": null,
-                        "title": "Navigation 1.1.2.2.1"
-                      },
+                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
+                      "description": null,
+                      "lastModified": null,
+                      "title": "Navigation 1.1.2.2.1",
                       "active": false,
                       "children": [],
                       "level": 4,
                       "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"
                     },
                     {
-                      "page": {
-                        "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
-                        "pageTitle": null,
-                        "name": "navigation-1-1-2-3",
-                        "description": null,
-                        "title": "Navigation 1.1.2.3"
-                      },
+                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
+                      "description": null,
+                      "lastModified": null,
+                      "title": "Navigation 1.1.2.3",
                       "active": false,
                       "children": [],
                       "level": 4,
@@ -92,13 +71,10 @@
           "url": "/core/navigation-1-vanity"
         },
         {
-          "page": {
-            "path": "/content/navigation/navigation-2",
-            "pageTitle": null,
-            "name": "navigation-2",
-            "description": null,
-            "title": "Navigation 2"
-          },
+          "path": "/content/navigation/navigation-2",
+          "description": null,
+          "lastModified": null,
+          "title": "Navigation 2",
           "active": false,
           "children": [],
           "level": 1,
@@ -109,5 +85,5 @@
       "url": "/core/content/navigation.html"
     }
   ],
-  ":type": "core/wcm/sandbox/components/navigation/v1/navigation"
+  ":type": "core/wcm/components/navigation/v1/navigation"
 }

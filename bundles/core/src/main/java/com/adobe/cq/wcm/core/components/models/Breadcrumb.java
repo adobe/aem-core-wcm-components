@@ -17,7 +17,11 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Breadcrumb} Sling Model used for the {@code /apps/core/wcm/components/breadcrumb} component.
@@ -25,7 +29,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Breadcrumb {
+public interface Breadcrumb extends ComponentExporter {
 
     /**
      * Name of the resource property that will indicate if pages that are hidden for navigation will still be displayed.
@@ -57,6 +61,16 @@ public interface Breadcrumb {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default Collection<NavigationItem> getItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ComponentExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 }

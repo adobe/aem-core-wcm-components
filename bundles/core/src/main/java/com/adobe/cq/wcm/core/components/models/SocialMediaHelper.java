@@ -17,7 +17,11 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the Sling Model for the {@code /apps/core/wcm/components/sharing} component.
@@ -25,7 +29,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface SocialMediaHelper {
+public interface SocialMediaHelper extends ComponentExporter {
 
     /**
      * Name of the resource property that will indicate which social networks are supported for social sharing.
@@ -118,6 +122,16 @@ public interface SocialMediaHelper {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default Map<String, String> getMetadata() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ComponentExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 }

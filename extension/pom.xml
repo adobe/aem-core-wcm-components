@@ -21,9 +21,9 @@
     <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
     <!-- ====================================================================== -->
     <parent>
-        <artifactId>core.wcm.components.sandbox.parent</artifactId>
+        <artifactId>core.wcm.components.parent</artifactId>
         <groupId>com.adobe.cq</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.9.24</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -55,19 +55,16 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.day.jcr.vault</groupId>
-                <artifactId>content-package-maven-plugin</artifactId>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <verbose>true</verbose>
-                    <group>adobe/cq60</group>
-                    <failOnError>true</failOnError>
-                    <builtContentDirectory>target/${project.artifactId}</builtContentDirectory>
+                    <showImportPackageReport>false</showImportPackageReport>
+                    <embeddedTarget>/apps/core/wcm/install</embeddedTarget>
                     <embeddeds>
                         <embedded>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>core.wcm.components.sandbox.extension.contentfragment.bundle</artifactId>
-                            <target>/apps/core/wcm/install</target>
                             <filter>true</filter>
                         </embedded>
                     </embeddeds>
@@ -78,6 +75,18 @@
                             <filter>true</filter>
                         </subPackage>
                     </subPackages>
+                    <dependencies>
+                        <dependency>
+                            <group>day/cq60/product</group>
+                            <name>cq-platform-content</name>
+                            <version>[1.3.234,)</version>
+                        </dependency>
+                        <dependency>
+                            <group>day/cq60/product</group>
+                            <name>cq-dam-cfm-content</name>
+                            <version>[0.9.345-NPR-19008-R010,)</version>
+                        </dependency>
+                    </dependencies>
                 </configuration>
             </plugin>
         </plugins>
@@ -148,7 +157,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.sandbox.extension.contentfragment.bundle</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

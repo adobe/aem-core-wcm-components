@@ -11,7 +11,7 @@
     "image" : {
         "jcr:primaryType"        : "cq:Component",
         "jcr:createdBy"          : "admin",
-        "jcr:title"              : "Image (v2 - sandbox)",
+        "jcr:title"              : "Image (v2)",
         "sling:resourceSuperType": "core/wcm/components/image",
         "jcr:description"        : "Smart Adaptive Image",
         "cq:icon"                : "image",

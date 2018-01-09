@@ -18,10 +18,12 @@
 
     // class of the edit dialog content
     var CLASS_EDIT_DIALOG = "cmp-contentfragment__edit-dialog";
-    // name of the fragment path field
-    var NAME_FRAGMENT_PATH = "./fragmentPath";
-    // name of the element names field (multifield)
-    var NAME_ELEMENT_NAMES = "./elementNames";
+
+    // field selectors
+    var SELECTOR_FRAGMENT_PATH = "[name='./fragmentPath']";
+    var SELECTOR_ELEMENT_NAMES = "[data-granite-coral-multifield-name='./elementNames']";
+    var SELECTOR_ELEMENT_NAMES_ADD = SELECTOR_ELEMENT_NAMES + " > [is=coral-button]";
+    var SELECTOR_VARIATION_NAME = "[name='./variationName']";
 
     // ui helper
     var ui = $(window).adaptTo("foundation-ui");
@@ -39,100 +41,112 @@
     // the element names field (multifield)
     var elementNames;
     // the add button of the element names field
-    var addButton;
-    // the path of the element names field
-    var elementNamesPath;
+    var addElement;
+    // the variation name field (select)
+    var variationName;
+
     // keeps track of the current fragment path
     var currentFragmentPath;
+    // the resource path of the element names field
+    var elementNamesPath;
+    // the resource path of the variation name field
+    var variationNamePath;
 
     function initialize(dialog) {
         // get the fields
-        fragmentPath = dialog.querySelector("[name='"+NAME_FRAGMENT_PATH+"']");
-        var elementNamesSelector = "[data-granite-coral-multifield-name='"+NAME_ELEMENT_NAMES+"']";
-        elementNames = dialog.querySelector(elementNamesSelector);
-        addButton = elementNames.querySelector(elementNamesSelector + " > [is=coral-button]");
+        fragmentPath = dialog.querySelector(SELECTOR_FRAGMENT_PATH);
+        elementNames = dialog.querySelector(SELECTOR_ELEMENT_NAMES);
+        addElement = elementNames.querySelector(SELECTOR_ELEMENT_NAMES_ADD);
+        variationName = dialog.querySelector(SELECTOR_VARIATION_NAME);
 
         // get the current fragment path
         currentFragmentPath = fragmentPath.value;
-        // get the path of the element names field from its data attribute
-        elementNamesPath = elementNames.dataset.fieldPath;
-        // disable the add button if no content fragment is currently set
+        // disable add button and variation name if no content fragment is currently set
         if (!currentFragmentPath) {
-            addButton.setAttribute("disabled", "");
+            addElement.setAttribute("disabled", "");
+            variationName.setAttribute("disabled", "");
         }
 
-        // execute function when the fragment path changes
+        // get the field resource paths from their data attribute
+        elementNamesPath = elementNames.dataset.fieldPath;
+        variationNamePath = variationName.dataset.fieldPath;
+
+        // register change listener
         $(fragmentPath).on("foundation-field-change", onFragmentPathChange);
     }
 
     /**
-     * Executes after the fragment path has changed. Shows a confirmation dialog to the user if the configuration is to
-     * be reset and updates the element names multifield to reflect the newly selected content fragment.
+     * Executes after the fragment path has changed. Shows a confirmation dialog to the user if the current
+     * configuration is to be reset and updates the fields to reflect the newly selected content fragment.
      */
     function onFragmentPathChange() {
-        // if the fragment path was deleted
+        // if the fragment was reset (i.e. the fragment path was deleted)
         if (!fragmentPath.value) {
-            // if no elements are configured, then there is no need for a confirmation
-            if (elementNames.items.length === 0) {
-                // unset the current fragment path
-                currentFragmentPath = null;
-                // disable add button
-                addButton.setAttribute("disabled", "");
-            } else {
-                // show confirmation dialog
-                showConfirmation(function () {
-                    // disable add button after confirmation
-                    addButton.setAttribute("disabled", "");
-                });
-            }
+            // confirm change (if necessary)
+            confirmFragmentChange(null, null, function () {
+                // disable add button and variation name
+                addElement.setAttribute("disabled", "");
+                variationName.setAttribute("disabled", "");
+            });
             // don't do anything else
             return;
         }
 
-        // request the markup of the element names field (with the new fragment path as a parameter)
-        $.get({
-            url: Granite.HTTP.externalize(elementNamesPath) + ".html",
-            data: {
-                fragmentPath: fragmentPath.value
-            }
-        }).success(function (html) {
-            // find the updated multifield in the response markup
-            var newElementNames = $(html).find("[data-granite-coral-multifield-name='"+NAME_ELEMENT_NAMES+"']")[0];
-            Coral.commons.ready(newElementNames, function() {
-                // find the select templates of both the existing and the new multifield
-                var select1 = $(elementNames.template.content).find("coral-select").get(0);
-                var select2 = $(newElementNames.template.content).find("coral-select").get(0);
+        // get markup of element names and variation name fields, parameterizing their datasources with new fragment
+        var data = { fragmentPath: fragmentPath.value };
+        var elementNamesRequest = $.get({url: Granite.HTTP.externalize(elementNamesPath) + ".html", data: data});
+        var variationNameRequest = $.get({url: Granite.HTTP.externalize(variationNamePath) + ".html", data: data});
 
-                // if no elements are configured or the selects are equal (which means that the previous and the newly
-                // selected content fragment have the same elements), then there is no need for a confirmation
-                if (elementNames.items.length === 0 || selectsAreEqual(select1, select2)) {
-                    // update the current fragment path
-                    currentFragmentPath = fragmentPath.value;
-                    // update the existing multifield's template
-                    elementNames.template = newElementNames.template;
-                    // enable add button
-                    addButton.removeAttribute("disabled");
-                } else {
-                    // show confirmation dialog
-                    showConfirmation(function () {
-                        // update the existing multifield's template
+        // wait for requests to load
+        $.when(elementNamesRequest, variationNameRequest).then(function (result1, result2) {
+            // get the fields from the resulting markup
+            var newElementNames = $(result1[0]).find(SELECTOR_ELEMENT_NAMES)[0];
+            var newVariationName = $(result2[0]).find(SELECTOR_VARIATION_NAME)[0];
+            // wait for them to be ready
+            Coral.commons.ready(newElementNames, function() {
+                Coral.commons.ready(newVariationName, function() {
+                    // confirm change (if necessary)
+                    confirmFragmentChange(newElementNames, newVariationName, function () {
+                        // replace the element names multifield's template
                         elementNames.template = newElementNames.template;
-                        // enable add button
-                        addButton.removeAttribute("disabled");
+
+                        // replace the variation name select, keeping its value
+                        newVariationName.value = variationName.value;
+                        variationName.parentNode.replaceChild(newVariationName, variationName);
+                        variationName = newVariationName;
+
+                        // enable add button and variation name
+                        addElement.removeAttribute("disabled");
+                        variationName.removeAttribute("disabled");
                     });
-                }
+                });
             });
-        }).error(function () {
+        }, function () {
+            // display error dialog if one of the requests failed
             ui.prompt(errorDialogTitle, errorDialogMessage, "error");
         });
     }
 
     /**
-     * Shows a confirmation dialog. If the user cancels, the fragment path is reset to its previous value; if they
-     * accept, the current fragment path is updated, the configured element names are cleared, and the specified
-     * callback is invoked.
+     * Presents the user with a confirmation dialog if the current configuration needs to be reset as a result
+     * of the content fragment change. Executes the specified callback after the user confirms, or if the current
+     * configuration can be kept (in which case no dialog is shown).
+     *
+     * @param newElementNames the element names field reflecting the newly selected fragment (null if fragment was unset)
+     * @param newVariationName the variation name field reflecting the newly selected fragment (null if fragment was unset)
+     * @param callback a callback to execute after the change is confirmed
      */
-    function showConfirmation(callback) {
+    function confirmFragmentChange(newElementNames, newVariationName, callback) {
+        // check if we can keep the current configuration, in which case no confirmation dialog is necessary
+        if (canKeepConfig(newElementNames, newVariationName)) {
+            // update the current fragment path
+            currentFragmentPath = fragmentPath.value;
+            // execute callback
+            callback();
+            return;
+        }
+
+        // else show a confirmation dialog
         ui.prompt(confirmationDialogTitle, confirmationDialogMessage, "warning", [{
             text: confirmationDialogCancel,
             handler: function () {
@@ -145,37 +159,76 @@
             text: confirmationDialogConfirm,
             primary: true,
             handler: function () {
+                // reset the current configuration
+                elementNames.items.clear();
+                variationName.value = "";
+
                 // update the current fragment path
                 currentFragmentPath = fragmentPath.value;
-                // clear all configured elements
-                elementNames.items.clear();
-                // invoke callback
+                // execute callback
                 callback();
             }
         }]);
     }
 
-    /**
-     * Verifies if two uninitialized coral-select components are equal by checking if they contain the same
-     * coral-select-item elements in their DOM.
-     */
-    function selectsAreEqual(select1, select2) {
-        // check if they have the same number of items
-        var items1 = select1.querySelectorAll("coral-select-item");
-        var items2 = select2.querySelectorAll("coral-select-item");
-        if (items1.length !== items2.length) {
-            return false;
-        }
 
-        // check if the items have the same values
-        for (var i = 0; i < items1.length; i++) {
-            var item1 = items1[i];
-            var item2 = items2[i];
-            if (item1.attributes.value.value !== item2.attributes.value.value) {
+    /**
+     * Checks if the current configuration of element names and variation name can be kept, or if it needs to be reset
+     * as a result of the content fragment change. It compares the two fields to the new ones that reflect the newly
+     * selected content fragment.
+     *
+     * @param newElementNames the element names field reflecting the newly selected fragment (null if fragment was unset)
+     * @param newVariationName the variation name field reflecting the newly selected fragment (null if fragment was unset)
+     * @returns {boolean} true if the configuration can be kept or if there was none, false otherwise
+     */
+    function canKeepConfig(newElementNames, newVariationName) {
+        // check if some element names are currently configured
+        if (elementNames.items.length > 0) {
+            // if we're unsetting the current fragment we need to reset the config
+            if (!newElementNames) {
+                return false;
+            }
+            // compare the items of the current and new element names fields
+            var currentItems = elementNames.template.content.querySelectorAll("coral-select-item");
+            var newItems = newElementNames.template.content.querySelectorAll("coral-select-item");
+            if (!itemsAreEqual(currentItems, newItems)) {
                 return false;
             }
         }
 
+        // check if a varation is currently configured
+        if (variationName.value && variationName.value !== "master") {
+            // if we're unsetting the current fragment we need to reset the config
+            if (!newVariationName) {
+                return false;
+            }
+            // compare the items of the current and new variation name fields
+            if (!itemsAreEqual(variationName.items.getAll(), newVariationName.items.getAll())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Compares two arrays containing select items, returning true if the arrays have the same size and all contained
+     * items have the same value and label.
+     */
+    function itemsAreEqual(a1, a2) {
+        // verify that the arrays have the same length
+        if (a1.length !== a2.length) {
+            return false;
+        }
+        for (var i = 0; i < a1.length; i++) {
+            var item1 = a1[i];
+            var item2 = a2[i];
+            if (item1.attributes.value.value !== item2.attributes.value.value
+                || item1.textContent !== item2.textContent) {
+                // the values or labels of the current items didn't match
+                return false;
+            }
+        }
         return true;
     }
 

@@ -11,20 +11,12 @@
     "main": {
       "value": "<p>Main content</p>",
       "title": "Main",
-      "multiValued": false,
-      "displayValues": [
-        "<p>Main content</p>"
-      ],
       "contentType": "text/html",
       ":type": "text/html"
     },
     "second": {
       "value": "Second content",
       "title": "Second",
-      "multiValued": false,
-      "displayValues": [
-        "Second content"
-      ],
       "contentType": "text/plain",
       ":type": "text/plain"
     }

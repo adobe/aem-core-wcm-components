@@ -45,6 +45,7 @@ public class BreadcrumbImplTest {
     private static final String BREADCRUMB_3 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-hide-current";
     private static final String BREADCRUMB_4 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-start-level";
     private static final String BREADCRUMB_5 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-style-based";
+    private static final String BREADCRUMB_6 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-v2";
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/breadcrumb/women");
@@ -88,12 +89,18 @@ public class BreadcrumbImplTest {
         Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_5));
     }
 
+    @Test
+    public void testV2JSONExporter() throws Exception {
+        Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_6);
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_6));
+    }
+
     private void checkBreadcrumbConsistency(Breadcrumb breadcrumb, String[] expectedPages) {
         assertTrue("Expected that the returned breadcrumb will contain " + expectedPages.length + " items",
                 breadcrumb.getItems().size() == expectedPages.length);
         int index = 0;
         for (NavigationItem item : breadcrumb.getItems()) {
-            assertEquals(expectedPages[index++], item.getPage().getTitle());
+            assertEquals(expectedPages[index++], item.getTitle());
         }
     }
 
@@ -108,6 +115,7 @@ public class BreadcrumbImplTest {
         }
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
         request.setResource(resource);
+        request.setContextPath("");
         SlingBindings bindings = new SlingBindings();
         bindings.put(SlingBindings.RESOURCE, resource);
         bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());

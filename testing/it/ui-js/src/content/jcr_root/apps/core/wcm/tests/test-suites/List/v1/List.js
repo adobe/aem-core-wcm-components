@@ -26,7 +26,7 @@
     /**
      * v1 specifics
      */
-    var tcExecuteBeforeTest = list.tcExecuteBeforeTest(c.rtList, c.rtText);
+    var tcExecuteBeforeTest = list.tcExecuteBeforeTest(c.rtList_v1, c.rtText_v1);
     var tcExecuteAfterTest = list.tcExecuteAfterTest();
 
     /**

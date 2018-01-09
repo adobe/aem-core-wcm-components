@@ -26,33 +26,49 @@
     // relative path from page node to the root layout container
     c.relParentCompPath = "/jcr:content/root/responsivegrid/";
     // the path to the policies
-    c.policyPath = "/conf/core-components/settings/wcm/policies/core-component/components/v1";
+    c.policyPath = "/conf/core-components/settings/wcm/policies/core-component/components";
     // the policy assignment path
-    c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core-component/components/v1";
+    c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core-component/components";
     // proxy components path
-    c.proxyPath = "/apps/core-component/components/v1/"
+    c.proxyPath = "/apps/core-component/components/"
 
     // core component resource types
     // text component
-    c.rtText = "core/wcm/components/text/v1/text";
+    c.rtText_v1 = "core/wcm/components/text/v1/text";
+    c.rtText_v2 = "core/wcm/components/text/v2/text";
     // title component
-    c.rtTitle = "core/wcm/components/title/v1/title";
+    c.rtTitle_v1 = "core/wcm/components/title/v1/title";
+    c.rtTitle_v2 = "core/wcm/components/title/v2/title";
     // list component
-    c.rtList = "core/wcm/components/list/v1/list";
+    c.rtList_v1 = "core/wcm/components/list/v1/list";
+    c.rtList_v2 = "core/wcm/components/list/v2/list";
     // image component
-    c.rtImage = "core/wcm/components/image/v1/image";
+    c.rtImage_v1 = "core/wcm/components/image/v1/image";
+    c.rtImage_v2 = "core/wcm/components/image/v2/image";
     // breadcrumb component
-    c.rtBreadcrumb = "core/wcm/components/breadcrumb/v1/breadcrumb";
+    c.rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
+    c.rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
+    // navigation component
+    c.rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
+    // language navigation component
+    c.rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
+    // search component
+    c.rtSearch_v1 = "core/wcm/components/search/v1/search";
     // form container
-    c.rtFormContainer = "core/wcm/components/form/container/v1/container";
+    c.rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
+    c.rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
     // form button
-    c.rtFormButton = "core/wcm/components/form/button/v1/button";
+    c.rtFormButton_v1 = "core/wcm/components/form/button/v1/button";
+    c.rtFormButton_v2 = "core/wcm/components/form/button/v2/button";
     // form button
-    c.rtFormText = "core/wcm/components/form/text/v1/text";
+    c.rtFormText_v1 = "core/wcm/components/form/text/v1/text";
+    c.rtFormText_v2 = "core/wcm/components/form/text/v2/text";
     // form option
-    c.rtFormOptions = "core/wcm/components/form/options/v1/options";
+    c.rtFormOptions_v1 = "core/wcm/components/form/options/v1/options";
+    c.rtFormOptions_v2 = "core/wcm/components/form/options/v2/options";
     // hidden field
-    c.rtFormHidden = "core/wcm/components/form/hidden/v1/hidden";
+    c.rtFormHidden_v1 = "core/wcm/components/form/hidden/v1/hidden";
+    c.rtFormHidden_v2 = "core/wcm/components/form/hidden/v2/hidden";
 
     // selectors
 
@@ -794,6 +810,8 @@
      */
     c.tcExecuteBeforeTestSuite =  new TestCase("Setup Before Testsuite")
         // disable tutorial popups
-        .execTestCase(c.disableTutorials);
+        .execTestCase(c.disableTutorials)
+        // 2 sec wait for Edge to avoid random failing of very first test in a test run
+        .wait(2000);
 
 }(hobs, jQuery));

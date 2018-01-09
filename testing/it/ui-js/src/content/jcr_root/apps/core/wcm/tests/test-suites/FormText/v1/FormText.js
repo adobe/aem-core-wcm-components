@@ -27,7 +27,7 @@
      * v1 specifics
      */
     var itemSelector = '.help-block';
-    var tcExecuteBeforeTest = formText.tcExecuteBeforeTest(c.rtFormText);
+    var tcExecuteBeforeTest = formText.tcExecuteBeforeTest(c.rtFormText_v1);
     var tcExecuteAfterTest = formText.tcExecuteAfterTest();
 
     /**

@@ -23,7 +23,7 @@
     /**
      * v1 specifics
      */
-    var tcExecuteBeforeTest = formContainer.tcExecuteBeforeTest(c.rtFormContainer, c.rtFormText, c.rtFormButton);
+    var tcExecuteBeforeTest = formContainer.tcExecuteBeforeTest(c.rtFormContainer_v1, c.rtFormText_v1, c.rtFormButton_v1);
     var tcExecuteAfterTest = formContainer.tcExecuteAfterTest();
 
     /**

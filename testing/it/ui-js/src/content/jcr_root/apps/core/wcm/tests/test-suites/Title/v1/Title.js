@@ -26,7 +26,7 @@
     /**
      * v1 specifics
      */
-    var tcExecuteBeforeTest = title.tcExecuteBeforeTest(c.rtTitle);
+    var tcExecuteBeforeTest = title.tcExecuteBeforeTest(c.rtTitle_v1);
     var tcExecuteAfterTest = title.tcExecuteAfterTest(c.policyPath, c.policyAssignmentPath);
 
     /**
@@ -40,9 +40,9 @@
         .addTestCase(title.tcSetTitleValueUsingConfigDialog(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcCheckExistenceOfTitleTypes(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcSetTitleType(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(title.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/v1",
+        .addTestCase(title.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
-        .addTestCase(title.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components/v1",
+        .addTestCase(title.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
     ;
 }(hobs, jQuery));

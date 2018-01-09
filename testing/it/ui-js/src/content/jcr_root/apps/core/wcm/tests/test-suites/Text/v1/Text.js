@@ -26,7 +26,7 @@
     /**
      * v1 specifics
      */
-    var tcExecuteBeforeTest = text.tcExecuteBeforeTest(c.rtText);
+    var tcExecuteBeforeTest = text.tcExecuteBeforeTest(c.rtText_v1);
     var tcExecuteAfterTest = text.tcExecuteAfterTest();
     var selectors = {
         editor: '.cmp-text.aem-GridColumn p',

@@ -15,17 +15,18 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.testing;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.reflect.ClassPath;
 
 import static org.junit.Assert.fail;
 
@@ -87,38 +88,13 @@ public class AbstractModelTest {
     }
 
     private static List<Class> getClasses(String packageName) throws ClassNotFoundException, IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        String path = packageName.replace('.', '/');
-        Enumeration<URL> resources = classLoader.getResources(path);
-        List<File> dirs = new ArrayList<>();
-        while (resources.hasMoreElements()) {
-            URL resource = resources.nextElement();
-            dirs.add(new File(resource.getFile()));
-        }
-        ArrayList<Class> classes = new ArrayList<>();
-        for (File directory : dirs) {
-            classes.addAll(findClasses(directory, packageName));
-        }
-        return classes;
-    }
-
-    private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
         List<Class> classes = new ArrayList<>();
-        if (!directory.exists()) {
-            return classes;
-        }
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    if (!file.getName().contains(".")) {
-                        classes.addAll(findClasses(file, packageName + "." + file.getName()));
-                    }
-                } else if (file.getName().endsWith(".class")) {
-                    classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
-                }
-            }
-        }
+        ClassPath classpath = ClassPath.from(AbstractModelTest.class.getClassLoader());
+        String packagePrefix = packageName + '.';
+        ImmutableSet.Builder<ClassPath.ClassInfo> builder = ImmutableSet.builder();
+        classpath.getAllClasses().stream().filter(classInfo -> classInfo.getName().startsWith(packagePrefix)).forEach(builder::add);
+        ImmutableSet<ClassPath.ClassInfo> packageClasses = builder.build();
+        classes.addAll(packageClasses.stream().map(ClassPath.ClassInfo::load).collect(Collectors.toList()));
         return classes;
     }
 

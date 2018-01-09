@@ -31,6 +31,7 @@ import io.wcm.testing.mock.aem.junit.AemContextCallback;
 public final class CoreComponentTestContext {
 
     public static final String TEST_CONTENT_JSON = "/test-content.json";
+    public static final String TEST_APPS_JSON = "/test-apps.json";
 
 
     private CoreComponentTestContext() {

@@ -622,7 +622,7 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
     };
 
     /**
-     * Test : test contstraint message
+     * Test : test constraint message
      */
     formText.setConstraintMessage = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Constraint Message", {

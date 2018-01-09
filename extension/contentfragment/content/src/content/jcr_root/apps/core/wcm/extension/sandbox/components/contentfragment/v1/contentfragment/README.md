@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Content Fragment (v1 - sandbox)
+Content Fragment (v1 - sandbox extension)
 ====
 Content Fragment component written in HTL that displays the elements of a Content Fragment or a selection thereof.
 
@@ -31,6 +31,7 @@ The following JCR properties are used:
 
 1. `./fragmentPath` - defines the path to the Content Fragment to be rendered
 2. `./elementNames` - multi-valued property defining the elements to be rendered and in which order (optional: if not present, all elements are rendered)
+3. `./variationName` - defines the variation to use to render the elements (optional: if not present, the master variation is used)
 
 ## BEM description
 ```
@@ -43,7 +44,7 @@ BLOCK cmp-contentfragment
 
 ## Information
 * **Vendor**: Adobe
-* **Version**: v1 - sandbox
+* **Version**: v1 - sandbox extension
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_contentfragment\_v1](https://www.adobe.com/go/aem_cmp_contentfragment_v1)

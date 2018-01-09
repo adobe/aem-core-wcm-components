@@ -1,0 +1,8 @@
+{
+    "srcUriTemplate"        : "/core/content/test/jcr%3acontent/root/image4.img{.width}.png/1494867377756.png",
+    "widths": [],
+    "lazyEnabled"           : false,
+    "title"                 : "Adobe Systems Logo and Wordmark",
+    "src"                   : "/core/content/test/jcr%3acontent/root/image4.img.png/1494867377756.png",
+    ":type"                 : "core/wcm/components/image/v2/image"
+}

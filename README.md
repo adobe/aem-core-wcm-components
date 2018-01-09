@@ -19,23 +19,23 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 ## Available Components
 
 * Page authoring components:
-  * [Page component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/page/v2/page)
-  * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/breadcrumb/v2/breadcrumb)
-  * [Title component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/title/v2/title)
-  * [Text component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/text/v2/text)
-  * [Image component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/image/v2/image)
-  * [List component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/list/v2/list)
-  * [Sharing component](content/src/content/jcr_root/apps/core/wcm/sandbox/components/sharing/v2/sharing)
-  * [Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/navigation/v1/navigation)
-  * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/sandbox/components/languagenavigation/v1/languagenavigation)
-  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/sandbox/components/search/v1/search)
+  * [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
+  * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Title component](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+  * [Text component](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
+  * [Image component](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
+  * [List component](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
+  * [Sharing component](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+  * [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
+  * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
+  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
   * [Teaser](content/src/content/jcr_root/apps/core/wcm/sandbox/components/teaser/v1/teaser)
 * Form components:
-  * [Form container](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/container/v2/container)
-  * [Form text field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/text/v2/text)
-  * [Form options field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/options/v2/options)
-  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/hidden/v2/hidden)
-  * [Form button](content/src/content/jcr_root/apps/core/wcm/sandbox/components/form/button/v2/button)
+  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+  * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page
 

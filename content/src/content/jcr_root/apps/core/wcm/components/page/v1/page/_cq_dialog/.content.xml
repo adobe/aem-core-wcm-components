@@ -304,9 +304,32 @@
                                         </items>
                                     </templates>
                                     <authenticationrequirement
+                                        cq:showOnCreate="{Boolean}false"
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/include"
-                                        path="/mnt/overlay/foundation/components/page/cq:dialog/content/items/tabs/items/advanced/items/column/items/authenticationrequirement"/>
+                                        jcr:title="Authentication Requirement"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <cugconfigwarning
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="cq/gui/components/siteadmin/admin/properties/cugconfigwarning"
+                                                warning="The Authentication Requirement cannot be edited because the page is using a deprecated configuration for the Closed User Group.&lt;br>Please refer to the &lt;a href=&quot;https://www.adobe.com/go/aem6_3_docs_cug_migration_en&quot; class=&quot;coral-Link&quot;>documentation&lt;/a>."/>
+                                            <enable
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="cq/gui/components/siteadmin/admin/properties/authrequirement"
+                                                fieldDescription="You might need to configure a Closed User Group in the Permission tab."
+                                                text="Enable"/>
+                                            <loginpath
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="cq/gui/components/siteadmin/admin/properties/loginpath"
+                                                fieldLabel="Login Page"
+                                                name="./cq:loginPath"
+                                                rootPath="/content">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-msm-lockable="cq:loginPath"/>
+                                            </loginpath>
+                                        </items>
+                                    </authenticationrequirement>
                                     <export
                                         cq:showOnCreate="{Boolean}false"
                                         jcr:primaryType="nt:unstructured"

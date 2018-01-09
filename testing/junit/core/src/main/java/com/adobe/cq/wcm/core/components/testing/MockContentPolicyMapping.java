@@ -20,7 +20,6 @@ import java.util.Calendar;
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.adapter.SlingAdaptable;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.policies.ContentPolicy;
@@ -28,10 +27,17 @@ import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 
 public class MockContentPolicyMapping extends SlingAdaptable implements ContentPolicyMapping {
 
-    Resource contentPolicyResource;
+    Resource contentPolicyMappingResource;
+    private ContentPolicy contentPolicy;
+    private String contentPolicyPath;
 
-    public MockContentPolicyMapping(Resource contentPolicyResource) {
-        this.contentPolicyResource = contentPolicyResource;
+    public MockContentPolicyMapping(Resource contentPolicyMappingResource) {
+        this.contentPolicyMappingResource = contentPolicyMappingResource;
+        contentPolicyPath = contentPolicyMappingResource.getValueMap().get("cq:policy", String.class);
+        if (StringUtils.isEmpty(contentPolicyPath)) {
+            throw new IllegalArgumentException("Resource " + contentPolicyMappingResource.getPath() + " does not contain a valid " +
+                    "cq:policy property");
+        }
     }
 
     @Override
@@ -51,18 +57,11 @@ public class MockContentPolicyMapping extends SlingAdaptable implements ContentP
 
     @Override
     public ContentPolicy getPolicy() {
-        ValueMap valueMap = contentPolicyResource.adaptTo(ValueMap.class);
-        if (valueMap.containsKey("cq:policy")) {
-            String policyPath = valueMap.get("cq:policy", StringUtils.EMPTY);
-            if (StringUtils.isNotEmpty(policyPath)) {
-                policyPath = "/conf/coretest/settings/wcm/policies/" + policyPath;
-                Resource policyResource = contentPolicyResource.getResourceResolver().getResource(policyPath);
-                if (policyResource != null) {
-                    return new MockContentPolicy(policyResource);
-                }
-            }
+        if (contentPolicy == null) {
+            contentPolicy = new MockContentPolicy(contentPolicyMappingResource.getResourceResolver().getResource
+                    ("/conf/coretest/settings/wcm/policies/" + contentPolicyPath));
         }
-        return null;
+        return contentPolicy;
     }
 
     @Override

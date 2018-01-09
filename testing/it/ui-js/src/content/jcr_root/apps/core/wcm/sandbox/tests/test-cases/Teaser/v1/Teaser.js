@@ -35,11 +35,23 @@
 
         // create a proxy component
         .execFct(function (opts, done){
-            c.createProxyComponent(h.param("compPath")(opts), c.proxyPath_v2, "compPath", done)
+            c.createProxyComponent(teaserRT, c.proxyPath_sandbox, "proxyPath", done);
+        })
+
+        // create a proxy component for an image
+        .execFct(function (opts, done){
+            c.createProxyComponent(c.rtImage_v2,c.proxyPath_sandbox, "imageProxyPath", done)
         })
 
         .execFct(function (opts, done) {
-            c.addComponent(teaserRT, h.param('teaser_page')(opts) + c.relParentCompPath, 'cmpPath', done);
+            // we need to set property for image rendering delegation from  teaser proxy to image proxy
+            var data = {};
+            data.imageDelegate = h.param("imageProxyPath")(opts);
+            c.editNodeProperties(h.param("proxyPath")(opts), data, done)
+        })
+
+        .execFct(function (opts, done) {
+            c.addComponent(h.param("proxyPath")(opts), h.param('teaser_page')(opts) + c.relParentCompPath, 'cmpPath', done);
         })
         .navigateTo('/editor.html%teaser_page%.html');
     };
@@ -51,9 +63,13 @@
             c.deletePage(h.param('teaser_page')(opts), done);
         })
 
-        // delete the test page we created
+        // delete the test proxies we created
         .execFct(function (opts, done) {
-            c.deleteProxyComponent(h.param("compPath")(opts), done);
+            c.deleteProxyComponent(h.param("proxyPath")(opts), done);
+        })
+
+        .execFct(function (opts, done) {
+            c.deleteProxyComponent(h.param("imageProxyPath")(opts), done);
         });
     };
 

@@ -28,7 +28,7 @@
      */
     var buttonSelector =".btn"
 
-    var tcExecuteBeforeTest = formButton.tcExecuteBeforeTest(c.rtFormButton);
+    var tcExecuteBeforeTest = formButton.tcExecuteBeforeTest(c.rtFormButton_v1);
     var tcExecuteAfterTest = formButton.tcExecuteAfterTest();
 
     /**

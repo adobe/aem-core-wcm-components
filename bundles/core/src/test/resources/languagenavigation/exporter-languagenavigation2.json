@@ -1,23 +1,15 @@
 {
   "items": [
     {
-      "page": {
-        "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
-        "pageTitle": null,
-        "name": "about",
-        "description": null,
-        "title": "About Us"
-      },
+      "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
+      "description": null,
+      "lastModified": null,
       "active": true,
       "children": [
         {
-          "page": {
-            "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
-            "pageTitle": null,
-            "name": "about",
-            "description": null,
-            "title": "About Us"
-          },
+          "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
+          "description": null,
+          "lastModified": null,
           "active": true,
           "children": [],
           "level": 1,
@@ -28,13 +20,9 @@
           "language": "en-US"
         },
         {
-          "page": {
-            "path": "/content/languagenavigation/LOCALE-1/LOCALE-6",
-            "pageTitle": null,
-            "name": "LOCALE-6",
-            "description": null,
-            "title": "LOCALE 6"
-          },
+          "path": "/content/languagenavigation/LOCALE-1/LOCALE-6",
+          "description": null,
+          "lastModified": null,
           "active": false,
           "children": [],
           "level": 1,
@@ -53,23 +41,15 @@
       "language": "en-US"
     },
     {
-      "page": {
-        "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
-        "pageTitle": null,
-        "name": "about",
-        "description": null,
-        "title": "About Us"
-      },
+      "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
+      "description": null,
+      "lastModified": null,
       "active": false,
       "children": [
         {
-          "page": {
-            "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
-            "pageTitle": null,
-            "name": "about",
-            "description": null,
-            "title": "About Us"
-          },
+          "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
+          "description": null,
+          "lastModified": null,
           "active": false,
           "children": [],
           "level": 1,
@@ -80,13 +60,9 @@
           "language": "en-CA"
         },
         {
-          "page": {
-            "path": "/content/languagenavigation/LOCALE-2/LOCALE-7",
-            "pageTitle": null,
-            "name": "LOCALE-7",
-            "description": null,
-            "title": "LOCALE 7"
-          },
+          "path": "/content/languagenavigation/LOCALE-2/LOCALE-7",
+          "description": null,
+          "lastModified": null,
           "active": false,
           "children": [],
           "level": 1,
@@ -105,23 +81,15 @@
       "language": "en-CA"
     },
     {
-      "page": {
-        "path": "/content/languagenavigation/LOCALE-3",
-        "pageTitle": null,
-        "name": "LOCALE-3",
-        "description": null,
-        "title": "LOCALE 3"
-      },
+      "path": "/content/languagenavigation/LOCALE-3",
+      "description": null,
+      "lastModified": null,
       "active": false,
       "children": [
         {
-          "page": {
-            "path": "/content/languagenavigation/LOCALE-3/LOCALE-8",
-            "pageTitle": null,
-            "name": "LOCALE-8",
-            "description": null,
-            "title": "LOCALE 8"
-          },
+          "path": "/content/languagenavigation/LOCALE-3/LOCALE-8",
+          "description": null,
+          "lastModified": null,
           "active": false,
           "children": [],
           "level": 1,
@@ -140,23 +108,15 @@
       "language": "de-CH"
     },
     {
-      "page": {
-        "path": "/content/languagenavigation/LOCALE-4",
-        "pageTitle": null,
-        "name": "LOCALE-4",
-        "description": null,
-        "title": "LOCALE 4"
-      },
+      "path": "/content/languagenavigation/LOCALE-4",
+      "description": null,
+      "lastModified": null,
       "active": false,
       "children": [
         {
-          "page": {
-            "path": "/content/languagenavigation/LOCALE-4/LOCALE-9",
-            "pageTitle": null,
-            "name": "LOCALE-9",
-            "description": null,
-            "title": "LOCALE 9"
-          },
+          "path": "/content/languagenavigation/LOCALE-4/LOCALE-9",
+          "description": null,
+          "lastModified": null,
           "active": false,
           "children": [],
           "level": 1,
@@ -175,5 +135,5 @@
       "language": "de-DE"
     }
   ],
-  ":type": "core/wcm/sandbox/components/languagenavigation/v1/languagenavigation"
+  ":type": "core/wcm/components/languagenavigation/v1/languagenavigation"
 }

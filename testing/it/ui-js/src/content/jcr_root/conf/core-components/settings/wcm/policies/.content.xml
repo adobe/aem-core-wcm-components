@@ -91,7 +91,6 @@
     </wcm>
     <core-component jcr:primaryType="nt:unstructured">
         <components jcr:primaryType="nt:unstructured">
-            <v1 jcr:primaryType="nt:unstructured"/>
             <sandbox jcr:primaryType="nt:unstructured"/>
         </components>
     </core-component>

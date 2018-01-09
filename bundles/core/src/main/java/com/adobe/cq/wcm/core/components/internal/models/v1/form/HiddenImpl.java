@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.models.form.Field;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -28,17 +27,17 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
+import com.adobe.cq.wcm.core.components.models.form.Field;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHelper;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Field.class, ComponentExporter.class},
-       resourceType = HiddenImpl.RESOURCE_TYPE)
+       resourceType = {FormConstants.RT_CORE_FORM_HIDDEN_V1, FormConstants.RT_CORE_FORM_HIDDEN_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class HiddenImpl extends AbstractFieldImpl {
-
-    protected static final String RESOURCE_TYPE = "core/wcm/components/form/hidden/v1/hidden";
 
     static final String PROP_NAME_DEFAULT = "hidden";
     static final String PROP_VALUE_DEFAULT = "";

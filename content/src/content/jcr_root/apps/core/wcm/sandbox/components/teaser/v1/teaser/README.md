@@ -22,7 +22,7 @@ Teaser component written in HTL.
 ### Use Object
 The Teaser component uses the `com.adobe.cq.wcm.core.components.sandbox.models.Teaser` Sling model as its Use-object.
 
-### Component policy configuration properties
+### Component Policy Configuration Properties
 The following configuration properties are inherited from the image component:
 
 1. `./allowedWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
@@ -30,7 +30,7 @@ component; the actual size will be requested by the client device;
 2. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
 device)
 
-### Edit dialog properties
+### Edit Dialog Properties
 The following properties are written to JCR for this Teaser component and are expected to be available as `Resource` properties:
 
 1. `./fileReference` property or `file` child node - will store either a reference to the image file, or the image file
@@ -39,7 +39,7 @@ The following properties are written to JCR for this Teaser component and are ex
 4. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
 5. `./jcr:description` - defines the value of the teaser description 
 
-## BEM description
+## BEM Description
 ```
 BLOCK cmp-teaser
     ELEMENT cmp-teaser__image

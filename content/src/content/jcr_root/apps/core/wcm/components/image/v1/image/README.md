@@ -26,7 +26,7 @@ Image component written in HTL that renders a smart adaptive image.
 ### Use Object
 The Image component uses the `com.adobe.cq.wcm.core.components.models.Image` Sling Model as its Use-object.
 
-### Component policy configuration properties
+### Component Policy Configuration Properties
 The following configuration properties are used:
 
 1. `./allowedWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
@@ -34,7 +34,7 @@ component; the actual size will be requested by the client device;
 2. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
 device)
 
-### Edit dialog properties
+### Edit Dialog Properties
 The following properties are written to JCR for this Image component and are expected to be available as `Resource` properties:
 
 1. `./fileReference` property or `file` child node - will store either a reference to the image file, or the image file
@@ -46,7 +46,7 @@ The following properties are written to JCR for this Image component and are exp
 6. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
 otherwise a caption will be rendered
 
-## Rendering logic
+## Rendering Logic
 
 The HTML markup for the image component looks like this
 
@@ -75,12 +75,11 @@ The following JSON format is expected in the attribute `data-cmp-image` of the `
 }
 ```
 
-### Necessary attributes for the javascript logic
+### Necessary Attributes for the JavaScript Logic
 1. `cmp-image` class attribute is necessary to select the right container below which to create the new `img` element. Make sure to manually place this container in the markup of composed components (`data-sly-resource` with a `resourceType` override).
 2. `data-cmp-image` attribute must contain all necessary image URLs in the format described above.
 
-
-## Extending from this component
+## Extending from This Component
 
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section above).
 2. In case your own component does not only render an image but does also render something else, use the following approach
@@ -89,8 +88,7 @@ The following JSON format is expected in the attribute `data-cmp-image` of the `
   3. You derived component should reset `cq:htmlTags`
   4. You component's dialog should overwrite the dialog fully from the image component via `sling:hideResource="true"` on the node `cq:dialog/content/items/image`
 
-
-## URL formats
+## URL Formats
 The images are loaded through the `com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet`, therefore their URLs have the following patterns:
 
 ```
@@ -101,6 +99,12 @@ Publish:
 /content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>
 ```
 
+## Client Libraries
+The component provides a `core.wcm.components.image.v1` client library category that contains a recommended base
+CSS styling. It should be added to a relevant site client library using the `embed` property.
+
+It also provides a `core.wcm.components.image.v1.editor` editor client library category that includes
+JavaScript handling for dialog interaction. It is already included by its edit dialog.
 
 ## Information
 * **Vendor**: Adobe

@@ -4,7 +4,7 @@
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
             "jcr:title"         : "Content Fragments Test",
-            "sling:resourceType": "core/wcm/sandbox/components/page/v2/page",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
             "root"              : {
                 "jcr:primaryType"   : "nt:unstructured",
                 "sling:resourceType": "wcm/foundation/components/responsivegrid",
@@ -29,6 +29,18 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/text-only"
+                    },
+                    "text-only-variation"                  : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "variationName"     : "teaser"
+                    },
+                    "text-only-non-existing-variation"     : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/text-only",
+                        "variationName"     : "non-existing"
                     },
                     "text-only-single-element"             : {
                         "jcr:primaryType"   : "nt:unstructured",
@@ -60,6 +72,18 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured"
+                    },
+                    "structured-variation"                 : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured",
+                        "variationName"     : "teaser"
+                    },
+                    "structured-non-existing-variation"    : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
+                        "fragmentPath"      : "/content/dam/contentfragments/structured",
+                        "variationName"     : "non-existing"
                     },
                     "structured-nested-model"              : {
                         "jcr:primaryType"   : "nt:unstructured",

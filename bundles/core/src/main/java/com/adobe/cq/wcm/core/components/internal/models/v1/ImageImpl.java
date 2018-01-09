@@ -34,7 +34,6 @@ import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.commons.json.JSONArray;
 import org.apache.sling.commons.json.JSONObject;
@@ -60,22 +59,22 @@ import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.NameConstants;
+import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Style;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ImageImpl implements Image, ComponentExporter {
+public class ImageImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v1/image";
     private static final String DEFAULT_EXTENSION = "jpeg";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
-    private static final String DOT = ".";
-    private static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
+    protected static final String DOT = ".";
+    protected static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
     private static final List<String> NON_SUPPORTED_IMAGE_MIMETYPE = Collections.singletonList("image/svg+xml");
 
@@ -83,10 +82,13 @@ public class ImageImpl implements Image, ComponentExporter {
     protected SlingHttpServletRequest request;
 
     @Inject
-    private Resource resource;
+    protected Resource resource;
 
     @ScriptVariable
     private PageManager pageManager;
+
+    @ScriptVariable
+    private Page currentPage;
 
     @ScriptVariable
     protected Style currentStyle;
@@ -96,7 +98,7 @@ public class ImageImpl implements Image, ComponentExporter {
 
     @Inject
     @Source("osgi-services")
-    private MimeTypeService mimeTypeService;
+    protected MimeTypeService mimeTypeService;
 
     @ValueMapValue(name = DownloadResource.PN_REFERENCE, injectionStrategy = InjectionStrategy.OPTIONAL)
     protected String fileReference;
@@ -113,10 +115,17 @@ public class ImageImpl implements Image, ComponentExporter {
     private String src;
     protected String[] smartImages = new String[]{};
     protected int[] smartSizes = new int[0];
-    private String json;
-    private boolean displayPopupTitle;
+    protected String json;
+    protected boolean displayPopupTitle;
     protected boolean isDecorative;
 
+    protected boolean hasContent;
+    protected String mimeType;
+    protected String extension;
+    protected long lastModifiedDate = 0;
+    protected boolean inTemplate;
+    protected String baseResourcePath;
+    protected String templateRelativePath;
     protected boolean disableLazyLoading;
 
     /**
@@ -126,8 +135,7 @@ public class ImageImpl implements Image, ComponentExporter {
      */
     @PostConstruct
     protected void initModel() {
-        boolean hasContent = false;
-        String mimeType = MIME_TYPE_IMAGE_JPEG;
+        mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
         Asset asset = null;
@@ -156,14 +164,15 @@ public class ImageImpl implements Image, ComponentExporter {
             // validate if correct mime type (i.e. rasterized image)
             if (!mimeType.startsWith(MIME_TYPE_IMAGE_PREFIX)) {
                 LOGGER.error("Image at {} uses a binary with a non-image mime type ({})", resource.getPath(), mimeType);
+                hasContent = false;
                 return;
             }
             if (NON_SUPPORTED_IMAGE_MIMETYPE.contains(mimeType)) {
                 LOGGER.error("Image at {} uses binary with a non-supported image mime type ({})", resource.getPath(), mimeType);
+                hasContent = false;
                 return;
             }
-            String extension = mimeTypeService.getExtension(mimeType);
-            long lastModifiedDate = 0;
+            extension = mimeTypeService.getExtension(mimeType);
             ValueMap properties = resource.getValueMap();
             Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
             if (lastModified == null) {
@@ -181,35 +190,37 @@ public class ImageImpl implements Image, ComponentExporter {
             if (extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
                 extension = DEFAULT_EXTENSION;
             }
-            ResourceResolver resourceResolver = request.getResourceResolver();
-            ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
-            if (policyManager != null) {
-                ContentPolicy contentPolicy = policyManager.getPolicy(resource);
-                if (contentPolicy != null) {
-                    disableLazyLoading = contentPolicy.getProperties().get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
-                }
-                Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths(contentPolicy);
-                smartImages = new String[supportedRenditionWidths.size()];
-                smartSizes = new int[supportedRenditionWidths.size()];
-                int index = 0;
-                String escapedResourcePath = Text.escapePath(resource.getPath());
-                for (Integer width : supportedRenditionWidths) {
-                    smartImages[index] = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT +
-                            width + DOT + extension + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension
-                            : "");
-                    smartSizes[index] = width;
-                    index++;
-                }
-                src = request.getContextPath() + escapedResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT;
-                if (smartSizes.length == 1) {
-                    src += smartSizes[0] + DOT + extension;
-                } else {
-                    src += extension;
-                }
-                src += lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "";
+            disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+            Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
+            smartImages = new String[supportedRenditionWidths.size()];
+            smartSizes = new int[supportedRenditionWidths.size()];
+            int index = 0;
+            Template template = currentPage.getTemplate();
+            if (template != null && resource.getPath().startsWith(template.getPath())) {
+                inTemplate = true;
+                baseResourcePath = currentPage.getPath();
+                templateRelativePath = resource.getPath().substring(template.getPath().length());
+            } else {
+                baseResourcePath = resource.getPath();
             }
+            for (Integer width : supportedRenditionWidths) {
+                smartImages[index] = Text.escapePath(request.getContextPath() + baseResourcePath + DOT +
+                        AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + width + DOT + extension +
+                        (inTemplate ? templateRelativePath : "") +
+                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : ""));
+                smartSizes[index] = width;
+                index++;
+            }
+            src = Text.escapePath(request.getContextPath() + baseResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT);
+            if (smartSizes.length == 1) {
+                src += smartSizes[0] + DOT + extension;
+            } else {
+                src += extension;
+            }
+            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT +
+                    extension : "");
             if (!isDecorative) {
-                if(StringUtils.isNotEmpty(linkURL)) {
+                if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
                 }
             } else {
@@ -271,16 +282,14 @@ public class ImageImpl implements Image, ComponentExporter {
         json = new JSONObject(objectMap).toString();
     }
 
-    private Set<Integer> getSupportedRenditionWidths(ContentPolicy contentPolicy) {
+    private Set<Integer> getSupportedRenditionWidths() {
         Set<Integer> allowedRenditionWidths = new TreeSet<>();
-        if (contentPolicy != null) {
-            String[] supportedWidthsConfig = contentPolicy.getProperties().get(PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
-            for (String width : supportedWidthsConfig) {
-                try {
-                    allowedRenditionWidths.add(Integer.parseInt(width));
-                } catch (NumberFormatException e) {
-                    LOGGER.error(String.format("Invalid width detected (%s) for content policy configuration.", width), e);
-                }
+        String[] supportedWidthsConfig = currentStyle.get(PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
+        for (String width : supportedWidthsConfig) {
+            try {
+                allowedRenditionWidths.add(Integer.parseInt(width));
+            } catch (NumberFormatException e) {
+                LOGGER.error(String.format("Invalid width detected (%s) for content policy configuration.", width), e);
             }
         }
         return allowedRenditionWidths;

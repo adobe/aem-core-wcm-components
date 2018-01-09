@@ -13,7 +13,8 @@
             propertyName="./fragmentPath">
             <parameters
                 jcr:primaryType="nt:unstructured"
-                elementNames=""/>
+                elementNames=""
+                variationName=""/>
         </contentfragment>
     </cq:dropTargets>
 </jcr:root>

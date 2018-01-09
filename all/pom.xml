@@ -46,14 +46,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.day.jcr.vault</groupId>
-                <artifactId>content-package-maven-plugin</artifactId>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <verbose>true</verbose>
-                    <group>adobe/cq60</group>
-                    <failOnError>true</failOnError>
-                    <builtContentDirectory>target/${project.artifactId}</builtContentDirectory>
+                    <showImportPackageReport>false</showImportPackageReport>
+                    <embeddedTarget>/apps/core/wcm/install</embeddedTarget>
                     <embeddeds>
                         <embedded>
                             <groupId>${project.groupId}</groupId>
@@ -62,7 +60,6 @@
                             <filter>true</filter>
                         </embedded>
                     </embeddeds>
-                    <failOnMissingEmbed>true</failOnMissingEmbed>
                     <subPackages>
                         <subPackage>
                             <groupId>${project.groupId}</groupId>
@@ -76,6 +73,10 @@
                         </subPackage>
                     </subPackages>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.day.jcr.vault</groupId>
+                <artifactId>content-package-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

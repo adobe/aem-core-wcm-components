@@ -17,8 +17,11 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.day.cq.wcm.api.Page;
 
 /**
@@ -28,7 +31,7 @@ import com.day.cq.wcm.api.Page;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface List {
+public interface List extends ComponentExporter {
 
     /**
      * Name of the resource property indicating how the list will be built. Possible values are:
@@ -143,8 +146,21 @@ public interface List {
      *
      * @return {@link Collection} of {@link Page}s
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     * @deprecated since 12.1.0: use {@link List#getListItems} instead
      */
+    @Deprecated
     default Collection<Page> getItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the list's items collection, as {@link ListItem}s elements.
+     *
+     * @return {@link Collection} of {@link com.adobe.cq.wcm.core.components.models.Page}s
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    default Collection<ListItem> getListItems() {
         throw new UnsupportedOperationException();
     }
 
@@ -188,4 +204,15 @@ public interface List {
     default String getDateFormatString() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * @see ComponentExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+
 }

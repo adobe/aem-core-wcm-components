@@ -1,56 +1,111 @@
 {
-    "no-config"                           : {
+    "elements-no-config"                           : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements"
     },
-    "fragment-path-non-existing"          : {
+    "elements-fragment-path-non-existing"          : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "fragmentPath"      : "/content/dam/contentfragments/non-existing"
     },
-    "component-path-non-existing"         : {
+    "elements-component-path-non-existing"         : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/non-existing"
     },
-    "fragment-path-invalid"               : {
+    "elements-fragment-path-invalid"               : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "fragmentPath"      : "/content/dam/contentfragments"
     },
-    "component-path-invalid"              : {
+    "elements-component-path-invalid"              : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "componentPath"     : "/content/contentfragments"
     },
-    "component-path-invalid-fragment-path": {
+    "elements-component-path-invalid-fragment-path": {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/text-only-invalid-path"
     },
-    "fragment-path-text-only"             : {
+    "elements-fragment-path-text-only"             : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/text-only"
     },
-    "component-path-text-only"            : {
+    "elements-component-path-text-only"            : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "fragmentPath"      : "/content/dam/contentfragments/text-only"
     },
-    "fragment-path-structured"            : {
+    "elements-fragment-path-structured"            : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/structured"
     },
-    "component-path-structured"           : {
+    "elements-component-path-structured"           : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
         "fragmentPath"      : "/content/dam/contentfragments/structured"
     },
-    "fragment-path-override"              : {
+    "elements-fragment-path-override"              : {
         "jcr:primaryType"   : "nt:unstructured",
         "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/elements",
+        "fragmentPath"      : "/content/dam/contentfragments/structured",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/non-existing"
+    },
+    "variations-no-config"                           : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations"
+    },
+    "variations-fragment-path-non-existing"          : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "fragmentPath"      : "/content/dam/contentfragments/non-existing"
+    },
+    "variations-component-path-non-existing"         : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/non-existing"
+    },
+    "variations-fragment-path-invalid"               : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "fragmentPath"      : "/content/dam/contentfragments"
+    },
+    "variations-component-path-invalid"              : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "componentPath"     : "/content/contentfragments"
+    },
+    "variations-component-path-invalid-fragment-path": {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/text-only-invalid-path"
+    },
+    "variations-fragment-path-text-only"             : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/text-only"
+    },
+    "variations-component-path-text-only"            : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "fragmentPath"      : "/content/dam/contentfragments/text-only"
+    },
+    "variations-fragment-path-structured"            : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/structured"
+    },
+    "variations-component-path-structured"           : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
+        "fragmentPath"      : "/content/dam/contentfragments/structured"
+    },
+    "variations-fragment-path-override"              : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/extension/sandbox/components/contentfragment/v1/datasource/variations",
         "fragmentPath"      : "/content/dam/contentfragments/structured",
         "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/non-existing"
     }

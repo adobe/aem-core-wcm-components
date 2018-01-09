@@ -48,8 +48,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .execFct(function (opts, done) {
                 c.setPageName(h.param("testPagePath")(opts), "testPageName", done);
             })
-            .click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
-            .click("button.cq-siteadmin-admin-actions-properties-activator",{expectNav:true})
+            .navigateTo("/mnt/overlay/wcm/core/content/sites/properties.html?item=%testPagePath%")
+            //.click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
+            //.click("button.cq-siteadmin-admin-actions-properties-activator",{expectNav:true})
             ;
 
     /**
@@ -428,7 +429,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             //test the authentication requirement
             .click("input[name='./cq:authenticationRequired']")
             .fillInput("foundation-autocomplete[name='./cq:loginPath'] input[is='coral-textfield']", loginPage, {delay: 1000})
-            .click("button[value='" + loginPage + "']")
+            .click("button[value='" + loginPage + "']",{after:2000})
 
             /*****  Check if the date is saved *****/
 
@@ -680,17 +681,15 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            .click("coral-tab-label:contains('Permissions')", {delay: 1000})
+            .click("coral-tab-label:contains('Permissions')", {after: 1000})
             //check if the "Permissions" option was selected
             .assert.isTrue(function () {
                 return h.find("coral-tab.is-selected coral-tab-label:contains('Permissions')").size() === 1
             })
 
-            .click("button:contains('Add Permissions')")
-
+            .click("button:contains('Add Permissions')",{after: 1000})
             //add permissions for a user
-            .fillInput("foundation-autocomplete.js-cq-sites-CreatePermissionsDialog-authorizableList input[is='coral-textfield']", "corecomp", {delayafter: 2000})
-            //.wait(100)
+            .fillInput("foundation-autocomplete.js-cq-sites-CreatePermissionsDialog-authorizableList input[is='coral-textfield']", "corecomp",{after: 1000})
             .click("foundation-autocomplete.js-cq-sites-CreatePermissionsDialog-authorizableList coral-overlay:contains('corecomp') button")
             //check if the tag for the user was added
             .assert.exist("foundation-autocomplete.js-cq-sites-CreatePermissionsDialog-authorizableList coral-tag[value='corecomp']")
@@ -707,7 +706,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .assert.exist("coral-dialog:contains('Add Permissions') button:contains('Add')[disabled]", false)
 
             //add permission
-            .click("coral-dialog:contains('Add Permissions') button:contains('Add')")
+            .click("coral-dialog:contains('Add Permissions') button:contains('Add')",{after: 1000})
 
             //check if the permission was added to the list
             .assert.isTrue(function () {
@@ -725,12 +724,11 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             })
 
             //check if the permission was added to the Effective Permissions list
-            .click("button:contains('Effective Permissions')")
+            .click("button:contains('Effective Permissions')",{after: 1000})
             .assert.exist(".cq-siteadmin-admin-properties-effective-permissions:contains('CoreComponent')")
-            .click("coral-dialog:contains('Effective Permissions') button[title='Close']")
-
+            .click("coral-dialog:contains('Effective Permissions') button[title='Close']",{after: 1000})
             //edit a permission
-            .click("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent') button.js-cq-sites-PermissionsProperties-edit")
+            .click("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent') button.js-cq-sites-PermissionsProperties-edit",{after: 1000})
             //check if Browse, Edit and Delete page checkboxes are checked
             .assert.exist("coral-dialog:contains('Edit Permissions') coral-checkbox[name='read'][checked]")
             .assert.exist("coral-dialog:contains('Edit Permissions') coral-checkbox[name='modify'][checked]")
@@ -738,7 +736,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             //add the publish/unpublish permission
             .click("coral-dialog:contains('Edit Permissions') input[name='replicate']")
             //save the changes
-            .click("coral-dialog:contains('Edit Permissions') button.js-cq-sites-EditPermissionsDialog-update")
+            .click("coral-dialog:contains('Edit Permissions') button.js-cq-sites-EditPermissionsDialog-update",{after: 1000})
             //check if the permission was added
             .assert.isTrue(function () {
                 return h.find("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent') td:eq(4) coral-icon").size() === 1
@@ -746,7 +744,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             //delete permission from the list
             .click("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent') button.js-cq-sites-PermissionsProperties-delete")
-            .click("button:contains('Delete')")
+            .click("button:contains('Delete')",{after: 1000})
             .assert.exist("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent')", false)
             ;
     };
@@ -770,17 +768,16 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
                 return h.find("coral-tab.is-selected coral-tab-label:contains('Permissions')").size() === 1
             })
 
-            .click("button:contains('Edit Closed User Group')")
+            .click("button:contains('Edit Closed User Group')",{after:1000})
 
-            .fillInput("foundation-autocomplete.js-cq-sites-CUGPermissionsDialog-authorizableList input[is='coral-textfield']", "corecomp", {delayAfter: 2000})
-            //.wait()
+            .fillInput("foundation-autocomplete.js-cq-sites-CUGPermissionsDialog-authorizableList input[is='coral-textfield']", "corecomp", {after: 1000})
             .click("foundation-autocomplete.js-cq-sites-CUGPermissionsDialog-authorizableList coral-overlay:contains('corecomp') button")
             //check if the tag for the user was added
             .assert.exist("foundation-autocomplete.js-cq-sites-CUGPermissionsDialog-authorizableList coral-tag[value='corecomp']")
             .click("coral-dialog:contains('Edit Closed') button[title='Remove']")
 
             //add permissions for a user
-            .fillInput("foundation-autocomplete.js-cq-sites-CUGPermissionsDialog-authorizableList input[is='coral-textfield']", "corecomp", {delayAfter: 1000})
+            .fillInput("foundation-autocomplete.js-cq-sites-CUGPermissionsDialog-authorizableList input[is='coral-textfield']", "corecomp", {after: 2000})
             //.wait()
             .click("foundation-autocomplete.js-cq-sites-CUGPermissionsDialog-authorizableList coral-overlay:contains('corecomp') button")
             //check if the tag for the user was added
@@ -893,8 +890,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .execFct(function (opts, done) {
                 c.setPageName(h.param("testLiveCopyPagePath")(opts), "testPageName", done);
             })
-            .click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
-            .click("button.cq-siteadmin-admin-actions-properties-activator")
+            .navigateTo("/mnt/overlay/wcm/core/content/sites/properties.html?item=%testLiveCopyPagePath%")
+            //.click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
+            //.click("button.cq-siteadmin-admin-actions-properties-activator")
 
             .click("coral-tab-label:contains('Live Copy')", {delay: 1000})
             //check if the "Live Copy" option was selected
@@ -903,13 +901,13 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             })
 
             //check the Synchronize button
-            .click("coral-actionbar-item:contains('Synchronize') button")
-            .click(".coral-Button--primary:contains('Sync')")
+            .click("coral-actionbar-item:contains('Synchronize') button", {before: 1000})
+            .click("coral-dialog[aria-hidden=false] button[variant='primary']:contains('Sync')", {before: 1000})
 
             //check the Reset button
             .click("coral-tab-label:contains('Live Copy')", {delay: 1000})
-            .click("coral-actionbar-item:contains('Reset') button")
-            .click(".coral-Button--warning:contains('Reset')")
+            .click("coral-actionbar-item:contains('Reset') button", {delay: 1000})
+            .click("coral-dialog[aria-hidden=false] button[variant='warning']:contains('Reset')", {before: 1000})
 
             //check the Suspend button
             .click("coral-tab-label:contains('Live Copy')", {delay: 1000})
@@ -917,24 +915,24 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click(function () {
                 return h.find("coral-anchorlist coral-list-item-content").eq(0)
             })
-            .click(".coral-Button--warning:contains('Suspend')")
+            .click("coral-dialog[aria-hidden=false] button[variant='warning']:contains('Suspend')", {before: 1000})
 
             //check the Resume button
             .click("coral-tab-label:contains('Live Copy')", {delay: 1000})
             .click("coral-actionbar-item:contains('Resume') button", {delay: 1000})
-            .click(".coral-Button--warning:contains('Resume')", {delay: 1000})
+            .click("coral-dialog[aria-hidden=false] button[variant='warning']:contains('Resume')", {before: 1000})
 
             .click("coral-tab-label:contains('Live Copy')", {delay: 1000})
             .click("coral-actionbar-item:contains('Suspend') button")
             .click(function () {
                 return h.find("coral-anchorlist coral-list-item-content").eq(1)
             })
-            .click(".coral-Button--warning:contains('Suspend')")
+            .click("coral-dialog[aria-hidden=false] button[variant='warning']:contains('Suspend')", {before: 1000})
 
             //check the Detach button
             .click("coral-tab-label:contains('Live Copy')", {delay: 1000})
-            .click("coral-actionbar-item:contains('Detach') button")
-            .click(".coral-Button--warning:contains('Detach')")
+            .click("coral-actionbar-item:contains('Detach') button", {delay: 1000})
+            .click("coral-dialog[aria-hidden=false] button[variant='warning']:contains('Detach')", {before: 1000})
 
             .wait(1000)
             // delete the test page we created for live copy

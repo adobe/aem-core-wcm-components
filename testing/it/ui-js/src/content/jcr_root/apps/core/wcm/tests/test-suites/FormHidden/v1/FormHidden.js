@@ -26,7 +26,7 @@
     /**
      * v1 specifics
      */
-    var tcExecuteBeforeTest = formHidden.tcExecuteBeforeTest(c.rtFormHidden);
+    var tcExecuteBeforeTest = formHidden.tcExecuteBeforeTest(c.rtFormHidden_v1);
     var tcExecuteAfterTest = formHidden.tcExecuteAfterTest();
 
     /**

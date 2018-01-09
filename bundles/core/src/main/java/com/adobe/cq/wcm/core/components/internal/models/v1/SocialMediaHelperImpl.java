@@ -15,22 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import com.adobe.cq.commerce.api.CommerceException;
-import com.adobe.cq.commerce.api.CommerceService;
-import com.adobe.cq.commerce.api.CommerceSession;
-import com.adobe.cq.commerce.api.PriceInfo;
-import com.adobe.cq.commerce.api.Product;
-import com.adobe.cq.commerce.common.CommerceHelper;
-import com.adobe.cq.commerce.common.PriceFilter;
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.SocialMediaHelper;
-import com.adobe.cq.xf.social.ExperienceFragmentSocialVariation;
-import com.day.cq.commons.Externalizer;
-import com.day.cq.commons.ImageResource;
-import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -48,12 +39,22 @@ import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.adobe.cq.commerce.api.CommerceException;
+import com.adobe.cq.commerce.api.CommerceService;
+import com.adobe.cq.commerce.api.CommerceSession;
+import com.adobe.cq.commerce.api.PriceInfo;
+import com.adobe.cq.commerce.api.Product;
+import com.adobe.cq.commerce.common.CommerceHelper;
+import com.adobe.cq.commerce.common.PriceFilter;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.models.SocialMediaHelper;
+import com.adobe.cq.xf.social.ExperienceFragmentSocialVariation;
+import com.day.cq.commons.Externalizer;
+import com.day.cq.commons.ImageResource;
+import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.Page;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Helper class for page functionality related to page sharing by user on social media platforms.
@@ -61,7 +62,7 @@ import java.util.Map;
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {SocialMediaHelper.class, ComponentExporter.class}, resourceType =
         SocialMediaHelperImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class SocialMediaHelperImpl implements SocialMediaHelper, ComponentExporter {
+public class SocialMediaHelperImpl implements SocialMediaHelper {
 
     static final String RESOURCE_TYPE = "core/wcm/components/sharing/v1/sharing";
 

@@ -17,26 +17,21 @@
 package com.adobe.cq.wcm.core.components.internal.form;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.scripting.api.resource.ScriptingResourceResolverProvider;
-import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.sandbox.models.form.Button;
+import com.adobe.cq.wcm.core.components.models.form.Button;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormsConstants;
 
@@ -95,7 +90,7 @@ public class FormStructureHelperImpl implements FormStructureHelper {
     }
 
     private boolean isButtonElement(Resource resource) {
-        if (resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON) || resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_SANDBOX)) {
+        if (resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V1) || resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V2)) {
             ValueMap valueMap = resource.adaptTo(ValueMap.class);
             if(valueMap != null) {
                 String type = valueMap.get("type", String.class);
@@ -108,8 +103,7 @@ public class FormStructureHelperImpl implements FormStructureHelper {
     }
 
     private boolean isFormResource(Resource resource) {
-        if (resource.getResourceType().startsWith(FormConstants.RT_CORE_FORM_PREFIX) || resource.getResourceType().startsWith
-                (FormConstants.RT_CORE_FORM_PREFIX_SANDBOX)) {
+        if (resource.getResourceType().startsWith(FormConstants.RT_CORE_FORM_PREFIX)) {
             return true;
         } else {
             if(scriptingResourceResolverProvider != null) {
@@ -130,7 +124,7 @@ public class FormStructureHelperImpl implements FormStructureHelper {
         Resource componentResource = scriptResourceResolver.getResource(resource.getResourceType());
         String parentResourceType = scriptResourceResolver.getParentResourceType(componentResource);
         while (!result && parentResourceType != null) {
-            if (parentResourceType.startsWith(FormConstants.RT_CORE_FORM_PREFIX) || parentResourceType.startsWith(FormConstants.RT_CORE_FORM_PREFIX_SANDBOX)) {
+            if (parentResourceType.startsWith(FormConstants.RT_CORE_FORM_PREFIX)) {
                 result = true;
             } else {
                 parentResourceType = scriptResourceResolver.getParentResourceType(parentResourceType);

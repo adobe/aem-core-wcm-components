@@ -80,6 +80,26 @@
             "usePlaceholder": "true",
             "rows": 3,
             "hideTitle": true
+          },
+          "text-v2": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:title": "Custom title",
+            "jcr:createdBy": "admin",
+            "jcr:created": "Wed Oct 05 2016 16:28:06 GMT+0530",
+            "constraintMessage": "The value should be a valid email address",
+            "showHideExpression": "((givenName.equals(\"\"Referees\"\")))",
+            "readOnly": true,
+            "helpMessage": "Custom help/placeholder message",
+            "required": true,
+            "name": "Custom Name",
+            "type": "email",
+            "useTextarea": true,
+            "value": "Prefilled Sample Input",
+            "sling:resourceType": "core/wcm/components/form/text/v2/text",
+            "requiredMessage": "please fill the field",
+            "usePlaceholder": "true",
+            "rows": 3,
+            "hideTitle": true
           }
         }
       }

@@ -31,24 +31,24 @@
                             "jcr:primaryType": "nt:unstructured",
                             "languagenavigation-component-1": {
                                 "jcr:primaryType"   : "nt:unstructured",
-                                "sling:resourceType": "core/wcm/sandbox/components/languagenavigation/v1/languagenavigation",
-                                "siteRoot"          : "/content/languagenavigation"
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation",
+                                "navigationRoot"    : "/content/languagenavigation"
                             },
                             "languagenavigation-component-2": {
                                 "jcr:primaryType"   : "nt:unstructured",
-                                "sling:resourceType": "core/wcm/sandbox/components/languagenavigation/v1/languagenavigation",
-                                "siteRoot"          : "/content/languagenavigation",
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation",
+                                "navigationRoot"    : "/content/languagenavigation",
                                 "structureDepth"    : 2
                             },
                             "languagenavigation-component-3": {
                                 "jcr:primaryType"   : "nt:unstructured",
                                 "cq:policy"         : "coretest/components/content/languagenavigation/policy-1",
-                                "sling:resourceType": "core/wcm/sandbox/components/languagenavigation/v1/languagenavigation",
-                                "siteRoot"          : "/content/languagenavigation"
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation",
+                                "navigationRoot"    : "/content/languagenavigation"
                             },
                             "languagenavigation-component-4": {
                                 "jcr:primaryType"   : "nt:unstructured",
-                                "sling:resourceType": "core/wcm/sandbox/components/languagenavigation/v1/languagenavigation"
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation"
                             }
                         }
                     }

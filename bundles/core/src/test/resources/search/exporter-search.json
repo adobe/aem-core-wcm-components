@@ -1,5 +1,6 @@
 {
   "resultsSize": 10,
   "searchTermMinimumLength": 3,
-  ":type": "core/wcm/sandbox/components/search/v1/search"
+  "results":[{"path":"/content/search/page","url":"/content/search/page.html","description":"Yoda is back!","title":"Page","lastModified":1501792920000}],
+  ":type": "core/wcm/components/search/v1/search"
 }

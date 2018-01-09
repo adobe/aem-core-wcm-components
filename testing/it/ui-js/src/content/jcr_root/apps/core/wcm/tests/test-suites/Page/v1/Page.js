@@ -51,7 +51,7 @@
         .addTestCase(page.tcSocialMediaPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcCloudServicesPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcPersonalizationPageProperties(pageSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(page.tcAddPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
+//        .addTestCase(page.tcAddPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcEditUserGroupPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcEffectivePermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcBlueprintPageProperties63(tcExecuteBeforeTest, tcExecuteAfterTest))

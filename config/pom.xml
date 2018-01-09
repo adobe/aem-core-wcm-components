@@ -52,66 +52,23 @@
                     we want to keep some of the META-INF files and not configure
                     everything in the plugin.
                 -->
-                <directory>${basedir}/src/content/META-INF</directory>
-                <targetPath>../vault-work/META-INF</targetPath>
-            </resource>
-            <resource>
-                <directory>${project.build.sourceDirectory}</directory>
-                <excludes>
-                    <!-- exclude .vlt control files in the package -->
-                    <exclude>**/.vlt</exclude>
-                    <exclude>**/.vltignore</exclude>
-                    <exclude>**/.gitignore</exclude>
-                    <exclude>**/*.iml</exclude>
-                    <exclude>**/.classpath</exclude>
-                    <exclude>**/.project</exclude>
-                    <exclude>**/.settings</exclude>
-                    <exclude>**/.DS_Store</exclude>
-                    <exclude>**/target/**</exclude>
-                    <exclude>**/pom.xml</exclude>
-                </excludes>
-                <targetPath>../${project.artifactId}</targetPath>
+                <directory>${basedir}/src/content/META-INF/vault/definition</directory>
+                <targetPath>../vault-work/META-INF/vault/definition</targetPath>
             </resource>
         </resources>
 
         <plugins>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>filevault-package-maven-plugin</artifactId>
+                <extensions>true</extensions>
                 <configuration>
-                    <includeEmptyDirs>true</includeEmptyDirs>
+                    <showImportPackageReport>false</showImportPackageReport>
                 </configuration>
-
-                <executions>
-                    <execution>
-                        <id>copy-metainf-vault-resources</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/vault-work/META-INF</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/content/META-INF</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
-
             <plugin>
                 <groupId>com.day.jcr.vault</groupId>
                 <artifactId>content-package-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <verbose>true</verbose>
-                    <group>adobe/cq60</group>
-                    <failOnError>true</failOnError>
-                    <builtContentDirectory>target/${project.artifactId}</builtContentDirectory>
-                    <filterSource>${basedir}/src/content/META-INF/vault/filter.xml</filterSource>
-                </configuration>
             </plugin>
         </plugins>
     </build>

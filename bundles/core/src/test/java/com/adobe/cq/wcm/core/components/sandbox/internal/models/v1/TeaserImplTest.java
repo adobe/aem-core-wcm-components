@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -154,7 +155,7 @@ public class TeaserImplTest {
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
         Component component = mock(Component.class);
         when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
-            put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/sandbox/components/image/v2/image");
+            put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
         }}));
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);

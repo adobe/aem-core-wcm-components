@@ -30,11 +30,14 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Text;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Text.class, ComponentExporter.class}, resourceType=TextImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class,
+       adapters = {Text.class, ComponentExporter.class},
+       resourceType = {TextImpl.RESOURCE_TYPE_V1, TextImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TextImpl implements Text, ComponentExporter {
+public class TextImpl implements Text {
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/text/v1/text";
+    protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/text/v1/text";
+    protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/text/v2/text";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String text;

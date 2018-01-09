@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Defines the Sling Model for the {@code /apps/core/wcm/sandbox/components/contentfragment} component. The model
+ * Defines the Sling Model for the {@code /apps/core/wcm/components/contentfragment} component. The model
  * provides information about the referenced content fragment and access to representations of its elements.
  *
  * @since com.adobe.cq.wcm.core.components.sandbox.models 2.6.0
@@ -52,6 +52,13 @@ public interface ContentFragment extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
      */
     String PN_ELEMENT_NAMES = "elementNames";
+
+    /**
+     * Name of the optional resource property that stores the name of the variation to be used.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.1.0
+     */
+    String PN_VARIATION_NAME = "variationName";
 
     /**
      * Represents a content element of a content fragment.
@@ -93,6 +100,7 @@ public interface ContentFragment extends ContainerExporter {
          * @see DataType#isMultiValue()
          * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
          */
+        @JsonIgnore
         default boolean isMultiValued() {
             throw new UnsupportedOperationException();
         }
@@ -149,6 +157,7 @@ public interface ContentFragment extends ContainerExporter {
          * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
          */
         @Nullable
+        @JsonIgnore
         default String[] getDisplayValues() {
             throw new UnsupportedOperationException();
         }

@@ -233,6 +233,14 @@
             }
         }
     },
+    "optionsDefault-v2": {
+        "jcr:primaryType"   : "nt:unstructured",
+        "jcr:createdBy"     : "admin",
+        "jcr:lastModifiedBy": "admin",
+        "jcr:created"       : "Wed Nov 02 2016 15:32:37 GMT+0100",
+        "jcr:lastModified"  : "Wed Nov 09 2016 14:50:06 GMT+0100",
+        "sling:resourceType": "core/wcm/components/form/options/v2/options"
+    },
     "jcr:primaryType": "nt:unstructured"
 
 }

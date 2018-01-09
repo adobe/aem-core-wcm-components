@@ -26,7 +26,7 @@
     /**
      * v1 specifics
      */
-    var tcExecuteBeforeTest = formComponents.tcExecuteBeforeTest(c.rtFormContainer, c.rtFormText, c.rtFormHidden, c.rtFormOptions, c.rtFormButton);
+    var tcExecuteBeforeTest = formComponents.tcExecuteBeforeTest(c.rtFormContainer_v1, c.rtFormText_v1, c.rtFormHidden_v1, c.rtFormOptions_v1, c.rtFormButton_v1);
     var tcExecuteAfterTest = formComponents.tcExecuteAfterTest();
 
     /**

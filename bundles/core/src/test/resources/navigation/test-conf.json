@@ -21,18 +21,16 @@
                                 "navigation"        : {
                                     "jcr:primaryType": "nt:unstructured",
                                     "policy_1"       : {
-                                        "jcr:primaryType": "nt:unstructured",
-                                        "siteRoot"       : "/content/navigation",
-                                        "startLevel"     : 1,
-                                        "maxDepth"       : 2,
-                                        "skipRoot"       : true
+                                        "jcr:primaryType"   : "nt:unstructured",
+                                        "navigationRoot"    : "/content/navigation",
+                                        "structureDepth"    : 2,
+                                        "skipNavigationRoot": true
                                     },
                                     "policy_2"       : {
                                         "jcr:primaryType"    : "nt:unstructured",
-                                        "siteRoot"           : "/content/navigation",
-                                        "startLevel"         : 1,
-                                        "maxDepth"           : 2,
-                                        "currentPageTreeOnly": false
+                                        "navigationRoot"     : "/content/navigation",
+                                        "collectAllPages"    : false,
+                                        "structureDepth"     : 2
                                     }
                                 }
                             }
@@ -63,10 +61,9 @@
                                         "jcr:createdBy"     : "admin",
                                         "jcr:lastModifiedBy": "admin",
                                         "jcr:created"       : "Wed Jul 05 2017 18:54:14 GMT+0200",
-                                        "siteRoot"          : "/content/navigation",
-                                        "startLevel"        : 1,
+                                        "navigationRoot"    : "/content/navigation",
                                         "jcr:lastModified"  : "Wed Jul 05 2017 18:54:30 GMT+0200",
-                                        "sling:resourceType": "core/wcm/sandbox/components/navigation/v1/navigation"
+                                        "sling:resourceType": "core/wcm/components/navigation/v1/navigation"
                                     }
                                 }
                             }

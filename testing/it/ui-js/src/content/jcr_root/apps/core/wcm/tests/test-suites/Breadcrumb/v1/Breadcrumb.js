@@ -30,7 +30,7 @@
         normal: "li.breadcrumb-item",
         active: "li.breadcrumb-item.active"
     };
-    var tcExecuteBeforeTest = breadcrumb.tcExecuteBeforeTest(c.rtBreadcrumb);
+    var tcExecuteBeforeTest = breadcrumb.tcExecuteBeforeTest(c.rtBreadcrumb_v1);
     var tcExecuteAfterTest = breadcrumb.tcExecuteAfterTest();
 
 

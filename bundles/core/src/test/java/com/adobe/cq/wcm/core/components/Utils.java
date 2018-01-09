@@ -26,6 +26,7 @@ import javax.json.JsonReader;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
+import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
 import com.adobe.cq.wcm.core.components.internal.jackson.PageModuleProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,8 +48,10 @@ public class Utils {
     public static void testJSONExport(Object model, String expectedJsonResource) {
         Writer writer = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
-        PageModuleProvider moduleProvider = new PageModuleProvider();
-        mapper.registerModule(moduleProvider.getModule());
+        PageModuleProvider pageModuleProvider = new PageModuleProvider();
+        mapper.registerModule(pageModuleProvider.getModule());
+        DefaultMethodSkippingModuleProvider defaultMethodSkippingModuleProvider = new DefaultMethodSkippingModuleProvider();
+        mapper.registerModule(defaultMethodSkippingModuleProvider.getModule());
         try {
             mapper.writer().writeValue(writer, model);
         } catch (IOException e) {

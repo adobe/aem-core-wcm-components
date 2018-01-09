@@ -28,5 +28,5 @@
       "url": "/core/navigation-1-vanity"
     }
   ],
-  ":type": "core/wcm/sandbox/components/navigation/v1/navigation"
+  ":type": "core/wcm/components/navigation/v1/navigation"
 }

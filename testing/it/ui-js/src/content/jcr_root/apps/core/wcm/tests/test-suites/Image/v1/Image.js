@@ -27,7 +27,7 @@
      * v1 specifics
      */
     var titleSelector = "span.cmp-image--title";
-    var tcExecuteBeforeTest = image.tcExecuteBeforeTest(c.rtImage);
+    var tcExecuteBeforeTest = image.tcExecuteBeforeTest(c.rtImage_v1);
     var tcExecuteAfterTest = image.tcExecuteAfterTest();
 
     /**
