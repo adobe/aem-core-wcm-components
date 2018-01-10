@@ -1,13 +1,8 @@
 {
     "items": [
         {
-            "page"  : {
-                "path"       : "/content/breadcrumb/women",
-                "pageTitle"  : null,
-                "name"       : "women",
-                "description": null,
-                "title"      : "Women"
-            },
+            "url"   : "/content/breadcrumb/women.html",
+            "title" : "Women",
             "active": false
         }
     ],

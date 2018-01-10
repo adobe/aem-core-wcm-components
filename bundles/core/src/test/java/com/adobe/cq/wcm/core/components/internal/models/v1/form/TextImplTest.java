@@ -37,6 +37,7 @@ public class TextImplTest {
     private static final String CONTAINING_PAGE = "/content/we-retail/demo-page";
     private static final String TEXTINPUT1_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text";
     private static final String TEXTINPUT2_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text_185087333";
+    private static final String TEXTINPUT3_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/text-v2";
 
 
     @ClassRule
@@ -81,6 +82,11 @@ public class TextImplTest {
         Utils.testJSONExport(text, Utils.getTestExporterJSONPath(TEST_BASE, TEXTINPUT2_PATH));
     }
 
+    @Test
+    public void testV2JSONExport() {
+        Text text = getTextUnderTest(TEXTINPUT3_PATH);
+        Utils.testJSONExport(text, Utils.getTestExporterJSONPath(TEST_BASE, TEXTINPUT3_PATH));
+    }
 
     private Text getTextUnderTest(String resourcePath) {
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);

@@ -45,7 +45,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.internal.Constants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.models.form.Container;
@@ -56,12 +55,11 @@ import com.day.cq.wcm.foundation.forms.FormsHelper;
 
 import static com.day.cq.wcm.foundation.forms.FormsConstants.SCRIPT_FORM_SERVER_VALIDATION;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Container.class, ContainerExporter.class}, resourceType = ContainerImpl
-        .RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class,
+       adapters = {Container.class, ContainerExporter.class},
+       resourceType = {FormConstants.RT_CORE_FORM_CONTAINER_V1, FormConstants.RT_CORE_FORM_CONTAINER_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ContainerImpl implements Container, ContainerExporter {
-
-    protected static final String RESOURCE_TYPE = FormConstants.RT_CORE_FORM_CONTAINER_V1;
+public class ContainerImpl implements Container {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContainerImpl.class);
     private static final String PROP_METHOD_DEFAULT = "POST";
@@ -133,7 +131,7 @@ public class ContainerImpl implements Container, ContainerExporter {
             }
         }
 
-        if (!StringUtils.equals(request.getRequestPathInfo().getExtension(), Constants.EXPORTER_EXTENSION)) {
+        if (!StringUtils.equals(request.getRequestPathInfo().getExtension(), ExporterConstants.SLING_MODEL_EXTENSION)) {
             runActionTypeInit(formStructureHelper);
         }
     }

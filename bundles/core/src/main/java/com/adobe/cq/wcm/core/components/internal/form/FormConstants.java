@@ -28,23 +28,43 @@ public final class FormConstants {
 
     }
 
-    /** The prefix for all core form related resource types.*/
+    /** The prefixes for all core form related resource types */
     public final static String RT_CORE_FORM_PREFIX = "core/wcm/components/form/";
 
-    /** The resource type for form container version 1. */
+    /** The resource type for form container v1 */
     public final static String RT_CORE_FORM_CONTAINER_V1 = RT_CORE_FORM_PREFIX + "container/v1/container";
+    /** The resource type for form container v2 */
+    public final static String RT_CORE_FORM_CONTAINER_V2 = RT_CORE_FORM_PREFIX + "container/v2/container";
 
-    // The resource type prefix for the form container related datasources
+    /* The resource type prefix for the form container related datasources */
     public final static String RT_CORE_FORM_CONTAINER_DATASOURCE_V1 = RT_CORE_FORM_PREFIX + "container/v1/datasource";
 
     /** Array of all resource types for the form container, including versions */
     public final static Set<String> RT_ALL_CORE_FORM_CONTAINER = Collections.unmodifiableSet(new HashSet<String>() {{
         add(RT_CORE_FORM_CONTAINER_V1);
+        add(RT_CORE_FORM_CONTAINER_V2);
     }});
 
     /** Node-name of the touch based dialog for form actions */
     public static final String NN_DIALOG = "cq:dialog";
 
-    /** The resource type for form button */
-    public final static String RT_CORE_FORM_BUTTON = "core/wcm/components/form/button";
+    /** The resource type for form button v1 */
+    public final static String RT_CORE_FORM_BUTTON_V1 = RT_CORE_FORM_PREFIX + "button/v1/button";
+    /** The resource type for form button v2 */
+    public final static String RT_CORE_FORM_BUTTON_V2 = RT_CORE_FORM_PREFIX + "button/v2/button";
+
+    /** The resource type for hidden fields v1 */
+    public static final String RT_CORE_FORM_HIDDEN_V1 = RT_CORE_FORM_PREFIX + "hidden/v1/hidden";
+    /** The resource type for hidden fields v2 */
+    public static final String RT_CORE_FORM_HIDDEN_V2 = RT_CORE_FORM_PREFIX + "hidden/v2/hidden";
+
+    /** The resource type for options fields v1 */
+    public static final String RT_CORE_FORM_OPTIONS_V1 = RT_CORE_FORM_PREFIX + "options/v1/options";
+    /** The resource type for options fields v2 */
+    public static final String RT_CORE_FORM_OPTIONS_V2 = RT_CORE_FORM_PREFIX + "options/v2/options";
+
+    /** The resource type for text fields v1 */
+    public static final String RT_CORE_FORM_TEXT_V1 = RT_CORE_FORM_PREFIX + "text/v1/text";
+    /** The resource type for text fields v2 */
+    public static final String RT_CORE_FORM_TEXT_V2 = RT_CORE_FORM_PREFIX + "text/v2/text";
 }

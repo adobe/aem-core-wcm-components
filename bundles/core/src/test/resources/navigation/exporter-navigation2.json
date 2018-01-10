@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "page": {
+        "path": "/content/navigation/navigation-1",
+        "pageTitle": null,
+        "name": "navigation-1",
+        "description": null,
+        "title": "Navigation 1"
+      },
+      "active": true,
+      "children": [
+        {
+          "page": {
+            "path": "/content/navigation/navigation-1/navigation-1-1",
+            "pageTitle": null,
+            "name": "navigation-1-1",
+            "description": null,
+            "title": "Navigation 1.1"
+          },
+          "active": true,
+          "children": [],
+          "level": 1,
+          "url": "/core/content/navigation/navigation-1/navigation-1-1.html"
+        }
+      ],
+      "level": 0,
+      "url": "/core/navigation-1-vanity"
+    }
+  ],
+  ":type": "core/wcm/components/navigation/v1/navigation"
+}

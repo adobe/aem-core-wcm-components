@@ -58,6 +58,7 @@ public class OptionsImplTest {
     private static final String OPTIONS_6 = CONTENT_ROOT + "/radio";
     private static final String OPTIONS_7 = CONTENT_ROOT + "/drop-down";
     private static final String OPTIONS_8 = CONTENT_ROOT + "/multi-drop-down";
+    private static final String OPTIONS_9 = CONTENT_ROOT + "/optionsDefault-v2";
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
@@ -175,6 +176,12 @@ public class OptionsImplTest {
         Options options = getOptionsUnderTest(OPTIONS_8);
         assertEquals(Type.MULTI_DROP_DOWN, options.getType());
         Utils.testJSONExport(options, Utils.getTestExporterJSONPath(TEST_BASE, OPTIONS_8));
+    }
+
+    @Test
+    public void testV2JSONExport() {
+        Options options = getOptionsUnderTest(OPTIONS_9);
+        Utils.testJSONExport(options, Utils.getTestExporterJSONPath(TEST_BASE, OPTIONS_9));
     }
 
     private Options getOptionsUnderTest(String resourcePath) {

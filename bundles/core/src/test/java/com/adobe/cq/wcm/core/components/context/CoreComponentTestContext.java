@@ -31,6 +31,7 @@ import io.wcm.testing.mock.aem.junit.AemContextCallback;
 public final class CoreComponentTestContext {
 
     public static final String TEST_CONTENT_JSON = "/test-content.json";
+    public static final String TEST_APPS_JSON = "/test-apps.json";
 
 
     private CoreComponentTestContext() {
@@ -56,9 +57,9 @@ public final class CoreComponentTestContext {
                     context.registerService(FormStructureHelperFactory.class, resource -> null);
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
                     if (testBase != null) {
-                    if (StringUtils.isNotEmpty(testBase)) {
+                        if (StringUtils.isNotEmpty(testBase)) {
                             context.load().json(testBase + TEST_CONTENT_JSON, contentRoot);
-                    } else {
+                        } else {
                             context.load().json(TEST_CONTENT_JSON, contentRoot);
                         }
                     }

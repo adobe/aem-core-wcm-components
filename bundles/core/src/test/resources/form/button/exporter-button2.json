@@ -1,0 +1,8 @@
+{
+    "id": "button-id",
+    "title": "button title",
+    "name": "name1",
+    "value": "value1",
+    "type": "BUTTON",
+    ":type": "core/wcm/components/form/button/v2/button/v2/button"
+}

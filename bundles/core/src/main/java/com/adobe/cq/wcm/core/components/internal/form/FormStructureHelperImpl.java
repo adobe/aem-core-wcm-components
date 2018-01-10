@@ -42,7 +42,6 @@ import com.day.cq.wcm.foundation.forms.FormsConstants;
 public class FormStructureHelperImpl implements FormStructureHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FormStructureHelperImpl.class.getName());
-    private static final String SLING_SCRIPTING_USER = "sling-scripting";
 
     @Reference
     private ScriptingResourceResolverProvider scriptingResourceResolverProvider;
@@ -91,7 +90,7 @@ public class FormStructureHelperImpl implements FormStructureHelper {
     }
 
     private boolean isButtonElement(Resource resource) {
-        if (resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON)) {
+        if (resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V1) || resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V2)) {
             ValueMap valueMap = resource.adaptTo(ValueMap.class);
             if(valueMap != null) {
                 String type = valueMap.get("type", String.class);

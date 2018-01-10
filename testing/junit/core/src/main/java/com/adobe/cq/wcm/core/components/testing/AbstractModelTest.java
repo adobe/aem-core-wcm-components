@@ -70,8 +70,13 @@ public class AbstractModelTest {
                         t = e.getCause();
                     }
                     if (t == null || !(t instanceof UnsupportedOperationException)) {
-                        errors.append("Expected method ").append(m.toString()).append(" to throw an ").append(UnsupportedOperationException
-                                .class.getName()).append(".\n");
+                        errors.append("Expected method ")
+                                .append(m.toString())
+                                .append("in class ")
+                                .append(clazz.getName())
+                                .append(" to throw an ")
+                                .append(UnsupportedOperationException.class.getName())
+                                .append(".\n");
                     }
                 }
             }
@@ -85,8 +90,12 @@ public class AbstractModelTest {
     private static List<Class> getClasses(String packageName) throws ClassNotFoundException, IOException {
         List<Class> classes = new ArrayList<>();
         ClassPath classpath = ClassPath.from(AbstractModelTest.class.getClassLoader());
-        ImmutableSet<ClassPath.ClassInfo> topLevelClasses = classpath.getTopLevelClassesRecursive(packageName);
-        classes.addAll(topLevelClasses.stream().map(ClassPath.ClassInfo::load).collect(Collectors.toList()));
+        String packagePrefix = packageName + '.';
+        ImmutableSet.Builder<ClassPath.ClassInfo> builder = ImmutableSet.builder();
+        classpath.getAllClasses().stream().filter(classInfo -> classInfo.getName().startsWith(packagePrefix)).forEach(builder::add);
+        ImmutableSet<ClassPath.ClassInfo> packageClasses = builder.build();
+        classes.addAll(packageClasses.stream().map(ClassPath.ClassInfo::load).collect(Collectors.toList()));
         return classes;
     }
+
 }

@@ -31,7 +31,7 @@ Text form field component written in HTL.
 ### Use Object
 The Form Text component uses the `com.adobe.cq.wcm.core.components.models.form.Text` Sling Model for its Use-object.
 
-### Edit dialog properties
+### Edit Dialog Properties
 The following properties are written to JCR for this Form Text component and are expected to be available as `Resource` properties:
 
 1. `./type` - defines the type of text this field provides; possible values: `text`, `textarea`, `email`, `tel`, `date`, `number`,
@@ -47,6 +47,13 @@ The following properties are written to JCR for this Form Text component and are
 9. `./required` - if set to `true`, this field will be marked as required, not allowing the form to be submitted until the field has a value
 10. `./requiredMessage` - defines the message displayed as tooltip when submitting the form if the value is left empty
 11. `./readOnly` - if set to `true`, the filed will be read only
+
+## Client Libraries
+The component provides a `core.wcm.components.form.text.v1` client library category that contains a JavaScript
+component. It should be added to a relevant site client library using the `embed` property.
+
+It also provides a `core.wcm.components.form.text.v1.editor` editor client library category that includes
+JavaScript handling for dialog interaction. It is already included by its edit dialog.
 
 ## Information
 * **Vendor**: Adobe

@@ -10,6 +10,8 @@
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
+            dc:title="Beach house"
+            dc:description="House on a beach with blue sky"
             dam:Bitsperpixel="{Long}24"
             dam:Fileformat="JPEG"
             dam:MIMEtype="image/jpeg"

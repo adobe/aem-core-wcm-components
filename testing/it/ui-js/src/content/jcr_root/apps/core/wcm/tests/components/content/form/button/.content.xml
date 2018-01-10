@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="button"
-    jcr:description="Allows visitors to interact with the form"
-    jcr:primaryType="cq:Component"
-    jcr:title="Form Button (v1)"
-    sling:resourceSuperType="core/wcm/components/form/button/v1/button"
-    componentGroup="Core Component Form"/>

@@ -1,0 +1,20 @@
+{
+    "teaser": {
+        "jcr:primaryType"        : "cq:Component",
+        "imageDelegate"          : "core/wcm/components/image",
+        "jcr:createdBy"          : "admin",
+        "jcr:title"              : "Teaser (v1)",
+        "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+        "cq:icon"                : "image",
+        "componentGroup"         : ".core-wcm"
+    },
+    "image" : {
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:createdBy"          : "admin",
+        "jcr:title"              : "Image (v2)",
+        "sling:resourceSuperType": "core/wcm/components/image",
+        "jcr:description"        : "Smart Adaptive Image",
+        "cq:icon"                : "image",
+        "componentGroup"         : ".core-wcm"
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "jcr:primaryType": "sling:Folder",
+    "coretest"       : {
+        "jcr:primaryType": "sling:OrderedFolder",
+        "jcr:title"      : "Core",
+        "settings"       : {
+            "jcr:primaryType": "sling:Folder",
+            "wcm"            : {
+                "jcr:primaryType": "cq:Page",
+                "policies"       : {
+                    "jcr:primaryType": "cq:Page",
+                    "core"           : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "nt:unstructured",
+                        "wcm"               : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "sling:resourceType": "nt:unstructured",
+                            "components"        : {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "sling:resourceType": "nt:unstructured",
+                                "teaser"            : {
+                                    "jcr:primaryType"     : "nt:unstructured",
+                                    "policy_1478854677326": {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

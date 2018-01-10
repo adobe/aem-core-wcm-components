@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.io.IOException;
 import java.io.StringReader;
 
 import javax.json.Json;
@@ -34,6 +33,7 @@ import com.adobe.cq.sightly.SightlyWCMMode;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.testing.MockContentPolicyStyle;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
@@ -58,12 +58,12 @@ public class ImageImplTest extends AbstractImageTest {
     protected String testBase = TEST_BASE;
 
     @BeforeClass
-    public static void setUp() throws IOException {
+    public static void setUp() {
         internalSetUp(CONTEXT, TEST_BASE);
     }
 
     @Test
-    public void testImageWithTwoOrMoreSmartSizes() throws Exception {
+    public void testImageWithTwoOrMoreSmartSizes() {
         String escapedResourcePath = Text.escapePath(IMAGE0_PATH);
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
@@ -81,7 +81,7 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    public void testImageWithOneSmartSize() throws Exception {
+    public void testImageWithOneSmartSize() {
         String escapedResourcePath = Text.escapePath(IMAGE3_PATH);
         Image image = getImageUnderTest(IMAGE3_PATH);
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
@@ -98,7 +98,7 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    public void testSimpleDecorativeImage() throws Exception {
+    public void testSimpleDecorativeImage() {
         String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
         Image image = getImageUnderTest(IMAGE4_PATH);
         assertNull("Did not expect a value for the alt attribute, since the image is marked as decorative.", image.getAlt());
@@ -114,14 +114,14 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    public void testInvalidAssetTypeImage() throws Exception {
+    public void testInvalidAssetTypeImage() {
         Image image = getImageUnderTest(IMAGE17_PATH);
         assertNull(image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE17_PATH));
     }
 
     @Test
-    public void testExtensionDeterminedFromMimetype() throws Exception {
+    public void testExtensionDeterminedFromMimetype() {
         String escapedResourcePath = Text.escapePath(IMAGE18_PATH);
         Image image = getImageUnderTest(IMAGE18_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1490005239000.png", image.getSrc());
@@ -129,7 +129,7 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    public void testImageCacheKiller() throws Exception {
+    public void testImageCacheKiller() {
         String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
         Image image = getImageUnderTest(IMAGE4_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
@@ -141,7 +141,7 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    public void testTIFFImage() throws Exception {
+    public void testTIFFImage() {
         String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
         Image image = getImageUnderTest(IMAGE16_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg/1500299989000.jpeg", image.getSrc());
@@ -154,7 +154,31 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(ImageImpl.RESOURCE_TYPE, ((ImageImpl) image).getExportedType());
     }
 
-    private void compareJSON(String expectedJson, String json) throws Exception {
+    @Test
+    public void testImageFromTemplateStructure() {
+        Image image = getImageUnderTest(TEMPLATE_IMAGE_PATH);
+        assertEquals(CONTEXT_PATH + "/content/test.img.png/structure/jcr%3acontent/root/image_template/1490005239000.png", image.getSrc());
+        assertEquals(IMAGE_TITLE_ALT, image.getAlt());
+        assertEquals(IMAGE_TITLE_ALT, image.getTitle());
+        assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
+        String expectedJson = "{" +
+                "\"smartImages\":[" +
+                    "\"/core/content/test.img.600.png/structure/jcr%3acontent/root/image_template/1490005239000.png\"," +
+                    "\"/core/content/test.img.700.png/structure/jcr%3acontent/root/image_template/1490005239000.png\"," +
+                    "\"/core/content/test.img.800.png/structure/jcr%3acontent/root/image_template/1490005239000.png\"," +
+                    "\"/core/content/test.img.2000.png/structure/jcr%3acontent/root/image_template/1490005239000.png\"," +
+                    "\"/core/content/test.img.2500.png/structure/jcr%3acontent/root/image_template/1490005239000.png\"" +
+                "]," +
+                "\"smartSizes\":[600,700,800,2000,2500]," +
+                "\"lazyEnabled\":true" +
+        "}";
+        compareJSON(expectedJson, image.getJson());
+        assertFalse(image.displayPopupTitle());
+        assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_PATH));
+    }
+
+    protected void compareJSON(String expectedJson, String json) {
         JsonReader expected = Json.createReader(new StringReader(expectedJson));
         JsonReader actual = Json.createReader(new StringReader(json));
         assertEquals(expected.read(), actual.read());
@@ -164,20 +188,27 @@ public class ImageImplTest extends AbstractImageTest {
         return getImageUnderTest(resourcePath, Image.class);
     }
 
-    protected Image getImageUnderTest(String resourcePath, Class<? extends Image> imageClass) {
+    protected <T> T getImageUnderTest(String resourcePath, Class<T> imageClass) {
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
         ContentPolicyMapping mapping = resource.adaptTo(ContentPolicyMapping.class);
-        if (mapping == null) {
-            throw new IllegalStateException("Adapter not registered for the ContentPolicyManager.");
+        ContentPolicy contentPolicy = null;
+        if (mapping != null) {
+            contentPolicy = mapping.getPolicy();
         }
-        ContentPolicy contentPolicy = mapping.getPolicy();
-
         SlingBindings slingBindings = new SlingBindings();
+        Style style = null;
         if (contentPolicy != null) {
             when(contentPolicyManager.getPolicy(resource)).thenReturn(contentPolicy);
+            style = new MockContentPolicyStyle(contentPolicy);
+        }
+        if (style == null) {
+            style = mock(Style.class);
+            when(style.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
+                    invocationOnMock -> invocationOnMock.getArguments()[1]
+            );
         }
         slingBindings.put(SlingBindings.RESOURCE, resource);
         final MockSlingHttpServletRequest request =
@@ -188,10 +219,6 @@ public class ImageImplTest extends AbstractImageTest {
         slingBindings.put(WCMBindings.CURRENT_PAGE, page);
         slingBindings.put(WCMBindings.WCM_MODE, new SightlyWCMMode(request));
         slingBindings.put(WCMBindings.PAGE_MANAGER, CONTEXT.pageManager());
-        Style style = mock(Style.class);
-        when(style.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
-                invocationOnMock -> invocationOnMock.getArguments()[1]
-        );
         slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         request.setAttribute(SlingBindings.class.getName(), slingBindings);

@@ -61,14 +61,6 @@
                         "jcr:createdBy": "admin",
                         "jcr:primaryType": "cq:PageContent",
                         "root": {
-                            "breadcrumb": {
-                                "jcr:created": "Tue Mar 08 2016 14:56:20 GMT+0100",
-                                "jcr:createdBy": "admin",
-                                "jcr:lastModified": "Tue Mar 08 2016 14:56:31 GMT+0100",
-                                "jcr:lastModifiedBy": "admin",
-                                "jcr:primaryType": "nt:unstructured",
-                                "sling:resourceType": "coretest/components/structure/breadcrumb"
-                            },
                             "jcr:primaryType": "nt:unstructured",
                             "product": {
                                 "cq:commerceType": "product",
@@ -201,15 +193,6 @@
                         "jcr:createdBy": "admin",
                         "jcr:primaryType": "cq:PageContent",
                         "root": {
-                            "breadcrumb": {
-                                "editable": false,
-                                "jcr:created": "Tue Mar 08 2016 14:56:20 GMT+0100",
-                                "jcr:createdBy": "admin",
-                                "jcr:lastModified": "Tue Mar 08 2016 14:56:20 GMT+0100",
-                                "jcr:lastModifiedBy": "admin",
-                                "jcr:primaryType": "nt:unstructured",
-                                "sling:resourceType": "coretest/components/structure/breadcrumb"
-                            },
                             "footer": {
                                 "jcr:created": "Wed Jan 13 2016 15:58:16 GMT+0100",
                                 "jcr:createdBy": "admin",

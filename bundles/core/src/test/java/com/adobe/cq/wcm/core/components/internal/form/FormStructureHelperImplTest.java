@@ -53,8 +53,6 @@ public class FormStructureHelperImplTest {
 
     private ResourceResolver resourceResolver;
 
-    private static final String SLING_SCRIPTING_USER = "sling-scripting";
-
     @Before
     public void setUp() throws Exception {
         resourceResolver = context.resourceResolver();
@@ -106,8 +104,6 @@ public class FormStructureHelperImplTest {
         allowedFields.add("button_button");
         allowedFields.add("text_inside_non_form_node");
         allowedFields.add("button_button_inherited");
-        allowedFields.add("button_submit");
-        allowedFields.add("button_submit_inherited");
 
         Set<String> returnedFormFields = new HashSet<>();
 

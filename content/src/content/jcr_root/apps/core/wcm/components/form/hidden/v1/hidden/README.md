@@ -23,7 +23,7 @@ Hidden form field component written in HTL.
 ### Use Object
 The Form Hidden component uses the `com.adobe.cq.wcm.core.components.models.form.Field` Sling Model for its Use-object.
 
-### Edit dialog properties
+### Edit Dialog Properties
 The following properties are written to JCR for this Form Hidden component and are expected to be available as `Resource` properties:
 
 1. `./name` - defines the name of the field, which will be submitted with the form data

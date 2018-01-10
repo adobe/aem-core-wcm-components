@@ -15,10 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.testing;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.adapter.AdapterFactory;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.osgi.service.component.annotations.Component;
 
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 
 @Component(
@@ -34,7 +39,30 @@ public class MockAdapterFactory implements AdapterFactory {
     @SuppressWarnings("unchecked")
     public <AdapterType> AdapterType getAdapter(Object o, Class<AdapterType> aClass) {
         if (aClass == ContentPolicyMapping.class && o instanceof Resource) {
-            return (AdapterType) new MockContentPolicyMapping((Resource) o);
+            Resource resource = (Resource) o;
+            ValueMap valueMap = resource.getValueMap();
+            String policyPath = valueMap.get("cq:policy", StringUtils.EMPTY);
+            Resource policyMappingResource = null;
+            if (StringUtils.isNotEmpty(policyPath)) {
+                policyMappingResource = resource;
+            } else {
+                PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+                if (pageManager != null) {
+                    Page page = pageManager.getContainingPage(resource);
+                    if (page != null) {
+                        Template template = page.getTemplate();
+                        if (template != null && page.getPath().startsWith(template.getPath() + "/")) {
+                            // in template; resolve relative to policies node
+                            policyPath = template.getPath() + "/policies/" + resource.getPath().replace(template.getPath
+                                    () + "/structure/", "");
+                            policyMappingResource = resource.getResourceResolver().getResource(policyPath);
+                        }
+                    }
+                }
+            }
+            if (policyMappingResource != null) {
+                return (AdapterType) new MockContentPolicyMapping(policyMappingResource);
+            }
         }
         return null;
     }

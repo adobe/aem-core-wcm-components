@@ -1,0 +1,121 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~ Copyright 2017 Adobe Systems Incorporated
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~     http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+package com.adobe.cq.wcm.core.components.internal.models.v2;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.jackrabbit.vault.util.Text;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.commons.json.JSONArray;
+import org.apache.sling.commons.json.JSONObject;
+import org.apache.sling.models.annotations.Exporter;
+import org.apache.sling.models.annotations.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
+import com.adobe.cq.wcm.core.components.models.Image;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.DamConstants;
+
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl implements Image {
+
+    public static final String RESOURCE_TYPE = "core/wcm/components/image/v2/image";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
+    private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+
+    private String srcUriTemplate;
+
+    @PostConstruct
+    protected void initModel() {
+        super.initModel();
+        boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
+        boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
+        displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
+        if (StringUtils.isNotEmpty(fileReference)) {
+            // the image is coming from DAM
+            final Resource assetResource = request.getResourceResolver().getResource(fileReference);
+            if (assetResource != null) {
+                Asset asset = assetResource.adaptTo(Asset.class);
+                if (asset != null) {
+                    if (!isDecorative && altValueFromDAM) {
+                        String damDescription = asset.getMetadataValue(DamConstants.DC_DESCRIPTION);
+                        if(StringUtils.isEmpty(damDescription)) {
+                            damDescription = asset.getMetadataValue(DamConstants.DC_TITLE);
+                        }
+                        if (StringUtils.isNotEmpty(damDescription)) {
+                            alt = damDescription;
+                        }
+                    }
+                    if (titleValueFromDAM) {
+                        String damTitle = asset.getMetadataValue(DamConstants.DC_TITLE);
+                        if (StringUtils.isNotEmpty(damTitle)) {
+                            title = damTitle;
+                        }
+                    }
+                } else {
+                    LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
+                            request.getResource().getPath());
+                }
+            } else {
+                LOGGER.error("Unable to find resource '{}' used by image '{}'.", fileReference, request.getResource().getPath());
+            }
+        }
+        if (hasContent) {
+            disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
+            srcUriTemplate = request.getContextPath() + Text.escapePath(baseResourcePath) + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR +
+                    SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+            buildJson();
+        }
+    }
+
+    @Nonnull
+    @Override
+    public int[] getWidths() {
+        return Arrays.copyOf(smartSizes, smartSizes.length);
+    }
+
+    @Override
+    public String getSrcUriTemplate() {
+        return srcUriTemplate;
+    }
+
+    @Override
+    public boolean isLazyEnabled() {
+        return !disableLazyLoading;
+    }
+
+    private void buildJson() {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put(Image.JSON_SMART_SIZES, new JSONArray(Arrays.asList(ArrayUtils.toObject(smartSizes))));
+        objectMap.put(Image.JSON_SMART_IMAGES, new JSONArray(Arrays.asList(smartImages)));
+        objectMap.put(Image.JSON_LAZY_ENABLED, !disableLazyLoading);
+        json = new JSONObject(objectMap).toString();
+    }
+}

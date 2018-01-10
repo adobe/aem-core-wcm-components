@@ -24,14 +24,13 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.form.Field;
 import com.day.cq.commons.jcr.JcrConstants;
 
 /**
  * Abstract class which can be used as base class for {@link Field} implementations.
  */
-public abstract class AbstractFieldImpl implements Field, ComponentExporter {
+public abstract class AbstractFieldImpl implements Field {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     protected String id;

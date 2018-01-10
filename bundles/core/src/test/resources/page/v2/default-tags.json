@@ -1,0 +1,31 @@
+{
+    "jcr:primaryType"   : "cq:Tag",
+    "jcr:createdBy"     : "admin",
+    "jcr:title"         : "Standard Tags",
+    "jcr:created"       : "Mon Jan 18 2016 16:49:39 GMT+0100",
+    "sling:resourceType": "cq/tagging/components/tag",
+    "one"               : {
+        "jcr:primaryType"   : "cq:Tag",
+        "jcr:createdBy"     : "admin",
+        "jcr:title"         : "one",
+        "jcr:title.en"      : "one",
+        "jcr:created"       : "Fri Jan 22 2016 12:27:23 GMT+0100",
+        "sling:resourceType": "cq/tagging/components/tag"
+    },
+    "two"               : {
+        "jcr:primaryType"   : "cq:Tag",
+        "jcr:createdBy"     : "admin",
+        "jcr:title"         : "two",
+        "jcr:title.en"      : "two",
+        "jcr:created"       : "Fri Jan 22 2016 12:27:23 GMT+0100",
+        "sling:resourceType": "cq/tagging/components/tag"
+    },
+    "three"             : {
+        "jcr:primaryType"   : "cq:Tag",
+        "jcr:createdBy"     : "admin",
+        "jcr:title"         : "three",
+        "jcr:title.en"      : "three",
+        "jcr:created"       : "Fri Jan 22 2016 12:27:23 GMT+0100",
+        "sling:resourceType": "cq/tagging/components/tag"
+    }
+}

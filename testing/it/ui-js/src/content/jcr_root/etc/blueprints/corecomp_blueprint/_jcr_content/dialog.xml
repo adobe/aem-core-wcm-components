@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Dialog"
+    title="Blueprint">
+    <items jcr:primaryType="cq:WidgetCollection">
+        <tabs jcr:primaryType="cq:TabPanel">
+            <items jcr:primaryType="cq:WidgetCollection">
+                <tab_lan
+                    jcr:primaryType="cq:Widget"
+                    path="/libs/wcm/msm/templates/blueprint/defaults/language_tab.infinity.json"
+                    xtype="cqinclude"/>
+                <tab_chap
+                    jcr:primaryType="cq:Widget"
+                    path="/libs/wcm/msm/templates/blueprint/defaults/chapters_tab.infinity.json"
+                    xtype="cqinclude"/>
+                <tab_lc
+                    jcr:primaryType="cq:Widget"
+                    path="/libs/wcm/msm/templates/blueprint/defaults/livecopy_tab.infinity.json"
+                    xtype="cqinclude"/>
+            </items>
+        </tabs>
+    </items>
+</jcr:root>

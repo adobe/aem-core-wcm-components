@@ -60,28 +60,14 @@
     <!-- ====================================================================== -->
     <build>
         <resources>
+            <!-- define the resources that will go into the package -->
             <resource>
                 <!--
-                    keep some of the META-INF files and not configure
+                    we want to keep some of the META-INF files and not configure
                     everything in the plugin.
                 -->
-                <directory>${basedir}/src/content/META-INF</directory>
-                <targetPath>../vault-work/META-INF</targetPath>
-            </resource>
-            <resource>
-                <directory>${basedir}/src/content/jcr_root</directory>
-                <targetPath>.</targetPath>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>**/.vlt</exclude>
-                    <exclude>**/.vltignore</exclude>
-                    <exclude>**/*.iml</exclude>
-                    <exclude>**/.classpath</exclude>
-                    <exclude>**/.project</exclude>
-                    <exclude>**/.settings/**</exclude>
-                    <exclude>**/.DS_Store</exclude>
-                    <exclude>**/target/**</exclude>
-                </excludes>
+                <directory>${basedir}/src/content/META-INF/vault/definition</directory>
+                <targetPath>../vault-work/META-INF/vault/definition</targetPath>
             </resource>
         </resources>
 
@@ -128,23 +114,13 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>filevault-package-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
                 <groupId>com.day.jcr.vault</groupId>
                 <artifactId>content-package-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
-                    <group>${vault.package.group}</group>
-                    <requiresRoot>true</requiresRoot>
-                    <filterSource>${basedir}/src/content/META-INF/vault/filter.xml</filterSource>
-                    <prefix>/</prefix>
-                    <dependencies>
-                        <dependency>
-                            <group>day/cq60/product</group>
-                            <name>cq-content</name>
-                            <version>[6.1.76,)</version>
-                        </dependency>
-                    </dependencies>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -174,7 +150,6 @@
                         <configuration>
                             <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                             <failOnError>true</failOnError>
-                            <failOnMissingEmbed>true</failOnMissingEmbed>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -201,7 +176,6 @@
                         <configuration>
                             <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
                             <failOnError>true</failOnError>
-                            <failOnMissingEmbed>true</failOnMissingEmbed>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 import com.adobe.cq.wcm.core.components.Utils;
+import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.models.form.Field;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -40,6 +41,7 @@ public class HiddenImplTest {
     private static final String CONTAINING_PAGE = "/content/we-retail/demo-page";
     private static final String HIDDENINPUT1_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/hidden_1";
     private static final String HIDDENINPUT2_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/hidden_2";
+    private static final String HIDDENINPUT3_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container/hidden_3";
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/we-retail/demo-page");
@@ -79,7 +81,13 @@ public class HiddenImplTest {
     @Test
     public void testExportedType() {
         Field hiddenField = prepareHiddenFieldForTest(HIDDENINPUT1_PATH);
-        assertEquals(HiddenImpl.RESOURCE_TYPE, ((HiddenImpl) hiddenField).getExportedType());
+        assertEquals(FormConstants.RT_CORE_FORM_HIDDEN_V1, ((HiddenImpl) hiddenField).getExportedType());
+    }
+
+    @Test
+    public void testV2JOSNExport() {
+        Field hiddenField = prepareHiddenFieldForTest(HIDDENINPUT3_PATH);
+        Utils.testJSONExport(hiddenField, Utils.getTestExporterJSONPath(TEST_BASE, HIDDENINPUT3_PATH));
     }
 
     private Field prepareHiddenFieldForTest(String resourcePath) {

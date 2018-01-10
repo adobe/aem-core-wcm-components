@@ -18,7 +18,14 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.Calendar;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Defines the {@code Page} Sling Model used for the {@code /apps/core/wcm/components/page} component.
@@ -26,7 +33,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Page {
+public interface Page extends ContainerExporter {
 
     /**
      * Key used for the regular favicon file.
@@ -75,6 +82,14 @@ public interface Page {
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_TOUCH_ICON_152 = "touchIcon152";
+
+    /**
+     * Name of the configuration policy property that will store the category of the client library from which web application resources
+     * will be served.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    String PN_APP_RESOURCES_CLIENTLIB = "appResourcesClientlib";
 
     /**
      * Expected file name for the regular favicon file.
@@ -150,6 +165,7 @@ public interface Page {
      * @return an array of keywords represented as {@link String}s; the array can be empty if no keywords have been defined for the page
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @JsonIgnore
     default String[] getKeywords() {
         throw new UnsupportedOperationException();
     }
@@ -193,7 +209,9 @@ public interface Page {
      *
      * @return {@link Map} containing the names of the favicons and their corresponding paths
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     * @deprecated since 12.2.0
      */
+    @Deprecated
     default Map<String, String> getFavicons() {
         throw new UnsupportedOperationException();
     }
@@ -215,6 +233,7 @@ public interface Page {
      * template has no client libraries
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
+    @JsonIgnore
     default String[] getClientLibCategories() {
         throw new UnsupportedOperationException();
     }
@@ -226,6 +245,68 @@ public interface Page {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTemplateName() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the root path of the application's web resources (e.g. favicons, application manifest, etc.).
+     *
+     * @return resources path; can return {@code null} if no such resources were defined
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nullable
+    default String getAppResourcesPath() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the CSS classes defined for the page
+     *
+     * @return {@link String} containing the CSS classes defined for the page, if one class exists, {@code null} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    default String getCssClassNames() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the target page if this page is redirecting to another page.
+     *
+     * @return {@link NavigationItem} of redirect target
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nullable
+    default NavigationItem getRedirectTarget() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ContainerExporter#getExportedItemsOrder()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    @Override
+    default String[] getExportedItemsOrder() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ContainerExporter#getExportedItems()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    @Override
+    default Map<String, ? extends ComponentExporter> getExportedItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ContainerExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 

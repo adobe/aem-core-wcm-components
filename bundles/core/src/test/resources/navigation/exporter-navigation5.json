@@ -1,0 +1,57 @@
+{
+  "items": [
+    {
+      "active": false,
+      "children": [
+        {
+          "active": false,
+          "children": [],
+          "level": 1,
+          "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
+          "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
+          "description": null,
+          "lastModified": null,
+          "title": "Navigation 1.1.1"
+        },
+        {
+          "active": false,
+          "children": [
+            {
+              "active": false,
+              "children": [],
+              "level": 2,
+              "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
+              "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
+              "description": null,
+              "lastModified": null,
+              "title": "Navigation 1.1.2.2.1"
+            },
+            {
+              "active": false,
+              "children": [],
+              "level": 2,
+              "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
+              "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
+              "description": null,
+              "lastModified": null,
+              "title": "Navigation 1.1.2.3"
+            }
+          ],
+          "level": 1,
+          "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
+          "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
+          "description": null,
+          "lastModified": null,
+          "title": "Navigation 1.1.2"
+        }
+      ],
+      "level": 0,
+      "path": "/content/navigation/navigation-1/navigation-1-1",
+      "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
+      "description": null,
+      "lastModified": null,
+      "title": "Navigation 1.1"
+    }
+  ],
+  ":type": "core/wcm/components/navigation/v1/navigation"
+}

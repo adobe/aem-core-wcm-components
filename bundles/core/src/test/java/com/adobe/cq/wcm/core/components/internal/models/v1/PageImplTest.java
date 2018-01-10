@@ -45,6 +45,7 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
+import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -69,7 +70,7 @@ import static org.mockito.Mockito.when;
 
 public class PageImplTest {
 
-    protected static String TEST_BASE = "/page";
+    private static String TEST_BASE = "/page";
     protected static final String CONTEXT_PATH = "/core";
     protected static final String ROOT = "/content/page";
     protected static final String PAGE = ROOT + "/templated-page";
@@ -90,17 +91,21 @@ public class PageImplTest {
     protected static final String PN_TOUCH_ICON_120 = "touchIcon120";
     protected static final String PN_TOUCH_ICON_152 = "touchIcon152";
 
-    protected static Class<? extends Page> pageClass = Page.class;
     protected static ContentPolicyManager contentPolicyManager;
 
     @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, ROOT);
+    public static final AemContext CONTEXT = CoreComponentTestContext.createContext();
 
     @BeforeClass
     public static void setUp() {
+        internalSetUp(CONTEXT, TEST_BASE, ROOT);
+    }
+
+    protected static void internalSetUp(AemContext aemContext, String testBase, String contentRoot) {
+        aemContext.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, contentRoot);
         contentPolicyManager = mock(ContentPolicyManager.class);
-        CONTEXT.registerInjectActivateService(new MockAdapterFactory());
-        CONTEXT.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
+        aemContext.registerInjectActivateService(new MockAdapterFactory());
+        aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
                 new Function<ResourceResolver, ContentPolicyManager>() {
                     @Nullable
                     @Override
@@ -108,11 +113,12 @@ public class PageImplTest {
                         return contentPolicyManager;
                     }
                 });
-        CONTEXT.load().json(TEST_BASE + "/test-conf.json", "/conf/coretest/settings");
-        CONTEXT.load().json(TEST_BASE + "/default-tags.json", "/etc/tags/default");
+        aemContext.addModelsForClasses(MockResponsiveGrid.class);
+        aemContext.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
+        aemContext.load().json(testBase + "/default-tags.json", "/etc/tags/default");
         SlingModelFilter slingModelFilter = mock(SlingModelFilter.class);
-        CONTEXT.registerService(SlingModelFilter.class, slingModelFilter);
-        CONTEXT.registerService(SlingModelFilter.class, new SlingModelFilter() {
+        aemContext.registerService(SlingModelFilter.class, slingModelFilter);
+        aemContext.registerService(SlingModelFilter.class, new SlingModelFilter() {
 
             private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
                 add(NameConstants.NN_RESPONSIVE_CONFIG);
@@ -145,7 +151,7 @@ public class PageImplTest {
         CONTEXT.load().binaryFile(TEST_BASE + "/" + FN_TOUCH_ICON_152, DESIGN_PATH + "/" + FN_TOUCH_ICON_152);
         CONTEXT.load().binaryFile(TEST_BASE + "/static.css", DESIGN_PATH + "/static.css");
 
-        Page page = getPageUnderTest(PAGE);
+        Page page = getPageUnderTest(Page.class, PAGE);
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
@@ -166,7 +172,7 @@ public class PageImplTest {
 
     @Test
     public void testFavicons() {
-        Page page = getPageUnderTest(PAGE);
+        Page page = getPageUnderTest(Page.class, PAGE);
         Map favicons = page.getFavicons();
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_ICO, favicons.get(PN_FAVICON_ICO));
         assertEquals(DESIGN_PATH + "/" + FN_FAVICON_PNG, favicons.get(PN_FAVICON_PNG));
@@ -178,16 +184,16 @@ public class PageImplTest {
 
     @Test
     public void testDefaultDesign() {
-        Page page = getPageUnderTest(PAGE, null);
+        Page page = getPageUnderTest(Page.class, PAGE, null);
         assertNull(page.getDesignPath());
         assertNull(page.getStaticDesignPath());
     }
 
-    protected Page getPageUnderTest(String pagePath) {
-        return getPageUnderTest(pagePath, DESIGN_PATH);
+    protected <T> T getPageUnderTest(Class<T> model, String pagePath) {
+        return getPageUnderTest(model, pagePath, DESIGN_PATH);
     }
 
-    protected Page getPageUnderTest(String pagePath, String designPath) {
+    protected <T> T getPageUnderTest(Class<T> model, String pagePath, String designPath) {
         Resource resource = CONTEXT.resourceResolver().getResource(pagePath + "/" + JcrConstants.JCR_CONTENT);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to define test resource " + pagePath + "?");
@@ -235,6 +241,6 @@ public class PageImplTest {
         request.setResource(resource);
         slingBindings.put(SlingBindings.REQUEST, request);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(pageClass);
+        return request.adaptTo(model);
     }
 }

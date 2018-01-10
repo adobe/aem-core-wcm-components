@@ -1,0 +1,155 @@
+{
+    "languagenavigation": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title"      : "Language Structure",
+            "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200"
+        },
+        "LOCALE-1": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "LOCALE 1",
+                "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "jcr:language"   : "en_US"
+            },
+            "LOCALE-5": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "LOCALE 5",
+                    "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200"
+                },
+                "about": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title"      : "About Us",
+                        "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                        "root"           : {
+                            "jcr:primaryType": "nt:unstructured",
+                            "languagenavigation-component-1": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation",
+                                "navigationRoot"    : "/content/languagenavigation"
+                            },
+                            "languagenavigation-component-2": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation",
+                                "navigationRoot"    : "/content/languagenavigation",
+                                "structureDepth"    : 2
+                            },
+                            "languagenavigation-component-3": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "cq:policy"         : "coretest/components/content/languagenavigation/policy-1",
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation",
+                                "navigationRoot"    : "/content/languagenavigation"
+                            },
+                            "languagenavigation-component-4": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "sling:resourceType": "core/wcm/components/languagenavigation/v1/languagenavigation"
+                            }
+                        }
+                    }
+                }
+            },
+            "LOCALE-6": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "LOCALE 6",
+                    "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                    "jcr:language"   : "es_US"
+                }
+            }
+        },
+        "LOCALE-2": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "LOCALE 2",
+                "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "jcr:language"   : "en_CA"
+            },
+            "LOCALE-5": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "LOCALE 5",
+                    "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200"
+                },
+                "about": {
+                    "jcr:primaryType": "cq:Page",
+                    "jcr:content"    : {
+                        "jcr:primaryType": "cq:PageContent",
+                        "jcr:title"      : "About Us",
+                        "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200"
+                    }
+                }
+            },
+            "LOCALE-7": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "LOCALE 7",
+                    "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                    "jcr:language"   : "fr_CA"
+                }
+            }
+        },
+        "LOCALE-3": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType" : "cq:PageContent",
+                "jcr:title"       : "LOCALE 3",
+                "jcr:created"     : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "sling:vanityPath": "/LOCALE-3-vanity",
+                "jcr:language"    : "de_CH"
+            },
+            "LOCALE-8": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "LOCALE 8",
+                    "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200"
+                }
+            }
+        },
+        "LOCALE-4": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "LOCALE 4",
+                "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "jcr:language"   : "de_DE"
+            },
+            "LOCALE-9": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "LOCALE 9",
+                    "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200"
+                }
+            },
+            "hideInNav": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "hideInNav",
+                    "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                    "hideInNav"      : true
+                }
+            }
+        },
+        "hideInNav": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "hideInNav",
+                "jcr:created"    : "Mon Jul 10 2017 20:21:55 GMT+0200",
+                "hideInNav"      : true
+            }
+        }
+    }
+}

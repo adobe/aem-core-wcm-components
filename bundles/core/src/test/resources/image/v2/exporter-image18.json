@@ -1,0 +1,16 @@
+{
+    "widths": [
+        128,
+        256,
+        512,
+        1024,
+        1280,
+        1440,
+        1920,
+        2048
+    ],
+    "lazyEnabled"           : true,
+    "srcUriTemplate"        : "/core/content/test/jcr%3acontent/root/image18.img{.width}.png/1490005239000.png",
+    "src"                   : "/core/content/test/jcr%3acontent/root/image18.img.png/1490005239000.png",
+    ":type"                 : "core/wcm/components/image/v2/image"
+}

@@ -1,0 +1,23 @@
+{
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
+        {
+            "url": "/context/content/list/pages/page_1.html",
+            "path": "/content/list/pages/page_1",
+            "title": "Page 1",
+            "description": null,
+            "lastModified": 1474672365000
+        },
+        {
+            "url": "/context/content/list/pages/page_2.html",
+            "path": "/content/list/pages/page_2",
+            "title": "Page 2",
+            "description": null,
+            "lastModified": 1474499565000
+        }
+    ],
+    "showDescription": true,
+    "showModificationDate": true,
+    "linkItems": true,
+    ":type": "core/wcm/components/list/v2/list"
+}

@@ -39,19 +39,20 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.models.form.OptionItem;
 import com.adobe.cq.wcm.core.components.models.form.Options;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Options.class, ComponentExporter.class},
-       resourceType = OptionsImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class,
+       adapters = {Options.class, ComponentExporter.class},
+       resourceType = {FormConstants.RT_CORE_FORM_OPTIONS_V1, FormConstants.RT_CORE_FORM_OPTIONS_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class OptionsImpl extends AbstractFieldImpl implements Options {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OptionsImpl.class);
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/form/options/v1/options";
     private static final String PN_TYPE = "type";
     private static final String OPTION_ITEMS_PATH = "items";
     private static final String ID_PREFIX = "form-options";

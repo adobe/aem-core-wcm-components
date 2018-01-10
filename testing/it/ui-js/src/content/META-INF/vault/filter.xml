@@ -18,8 +18,14 @@
     <!-- Sample content -->
     <filter root="/conf/core-components"/>
     <filter root="/content/core-components"/>
+    <filter root="/content/campaigns/core_component_brand"/>
+    <filter root="/etc/tags/test-tags"/>
     <filter root="/content/dam/core-components"/>
-
+    <filter root="/home/users/core-component"/>
+    <filter root="/etc/blueprints/corecomp_blueprint"/>
     <!-- Hobbes IT folder -->
     <filter root="/apps/core/wcm/tests"/>
+    <filter root="/apps/msm">
+        <include pattern="/apps/msm/corecomp_blueprint(/.*)?"/>
+    </filter>
 </workspaceFilter>

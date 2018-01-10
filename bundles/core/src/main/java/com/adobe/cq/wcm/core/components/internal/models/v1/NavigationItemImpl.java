@@ -13,30 +13,49 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 package com.adobe.cq.wcm.core.components.internal.models.v1;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.sling.api.SlingHttpServletRequest;
 
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class NavigationItemImpl implements NavigationItem {
+public class NavigationItemImpl extends PageListItemImpl implements NavigationItem {
 
-    protected Page page;
+    protected List<NavigationItem> children = Collections.emptyList();
+    protected int level;
     protected boolean active;
 
-    public NavigationItemImpl(Page page, boolean active) {
-        this.page = page;
+    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children) {
+        super(request, page);
         this.active = active;
+        this.level = level;
+        this.children = children;
     }
 
     @Override
-    public Page getPage(){
+    @JsonIgnore
+    public Page getPage() {
         return page;
     }
 
     @Override
     public boolean isActive() {
         return active;
+    }
+
+    @Override
+    public List<NavigationItem> getChildren() {
+        return children;
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
     }
 
 }

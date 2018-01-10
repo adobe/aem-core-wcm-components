@@ -16,8 +16,6 @@
 
 ;(function(h, $) {
 
-    hobs.config.pacing_delay = 250;
-
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
 
@@ -28,31 +26,49 @@
     // relative path from page node to the root layout container
     c.relParentCompPath = "/jcr:content/root/responsivegrid/";
     // the path to the policies
-    c.policyPath = "/conf/core-components/settings/wcm/policies/core/wcm/components";
+    c.policyPath = "/conf/core-components/settings/wcm/policies/core-component/components";
     // the policy assignment path
-    c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core/wcm/components";
+    c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core-component/components";
+    // proxy components path
+    c.proxyPath = "/apps/core-component/components/"
 
     // core component resource types
     // text component
-    c.rtText = "core/wcm/components/text/v1/text";
+    c.rtText_v1 = "core/wcm/components/text/v1/text";
+    c.rtText_v2 = "core/wcm/components/text/v2/text";
     // title component
-    c.rtTitle = "core/wcm/components/title/v1/title";
+    c.rtTitle_v1 = "core/wcm/components/title/v1/title";
+    c.rtTitle_v2 = "core/wcm/components/title/v2/title";
     // list component
-    c.rtList = "core/wcm/components/list/v1/list";
+    c.rtList_v1 = "core/wcm/components/list/v1/list";
+    c.rtList_v2 = "core/wcm/components/list/v2/list";
     // image component
-    c.rtImage = "core/wcm/components/image/v1/image";
+    c.rtImage_v1 = "core/wcm/components/image/v1/image";
+    c.rtImage_v2 = "core/wcm/components/image/v2/image";
     // breadcrumb component
-    c.rtBreadcrumb = "core/wcm/components/breadcrumb/v1/breadcrumb";
+    c.rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
+    c.rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
+    // navigation component
+    c.rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
+    // language navigation component
+    c.rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
+    // search component
+    c.rtSearch_v1 = "core/wcm/components/search/v1/search";
     // form container
-    c.rtFormContainer = "core/wcm/components/form/container/v1/container";
+    c.rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
+    c.rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
     // form button
-    c.rtFormButton = "core/wcm/components/form/button/v1/button";
+    c.rtFormButton_v1 = "core/wcm/components/form/button/v1/button";
+    c.rtFormButton_v2 = "core/wcm/components/form/button/v2/button";
     // form button
-    c.rtFormText = "core/wcm/components/form/text/v1/text";
+    c.rtFormText_v1 = "core/wcm/components/form/text/v1/text";
+    c.rtFormText_v2 = "core/wcm/components/form/text/v2/text";
     // form option
-    c.rtFormOptions = "core/wcm/components/form/options/v1/options";
+    c.rtFormOptions_v1 = "core/wcm/components/form/options/v1/options";
+    c.rtFormOptions_v2 = "core/wcm/components/form/options/v2/options";
     // hidden field
-    c.rtFormHidden = "core/wcm/components/form/hidden/v1/hidden";
+    c.rtFormHidden_v1 = "core/wcm/components/form/hidden/v1/hidden";
+    c.rtFormHidden_v2 = "core/wcm/components/form/hidden/v2/hidden";
 
     // selectors
 
@@ -60,6 +76,7 @@
     c.selConfigDialog = ".cq-dialog.foundation-form.foundation-layout-form";
     // save button on a configuration dialog
     c.selSaveConfDialogButton = ".cq-dialog-actions button[is='coral-button'][title='Done']";
+    c.selCloseConfDialogButton = 'button.cq-dialog-cancel';
 
     /**
      * Creates a CQ page via POST request, the same as send by the create page wizard.
@@ -69,8 +86,9 @@
      * @param pageName Mandatory. Page name to be set for the page.
      * @param dynParName Optional. Hobbes dynamic param to store the generated page path.
      * @param done Mandatory. Callback to be executed when async method has finished.
+     * @param [testPageRT='core/wcm/tests/components/test-page'] the resource type of the test page
      */
-    c.createPage = function (templatePath, parentPath, pageName, dynParName, done) {
+    c.createPage = function (templatePath, parentPath, pageName, dynParName, done, testPageRT) {
         // mandatory check
         if (parentPath == null || templatePath == null || pageName == null || done == null) {
             if (done) done(false, "createPage failed! mandatory parameter(s) missing!");
@@ -88,7 +106,7 @@
                 "_charset_": "utf-8",
                 "./jcr:title": pageName,
                 "pageName": pageName,
-                "./sling:resourceType": "core/wcm/tests/components/test-page"
+                "./sling:resourceType": testPageRT || "core/wcm/tests/components/test-page"
             }
         })
             // when the request was successful
@@ -147,6 +165,59 @@
     };
 
     /**
+     * Creates a Live Copy via POST request.
+     *
+     * @param srcPath Mandatory. Path to the source page for the live copy."
+     * @param destPath Mandatory. Path to the destination page for the live copy."
+     * @param title Mandatory. the title to be set for the live copy.
+     * @param label Mandatory. The label to be set for the live copy.
+     * @param dynParName Optional. Hobbes dynamic param to store the generated page path.
+     * @param done Mandatory. Callback to be executed when async method has finished.
+     */
+    c.createLiveCopy = function (srcPath, destPath, title, label, dynParName, done) {
+        // mandatory check
+        if (srcPath == null || destPath == null || title == null || label == null || done == null) {
+            if (done) done(false, "createLiveCopy failed! mandatory parameter(s) missing!");
+            return;
+        }
+
+        // the ajax call
+        jQuery.ajax({
+            url: "/bin/wcmcommand",
+            method: "POST",
+            // POST data to be send in the request
+            data: {
+                "cmd": "createLiveCopy",
+                "srcPath": srcPath,
+                "destPath": destPath,
+                "_charset_": "utf-8",
+                "title": title,
+                "label": label
+            }
+        })
+        // when the request was successful
+            .done(function (data, textStatus, jqXHR) {
+                // extract the created page path from the returned HTML
+                var path = jQuery(data).find("#Path").text();
+
+                // store the page path and name as dynamic data for reuse in hobs functions
+                if (dynParName != null) {
+                    hobs.param(dynParName, path);
+                }
+            })
+
+            // request fails
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                // log an error
+                done(false, "createLiveCopy failed! POST failed with: " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
+    /**
      * Adds a component to a page.
      *
      * @param component          mandatory components resource type
@@ -194,6 +265,84 @@
                 done(true);
             })
     };
+
+    /**
+     * Adds a component to a page.
+     *
+     * @param component          mandatory components resource type
+     * @param proxyCompPath      mandatory absolute path to the parent component
+     * @param dynParName         optional name of hobbes param to store the new components absolute path
+     * @param done               mandatory call back to execute when async method has finished
+     * @param title              mandatory the title of the component
+     * @param componentGroup     optional the group of the component, if empty, 'Core' is used
+     */
+    c.createProxyComponent = function (component, proxyCompPath, dynParName, done, title, componentGroup) {
+        // mandatory check
+        if (component == null || proxyCompPath == null || done == null) {
+            if (done) done(false, "createProxyComponent failed! mandatory parameter(s) missing!");
+            return;
+        }
+
+        // default settings
+        if (title == null) title = component.substring(component.lastIndexOf("/") + 1);
+        if (componentGroup == null) componentGroup = "Core";
+
+        // the ajax call
+        jQuery.ajax({
+            url: proxyCompPath,
+            method: "POST",
+            data: {
+                "jcr:primaryType" : "cq:Component",
+                "componentGroup": componentGroup,
+                "jcr:title": title,
+                "jcr:description": title,
+                "sling:resourceSuperType": component
+            }
+        })
+            .done(function (data, textStatus, jqXHR) {
+                // extract the component path from the returned HTML
+                if (dynParName != null) {
+                    h.param(dynParName, jQuery(data).find("#Path").text());
+                }
+            })
+            // in case of failure
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "createProxyComponent failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
+    /**
+     * Deletes a proxy component.
+     *
+     * @param pagePath Mandatory. testPagePath path to the page to be deleted
+     * @param done Optional. callback to be executed when the async method has finished.
+     */
+    c.deleteProxyComponent = function (proxyPath, done) {
+        // mandatory check
+        if (proxyPath == null || done == null) {
+            if (done) done(false, "deletePage failed! mandatory parameter(s) missing!");
+            return;
+        }
+        jQuery.ajax({
+            url: proxyPath,
+            method: "POST",
+            data: {
+                ":operation": "delete"
+            }
+        })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                done(false, "deletePage failed: POST failed with " + textStatus + "," + errorThrown);
+            })
+            // always executed, fail or success
+            .then(function () {
+                done(true);
+            })
+    };
+
 
     /**
      * Sets properties of a repository node.
@@ -262,14 +411,15 @@
      * @param data Tha policy's data
      * @param done  Mandatory. the callback to execute when post returns
      */
-    c.createPolicy = function (component_path, data, dynParName, done) {
+    c.createPolicy = function (component_path, data, dynParName, done, policyPath) {
+        policyPath = policyPath || c.policyPath;
         // mandatory check
         if (component_path == null || data == null || done == null) {
             if (done) done(false, "createPolicy failed! Mandatory param(s) missing.");
             return;
             }
             jQuery.ajax({
-                url: c.policyPath+component_path,
+                url: policyPath + component_path,
                 method: "POST",
                 data: data
             })
@@ -296,14 +446,15 @@
      * @param data Tha policy's data
      * @param done  Mandatory. the callback to execute when post returns
      */
-    c.assignPolicy = function (component_path, data, done) {
+    c.assignPolicy = function (component_path, data, done, policyAssignmentPath) {
+        policyAssignmentPath = policyAssignmentPath || c.policyAssignmentPath;
         // mandatory check
         if (component_path == null || data == null || done == null) {
             if (done) done(false, "assignPolicy failed! Mandatory param(s) missing.");
             return;
         }
         jQuery.ajax({
-            url: c.policyAssignmentPath+component_path,
+            url: policyAssignmentPath + component_path,
             method: "POST",
             data: data
         })
@@ -322,14 +473,15 @@
      * @param policyPath Mandatory. policyPath path to the policy to be deleted
      * @param done Optional. callback to be executed when the async method has finished.
      */
-    c.deletePolicy = function (component_path, done) {
+    c.deletePolicy = function (component_path, done, policyPath) {
+        policyPath = policyPath || c.policyPath;
         // mandatory check
         if (component_path == null || done == null) {
             if (done) done(false, "deletePolicy failed! mandatory parameter(s) missing!");
             return;
         }
         jQuery.ajax({
-            url: c.policyPath+component_path,
+            url: policyPath + component_path,
             method: "POST",
             data: {
                 ":operation": "delete"
@@ -350,14 +502,15 @@
      * @param policyAllocationPath Mandatory. policyAllocatiionPath path to the policy allocation to be deleted
      * @param done Optional. callback to be executed when the async method has finished.
      */
-    c.deletePolicyAssignment = function (component_path, done) {
+    c.deletePolicyAssignment = function (component_path, done, policyAssignmentPath) {
+        policyAssignmentPath = policyAssignmentPath || c.policyAssignmentPath;
         // mandatory check
         if (component_path == null || done == null) {
             if (done) done(false, "deletePolicyAllocation failed! mandatory parameter(s) missing!");
             return;
         }
         jQuery.ajax({
-            url: c.policyAssignmentPath+component_path,
+            url: policyAssignmentPath + component_path,
             method: "POST",
             data: {
                 ":operation": "delete"
@@ -377,6 +530,21 @@
      */
     c.getContentFrame = function () {
         return h.find('iframe#ContentFrame').get(0);
+    };
+
+    /**
+     * returns the page name.
+     */
+    c.setPageName = function (pagePath, pageName, done) {
+        // mandatory check
+        if (pagePath == null || pageName == null || done == null) {
+            if (done) done(false, "setPageName failed! mandatory parameter(s) missing!");
+            return;
+        }
+        var name = pagePath.substring(pagePath.lastIndexOf("/") + 1, pagePath.length);
+        hobs.param(pageName,name);
+
+        done(true);
     };
 
     /**
@@ -530,6 +698,21 @@
             .click(c.selSaveConfDialogButton,{expectNav:false})
         ,{ timeout:10 });
 
+    c.tcCloseConfigureDialog = new TestCase('Close Component Configuration Dialog')
+    // if full Screen mode was used make sure the click waits for the navigation change
+        .ifElse(
+            // check if the dialog opened in a different URL
+            function () {
+                return hobs.context().window.location.pathname.startsWith('/mnt/override')
+            },
+            TestCase('Close Fullscreen Dialog')
+            // NOTE: this will cause test to fail if the dialog can't be closed e.g. due to missing mandatory values
+                .click(c.selCloseConfDialogButton, {expectNav: true})
+            ,
+            TestCase('Close Modal Dialog')
+                .click(c.selCloseConfDialogButton, {expectNav: false}),
+            {timeout: 10});
+
 
     /**
      * Opens the inline editor for a component. Uses 'data-path' attribute to identify the correct
@@ -628,5 +811,7 @@
     c.tcExecuteBeforeTestSuite =  new TestCase("Setup Before Testsuite")
         // disable tutorial popups
         .execTestCase(c.disableTutorials)
+        // 2 sec wait for Edge to avoid random failing of very first test in a test run
+        .wait(2000);
 
 }(hobs, jQuery));

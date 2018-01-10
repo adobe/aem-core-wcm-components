@@ -23,19 +23,22 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 ## Available Components
 
 * Page authoring components:
-  * [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v1/page)
-  * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v1/breadcrumb)
-  * [Title component](content/src/content/jcr_root/apps/core/wcm/components/title/v1/title)
-  * [Text component](content/src/content/jcr_root/apps/core/wcm/components/text/v1/text)
-  * [Image component](content/src/content/jcr_root/apps/core/wcm/components/image/v1/image)
-  * [List component](content/src/content/jcr_root/apps/core/wcm/components/list/v1/list)
+  * [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
+  * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Title component](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+  * [Text component](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
+  * [Image component](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
+  * [List component](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Sharing component](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+  * [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
+  * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
+  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 * Form components:
-  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v1/container)
-  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v1/text)
-  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v1/options)
-  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v1/hidden)
-  * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v1/button)
+  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+  * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page
 
@@ -46,6 +49,7 @@ Core Components | AEM                       | Java
 1.0.0, 1.0.2    | AEM 6.3                   | 1.7
 1.0.4, 1.0.6    | AEM 6.3                   | 1.8
 1.1.0           | AEM 6.3 + FP19614 or SP 1 | 1.8
+2.0.0           | AEM 6.3 + SP1 + FP20593   | 1.8
 
 ## Installation
 
@@ -100,7 +104,7 @@ core components package into your own project maven build you can add the depend
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>1.0.4</version>
+     <version>2.0.0</version>
  </dependency>
  ```
  
