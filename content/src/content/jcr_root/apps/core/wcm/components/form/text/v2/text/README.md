@@ -77,6 +77,6 @@ A `data-cmp-hook-form-text="input"` attribute should be added to the input field
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_form\_text\_v2](https://www.adobe.com/go/aem_cmp_form_text_v2)
 
