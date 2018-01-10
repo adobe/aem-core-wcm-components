@@ -61,6 +61,6 @@ BLOCK cmp-navigation
 * **Vendor**: Adobe
 * **Version**: v1
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_navigation\_v1](https://www.adobe.com/go/aem_cmp_navigation_v1)
 

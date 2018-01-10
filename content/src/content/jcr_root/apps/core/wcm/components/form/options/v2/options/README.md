@@ -60,6 +60,6 @@ BLOCK cmp-form-options
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_form\_options\_v2](https://www.adobe.com/go/aem_cmp_form_options_v2)
 

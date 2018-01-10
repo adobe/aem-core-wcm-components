@@ -122,5 +122,5 @@ handling for dialog interaction. It is already included by its edit dialog.
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_page\_v2](https://www.adobe.com/go/aem_cmp_page_v2)

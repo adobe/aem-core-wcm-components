@@ -80,6 +80,6 @@ BLOCK cmp-list
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_list\_v2](https://www.adobe.com/go/aem_cmp_list_v2)
 

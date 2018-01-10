@@ -40,6 +40,6 @@ BLOCK cmp-text
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_text\_v2](https://www.adobe.com/go/aem_cmp_text_v2)
 

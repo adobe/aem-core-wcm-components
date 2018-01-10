@@ -34,6 +34,6 @@ The following properties are written to JCR for this Form Hidden component and a
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_form\_hidden\_v2](https://www.adobe.com/go/aem_cmp_form_hidden_v2)
 
