@@ -58,11 +58,11 @@
                     captionTuple.reset();
                 });
                 $cqFileUpload.on('coral-fileupload:fileadded', function () {
-                    fileReference = undefined;
                     altTuple.hideTextfield(dialogContent.querySelector('coral-checkbox[name="./isDecorative"]').checked);
                     altTuple.hideCheckbox(true);
                     captionTuple.hideTextfield(false);
                     captionTuple.hideCheckbox(true);
+                    fileReference = undefined;
                 });
             }
             if ($cqFileUploadEdit) {
@@ -173,7 +173,7 @@
                             self._checkboxFoundation.setDisabled(true);
                             $(self._checkbox).parent().hide();
                             var previousValue = self._textfield.getAttribute(self.ATTR_PREVIOUS_VALUE);
-                            if (previousValue !== undefined && previousValue !== null) {
+                            if (fileReference && previousValue !== undefined && previousValue !== null) {
                                 self._textfieldFoundation.setValue(previousValue);
                             }
                         }
