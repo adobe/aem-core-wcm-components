@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2017 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
     jcr:primaryType="nt:unstructured"
     jcr:title="Form Container"
     sling:resourceType="cq/gui/components/authoring/dialog"
@@ -20,69 +37,82 @@
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
-                            <actionType
-                                granite:class="cmp-action-type-selection"
+                            <columns
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                deleteHint="{Boolean}true"
-                                fieldLabel="Action Type"
-                                name="./actionType">
-                                <datasource
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/form/container/v1/datasource/actiontype"/>
-                                <granite:data
-                                    jcr:primaryType="nt:unstructured"
-                                    cq-dialog-dropdown-showhide-target=".action-type-dialog"/>
-                            </actionType>
-                            <advanced
-                                granite:id="cmp-action-type-settings"
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                                <datasource
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/form/container/v1/datasource/actionsetting"/>
-                            </advanced>
-                            <workflowcontainer
-                                granite:class="hide cmp-workflow-container"
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <workflowmodel
+                                    <column
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                        emptyOption="{Boolean}true"
-                                        fieldDescription="Whether a workflow should be started with the stored content as payload."
-                                        fieldLabel="Start Workflow"
-                                        name="./workflowModel">
-                                        <datasource
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="core/wcm/components/form/container/v1/datasource/workflowmodel"/>
-                                        <granite:data
-                                            jcr:primaryType="nt:unstructured"
-                                            cq-dialog-dropdown-showhide-target=".cmp-workflow-title"/>
-                                    </workflowmodel>
-                                    <workflowTitle
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                        fieldDescription="Title for the workflow."
-                                        fieldLabel="Workflow Title"
-                                        name="./workflowTitle"
-                                        required="{Boolean}true"
-                                        wrapperClass="hide cmp-workflow-title">
-                                        <granite:data
-                                            jcr:primaryType="nt:unstructured"
-                                            reverseshowhidetargetvalue=""/>
-                                    </workflowTitle>
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <actionType
+                                                granite:class="cmp-action-type-selection"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                deleteHint="{Boolean}true"
+                                                fieldLabel="Action Type"
+                                                name="./actionType">
+                                                <datasource
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="core/wcm/components/form/container/v1/datasource/actiontype"/>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-dialog-dropdown-showhide-target=".action-type-dialog"/>
+                                            </actionType>
+                                            <advanced
+                                                granite:id="cmp-action-type-settings"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                                <datasource
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="core/wcm/components/form/container/v1/datasource/actionsetting"/>
+                                            </advanced>
+                                            <workflowcontainer
+                                                granite:class="hide cmp-workflow-container"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <workflowmodel
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                        emptyOption="{Boolean}true"
+                                                        fieldDescription="Whether a workflow should be started with the stored content as payload."
+                                                        fieldLabel="Start Workflow"
+                                                        name="./workflowModel">
+                                                        <datasource
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="core/wcm/components/form/container/v1/datasource/workflowmodel"/>
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cq-dialog-dropdown-showhide-target=".cmp-workflow-title"/>
+                                                    </workflowmodel>
+                                                    <workflowTitle
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldDescription="Title for the workflow."
+                                                        fieldLabel="Workflow Title"
+                                                        name="./workflowTitle"
+                                                        required="{Boolean}true"
+                                                        wrapperClass="hide cmp-workflow-title">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            reverseshowhidetargetvalue=""/>
+                                                    </workflowTitle>
+                                                </items>
+                                            </workflowcontainer>
+                                            <redirect
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                fieldDescription="Leave empty to redisplay the form after submission"
+                                                fieldLabel="Thank You Page"
+                                                name="./redirect"
+                                                rootPath="/content"
+                                                wrapperClass="hide cmp-redirect-selection"/>
+                                        </items>
+                                    </column>
                                 </items>
-                            </workflowcontainer>
-                            <redirect
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                fieldDescription="Leave empty to redisplay the form after submission"
-                                fieldLabel="Thank You Page"
-                                name="./redirect"
-                                rootPath="/content"
-                                wrapperClass="hide cmp-redirect-selection"/>
+                            </columns>
                         </items>
                     </properties>
                 </items>
