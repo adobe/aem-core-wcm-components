@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2017 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
     jcr:primaryType="nt:unstructured"
     jcr:title="Text"
     sling:resourceType="cq/gui/components/authoring/dialog"
@@ -243,13 +260,13 @@
                             <Paraformat
                                 granite:class="js-cq-IPEPlugin-group"
                                 jcr:primaryType="nt:unstructured"
-                                jcr:title="Paragraph styles"
+                                jcr:title="Paragraph Styles"
                                 sling:resourceType="granite/ui/components/coral/foundation/container"
                                 maximized="{Boolean}true">
                                 <items jcr:primaryType="nt:unstructured">
                                     <paraformat
                                         jcr:primaryType="nt:unstructured"
-                                        jcr:title="Enable Paragraph styles"
+                                        jcr:title="Enable paragraph styles"
                                         sling:resourceType="cq/gui/components/authoring/dialog/inplaceediting/configuration/plugin"
                                         features="*"
                                         name="paraformat"/>
@@ -262,7 +279,7 @@
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                             composite="{Boolean}true"
-                                            fieldLabel="Custom formats">
+                                            fieldLabel="Custom Formats">
                                             <field
                                                 granite:class="cq-paragraphstyles-field"
                                                 jcr:primaryType="nt:unstructured"
@@ -304,7 +321,7 @@
                                 <items jcr:primaryType="nt:unstructured">
                                     <specialchars
                                         jcr:primaryType="nt:unstructured"
-                                        jcr:title="Enable Special characters"
+                                        jcr:title="Enable special characters"
                                         sling:resourceType="cq/gui/components/authoring/dialog/inplaceediting/configuration/pluginfeature"
                                         name="specialchars"/>
                                     <configWrapper
@@ -316,7 +333,7 @@
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                             composite="{Boolean}true"
-                                            fieldLabel="Add characters">
+                                            fieldLabel="Add Characters">
                                             <field
                                                 granite:class="cq-specialcharacters-field"
                                                 jcr:primaryType="nt:unstructured"
