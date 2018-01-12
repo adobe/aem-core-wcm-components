@@ -16,19 +16,14 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.jackrabbit.vault.util.Text;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.commons.json.JSONArray;
-import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.slf4j.Logger;
@@ -111,11 +106,4 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return !disableLazyLoading;
     }
 
-    private void buildJson() {
-        Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put(Image.JSON_SMART_SIZES, new JSONArray(Arrays.asList(ArrayUtils.toObject(smartSizes))));
-        objectMap.put(Image.JSON_SMART_IMAGES, new JSONArray(Arrays.asList(smartImages)));
-        objectMap.put(Image.JSON_LAZY_ENABLED, !disableLazyLoading);
-        json = new JSONObject(objectMap).toString();
-    }
 }
