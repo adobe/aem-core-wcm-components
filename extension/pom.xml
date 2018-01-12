@@ -21,9 +21,9 @@
     <!-- P A R E N T  P R O J E C T  D E S C R I P T I O N                      -->
     <!-- ====================================================================== -->
     <parent>
-        <artifactId>core.wcm.components.parent</artifactId>
+        <artifactId>core.wcm.components.sandbox.parent</artifactId>
         <groupId>com.adobe.cq</groupId>
-        <version>1.9.24</version>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 

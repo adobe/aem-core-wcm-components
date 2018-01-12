@@ -11,13 +11,11 @@
     "main": {
       "value": "<p>Main content</p>",
       "title": "Main",
-      "contentType": "text/html",
       ":type": "text/html"
     },
     "second": {
       "value": "Second content",
       "title": "Second",
-      "contentType": "text/plain",
       ":type": "text/plain"
     }
   }

@@ -33,7 +33,7 @@ import javax.json.Json;
 import javax.json.JsonReader;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
@@ -110,6 +110,7 @@ public class ContentFragmentImplTest {
     private static final String TEXT_ONLY_TYPE = "/content/dam/contentfragments/text-only/jcr:content/model";
     private static final String STRUCTURED_TYPE = "global/models/test";
     private static final String STRUCTURED_TYPE_NESTED = "global/nested/models/test";
+    private static final String[] ASSOCIATED_CONTENT = new String[]{ "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test" };
     private static final Element MAIN = new Element("main", "Main", "text/html", "<p>Main content</p>");
     private static final Element SECOND_TEXT_ONLY = new Element("second", "Second", "text/plain", "Second content");
     private static final Element SECOND_STRUCTURED = new Element("second", "Second", null, new String[]{"one", "two", "three"});
@@ -130,8 +131,9 @@ public class ContentFragmentImplTest {
         AEM_CONTEXT.load().json("/contentfragment/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
         AEM_CONTEXT.load().json("/contentfragment/test-content-conf.json", "/conf/global/nested/settings/dam/cfm/models");
 
-        // load the content fragments
-        AEM_CONTEXT.load().json("/contentfragment/test-content-dam.json", "/content/dam/contentfragments");
+        // load the content fragments and collection
+        AEM_CONTEXT.load().json("/contentfragment/test-content-dam-contentfragments.json", "/content/dam/contentfragments");
+        AEM_CONTEXT.load().json("/contentfragment/test-content-dam-collections.json", "/content/dam/collections");
 
         // set content element values for the text-only fragment (stored as binary properties)
         String path = "/content/dam/contentfragments/text-only/";
@@ -187,31 +189,32 @@ public class ContentFragmentImplTest {
     @Test
     public void testTextOnly() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, MAIN, SECOND_TEXT_ONLY);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlyVariation() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_VARIATION);
-        assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, MAIN, SECOND_TEXT_ONLY);
+        assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN,
+                SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlyNonExistingVariation() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_NON_EXISTING_VARIATION);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, MAIN, SECOND_TEXT_ONLY);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlySingleElement() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_SINGLE_ELEMENT);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, SECOND_TEXT_ONLY);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlyMultipleElements() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, SECOND_TEXT_ONLY, MAIN);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY, MAIN);
     }
 
     @Test
@@ -235,37 +238,42 @@ public class ContentFragmentImplTest {
     @Test
     public void testStructured() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, MAIN, SECOND_STRUCTURED);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
+                SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredVariation() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_VARIATION);
-        assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, STRUCTURED_TYPE, MAIN, SECOND_STRUCTURED);
+        assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
+                SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredNonExistingVariation() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NON_EXISTING_VARIATION);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, MAIN, SECOND_STRUCTURED);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
+                SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredNestedModel() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NESTED_MODEL);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE_NESTED, MAIN, SECOND_STRUCTURED);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE_NESTED, ASSOCIATED_CONTENT, MAIN,
+                SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredSingleElement() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_SINGLE_ELEMENT);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, SECOND_STRUCTURED);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredMultipleElements() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_MULTIPLE_ELEMENTS);
-        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, SECOND_STRUCTURED, MAIN);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED,
+                MAIN);
     }
 
     @Test
@@ -303,6 +311,42 @@ public class ContentFragmentImplTest {
         assertEquals(jsonReaderExpected.read(), jsonReaderOutput.read());
     }
 
+    @Test
+    public void testStructuredGetEditorJSON() {
+        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_MULTIPLE_ELEMENTS);
+        String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
+                "\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
+                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+        assertEquals(fragment.getEditorJSON(), expectedJSON);
+    }
+
+    @Test
+    public void testStructuredWithVariationGetEditorJSON() {
+        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_VARIATION);
+        String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
+                "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
+                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+        assertEquals(fragment.getEditorJSON(), expectedJSON);
+    }
+
+    @Test
+    public void testTextOnlyGetEditorJSON() {
+        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
+        String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"" +
+                ",\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
+                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+        assertEquals(fragment.getEditorJSON(), expectedJSON);
+    }
+
+    @Test
+    public void testTextOnlyWithVariationGetEditorJSON() {
+        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_VARIATION);
+        String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"," +
+                "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
+                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+        assertEquals(fragment.getEditorJSON(), expectedJSON);
+    }
+
     /* helper methods */
 
     /**
@@ -326,8 +370,10 @@ public class ContentFragmentImplTest {
      * default variation.
      */
     private void assertContentFragment(ContentFragment fragment, String expectedTitle, String expectedDescription,
-                                       String expectedType, Element... expectedElements) {
-        assertContentFragment(fragment, null, expectedTitle, expectedDescription, expectedType, expectedElements);
+                                       String expectedType, String[] expectedAssociatedContent,
+                                       Element... expectedElements) {
+        assertContentFragment(fragment, null, expectedTitle, expectedDescription, expectedType,
+                expectedAssociatedContent, expectedElements);
     }
 
     /**
@@ -335,10 +381,17 @@ public class ContentFragmentImplTest {
      * specified variation.
      */
     private void assertContentFragment(ContentFragment fragment, String variationName, String expectedTitle,
-                                       String expectedDescription, String expectedType, Element... expectedElements) {
+                                       String expectedDescription, String expectedType,
+                                       String[] expectedAssociatedContent, Element... expectedElements) {
         assertEquals("Content fragment has wrong title", expectedTitle, fragment.getTitle());
         assertEquals("Content fragment has wrong description", expectedDescription  ,fragment.getDescription());
         assertEquals("Content fragment has wrong type", expectedType ,fragment.getType());
+        List<Resource> associatedContent = fragment.getAssociatedContent();
+        assertEquals("Content fragment has wrong number of associated content", expectedAssociatedContent.length, associatedContent.size());
+        for (int i = 0; i < expectedAssociatedContent.length; i++) {
+            Resource resource = associatedContent.get(i);
+            assertEquals("Element has wrong associated content", expectedAssociatedContent[i], resource.getPath());
+        }
         List<ContentFragment.Element> elements = fragment.getElements();
         assertEquals("Content fragment has wrong number of elements", expectedElements.length, elements.size());
         for (int i = 0; i < expectedElements.length; i++) {
@@ -346,18 +399,19 @@ public class ContentFragmentImplTest {
             Element expected = expectedElements[i];
             assertEquals("Element has wrong name", expected.name, element.getName());
             assertEquals("Element has wrong title", expected.title, element.getTitle());
-            assertEquals("Element has wrong multi-valued flag", expected.isMultiValued, element.isMultiValued());
             String contentType = expected.contentType;
-            String displayValue = StringUtils.join(expected.values, ", ");
-            String[] displayValues = expected.values;
+            String [] expectedValues = expected.values;
             if (StringUtils.isNotEmpty(variationName)) {
                 contentType = expected.variations.get(variationName).contentType;
-                displayValue = StringUtils.join(expected.variations.get(variationName).values, ", ");
-                displayValues = expected.variations.get(variationName).values;
+                expectedValues = expected.variations.get(variationName).values;
             }
-            assertEquals("Element has wrong content type", contentType, element.getContentType());
-            assertEquals("Element has wrong display value", displayValue, element.getDisplayValue());
-            assertArrayEquals("Element has wrong display values", displayValues, element.getDisplayValues());
+            Object elementValue = element.getValue();
+            if (elementValue != null && elementValue.getClass().isArray()) {
+                assertArrayEquals("Element's values didn't match", expectedValues, (String[])elementValue);
+            } else {
+                assertEquals("Element is not single valued", expectedValues.length, 1);
+                assertEquals("Element's value didn't match", expectedValues[0], elementValue);
+            }
         }
     }
 
@@ -373,6 +427,7 @@ public class ContentFragmentImplTest {
         private final String PATH_MODEL_ELEMENTS = PATH_MODEL + "/elements";
         private final String PATH_MODEL_VARIATIONS = PATH_MODEL + "/variations";
         private final String PATH_MODEL_DIALOG_ITEMS = JCR_CONTENT + "/model/cq:dialog/content/items";
+        private final String PATH_ASSOCIATED_CONTENT = JCR_CONTENT + "/associated/sling:members";
         private final String PN_CONTENT_FRAGMENT = "contentFragment";
         private final String PN_MODEL = "cq:model";
         private final String PN_ELEMENT_NAME = "name";
@@ -479,6 +534,9 @@ public class ContentFragmentImplTest {
             FragmentTemplate template = mock(FragmentTemplate.class);
             when(template.adaptTo(Resource.class)).thenReturn(modelAdaptee);
             when(fragment.getTemplate()).thenReturn(template);
+
+            Iterator<Resource> associatedContent = getAssociatedContent(resource);
+            when(fragment.getAssociatedContent()).thenReturn(associatedContent);
 
             return fragment;
         }
@@ -648,6 +706,24 @@ public class ContentFragmentImplTest {
             }
 
             return element;
+        }
+
+        /**
+         * Returns a list of resources representing the associated content for a content fragment.
+         */
+        private Iterator<Resource> getAssociatedContent(Resource resource) {
+            List<Resource> associatedContent = new LinkedList<>();
+            ResourceResolver resolver = resource.getResourceResolver();
+            Resource members = resource.getChild(PATH_ASSOCIATED_CONTENT);
+            if (resource != null) {
+                String[] paths = members.getValueMap().get("sling:resources", String[].class);
+                if (paths != null){
+                    for (String path : paths) {
+                        associatedContent.add(resolver.getResource(path));
+                    }
+                }
+            }
+            return associatedContent.iterator();
         }
 
     };

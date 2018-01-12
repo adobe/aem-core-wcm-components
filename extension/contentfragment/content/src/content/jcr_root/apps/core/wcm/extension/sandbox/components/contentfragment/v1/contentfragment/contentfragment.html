@@ -17,11 +17,12 @@
 <sly data-sly-test="${properties.fragmentPath}">
     <dl data-sly-use.fragment="com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models.ContentFragment"
         data-sly-test="${!fragment.elements.isEmpty}"
-        data-sly-list.element="${fragment.elements}"
-        data-sly-use.elementTemplate="element.html"
         data-path="${properties.fragmentPath}"
         data-type="${fragment.type}"
-        class="cmp-contentfragment${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}">
+        data-json="${!wcmmode.disabled && fragment.editorJSON}"
+        class="cmp-contentfragment${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}"
+        data-sly-use.elementTemplate="element.html"
+        data-sly-list.element="${fragment.elements}">
         <sly data-sly-call="${elementTemplate.element @ element=element}"></sly>
     </dl>
 </sly>

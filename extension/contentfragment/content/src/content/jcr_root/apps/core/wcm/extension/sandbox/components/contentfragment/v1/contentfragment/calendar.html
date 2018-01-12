@@ -13,14 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.element="${@ element='The content fragment element'}">
-    <div class="cmp-contentfragment__element cmp-contentfragment__element--${element.name}">
-        <dt class="cmp-contentfragment__element-label">${element.title}</dt>
-        <dd class="cmp-contentfragment__element-value">
-            <sly data-sly-test="${element.dataType == 'calendar'}" data-sly-use.tpl="calendar.html"
-                 data-sly-call="${tpl.element @ date = element.value}"></sly>
-            <sly data-sly-test="${element.dataType == 'boolean'}">${element.value ? "true" : "false"}</sly>
-            <sly data-sly-test="${element.dataType != 'calendar' && element.dataType != 'boolean'}">${(element.value) @join='<br/>', context='html'}</sly>
-        </dd>
-    </div>
+<template data-sly-template.element="${@ date='The date', format='The format'}">
+    <!--/* set a default format if none was provided */-->
+    <sly data-sly-test.format="${format ? format : 'YYYY-MM-dd HH:mm'}"></sly>
+    <!--/* i18n will allow to customise format based on locale as it's applied to the formatting string before the actual date formatting is done */-->
+    ${format @ format=date, type='date', i18n}
 </template>

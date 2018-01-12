@@ -61,7 +61,7 @@ public abstract class AbstractDataSourceServletTest {
     @BeforeClass
     public static void setUpSuper() throws Exception {
         // load the content fragments
-        CONTEXT.load().json("/contentfragment/test-content-dam.json", "/content/dam/contentfragments");
+        CONTEXT.load().json("/contentfragment/test-content-dam-contentfragments.json", "/content/dam/contentfragments");
         // load the data sources
         CONTEXT.load().json("/contentfragment/test-content-datasources.json", DATASOURCES_PATH);
         // load the content fragment models

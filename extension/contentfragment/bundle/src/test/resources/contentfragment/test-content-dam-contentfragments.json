@@ -47,7 +47,12 @@
                 "jcr:primaryType"   : "nt:unstructured",
                 "sling:resourceType": "sling/collection",
                 "sling:members"     : {
-                    "jcr:primaryType": "nt:unstructured"
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resources": ["/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"],
+                    "test"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resource" : "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"
+                    }
                 }
             },
             "metadata"       : {
@@ -166,7 +171,12 @@
                 "jcr:primaryType"   : "nt:unstructured",
                 "sling:resourceType": "sling/collection",
                 "sling:members"     : {
-                    "jcr:primaryType": "nt:unstructured"
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resources": ["/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"],
+                    "test"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resource" : "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"
+                    }
                 }
             },
             "metadata"          : {
@@ -224,7 +234,12 @@
                 "jcr:primaryType"   : "nt:unstructured",
                 "sling:resourceType": "sling/collection",
                 "sling:members"     : {
-                    "jcr:primaryType": "nt:unstructured"
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resources": ["/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"],
+                    "test"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resource" : "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"
+                    }
                 }
             },
             "metadata"          : {

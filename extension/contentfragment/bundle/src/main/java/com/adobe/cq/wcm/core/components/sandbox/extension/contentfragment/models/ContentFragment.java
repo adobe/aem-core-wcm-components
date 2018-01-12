@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.dam.cfm.ContentElement;
@@ -34,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Defines the Sling Model for the {@code /apps/core/wcm/components/contentfragment} component. The model
  * provides information about the referenced content fragment and access to representations of its elements.
  *
- * @since com.adobe.cq.wcm.core.components.sandbox.models 2.6.0
+ * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
  */
 @ConsumerType
 public interface ContentFragment extends ContainerExporter {
@@ -42,28 +43,28 @@ public interface ContentFragment extends ContainerExporter {
     /**
      * Name of the mandatory resource property that stores the path to a content fragment.
      *
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     String PN_PATH = "fragmentPath";
 
     /**
      * Name of the optional resource property that stores the names of the elements to be used.
      *
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     String PN_ELEMENT_NAMES = "elementNames";
 
     /**
      * Name of the optional resource property that stores the name of the variation to be used.
      *
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.1.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     String PN_VARIATION_NAME = "variationName";
 
     /**
      * Represents a content element of a content fragment.
      *
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     @ConsumerType
     interface Element extends ComponentExporter {
@@ -73,7 +74,7 @@ public interface ContentFragment extends ContainerExporter {
          *
          * @return the technical name of the element
          * @see ContentElement#getName()
-         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
          */
         @Nonnull
         @JsonIgnore
@@ -86,7 +87,7 @@ public interface ContentFragment extends ContainerExporter {
          *
          * @return the title of the element
          * @see ContentElement#getTitle()
-         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
          */
         @Nullable
         default String getTitle() {
@@ -94,71 +95,35 @@ public interface ContentFragment extends ContainerExporter {
         }
 
         /**
-         * Returns {@code true} if the element is multi-valued, {@code false} otherwise.
-         *
-         * @return {@code true} if the element is multi-valued, {@code false} otherwise
-         * @see DataType#isMultiValue()
-         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+         * Returns the string representation of data type of {@link FragmentData} of the element.
+         * For the possible values see {@link com.adobe.cq.dam.cfm.BasicDataType}. Note that this doesn't
+         * contain information about the multivalued characteristic of element. Eg. even if the actual value is of type
+         * String [], the data type returned would be String.
+         * @return the data type string
+         * @see FragmentData#getDataType()
+         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
          */
-        @JsonIgnore
-        default boolean isMultiValued() {
+        @Nonnull
+        default String getDataType() {
             throw new UnsupportedOperationException();
         }
 
         /**
-         * Returns the content type of the element.
-         *
-         * @return the content type
-         * @see ContentElement#getContentType()
-         * @see FragmentData#getContentType()
-         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
-         */
-        @Nullable
-        default String getContentType() {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * Returns the value of the element.
+         * Returns the value of the element. The returned object's type would correspond to the types as specified in
+         * {@link com.adobe.cq.dam.cfm.BasicDataType} or an array of those types.
          *
          * @return the value of the element
          * @see FragmentData#getValue()
-         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
          */
         @Nullable
         default Object getValue() {
             throw new UnsupportedOperationException();
         }
 
-        /**
-         * Returns the value of the element as a string to be displayed. If the element is multi-valued, the returned
-         * string is a comma-separated concatenation of all its values.
-         *
-         * @return the value as a string
-         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
-         */
-        @Nullable
-        @JsonIgnore
-        default String getDisplayValue() {
-            throw new UnsupportedOperationException();
-        }
-
         @Nonnull
         @Override
         default String getExportedType() {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * Returns the values of the multi-valued element as an array of strings to be displayed. If the element is not
-         * multi-valued, the returned array will contain a single entry.
-         *
-         * @return the values as strings
-         * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
-         */
-        @Nullable
-        @JsonIgnore
-        default String[] getDisplayValues() {
             throw new UnsupportedOperationException();
         }
 
@@ -169,7 +134,7 @@ public interface ContentFragment extends ContainerExporter {
      *
      * @return the title of the content fragment
      * @see com.adobe.cq.dam.cfm.ContentFragment#getTitle()
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     @Nullable
     default String getTitle() {
@@ -181,7 +146,7 @@ public interface ContentFragment extends ContainerExporter {
      *
      * @return the description of the content fragment
      * @see com.adobe.cq.dam.cfm.ContentFragment#getDescription()
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     @Nullable
     default String getDescription() {
@@ -194,7 +159,7 @@ public interface ContentFragment extends ContainerExporter {
      * "/content/dam/my-cf/jcr:content/model" for a text-only content fragment).
      *
      * @return the type of the content fragment
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     @Nullable
     @JsonProperty("model")
@@ -210,11 +175,24 @@ public interface ContentFragment extends ContainerExporter {
      *
      * @return a selection or all of the content fragment's elements
      * @see com.adobe.cq.dam.cfm.ContentFragment#getElements()
-     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 0.0.1
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
      */
     @Nullable
     @JsonIgnore
     default java.util.List<Element> getElements() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns a list of resources representing the collections that are associated to this content fragment.
+     *
+     * @return a list of collection resources
+     * @see ContentFragment#getAssociatedContent()
+     * @since com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.models 1.0.0
+     */
+    @Nullable
+    @JsonIgnore
+    default java.util.List<Resource> getAssociatedContent() {
         throw new UnsupportedOperationException();
     }
 
@@ -233,6 +211,16 @@ public interface ContentFragment extends ContainerExporter {
     @Nonnull
     @Override
     default String[] getExportedItemsOrder() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns a JSON format string containing information about this fragment.
+     * @return JSON string
+     */
+    @Nonnull
+    @JsonIgnore
+    default String getEditorJSON() {
         throw new UnsupportedOperationException();
     }
 
