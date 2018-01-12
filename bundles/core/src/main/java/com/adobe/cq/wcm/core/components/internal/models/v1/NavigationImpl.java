@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;

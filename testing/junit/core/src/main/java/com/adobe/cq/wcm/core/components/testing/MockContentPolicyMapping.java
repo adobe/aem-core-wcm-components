@@ -17,7 +17,7 @@ package com.adobe.cq.wcm.core.components.testing;
 
 import java.util.Calendar;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.adapter.SlingAdaptable;
 import org.apache.sling.api.resource.Resource;
 

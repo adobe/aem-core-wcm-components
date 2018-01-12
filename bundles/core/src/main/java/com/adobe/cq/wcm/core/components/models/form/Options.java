@@ -17,7 +17,7 @@ package com.adobe.cq.wcm.core.components.models.form;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**

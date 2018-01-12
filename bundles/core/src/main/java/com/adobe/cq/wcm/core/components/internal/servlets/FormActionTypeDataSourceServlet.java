@@ -24,7 +24,7 @@ import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
 import com.adobe.granite.ui.components.ds.DataSource;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.NonExistingResource;

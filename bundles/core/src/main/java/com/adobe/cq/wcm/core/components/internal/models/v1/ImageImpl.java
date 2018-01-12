@@ -15,28 +15,25 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.commons.json.JSONArray;
-import org.apache.sling.commons.json.JSONObject;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.models.annotations.Exporter;
@@ -274,12 +271,20 @@ public class ImageImpl implements Image {
         return resource.getResourceType();
     }
 
-    private void buildJson() {
-        Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put(Image.JSON_SMART_SIZES, new JSONArray(Arrays.asList(ArrayUtils.toObject(smartSizes))));
-        objectMap.put(Image.JSON_SMART_IMAGES, new JSONArray(Arrays.asList(smartImages)));
-        objectMap.put(Image.JSON_LAZY_ENABLED, !disableLazyLoading);
-        json = new JSONObject(objectMap).toString();
+    protected void buildJson() {
+        JsonArrayBuilder smartSizesJsonBuilder = Json.createArrayBuilder();
+        for (int size : smartSizes) {
+            smartSizesJsonBuilder.add(size);
+        }
+        JsonArrayBuilder smartImagesJsonBuilder = Json.createArrayBuilder();
+        for (String image : smartImages) {
+            smartImagesJsonBuilder.add(image);
+        }
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        jsonObjectBuilder.add(JSON_SMART_IMAGES, smartImagesJsonBuilder);
+        jsonObjectBuilder.add(JSON_SMART_SIZES, smartSizesJsonBuilder);
+        jsonObjectBuilder.add(JSON_LAZY_ENABLED, !disableLazyLoading);
+        json = jsonObjectBuilder.build().toString();
     }
 
     private Set<Integer> getSupportedRenditionWidths() {
