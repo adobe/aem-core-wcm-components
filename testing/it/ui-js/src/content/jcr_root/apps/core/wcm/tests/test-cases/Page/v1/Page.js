@@ -24,9 +24,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
     var page = window.CQ.CoreComponentsIT.Page.v1;
-    
-    var tag1 = "TestTags : TestTag1";
-    var tag2 = "TestTags : TestTag2";
+
+    var tag1 = "TestTag1";
+    var tag2 = "TestTag2";
     var pageTitle = "This is the page title";
     var navTitle = "This is the navigation title";
     var subtitle = "This is the page subtitle";
@@ -44,14 +44,14 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
      * Test: open the page property.
      */
     page.openPageProperties = new h.TestCase("Open the page property")
-        //select the page
-            .execFct(function (opts, done) {
-                c.setPageName(h.param("testPagePath")(opts), "testPageName", done);
-            })
-            .navigateTo("/mnt/overlay/wcm/core/content/sites/properties.html?item=%testPagePath%")
-            //.click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
-            //.click("button.cq-siteadmin-admin-actions-properties-activator",{expectNav:true})
-            ;
+    //select the page
+        .execFct(function (opts, done) {
+            c.setPageName(h.param("testPagePath")(opts), "testPageName", done);
+        })
+        .navigateTo("/mnt/overlay/wcm/core/content/sites/properties.html?item=%testPagePath%")
+    //.click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
+    //.click("button.cq-siteadmin-admin-actions-properties-activator",{expectNav:true})
+    ;
 
     /**
      * Before Test Case
@@ -79,15 +79,20 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             });
     };
 
-        /**
-         * Test: Check the Basic Title and Tags options of a page properties.
-         */
-        page.tcBasicTitleAndTagsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-            return new h.TestCase("Basic Title and Tags page properties", {
+    /**
+     * Test: Check the Basic Title and Tags options of a page properties.
+     */
+    page.tcBasicTitleAndTagsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Basic Title and Tags page properties", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest
         })
-        // open the new page in the sites
+
+            // create tags
+            .execFct(function (opts, done) {c.addTag(tag1, done); })
+            .execFct(function (opts, done) {c.addTag(tag2, done); })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
@@ -109,16 +114,16 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .fillInput("input[name='./jcr:title']", "Page")
 
             //add two tags
-           .click("foundation-autocomplete.cq-ui-tagfield button")
-            .click("coral-columnview-item-content[title='TestTags']")
-            .click("coral-columnview-item:contains('TestTag1') coral-columnview-item-thumbnail")
-            .click("coral-columnview-item:contains('TestTag2') coral-columnview-item-thumbnail")
+            .click("foundation-autocomplete.cq-ui-tagfield button")
+            .click("coral-columnview-item-content[title='Standard Tags']")
+            .click("coral-columnview-item:contains('" + tag1 + "') coral-columnview-item-thumbnail")
+            .click("coral-columnview-item:contains('"+ tag2+ "') coral-columnview-item-thumbnail")
             .click("button.granite-pickerdialog-submit")
             //check if tags were added
             .assert.exist("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag1 + "')")
             .assert.exist("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "')")
 
-            //detele a tag
+            //delete a tag
             .click("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "') > button")
             .assert.exist("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "')", false)
 
@@ -145,58 +150,58 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             });
     };
 
-        /**
-         * Test: Check the Basic More titles and descriptions options of a page properties.
-         */
-        page.tcBasicTitlesAndDescriptionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-            return new h.TestCase("Basic Titles and Descriptions page properties", {
-                execBefore: tcExecuteBeforeTest,
-                execAfter: tcExecuteAfterTest
+    /**
+     * Test: Check the Basic More titles and descriptions options of a page properties.
+     */
+    page.tcBasicTitlesAndDescriptionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Basic Titles and Descriptions page properties", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+        // open the new page in the sites
+            .navigateTo("/sites.html%testPagePath%")
+
+            .execTestCase(page.openPageProperties)
+
+            /***** Insert information for 'More Titles and Description' *****/
+
+            //open the Basic tab
+            .click("coral-tab-label:contains('Basic')")
+            //check if the "Basic" option was selected
+            .assert.isTrue(function () {
+                return h.find("coral-tab.is-selected coral-tab-label:contains('Basic')").size() === 1
             })
-            // open the new page in the sites
-                .navigateTo("/sites.html%testPagePath%")
 
-                .execTestCase(page.openPageProperties)
+            .simulate("input[name='./pageTitle']", "key-sequence",
+                {sequence: pageTitle})
+            .simulate("input[name='./navTitle']", "key-sequence",
+                {sequence: navTitle})
+            .simulate("input[name='./subtitle']", "key-sequence",
+                {sequence: subtitle})
+            .simulate("textarea[name='./jcr:description']", "key-sequence",
+                {sequence: description})
 
-                /***** Insert information for 'More Titles and Description' *****/
+            /*****  Check if the date is saved *****/
 
-                //open the Basic tab
-                .click("coral-tab-label:contains('Basic')")
-                //check if the "Basic" option was selected
-                .assert.isTrue(function () {
-                    return h.find("coral-tab.is-selected coral-tab-label:contains('Basic')").size() === 1
-                })
+            //save the configuration and open again the page property
+            .click("coral-buttongroup button:contains('Save & Close')",{expectNav:true})
+            .execTestCase(page.openPageProperties)
+            .click("coral-tab-label:contains('Basic')")
 
-                .simulate("input[name='./pageTitle']", "key-sequence",
-                    {sequence: pageTitle})
-                .simulate("input[name='./navTitle']", "key-sequence",
-                    {sequence: navTitle})
-                .simulate("input[name='./subtitle']", "key-sequence",
-                    {sequence: subtitle})
-                .simulate("textarea[name='./jcr:description']", "key-sequence",
-                    {sequence: description})
-
-                /*****  Check if the date is saved *****/
-
-                //save the configuration and open again the page property
-                .click("coral-buttongroup button:contains('Save & Close')",{expectNav:true})
-                .execTestCase(page.openPageProperties)
-                .click("coral-tab-label:contains('Basic')")
-
-                //check the saved data
-                .assert.isTrue(function (opts) {
-                    return h.find("input[name='./pageTitle']").val() === pageTitle
-                })
-                .assert.isTrue(function (opts) {
-                    return h.find("input[name='./navTitle']").val() === navTitle
-                })
-                .assert.isTrue(function (opts) {
-                    return h.find("input[name='./subtitle']").val() === subtitle
-                })
-                .assert.isTrue(function (opts) {
-                    return h.find("textarea[name='./jcr:description").val() === description
-                });
-        };
+            //check the saved data
+            .assert.isTrue(function (opts) {
+                return h.find("input[name='./pageTitle']").val() === pageTitle
+            })
+            .assert.isTrue(function (opts) {
+                return h.find("input[name='./navTitle']").val() === navTitle
+            })
+            .assert.isTrue(function (opts) {
+                return h.find("input[name='./subtitle']").val() === subtitle
+            })
+            .assert.isTrue(function (opts) {
+                return h.find("textarea[name='./jcr:description").val() === description
+            });
+    };
 
     /**
      * Test: Check the Basic On/Off time options of a page properties.
@@ -750,8 +755,8 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     };
 
     /**
-    * Test: Check the Edit Closed User Group options of a page properties.
-    */
+     * Test: Check the Edit Closed User Group options of a page properties.
+     */
     page.tcEditUserGroupPermissionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Edit user group's permissions for a page", {
             execBefore: tcExecuteBeforeTest,
@@ -802,8 +807,8 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     };
 
     /**
-    * Test: Check the Effective Permissions options of a page properties.
-    */
+     * Test: Check the Effective Permissions options of a page properties.
+     */
     page.tcEffectivePermissionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Effective permissions for a page", {
             execBefore: tcExecuteBeforeTest,
