@@ -482,7 +482,7 @@
             <dependency>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.commons.johnzon</artifactId>
-                <version>1.1.0</version>
+                <version>1.0.0</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -576,7 +576,7 @@
             <dependency>
                 <groupId>com.adobe.aem</groupId>
                 <artifactId>uber-jar</artifactId>
-                <version>6.3.1.2</version>
+                <version>6.3.1.1</version>
                 <classifier>apis</classifier>
                 <scope>provided</scope>
             </dependency>
