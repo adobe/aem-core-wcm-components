@@ -240,9 +240,9 @@
         <!-- Testing dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.junit.core</artifactId>
+            <artifactId>core.wcm.components.sandbox.junit.core</artifactId>
             <scope>test</scope>
-            <version>1.9.27-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- for testing we need the new ResourceTypeBasedResourcePicker -->
         <dependency>
