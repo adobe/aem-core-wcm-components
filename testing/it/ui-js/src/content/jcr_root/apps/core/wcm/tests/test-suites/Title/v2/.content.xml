@@ -5,4 +5,4 @@
         aem.core-components.testsuite,
         aem.core-components.testsuite.title,
         aem.core-components.testsuite.title.v2]"
-    dependencies="[aem.core-components.tests.title.v2]"/>
+    dependencies="[aem.core-components.tests.commons, aem.core-components.tests.title.v1]"/>
