@@ -22,13 +22,12 @@
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
     var titleV1 = window.CQ.CoreComponentsIT.Title.v1;
-    var titleV2 = window.CQ.CoreComponentsIT.Title.v2;
 
     /**
      * v2 specifics
      */
-    var tcExecuteBeforeTest = titleV2.tcExecuteBeforeTest(c.rtTitle_v2, "core/wcm/tests/components/test-page-v2");
-    var tcExecuteAfterTest = titleV2.tcExecuteAfterTest(c.policyPath, c.policyAssignmentPath);
+    var tcExecuteBeforeTest = titleV1.tcExecuteBeforeTest(c.rtTitle_v2, "core/wcm/tests/components/test-page-v2");
+    var tcExecuteAfterTest = titleV1.tcExecuteAfterTest(c.policyPath, c.policyAssignmentPath);
 
     /**
      * The main test suite for Title component
