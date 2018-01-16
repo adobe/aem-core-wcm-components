@@ -23,7 +23,7 @@
     <parent>
         <artifactId>core.wcm.components.parent</artifactId>
         <groupId>com.adobe.cq</groupId>
-        <version>2.0.0</version>
+        <version>2.0.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.all</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>content-package</packaging>
 
     <name>Adobe Experience Manager Core WCM Components Full Package</name>
@@ -40,7 +40,7 @@
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
         <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
         <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/all</url>
-        <tag>core.wcm.components.reactor-2.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <build>
