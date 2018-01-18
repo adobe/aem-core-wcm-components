@@ -16,7 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
