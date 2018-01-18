@@ -59,6 +59,11 @@ public class ListImplTest {
     private static final String LIST_9 = "/content/list/listTypes/staticOrderByModificationDateListType";
     private static final String LIST_10 = "/content/list/listTypes/staticOrderByModificationDateDescListType";
     private static final String LIST_11 = "/content/list/listTypes/staticMaxItemsListType";
+    private static final String LIST_12 = "/content/list/listTypes/staticOrderByModificationDateListTypeWithNoModificationDate";
+    private static final String LIST_13 = "/content/list/listTypes/staticOrderByModificationDateListTypeWithNoModificationDateForOneItem";
+    private static final String LIST_14 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitle";
+    private static final String LIST_15 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitleForOneItem";
+
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
@@ -157,6 +162,34 @@ public class ListImplTest {
         List list = getListUnderTest(LIST_11);
         checkListConsistency(list, new String[]{"Page 1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_11));
+    }
+
+    @Test
+    public void testOrderByModificationDateWithNoModificationDate() throws Exception {
+        List list = getListUnderTest(LIST_12);
+        checkListConsistency(list, new String[]{"Page 1.1", "Page 1.2"});
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_12));
+    }
+
+    @Test
+    public void testOrderByModificationDateWithNoModificationDateForOneItem() throws Exception {
+        List list = getListUnderTest(LIST_13);
+        checkListConsistency(list, new String[]{"Page 1", "Page 1.2"});
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_13));
+    }
+
+    @Test
+    public void testOrderByTitleWithNoTitle() throws Exception {
+        List list = getListUnderTest(LIST_14);
+        checkListConsistency(list, new String[]{null, null});
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_14));
+    }
+
+    @Test
+    public void testOrderByTitleWithNoTitleForOneItem() throws Exception {
+        List list = getListUnderTest(LIST_15);
+        checkListConsistency(list, new String[]{"Page 1", "Page 2", null});
+        Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_15));
     }
 
     private List getListUnderTest(String resourcePath) {

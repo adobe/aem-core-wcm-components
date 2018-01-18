@@ -16,10 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
@@ -391,9 +388,19 @@ public class ListImpl implements List {
         public int compare(Page item1, Page item2) {
             int i = 0;
             if (orderBy == OrderBy.MODIFIED) {
-                i = item1.getLastModified().compareTo(item2.getLastModified());
+                if (item1.getLastModified() != null && item2.getLastModified() != null) {
+                    i = item1.getLastModified().compareTo(item2.getLastModified());
+                } else {
+                    // define null date to be after nonnull, two null dates are equal
+                    i = (item1.getLastModified() == null ? 0 : -1) + (item2.getLastModified() == null ? 0 : 1);
+                }
             } else if (orderBy == OrderBy.TITLE) {
-                i = item1.getTitle().compareTo(item2.getTitle());
+                if (item1.getTitle() != null && item2.getTitle() != null) {
+                    i = item1.getTitle().compareTo(item2.getTitle());
+                } else {
+                    // define null title is after nonnull, two null titles are equal
+                    i = (item1.getTitle() == null ? 0 : -1) + (item2.getTitle() == null ? 0 : 1);
+                }
             }
 
             if (sortOrder == SortOrder.DESC) {
