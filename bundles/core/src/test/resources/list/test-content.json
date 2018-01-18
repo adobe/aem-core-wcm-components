@@ -116,7 +116,8 @@
             "orderBy"             : "modified",
             "pages"               : [
                 "/content/list/pages/page_1",
-                "/content/list/pages/page_1/page_1_2"
+                "/content/list/pages/page_1/page_1_2",
+                "/content/list/pages/page_2"
             ]
         },
         "staticOrderByModificationDateDescListType": {

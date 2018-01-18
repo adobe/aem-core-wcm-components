@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -391,19 +392,11 @@ public class ListImpl implements List {
         public int compare(Page item1, Page item2) {
             int i = 0;
             if (orderBy == OrderBy.MODIFIED) {
-                if (item1.getLastModified() != null && item2.getLastModified() != null) {
-                    i = item1.getLastModified().compareTo(item2.getLastModified());
-                } else {
-                    // define null date to be after nonnull, two null dates are equal
-                    i = (item1.getLastModified() == null ? 0 : -1) + (item2.getLastModified() == null ? 0 : 1);
-                }
+                // getLastModified may return null, define null to be after nonnull values
+                i = ObjectUtils.compare(item1.getLastModified(), item2.getLastModified(), true);
             } else if (orderBy == OrderBy.TITLE) {
-                if (item1.getTitle() != null && item2.getTitle() != null) {
-                    i = item1.getTitle().compareTo(item2.getTitle());
-                } else {
-                    // define null title is after nonnull, two null titles are equal
-                    i = (item1.getTitle() == null ? 0 : -1) + (item2.getTitle() == null ? 0 : 1);
-                }
+                // getTitle may return null, define null to be greater than nonnull values
+                i = ObjectUtils.compare(item1.getTitle(), item2.getTitle(), true);
             }
 
             if (sortOrder == SortOrder.DESC) {
