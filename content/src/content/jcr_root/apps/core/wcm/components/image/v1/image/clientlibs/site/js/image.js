@@ -49,13 +49,13 @@
             var source = imageElement.getAttribute(options.sourceAttribute);
             imageElement.removeAttribute(options.sourceAttribute);
             imageElement.setAttribute('data-src-disabled', source);
+            container.insertBefore(imageElement, noScriptElement);
             noScriptElement.remove();
-            container.insertBefore(imageElement, container.firstChild);
 
             if (container.matches(options.imageSelector)) {
                 image = container;
             } else {
-                image = container.querySelector(options.imageSelector);
+                image = imageElement;
             }
 
             that.container = container;
