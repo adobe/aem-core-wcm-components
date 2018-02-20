@@ -37,6 +37,7 @@
         .addTestCase(formContainer.setMailAction(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formContainer.setContextPath(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formContainer.setThankYouPage(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/form/container/v1/container/clientlibs/site.css'));
         //The View Data button can't be tested because it tries to open a new window and this can't be tested with hobbes
         // NOTE: its not possible to test reliably if the test workflow has been started so no workflow test
         //.addTestCase(startWorkflow)

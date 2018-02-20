@@ -56,5 +56,6 @@
         .addTestCase(formTextV1.setReadOnly(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formTextV2.setRequired(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formTextV2.setConstraintMessage(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/form/text/v2/text/clientlibs/site.js'))
     ;
 }(hobs, jQuery));

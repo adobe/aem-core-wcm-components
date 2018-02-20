@@ -51,5 +51,6 @@
         .addTestCase(list.tcLinkItemsForList(tcExecuteBeforeTest, tcExecuteAfterTest)) 
         .addTestCase(list.tcShowDescriptionForList(tcExecuteBeforeTest, tcExecuteAfterTest)) 
         .addTestCase(list.tcShowDateForList(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/list/v1/list/clientlibs/site.css'));
     ;
 }(hobs, jQuery));

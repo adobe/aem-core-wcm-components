@@ -814,4 +814,23 @@
         // 2 sec wait for Edge to avoid random failing of very first test in a test run
         .wait(2000);
 
+    c.tcCheckProxiedClientLibrary = function(libraryPath) {
+        var clientlibraryPath = '/etc.clientlibs' + libraryPath;
+        return new hobs.TestCase('Test proxied client library - ' + libraryPath.substring(libraryPath.lastIndexOf('/') + 1))
+            .execFct(function (opts, done) {
+                jQuery.ajax({
+                    url: clientlibraryPath,
+                    method: 'GET'
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    done(false, 'Trying to access proxied client library ' + clientlibraryPath + ' failed with error: ' + textStatus + "," + errorThrown);
+                }).done(function (data, textStatus, jqXHR) {
+                    if (jqXHR.status === 200) {
+                        done(true);
+                    } else {
+                        done(false, 'Expected 200 status code for proxied client library ' + clientlibraryPath + '; instead got ' + jqXHR.status);
+                    }
+                });
+        });
+    };
+
 }(hobs, jQuery));

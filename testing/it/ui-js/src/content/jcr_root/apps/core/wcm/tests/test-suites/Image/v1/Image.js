@@ -43,6 +43,6 @@
         .addTestCase(image.tcSetCaption(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(image.tcSetCaptionAsPopup(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(image.tcSetImageAsDecorative(tcExecuteBeforeTest, tcExecuteAfterTest))
-
+        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/image/v1/image/clientlibs/site.js'));
     ;
 }(hobs, jQuery));
