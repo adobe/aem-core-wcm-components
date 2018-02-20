@@ -43,6 +43,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v2/image";
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
     private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+    private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
 
     private String srcUriTemplate;
 
@@ -83,9 +84,18 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
+
             srcUriTemplate = request.getContextPath() + Text.escapePath(baseResourcePath) + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR +
                     SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                     (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+
+            // if content policy delegate path is provided pass it to the image Uri
+            String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
+            if (StringUtils.isNotBlank(policyDelegatePath)) {
+                srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+                src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
+            }
+
             buildJson();
         }
     }

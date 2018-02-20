@@ -102,7 +102,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
         BufferedImage image = ImageIO.read(byteArrayInputStream);
@@ -120,7 +120,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         assertEquals("Expected a 404 response when the design does not allow the requested width to be rendered.", HttpServletResponse
                 .SC_NOT_FOUND, response.getStatus());
@@ -147,7 +147,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = spy(requestResponsePair.getRight());
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         verify(response).setContentType("image/png");
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
@@ -208,7 +208,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(response.getOutput());
         BufferedImage image = ImageIO.read(byteArrayInputStream);
@@ -293,7 +293,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         InputStream directStream = this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.png");
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
@@ -309,7 +309,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         InputStream directStream = this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.png");
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
@@ -325,7 +325,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         BufferedImage image = ImageIO.read(stream);
@@ -381,7 +381,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         assertEquals("Expected a 200 response code.", 200, response.getStatus());
         assertEquals("Mon, 20 Mar 2017 10:20:39 GMT", response.getHeader(HttpConstants.HEADER_LAST_MODIFIED));
@@ -403,7 +403,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         assertEquals("Expected a 302 response code.", 302, response.getStatus());
         assertEquals("Expected redirect location with correct last modified suffix",
@@ -418,7 +418,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("");
         servlet.doGet(request, response);
@@ -529,7 +529,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
     }
@@ -541,7 +541,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
-        when(contentPolicyManager.getPolicy(request.getResource())).thenReturn(contentPolicy);
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
         servlet.doGet(request, response);
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(response.getOutput()));
         assertEquals("Expected the cropped rectangle to have a 1390px width, since the servlet should not perform cropping upscaling.",

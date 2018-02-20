@@ -1,0 +1,12 @@
+{
+    "widths": [
+        600
+    ],
+    "lazyEnabled"           : false,
+    "srcUriTemplate"        : "/core/content/test/jcr%3acontent/root/image3.img{.width}.png?contentPolicyDelegatePath=/content/test/jcr:content/root/image0",
+    "title"                 : "Adobe Logo",
+    "alt"                   : "Adobe Logo",
+    "link"                  : "https://www.adobe.com",
+    "src"                   : "/core/content/test/jcr%3acontent/root/image3.img.600.png?contentPolicyDelegatePath=/content/test/jcr:content/root/image0",
+    ":type"                 : "core/wcm/components/image/v2/image"
+}
