@@ -184,9 +184,12 @@
         }
 
         function unwrapNoScript() {
-            var tmp = document.createElement('div');
-            tmp.innerHTML = decodeNoscript(that._elements.noscript.textContent.trim());
-            var imageElement = tmp.firstElementChild;
+            var markup = decodeNoscript(that._elements.noscript.textContent.trim());
+            var parser = new DOMParser();
+
+            // temporary document avoids requesting the image before removing its src
+            var temporaryDocument = parser.parseFromString(markup, "text/html");
+            var imageElement = temporaryDocument.querySelector(selectors.image);
             imageElement.removeAttribute('src');
 
             that._elements.container.insertBefore(imageElement, that._elements.noscript);
