@@ -30,7 +30,8 @@
     $(document).on('dialog-loaded', function (e) {
         var $dialog        = e.dialog,
             $dialogContent = $dialog.find(dialogContentSelector),
-            dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
+            dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined,
+            isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
         if (dialogContent) {
             altTuple          =
                 new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
@@ -46,7 +47,9 @@
                     fileReference = e.path;
                     retrieveDAMInfo(fileReference).then(
                         function () {
-                            altTuple.hideCheckbox(dialogContent.querySelector('coral-checkbox[name="./isDecorative"]').checked);
+                            if (isDecorative) {
+                                altTuple.hideCheckbox(isDecorative.checked);
+                            }
                             captionTuple.hideCheckbox(false);
                             altTuple.reinitCheckbox();
                             captionTuple.reinitCheckbox();
@@ -58,7 +61,9 @@
                     captionTuple.reset();
                 });
                 $cqFileUpload.on('coral-fileupload:fileadded', function () {
-                    altTuple.hideTextfield(dialogContent.querySelector('coral-checkbox[name="./isDecorative"]').checked);
+                    if (isDecorative) {
+                        altTuple.hideTextfield(isDecorative.checked);
+                    }
                     altTuple.hideCheckbox(true);
                     captionTuple.hideTextfield(false);
                     captionTuple.hideCheckbox(true);
@@ -96,17 +101,19 @@
     });
 
     function toggleAlternativeFieldsAndLink(checkbox) {
-        if (checkbox.checked) {
-            $linkURLGroup.hide();
-            $altGroup.hide();
-        } else {
-            $altGroup.show();
-            $linkURLGroup.show();
-        }
-        $linkURLField.adaptTo('foundation-field').setDisabled(checkbox.checked);
-        altTuple.hideTextfield(checkbox.checked);
-        if (fileReference) {
-            altTuple.hideCheckbox(checkbox.checked);
+        if (checkbox) {
+            if (checkbox.checked) {
+                $linkURLGroup.hide();
+                $altGroup.hide();
+            } else {
+                $altGroup.show();
+                $linkURLGroup.show();
+            }
+            $linkURLField.adaptTo('foundation-field').setDisabled(checkbox.checked);
+            altTuple.hideTextfield(checkbox.checked);
+            if (fileReference) {
+                altTuple.hideCheckbox(checkbox.checked);
+            }
         }
     }
 
@@ -216,15 +223,17 @@
      * The text field will be disabled when the checkbox is checked, or enabled if the checkbox is not checked.
      */
     CheckboxTextfieldTuple.prototype.update = function () {
-        if (this._checkboxFoundation.getValue() === 'true') {
-            this._textfieldFoundation.setValue(this._textfield.getAttribute(this.ATTR_SEEDED_VALUE));
-            this._textfieldFoundation.setDisabled(true);
-        } else {
-            var previousValue = this._textfield.getAttribute(this.ATTR_PREVIOUS_VALUE);
-            if (previousValue !== undefined && previousValue !== null) {
-                this._textfieldFoundation.setValue(previousValue);
+        if (this._checkboxFoundation && this._textfieldFoundation && this._textfield) {
+            if (this._checkboxFoundation.getValue() === 'true') {
+                this._textfieldFoundation.setValue(this._textfield.getAttribute(this.ATTR_SEEDED_VALUE));
+                this._textfieldFoundation.setDisabled(true);
+            } else {
+                var previousValue = this._textfield.getAttribute(this.ATTR_PREVIOUS_VALUE);
+                if (previousValue !== undefined && previousValue !== null) {
+                    this._textfieldFoundation.setValue(previousValue);
+                }
+                this._textfieldFoundation.setDisabled(false);
             }
-            this._textfieldFoundation.setDisabled(false);
         }
     };
 
@@ -235,10 +244,12 @@
      * @param {String} [value] the value to seed
      */
     CheckboxTextfieldTuple.prototype.seedTextValue = function (value) {
-        if (value !== undefined && value !== null) {
-            this._textfield.setAttribute(this.ATTR_SEEDED_VALUE, value);
-        } else {
-            this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
+        if (this._textfield) {
+            if (value !== undefined && value !== null) {
+                this._textfield.setAttribute(this.ATTR_SEEDED_VALUE, value);
+            } else {
+                this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
+            }
         }
     };
 
@@ -249,23 +260,27 @@
      * @see {@link CheckboxTextfieldTuple#seedTextValue}
      */
     CheckboxTextfieldTuple.prototype.reset = function () {
-        this._checkboxFoundation.setValue(false);
-        this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
-        var previousValue = this._textfield.getAttribute(this.ATTR_PREVIOUS_VALUE);
-        if (previousValue !== undefined && previousValue !== null) {
-            this._textfieldFoundation.setValue(previousValue);
+        if (this._checkboxFoundation && this._textfield && this._textfieldFoundation) {
+            this._checkboxFoundation.setValue(false);
+            this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
+            var previousValue = this._textfield.getAttribute(this.ATTR_PREVIOUS_VALUE);
+            if (previousValue !== undefined && previousValue !== null) {
+                this._textfieldFoundation.setValue(previousValue);
+            }
+            this._textfieldFoundation.setDisabled(false);
         }
-        this._textfieldFoundation.setDisabled(false);
     };
 
     /**
      * Sets the checkbox to its initial checked state.
      */
     CheckboxTextfieldTuple.prototype.reinitCheckbox = function () {
-        var previousValue = this._checkbox.getAttribute(this.ATTR_PREVIOUS_VALUE);
-        if (previousValue !== undefined && previousValue !== null) {
-            this._checkboxFoundation.setValue(previousValue);
-            this.update();
+        if (this._checkbox && this._checkboxFoundation) {
+            var previousValue = this._checkbox.getAttribute(this.ATTR_PREVIOUS_VALUE);
+            if (previousValue !== undefined && previousValue !== null) {
+                this._checkboxFoundation.setValue(previousValue);
+                this.update();
+            }
         }
     };
 
@@ -274,10 +289,13 @@
      * @param {Boolean} [hide] when set to <code>true</code> the checkbox will be hidden
      */
     CheckboxTextfieldTuple.prototype.hideCheckbox = function (hide) {
-        if (hide) {
-            $(this._checkboxSelector).adaptTo('foundation-toggleable').hide();
-        } else {
-            $(this._checkboxSelector).adaptTo('foundation-toggleable').show();
+        var checkbox = $(this._checkboxSelector).adaptTo('foundation-toggleable');
+        if (checkbox) {
+            if (hide) {
+                checkbox.hide();
+            } else {
+                checkbox.show();
+            }
         }
     };
 
@@ -286,10 +304,13 @@
      * @param {Boolean} [hide] when set to <code>true</code> the text will be hidden
      */
     CheckboxTextfieldTuple.prototype.hideTextfield = function (hide) {
-        if (hide) {
-            $(this._textfieldSelector).adaptTo('foundation-toggleable').hide();
-        } else {
-            $(this._textfieldSelector).adaptTo('foundation-toggleable').show();
+        var textfield = $(this._textfieldSelector).adaptTo('foundation-toggleable');
+        if (textfield) {
+            if (hide) {
+                textfield.hide();
+            } else {
+                textfield.show();
+            }
         }
     };
 
