@@ -269,7 +269,37 @@
             .click(selectors.component.clear, {delay: 1000})
             .assert.visible(selectors.component.clear, false)
             .assert.visible(selectors.component.results, false)
-            .assert.exist(selectors.component.input + '[value="Page"]', false);
+            .execFct(function(opts, done) {
+                var $input = h.find(selectors.component.input);
+                if ($input[0].value === '') {
+                    done();
+                }
+            })
+    };
+
+    /**
+     * Test: Key: Enter key in input field doesn't navigate or clear input
+     */
+    search.testKeyEnterInput = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new TestCase('Key: Enter in input', {
+            execBefore: tcExecuteBeforeTest,
+            execAfter : tcExecuteAfterTest
+        })
+            .config.changeContext(c.getContentFrame)
+            .fillInput(selectors.component.input, 'Page', {delay: 1000})
+            .simulate(selectors.component.input, 'keydown', 13, {delay: 1000, delayAfter: 1000}) // Enter key
+            .execFct(function(opts, done) {
+                var location = h.context().window.location.href;
+                if (location.indexOf(h.param('page_1_1')()) > 0) {
+                    done();
+                }
+            })
+            .execFct(function(opts, done) {
+                var $input = h.find(selectors.component.input);
+                if ($input[0].value === 'Page') {
+                    done();
+                }
+            })
     };
 
     /**

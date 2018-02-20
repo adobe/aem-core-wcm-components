@@ -32,6 +32,7 @@
         .addTestCase(search.testDefaultConfiguration(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testChangeSearchRoot(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testClearButton(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(search.testKeyEnterInput(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testOutsideClick(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testMark(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(search.testMinLength(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
