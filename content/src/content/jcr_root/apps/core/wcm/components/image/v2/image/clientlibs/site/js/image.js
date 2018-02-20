@@ -139,7 +139,9 @@
 
             if (that._elements.image.getAttribute('src') !== url) {
                 that._elements.image.setAttribute('src', url);
-                window.removeEventListener('scroll', that.update);
+                if (!hasWidths) {
+                    window.removeEventListener('scroll', that.update);
+                }
             }
 
             if (that._lazyLoaderShowing) {
