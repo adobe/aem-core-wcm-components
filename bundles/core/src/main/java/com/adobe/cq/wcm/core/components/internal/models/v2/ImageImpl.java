@@ -85,7 +85,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
-            srcUriTemplate = request.getContextPath() + Text.escapePath(baseResourcePath) + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR +
+            srcUriTemplate = baseResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR +
                     SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                     (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
 

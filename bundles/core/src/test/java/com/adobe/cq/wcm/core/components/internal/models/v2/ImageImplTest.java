@@ -97,7 +97,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
 
     @Test
     public void testSimpleDecorativeImage() {
-        String escapedResourcePath = Text.escapePath(AbstractImageTest.IMAGE4_PATH);
+        String escapedResourcePath = AbstractImageTest.IMAGE4_PATH.replace("jcr:content", "_jcr_content");
         com.adobe.cq.wcm.core.components.models.Image image = getImageUnderTest(AbstractImageTest.IMAGE4_PATH);
         assertNull("Did not expect a value for the alt attribute, since the image is marked as decorative.", image.getAlt());
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
@@ -113,15 +113,15 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
 
     @Test
     public void testImageWithTwoOrMoreSmartSizes() {
-        String escapedResourcePath = Text.escapePath(AbstractImageTest.IMAGE0_PATH);
+        String escapedResourcePath = AbstractImageTest.IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
         assertEquals("Adobe Systems Logo and Wordmark in PNG format", image.getAlt());
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
-        String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image0.img.600.png/1490005239000.png\"," +
-                "\"/core/content/test/jcr%3acontent/root/image0.img.700.png/1490005239000.png\",\"/core/content/test/jcr%3acontent/root/image0" +
-                ".img.800.png/1490005239000.png\",\"/core/content/test/jcr%3acontent/root/image0.img.2000.png/1490005239000.png\", " +
-                "\"/core/content/test/jcr%3acontent/root/image0.img.2500.png/1490005239000.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":false}";
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0.img.600.png/1490005239000.png\"," +
+                "\"/core/content/test/_jcr_content/root/image0.img.700.png/1490005239000.png\",\"/core/content/test/_jcr_content/root/image0" +
+                ".img.800.png/1490005239000.png\",\"/core/content/test/_jcr_content/root/image0.img.2000.png/1490005239000.png\", " +
+                "\"/core/content/test/_jcr_content/root/image0.img.2500.png/1490005239000.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
         assertTrue(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
