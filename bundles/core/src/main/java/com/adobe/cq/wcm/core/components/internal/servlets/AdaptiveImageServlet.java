@@ -226,7 +226,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
             int resizeWidth = defaultResizeWidth;
             String widthSelector = selectors[selectors.length - 1];
-            List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(resourceResolver, component);
+            List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(resourceResolver, component, request);
             if (!DEFAULT_SELECTOR.equals(widthSelector)) {
                 try {
                     Integer width = Integer.parseInt(widthSelector);
@@ -615,7 +615,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param imageResource    the resource identifying the accessed image component
      * @return the list of the allowed widths; the list will be <i>empty</i> if the component doesn't have a content policy
      */
-    private List<Integer> getAllowedRenditionWidths(@Nonnull ResourceResolver resourceResolver, Resource imageResource) {
+    private List<Integer> getAllowedRenditionWidths(@Nonnull ResourceResolver resourceResolver, Resource imageResource, @Nonnull SlingHttpServletRequest request) {
         List<Integer> list = new ArrayList<>();
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
@@ -630,7 +630,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     }
                 }
             }
-            ContentPolicy contentPolicy = policyManager.getPolicy(imageResource);
+            ContentPolicy contentPolicy = policyManager.getPolicy(imageResource, request);
             if (contentPolicy != null) {
                 String[] allowedRenditionWidths = contentPolicy.getProperties()
                         .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);

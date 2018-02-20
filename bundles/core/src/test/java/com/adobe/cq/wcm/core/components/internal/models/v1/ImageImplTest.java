@@ -16,10 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.StringReader;
+import java.util.HashMap;
 
 import javax.json.Json;
 import javax.json.JsonReader;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -189,6 +191,10 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     protected <T> T getImageUnderTest(String resourcePath, Class<T> imageClass) {
+        return getImageUnderTest(resourcePath, imageClass, null);
+    }
+
+    protected <T> T getImageUnderTest(String resourcePath, Class<T> imageClass, String policyDelegatePath) {
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
@@ -222,6 +228,9 @@ public class ImageImplTest extends AbstractImageTest {
         slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
+        if (StringUtils.isNotBlank(policyDelegatePath)) {
+            request.setParameterMap(new HashMap<String, Object>() {{ put("contentPolicyDelegatePath", policyDelegatePath);}});
+        }
         return request.adaptTo(imageClass);
     }
 
