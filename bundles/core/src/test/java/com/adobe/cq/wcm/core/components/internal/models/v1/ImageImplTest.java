@@ -66,15 +66,16 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     public void testImageWithTwoOrMoreSmartSizes() {
-        String escapedResourcePath = Text.escapePath(IMAGE0_PATH);
+        String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
         assertEquals(IMAGE_TITLE_ALT, image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
-        String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image0.img.600.png/1490005239000.png\"," +
-                "\"/core/content/test/jcr%3acontent/root/image0.img.700.png/1490005239000.png\",\"/core/content/test/jcr%3acontent/root/image0" +
-                ".img.800.png/1490005239000.png\",\"/core/content/test/jcr%3acontent/root/image0.img.2000.png/1490005239000.png\", " +
-                "\"/core/content/test/jcr%3acontent/root/image0.img.2500.png/1490005239000.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0.img.600.png/1490005239000.png\"," +
+                "\"/core/content/test/_jcr_content/root/image0.img.700.png/1490005239000.png\"," +
+                "\"/core/content/test/_jcr_content/root/image0" +
+                ".img.800.png/1490005239000.png\",\"/core/content/test/_jcr_content/root/image0.img.2000.png/1490005239000.png\", " +
+                "\"/core/content/test/_jcr_content/root/image0.img.2500.png/1490005239000.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
@@ -84,7 +85,7 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     public void testImageWithOneSmartSize() {
-        String escapedResourcePath = Text.escapePath(IMAGE3_PATH);
+        String escapedResourcePath = IMAGE3_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE3_PATH);
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
         assertEquals(IMAGE_TITLE_ALT, image.getTitle());
@@ -92,7 +93,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertEquals(IMAGE_LINK, image.getLink());
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.600.png/1490005239000.png", image.getSrc());
-        String expectedJson = "{\"smartImages\":[\"/core/content/test/jcr%3acontent/root/image3.img.600.png/1490005239000.png\"]," +
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image3.img.600.png/1490005239000.png\"]," +
                 "\"smartSizes\":[600]," +
                 "\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
@@ -101,7 +102,7 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     public void testSimpleDecorativeImage() {
-        String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
+        String escapedResourcePath = IMAGE4_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE4_PATH);
         assertNull("Did not expect a value for the alt attribute, since the image is marked as decorative.", image.getAlt());
         assertNull("Did not expect a title for this image.", image.getTitle());
@@ -124,7 +125,7 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     public void testExtensionDeterminedFromMimetype() {
-        String escapedResourcePath = Text.escapePath(IMAGE18_PATH);
+        String escapedResourcePath = IMAGE18_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE18_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1490005239000.png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE18_PATH));
@@ -132,11 +133,11 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     public void testImageCacheKiller() {
-        String escapedResourcePath = Text.escapePath(IMAGE4_PATH);
+        String escapedResourcePath = IMAGE4_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE4_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
 
-        escapedResourcePath = Text.escapePath(IMAGE15_PATH);
+        escapedResourcePath = IMAGE15_PATH.replace("jcr:content", "_jcr_content");
         image = getImageUnderTest(IMAGE15_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.png/1494867377756.png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE15_PATH));
@@ -144,7 +145,7 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     public void testTIFFImage() {
-        String escapedResourcePath = Text.escapePath(IMAGE16_PATH);
+        String escapedResourcePath = IMAGE16_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE16_PATH);
         assertEquals(CONTEXT_PATH + escapedResourcePath + ".img.jpeg/1500299989000.jpeg", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE16_PATH));

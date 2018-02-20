@@ -200,15 +200,16 @@ public class ImageImpl implements Image {
             } else {
                 baseResourcePath = resource.getPath();
             }
+            baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             for (Integer width : supportedRenditionWidths) {
-                smartImages[index] = Text.escapePath(request.getContextPath() + baseResourcePath + DOT +
+                smartImages[index] = baseResourcePath + DOT +
                         AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + width + DOT + extension +
-                        (inTemplate ? templateRelativePath : "") +
-                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : ""));
+                        (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
                 smartSizes[index] = width;
                 index++;
             }
-            src = Text.escapePath(request.getContextPath() + baseResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT);
+            src = baseResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT;
             if (smartSizes.length == 1) {
                 src += smartSizes[0] + DOT + extension;
             } else {
