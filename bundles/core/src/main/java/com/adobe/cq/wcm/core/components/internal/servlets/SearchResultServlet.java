@@ -26,7 +26,6 @@ import javax.jcr.RangeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -102,12 +101,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         Page currentPage = getCurrentPage(request);
         if (currentPage != null) {
             Resource searchResource = getSearchContentResource(request, currentPage);
-            if (searchResource != null) {
-                List<ListItem> results = getResults(request, searchResource, currentPage);
-                writeJson(results, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
+            List<ListItem> results = getResults(request, searchResource, currentPage);
+            writeJson(results, response);
         }
     }
 
@@ -161,13 +156,23 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
 
 
     private List<ListItem> getResults(SlingHttpServletRequest request, Resource searchResource, Page currentPage) {
-        ValueMap valueMap = searchResource.getValueMap();
-        ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
-        int searchTermMinimumLength = valueMap.get(Search.PN_SEARCH_TERM_MINIMUM_LENGTH, contentPolicyMap.get(Search
-                .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
-        int resultsSize = valueMap.get(Search.PN_RESULTS_SIZE, contentPolicyMap.get(Search.PN_RESULTS_SIZE,
-                SearchImpl.PROP_RESULTS_SIZE_DEFAULT));
-        String searchRootPagePath = getSearchRootPagePath(searchResource, currentPage, contentPolicyMap);
+        int searchTermMinimumLength = SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
+        int resultsSize = SearchImpl.PROP_RESULTS_SIZE_DEFAULT;
+        String searchRootPagePath;
+        if (searchResource != null) {
+            ValueMap valueMap = searchResource.getValueMap();
+            ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
+            searchTermMinimumLength = valueMap.get(Search.PN_SEARCH_TERM_MINIMUM_LENGTH, contentPolicyMap.get(Search
+                        .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
+            resultsSize = valueMap.get(Search.PN_RESULTS_SIZE, contentPolicyMap.get(Search.PN_RESULTS_SIZE,
+                        SearchImpl.PROP_RESULTS_SIZE_DEFAULT));
+            String searchRoot = searchResource.getValueMap().get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, String
+                    .class));
+            searchRootPagePath = getSearchRootPagePath(searchRoot, currentPage);
+        } else {
+            String languageRoot = languageManager.getLanguageRoot(currentPage.getContentResource()).getPath();
+            searchRootPagePath = getSearchRootPagePath(languageRoot, currentPage);
+        }
         if (StringUtils.isEmpty(searchRootPagePath)) {
             searchRootPagePath = currentPage.getPath();
         }
@@ -212,10 +217,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return results;
     }
 
-    private String getSearchRootPagePath(Resource searchResource, Page currentPage, ValueMap contentPolicyMap) {
+    private String getSearchRootPagePath(String searchRoot, Page currentPage) {
         String searchRootPagePath = null;
-        ValueMap valueMap = searchResource.getValueMap();
-        String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, String.class));
         PageManager pageManager = currentPage.getPageManager();
         if (StringUtils.isNotEmpty(searchRoot) && pageManager != null) {
             Page rootPage = pageManager.getPage(searchRoot);
