@@ -156,7 +156,7 @@ public interface List extends ComponentExporter {
     /**
      * Returns the list's items collection, as {@link ListItem}s elements.
      *
-     * @return {@link Collection} of {@link com.adobe.cq.wcm.core.components.models.Page}s
+     * @return {@link Collection} of {@link ListItem}s
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     @Nonnull
