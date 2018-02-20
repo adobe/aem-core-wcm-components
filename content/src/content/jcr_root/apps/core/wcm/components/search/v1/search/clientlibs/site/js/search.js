@@ -207,9 +207,8 @@
                 }
                 break;
             case keyCodes.ENTER:
-                if (!self._resultsOpen()) {
-                    self._elements.form.submit();
-                } else {
+                event.preventDefault();
+                if (self._resultsOpen()) {
                     var focused = self._elements.results.querySelector(selectors.item.focused);
                     if (focused) {
                         focused.click();
