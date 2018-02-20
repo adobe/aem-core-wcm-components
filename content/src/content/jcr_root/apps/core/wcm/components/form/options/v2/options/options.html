@@ -16,7 +16,7 @@
 <sly data-sly-use.options="com.adobe.cq.wcm.core.components.models.form.Options"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-test.isNotEmpty="${options.items.size}">
-    <fieldset class="cmp-form-options">
+    <fieldset class="cmp-form-options cmp-form-options--${options.type.value}">
         <sly data-sly-test="${options.type.value == 'checkbox' || options.type.value == 'radio'}">
             <legend class="cmp-form-options__legend">${options.title}</legend>
             <label class="cmp-form-options__field-label" data-sly-repeat.optionItem="${options.items}">
