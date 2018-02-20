@@ -119,7 +119,7 @@
 
             that._elements.container = that._elements.link ? that._elements.link : that._elements.self;
 
-            unwrapNoscript();
+            unwrapNoScript();
 
             if (that._properties.lazy) {
                 addLazyLoader();
@@ -181,14 +181,14 @@
             that._lazyLoaderShowing = true;
         }
 
-        function unwrapNoscript() {
+        function unwrapNoScript() {
             var tmp = document.createElement('div');
             tmp.innerHTML = decodeNoscript(that._elements.noscript.textContent.trim());
             var imageElement = tmp.firstElementChild;
             imageElement.removeAttribute('src');
-            that._elements.noscript.parentNode.removeChild(that._elements.noscript);
-            that._elements.container.insertBefore(imageElement, that._elements.container.firstChild);
 
+            that._elements.container.insertBefore(imageElement, that._elements.noscript);
+            that._elements.noscript.parentNode.removeChild(that._elements.noscript);
             if (that._elements.container.matches(selectors.image)) {
                 that._elements.image = that._elements.container;
             } else {
