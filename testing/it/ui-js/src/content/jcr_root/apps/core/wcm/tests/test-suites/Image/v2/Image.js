@@ -42,5 +42,6 @@
         .addTestCase(imageV2.tcAddAltTextAndTitle(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV1.tcSetLink(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV2.tcDisableCaptionAsPopup(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(imageV2.tcSetImageAsDecorative(tcExecuteBeforeTest, tcExecuteAfterTest));
+        .addTestCase(imageV2.tcSetImageAsDecorative(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/image/v2/image/clientlibs/site.js'));
 }(hobs, jQuery));
