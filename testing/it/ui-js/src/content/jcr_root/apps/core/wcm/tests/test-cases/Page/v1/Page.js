@@ -116,9 +116,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             //add two tags
             .click("foundation-autocomplete.cq-ui-tagfield button")
             .click("coral-columnview-item-content[title='Standard Tags']")
-            .click("coral-columnview-item:contains('" + tag1 + "') coral-columnview-item-thumbnail")
-            .click("coral-columnview-item:contains('"+ tag2+ "') coral-columnview-item-thumbnail")
-            .click("button.granite-pickerdialog-submit")
+            .click("coral-columnview-item:contains('" + tag1 + "') coral-columnview-item-thumbnail",{after:1000})
+            .click("coral-columnview-item:contains('"+ tag2+ "') coral-columnview-item-thumbnail",{after:1000})
+            .click("button.granite-pickerdialog-submit",{after:1000})
             //check if tags were added
             .assert.exist("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag1 + "')")
             .assert.exist("coral-taglist[name='./cq:tags'] coral-tag:contains('" + tag2 + "')")
@@ -561,15 +561,15 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            .click("coral-tab-label:contains('Social Media')", {delay: 1000})
+            .click("coral-tab-label:contains('Social Media')", {after: 1000})
             //check if the "Social Media" option was selected
             .assert.isTrue(function () {
                 return h.find("coral-tab.is-selected coral-tab-label:contains('Social Media')").size() === 1
             })
 
             //test social media sharing
-            .click("input[name='./socialMedia'][value='facebook']")
-            .click("input[name='./socialMedia'][value='pinterest']")
+            .click("input[name='./socialMedia'][value='facebook']", {after: 1000})
+            .click("input[name='./socialMedia'][value='pinterest']", {after: 1000})
             .click("foundation-autocomplete[name='./variantPath'] button[title='Open Selection Dialog']")
             .click("form.granite-pickerdialog-content button:contains('Cancel')")
 
@@ -578,7 +578,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             //save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')",{expectNav:true})
             .execTestCase(page.openPageProperties)
-            .click("coral-tab-label:contains('Social Media')", {delay: 1000})
+            .click("coral-tab-label:contains('Social Media')", {after: 1000})
 
             //check if facebook is checked
             .assert.isTrue(function (opts) {
