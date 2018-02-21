@@ -54,18 +54,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
+                <version>3.0.0</version>
                 <configuration>
                     <stylesheet>maven</stylesheet>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <links>
-                        <link>http://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
-                        <link>http://java.sun.com/products/servlet/2.5/docs/servlet-2_5-mr2</link>
-                        <link>http://www.day.com/maven/jsr170/javadocs/jcr-2.0/</link>
-                        <link>http://sling.apache.org/apidocs/sling5</link>
-                        <link>http://dev.day.com/docs/en/cq/current/javadoc</link>
-                        <link>http://jackrabbit.apache.org/api/2.4</link>
-                        <link>http://www.osgi.org/javadoc/r4v42</link>
+                        <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
+                        <link>https://docs.oracle.com/javaee/7/api/</link>
+                        <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
+                        <link>https://sling.apache.org/apidocs/sling9/</link>
+                        <link>https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/reference-materials/javadoc/</link>
+                        <link>https://jackrabbit.apache.org/api/2.12/</link>
+                        <link>https://osgi.org/javadoc/r6/core/</link>
+                        <link>https://osgi.org/javadoc/r6/annotation/</link>
+                        <link>https://osgi.org/javadoc/r6/cmpn/</link>
                     </links>
                     <excludePackageNames>*.impl:*.internal</excludePackageNames>
                 </configuration>
@@ -200,7 +202,6 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>3.2.0</version>
-                    <inherited>true</inherited>
                     <configuration>
                         <instructions>
                             <Bundle-RequiredExecutionEnvironment>JavaSE-1.${aem.java.version}</Bundle-RequiredExecutionEnvironment>
@@ -247,10 +248,28 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9</version>
+                    <version>3.0.0</version>
                     <configuration>
+                        <stylesheet>maven</stylesheet>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <links>
+                            <link>https://docs.oracle.com/javase/${aem.java.version}/docs/api/</link>
+                            <link>https://docs.oracle.com/javaee/7/api/</link>
+                            <link>https://docs.adobe.com/docs/en/spec/jsr170/javadocs/jcr-2.0/</link>
+                            <link>https://sling.apache.org/apidocs/sling9/</link>
+                            <link>https://helpx.adobe.com/experience-manager/6-3/sites/developing/using/reference-materials/javadoc/</link>
+                            <link>https://jackrabbit.apache.org/api/2.12/</link>
+                            <link>https://osgi.org/javadoc/r6/core/</link>
+                            <link>https://osgi.org/javadoc/r6/annotation/</link>
+                            <link>https://osgi.org/javadoc/r6/cmpn/</link>
+                        </links>
                         <excludePackageNames>*.impl:*.internal</excludePackageNames>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.rat</groupId>
@@ -348,12 +367,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
-                <inherited>true</inherited>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
             <plugin>
@@ -423,14 +436,23 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                        </configuration>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
                                 <goals>
                                     <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
                                 </goals>
                             </execution>
                         </executions>
