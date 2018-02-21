@@ -244,6 +244,9 @@
             method: "POST",
             data: {
                 "./sling:resourceType": component,
+                "./jcr:created": "",
+                "./jcr:lastModified": "",
+                "./cq:lastModified": "",
                 ":order": order,
                 "_charset_": "utf-8",
                 ":nameHint": nameHint
