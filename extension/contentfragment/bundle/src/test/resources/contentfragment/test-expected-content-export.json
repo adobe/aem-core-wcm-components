@@ -1,13 +1,8 @@
 {
-  "description": "This is a test content fragment.",
   "title": "Test Content Fragment",
+  "description": "This is a test content fragment.",
   "model": "/content/dam/contentfragments/text-only/jcr:content/model",
-  ":itemsOrder": [
-    "main",
-    "second"
-  ],
-  ":type": "core/wcm/extension/sandbox/components/contentfragment/v1/contentfragment",
-  ":items": {
+  "elements": {
     "main": {
       "value": "<p>Main content</p>",
       "title": "Main",
@@ -18,5 +13,12 @@
       "title": "Second",
       ":type": "text/plain"
     }
-  }
+  },
+  "elementsOrder": [
+    "main",
+    "second"
+  ],
+  ":type": "core/wcm/extension/components/contentfragment/v1/contentfragment",
+  ":items": {},
+  ":itemsOrder": []
 }

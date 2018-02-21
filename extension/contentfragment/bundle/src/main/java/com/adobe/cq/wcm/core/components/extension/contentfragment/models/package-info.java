@@ -13,19 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components;
+@Version("1.0.0")
+package com.adobe.cq.wcm.core.components.extension.contentfragment.models;
 
-import org.junit.Test;
-
-import com.adobe.cq.wcm.core.components.testing.AbstractModelTest;
-
-public class ModelsCommonsTest extends AbstractModelTest{
-
-    @Test
-    public void testDefaultBehaviour() throws Exception {
-        testDefaultBehaviour(new String[] {
-                "com.adobe.cq.wcm.core.components.extension.contentfragment.models"
-        });
-    }
-
-}
+import org.osgi.annotation.versioning.Version;

@@ -23,15 +23,15 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.sandbox.parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>2.0.0</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>core.wcm.components.sandbox.extension.contentfragment.bundle</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
+    <version>0.0.7-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>Adobe Experience Manager Core WCM Components Extension - Structured Content Fragment Bundle - Sandbox</name>
+    <name>Adobe Experience Manager Core WCM Components Extension - Structured Content Fragment Bundle</name>
 
     <scm>
         <connection>scm:git:https://git.corp.adobe.com/CQ/aem-core-wcm-components.git</connection>
@@ -62,7 +62,7 @@
                 <configuration>
                     <instructions>
                         <!-- The Sling-Model-Packages instruction needs to point to the implementation package -->
-                        <Sling-Model-Packages>com.adobe.cq.wcm.core.components.sandbox.extension.contentfragment.internal.models</Sling-Model-Packages>
+                        <Sling-Model-Packages>com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models</Sling-Model-Packages>
                     </instructions>
                 </configuration>
             </plugin>
@@ -242,7 +242,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.sandbox.junit.core</artifactId>
             <scope>test</scope>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>2.0.0</version>
         </dependency>
         <!-- for testing we need the new ResourceTypeBasedResourcePicker -->
         <dependency>
