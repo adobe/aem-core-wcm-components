@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -204,7 +205,7 @@ public class ContainerImpl implements Container {
                 exportedItemsOrder = ArrayUtils.EMPTY_STRING_ARRAY;
             }
         }
-        return exportedItemsOrder;
+        return Arrays.copyOf(exportedItemsOrder,exportedItemsOrder.length);
     }
 
     @Nonnull
