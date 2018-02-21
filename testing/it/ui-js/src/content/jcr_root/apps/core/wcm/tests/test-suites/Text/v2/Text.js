@@ -22,9 +22,12 @@
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
     var textV1 = window.CQ.CoreComponentsIT.Text.v1;
+    var textV2 = window.CQ.CoreComponentsIT.Text.v2;
     var selectors = {
         editor: '.text.aem-GridColumn p',
-        rendered: '.cmp-text > p'
+        editorConf: '.text.aem-GridColumn div',
+        rendered: '.cmp-text > p',
+        renderedConf: '.cmp-text > div'
     };
 
     /**
@@ -36,9 +39,10 @@
     /**
      * The main test suite for Text Component
      */
-    new h.TestSuite('Text v2', {path: '/apps/core/wcm/test-suites/core-components-it/v2/Text.js',
+    new h.TestSuite('Text v2', {path: '/apps/core/wcm/tests/test-suites/Text/v2/Text.js',
         execBefore:c.tcExecuteBeforeTestSuite,
         execInNewWindow : false})
 
-        .addTestCase(textV1.tcSetTextValueUsingInlineEditor(selectors, tcExecuteBeforeTest, tcExecuteAfterTest));
+        .addTestCase(textV1.tcSetTextValueUsingInlineEditor(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(textV2.tcCheckTextWithXSSProtection(selectors, tcExecuteBeforeTest, tcExecuteAfterTest));
 }(hobs, jQuery));
