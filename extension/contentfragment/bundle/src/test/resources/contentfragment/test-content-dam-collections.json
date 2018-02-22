@@ -1,0 +1,18 @@
+{
+    "X": {
+        "jcr:primaryType"     : "nt:unstructured",
+        "X7v6pJAcy5qtkUdXdIxR": {
+            "jcr:primaryType": "nt:unstructured",
+            "test"           : {
+                "jcr:primaryType"        : "nt:unstructured",
+                "sling:resourceSuperType": "sling/collection",
+                "sling:resourceType"     : "dam/collection",
+                "jcr:title"              : "Test Collection",
+                "sling:members":         {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resources": []
+                }
+            }
+        }
+    }
+}

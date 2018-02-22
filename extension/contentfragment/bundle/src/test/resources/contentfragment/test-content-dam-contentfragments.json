@@ -1,0 +1,266 @@
+{
+    "text-only" : {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes" : ["mix:referenceable"],
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Fri Aug 25 2017 14:43:41 GMT+0200",
+        "jcr:uuid"       : "5037ca42-4dab-4a55-aaa8-1a3db1f2e2c4",
+        "jcr:content"    : {
+            "jcr:primaryType": "dam:AssetContent",
+            "jcr:title"      : "Test Content Fragment",
+            "dam:assetState" : "unProcessed",
+            "jcr:description": "This is a test content fragment.",
+            "contentFragment": true,
+            "renditions"     : {
+                "jcr:primaryType": "nt:folder",
+                "jcr:createdBy"  : "admin",
+                "jcr:created"    : "Fri Aug 25 2017 14:43:41 GMT+0200",
+                "original"       : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "text/html",
+                        "jcr:lastModified"  : "Mon Aug 28 2017 14:39:00 GMT+0200",
+                        ":jcr:data"         : 20
+                    }
+                },
+                "teaser"         : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "text/html",
+                        "jcr:lastModified"  : "Mon Aug 28 2017 14:39:00 GMT+0200",
+                        ":jcr:data"         : 20
+                    }
+                }
+            },
+            "related"        : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "associated"     : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "sling/collection",
+                "sling:members"     : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resources": ["/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"],
+                    "test"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resource" : "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"
+                    }
+                }
+            },
+            "metadata"       : {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:mixinTypes" : ["cq:Taggable"]
+            },
+            "model"          : {
+                "jcr:primaryType"  : "nt:unstructured",
+                "jcr:title"        : "Test Fragment Model",
+                "version"          : 1,
+                "jcr:description"  : "This is a test fragment model",
+                "precreateElements": true,
+                "elements"         : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "main"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:title"      : "Main",
+                        "defaultContent" : "",
+                        "name"           : "main"
+                    },
+                    "second"         : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:title"      : "Second",
+                        "defaultContent" : "",
+                        "name"           : "second",
+                        "assetName"      : "second"
+                    }
+                },
+                "variations": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "teaser"         : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:description": "Teaser variation",
+                        "jcr:title"      : "Teaser",
+                        "name"           : "teaser"
+                    }
+                }
+            }
+        },
+        "subassets"      : {
+            "jcr:primaryType": "sling:OrderedFolder",
+            "jcr:createdBy"  : "admin",
+            "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+            "second"         : {
+                "jcr:primaryType": "dam:Asset",
+                "jcr:mixinTypes" : ["mix:referenceable"],
+                "jcr:createdBy"  : "admin",
+                "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                "jcr:uuid"       : "8e628d61-cfaf-4e8c-abd0-cd6ef9e41c4a",
+                "jcr:content"    : {
+                    "jcr:primaryType"   : "dam:AssetContent",
+                    "jcr:title"         : "Test Content Fragment - Second",
+                    "jcr:lastModifiedBy": "admin",
+                    "dam:assetState"    : "processed",
+                    "jcr:lastModified"  : "Mon Aug 28 2017 14:40:26 GMT+0200",
+                    "dam:relativePath"  : "test-content-fragment/subassets/second",
+                    "metadata"          : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:mixinTypes" : ["cq:Taggable"],
+                        "dam:extracted"  : "Mon Aug 28 2017 14:39:13 GMT+0200",
+                        "dc:format"      : "text/html",
+                        "dam:sha1"       : "e0560819432c38e1b17c09c0ab48adf2208decae",
+                        "dam:size"       : 22
+                    },
+                    "related"           : {
+                        "jcr:primaryType": "nt:unstructured"
+                    },
+                    "renditions"        : {
+                        "jcr:primaryType": "nt:folder",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                        "original"       : {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:createdBy"  : "admin",
+                            "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                            "jcr:content"    : {
+                                "jcr:primaryType"   : "oak:Resource",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:mimeType"      : "text/plain",
+                                "jcr:lastModified"  : "Mon Aug 28 2017 14:39:13 GMT+0200",
+                                ":jcr:data"         : 22
+                            }
+                        },
+                        "teaser"         : {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:createdBy"  : "admin",
+                            "jcr:created"    : "Mon Aug 28 2017 14:38:14 GMT+0200",
+                            "jcr:content"    : {
+                                "jcr:primaryType"   : "oak:Resource",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:mimeType"      : "text/plain",
+                                "jcr:lastModified"  : "Mon Aug 28 2017 14:39:13 GMT+0200",
+                                ":jcr:data"         : 22
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "structured": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Wed Aug 30 2017 13:35:42 GMT+0200",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:title"         : "Test Content Fragment",
+            "jcr:description"   : "This is a test content fragment.",
+            "jcr:lastModifiedBy": "admin",
+            "contentFragment"   : true,
+            "jcr:lastModified"  : "Wed Aug 30 2017 13:35:46 GMT+0200",
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "associated"        : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "sling/collection",
+                "sling:members"     : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resources": ["/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"],
+                    "test"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resource" : "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"
+                    }
+                }
+            },
+            "metadata"          : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:mixinTypes"    : ["cq:Taggable"],
+                "jcr:lastModifiedBy": "admin",
+                "dc:format"         : "application/json",
+                "dc:modified"       : "Wed Aug 30 2017 13:35:46 GMT+0200",
+                "cq:tags"           : [],
+                "jcr:lastModified"  : "Wed Aug 30 2017 13:35:46 GMT+0200"
+            },
+            "data"              : {
+                "jcr:primaryType": "nt:unstructured",
+                "cq:model"       : "/conf/global/settings/dam/cfm/models/test",
+                "master"         : {
+                    "jcr:primaryType" : "nt:unstructured",
+                    "main"            : "<p>Main content</p>",
+                    "main@ContentType": "text/html",
+                    "second"          : ["one", "two", "three"]
+                },
+                "teaser"        : {
+                    "jcr:primaryType" : "nt:unstructured",
+                    "main"            : "<p>Main content (teaser)</p>",
+                    "main@ContentType": "text/html",
+                    "second"          : ["one (teaser)", "two (teaser)", "three (teaser)"]
+                }
+            },
+            "model"             : {
+                "jcr:primaryType": "nt:unstructured",
+                "variations"     : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "teaser"         : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:title": "Teaser"
+                    }
+                }
+            }
+        }
+    },
+    "structured-nested-model": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Wed Aug 30 2017 13:35:42 GMT+0200",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:title"         : "Test Content Fragment",
+            "jcr:description"   : "This is a test content fragment.",
+            "jcr:lastModifiedBy": "admin",
+            "contentFragment"   : true,
+            "jcr:lastModified"  : "Wed Aug 30 2017 13:35:46 GMT+0200",
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "associated"        : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "sling/collection",
+                "sling:members"     : {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resources": ["/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"],
+                    "test"           : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resource" : "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"
+                    }
+                }
+            },
+            "metadata"          : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "jcr:mixinTypes"    : ["cq:Taggable"],
+                "jcr:lastModifiedBy": "admin",
+                "dc:format"         : "application/json",
+                "dc:modified"       : "Wed Aug 30 2017 13:35:46 GMT+0200",
+                "cq:tags"           : [],
+                "jcr:lastModified"  : "Wed Aug 30 2017 13:35:46 GMT+0200"
+            },
+            "data"              : {
+                "jcr:primaryType": "nt:unstructured",
+                "cq:model"       : "/conf/global/nested/settings/dam/cfm/models/test",
+                "master"         : {
+                    "jcr:primaryType" : "nt:unstructured",
+                    "main"            : "<p>Main content</p>",
+                    "main@ContentType": "text/html",
+                    "second"          : ["one", "two", "three"]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2018 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+
+<template data-sly-template.paragraphs="${@ fragment='The content fragment', fragmentPath='fragment path', wcmmode = 'WCM mode'}">
+    <div data-path="${fragmentPath}"
+         data-json="${!wcmmode.disabled && fragment.editorJSON}"
+         class="cmp-contentfragment">
+        <div data-sly-resource="${'par0' @ resourceType=fragment.gridResourceType}"></div>
+        <div data-sly-list="${fragment.elements[0].paragraphs}">
+            ${item @ context="html"}
+            <div data-sly-resource="${'par{0}' @ format=itemList.count, resourceType=fragment.gridResourceType}"></div>
+        </div>
+    </div>
+</template>
+
+<template data-sly-template.elements="${@ fragment='The content fragment', fragmentPath='fragment path', wcmmode = 'WCM mode'}">
+    <dl data-path="${fragmentPath}"
+        data-type="${fragment.type}"
+        data-json="${!wcmmode.disabled && fragment.editorJSON}"
+        class="cmp-contentfragment${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}"
+        data-sly-list.element="${fragment.elements}"
+        data-sly-use.elementTemplate="element.html">
+        <sly data-sly-call="${elementTemplate.element @ element=element}"></sly>
+    </dl>
+</template>
+
