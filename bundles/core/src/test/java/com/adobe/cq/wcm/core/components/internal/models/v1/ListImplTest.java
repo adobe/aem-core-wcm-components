@@ -59,6 +59,10 @@ public class ListImplTest {
     private static final String LIST_9 = "/content/list/listTypes/staticOrderByModificationDateListType";
     private static final String LIST_10 = "/content/list/listTypes/staticOrderByModificationDateDescListType";
     private static final String LIST_11 = "/content/list/listTypes/staticMaxItemsListType";
+    private static final String LIST_12 = "/content/list/listTypes/staticOrderByModificationDateListTypeWithNoModificationDate";
+    private static final String LIST_13 = "/content/list/listTypes/staticOrderByModificationDateListTypeWithNoModificationDateForOneItem";
+    private static final String LIST_14 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitle";
+    private static final String LIST_15 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitleForOneItem";
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
@@ -159,6 +163,30 @@ public class ListImplTest {
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_11));
     }
 
+    @Test
+    public void testOrderByModificationDateWithNoModificationDate() throws Exception {
+        List list = getListUnderTest(LIST_12);
+        checkListConsistency(list, new String[]{"Page 1.1", "Page 1.2"});
+    }
+
+    @Test
+    public void testOrderByModificationDateWithNoModificationDateForOneItem() throws Exception {
+        List list = getListUnderTest(LIST_13);
+        checkListConsistency(list, new String[]{"Page 2", "Page 1", "Page 1.2"});
+    }
+
+    @Test
+    public void testOrderByTitleWithNoTitle() throws Exception {
+        List list = getListUnderTest(LIST_14);
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_3", "/content/list/pages/page_4"});
+    }
+
+    @Test
+    public void testOrderByTitleWithNoTitleForOneItem() throws Exception {
+        List list = getListUnderTest(LIST_15);
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1", "/content/list/pages/page_2", "/content/list/pages/page_4"});
+    }
+
     private List getListUnderTest(String resourcePath) {
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
@@ -186,6 +214,15 @@ public class ListImplTest {
         int index = 0;
         for (Page item : list.getItems()) {
             assertEquals(expectedPages[index++], item.getTitle());
+        }
+    }
+
+    private void checkListConsistencyByPaths(List list, String[] expectedPagePaths) {
+        assertTrue("Expected that the returned list will contain " + expectedPagePaths.length + " items",
+                list.getItems().size() == expectedPagePaths.length);
+        int index = 0;
+        for (Page item : list.getItems()) {
+            assertEquals(expectedPagePaths[index++], item.getPath());
         }
     }
 }

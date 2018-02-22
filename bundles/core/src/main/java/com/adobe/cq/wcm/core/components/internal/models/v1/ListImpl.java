@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -391,9 +392,11 @@ public class ListImpl implements List {
         public int compare(Page item1, Page item2) {
             int i = 0;
             if (orderBy == OrderBy.MODIFIED) {
-                i = item1.getLastModified().compareTo(item2.getLastModified());
+                // getLastModified may return null, define null to be after nonnull values
+                i = ObjectUtils.compare(item1.getLastModified(), item2.getLastModified(), true);
             } else if (orderBy == OrderBy.TITLE) {
-                i = item1.getTitle().compareTo(item2.getTitle());
+                // getTitle may return null, define null to be greater than nonnull values
+                i = ObjectUtils.compare(item1.getTitle(), item2.getTitle(), true);
             }
 
             if (sortOrder == SortOrder.DESC) {
