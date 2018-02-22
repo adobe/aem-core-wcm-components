@@ -42,8 +42,7 @@ public class Utils {
     public static String getURL(@Nonnull SlingHttpServletRequest request, @Nonnull PageManager pageManager, @Nonnull String path) {
         Page page = pageManager.getPage(path);
         if (page != null) {
-            String vanityURL = page.getVanityUrl();
-            return StringUtils.isEmpty(vanityURL) ? request.getContextPath() + path + ".html" : request.getContextPath() + vanityURL;
+            return getURL(request, page);
         }
         return path;
     }
