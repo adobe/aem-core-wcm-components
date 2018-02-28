@@ -19,6 +19,7 @@
       enctype="${container.enctype}"
       class="${grid.cssClass}">
     <input type="hidden" name=":formstart" value="${resource.path}"/>
+    <input type="hidden" name="_charset_" value="utf-8"/>
     <input data-sly-test="${container.redirect}" type="hidden" name=":redirect" value="${container.redirect @ extension='html'}"/>
     <sly data-sly-repeat.paragraph="${grid.paragraphs}"
          data-sly-resource="${paragraph.path @ resourceType=paragraph.resourceType, decorationTagName='div', cssClassName=paragraph.cssClass}"></sly>
