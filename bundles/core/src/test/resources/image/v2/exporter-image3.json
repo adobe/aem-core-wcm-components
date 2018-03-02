@@ -3,10 +3,10 @@
         600
     ],
     "lazyEnabled"           : false,
-    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image3.img{.width}.png",
+    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image3.coreimg{.width}.png",
     "title"                 : "Adobe Logo",
     "alt"                   : "Adobe Logo",
     "link"                  : "https://www.adobe.com",
-    "src"                   : "/core/content/test/_jcr_content/root/image3.img.600.png",
+    "src"                   : "/core/content/test/_jcr_content/root/image3.coreimg.600.png",
     ":type"                 : "core/wcm/components/image/v2/image"
 }

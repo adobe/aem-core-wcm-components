@@ -59,10 +59,10 @@ The images are loaded through the `com.adobe.cq.wcm.core.components.internal.ser
 
 ```
 Author:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>/<timestamp>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.coreimg.<width>.<extension>/<timestamp>.<extension>
 
 Publish:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.coreimg.<width>.<extension>
 ```
 
 ## Client Libraries
@@ -88,7 +88,7 @@ The following attributes can be added to the same element to provide options:
 1. `data-cmp-lazy` - if not `false`, indicates that the image should be rendered lazily.
 2. `data-cmp-src` - the image source. Can be a simple image source, or a URI template representation that can be variable expanded -
 useful for building an image configuration with an alternative width. Should contain a `{.width}` variable.
-e.g. '/path/to/image.img{.width}.jpeg'
+e.g. '/path/to/image.coreimg{.width}.jpeg'
 3. `data-cmp-widths` - a comma-separated string of alternative image widths (in pixels).
 Populated with `allowedRenditionWidths` from the component's edit dialog.
 

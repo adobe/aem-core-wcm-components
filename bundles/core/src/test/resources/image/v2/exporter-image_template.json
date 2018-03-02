@@ -1,5 +1,5 @@
 {
-    "srcUriTemplate": "/core/content/test.img{.width}.png/structure/jcr:content/root/image_template/1490005239000.png",
+    "srcUriTemplate": "/core/content/test.coreimg{.width}.png/structure/jcr:content/root/image_template/1490005239000.png",
     "widths" : [
         600,
         700,
@@ -11,6 +11,6 @@
     "title"         : "Adobe Systems Logo and Wordmark",
     "alt"           : "Adobe Systems Logo and Wordmark in PNG format",
     "link"          : "/core/content/test-image.html",
-    "src"           : "/core/content/test.img.png/structure/jcr%3acontent/root/image_template/1490005239000.png",
+    "src"           : "/core/content/test.coreimg.png/structure/jcr%3acontent/root/image_template/1490005239000.png",
     ":type"         : "core/wcm/components/image/v2/image"
 }

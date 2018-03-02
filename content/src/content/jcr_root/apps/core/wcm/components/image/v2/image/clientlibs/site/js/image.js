@@ -70,7 +70,7 @@
          *
          * Can be a simple image source, or a URI template representation that
          * can be variable expanded - useful for building an image configuration with an alternative width.
-         * e.g. '/path/image.img{.width}.jpeg/1506620954214.jpeg'
+         * e.g. '/path/image.coreimg{.width}.jpeg/1506620954214.jpeg'
          */
         'src': {
         }

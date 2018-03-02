@@ -47,7 +47,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .execTestCase(c.tcSaveConfigureDialog)
             .asserts.isTrue(function () {
                 return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
-                    '/_jcr_content/root/responsivegrid/image.img."][alt="' + originalDamDescription + '"][title="' + originalDamTitle +
+                    '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + originalDamDescription + '"][title="' + originalDamTitle +
                     '"]',
                     '#ContentFrame').size() === 1;
             });
@@ -74,7 +74,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .execTestCase(c.tcSaveConfigureDialog)
             .asserts.isTrue(function () {
                 return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
-                    '/_jcr_content/root/responsivegrid/image.img."][alt="' + altText + '"][title="' + captionText + '"]',
+                    '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + altText + '"][title="' + captionText + '"]',
                     "#ContentFrame").size() === 1;
             });
     };
@@ -92,7 +92,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .execTestCase(c.tcSaveConfigureDialog)
             .asserts.isTrue(function () {
                 return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
-                    '/_jcr_content/root/responsivegrid/image.img."][alt="' + originalDamDescription + '"]', '#ContentFrame').size() === 1
+                    '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + originalDamDescription + '"]', '#ContentFrame').size() === 1
                     && h.find(titleSelector + ':contains("' + originalDamTitle + '")', '#ContentFrame').size() === 1;
             });
     };

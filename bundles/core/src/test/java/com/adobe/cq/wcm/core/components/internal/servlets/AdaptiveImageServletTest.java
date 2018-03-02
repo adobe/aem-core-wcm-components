@@ -75,8 +75,6 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
     @Before
     public void init() throws IOException {
         resourceResolver = CONTEXT.resourceResolver();
-        servlet = new AdaptiveImageServlet();
-        Whitebox.setInternalState(servlet, "mimeTypeService", mockedMimeTypeService);
         AssetHandler assetHandler = mock(AssetHandler.class);
         AssetStore assetStore = mock(AssetStore.class);
         when(assetStore.getAssetHandler(anyString())).thenReturn(assetHandler);
@@ -84,8 +82,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
             Rendition rendition = invocation.getArgumentAt(0, Rendition.class);
             return ImageIO.read(rendition.getStream());
         });
-        Whitebox.setInternalState(servlet, "assetStore", assetStore);
-        activateServlet(servlet);
+        servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);
     }
 
     @After
@@ -396,7 +393,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
     @Test
     public void testImageWithIncorrectLastModifiedSuffix() throws Exception {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
-                "img.800", "png");
+                "coreimg.800", "png");
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("/42.png");
@@ -407,13 +404,13 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         servlet.doGet(request, response);
         assertEquals("Expected a 302 response code.", 302, response.getStatus());
         assertEquals("Expected redirect location with correct last modified suffix",
-                CONTEXT_PATH + "/content/test/jcr%3acontent/root/image19.img.800.png/1490005239000.png", response.getHeader("Location"));
+                CONTEXT_PATH + "/content/test/jcr%3acontent/root/image19.coreimg.800.png/1490005239000.png", response.getHeader("Location"));
     }
 
     @Test
     public void testImageWithMissingLastModifiedSuffix() throws Exception {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(IMAGE19_PATH,
-                "img.800", "png");
+                "coreimg.800", "png");
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
         ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
@@ -424,7 +421,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         servlet.doGet(request, response);
         assertEquals("Expected a 302 response code.", 302, response.getStatus());
         assertEquals("Expected redirect location with correct last modified suffix",
-                CONTEXT_PATH + "/content/test/jcr%3acontent/root/image19.img.800.png/1490005239000.png", response.getHeader("Location"));
+                CONTEXT_PATH + "/content/test/jcr%3acontent/root/image19.coreimg.800.png/1490005239000.png", response.getHeader("Location"));
     }
 
     @Test
@@ -473,7 +470,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
 
     @Test
     public void testImageFromTemplateStructureNodeNoLastModifiedInfo() throws IOException {
-        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(PAGE, "img",
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(PAGE, "coreimg",
                 "png");
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
@@ -483,13 +480,13 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         servlet.doGet(request, response);
         assertEquals("Expected a 302 response code.", 302, response.getStatus());
         assertEquals("Expected redirect location with correct last modified suffix",
-                CONTEXT_PATH + "/content/test.img.png/structure/jcr%3acontent/root/image_template/1490005239000.png",
+                CONTEXT_PATH + "/content/test.coreimg.png/structure/jcr%3acontent/root/image_template/1490005239000.png",
                 response.getHeader("Location"));
     }
 
     @Test
     public void testImageFromTemplateStructureNodeOldLastModifiedInfo() throws IOException {
-        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(PAGE, "img",
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(PAGE, "coreimg",
                 "png");
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
         MockSlingHttpServletResponse response = requestResponsePair.getRight();
@@ -499,7 +496,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         servlet.doGet(request, response);
         assertEquals("Expected a 302 response code.", 302, response.getStatus());
         assertEquals("Expected redirect location with correct last modified suffix",
-                CONTEXT_PATH + "/content/test.img.png/structure/jcr%3acontent/root/image_template/1490005239000.png",
+                CONTEXT_PATH + "/content/test.coreimg.png/structure/jcr%3acontent/root/image_template/1490005239000.png",
                 response.getHeader("Location"));
     }
 
@@ -595,20 +592,6 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         modifiersField.setAccessible(true);
         modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
         field.set(null, newValue);
-    }
-
-    private void activateServlet(AdaptiveImageServlet servlet) {
-        servlet.activate(new AdaptiveImageServlet.Configuration() {
-            @Override
-            public Class<? extends Annotation> annotationType() {
-                return null;
-            }
-
-            @Override
-            public int defaultResizeWidth() {
-                return ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH;
-            }
-        });
     }
 
     private static class RequestResponsePair extends Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> {
