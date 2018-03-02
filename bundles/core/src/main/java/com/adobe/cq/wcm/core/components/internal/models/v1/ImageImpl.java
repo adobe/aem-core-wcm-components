@@ -118,12 +118,17 @@ public class ImageImpl implements Image {
 
     protected boolean hasContent;
     protected String mimeType;
+    protected String selector;
     protected String extension;
     protected long lastModifiedDate = 0;
     protected boolean inTemplate;
     protected String baseResourcePath;
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
+
+    public ImageImpl() {
+        selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
+    }
 
     /**
      * needs to be protected so that implementations that extend this one can optionally call super.initModel; Sling Models doesn't
@@ -203,13 +208,13 @@ public class ImageImpl implements Image {
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             for (Integer width : supportedRenditionWidths) {
                 smartImages[index] = baseResourcePath + DOT +
-                        AdaptiveImageServlet.DEFAULT_SELECTOR + DOT + width + DOT + extension +
+                        selector + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                         (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
                 smartSizes[index] = width;
                 index++;
             }
-            src = baseResourcePath + DOT + AdaptiveImageServlet.DEFAULT_SELECTOR + DOT;
+            src = baseResourcePath + DOT + selector + DOT;
             if (smartSizes.length == 1) {
                 src += smartSizes[0] + DOT + extension;
             } else {

@@ -10,7 +10,7 @@
         2048
     ],
     "lazyEnabled"           : true,
-    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image18.img{.width}.png/1490005239000.png",
-    "src"                   : "/core/content/test/_jcr_content/root/image18.img.png/1490005239000.png",
+    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image18.coreimg{.width}.png/1490005239000.png",
+    "src"                   : "/core/content/test/_jcr_content/root/image18.coreimg.png/1490005239000.png",
     ":type"                 : "core/wcm/components/image/v2/image"
 }

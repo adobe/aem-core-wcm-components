@@ -71,56 +71,36 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.image.Layer;
 import com.google.common.base.Joiner;
 
-@Component(
-        service = Servlet.class,
-        configurationPid = "com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet",
-        property = {
-                "sling.servlet.selectors=" + AdaptiveImageServlet.DEFAULT_SELECTOR,
-                "sling.servlet.resourceTypes=" + AdaptiveImageServlet.IMAGE_RESOURCE_TYPE,
-                "sling.servlet.resourceTypes=" + AdaptiveImageServlet.PAGE_NODE_RESOURCE_TYPE,
-                "sling.servlet.extensions=jpg",
-                "sling.servlet.extensions=jpeg",
-                "sling.servlet.extensions=png",
-                "sling.servlet.extensions=gif"
-        }
-)
-@Designate(
-        ocd = AdaptiveImageServlet.Configuration.class
-)
+/**
+ * Servlet for adaptive images, can render images with different widths based on policies and requested width.
+ *
+ * Registration of the servlet is handled by the {@link AdaptiveImageServletMappingConfigurationConsumer}
+ * based on {@link AdaptiveImageServletMappingConfigurationFactory} configurations.
+ *
+ * The following configurations are provided out-of-box for {@code ['jpg','jpeg','gif','png']} extensions:
+ * <ul>
+ *   <li>{@code RTs=['core/wcm/components/image'], selectors=['img']} - for Image v1 URLs</li>
+ *   <li>{@code RTs=['core/wcm/components/image','cq/Page'], selectors=['coreimg']} - for Image v2 URLs</li>
+ * </ul>
+ */
 public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     public static final String DEFAULT_SELECTOR = "img";
+    public static final String CORE_DEFAULT_SELECTOR = "coreimg";
     public static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
-    public static final String PAGE_NODE_RESOURCE_TYPE = "cq/Page";
-    private static final int DEFAULT_RESIZE_WIDTH = 1280;
+    public static final int DEFAULT_RESIZE_WIDTH = 1280;
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
     private static final String DEFAULT_MIME = "image/jpeg";
     private int defaultResizeWidth;
 
-    @Reference
     private MimeTypeService mimeTypeService;
 
-    @Reference
     private AssetStore assetStore;
 
-    @ObjectClassDefinition(
-            name = "AEM Core WCM Components Adaptive Image Servlet Configuration",
-            description = "Adaptive Image Servlet configuration options"
-    )
-    @interface Configuration {
-
-        @AttributeDefinition(
-                description = "In case the requested image contains no width information in the request and the image also " +
-                        "doesn't have a content policy that defines the allowed rendition widths, then the image processed by this server will be" +
-                        " resized to this configured width, for images whose width is larger than this value."
-        )
-        int defaultResizeWidth() default DEFAULT_RESIZE_WIDTH;
-
-    }
-
-    @Activate
-    protected void activate(Configuration configuration) {
-        defaultResizeWidth = configuration.defaultResizeWidth() > 0 ? configuration.defaultResizeWidth() : DEFAULT_RESIZE_WIDTH;
+    public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth) {
+        this.mimeTypeService = mimeTypeService;
+        this.assetStore = assetStore;
+        this.defaultResizeWidth = defaultResizeWidth > 0 ? defaultResizeWidth : DEFAULT_RESIZE_WIDTH;
     }
 
     @Override
@@ -227,7 +207,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             int resizeWidth = defaultResizeWidth;
             String widthSelector = selectors[selectors.length - 1];
             List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(resourceResolver, component, request);
-            if (!DEFAULT_SELECTOR.equals(widthSelector)) {
+            if (selectors.length > 1 || StringUtils.isNumeric(widthSelector)) {
                 try {
                     Integer width = Integer.parseInt(widthSelector);
                     boolean isRequestedWidthAllowed = false;

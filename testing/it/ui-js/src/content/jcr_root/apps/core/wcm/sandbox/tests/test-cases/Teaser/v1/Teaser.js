@@ -91,7 +91,7 @@
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function () {
                 return h.find(selectors.component.image + ' img[src*="' + h.param('teaser_page')() +
-                    '/_jcr_content/root/responsivegrid/teaser.img."]', '#ContentFrame').size() === 1;
+                    '/_jcr_content/root/responsivegrid/teaser."]', '#ContentFrame').size() === 1;
             })
             .assert.isTrue(function () {
                 return h.find(selectors.component.title, '#ContentFrame').text() === title;

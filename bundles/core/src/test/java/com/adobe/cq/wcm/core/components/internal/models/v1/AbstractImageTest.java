@@ -25,6 +25,7 @@ import org.apache.sling.commons.mime.MimeTypeService;
 import org.junit.ClassRule;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
@@ -43,6 +44,7 @@ public class AbstractImageTest {
     protected static final String TEST_CONTENT_ROOT = "/content";
     protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
     protected static final String PAGE = TEST_CONTENT_ROOT + "/test";
+    protected static final String SELECTOR = AdaptiveImageServlet.DEFAULT_SELECTOR;
     protected static final String IMAGE0_PATH = PAGE + "/jcr:content/root/image0";
     protected static final String IMAGE1_PATH = PAGE + "/jcr:content/root/image1";
     protected static final String IMAGE2_PATH = PAGE + "/jcr:content/root/image2";
