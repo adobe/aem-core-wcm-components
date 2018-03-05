@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.0.0</version>
+        <version>2.0.2</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
@@ -36,9 +36,9 @@
     <name>Adobe Experience Manager Core WCM Components Extension - Structured Content Fragment Content</name>
 
     <scm>
-        <connection>scm:git:https://git.corp.adobe.com/CQ/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@git.corp.adobe.com:CQ/aem-core-wcm-components.git</developerConnection>
-        <url>https://git.corp.adobe.com/CQ/aem-core-wcm-components/tree/PRIVATE_master/extension/contentfragment/content</url>
+        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
+        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
+        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/extension/contenfragment/content</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -152,7 +152,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
-            <version>0.0.6</version>
+            <version>0.0.8</version>
             <scope>provided</scope>
         </dependency>
 
