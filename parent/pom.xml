@@ -125,6 +125,7 @@
                         <goals>deploy</goals>
                         <releaseProfiles>release</releaseProfiles>
                         <projectVersionPolicyId>OddEvenVersionPolicy</projectVersionPolicyId>
+                        <useReleaseProfile>false</useReleaseProfile>
                     </configuration>
                 </plugin>
                 <plugin>
