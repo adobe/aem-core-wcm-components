@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.servlet.Servlet;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.BundleContext;
@@ -81,7 +82,7 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
         try {
             Configuration[] configurations = configurationAdmin.listConfigurations("(" + Constants.SERVICE_PID + "=" +
                     AdaptiveImageServlet.class.getName() + ")");
-            if (configurations.length > 0) {
+            if (ArrayUtils.isNotEmpty(configurations)) {
                 Configuration oldConfig = configurations[0];
                 oldAISDefaultResizeWidth = PropertiesUtil.toInteger(oldConfig.getProperties().get("defaultResizeWidth"), Integer.MIN_VALUE);
                 if (oldAISDefaultResizeWidth > 0) {
