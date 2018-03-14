@@ -18,9 +18,17 @@
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${breadcrumb.items.size > 0}">
     <ol class="cmp-breadcrumb__list"
+        itemscope itemtype="http://schema.org/BreadcrumbList"
         data-sly-list.navItem="${breadcrumb.items}">
-        <li class="cmp-breadcrumb__item${navItem.active ? ' cmp-breadcrumb__item--active' : ''}">
-            <a href="${navItem.URL}" data-sly-unwrap="${navItem.active}" class="cmp-breadcrumb__item-link">${navItem.title}</a>
+        <li class="cmp-breadcrumb__item${navItem.active ? ' cmp-breadcrumb__item--active' : ''}"
+            itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="${navItem.URL}"
+               class="cmp-breadcrumb__item-link"
+               itemprop="item"
+               data-sly-unwrap="${navItem.active}">
+                <span itemprop="name">${navItem.title}</span>
+            </a>
+            <meta itemprop="position" content="${navItem.count}" />
         </li>
     </ol>
 </nav>
