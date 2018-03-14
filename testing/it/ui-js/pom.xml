@@ -23,18 +23,18 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>com.adobe.cq</groupId>
-        <artifactId>core.wcm.components.sandbox.parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>core.wcm.components.parent</artifactId>
+        <version>2.0.5-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>core.wcm.components.sandbox.it.ui-js</artifactId>
+    <artifactId>core.wcm.components.it.ui-js</artifactId>
+    <version>2.0.5-SNAPSHOT</version>
     <packaging>content-package</packaging>
-    <name>Adobe Experience Manager Core WCM Components JS Tests - Sandbox</name>
-    <version>0.0.1-SNAPSHOT</version>
+    <name>Adobe Experience Manager Core WCM Components JS Tests</name>
 
     <!-- ====================================================================== -->
     <!-- S C M  D E F I N I T I O N                                             -->

@@ -22,14 +22,14 @@
     <!-- ====================================================================== -->
     <parent>
         <groupId>com.adobe.cq</groupId>
-        <artifactId>core.wcm.components.sandbox.parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>core.wcm.components.parent</artifactId>
+        <version>2.0.5-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>core.wcm.components.sandbox.junit.core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>Adobe Experience Manager Core WCM Components JUnit Testing - Sandbox</name>
+    <artifactId>core.wcm.components.junit.core</artifactId>
+    <version>2.0.5-SNAPSHOT</version>
+    <name>Adobe Experience Manager Core WCM Components JUnit Testing</name>
 
     <scm>
         <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
