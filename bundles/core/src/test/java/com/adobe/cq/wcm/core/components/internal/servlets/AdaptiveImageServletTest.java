@@ -18,9 +18,9 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -39,7 +39,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.internal.util.reflection.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,8 +46,10 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.api.handler.AssetHandler;
 import com.day.cq.dam.api.handler.store.AssetStore;
+import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
+import com.day.image.Layer;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -519,6 +520,21 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
 
     }
 
+    @Test
+    public void testHorizontalAndVerticalFlipWithDAMAsset() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE22_PATH, 1494867377756L, "img.2000", "png");
+        testHorizontalAndVerticalFlip(requestResponsePair);
+    }
+
+    @Test
+    public void testHorizontalAndVerticalFlipWithImageFile() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE23_PATH, 1494867377756L, "img.2000", "png");
+        testHorizontalAndVerticalFlip(requestResponsePair);
+
+    }
+
     private void testNegativeRequestedWidth(String imagePath) throws IOException {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
                 prepareRequestResponsePair(imagePath, "img.-1", "png");
@@ -545,6 +561,24 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
                 expectedWidth, image.getWidth());
         assertEquals("Expected the cropped rectangle to have a 515px height, since the servlet should not perform cropping upscaling.",
                 expectedHeight, image.getHeight());
+    }
+
+    private void testHorizontalAndVerticalFlip(Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair) throws
+            IOException {
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
+        ContentPolicy contentPolicy = mapping.getPolicy();
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
+        servlet.doGet(request, response);
+        assertEquals("Expected a 200 response.",
+                HttpServletResponse.SC_OK, response.getStatus());
+        Layer layer = new Layer(this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.png"));
+        layer.flipHorizontally();
+        layer.flipVertically();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        layer.write(StandardImageHandler.PNG1_MIMETYPE, 1.0, outputStream);
+        assertArrayEquals(outputStream.toByteArray(), response.getOutput());
     }
 
     private Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> prepareRequestResponsePair(String resourcePath,

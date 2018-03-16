@@ -66,6 +66,8 @@ public class AbstractImageTest {
     protected static final String IMAGE18_PATH = PAGE + "/jcr:content/root/image18";
     protected static final String IMAGE19_PATH = PAGE + "/jcr:content/root/image19";
     protected static final String IMAGE20_PATH = PAGE + "/jcr:content/root/image20";
+    protected static final String IMAGE22_PATH = PAGE + "/jcr:content/root/image22";
+    protected static final String IMAGE23_PATH = PAGE + "/jcr:content/root/image23";
     protected static final String TEMPLATE_PATH = "/conf/coretest/settings/wcm/templates/testtemplate";
     protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
@@ -83,6 +85,7 @@ public class AbstractImageTest {
     protected static final String PNG12_FILE_PATH = IMAGE12_PATH + "/file";
     protected static final String PNG14_FILE_PATH = IMAGE14_PATH + "/file";
     protected static final String PNG20_FILE_PATH = IMAGE20_PATH + "/file";
+    protected static final String PNG23_FILE_PATH = IMAGE23_PATH + "/file";
 
     protected static ContentPolicyManager contentPolicyManager;
     protected static MimeTypeService mockedMimeTypeService;
@@ -121,6 +124,7 @@ public class AbstractImageTest {
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG14_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
         aemContext.load().binaryFile("/image/" + TIFF_IMAGE_BINARY_NAME, TIFF_ASSET_PATH + "/jcr:content/renditions/original");
         aemContext.load().binaryFile("/image/" + _1PX_IMAGE_BINARY_NAME, PNG20_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG23_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
         aemContext.registerInjectActivateService(new MockAdapterFactory());
         contentPolicyManager = mock(ContentPolicyManager.class);
         aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,

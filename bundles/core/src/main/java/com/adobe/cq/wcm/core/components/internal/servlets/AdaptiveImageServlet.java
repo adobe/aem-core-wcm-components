@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.servlet.Servlet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
@@ -43,17 +42,12 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.mime.MimeTypeService;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.metatype.annotations.AttributeDefinition;
-import org.osgi.service.metatype.annotations.Designate;
-import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.internal.resource.ImageResourceWrapper;
+import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.dam.api.Asset;
@@ -87,8 +81,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     public static final String DEFAULT_SELECTOR = "img";
     public static final String CORE_DEFAULT_SELECTOR = "coreimg";
-    public static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
-    public static final int DEFAULT_RESIZE_WIDTH = 1280;
+    private static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
+    static final int DEFAULT_RESIZE_WIDTH = 1280;
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
     private static final String DEFAULT_MIME = "image/jpeg";
     private int defaultResizeWidth;
@@ -160,8 +154,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             component = componentCandidate;
         }
-        Image image = new Image(component);
-        if (image.source == Source.NONEXISTING) {
+        ImageComponent imageComponent = new ImageComponent(component);
+        if (imageComponent.source == Source.NONEXISTING) {
             LOGGER.error("The image from {} does not have a valid file reference.", component.getPath());
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
@@ -176,10 +170,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             lastModifiedEpoch = lastModifiedDate.getTimeInMillis();
         }
         Asset asset = null;
-        if (image.source == Source.ASSET) {
-            asset = image.imageResource.adaptTo(Asset.class);
+        if (imageComponent.source == Source.ASSET) {
+            asset = imageComponent.imageResource.adaptTo(Asset.class);
             if (asset == null) {
-                LOGGER.error("Unable to adapt resource {} used by image {} to an asset.", image.imageResource.getPath(), component.getPath());
+                LOGGER.error("Unable to adapt resource {} used by image {} to an asset.", imageComponent.imageResource.getPath(), component.getPath());
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
@@ -225,9 +219,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         }
                         if (isRequestedWidthAllowed) {
                             String imageType = getImageType(requestPathInfo.getExtension());
-                            if (image.source == Source.FILE) {
-                                resizeAndStreamFile(response, componentProperties, resizeWidth, image.imageResource, imageType);
-                            } else if (image.source == Source.ASSET) {
+                            if (imageComponent.source == Source.FILE) {
+                                resizeAndStreamFile(response, componentProperties, resizeWidth, imageComponent.imageResource, imageType);
+                            } else if (imageComponent.source == Source.ASSET) {
                                 resizeAndStreamAsset(response, componentProperties, resizeWidth, asset, imageType);
                             }
                         } else {
@@ -245,9 +239,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             } else {
                 LOGGER.debug("The image request contains no width information. Will resize the image to {}px.", defaultResizeWidth);
                 String imageType = getImageType(requestPathInfo.getExtension());
-                if (image.source == Source.FILE) {
-                    resizeAndStreamFile(response, componentProperties, defaultResizeWidth, image.imageResource, imageType);
-                } else if (image.source == Source.ASSET) {
+                if (imageComponent.source == Source.FILE) {
+                    resizeAndStreamFile(response, componentProperties, defaultResizeWidth, imageComponent.imageResource, imageType);
+                } else if (imageComponent.source == Source.ASSET) {
                     resizeAndStreamAsset(response, componentProperties, defaultResizeWidth, asset, imageType);
                 }
             }
@@ -287,12 +281,14 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         int rotationAngle = getRotation(componentProperties);
         Rectangle rectangle = getCropRect(componentProperties);
-        if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
+        boolean flipHorizontally = componentProperties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
+        boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
+        if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
             int originalWidth = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGEWIDTH));
             int originalHeight = getDimension(asset.getMetadataValue(DamConstants.TIFF_IMAGELENGTH));
             AssetHandler assetHandler = assetStore.getAssetHandler(imageType);
             Layer layer = null;
-            boolean appliedRotationOrCropping = false;
+            boolean appliedTransformation = false;
             if (rectangle != null) {
                 double scaling;
                 Rendition webRendition = getAWebRendition(asset);
@@ -324,7 +320,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 } else {
                     layer.crop(rectangle);
                 }
-                appliedRotationOrCropping = true;
+                appliedTransformation = true;
             }
             if (rotationAngle != 0) {
                 if (layer == null) {
@@ -332,9 +328,25 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 }
                 layer.rotate(rotationAngle);
                 LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
-                appliedRotationOrCropping = true;
+                appliedTransformation = true;
             }
-            if (!appliedRotationOrCropping) {
+            if (flipHorizontally) {
+                if (layer == null) {
+                    layer = new Layer(assetHandler.getImage(asset.getOriginal()));
+                }
+                layer.flipHorizontally();
+                LOGGER.debug("Flipped image horizontally.");
+                appliedTransformation = true;
+            }
+            if (flipVertically) {
+                if (layer == null) {
+                    layer = new Layer(assetHandler.getImage(asset.getOriginal()));
+                }
+                layer.flipVertically();
+                LOGGER.debug("Flipped image vertically.");
+                appliedTransformation = true;
+            }
+            if (!appliedTransformation) {
                 Rendition rendition = asset.getRendition(String.format(DamConstants.PREFIX_ASSET_WEB + ".%d.%d.%s", resizeWidth,
                         resizeWidth, extension));
                 if (rendition != null) {
@@ -379,8 +391,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
             int rotationAngle = getRotation(componentProperties);
             Rectangle rectangle = getCropRect(componentProperties);
+            boolean flipHorizontally = componentProperties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
+            boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
             if (is != null) {
-                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0) {
+                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
                     Layer layer = null;
                     if (rectangle != null) {
                         layer = new Layer(is);
@@ -393,6 +407,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         }
                         layer.rotate(rotationAngle);
                         LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
+                    }
+                    if (flipHorizontally) {
+                        if (layer == null) {
+                            layer = new Layer(is);
+                        }
+                        layer.flipHorizontally();
+                    }
+                    if (flipVertically) {
+                        if (layer == null) {
+                            layer = new Layer(is);
+                        }
+                        layer.flipVertically();
                     }
                     if (layer == null) {
                         layer = new Layer(is);
@@ -649,11 +675,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         NONEXISTING
     }
 
-    private static class Image {
+    private static class ImageComponent {
         Source source = Source.NONEXISTING;
         Resource imageResource;
 
-        Image(@Nonnull Resource component) {
+        ImageComponent(@Nonnull Resource component) {
             String fileReference = component.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
             if (StringUtils.isNotEmpty(fileReference)) {
                 imageResource = component.getResourceResolver().getResource(fileReference);
