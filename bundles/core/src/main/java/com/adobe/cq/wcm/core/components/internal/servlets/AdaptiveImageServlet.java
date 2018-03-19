@@ -220,9 +220,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         if (isRequestedWidthAllowed) {
                             String imageType = getImageType(requestPathInfo.getExtension());
                             if (imageComponent.source == Source.FILE) {
-                                resizeAndStreamFile(response, componentProperties, resizeWidth, imageComponent.imageResource, imageType);
+                                transformAndStreamFile(response, componentProperties, resizeWidth, imageComponent.imageResource, imageType);
                             } else if (imageComponent.source == Source.ASSET) {
-                                resizeAndStreamAsset(response, componentProperties, resizeWidth, asset, imageType);
+                                transformAndStreamAsset(response, componentProperties, resizeWidth, asset, imageType);
                             }
                         } else {
                             LOGGER.error("The requested width ({}) is not allowed by the content policy.", width);
@@ -240,9 +240,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 LOGGER.debug("The image request contains no width information. Will resize the image to {}px.", defaultResizeWidth);
                 String imageType = getImageType(requestPathInfo.getExtension());
                 if (imageComponent.source == Source.FILE) {
-                    resizeAndStreamFile(response, componentProperties, defaultResizeWidth, imageComponent.imageResource, imageType);
+                    transformAndStreamFile(response, componentProperties, defaultResizeWidth, imageComponent.imageResource, imageType);
                 } else if (imageComponent.source == Source.ASSET) {
-                    resizeAndStreamAsset(response, componentProperties, defaultResizeWidth, asset, imageType);
+                    transformAndStreamAsset(response, componentProperties, defaultResizeWidth, asset, imageType);
                 }
             }
         }
@@ -271,7 +271,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
-    private void resizeAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, Asset asset, String
+    private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, Asset asset, String
             imageType) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
         if ("gif".equalsIgnoreCase(extension)) {
@@ -376,7 +376,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
     }
 
-    private void resizeAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
+    private void transformAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
             resizeWidth, Resource imageFile, String imageType) throws
             IOException {
         InputStream is = null;
