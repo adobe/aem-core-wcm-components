@@ -395,33 +395,20 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
             if (is != null) {
                 if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
-                    Layer layer = null;
+                    Layer layer = new Layer(is);
                     if (rectangle != null) {
-                        layer = new Layer(is);
                         layer.crop(rectangle);
                         LOGGER.debug("Applied cropping transformation.");
                     }
                     if (rotationAngle != 0) {
-                        if (layer == null) {
-                            layer = new Layer(is);
-                        }
                         layer.rotate(rotationAngle);
                         LOGGER.debug("Applied rotation transformation ({} degrees).", rotationAngle);
                     }
                     if (flipHorizontally) {
-                        if (layer == null) {
-                            layer = new Layer(is);
-                        }
                         layer.flipHorizontally();
                     }
                     if (flipVertically) {
-                        if (layer == null) {
-                            layer = new Layer(is);
-                        }
                         layer.flipVertically();
-                    }
-                    if (layer == null) {
-                        layer = new Layer(is);
                     }
                     resizeAndStreamLayer(response, layer, imageType, resizeWidth);
                 } else {
