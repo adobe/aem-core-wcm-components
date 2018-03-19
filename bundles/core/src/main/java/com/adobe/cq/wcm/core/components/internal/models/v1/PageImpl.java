@@ -251,13 +251,14 @@ public class PageImpl implements Page {
             template = this.currentPage.getTemplate();
         }
 
+        // If the template is editable
         if (template != null && template.hasStructureSupport()) {
             ComponentContext componentContext = WCMUtils.getComponentContext(request);
 
             if (componentContext != null) {
                 TemplateManager templateManager = resolver.adaptTo(TemplateManager.class);
 
-                // Template structured resources
+                // Resources backed by the template structure
                 if (templateManager != null) {
                     children = templateManager.getStructureResources(componentContext);
                 }
