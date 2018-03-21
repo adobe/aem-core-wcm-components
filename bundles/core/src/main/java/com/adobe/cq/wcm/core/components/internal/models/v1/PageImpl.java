@@ -50,9 +50,12 @@ import com.adobe.cq.wcm.core.components.models.Page;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.TemplateManager;
+import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.commons.WCMUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
@@ -241,7 +244,32 @@ public class PageImpl implements Page {
                                               @Nonnull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
-        for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {
+        Iterable<Resource> children = null;
+        Template template = null;
+
+        if (this.currentPage != null) {
+            template = this.currentPage.getTemplate();
+        }
+
+        // If the template is editable
+        if (template != null && template.hasStructureSupport()) {
+            ComponentContext componentContext = WCMUtils.getComponentContext(request);
+
+            if (componentContext != null) {
+                TemplateManager templateManager = resolver.adaptTo(TemplateManager.class);
+
+                // Resources backed by the template structure
+                if (templateManager != null) {
+                    children = templateManager.getStructureResources(componentContext);
+                }
+            }
+        }
+
+        if (children == null || !children.iterator().hasNext()) {
+            children = request.getResource().getChildren();
+        }
+
+        for (final Resource child : slingModelFilter.filterChildResources(children)) {
             itemWrappers.put(child.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass));
         }
 

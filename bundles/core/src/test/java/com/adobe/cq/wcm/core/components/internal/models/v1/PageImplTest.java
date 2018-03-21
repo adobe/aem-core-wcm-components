@@ -17,10 +17,12 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,12 +35,17 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.models.factory.ModelFactory;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.powermock.reflect.Whitebox;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
@@ -49,6 +56,7 @@ import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.TemplateManager;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
@@ -63,6 +71,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -91,7 +100,11 @@ public class PageImplTest {
     protected static final String PN_TOUCH_ICON_120 = "touchIcon120";
     protected static final String PN_TOUCH_ICON_152 = "touchIcon152";
 
+    protected static MockSlingHttpServletRequest request;
+    protected static ResourceResolver resolver;
     protected static ContentPolicyManager contentPolicyManager;
+    protected static TemplateManager templateManager;
+    protected static ComponentContext componentContext;
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext();
@@ -99,6 +112,12 @@ public class PageImplTest {
     @BeforeClass
     public static void setUp() {
         internalSetUp(CONTEXT, TEST_BASE, ROOT);
+    }
+
+    @Before
+    public void beforeTest() {
+        resolver = spy(CONTEXT.resourceResolver());
+        request = spy(new MockSlingHttpServletRequest(resolver, CONTEXT.bundleContext()));
     }
 
     protected static void internalSetUp(AemContext aemContext, String testBase, String contentRoot) {
@@ -194,53 +213,108 @@ public class PageImplTest {
     }
 
     protected <T> T getPageUnderTest(Class<T> model, String pagePath, String designPath) {
+        return getPageUnderTest(model, pagePath, designPath, true);
+    }
+
+    protected <T> T getPageUnderTest(Class<T> model, String pagePath, String designPath, boolean withEditableTemplate) {
         Resource resource = CONTEXT.resourceResolver().getResource(pagePath + "/" + JcrConstants.JCR_CONTENT);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to define test resource " + pagePath + "?");
         }
-        com.day.cq.wcm.api.Page page = spy(CONTEXT.pageManager().getPage(pagePath));
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
+
+        Resource resourceSpy = spy(resource);
+        when(resourceSpy.listChildren()).thenReturn(resource.listChildren());
+
+        com.day.cq.wcm.api.Page page = CONTEXT.pageManager().getPage(pagePath);
+        com.day.cq.wcm.api.Page pageSpy = spy(page);
+        componentContext = mock(ComponentContext.class);
         SlingBindings slingBindings = new SlingBindings();
         Design design = mock(Design.class);
+
         if (designPath != null) {
             when(design.getPath()).thenReturn(designPath);
         } else {
             when(design.getPath()).thenReturn(Designer.DEFAULT_DESIGN_PATH);
         }
+
         Resource templateResource = CONTEXT.resourceResolver().getResource("/conf/coretest/settings/wcm/templates/product-page");
         Template template = mock(Template.class);
-        when(template.hasStructureSupport()).thenReturn(true);
         when(template.adaptTo(Resource.class)).thenReturn(templateResource);
-        when(page.getTemplate()).thenReturn(template);
+        when(pageSpy.getTemplate()).thenReturn(template);
+        when(template.hasStructureSupport()).thenReturn(withEditableTemplate);
         contentPolicyManager = mock(ContentPolicyManager.class);
+        templateManager = mock(TemplateManager.class);
+        when(resolver.adaptTo(TemplateManager.class)).thenReturn(templateManager);
         ContentPolicyMapping mapping = templateResource.getChild(POLICIES_MAPPING_PATH).adaptTo(ContentPolicyMapping.class);
         ContentPolicy contentPolicy = mapping.getPolicy();
         Style style;
         slingBindings.put(WCMBindings.CURRENT_DESIGN, design);
+
         if (contentPolicy != null) {
             Resource contentPolicyResource = CONTEXT.resourceResolver().getResource(contentPolicy.getPath());
             style = new MockStyle(contentPolicyResource, contentPolicyResource.adaptTo(ValueMap.class));
-            when(contentPolicyManager.getPolicy(page.getContentResource())).thenReturn(contentPolicy);
+            when(contentPolicyManager.getPolicy(pageSpy.getContentResource())).thenReturn(contentPolicy);
         } else {
             style = mock(Style.class);
             when(style.get(anyString(), Matchers.anyObject())).thenAnswer(
                     invocationOnMock -> invocationOnMock.getArguments()[1]
             );
         }
-        ComponentContext componentContext = mock(ComponentContext.class);
+
         Set<String> cssClassNames = new LinkedHashSet<>(Arrays.asList("class1", "class2"));
         when(componentContext.getCssClassNames()).thenReturn(cssClassNames);
         slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         slingBindings.put(SlingBindings.RESOLVER, request.getResourceResolver());
-        slingBindings.put(WCMBindings.CURRENT_PAGE, page);
+        slingBindings.put(WCMBindings.CURRENT_PAGE, pageSpy);
         slingBindings.put(WCMBindings.PAGE_MANAGER, CONTEXT.pageManager());
-        slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.PAGE_PROPERTIES, page.getProperties());
+        slingBindings.put(SlingBindings.RESOURCE, resourceSpy);
+        slingBindings.put(WCMBindings.PAGE_PROPERTIES, pageSpy.getProperties());
         slingBindings.put(WCMBindings.COMPONENT_CONTEXT, componentContext);
         request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
+        request.setResource(resourceSpy);
         slingBindings.put(SlingBindings.REQUEST, request);
+        when(request.getAttribute(eq("com.day.cq.wcm.componentcontext"))).thenReturn(componentContext);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(model);
     }
+
+    private void testGetChildModel(boolean withEditableTemplate) {
+        List<Resource> childResources = new ArrayList<>();
+        Resource resource1 = mock(Resource.class);
+        String resourceName = "test";
+        when(resource1.getName()).thenReturn(resourceName);
+
+        childResources.add(resource1);
+
+        Page page = getPageUnderTest(Page.class, PAGE, DESIGN_PATH, withEditableTemplate);
+
+        when(request.getResource().getChildren()).thenReturn(childResources);
+
+        ModelFactory modelFactory = mock(ModelFactory.class);
+
+        ComponentExporter componentExporter = mock(ComponentExporter.class);
+
+        when(modelFactory.getModelFromWrappedRequest(eq(request), eq(resource1), eq(ComponentExporter.class))).thenReturn(componentExporter);
+
+        Whitebox.setInternalState(page, "modelFactory", modelFactory);
+
+        when(templateManager.getStructureResources(eq(componentContext))).thenReturn(childResources);
+
+        Map<String, ? extends ComponentExporter> exportedItems = page.getExportedItems();
+
+        Assert.assertEquals(childResources.size(), exportedItems.size());
+
+        Assert.assertEquals(componentExporter, exportedItems.get(resourceName));
+    }
+
+    @Test
+    public void testGetChildModelStaticTemplate() {
+        testGetChildModel(false);
+    }
+
+    @Test
+    public void testGetChildModelEditableTemplate() {
+        testGetChildModel(true);
+    }
+
 }
