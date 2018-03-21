@@ -102,6 +102,22 @@ public interface Image extends ComponentExporter {
      */
     String PN_TITLE_VALUE_FROM_DAM = "titleValueFromDAM";
 
+
+    /**
+     * Name of the resource property that will indicate if the current image should be flipped horizontally.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.3.0
+     */
+    String PN_FLIP_HORIZONTAL = "imageFlipHorizontal";
+
+    /**
+     * Name of the resource property that will indicate if the current image should be flipped vertically.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.3.0
+     */
+    String PN_FLIP_VERTICAL = "imageFlipVertical";
+
+
     /**
      * Returns the value for the {@code src} attribute of the image.
      *
