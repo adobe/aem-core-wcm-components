@@ -317,31 +317,4 @@ public class PageImplTest {
         testGetChildModel(true);
     }
 
-    @Test
-    public void testGetChildModelStructured() {
-        List<Resource> structuredChildResources = new ArrayList<>();
-        Resource resource1 = mock(Resource.class);
-        String resourceName = "test";
-        when(resource1.getName()).thenReturn(resourceName);
-
-        structuredChildResources.add(resource1);
-
-        Page page = getPageUnderTest(Page.class, PAGE);
-
-        ModelFactory modelFactory = mock(ModelFactory.class);
-
-        ComponentExporter componentExporter = mock(ComponentExporter.class);
-
-        when(modelFactory.getModelFromWrappedRequest(eq(request), eq(resource1), eq(ComponentExporter.class))).thenReturn(componentExporter);
-
-        Whitebox.setInternalState(page, "modelFactory", modelFactory);
-
-        when(templateManager.getStructureResources(eq(componentContext))).thenReturn(structuredChildResources);
-
-        Map<String, ? extends ComponentExporter> exportedItems = page.getExportedItems();
-
-        Assert.assertEquals(structuredChildResources.size(), exportedItems.size());
-
-        Assert.assertEquals(componentExporter, exportedItems.get(resourceName));
-    }
 }
