@@ -170,7 +170,7 @@
                 "structure": {
                     "jcr:content": {
                         "cq:deviceGroups": [
-                            "/etc/mobile/groups/responsive"
+                            "mobile/groups/responsive"
                         ],
                         "cq:responsive": {
                             "breakpoints": {
