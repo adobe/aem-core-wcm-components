@@ -28,6 +28,7 @@
      */
     var itemSelector ={
         help: '.cmp-form-options__help-message',
+        description: '.cmp-form-options__field-description',
         checkbox: '.cmp-form-options__field--checkbox',
         radio: '.cmp-form-options__field--radio',
         dropDown: '.cmp-form-options__field--drop-down',
