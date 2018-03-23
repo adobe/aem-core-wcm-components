@@ -26,13 +26,15 @@
     /**
      * v2 specifics
      */
-    var itemSelector ={
+    var selectors ={
         help: '.cmp-form-options__help-message',
+        description: '.cmp-form-options__field-description',
         checkbox: '.cmp-form-options__field--checkbox',
         radio: '.cmp-form-options__field--radio',
         dropDown: '.cmp-form-options__field--drop-down',
         multiDropDown: '.cmp-form-options__field--multi-drop-down'
     };
+
     var tcExecuteBeforeTest = formOptionsV1.tcExecuteBeforeTest(c.rtFormOptions_v2, "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest = formOptionsV1.tcExecuteAfterTest();
 
@@ -46,11 +48,11 @@
         .addTestCase(formOptionsV1.checkMandatoryFields(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptionsV1.setTitle(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptionsV1.setElementName(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formOptionsV1.setHelpMessage(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formOptionsV1.setCheckbox(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formOptionsV1.setRadioButton(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formOptionsV1.setDropDown(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formOptionsV1.setMultiSelectDropDown(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formOptionsV1.setHelpMessage(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formOptionsV1.setCheckbox(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formOptionsV1.setRadioButton(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formOptionsV1.setDropDown(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formOptionsV1.setMultiSelectDropDown(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptionsV1.setActiveOptionForCheckbox(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptionsV1.setActiveOptionForRadioButton(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptionsV1.setActiveOptionForDropDown(tcExecuteBeforeTest, tcExecuteAfterTest))

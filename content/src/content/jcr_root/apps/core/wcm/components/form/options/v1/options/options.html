@@ -22,9 +22,9 @@
         <p class="help-block" data-sly-test="${options.helpMessage}">${options.helpMessage}</p>
         <div class="${options.type.value}-item" data-sly-repeat.optionItem="${options.items}">
             <label>
-              <input type="${options.type.value}" name="${options.name}" value="${optionItem.value}"
-                     checked="${optionItem.selected}" disabled="${optionItem.disabled}"/>
-              ${optionItem.text}
+                <input type="${options.type.value}" name="${options.name}" value="${optionItem.value}"
+                      checked="${optionItem.selected}" disabled="${optionItem.disabled}"/>
+                <span>${optionItem.text}</span>
             </label>
         </div>
     </fieldset>

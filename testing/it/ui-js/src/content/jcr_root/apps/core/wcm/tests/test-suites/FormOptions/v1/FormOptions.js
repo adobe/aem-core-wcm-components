@@ -28,6 +28,7 @@
      */
     var itemSelector ={
         help: '.help-block',
+        description: '.form-group input ~ span',
         checkbox: '.form-group.checkbox',
         radio: '.form-group.radio',
         dropDown: '.form-group.drop-down',
