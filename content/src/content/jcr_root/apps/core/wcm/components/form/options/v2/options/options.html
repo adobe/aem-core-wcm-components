@@ -22,7 +22,7 @@
             <label class="cmp-form-options__field-label" data-sly-repeat.optionItem="${options.items}">
                 <input class="cmp-form-options__field cmp-form-options__field--${options.type.value}" type="${options.type.value}" name="${options.name}"
                        value="${optionItem.value}" checked="${optionItem.selected}" disabled="${optionItem.disabled}"/>
-                ${optionItem.text}
+                <span class="cmp-form-options__field-description">${optionItem.text}</span>
             </label>
         </sly>
         <sly data-sly-test="${options.type.value == 'drop-down' || options.type.value == 'multi-drop-down'}">

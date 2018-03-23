@@ -30,11 +30,11 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     //title value
     var title = "Options";
     //help message
-    var helpMessage = "This is an help message"
+    var helpMessage = "This is an help message";
     //value for 'value' field
-    var value = "value1"
+    var value = "value1";
     //value for 'text' field
-    var text = "text1"
+    var text = "text1";
 
     /**
      * Before Test Case
@@ -235,6 +235,11 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
             //check if the option type is set to checkbox
             .asserts.isTrue(function () {
                 return h.find(itemSelector.checkbox, "#ContentFrame").size() == 1;
+            })
+
+            // check that the description is correctly set
+            .asserts.isTrue(function () {
+                return h.find(itemSelector.description + ':contains(' + text + ')', "#ContentFrame").size() == 1;
             });
     };
 
@@ -261,6 +266,11 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
             //check if the option type is set to radio button
             .asserts.isTrue(function () {
                 return h.find(itemSelector.radio, "#ContentFrame").size() == 1;
+            })
+
+            // check that the description is correctly set
+            .asserts.isTrue(function () {
+                return h.find(itemSelector.description + ':contains(' + text + ')', "#ContentFrame").size() == 1;
             });
     };
 

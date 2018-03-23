@@ -50,6 +50,7 @@ BLOCK cmp-form-options
     ELEMENT cmp-form-options__field
         MOD cmp-form-options__field--checkbox
         MOD cmp-form-options__field--radio
+    ELEMENT cmp-form-options__field-description
     ELEMENT cmp-form-options__label
     ELEMENT cmp-form-options__drop-down-field
     ELEMENT cmp-form-options__multi-drop-down-field
