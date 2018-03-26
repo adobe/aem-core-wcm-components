@@ -23,7 +23,9 @@
         ]
     }"></sly>
     <sly data-sly-include="/libs/cq/cloudserviceconfigs/components/servicelibs/servicelibs.jsp"></sly>
-    <sly data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
+    <sly data-sly-use.pip="com.adobe.granite.license.ProductInfoProvider" data-sly-test.aemVersion="${pip.productInfo.version}"
+         data-sly-test="${aemVersion.major > 6 || (aemVersion.major == 6 && aemVersion.minor > 3)}"
+         data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
     <sly data-sly-test="${clientlibCategories}"
          data-sly-call="${clientlib.css @ categories=clientlibCategories}"></sly>
     <link data-sly-test="${staticDesignPath}" href="${staticDesignPath}" rel="stylesheet" type="text/css" />

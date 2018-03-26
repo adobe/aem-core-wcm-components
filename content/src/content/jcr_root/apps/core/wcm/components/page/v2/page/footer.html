@@ -19,5 +19,7 @@
          data-sly-call="${clientlib.js @ categories=clientlibCategories}"></sly>
     <sly data-sly-include="customfooterlibs.html"></sly>
     <sly data-sly-resource="${'cloudservices' @ resourceType='cq/cloudserviceconfigs/components/servicecomponents'}"></sly>
-    <sly data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"></sly>
+    <sly data-sly-use.pip="com.adobe.granite.license.ProductInfoProvider" data-sly-test.aemVersion="${pip.productInfo.version}"
+         data-sly-test="${aemVersion.major > 6 || (aemVersion.major == 6 && aemVersion.minor > 3)}"
+         data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"></sly>
 </template>
