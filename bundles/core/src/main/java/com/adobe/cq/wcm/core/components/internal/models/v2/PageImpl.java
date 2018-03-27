@@ -33,6 +33,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.osgi.framework.Version;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -40,6 +41,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
@@ -55,6 +57,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
+
+    @OSGiService
+    private ProductInfoProvider productInfoProvider;
 
     @Self
     protected SlingHttpServletRequest request;
@@ -145,5 +150,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public NavigationItem getRedirectTarget() {
         return redirectTarget;
+    }
+
+    @Override
+    public boolean hasCloudconfigSupport() {
+        if (productInfoProvider == null) {
+            return false;
+        }
+        return productInfoProvider.getProductInfo().getVersion().compareTo(new Version("6.3.0")) > 0;
     }
 }
