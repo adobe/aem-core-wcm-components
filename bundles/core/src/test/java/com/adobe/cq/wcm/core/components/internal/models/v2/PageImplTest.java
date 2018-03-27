@@ -32,12 +32,13 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
-import com.adobe.granite.license.ProductInfo;
-import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
@@ -47,7 +48,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
     private static ClientLibrary mockClientLibrary;
 
-    private static ProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
+    private static MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
     @BeforeClass
     public static void setUp() {
@@ -114,14 +115,12 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
 
     @Test
     public void testHasCloudconfigSupport() {
-        Page page = new PageImpl();
+        Page page = getPageUnderTest(PAGE);
         assertFalse("Expected no cloudconfig support if product info provider missing", page.hasCloudconfigSupport());
-        ProductInfo mockProductInfo = mock(ProductInfo.class);
-        when(mockProductInfoProvider.getProductInfo()).thenReturn(mockProductInfo);
-        when(mockProductInfo.getVersion()).thenReturn(new Version("6.3.1"));
+        mockProductInfoProvider.setVersion(new Version("6.3.1"));
         assertFalse("Expected no cloudconfig support if product version < 6.4.0", page.hasCloudconfigSupport());
-        when(mockProductInfo.getVersion()).thenReturn(new Version("6.4.0"));
-        assertFalse("Expected cloudconfig support if product version >= 6.4.0", page.hasCloudconfigSupport());
+        mockProductInfoProvider.setVersion(new Version("6.4.0"));
+        assertTrue("Expected cloudconfig support if product version >= 6.4.0", page.hasCloudconfigSupport());
     }
 
     private Page getPageUnderTest(String pagePath) {

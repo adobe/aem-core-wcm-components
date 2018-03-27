@@ -26,7 +26,7 @@ import com.adobe.granite.license.ProductInfoProvider;
 )
 public class MockProductInfoProvider implements ProductInfoProvider {
 
-    private Version version;
+    private Version version = Version.emptyVersion;
 
     public void setVersion(Version version) {
         this.version = version;

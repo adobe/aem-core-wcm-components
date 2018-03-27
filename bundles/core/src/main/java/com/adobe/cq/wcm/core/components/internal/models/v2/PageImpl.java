@@ -157,6 +157,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         if (productInfoProvider == null) {
             return false;
         }
-        return productInfoProvider.getProductInfo().getVersion().compareTo(new Version("6.3.0")) > 0;
+        return productInfoProvider.getProductInfo().getVersion().compareTo(new Version("6.4.0")) >= 0;
     }
 }
