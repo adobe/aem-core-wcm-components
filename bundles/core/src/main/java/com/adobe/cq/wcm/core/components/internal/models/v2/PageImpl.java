@@ -55,6 +55,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
 
+    private Boolean hasCloudconfigSupport;
+
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
 
@@ -154,9 +156,14 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public boolean hasCloudconfigSupport() {
-        if (productInfoProvider == null) {
-            return false;
+        if (hasCloudconfigSupport == null) {
+            if (productInfoProvider == null || productInfoProvider.getProductInfo() == null ||
+                    productInfoProvider.getProductInfo().getVersion() == null) {
+                hasCloudconfigSupport = false;
+            } else {
+                hasCloudconfigSupport = productInfoProvider.getProductInfo().getVersion().compareTo(new Version("6.4.0")) >= 0;
+            }
         }
-        return productInfoProvider.getProductInfo().getVersion().compareTo(new Version("6.4.0")) >= 0;
+        return hasCloudconfigSupport;
     }
 }
