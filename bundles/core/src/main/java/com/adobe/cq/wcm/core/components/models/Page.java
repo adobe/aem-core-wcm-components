@@ -281,6 +281,16 @@ public interface Page extends ContainerExporter {
     }
 
     /**
+     * Checks if there's support for cloudconfig script tags so they can be added to page header/footer
+     *
+     * @return {@code true} if there's support for cloudconfig script tags
+     * @since com.adobe.cq.wcm.core.components.models 12.3.0
+     */
+    default boolean hasCloudconfigSupport() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ContainerExporter#getExportedItemsOrder()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */

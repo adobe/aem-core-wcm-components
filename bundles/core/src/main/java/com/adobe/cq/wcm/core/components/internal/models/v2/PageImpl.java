@@ -33,6 +33,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.osgi.framework.Version;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -40,6 +41,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.granite.license.ProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
@@ -53,8 +55,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
 
+    private Boolean hasCloudconfigSupport;
+
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
+
+    @OSGiService
+    private ProductInfoProvider productInfoProvider;
 
     @Self
     protected SlingHttpServletRequest request;
@@ -145,5 +152,18 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public NavigationItem getRedirectTarget() {
         return redirectTarget;
+    }
+
+    @Override
+    public boolean hasCloudconfigSupport() {
+        if (hasCloudconfigSupport == null) {
+            if (productInfoProvider == null || productInfoProvider.getProductInfo() == null ||
+                    productInfoProvider.getProductInfo().getVersion() == null) {
+                hasCloudconfigSupport = false;
+            } else {
+                hasCloudconfigSupport = productInfoProvider.getProductInfo().getVersion().compareTo(new Version("6.4.0")) >= 0;
+            }
+        }
+        return hasCloudconfigSupport;
     }
 }

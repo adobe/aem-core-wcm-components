@@ -19,5 +19,5 @@
          data-sly-call="${clientlib.js @ categories=clientlibCategories}"></sly>
     <sly data-sly-include="customfooterlibs.html"></sly>
     <sly data-sly-resource="${'cloudservices' @ resourceType='cq/cloudserviceconfigs/components/servicecomponents'}"></sly>
-    <sly data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"></sly>
+    <sly data-sly-test="${page.hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-footer' @ resourceType='cq/cloudconfig/components/scripttags/footer'}"></sly>
 </template>
