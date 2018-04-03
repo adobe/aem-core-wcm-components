@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 (function ($) {
-    'use strict';
+    "use strict";
 
     function toggleInputs(isDecorative) {
         var alt = $(".cmp-image--editor-alt");

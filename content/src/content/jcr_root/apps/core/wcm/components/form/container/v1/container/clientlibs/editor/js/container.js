@@ -87,9 +87,10 @@
 
     function showHideOptional($element, $optional, data) {
         var showOptional = $element.data(data);
-        var target, $workflowSelect;
+        var target,
+            $workflowSelect;
         if (showOptional) {
-            if (data == "usesworkflow") {
+            if (data === "usesworkflow") {
                 $workflowSelect = $optional.find("coral-select");
                 target = $workflowSelect.data("cqDialogDropdownShowhideTarget");
                 showHideWorkflowTitle($workflowSelect[0], target);
@@ -110,14 +111,14 @@
     function setVisibilityAndHandleFieldValidation($element, show) {
         if (show) {
             $element.removeClass("hide");
-            $element.find('input[aria-required=false], coral-multifield[aria-required=false]').
-                    filter(":not(.hide>input)").filter(":not(input.hide)").
-                    filter(":not(.hide>coral-multifield)").filter(":not(input.coral-multifield)").each(function (index, field) {
-                toggleValidation($(field));
-            });
+            $element.find("input[aria-required=false], coral-multifield[aria-required=false]").
+                filter(":not(.hide>input)").filter(":not(input.hide)").
+                filter(":not(.hide>coral-multifield)").filter(":not(input.coral-multifield)").each(function (index, field) {
+                    toggleValidation($(field));
+                });
         } else {
             $element.addClass("hide");
-            $element.find('input[aria-required=true], coral-multifield[aria-required=true]').each(function (index, field) {
+            $element.find("input[aria-required=true], coral-multifield[aria-required=true]").each(function (index, field) {
                 toggleValidation($(field));
             });
         }

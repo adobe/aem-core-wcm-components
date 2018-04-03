@@ -15,27 +15,27 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*global Coral,jQuery*/
 (function ($) {
-    'use strict';
+    "use strict";
 
-    var DIALOG_CONTENT_SELECTOR = '.cmp-navigation__editor',
+    var DIALOG_CONTENT_SELECTOR = ".cmp-navigation__editor",
         COLLECT_ALL_PAGES_SELECTOR = DIALOG_CONTENT_SELECTOR + ' coral-checkbox[name="./collectAllPages"]',
         STRUCTURE_DEPTH_SELECTOR = DIALOG_CONTENT_SELECTOR + ' coral-numberinput[name="./structureDepth"]';
 
-    $(window).adaptTo('foundation-registry').register('foundation.adapters', {
-        type: 'foundation-toggleable',
+    $(window).adaptTo("foundation-registry").register("foundation.adapters", {
+        type: "foundation-toggleable",
         selector: STRUCTURE_DEPTH_SELECTOR,
         adapter: function(el) {
             var toggleable = $(el);
             return {
                 isOpen: function() {
-                    return !toggleable.adaptTo('foundation-field').isDisabled();
+                    return !toggleable.adaptTo("foundation-field").isDisabled();
                 },
                 show: function() {
-                    toggleable.adaptTo('foundation-field').setDisabled(false);
+                    toggleable.adaptTo("foundation-field").setDisabled(false);
                     toggleable.parent().show();
                 },
                 hide: function() {
-                    toggleable.adaptTo('foundation-field').setDisabled(true);
+                    toggleable.adaptTo("foundation-field").setDisabled(true);
                     toggleable.parent().hide();
                 }
             };
@@ -46,19 +46,19 @@
         if (collectAllPages) {
             Coral.commons.ready(document.querySelector(STRUCTURE_DEPTH_SELECTOR), function (structureDepth) {
                 if (collectAllPages.checked) {
-                    $(structureDepth).adaptTo('foundation-toggleable').hide();
+                    $(structureDepth).adaptTo("foundation-toggleable").hide();
                 } else {
-                    $(structureDepth).adaptTo('foundation-toggleable').show();
+                    $(structureDepth).adaptTo("foundation-toggleable").show();
                 }
             });
         }
     }
 
-    $(document).on('coral-component:attached', COLLECT_ALL_PAGES_SELECTOR, function () {
+    $(document).on("coral-component:attached", COLLECT_ALL_PAGES_SELECTOR, function () {
         toggleStructureDepth(this);
     });
 
-    $(document).on('change', COLLECT_ALL_PAGES_SELECTOR, function () {
+    $(document).on("change", COLLECT_ALL_PAGES_SELECTOR, function () {
         toggleStructureDepth(this);
     });
 

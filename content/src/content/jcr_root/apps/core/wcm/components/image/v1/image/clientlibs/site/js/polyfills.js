@@ -16,13 +16,14 @@
 if (window.Element && !Element.prototype.closest) {
     Element.prototype.closest =
         function (s) {
-            'use strict';
+            "use strict";
             var matches = (this.document || this.ownerDocument).querySelectorAll(s),
                 el      = this,
                 i;
             do {
                 i = matches.length;
                 while (--i >= 0 && matches.item(i) !== el) {
+                    // continue
                 }
             } while ((i < 0) && (el = el.parentElement));
             return el;
@@ -37,10 +38,11 @@ if (window.Element && !Element.prototype.matches) {
         Element.prototype.oMatchesSelector ||
         Element.prototype.webkitMatchesSelector ||
         function (s) {
-            'use strict';
+            "use strict";
             var matches = (this.document || this.ownerDocument).querySelectorAll(s),
                 i       = matches.length;
             while (--i >= 0 && matches.item(i) !== this) {
+                // continue
             }
             return i > -1;
         };
@@ -48,9 +50,9 @@ if (window.Element && !Element.prototype.matches) {
 
 if (!Object.assign) {
     Object.assign = function (target, varArgs) { // .length of function is 2
-        'use strict';
+        "use strict";
         if (target === null) {
-            throw new TypeError('Cannot convert undefined or null to object');
+            throw new TypeError("Cannot convert undefined or null to object");
         }
 
         var to = Object(target);
@@ -71,12 +73,12 @@ if (!Object.assign) {
 }
 
 (function (arr) {
-    'use strict';
+    "use strict";
     arr.forEach(function (item) {
-        if (item.hasOwnProperty('remove')) {
+        if (item.hasOwnProperty("remove")) {
             return;
         }
-        Object.defineProperty(item, 'remove', {
+        Object.defineProperty(item, "remove", {
             configurable: true,
             enumerable: true,
             writable: true,

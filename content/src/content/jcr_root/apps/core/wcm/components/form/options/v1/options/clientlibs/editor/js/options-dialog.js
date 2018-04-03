@@ -14,6 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 (function ($, Granite, ns, $document) {
+    "use strict";
 
     var OPTION_SELECTED_SELECTOR       = "./selected",
         CHECKBOX_SELECTOR              = "coral-checkbox",

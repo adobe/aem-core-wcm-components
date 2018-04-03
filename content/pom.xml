@@ -42,6 +42,12 @@
         <tag>HEAD</tag>
     </scm>
 
+    <properties>
+        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <node.version>v8.10.0</node.version>
+        <npm.version>5.6.0</npm.version>
+    </properties>
+
     <!-- ====================================================================== -->
     <!-- B U I L D   D E F I N I T I O N                                        -->
     <!-- ====================================================================== -->
@@ -82,6 +88,53 @@
                             <generateJavaClasses>true</generateJavaClasses>
                         </configuration>
                     </execution>
+                </executions>
+            </plugin>
+
+            <!-- ====================================================================== -->
+            <!-- Frontend Maven Plugin                                                  -->
+            <!-- ====================================================================== -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <npmVersion>${npm.version}</npmVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>lint</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run lint</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin.version}</version>
+                <executions>
+
                 </executions>
             </plugin>
         </plugins>

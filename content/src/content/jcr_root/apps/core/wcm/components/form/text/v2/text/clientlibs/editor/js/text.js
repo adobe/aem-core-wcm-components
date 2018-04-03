@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 (function ($, channel, Coral) {
-    'use strict';
+    "use strict";
 
     var EDIT_DIALOG = ".cmp-form-text__editDialog";
     var TEXTFIELD_TYPES = ".cmp-form-text__types";
