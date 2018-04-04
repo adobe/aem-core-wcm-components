@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function ($) {
+(function($) {
     "use strict";
 
     var BUTTON_NAME = ".cmp-form-button__editor-name";
@@ -22,7 +22,7 @@
 
     $.validator.register({
         selector: BUTTON_NAME,
-        validate: function (el) {
+        validate: function(el) {
             var valueInput = el.closest("form").find(BUTTON_VALUE);
             if (valueInput.val() !== "") {
                 if (el.val() === "") {

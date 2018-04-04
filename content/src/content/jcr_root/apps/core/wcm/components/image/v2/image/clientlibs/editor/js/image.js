@@ -1,4 +1,4 @@
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,26 +12,26 @@
  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*global jQuery, Coral*/
-(function ($) {
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* global jQuery, Coral */
+(function($) {
     "use strict";
 
-    var dialogContentSelector = ".cmp-image__editor",
-        altTuple,
-        captionTuple,
-        $altGroup,
-        $linkURLGroup,
-        $linkURLField,
-        $cqFileUpload,
-        $cqFileUploadEdit,
-        fileReference         = undefined;
+    var dialogContentSelector = ".cmp-image__editor";
+    var altTuple;
+    var captionTuple;
+    var $altGroup;
+    var $linkURLGroup;
+    var $linkURLField;
+    var $cqFileUpload;
+    var $cqFileUploadEdit;
+    var fileReference;
 
-    $(document).on("dialog-loaded", function (e) {
-        var $dialog        = e.dialog,
-            $dialogContent = $dialog.find(dialogContentSelector),
-            dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined,
-            isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
+    $(document).on("dialog-loaded", function(e) {
+        var $dialog        = e.dialog;
+        var $dialogContent = $dialog.find(dialogContentSelector);
+        var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
+        var isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
         if (dialogContent) {
             altTuple          =
                 new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
@@ -43,10 +43,10 @@
             $cqFileUpload     = $dialog.find(".cq-FileUpload");
             $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             if ($cqFileUpload) {
-                $cqFileUpload.on("assetselected", function (e) {
+                $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     retrieveDAMInfo(fileReference).then(
-                        function () {
+                        function() {
                             if (isDecorative) {
                                 altTuple.hideCheckbox(isDecorative.checked);
                             }
@@ -56,11 +56,11 @@
                         }
                     );
                 });
-                $cqFileUpload.on("click", "[coral-fileupload-clear]", function () {
+                $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
                     altTuple.reset();
                     captionTuple.reset();
                 });
-                $cqFileUpload.on("coral-fileupload:fileadded", function () {
+                $cqFileUpload.on("coral-fileupload:fileadded", function() {
                     if (isDecorative) {
                         altTuple.hideTextfield(isDecorative.checked);
                     }
@@ -86,17 +86,17 @@
         }
     });
 
-    $(window).on("focus", function () {
+    $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
         }
     });
 
-    $(document).on("dialog-beforeclose", function () {
+    $(document).on("dialog-beforeclose", function() {
         $(window).off("focus");
     });
 
-    $(document).on("change", dialogContentSelector + ' coral-checkbox[name="./isDecorative"]', function (e) {
+    $(document).on("change", dialogContentSelector + ' coral-checkbox[name="./isDecorative"]', function(e) {
         toggleAlternativeFieldsAndLink(e.target);
     });
 
@@ -120,7 +120,7 @@
     function retrieveDAMInfo(fileReference) {
         return $.ajax({
             url: fileReference + "/_jcr_content/metadata.json"
-        }).done(function (data) {
+        }).done(function(data) {
             if (data) {
                 if (altTuple) {
                     var description = data["dc:description"];
@@ -142,9 +142,9 @@
     /**
      * Creates a tuple consisting of a checkbox and a text field located in the same dialog.
      *
-     * @param {Element} dialog the dialog where the two elements are found
-     * @param {String} checkboxSelector the selector for the checkbox
-     * @param {String} textfieldSelector the selector for the text field
+     * @param {HTMLElement} dialog The dialog where the two elements are found.
+     * @param {String} checkboxSelector The selector for the checkbox.
+     * @param {String} textfieldSelector The selector for the text field.
      * @constructor
      */
     function CheckboxTextfieldTuple(dialog, checkboxSelector, textfieldSelector) {
@@ -160,23 +160,23 @@
         self._textfieldFoundation = $(self._textfield).adaptTo("foundation-field");
         if (self._checkbox && self._checkboxFoundation) {
             self._checkbox.setAttribute(self.ATTR_PREVIOUS_VALUE, self._checkboxFoundation.getValue());
-            self._checkbox.addEventListener("change", function () {
+            self._checkbox.addEventListener("change", function() {
                 self.update();
             });
             $(window).adaptTo("foundation-registry").register("foundation.adapters", {
                 type: "foundation-toggleable",
                 selector: self._checkboxSelector,
-                adapter: function () {
+                adapter: function() {
                     return {
-                        isOpen: function () {
+                        isOpen: function() {
                             return !self._checkboxFoundation.isDisabled();
                         },
-                        show: function () {
+                        show: function() {
                             self._checkboxFoundation.setDisabled(false);
                             $(self._checkbox).parent().show();
                             self.update();
                         },
-                        hide: function () {
+                        hide: function() {
                             self._checkboxFoundation.setDisabled(true);
                             $(self._checkbox).parent().hide();
                             var previousValue = self._textfield.getAttribute(self.ATTR_PREVIOUS_VALUE);
@@ -193,16 +193,16 @@
             $(window).adaptTo("foundation-registry").register("foundation.adapters", {
                 type: "foundation-toggleable",
                 selector: self._textfieldSelector,
-                adapter: function () {
+                adapter: function() {
                     return {
-                        isOpen: function () {
+                        isOpen: function() {
                             return !self._textfieldFoundation.isDisabled();
                         },
-                        show: function () {
+                        show: function() {
                             self._textfieldFoundation.setDisabled(false);
                             $(self._textfield).parent().show();
                         },
-                        hide: function () {
+                        hide: function() {
                             self._textfieldFoundation.setDisabled(true);
                             $(self._textfield).parent().hide();
                         }
@@ -222,7 +222,7 @@
      *
      * The text field will be disabled when the checkbox is checked, or enabled if the checkbox is not checked.
      */
-    CheckboxTextfieldTuple.prototype.update = function () {
+    CheckboxTextfieldTuple.prototype.update = function() {
         if (this._checkboxFoundation && this._textfieldFoundation && this._textfield) {
             if (this._checkboxFoundation.getValue() === "true") {
                 this._textfieldFoundation.setValue(this._textfield.getAttribute(this.ATTR_SEEDED_VALUE));
@@ -241,9 +241,9 @@
      * Seeds a value in the {@link #ATTR_SEEDED_VALUE} data attribute of the checkbox. If the value is empty then the data attribute is
      * removed.
      *
-     * @param {String} [value] the value to seed
+     * @param {String} [value] The value to seed.
      */
-    CheckboxTextfieldTuple.prototype.seedTextValue = function (value) {
+    CheckboxTextfieldTuple.prototype.seedTextValue = function(value) {
         if (this._textfield) {
             if (value !== undefined && value !== null) {
                 this._textfield.setAttribute(this.ATTR_SEEDED_VALUE, value);
@@ -259,7 +259,7 @@
      * @see {@link CheckboxTextfieldTuple#update}
      * @see {@link CheckboxTextfieldTuple#seedTextValue}
      */
-    CheckboxTextfieldTuple.prototype.reset = function () {
+    CheckboxTextfieldTuple.prototype.reset = function() {
         if (this._checkboxFoundation && this._textfield && this._textfieldFoundation) {
             this._checkboxFoundation.setValue(false);
             this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
@@ -274,7 +274,7 @@
     /**
      * Sets the checkbox to its initial checked state.
      */
-    CheckboxTextfieldTuple.prototype.reinitCheckbox = function () {
+    CheckboxTextfieldTuple.prototype.reinitCheckbox = function() {
         if (this._checkbox && this._checkboxFoundation) {
             var previousValue = this._checkbox.getAttribute(this.ATTR_PREVIOUS_VALUE);
             if (previousValue !== undefined && previousValue !== null) {
@@ -286,9 +286,10 @@
 
     /**
      * Hides the checkbox field, depending on the <code>hide</code> value.
-     * @param {Boolean} [hide] when set to <code>true</code> the checkbox will be hidden
+     *
+     * @param {Boolean} [hide] When set to <code>true</code> the checkbox will be hidden.
      */
-    CheckboxTextfieldTuple.prototype.hideCheckbox = function (hide) {
+    CheckboxTextfieldTuple.prototype.hideCheckbox = function(hide) {
         var checkbox = $(this._checkboxSelector).adaptTo("foundation-toggleable");
         if (checkbox) {
             if (hide) {
@@ -301,9 +302,10 @@
 
     /**
      * Hides the text field, depending on the <code>hide</code> value.
-     * @param {Boolean} [hide] when set to <code>true</code> the text will be hidden
+     *
+     * @param {Boolean} [hide] When set to <code>true</code> the text will be hidden.
      */
-    CheckboxTextfieldTuple.prototype.hideTextfield = function (hide) {
+    CheckboxTextfieldTuple.prototype.hideTextfield = function(hide) {
         var textfield = $(this._textfieldSelector).adaptTo("foundation-toggleable");
         if (textfield) {
             if (hide) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
+(function() {
     "use strict";
 
     var NS = "cmp";
@@ -24,7 +24,7 @@
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
 
     var selectors = {
-        self: "[data-" + NS + '-is="' + IS +'"]',
+        self: "[data-" + NS + '-is="' + IS + '"]',
         image: '[data-cmp-hook-image="image"]'
     };
 
@@ -155,7 +155,7 @@
             var len = that._properties.widths.length;
             var key = 0;
 
-            while ((key < len-1) && (that._properties.widths[key] < optimalWidth)) {
+            while ((key < len - 1) && (that._properties.widths[key] < optimalWidth)) {
                 key++;
             }
 
@@ -217,10 +217,10 @@
                 return false;
             }
 
-            var wt = window.pageYOffset,
-                wb = wt + document.documentElement.clientHeight,
-                et = that._elements.container.getBoundingClientRect().top + wt,
-                eb = et + that._elements.container.clientHeight;
+            var wt = window.pageYOffset;
+            var wb = wt + document.documentElement.clientHeight;
+            var et = that._elements.container.getBoundingClientRect().top + wt;
+            var eb = et + that._elements.container.clientHeight;
 
             return eb >= wt - LAZY_THRESHOLD && et <= wb + LAZY_THRESHOLD;
         }
@@ -258,7 +258,7 @@
             }
         }
 
-        that.update = function () {
+        that.update = function() {
             if (that._properties.lazy) {
                 if (isLazyVisible()) {
                     loadImage();
@@ -281,15 +281,15 @@
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         var body             = document.querySelector("body");
-        var observer         = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
+        var observer         = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function (addedNode) {
+                    nodesArray.forEach(function(addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function (element) {
+                            elementsArray.forEach(function(element) {
                                 new Image({ element: element, options: readData(element) });
                             });
                         }
@@ -305,7 +305,7 @@
         });
     }
 
-    if (document.readyState !== "loading"){
+    if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady());
@@ -315,7 +315,7 @@
         on drag & drop of the component into a parsys, noscript's content will be escaped multiple times by the editor which creates
         the DOM for editing; the HTML parser cannot be used here due to the multiple escaping
      */
-    function decodeNoscript(text){
+    function decodeNoscript(text) {
         text = text.replace(/&(amp;)*lt;/g, "<");
         text = text.replace(/&(amp;)*gt;/g, ">");
         return text;

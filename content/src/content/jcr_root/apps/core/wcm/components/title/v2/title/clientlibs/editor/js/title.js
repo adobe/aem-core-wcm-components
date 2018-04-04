@@ -24,23 +24,23 @@
  * - hides all the sizes if only one size has been defined in the policy
  * - displays all the sizes defined in the policy if there are at least two
  */
-(function ($, Granite, ns, $document) {
+(function($, Granite, ns, $document) {
     "use strict";
 
-    var DEFAULT_SIZE_SELECTOR       = "coral-select.core-title-size-default",
-        DEFAULT_SIZES_SELECTOR      = "coral-select.core-title-sizes-default",
-        ALLOWED_SIZES_SELECTOR      = ".core-title-sizes-allowed coral-checkbox",
-        DATA_ATTR_VALIDATION_STATE  = "checkboxes.validation.state",
-        SIZES_SELECTOR              = "coral-select.core-title-sizes";
+    var DEFAULT_SIZE_SELECTOR       = "coral-select.core-title-size-default";
+    var DEFAULT_SIZES_SELECTOR      = "coral-select.core-title-sizes-default";
+    var ALLOWED_SIZES_SELECTOR      = ".core-title-sizes-allowed coral-checkbox";
+    var DATA_ATTR_VALIDATION_STATE  = "checkboxes.validation.state";
+    var SIZES_SELECTOR              = "coral-select.core-title-sizes";
 
     // Update the select field that defines the default value
     function updateDefaultSizeSelect(checkboxToggled) {
 
-        var select = $(DEFAULT_SIZE_SELECTOR).get(0),
-            $checkboxes = $(ALLOWED_SIZES_SELECTOR),
-            checkedTotal = 0,
-            firstCheckedValue = "",
-            selectValue = "";
+        var select = $(DEFAULT_SIZE_SELECTOR).get(0);
+        var $checkboxes = $(ALLOWED_SIZES_SELECTOR);
+        var checkedTotal = 0;
+        var firstCheckedValue = "";
+        var selectValue = "";
 
         if (select === null || select === undefined) {
             return;
@@ -50,7 +50,7 @@
         select.items.clear();
 
         // for each checked checkbox, add an option to the default sizes dropdown
-        $checkboxes.each(function (i, checkbox) {
+        $checkboxes.each(function(i, checkbox) {
             if (checkbox.checked) {
                 var newItem = new Coral.Select.Item();
                 newItem.content.textContent = checkbox.label.innerHTML;
@@ -61,7 +61,7 @@
         });
 
         // get the value of the first checked box
-        $checkboxes.each(function (i, checkbox) {
+        $checkboxes.each(function(i, checkbox) {
             if (checkbox.checked) {
                 firstCheckedValue = checkbox.value;
                 return false;
@@ -92,12 +92,12 @@
     // temporary workaround until CQ-4206495 and CUI-1818 are fixed:
     // add a margin when opening the dropdown
     $document.on("coral-select:showitems", DEFAULT_SIZE_SELECTOR, function(e) {
-        var select = e.currentTarget,
-            buttonHeight = $(select).find("button").outerHeight(true),
-            count = select.items.length,
-            totalHeight = count * (buttonHeight + 5),
-            maxHeight = parseInt($(select).find("coral-selectlist").css("max-height"), 10),
-            marginBottom = Math.min(totalHeight, maxHeight);
+        var select = e.currentTarget;
+        var buttonHeight = $(select).find("button").outerHeight(true);
+        var count = select.items.length;
+        var totalHeight = count * (buttonHeight + 5);
+        var maxHeight = parseInt($(select).find("coral-selectlist").css("max-height"), 10);
+        var marginBottom = Math.min(totalHeight, maxHeight);
         $(select).css("margin-bottom", marginBottom);
     });
 
@@ -113,7 +113,7 @@
         updateDefaultSizeSelect(true);
     });
 
-    $document.on("foundation-contentloaded", function (e) {
+    $document.on("foundation-contentloaded", function(e) {
         // Update the default size select when the design title dialog is opened
         Coral.commons.ready($(ALLOWED_SIZES_SELECTOR), function(component) {
             updateDefaultSizeSelect(false);
@@ -163,7 +163,7 @@
 
             // set the validation status on the first checkbox
             isValid = false;
-            $checkboxes.each(function (i, checkbox) {
+            $checkboxes.each(function(i, checkbox) {
                 if (checkbox.checked) {
                     isValid = true;
                     return false;

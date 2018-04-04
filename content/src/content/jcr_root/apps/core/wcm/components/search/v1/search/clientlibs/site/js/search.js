@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
+(function() {
     "use strict";
 
     var NS = "cmp";
@@ -32,7 +32,7 @@
     };
 
     var selectors = {
-        self: "[data-" + NS + '-is="' + IS +'"]',
+        self: "[data-" + NS + '-is="' + IS + '"]',
         item: {
             self: "[data-" + NS + "-hook-" + IS + '="item"]',
             title: "[data-" + NS + "-hook-" + IS + '="itemTitle"]',
@@ -265,10 +265,10 @@
         idCount++;
     };
 
-    Search.prototype._generateItems = function (data, results) {
+    Search.prototype._generateItems = function(data, results) {
         var self = this;
 
-        data.forEach(function (item) {
+        data.forEach(function(item) {
             var el = document.createElement("span");
             el.innerHTML = self._elements.itemTemplate.innerHTML;
             el.querySelectorAll(selectors.item.title)[0].appendChild(document.createTextNode(item.title));
@@ -424,15 +424,15 @@
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         var body = document.querySelector("body");
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function (addedNode) {
+                    nodesArray.forEach(function(addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function (element) {
+                            elementsArray.forEach(function(element) {
                                 new Search({ element: element, options: readData(element) });
                             });
                         }
@@ -448,7 +448,7 @@
         });
     }
 
-    if (document.readyState !== "loading"){
+    if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady());

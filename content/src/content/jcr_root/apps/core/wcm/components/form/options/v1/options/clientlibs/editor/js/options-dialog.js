@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function ($, Granite, ns, $document) {
+(function($, Granite, ns, $document) {
     "use strict";
 
-    var OPTION_SELECTED_SELECTOR       = "./selected",
-        CHECKBOX_SELECTOR              = "coral-checkbox",
-        RADIO_SELECTOR                 = "coral-radio",
-        OPTION_TYPE_ELEMENT_SELECTOR   = ".cmp-options--editor-type-v1",
-        GRANITE_UI_FOUNDATION_FIELD    = "foundation-field";
+    var OPTION_SELECTED_SELECTOR       = "./selected";
+    var CHECKBOX_SELECTOR              = "coral-checkbox";
+    var RADIO_SELECTOR                 = "coral-radio";
+    var OPTION_TYPE_ELEMENT_SELECTOR   = ".cmp-options--editor-type-v1";
+    var GRANITE_UI_FOUNDATION_FIELD    = "foundation-field";
 
     /**
      * Toggles checkboxes <-> radio buttons of the dialog depending on the value of the "./multiSelection" input field:
@@ -28,19 +28,22 @@
      * - otherwise, radio buttons are displayed
      *
      * The transformation only applies to checkboxes / radio buttons named "./selected".
+     *
+     * @param {jQuery} $dialog The options editor dialog.
+     * @param {HTMLInputElement} component The options type select input.
      */
     function toggleRadioCheckbox($dialog, component) {
 
-        var value = component.value,
-            isMultiSelection = (!(value === "drop-down" || value === "radio"));
+        var value = component.value;
+        var isMultiSelection = (!(value === "drop-down" || value === "radio"));
 
         // toggle the 'selected' input, which is either a checkbox or a radio button
-        $dialog.find("input[name='" + OPTION_SELECTED_SELECTOR + "']").each(function () {
-            var $input      = $(this),
-                $checkbox   = $input.closest(CHECKBOX_SELECTOR),
-                checkboxAPI = $checkbox.adaptTo(GRANITE_UI_FOUNDATION_FIELD),
-                $radio      = $input.closest(RADIO_SELECTOR),
-                radioAPI    = $radio.adaptTo(GRANITE_UI_FOUNDATION_FIELD);
+        $dialog.find("input[name='" + OPTION_SELECTED_SELECTOR + "']").each(function() {
+            var $input      = $(this);
+            var $checkbox   = $input.closest(CHECKBOX_SELECTOR);
+            var checkboxAPI = $checkbox.adaptTo(GRANITE_UI_FOUNDATION_FIELD);
+            var $radio      = $input.closest(RADIO_SELECTOR);
+            var radioAPI    = $radio.adaptTo(GRANITE_UI_FOUNDATION_FIELD);
 
             // if multiple selection of options is possible, display the checkboxes and hide/disable the radio buttons
             if (isMultiSelection) {
@@ -70,23 +73,22 @@
         });
     }
 
-    $document.on("foundation-contentloaded", function (e) {
+    $document.on("foundation-contentloaded", function(e) {
         var $dialog = $(e.target);
         if ($dialog.find(OPTION_TYPE_ELEMENT_SELECTOR).length > 0) {
-            $(OPTION_TYPE_ELEMENT_SELECTOR, e.target).each(function (i, element) {
-                Coral.commons.ready(element, function (component) {
+            $(OPTION_TYPE_ELEMENT_SELECTOR, e.target).each(function(i, element) {
+                Coral.commons.ready(element, function(component) {
                     toggleRadioCheckbox($dialog, component);
-                    component.on("change", function () {
+                    component.on("change", function() {
                         toggleRadioCheckbox($dialog, component);
                     });
-                    $document.on("foundation-field-change", function (e) {
+                    $document.on("foundation-field-change", function(e) {
                         toggleRadioCheckbox($dialog, component);
                     });
                 });
             });
         }
     });
-
 
 
 }(jQuery, Granite, Granite.author, jQuery(document)));

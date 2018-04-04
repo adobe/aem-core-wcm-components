@@ -14,12 +14,13 @@
  * limitations under the License.
  ******************************************************************************/
 if (window.Element && !Element.prototype.closest) {
+    // eslint valid-jsdoc: "off"
     Element.prototype.closest =
-        function (s) {
+        function(s) {
             "use strict";
-            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-                el      = this,
-                i;
+            var matches = (this.document || this.ownerDocument).querySelectorAll(s);
+            var el      = this;
+            var i;
             do {
                 i = matches.length;
                 while (--i >= 0 && matches.item(i) !== el) {
@@ -37,10 +38,10 @@ if (window.Element && !Element.prototype.matches) {
         Element.prototype.msMatchesSelector ||
         Element.prototype.oMatchesSelector ||
         Element.prototype.webkitMatchesSelector ||
-        function (s) {
+        function(s) {
             "use strict";
-            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-                i       = matches.length;
+            var matches = (this.document || this.ownerDocument).querySelectorAll(s);
+            var i       = matches.length;
             while (--i >= 0 && matches.item(i) !== this) {
                 // continue
             }
@@ -49,7 +50,7 @@ if (window.Element && !Element.prototype.matches) {
 }
 
 if (!Object.assign) {
-    Object.assign = function (target, varArgs) { // .length of function is 2
+    Object.assign = function(target, varArgs) { // .length of function is 2
         "use strict";
         if (target === null) {
             throw new TypeError("Cannot convert undefined or null to object");
@@ -72,9 +73,9 @@ if (!Object.assign) {
     };
 }
 
-(function (arr) {
+(function(arr) {
     "use strict";
-    arr.forEach(function (item) {
+    arr.forEach(function(item) {
         if (item.hasOwnProperty("remove")) {
             return;
         }

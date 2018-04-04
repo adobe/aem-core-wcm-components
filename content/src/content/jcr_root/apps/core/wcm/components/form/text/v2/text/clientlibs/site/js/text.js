@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
+(function() {
     "use strict";
 
     var NS = "cmp";
@@ -75,7 +75,7 @@
         this._elements.input.addEventListener("input", this._onInput.bind(this));
     }
 
-    FormText.prototype._onInvalid = function (event) {
+    FormText.prototype._onInvalid = function(event) {
         event.target.setCustomValidity("");
         if (event.target.validity.typeMismatch) {
             if (this._properties.constraintMessage) {
@@ -88,7 +88,7 @@
         }
     };
 
-    FormText.prototype._onInput = function (event) {
+    FormText.prototype._onInput = function(event) {
         event.target.setCustomValidity("");
     };
 
@@ -132,15 +132,15 @@
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         var body = document.querySelector("body");
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function (addedNode) {
+                    nodesArray.forEach(function(addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function (element) {
+                            elementsArray.forEach(function(element) {
                                 new FormText({ element: element, options: readData(element) });
                             });
                         }
@@ -156,7 +156,7 @@
         });
     }
 
-    if (document.readyState !== "loading"){
+    if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
         document.addEventListener("DOMContentLoaded", onDocumentReady());

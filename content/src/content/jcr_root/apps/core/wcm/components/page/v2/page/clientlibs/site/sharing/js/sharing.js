@@ -16,8 +16,8 @@
 (function(d, s, id) {
     "use strict";
 
-    var js,
-        fjs = d.getElementsByTagName(s)[0];
+    var js;
+    var fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) {
         return;
     }

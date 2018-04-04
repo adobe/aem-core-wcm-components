@@ -1,4 +1,4 @@
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ~ Copyright 2017 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the 'License');
@@ -12,14 +12,14 @@
  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*global Coral,jQuery*/
-(function ($) {
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* global Coral,jQuery */
+(function($) {
     "use strict";
 
-    var DIALOG_CONTENT_SELECTOR = ".cmp-navigation__editor",
-        COLLECT_ALL_PAGES_SELECTOR = DIALOG_CONTENT_SELECTOR + ' coral-checkbox[name="./collectAllPages"]',
-        STRUCTURE_DEPTH_SELECTOR = DIALOG_CONTENT_SELECTOR + ' coral-numberinput[name="./structureDepth"]';
+    var DIALOG_CONTENT_SELECTOR = ".cmp-navigation__editor";
+    var COLLECT_ALL_PAGES_SELECTOR = DIALOG_CONTENT_SELECTOR + ' coral-checkbox[name="./collectAllPages"]';
+    var STRUCTURE_DEPTH_SELECTOR = DIALOG_CONTENT_SELECTOR + ' coral-numberinput[name="./structureDepth"]';
 
     $(window).adaptTo("foundation-registry").register("foundation.adapters", {
         type: "foundation-toggleable",
@@ -44,7 +44,7 @@
 
     function toggleStructureDepth(collectAllPages) {
         if (collectAllPages) {
-            Coral.commons.ready(document.querySelector(STRUCTURE_DEPTH_SELECTOR), function (structureDepth) {
+            Coral.commons.ready(document.querySelector(STRUCTURE_DEPTH_SELECTOR), function(structureDepth) {
                 if (collectAllPages.checked) {
                     $(structureDepth).adaptTo("foundation-toggleable").hide();
                 } else {
@@ -54,11 +54,11 @@
         }
     }
 
-    $(document).on("coral-component:attached", COLLECT_ALL_PAGES_SELECTOR, function () {
+    $(document).on("coral-component:attached", COLLECT_ALL_PAGES_SELECTOR, function() {
         toggleStructureDepth(this);
     });
 
-    $(document).on("change", COLLECT_ALL_PAGES_SELECTOR, function () {
+    $(document).on("change", COLLECT_ALL_PAGES_SELECTOR, function() {
         toggleStructureDepth(this);
     });
 
