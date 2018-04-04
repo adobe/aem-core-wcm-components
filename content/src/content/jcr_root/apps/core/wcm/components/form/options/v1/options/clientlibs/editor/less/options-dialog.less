@@ -16,26 +16,26 @@
 
 // allows the Well to render correctly
 .cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item-container {
-  display: block;
+    display: block;
 }
 
 // aligns all the fields inside the container
 .cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item-container > .coral-Form-field {
-  display: inline-block;
+    display: inline-block;
 }
 
 // @cloudui - correctly separates the items
 .cmp-options--editor-v1 .cmp-options--editor-item-multifield-composite-item > .coral-Form-fieldwrapper {
-  display: inline-block;
+    display: inline-block;
 
-  // we need to escape the calc so that the contents are passed directly
-  width: ~"calc(50% - 5px)";
+    // we need to escape the calc so that the contents are passed directly
+    width: ~"calc(50% - 5px)";
 
-  + .coral-Form-fieldwrapper {
-    padding-left: 10px;
-  }
+    + .coral-Form-fieldwrapper {
+        padding-left: 10px;
+    }
 }

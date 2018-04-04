@@ -8,8 +8,5 @@ indent_size = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{css,less}]
-indent_size = 2
-
 [*.html]
 insert_final_newline = false
