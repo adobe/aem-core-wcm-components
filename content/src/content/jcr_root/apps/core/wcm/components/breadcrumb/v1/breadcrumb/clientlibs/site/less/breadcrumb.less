@@ -13,6 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 .breadcrumb {
   display: inline-block;
   list-style: none;
@@ -21,8 +22,8 @@
   & .breadcrumb-item {
     float: left;
 
-    & + .breadcrumb-item::before {
-      display: inline-block; //
+    & + .breadcrumb-item:before {
+      display: inline-block;
       padding: 0 5px;
       content: "/\00a0";
     }

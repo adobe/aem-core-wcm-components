@@ -13,28 +13,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 // allows the Well to render correctly
 .cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item-container {
-    display: block;
+  display: block;
 }
 
 // aligns all the fields inside the container
 .cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item-container > .coral-Form-field {
-    display: inline-block;
+  display: inline-block;
 }
 
 // @cloudui - correctly separates the items
 .cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item > .coral-Form-fieldwrapper {
-    display: inline-block;
+  display: inline-block;
 
-    // we need to escape the calc so that the contents are passed directly
-    width: ~"calc(50% - 5px)";
+  // we need to escape the calc so that the contents are passed directly
+  width: ~"calc(50% - 5px)";
 
-    + .coral-Form-fieldwrapper {
-        padding-left: 10px;
-    }
+  + .coral-Form-fieldwrapper {
+    padding-left: 10px;
+  }
 }
