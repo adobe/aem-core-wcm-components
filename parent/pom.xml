@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.4</version>
+    <version>2.0.5-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
 
@@ -171,6 +171,10 @@
                             <exclude>**/*.iml</exclude>
                             <exclude>**/.classpath</exclude>
                             <exclude>**/.project</exclude>
+                            <exclude>**/.eslintrc</exclude>
+                            <exclude>**/.editorconfig</exclude>
+                            <exclude>**/.stylelintrc</exclude>
+                            <exclude>**/.eslintignore</exclude>
                             <exclude>**/.settings</exclude>
                             <exclude>**/.DS_Store</exclude>
                             <exclude>**/target/**</exclude>
@@ -311,6 +315,11 @@
                             <exclude>jenkinsfiles/**/*</exclude>
                             <!-- Ignore IDEA files -->
                             <exclude>**/*.iml</exclude>
+                            <!-- Ignore lint-files -->
+                            <exclude>**/*.eslintrc</exclude>
+                            <exclude>**/*.editorconfig</exclude>
+                            <exclude>**/*.stylelintrc</exclude>
+                            <exclude>**/*.eslintignore</exclude>
                         </excludes>
                     </configuration>
                     <executions>
