@@ -33,7 +33,6 @@
                 },
                 assetDrop: 'coral-fileupload[name="./file"',
                 linkURL: 'foundation-autocomplete[name="./linkURL"]',
-                linkText: 'input[name="./linkText"]',
                 title: 'input[name="./jcr:title"]',
                 description: 'input[name="./jcr:description"]'
             }

@@ -22,7 +22,6 @@
     var c                                = window.CQ.CoreComponentsIT.commons,
         teaser                           = window.CQ.CoreComponentsIT.Teaser.v1,
         testImagePath                    = '/content/dam/core-components/core-comp-test-image.jpg',
-        linkText                         = 'Teaser Page',
         title                            = 'Teaser Title',
         description                      = 'Teaser Description';
 
@@ -85,7 +84,6 @@
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, '%teaser_page%')
-            .fillInput(selectors.editDialog.linkText, linkText)
             .fillInput(selectors.editDialog.title, title)
             .fillInput(selectors.editDialog.description, description)
             .execTestCase(c.tcSaveConfigureDialog)
@@ -94,14 +92,12 @@
                     '/_jcr_content/root/responsivegrid/teaser."]', '#ContentFrame').size() === 1;
             })
             .assert.isTrue(function () {
-                return h.find(selectors.component.title, '#ContentFrame').text() === title;
+                var selector = selectors.component.title + ' a' + selectors.component.link + '[href$="' + h.param('teaser_page')() + '.html"]';
+                return h.find(selector, '#ContentFrame').text() === title;
             })
             .assert.isTrue(function () {
-                return h.find(selectors.component.description, '#ContentFrame').text() === description;
-            })
-            .assert.isTrue(function () {
-                var $link = h.find('a' + selectors.component.link + '[href$="' + h.param('teaser_page')() + '.html"]', '#ContentFrame');
-                return $link && $link.size() === 1 && $link.text() === linkText;
+                var selector = selectors.component.description + ' a' + selectors.component.link + '[href$="' + h.param('teaser_page')() + '.html"]';
+                return h.find(selector, '#ContentFrame').text() === description;
             });
 
     };

@@ -67,17 +67,6 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Returns the text of the URL to which this teaser links, if one was defined.
-     *
-     * @return the text of the URL to which teaser links or {@code null}
-     * @see #getLinkURL()
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
-     */
-    default String getLinkText() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * Returns the image resource for this teaser.
      * @return the image resource for this teaser or {@code null}
      * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0

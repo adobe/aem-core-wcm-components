@@ -40,6 +40,7 @@ import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 
@@ -54,7 +55,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String title;
     private String description;
     private String linkURL;
-    private String linkText;
     private static final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
@@ -73,12 +73,20 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Self
     private SlingHttpServletRequest request;
 
+    private Page targetPage;
+
     @PostConstruct
     private void initModel() {
         title = properties.get(JcrConstants.JCR_TITLE, String.class);
-        description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
         linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
-        linkText = properties.get(Teaser.PN_LINK_TEXT, String.class);
+        targetPage = pageManager.getPage(linkURL);
+        if (StringUtils.isEmpty(title) && targetPage != null) {
+            title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+        }
+        description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
+        if (StringUtils.isEmpty(description) && targetPage != null) {
+            description = targetPage.getDescription();
+        }
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
         if (StringUtils.isEmpty(linkURL)) {
@@ -98,7 +106,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
         if (StringUtils.isNotEmpty(linkURL) && hasImage) {
-            linkURL = Utils.getURL(request, pageManager, linkURL);
+            if (targetPage != null) {
+                linkURL = Utils.getURL(request, targetPage);
+            }
             setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
     }
@@ -116,11 +126,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Override
     public String getLinkURL() {
         return linkURL;
-    }
-
-    @Override
-    public String getLinkText() {
-        return linkText;
     }
 
     public String getImagePath() {

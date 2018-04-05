@@ -56,12 +56,12 @@ public class TeaserImplTest {
     private static final String TITLE = "Teaser";
     private static final String DESCRIPTION = "Description";
     private static final String LINK = "https://www.adobe.com";
-    private static final String LINK_TEXT = "Adobe";
     private static final String TEASER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-1";
     private static final String TEASER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-2";
     private static final String TEASER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-3";
     private static final String TEASER_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-4";
     private static final String TEASER_5 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-5";
+    private static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
     private Logger teaserLogger;
 
     @ClassRule
@@ -98,7 +98,6 @@ public class TeaserImplTest {
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(LINK, teaser.getLinkURL());
-        assertEquals(LINK_TEXT, teaser.getLinkText());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
 
@@ -114,8 +113,14 @@ public class TeaserImplTest {
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(CONTEXT_PATH + "/content/teasers.html", teaser.getLinkURL());
-        assertEquals(LINK_TEXT, teaser.getLinkText());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser5"));
+    }
+
+    @Test
+    public void testPageInheritedProperties() {
+        Teaser teaser = getTeaserUnderTest(TEASER_6);
+        assertEquals("Teasers Test", teaser.getTitle());
+        assertEquals("Teasers description", teaser.getDescription());
     }
 
     @Test
