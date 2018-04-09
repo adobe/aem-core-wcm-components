@@ -36,7 +36,8 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
 
     formContainer.tcExecuteBeforeTest = function(formContainerRT, formTextRT, formButtonRT, pageRT) {
         return new h.TestCase("Setup Before Test")
-        // common set up
+
+            // common set up
             .execTestCase(c.tcExecuteBeforeTest)
 
             // create the test page, store page path in 'testPagePath'
@@ -99,7 +100,8 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
      */
     formContainer.tcExecuteAfterTest = function() {
         return new h.TestCase("Clean up after Test")
-        // common clean up
+
+            // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete any user generated content
             .execFct(function(opts, done) {
@@ -134,7 +136,7 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("containerPath"))
             // select action type
             .execTestCase(c.tcUseDialogSelect("./actionType", "foundation/components/form/actions/store"))
@@ -148,7 +150,7 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
 
             // switch to the content frame
             .config.changeContext(c.getContentFrame)
-        // click on the submit button
+            // click on the submit button
             .click("button:contains('Submit')", { expectNav: true })
 
             // get the json for the content node
@@ -181,20 +183,20 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
-        // open the config dialog
+            // open the config dialog
             .execTestCase(c.tcOpenConfigureDialog("containerPath"))
             // select action type
             .execTestCase(c.tcUseDialogSelect("./actionType", "foundation/components/form/actions/store"))
             // check if the input field has become visible
             .assert.visible("input[name='./action']")
-        // we set our own context path
+            // we set our own context path
             .fillInput("input[name='./action']", userContent + "/xxx")
             // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
             // switch to the content frame
             .config.changeContext(c.getContentFrame)
-        // click on the submit button
+            // click on the submit button
             .click("button:contains('Submit')", { expectNav: true })
 
             // request json for the stored form content
@@ -226,7 +228,7 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
-        // open the config dialog
+            // open the config dialog
             .execTestCase(c.tcOpenConfigureDialog("containerPath"))
             // select action type
             .execTestCase(c.tcUseDialogSelect("./actionType", "foundation/components/form/actions/store"))
@@ -241,11 +243,11 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
 
             // switch to the content frame
             .config.changeContext(c.getContentFrame)
-        // click on the submit button
+            // click on the submit button
             .click("button:contains('Submit')", { expectNav: true })
             // go back to edit frame
             .config.resetContext()
-        // check if the thank you page is shown
+            // check if the thank you page is shown
             .assert.isTrue(function() {
                 return h.context().window.location.pathname.includes("core-components-page.html");
             });
@@ -258,10 +260,9 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
     formContainer.setMailAction = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Test Mail action", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the config dialog
+            // open the config dialog
             .execTestCase(c.tcOpenConfigureDialog("containerPath"))
             // select action type
             .execTestCase(c.tcUseDialogSelect("./actionType", "foundation/components/form/actions/mail"))
@@ -283,7 +284,6 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             .fillInput("input[name='./cc']", cc1)
             .click("coral-multifield[data-granite-coral-multifield-name='./cc'] > button")
             .fillInput("input[name='./cc']:eq(1)", cc2)
-
 
             // save the dialog
             .execTestCase(c.tcSaveConfigureDialog)

@@ -42,7 +42,8 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
      */
     formOptions.tcExecuteBeforeTest = function(formOptionsRT, pageRT) {
         return new h.TestCase("Setup Before Test")
-        // common set up
+
+            // common set up
             .execTestCase(c.tcExecuteBeforeTest)
             // create the test page, store page path in 'testPagePath'
             .execFct(function(opts, done) {
@@ -67,7 +68,8 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
      */
     formOptions.tcExecuteAfterTest = function() {
         return new h.TestCase("Clean up after Test")
-        // common clean up
+
+            // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete the test page we created
             .execFct(function(opts, done) {
@@ -107,7 +109,8 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
      */
     formOptions.setOptionType = function(optionType) {
         return new h.TestCase("Set Form Input Type to " + optionType)
-        // open the dropdown
+
+            // open the dropdown
             .click("coral-select[name='./type'] button")
             // wait for the dropdown to appear
             .assert.visible("coral-select[name='./type'] coral-selectlist")
@@ -121,10 +124,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.checkMandatoryFields = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Check Mandatory fields", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             .click(c.selSaveConfDialogButton, { expectNav: false })
             // check if the dialog is still open
@@ -145,10 +147,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setTitle = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set title", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
@@ -169,10 +170,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setElementName = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Element Name", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
@@ -193,10 +193,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setHelpMessage = function(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Help Message", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
@@ -219,10 +218,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setCheckbox = function(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set checkbox type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
@@ -250,10 +248,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setRadioButton = function(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set radio button type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
@@ -281,10 +278,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setDropDown = function(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set drop-down type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
@@ -307,10 +303,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setMultiSelectDropDown = function(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set multi-select drop-down type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
@@ -330,9 +325,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setActiveOptionForCheckbox = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Active' option for the Checkbox type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the edit dialog
+            execAfter: tcExecuteAfterTest })
+
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the option type to checkbox
             .execTestCase(formOptions.setOptionType("checkbox"))
@@ -353,9 +348,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setActiveOptionForRadioButton = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Active' option for the Radio button type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the edit dialog
+            execAfter: tcExecuteAfterTest })
+
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the option type to radio
             .execTestCase(formOptions.setOptionType("radio"))
@@ -376,9 +371,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setActiveOptionForDropDown = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Active' option for the Drop down type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the edit dialog
+            execAfter: tcExecuteAfterTest })
+
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the option type to drop-down
             .execTestCase(formOptions.setOptionType("drop-down"))
@@ -399,9 +394,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setActiveOptionForMultiSelectDropDown = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Active' option for the Multi select drop down type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the edit dialog
+            execAfter: tcExecuteAfterTest })
+
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the option type to multi-select drop-down
             .execTestCase(formOptions.setOptionType("multi-drop-down"))
@@ -422,9 +417,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setDisabledOptionForCheckbox = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Disabled' option for the Checkbox type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the edit dialog
+            execAfter: tcExecuteAfterTest })
+
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the option type to checkbox
             .execTestCase(formOptions.setOptionType("checkbox"))
@@ -445,9 +440,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setDisabedOptionForRadioButton = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Disabled' option for the Radio button type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the edit dialog
+            execAfter: tcExecuteAfterTest })
+
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the option type to radio
             .execTestCase(formOptions.setOptionType("radio"))
@@ -468,9 +463,9 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setDisabledOptionForDropDown = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Disabled' option for the Drop down type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the edit dialog
+            execAfter: tcExecuteAfterTest })
+
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
             // set the option type to drop-down
             .execTestCase(formOptions.setOptionType("drop-down"))
@@ -491,21 +486,21 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     formOptions.setDisabledOptionForMultiSelectDropDown = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set the 'Disabled' option for the Multi select drop down type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("optionPath"))
-        // set the option type to multi-select drop-down
+            // set the option type to multi-select drop-down
             .execTestCase(formOptions.setOptionType("multi-drop-down"))
-        // set the mandatory fields
+            // set the mandatory fields
             .execTestCase(formOptions.setMandatoryFields)
-        // add one option
+            // add one option
             .execTestCase(formOptions.addOption)
-        // check the 'Disabled' option
+            // check the 'Disabled' option
             .click("input[type='checkbox'][name='./disabled']")
-        // close the edit dialog
+            // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
-        // check if the option is disabled
+            // check if the option is disabled
             .asserts.isTrue(function() {
                 return h.find("option[value='" + value + "'][disabled]", "#ContentFrame").size() === 1;
             });

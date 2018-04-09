@@ -17,7 +17,7 @@
 /**
  * Tests for core form button
  */
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcuts
@@ -46,4 +46,5 @@
         .addTestCase(formButtonV1.setButtonName(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formButtonV1.setButtonValue(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formButtonV1.setButtonValueWithoutName(tcExecuteBeforeTest, tcExecuteAfterTest));
+
 })(hobs, jQuery);

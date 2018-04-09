@@ -17,7 +17,7 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcuts
@@ -46,4 +46,5 @@
 
         .addTestCase(textV1.tcSetTextValueUsingInlineEditor(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(textV2.tcCheckTextWithXSSProtection(selectors, tcExecuteBeforeTest, tcExecuteAfterTest));
+
 }(hobs, jQuery));

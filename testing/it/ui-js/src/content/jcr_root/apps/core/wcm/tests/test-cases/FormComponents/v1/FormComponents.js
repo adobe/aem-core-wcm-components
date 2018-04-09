@@ -30,7 +30,8 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
 
     formComponents.tcExecuteBeforeTest = function(formContainerRT, formTextRT, formHihhenRT, formOptionsRT, formBUttonRT, pageRT) {
         return new h.TestCase("Setup Before Test")
-        // common set up
+
+            // common set up
             .execTestCase(c.tcExecuteBeforeTest)
 
             // create the test page, store page path in 'testPagePath'
@@ -138,7 +139,8 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
      */
     formComponents.tcExecuteAfterTest = function() {
         return new h.TestCase("Clean up after Test")
-        // common clean up
+
+            // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete any user generated content
             .execFct(function(opts, done) {
@@ -183,7 +185,7 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("containerPath"))
             // select action type
             .execTestCase(c.tcUseDialogSelect("./actionType", "foundation/components/form/actions/store"))
@@ -197,7 +199,7 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
 
             // switch to the content frame
             .config.changeContext(c.getContentFrame)
-        // click on the submit button
+            // click on the submit button
             .click("button:contains('Submit')", { expectNav: true })
 
             // get the json for the content node
@@ -206,7 +208,7 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
             })
             // check if all values for the form components are saved
             .assert.isTrue(function() {
-            // its stored in a child node with random name so we need to find it
+                // its stored in a child node with random name so we need to find it
                 var data = h.param("json_allForm")();
                 for (var prop in data) {
                 // its the only sub object

@@ -17,7 +17,7 @@
 /**
  * Tests for the core form components
  */
-;(function(h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut
@@ -37,7 +37,6 @@
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false })
 
-        .addTestCase(formComponents.storeContent(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(formComponents.storeContent(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 }(hobs, jQuery));

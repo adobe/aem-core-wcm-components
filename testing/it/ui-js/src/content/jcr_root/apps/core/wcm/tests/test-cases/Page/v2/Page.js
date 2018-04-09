@@ -19,7 +19,7 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
 /**
  * Tests for the core page component.
  */
-;(function(h, $){
+(function(h, $) {
     "use strict";
 
     // shortcut
@@ -38,14 +38,14 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
             execAfter: tcExecuteAfterTest,
             metadata: {
                 ignoreOn63: true
-            }
-        })
-        // open the new page in the sites
+            } })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(pageV1.openPageProperties)
 
-            /***** Insert information for 'Settings' *****/
+            /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { before: 1000 })
@@ -60,7 +60,7 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
             .fillInput("foundation-autocomplete[name='./cq:conf'] input[is='coral-textfield']", configuration, { after: 2000 })
             .click("button[value='" + configuration + "']", { after: 2000 })
 
-            /*****  Check if the configuration is saved *****/
+            /*  Check if the configuration is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -82,8 +82,8 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
             execAfter: tcExecuteAfterTest,
             metadata: {
                 ignoreOn63: true
-            }
-        })
+            } })
+
             // create the live copy page, store page path in 'testLiveCopyPagePath'
             .execFct(function(opts, done) {
                 c.createLiveCopy(h.param("testPagePath")(opts), c.rootPage, "page_" + Date.now(), "page_" + Date.now(), "testLiveCopyPagePath", done);

@@ -14,12 +14,12 @@
  * limitations under the License.
  ******************************************************************************/
 
-window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {}
+window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
 
 /**
  * Tests for the core page component.
  */
-;(function(h, $) {
+(function(h, $) {
     "use strict";
 
     // shortcut
@@ -60,7 +60,6 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {}
         .addTestCase(pageV1.tcEditUserGroupPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(pageV1.tcEffectivePermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(pageV2.tcBlueprintPageProperties64(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(pageV1.tcLiveCopyPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(pageV1.tcLiveCopyPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 }(hobs, jQuery));

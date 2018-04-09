@@ -199,10 +199,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
     formText.setElementName = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Element Name", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // Open the edit dialog
+            // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .execTestCase(formText.setMandatoryFields)
             // close the edit dialog

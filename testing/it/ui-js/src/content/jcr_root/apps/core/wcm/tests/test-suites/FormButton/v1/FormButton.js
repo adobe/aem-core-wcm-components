@@ -17,7 +17,7 @@
 /**
  * Tests for core form button
  */
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // short cut

@@ -17,7 +17,7 @@
 /**
  * Test for the breadcrumb component
  */
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcuts

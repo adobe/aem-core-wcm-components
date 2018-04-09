@@ -17,7 +17,7 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut
@@ -45,4 +45,5 @@
         .addTestCase(imageV2.tcDisableCaptionAsPopup(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV2.tcSetImageAsDecorative(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/image/v2/image/clientlibs/site.js"));
+
 }(hobs, jQuery));

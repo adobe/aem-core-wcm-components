@@ -38,7 +38,8 @@ window.CQ.CoreComponentsIT.FormHidden.v1 = window.CQ.CoreComponentsIT.FormHidden
      */
     formHidden.tcExecuteBeforeTest = function(formHiddenRT, pageRT) {
         return new h.TestCase("Setup Before Test")
-        // common set up
+
+            // common set up
             .execTestCase(c.tcExecuteBeforeTest)
             // create the test page, store page path in 'testPagePath'
             .execFct(function(opts, done) {
@@ -63,7 +64,8 @@ window.CQ.CoreComponentsIT.FormHidden.v1 = window.CQ.CoreComponentsIT.FormHidden
      */
     formHidden.tcExecuteAfterTest = function() {
         return new h.TestCase("Clean up after Test")
-        // common clean up
+
+            // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete the test page we created
             .execFct(function(opts, done) {
@@ -112,7 +114,7 @@ window.CQ.CoreComponentsIT.FormHidden.v1 = window.CQ.CoreComponentsIT.FormHidden
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
-        // Open the edit dialog
+            // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("hiddenPath"))
             // set the mandatory element name
             .execTestCase(formHidden.setMandatoryFields)
@@ -133,7 +135,7 @@ window.CQ.CoreComponentsIT.FormHidden.v1 = window.CQ.CoreComponentsIT.FormHidden
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
-        // Open the edit dialog
+            // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("hiddenPath"))
             // set the mandatory element name
             .execTestCase(formHidden.setMandatoryFields)
@@ -156,7 +158,7 @@ window.CQ.CoreComponentsIT.FormHidden.v1 = window.CQ.CoreComponentsIT.FormHidden
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
-        // Open the edit dialog
+            // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("hiddenPath"))
             // set the mandatory element name
             .execTestCase(formHidden.setMandatoryFields)

@@ -17,7 +17,7 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcuts
@@ -51,6 +51,6 @@
         .addTestCase(listV1.tcSetMaxItems(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(listV1.tcLinkItemsForList(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(listV1.tcShowDescriptionForList(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(listV1.tcShowDateForList(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(listV1.tcShowDateForList(tcExecuteBeforeTest, tcExecuteAfterTest));
+
 }(hobs, jQuery));

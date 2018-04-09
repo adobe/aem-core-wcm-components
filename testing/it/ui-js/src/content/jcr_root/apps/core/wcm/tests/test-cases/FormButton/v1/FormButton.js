@@ -19,7 +19,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
 /**
  * Tests for core form button
  */
-;(function(h, $){
+;(function(h, $) {
     "use strict";
 
     // short cut
@@ -31,6 +31,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
      */
     formButton.tcExecuteBeforeTest = function(formButtonRT, pageRT) {
         return new h.TestCase("Create Sample Content")
+
             // common set up
             .execTestCase(c.tcExecuteBeforeTest)
             // create the test page, store page path in 'testPagePath'
@@ -48,8 +49,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
                 c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
             })
             // open the new page in the editor
-            .navigateTo("/editor.html%testPagePath%.html")
-        ;
+            .navigateTo("/editor.html%testPagePath%.html");
     };
 
     /**
@@ -57,6 +57,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
      */
     formButton.tcExecuteAfterTest = function() {
         return new h.TestCase("Clean up after Test")
+
             // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete the test page we created
@@ -68,7 +69,6 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
             .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPath")(opts), done);
             });
-
     };
 
     /**
@@ -77,8 +77,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
     formButton.checkDefaultButtonAttributes = function(buttonSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Check Default Button Attributes", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
             // check that the type of button should be "submit"
             .asserts.isTrue(function() {
@@ -87,8 +86,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
             // check that the title on the button should be "Submit"
             .asserts.isTrue(function() {
                 return h.find(buttonSelector, "#ContentFrame").text().trim() === "Submit";
-            })
-        ;
+            });
     };
 
     /**
@@ -97,10 +95,9 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
     formButton.createButton = function(buttonSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Create a Button", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // Open the edit dialog
+            // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // change the type of the button
             .click("button[is='coral-button']:contains('Submit')")
@@ -113,8 +110,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
             // Check if the button tag is rendered with the correct type
             .asserts.isTrue(function() {
                 return h.find(buttonSelector + "[type='Button']", "#ContentFrame").size() === 1;
-            })
-        ;
+            });
     };
 
     /**
@@ -135,8 +131,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
             // Check if the button tag is rendered with the correct type
             .asserts.isTrue(function() {
                 return h.find(buttonSelector, "#ContentFrame").text().trim() === "Test Button";
-            })
-        ;
+            });
     };
 
     /**
@@ -184,8 +179,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
             // Check if the button tag is rendered with the correct type
             .asserts.isTrue(function() {
                 return h.find("[value='thisisthevalue']", "#ContentFrame").size() === 1;
-            })
-        ;
+            });
     };
 
     formButton.setButtonValueWithoutName = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
@@ -202,9 +196,7 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
             .execTestCase(c.tcSaveConfigureDialog)
             .asserts.isTrue(function() {
                 return h.find("coral-icon.coral-Form-fielderror").size() === 1;
-
-            })
-        ;
+            });
     };
 
 })(hobs, jQuery);

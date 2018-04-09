@@ -17,7 +17,7 @@
 /**
  * Tests for the core title component.
  */
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcuts
@@ -36,6 +36,7 @@
     new h.TestSuite("Title v1", { path: "/apps/core/wcm/tests/test-suites/core-components-suites/Title.js",
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false })
+
         // TODO: Removed for now as it not stable randomly failing
         // .addTestCase(title.tcSetTitleValueUsingInlineEditor(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcSetTitleValueUsingConfigDialog(tcExecuteBeforeTest, tcExecuteAfterTest))
@@ -44,6 +45,6 @@
         .addTestCase(title.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
         .addTestCase(title.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components",
-            c.policyPath, c.policyAssignmentPath))
-    ;
+            c.policyPath, c.policyAssignmentPath));
+
 }(hobs, jQuery));

@@ -17,7 +17,7 @@
 /**
  * Tests for core form option
  */
-;(function(h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut
@@ -61,7 +61,6 @@
         .addTestCase(formOptions.setDisabledOptionForCheckbox(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptions.setDisabedOptionForRadioButton(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptions.setDisabledOptionForDropDown(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formOptions.setDisabledOptionForMultiSelectDropDown(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(formOptions.setDisabledOptionForMultiSelectDropDown(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 })(hobs, jQuery);

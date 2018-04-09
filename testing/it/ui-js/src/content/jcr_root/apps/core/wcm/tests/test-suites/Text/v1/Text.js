@@ -17,7 +17,7 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcuts
@@ -42,4 +42,5 @@
         execInNewWindow: false })
 
         .addTestCase(text.tcSetTextValueUsingInlineEditor(selectors, tcExecuteBeforeTest, tcExecuteAfterTest));
+
 }(hobs, jQuery));

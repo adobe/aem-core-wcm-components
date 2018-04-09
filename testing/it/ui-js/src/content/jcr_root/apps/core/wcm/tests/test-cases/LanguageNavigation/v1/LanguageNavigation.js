@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* globals hobs,jQuery */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     window.CQ.CoreComponentsIT.LanguageNavigation.v1 = window.CQ.CoreComponentsIT.LanguageNavigation.v1 || {};
@@ -48,8 +48,8 @@
      */
     languageNavigation.tcExecuteBeforeTest = function(tcExecuteBeforeTest, languageNavigationRT, pageRT) {
         return new h.TestCase("Create Sample Content", {
-            execBefore: tcExecuteBeforeTest
-        })
+            execBefore: tcExecuteBeforeTest })
+
             // site root
             .execFct(function(opts, done) {
                 c.createPage(c.template, c.rootPage, "site_root", "site_root", done, pageRT);
@@ -293,8 +293,8 @@
     languageNavigation.testSetStructureDepthZero = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Structure Depth zero", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .fillInput(selectors.editDialog.navigationRoot, "%site_root%")
             .fillInput(selectors.editDialog.structureDepth, "0")
@@ -308,8 +308,8 @@
     languageNavigation.testNavigationRootNoStructure = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Navigation Root with no structure", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .fillInput(selectors.editDialog.navigationRoot, "%no_structure%")
             .execTestCase(c.tcSaveConfigureDialog)

@@ -14,18 +14,18 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* globals hobs,jQuery */
-;(function (h, $) {
-
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
+
     window.CQ.CoreComponentsIT.Navigation.v1 = window.CQ.CoreComponentsIT.Navigation.v1 || {};
     var c                                    = window.CQ.CoreComponentsIT.commons;
     var navigation                           = window.CQ.CoreComponentsIT.Navigation.v1;
 
     navigation.tcExecuteBeforeTest = function(tcExecuteBeforeTest, navigationRT, pageRT) {
         return new h.TestCase("Create Sample Content", {
-            execBefore: tcExecuteBeforeTest
-        })
-        // level 1
+            execBefore: tcExecuteBeforeTest })
+
+            // level 1
             .execFct(function(opts, done) {
                 c.createPage(c.template, c.rootPage, "page_1", "page_1", done, pageRT);
             })
@@ -115,12 +115,13 @@
 
     navigation.tcExecuteAfterTest = function(tcExecuteAfterTest) {
         return new h.TestCase("Clean up after test", {
-            execAfter: tcExecuteAfterTest
-        }).execFct(function(opts, done) {
-            c.deletePage(h.param("page_1")(opts), done);
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // delete the test page we created
+            .execFct(function(opts, done) {
+                c.deletePage(h.param("page_1")(opts), done);
+            })
+
+            // delete the test page we created
             .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPath")(opts), done);
             });
@@ -129,8 +130,8 @@
     navigation.testDefaultConfiguration = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Test default configuration", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .assert.isTrue(function() {
                 return h.find('coral-checkbox[name="./collectAllPages"]').prop("checked") === true;
@@ -153,8 +154,8 @@
     navigation.testIncludeNavigationRoot = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Include Navigation Root", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .assert.isTrue(function() {
                 return h.find('coral-checkbox[name="./collectAllPages"]').prop("checked") === true;
@@ -182,8 +183,8 @@
     navigation.testChangeStructureDepthLevel = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Change max depth level", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .fillInput('foundation-autocomplete[name="./navigationRoot"]', "%page_1%")
             // uncheck

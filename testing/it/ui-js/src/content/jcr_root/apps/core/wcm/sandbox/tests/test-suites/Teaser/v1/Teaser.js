@@ -14,10 +14,10 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* globals hobs,jQuery */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
-    var c      = window.CQ.CoreComponentsIT.commons;
+    var c = window.CQ.CoreComponentsIT.commons;
     var teaser = window.CQ.CoreComponentsIT.Teaser.v1;
     var selectors = {
         component: {

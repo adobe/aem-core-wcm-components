@@ -176,7 +176,7 @@
                             <exclude>**/.project</exclude>
                             <exclude>**/.eslintrc</exclude>
                             <exclude>**/.editorconfig</exclude>
-                            <exclude>**/.stylelintrc</exclude>
+                            <exclude>**/.stylelintrc.yaml</exclude>
                             <exclude>**/.eslintignore</exclude>
                             <exclude>**/.settings</exclude>
                             <exclude>**/.DS_Store</exclude>
@@ -323,7 +323,7 @@
                             <!-- Ignore lint-files -->
                             <exclude>**/*.eslintrc</exclude>
                             <exclude>**/*.editorconfig</exclude>
-                            <exclude>**/*.stylelintrc</exclude>
+                            <exclude>**/*.stylelintrc.yaml</exclude>
                             <exclude>**/*.eslintignore</exclude>
                             <!-- Ignore Node and npm -->
                             <exclude>**/node/**</exclude>

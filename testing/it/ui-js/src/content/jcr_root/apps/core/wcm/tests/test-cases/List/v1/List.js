@@ -676,20 +676,20 @@ window.CQ.CoreComponentsIT.List.v1 = window.CQ.CoreComponentsIT.List.v1 || {}
     list.tcLinkItemsForList = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Link the items from a list", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             // open the configuration dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-        // set parent page
-        // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
+            // set parent page
+            // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
             .simulate("foundation-autocomplete[name='./parentPage'] input[type!='hidden']", "key-sequence",
                 { sequence: "%parentPath%{enter}" })
 
             .click("coral-tab-label:contains('Item Settings')")
             .click("input[name='./linkItems']")
 
-        // close the dialog
+            // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
             .asserts.isTrue(function() {
@@ -702,20 +702,20 @@ window.CQ.CoreComponentsIT.List.v1 = window.CQ.CoreComponentsIT.List.v1 || {}
     list.tcShowDescriptionForList = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Show the list items's description", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             // open the configuration dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-        // set parent page
-        // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
+            // set parent page
+            // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
             .simulate("foundation-autocomplete[name='./parentPage'] input[type!='hidden']", "key-sequence",
                 { sequence: "%parentPath%{enter}" })
 
             .click("coral-tab-label:contains('Item Settings')")
             .click("input[name='./showDescription']")
 
-        // close the dialog
+            // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
             .asserts.isTrue(function() {
@@ -729,20 +729,20 @@ window.CQ.CoreComponentsIT.List.v1 = window.CQ.CoreComponentsIT.List.v1 || {}
     list.tcShowDateForList = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Show the list items's date", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             // open the configuration dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-        // set parent page
-        // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
+            // set parent page
+            // NOTE: simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
             .simulate("foundation-autocomplete[name='./parentPage'] input[type!='hidden']", "key-sequence",
                 { sequence: "%parentPath%{enter}" })
 
             .click("coral-tab-label:contains('Item Settings')")
             .click("input[name='./showModificationDate']")
 
-        // close the dialog
+            // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
             .asserts.isTrue(function() {

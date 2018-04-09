@@ -41,8 +41,7 @@ window.CQ.CoreComponentsIT.Text.v2 = window.CQ.CoreComponentsIT.Text.v2 || {}
             execAfter: tcExecuteAfterTest,
             metadata: {
                 ignoreOn63: true
-            }
-        })
+            } })
 
             // open dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
@@ -59,7 +58,7 @@ window.CQ.CoreComponentsIT.Text.v2 = window.CQ.CoreComponentsIT.Text.v2 || {}
                     var actualValue = h.find(selectors.editorConf).html();
                     return actualValue.trim() === textXSSProtectedHTL;
                 })
-            // swith back to edit frame
+            // switch back to edit frame
             .config.resetContext()
 
             // check if the text is rendered with XSS protection

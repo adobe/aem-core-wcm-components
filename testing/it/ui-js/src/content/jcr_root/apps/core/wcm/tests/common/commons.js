@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-;(function(h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut

@@ -17,7 +17,7 @@
 /**
  * Tests for core form option
  */
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut
@@ -40,7 +40,6 @@
         .addTestCase(formHidden.checkMandatoryFields(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formHidden.setElementName(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formHidden.setElementValue(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formHidden.setElementId(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(formHidden.setElementId(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 })(hobs, jQuery);

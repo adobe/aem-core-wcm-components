@@ -13,14 +13,14 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* globals hobs,jQuery */
-;(function (h, $) {
+//* globals hobs,jQuery */
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     window.CQ.CoreComponentsIT.Search.v1 = window.CQ.CoreComponentsIT.Search.v1 || {};
 
-    var c                  = window.CQ.CoreComponentsIT.commons;
-    var search             = window.CQ.CoreComponentsIT.Search.v1;
+    var c      = window.CQ.CoreComponentsIT.commons;
+    var search = window.CQ.CoreComponentsIT.Search.v1;
 
     var selectors = {
         component: {
@@ -39,7 +39,6 @@
     };
 
     var pollQuery = function(done, path, searchTerm, expected) {
-
         var maxRetries = 60;
         var timeout = 2000;
         var retries = 0;
@@ -86,8 +85,8 @@
 
     search.tcExecuteBeforeTest = function(tcExecuteBeforeTest, searchRT, pageRT) {
         return new h.TestCase("Create Sample Content", {
-            execBefore: tcExecuteBeforeTest
-        })
+            execBefore: tcExecuteBeforeTest })
+
             // level 1
             .execFct(function(opts, done) {
                 c.createPage(c.template, c.rootPage, "page_1_" + Date.now(), "page_1", done, pageRT);
@@ -203,11 +202,11 @@
      */
     search.tcExecuteAfterTest = function(policyPath, policyAssignmentPath) {
         return new h.TestCase("Clean up after test", {
-            execAfter: c.tcExecuteAfterTest
-        }).execFct(function(opts, done) {
-            c.deletePage(h.param("page_1")(opts), done);
-        })
+            execAfter: c.tcExecuteAfterTest })
 
+            .execFct(function(opts, done) {
+                c.deletePage(h.param("page_1")(opts), done);
+            })
             .execFct(function(opts, done) {
                 c.deletePolicy("/search", done, policyPath);
             })
@@ -227,8 +226,8 @@
     search.testDefaultConfiguration = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Default configuration", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .config.changeContext(c.getContentFrame)
             .execFct(function(opts, done) {
                 pollQuery(done, c.rootPage, "Page", h.param("page_1_1_1")());
@@ -244,8 +243,8 @@
     search.testChangeSearchRoot = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Change Search Root", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .fillInput('foundation-autocomplete[name="./searchRoot"]', "%page_1%")
             .execTestCase(c.tcSaveConfigureDialog)
@@ -260,8 +259,8 @@
     search.testClearButton = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Clear Button", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .config.changeContext(c.getContentFrame)
             .assert.visible(selectors.component.clear, false)
             .fillInput(selectors.component.input, "Page", { delay: 1000 })
@@ -308,8 +307,8 @@
     search.testOutsideClick = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Outside Click", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .config.changeContext(c.getContentFrame)
             .assert.visible(selectors.component.clear, false)
             .fillInput(selectors.component.input, "Page", { delay: 1000 })
@@ -324,8 +323,8 @@
     search.testMark = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Mark", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .config.changeContext(c.getContentFrame)
             .assert.visible(selectors.component.clear, false)
             .execFct(function(opts, done) {
@@ -341,8 +340,7 @@
     search.testMinLength = function(tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
         return new h.TestCase("Input Length", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
             .execFct(function(opts, done) {
                 var data = {
@@ -375,7 +373,6 @@
                 var $results = h.find(selectors.component.item.self);
                 return $results && $results.length > 0;
             });
-
     };
 
     /**
@@ -384,8 +381,7 @@
     search.testResultsSize = function(tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
         return new h.TestCase("Results Size", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
             .execFct(function(opts, done) {
                 var data = {
@@ -413,7 +409,6 @@
                 var $results = h.find(selectors.component.item.self);
                 return $results && $results.length === 2;
             });
-
     };
 
     /**
@@ -422,8 +417,8 @@
     search.testScrollDown = function(tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
         return new h.TestCase("Scroll Down", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .fillInput('foundation-autocomplete[name="./searchRoot"]', c.rootPage, { delayAfter: 1000 })
             .execTestCase(c.tcSaveConfigureDialog)
@@ -444,7 +439,6 @@
                 var $results = h.find(selectors.component.item.self);
                 return $results && $results.length === 20;
             });
-
     };
 
 }(hobs, jQuery));

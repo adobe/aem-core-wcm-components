@@ -45,35 +45,34 @@ window.CQ.CoreComponentsIT.FormText.v2 = window.CQ.CoreComponentsIT.FormText.v2 
     formTextV2.setRequired = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Required", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // 1
+            // 1
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-        // 2
+            // 2
             .execTestCase(formTextV1.setMandatoryFields)
             .execTestCase(c.tcSwitchConfigTab(("Constraints")))
             .click("input[type='checkbox'][name='./required'")
             .fillInput("textarea[name='./requiredMessage']", requiredMessage)
             .execTestCase(c.tcSaveConfigureDialog)
 
-        // 3
+            // 3
             .asserts.isTrue(function() {
                 return h.find("input[type='text'][name='" + elementName + "'][required]", "#ContentFrame").size() === 1;
             })
 
-        // 4
+            // 4
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .execTestCase(formTextV1.setInputType("textarea"))
             .execTestCase(c.tcSaveConfigureDialog)
 
-        // 5
+            // 5
             .asserts.isTrue(function() {
                 return h.find("textarea[name='" + elementName + "'][required]", "#ContentFrame").size() === 1;
             })
 
-        // 6
+            // 6
             .asserts.isTrue(function() {
                 return h.find(".cmp-form-text[data-cmp-required-message='" + requiredMessage + "']", "#ContentFrame").size() === 1;
             });
@@ -89,20 +88,19 @@ window.CQ.CoreComponentsIT.FormText.v2 = window.CQ.CoreComponentsIT.FormText.v2 
     formTextV2.setConstraintMessage = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Constraint Message", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
-        // 1
+            // 1
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-        // 2
+            // 2
             .execTestCase(formTextV1.setMandatoryFields)
             .execTestCase(formTextV1.setInputType("email"))
             .execTestCase(c.tcSwitchConfigTab(("Constraints")))
             .fillInput("textarea[name='./constraintMessage']", constraintMessage)
             .execTestCase(c.tcSaveConfigureDialog)
 
-        // 3
+            // 3
             .asserts.isTrue(function() {
                 return h.find(".cmp-form-text[data-cmp-constraint-message='" + constraintMessage + "']",
                     "#ContentFrame").size() === 1;

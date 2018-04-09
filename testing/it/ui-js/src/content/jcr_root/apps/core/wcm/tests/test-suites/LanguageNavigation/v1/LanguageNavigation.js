@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* globals hobs,jQuery */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     var c                                    = window.CQ.CoreComponentsIT.commons;
@@ -27,8 +27,8 @@
     new h.TestSuite("Language Navigation v1", {
         path: "/apps/core/wcm/tests/LanguageNavigation/v1/LanguageNavigation.js",
         execBefore: c.tcExecuteBeforeTestSuite,
-        execInNewWindow: false
-    })
+        execInNewWindow: false })
+
         .addTestCase(languageNavigation.testDefaultConfiguration(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(languageNavigation.testChangeStructureDepth(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(languageNavigation.testSetStructureDepthZero(tcExecuteBeforeTest, tcExecuteAfterTest))

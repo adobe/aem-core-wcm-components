@@ -29,6 +29,7 @@ window.CQ.CoreComponentsIT.Text.v1 = window.CQ.CoreComponentsIT.Text.v1 || {}
     var testValue = "<b>This</b> is a <i>rich</i> <u>text</u>.";
 
     hobs.config.pacing_delay = 250;
+
     /**
      * Before Test Case
      */

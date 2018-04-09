@@ -17,7 +17,7 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut
@@ -56,6 +56,6 @@
         .addTestCase(formText.setReadOnly(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formText.setRequired(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formText.setConstraintMessage(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/form/text/v1/text/clientlibs/site.js"))
-    ;
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/form/text/v1/text/clientlibs/site.js"));
+
 }(hobs, jQuery));

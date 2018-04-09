@@ -190,8 +190,7 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
     title.tcCheckExistenceOfTypesUsingPolicy = function(tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
         return new h.TestCase("Check available title types defined in a policy", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
             .execFct(function(opts, done) {
                 var data = {};
@@ -213,17 +212,16 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
 
             })
 
-        // open the dialog
+            // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-        // check if all title sizes defined in policy are there
+            // check if all title sizes defined in policy are there
             .assert.exist("coral-selectlist-item[value='h2']")
             .assert.exist("coral-selectlist-item[value='h3']")
             .assert.exist("coral-selectlist-item[value='h4']")
             .assert.exist("coral-selectlist-item[value='h6']")
 
-        // check if the default value is selected
-        // .assert.exist("coral-selectlist-item[value='h2'].is-selected")
-
+            // check if the default value is selected
+            // .assert.exist("coral-selectlist-item[value='h2'].is-selected")
             .execTestCase(c.tcSaveConfigureDialog)
 
             .assert.isTrue(function() {
@@ -249,7 +247,6 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
                 data["type"] = "h5";
 
                 c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
-
             })
 
             .execFct(function(opts, done) {
@@ -258,10 +255,9 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
                 data["sling:resourceType"] = "wcm/core/components/policies/mapping";
 
                 c.assignPolicy(policyName, data, done, policyAssignmentPath);
-
             })
 
-        // open the dialog
+            // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .execTestCase(c.tcSaveConfigureDialog)
 

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut
@@ -38,14 +38,14 @@
         .addTestCase(formContainer.setMailAction(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formContainer.setContextPath(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formContainer.setThankYouPage(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/form/container/v1/container/clientlibs/site.css"));
-    // The View Data button can't be tested because it tries to open a new window and this can't be tested with hobbes
-    // NOTE: its not possible to test reliably if the test workflow has been started so no workflow test
-    // .addTestCase(startWorkflow)
-    // See https://jira.corp.adobe.com/browse/CQ-106130
-    // TODO : setting form identifier is going to be replaced by css styles
-    // TODO : client validation not implemented yet
-
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/form/container/v1/container/clientlibs/site.css"))
+        // The View Data button can't be tested because it tries to open a new window and this can't be tested with hobbes
+        // NOTE: its not possible to test reliably if the test workflow has been started so no workflow test
+        // .addTestCase(startWorkflow)
+        // See https://jira.corp.adobe.com/browse/CQ-106130
+        // TODO : setting form identifier is going to be replaced by css styles
+        // TODO : client validation not implemented yet
+    ;
 
 }(hobs, jQuery));
 

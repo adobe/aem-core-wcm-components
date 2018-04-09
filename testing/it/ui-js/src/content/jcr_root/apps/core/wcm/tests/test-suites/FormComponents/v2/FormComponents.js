@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     // shortcut
@@ -34,7 +34,6 @@
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false })
 
-        .addTestCase(formComponentsV1.storeContent(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(formComponentsV1.storeContent(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 }(hobs, jQuery));

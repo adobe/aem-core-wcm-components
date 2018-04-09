@@ -45,13 +45,13 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
      * Test: open the page property.
      */
     page.openPageProperties = new h.TestCase("Open the page property")
-    // select the page
+        // select the page
         .execFct(function(opts, done) {
             c.setPageName(h.param("testPagePath")(opts), "testPageName", done);
         })
         .navigateTo("/mnt/overlay/wcm/core/content/sites/properties.html?item=%testPagePath%")
-    // .click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
-    // .click("button.cq-siteadmin-admin-actions-properties-activator",{expectNav:true})
+        // .click('coral-columnview-item:contains("%testPageName%") coral-columnview-item-thumbnail')
+        // .click("button.cq-siteadmin-admin-actions-properties-activator",{expectNav:true})
     ;
 
     /**
@@ -59,7 +59,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
      */
     page.tcExecuteBeforeTest = function(pageRT) {
         return new h.TestCase("Setup Before Test")
-        // common set up
+            // common set up
             .execTestCase(c.tcExecuteBeforeTest)
             // create the test page, store page path in 'testPagePath'
             .execFct(function(opts, done) {
@@ -72,7 +72,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
      */
     page.tcExecuteAfterTest = function() {
         return new h.TestCase("Clean up after Test")
-        // common clean up
+            // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete the test page we created
             .execFct(function(opts, done) {
@@ -86,8 +86,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcBasicTitleAndTagsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Basic Title and Tags page properties", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
             // create tags
             .execFct(function(opts, done) {
@@ -102,7 +101,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /** *** Insert information for 'Title and Tags' *****/
+            /* insert information for 'Title and Tags' */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -135,7 +134,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // set the Hide in Navigation
             .click("input[name='./hideInNav']")
 
-            /** ***  Check if the date is saved *****/
+            /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -161,14 +160,14 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcBasicTitlesAndDescriptionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Basic Titles and Descriptions page properties", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
 
-            /***** Insert information for 'More Titles and Description' *****/
+            /* insert information for 'More Titles and Description' */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -186,7 +185,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .simulate("textarea[name='./jcr:description']", "key-sequence",
                 { sequence: description })
 
-            /*****  Check if the date is saved *****/
+            /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -214,14 +213,14 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcBasicOnOffTimePageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Basic On/Off time page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
 
-            /***** Insert information for On/Off time *****/
+            /* Insert information for On/Off time */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -243,7 +242,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // select second day
             .click("coral-datepicker[name='./offTime'] td a:contains('2'):eq(0)", { delay: 1000 })
 
-            /*****  Check if the date is saved *****/
+            /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -266,14 +265,14 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcBasicVanityUrlPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Basic Vanity URL page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
 
-            /***** Insert information for 'Vanity URL' *****/
+            /* insert information for 'Vanity URL' */
 
             // open the Basic tab
             .click("coral-tab-label:contains('Basic')")
@@ -296,7 +295,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // set the Redirect Vanity URL
             .click("input[name='./sling:redirect']")
 
-            /*****  Check if data are saved *****/
+            /*  check if data are saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -319,14 +318,14 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcAdvancedSettingsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Advanced Settings page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
 
-            /***** Insert information for 'Settings' *****/
+            /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -347,7 +346,8 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
                 { sequence: alias })
             // required when running with no pacing delay, otherwise designPath does not get saved.
             .wait(2000)
-            /*****  Check if the date is saved *****/
+
+            /*  Check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -374,14 +374,14 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcAdvancedTemplatesSettingsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Advanced Templates page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
 
-            /***** Insert information for 'Settings' *****/
+            /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -401,7 +401,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .simulate("input[name='./cq:allowedTemplates']", "key-sequence",
                 { sequence: allowedTemplate })
 
-            /*****  Check if the date is saved *****/
+            /*  check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -427,7 +427,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /***** Insert information for 'Settings' *****/
+            /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -441,7 +441,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .fillInput("foundation-autocomplete[name='./cq:loginPath'] input[is='coral-textfield']", loginPage, { delay: 1000 })
             .click("button[value='" + loginPage + "']", { after: 2000 })
 
-            /*****  Check if the date is saved *****/
+            /*  check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -471,7 +471,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             .execTestCase(page.openPageProperties)
 
-            /***** Insert information for 'Settings' *****/
+            /* insert information for 'Settings' */
 
             // open the Advanced tab
             .click("coral-tab-label:contains('Advanced')", { delay: 1000 })
@@ -486,7 +486,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click("button[value='" + exportConfiguration + "']")
             .wait(200)
 
-            /*****  Check if the date is saved *****/
+            /*  check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -505,9 +505,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcThumbnailPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Thumbnail page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
@@ -578,7 +578,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click("foundation-autocomplete[name='./variantPath'] button[title='Open Selection Dialog']")
             .click("form.granite-pickerdialog-content button:contains('Cancel')")
 
-            /*****  Check if the date is saved *****/
+            /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { expectNav: true })
@@ -601,9 +601,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcCloudServicesPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Cloud Services page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
@@ -621,7 +621,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click(".cq-CloudServices-container span:contains('Add Configuration')")
             .click("coral-selectlist-item span:contains('Cloud Proxy Configuration')")
 
-            /*****  Check if the date is saved *****/
+            /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { before: 2000, expectNav: true })
@@ -639,9 +639,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcPersonalizationPageProperties = function(pageSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Personalization page property", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
@@ -659,7 +659,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click("button:contains('Add Brand')")
             .click(".groupedServices-ServiceSelector-service-title")
 
-            /** ***  Check if the date is saved *****/
+            /* check if the date is saved */
 
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { before: 2000, expectNav: true })
@@ -684,9 +684,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcAddPermissionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Add permissions for a page", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
@@ -755,8 +755,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // delete permission from the list
             .click("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent') button.js-cq-sites-PermissionsProperties-delete")
             .click("button:contains('Delete')", { after: 1000 })
-            .assert.exist("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent')", false)
-        ;
+            .assert.exist("table.js-cq-sites-UserGroup-permissions:contains('CoreComponent')", false);
     };
 
     /**
@@ -765,9 +764,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcEditUserGroupPermissionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Edit user group's permissions for a page", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
@@ -807,8 +806,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // delete permission from the list
             .click("table.js-cq-sites-ClosedUserGroup-permissions:contains('CoreComponent') button.js-cq-sites-ClosedUserGroup-delete")
             .click("button:contains('Delete')")
-            .assert.exist("table.js-cq-sites-ClosedUserGroup-permissions:contains('CoreComponent')", false)
-        ;
+            .assert.exist("table.js-cq-sites-ClosedUserGroup-permissions:contains('CoreComponent')", false);
     };
 
     /**
@@ -817,9 +815,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcEffectivePermissionsPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Effective permissions for a page", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // open the new page in the sites
+            execAfter: tcExecuteAfterTest })
+
+            // open the new page in the sites
             .navigateTo("/sites.html%testPagePath%")
 
             .execTestCase(page.openPageProperties)
@@ -832,8 +830,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
 
             // open the effective permissions option
             .click("button:contains('Effective Permissions')")
-            .click("coral-dialog:contains('Effective Permissions') button[title='Close']")
-        ;
+            .click("coral-dialog:contains('Effective Permissions') button[title='Close']");
     };
 
 
@@ -848,7 +845,8 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
                 ignoreOn64: true
             }
         })
-        // create the live copy page, store page path in 'testLiveCopyPagePath'
+
+            // create the live copy page, store page path in 'testLiveCopyPagePath'
             .execFct(function(opts, done) {
                 c.createLiveCopy(h.param("testPagePath")(opts), c.rootPage, "page_" + Date.now(), "page_" + Date.now(), "testLiveCopyPagePath", done);
             })
@@ -886,9 +884,9 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
     page.tcLiveCopyPageProperties = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Live Copy for a page", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-        // create the live copy page, store page path in 'testLiveCopyPagePath'
+            execAfter: tcExecuteAfterTest })
+
+            // create the live copy page, store page path in 'testLiveCopyPagePath'
             .execFct(function(opts, done) {
                 c.createLiveCopy(h.param("testPagePath")(opts), c.rootPage, "page_" + Date.now(), "page_" + Date.now(), "testLiveCopyPagePath", done);
             })
@@ -948,8 +946,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // delete the test page we created for live copy
             .execFct(function(opts, done) {
                 c.deletePage(h.param("testLiveCopyPagePath")(opts), done);
-            })
-        ;
+            });
     };
 
 }(hobs, jQuery));
