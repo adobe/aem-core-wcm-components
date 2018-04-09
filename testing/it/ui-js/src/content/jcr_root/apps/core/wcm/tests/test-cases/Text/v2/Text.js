@@ -19,15 +19,16 @@ window.CQ.CoreComponentsIT.Text.v2 = window.CQ.CoreComponentsIT.Text.v2 || {}
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) {
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
     var text = window.CQ.CoreComponentsIT.Text.v2;
 
     var testXSS = 'Hello World! <img ="/" onerror="alert(String.fromCharCode(88,83,83))"></img>';
-    var textXSSProtectedHTL = 'Hello World! <img>';
-    var textXSSProtectedRTE = 'Hello World! <img />';
+    var textXSSProtectedHTL = "Hello World! <img>";
+    var textXSSProtectedRTE = "Hello World! <img />";
 
     hobs.config.pacing_delay = 250;
 
@@ -35,7 +36,7 @@ window.CQ.CoreComponentsIT.Text.v2 = window.CQ.CoreComponentsIT.Text.v2 || {}
      * Test: Check if text is XSS protected
      */
     text.tcCheckTextWithXSSProtection = function(selectors, tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase('Check text with XSS protection',{
+        return new h.TestCase("Check text with XSS protection", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest,
             metadata: {
@@ -50,7 +51,7 @@ window.CQ.CoreComponentsIT.Text.v2 = window.CQ.CoreComponentsIT.Text.v2 || {}
             // save dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //switch to the content frame
+            // switch to the content frame
             .config.changeContext(c.getContentFrame)
             // check if the text is rendered with XSS protection
             .assert.isTrue(
@@ -65,9 +66,9 @@ window.CQ.CoreComponentsIT.Text.v2 = window.CQ.CoreComponentsIT.Text.v2 || {}
             .assert.isTrue(
                 function() {
                     jQuery.ajax({
-                            url: h.param("cmpPath")() + ".json",
-                            method: "GET"
-                        })
+                        url: h.param("cmpPath")() + ".json",
+                        method: "GET"
+                    })
                         .done(function(data) {
                             h.param("textJson", data.text);
                         });

@@ -12,21 +12,21 @@
  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* globals hobs,jQuery */
 ;(function (h, $) {
-    'use strict';
+    "use strict";
 
-    var c                                    = window.CQ.CoreComponentsIT.commons,
-        search                               = window.CQ.CoreComponentsIT.Search.v1;
+    var c                                    = window.CQ.CoreComponentsIT.commons;
+    var search                               = window.CQ.CoreComponentsIT.Search.v1;
 
     var tcExecuteBeforeTest = search.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtSearch_v1,
-        'core/wcm/tests/components/test-page-v2');
+        "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest  = search.tcExecuteAfterTest(c.policyPath, c.policyAssignmentPath);
 
-    new h.TestSuite('Search v1', {
-        path           : '/apps/core/wcm/tests/core-components-it/v1/search.js',
-        execBefore     : c.tcExecuteBeforeTestSuite,
+    new h.TestSuite("Search v1", {
+        path: "/apps/core/wcm/tests/core-components-it/v1/search.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     })
         .addTestCase(search.testDefaultConfiguration(tcExecuteBeforeTest, tcExecuteAfterTest))
@@ -41,7 +41,7 @@
             c.policyPath, c.policyAssignmentPath))
         .addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
-        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/search/v1/search/clientlibs/site.js'))
-        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/search/v1/search/clientlibs/site.css'))
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/search/v1/search/clientlibs/site.js"))
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/search/v1/search/clientlibs/site.css"))
     ;
 }(hobs, jQuery));

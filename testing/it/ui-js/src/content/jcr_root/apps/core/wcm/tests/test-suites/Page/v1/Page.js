@@ -18,6 +18,7 @@
  * Tests for the core page component.
  */
 ;(function(h, $){
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -26,8 +27,8 @@
     /**
      * v1 specifics
      */
-    var pageSelector={
-        segmentPath: '/etc/segmentation/contexthub/male'
+    var pageSelector = {
+        segmentPath: "/etc/segmentation/contexthub/male"
     };
     var tcExecuteBeforeTest = page.tcExecuteBeforeTest();
     var tcExecuteAfterTest = page.tcExecuteAfterTest();
@@ -35,9 +36,9 @@
     /**
      * The main test suite for Page component
      */
-    new h.TestSuite("Page v1", {path:"/apps/core/wcm/tests/test-suites/Page/v1/Page.js",
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Page v1", { path: "/apps/core/wcm/tests/test-suites/Page/v1/Page.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(page.tcBasicTitleAndTagsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcBasicTitlesAndDescriptionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
@@ -51,7 +52,7 @@
         .addTestCase(page.tcSocialMediaPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcCloudServicesPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcPersonalizationPageProperties(pageSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-//        .addTestCase(page.tcAddPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
+    //        .addTestCase(page.tcAddPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcEditUserGroupPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcEffectivePermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(page.tcBlueprintPageProperties63(tcExecuteBeforeTest, tcExecuteAfterTest))

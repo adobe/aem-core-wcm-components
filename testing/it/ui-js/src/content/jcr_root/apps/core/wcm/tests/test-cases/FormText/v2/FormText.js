@@ -19,7 +19,8 @@ window.CQ.CoreComponentsIT.FormText.v2 = window.CQ.CoreComponentsIT.FormText.v2 
 /**
  * Tests for the core form text component
  */
-;(function (h, $) {
+;(function(h, $) {
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -48,34 +49,34 @@ window.CQ.CoreComponentsIT.FormText.v2 = window.CQ.CoreComponentsIT.FormText.v2 
         })
 
         // 1
-          .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-          // 2
-          .execTestCase(formTextV1.setMandatoryFields)
-          .execTestCase(c.tcSwitchConfigTab(("Constraints")))
-          .click("input[type='checkbox'][name='./required'")
-          .fillInput("textarea[name='./requiredMessage']", requiredMessage)
-          .execTestCase(c.tcSaveConfigureDialog)
+        // 2
+            .execTestCase(formTextV1.setMandatoryFields)
+            .execTestCase(c.tcSwitchConfigTab(("Constraints")))
+            .click("input[type='checkbox'][name='./required'")
+            .fillInput("textarea[name='./requiredMessage']", requiredMessage)
+            .execTestCase(c.tcSaveConfigureDialog)
 
-          // 3
-          .asserts.isTrue(function () {
-              return h.find("input[type='text'][name='" + elementName + "'][required]", "#ContentFrame").size() == 1;
-          })
+        // 3
+            .asserts.isTrue(function() {
+                return h.find("input[type='text'][name='" + elementName + "'][required]", "#ContentFrame").size() === 1;
+            })
 
-          // 4
-          .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-          .execTestCase(formTextV1.setInputType("textarea"))
-          .execTestCase(c.tcSaveConfigureDialog)
+        // 4
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execTestCase(formTextV1.setInputType("textarea"))
+            .execTestCase(c.tcSaveConfigureDialog)
 
-          // 5
-          .asserts.isTrue(function () {
-              return h.find("textarea[name='" + elementName + "'][required]", "#ContentFrame").size() == 1;
-          })
+        // 5
+            .asserts.isTrue(function() {
+                return h.find("textarea[name='" + elementName + "'][required]", "#ContentFrame").size() === 1;
+            })
 
-          // 6
-          .asserts.isTrue(function () {
-              return h.find(".cmp-form-text[data-cmp-required-message='" + requiredMessage + "']", "#ContentFrame").size() == 1;
-          });
+        // 6
+            .asserts.isTrue(function() {
+                return h.find(".cmp-form-text[data-cmp-required-message='" + requiredMessage + "']", "#ContentFrame").size() === 1;
+            });
     };
 
     /**
@@ -92,20 +93,20 @@ window.CQ.CoreComponentsIT.FormText.v2 = window.CQ.CoreComponentsIT.FormText.v2 
         })
 
         // 1
-          .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-          // 2
-          .execTestCase(formTextV1.setMandatoryFields)
-          .execTestCase(formTextV1.setInputType("email"))
-          .execTestCase(c.tcSwitchConfigTab(("Constraints")))
-          .fillInput("textarea[name='./constraintMessage']", constraintMessage)
-          .execTestCase(c.tcSaveConfigureDialog)
+        // 2
+            .execTestCase(formTextV1.setMandatoryFields)
+            .execTestCase(formTextV1.setInputType("email"))
+            .execTestCase(c.tcSwitchConfigTab(("Constraints")))
+            .fillInput("textarea[name='./constraintMessage']", constraintMessage)
+            .execTestCase(c.tcSaveConfigureDialog)
 
-          // 3
-          .asserts.isTrue(function () {
-              return h.find(".cmp-form-text[data-cmp-constraint-message='" + constraintMessage + "']",
-                  "#ContentFrame").size() == 1;
-          });
+        // 3
+            .asserts.isTrue(function() {
+                return h.find(".cmp-form-text[data-cmp-constraint-message='" + constraintMessage + "']",
+                    "#ContentFrame").size() === 1;
+            });
     };
 
 }(hobs, jQuery));

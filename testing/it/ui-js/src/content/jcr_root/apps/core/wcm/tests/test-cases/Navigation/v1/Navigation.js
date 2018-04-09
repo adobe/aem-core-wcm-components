@@ -16,131 +16,131 @@
 /* globals hobs,jQuery */
 ;(function (h, $) {
 
-    'use strict';
+    "use strict";
     window.CQ.CoreComponentsIT.Navigation.v1 = window.CQ.CoreComponentsIT.Navigation.v1 || {};
     var c                                    = window.CQ.CoreComponentsIT.commons;
     var navigation                           = window.CQ.CoreComponentsIT.Navigation.v1;
 
-    navigation.tcExecuteBeforeTest = function (tcExecuteBeforeTest, navigationRT, pageRT) {
-        return new h.TestCase('Create Sample Content', {
+    navigation.tcExecuteBeforeTest = function(tcExecuteBeforeTest, navigationRT, pageRT) {
+        return new h.TestCase("Create Sample Content", {
             execBefore: tcExecuteBeforeTest
         })
         // level 1
-            .execFct(function (opts, done) {
-                c.createPage(c.template, c.rootPage, 'page_1', 'page_1', done, pageRT);
+            .execFct(function(opts, done) {
+                c.createPage(c.template, c.rootPage, "page_1", "page_1", done, pageRT);
             })
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 $.ajax({
-                    url     : h.param('page_1')(),
-                    method  : 'POST',
+                    url: h.param("page_1")(),
+                    method: "POST",
                     complete: done,
-                    data    : {
-                        '_charset_'             : 'UTF-8',
-                        './jcr:content/navTitle': 'Page 1'
+                    data: {
+                        "_charset_": "UTF-8",
+                        "./jcr:content/navTitle": "Page 1"
                     }
-                })
+                });
             })
             // level 2
-            .execFct(function (opts, done) {
-                c.createPage(c.template, h.param('page_1')(), 'page_1_1', 'page_1_1', done, pageRT);
+            .execFct(function(opts, done) {
+                c.createPage(c.template, h.param("page_1")(), "page_1_1", "page_1_1", done, pageRT);
             })
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 $.ajax({
-                    url     : h.param('page_1_1')(),
-                    method  : 'POST',
+                    url: h.param("page_1_1")(),
+                    method: "POST",
                     complete: done,
-                    data    : {
-                        '_charset_'             : 'UTF-8',
-                        './jcr:content/navTitle': 'Page 1.1',
-                        './jcr:content/sling:vanityPath': '/page_1_1_vanity'
+                    data: {
+                        "_charset_": "UTF-8",
+                        "./jcr:content/navTitle": "Page 1.1",
+                        "./jcr:content/sling:vanityPath": "/page_1_1_vanity"
                     }
-                })
+                });
             })
             // level 2 1
-            .execFct(function (opts, done) {
-                c.createPage(c.template, h.param('page_1_1')(), 'page_1_1_1', 'page_1_1_1', done, pageRT);
+            .execFct(function(opts, done) {
+                c.createPage(c.template, h.param("page_1_1")(), "page_1_1_1", "page_1_1_1", done, pageRT);
             })
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 $.ajax({
-                    url     : h.param('page_1_1_1')(),
-                    method  : 'POST',
+                    url: h.param("page_1_1_1")(),
+                    method: "POST",
                     complete: done,
-                    data    : {
-                        '_charset_'             : 'UTF-8',
-                        './jcr:content/navTitle': 'Page 1.1.1'
+                    data: {
+                        "_charset_": "UTF-8",
+                        "./jcr:content/navTitle": "Page 1.1.1"
                     }
-                })
+                });
             })
             // level 2 2
-            .execFct(function (opts, done) {
-                c.createPage(c.template, h.param('page_1_1')(), 'page_1_1_2', 'page_1_1_2', done, pageRT);
+            .execFct(function(opts, done) {
+                c.createPage(c.template, h.param("page_1_1")(), "page_1_1_2", "page_1_1_2", done, pageRT);
             })
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 $.ajax({
-                    url     : h.param('page_1_1_2')(),
-                    method  : 'POST',
+                    url: h.param("page_1_1_2")(),
+                    method: "POST",
                     complete: done,
-                    data    : {
-                        '_charset_'              : 'UTF-8',
-                        './jcr:content/hideInNav': true
+                    data: {
+                        "_charset_": "UTF-8",
+                        "./jcr:content/hideInNav": true
                     }
-                })
+                });
             })
             // level 2 3
-            .execFct(function (opts, done) {
-                c.createPage(c.template, h.param('page_1_1')(), 'page_1_1_3', 'page_1_1_3', done, pageRT);
+            .execFct(function(opts, done) {
+                c.createPage(c.template, h.param("page_1_1")(), "page_1_1_3", "page_1_1_3", done, pageRT);
             })
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 $.ajax({
-                    url     : h.param('page_1_1_3')(),
-                    method  : 'POST',
+                    url: h.param("page_1_1_3")(),
+                    method: "POST",
                     complete: done,
-                    data    : {
-                        '_charset_'             : 'UTF-8',
-                        './jcr:content/navTitle': 'Page 1.1.3'
+                    data: {
+                        "_charset_": "UTF-8",
+                        "./jcr:content/navTitle": "Page 1.1.3"
                     }
-                })
+                });
             })
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(navigationRT, c.proxyPath, "compPath", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(navigationRT, c.proxyPath, "compPath", done);
             })
 
             // add component
-            .execFct(function (opts, done) {
-                c.addComponent(h.param("compPath")(opts), h.param("page_1_1")(opts) + c.relParentCompPath, 'cmpPath', done);
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPath")(opts), h.param("page_1_1")(opts) + c.relParentCompPath, "cmpPath", done);
             })
             .navigateTo("/editor.html%page_1_1%.html");
     };
 
-    navigation.tcExecuteAfterTest = function (tcExecuteAfterTest) {
-        return new TestCase('Clean up after test', {
+    navigation.tcExecuteAfterTest = function(tcExecuteAfterTest) {
+        return new h.TestCase("Clean up after test", {
             execAfter: tcExecuteAfterTest
-        }).execFct(function (opts, done) {
-            c.deletePage(h.param('page_1')(opts), done);
+        }).execFct(function(opts, done) {
+            c.deletePage(h.param("page_1")(opts), done);
         })
 
         // delete the test page we created
-        .execFct(function (opts, done) {
-            c.deleteProxyComponent(h.param("compPath")(opts), done);
-        });
+            .execFct(function(opts, done) {
+                c.deleteProxyComponent(h.param("compPath")(opts), done);
+            });
     };
 
-    navigation.testDefaultConfiguration = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new TestCase('Test default configuration', {
+    navigation.testDefaultConfiguration = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Test default configuration", {
             execBefore: tcExecuteBeforeTest,
-            execAfter : tcExecuteAfterTest
+            execAfter: tcExecuteAfterTest
         })
-            .execTestCase(c.tcOpenConfigureDialog('cmpPath'))
-            .assert.isTrue(function () {
-                return h.find('coral-checkbox[name="./collectAllPages"]').prop('checked') === true;
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .assert.isTrue(function() {
+                return h.find('coral-checkbox[name="./collectAllPages"]').prop("checked") === true;
             })
             .assert.visible('coral-numberinput[name="./structureDepth"]', false)
-            .fillInput('foundation-autocomplete[name="./navigationRoot"]', '%page_1%')
+            .fillInput('foundation-autocomplete[name="./navigationRoot"]', "%page_1%")
             .execTestCase(c.tcSaveConfigureDialog)
             .config.changeContext(c.getContentFrame)
-            .assert.isTrue(function () {
-                return h.find('.cmp-navigation__item').size() === 3;
+            .assert.isTrue(function() {
+                return h.find(".cmp-navigation__item").size() === 3;
             })
             .assert.exist(
                 '.cmp-navigation__item.cmp-navigation__item--level-0.cmp-navigation__item--active:contains("Page 1.1")')
@@ -150,24 +150,24 @@
             .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-1:contains("Page 1.1.3")');
     };
 
-    navigation.testIncludeNavigationRoot = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new TestCase('Include Navigation Root', {
+    navigation.testIncludeNavigationRoot = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Include Navigation Root", {
             execBefore: tcExecuteBeforeTest,
-            execAfter : tcExecuteAfterTest
+            execAfter: tcExecuteAfterTest
         })
-            .execTestCase(c.tcOpenConfigureDialog('cmpPath'))
-            .assert.isTrue(function () {
-                return h.find('coral-checkbox[name="./collectAllPages"]').prop('checked') === true;
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .assert.isTrue(function() {
+                return h.find('coral-checkbox[name="./collectAllPages"]').prop("checked") === true;
             })
             .assert.visible('coral-numberinput[name="./structureDepth"]', false)
-            .fillInput('foundation-autocomplete[name="./navigationRoot"]', '%page_1%')
+            .fillInput('foundation-autocomplete[name="./navigationRoot"]', "%page_1%")
             // uncheck the skip root option
             .click('input[name="./skipNavigationRoot"]')
             .execTestCase(c.tcSaveConfigureDialog)
             .wait(200)
             .config.changeContext(c.getContentFrame)
-            .assert.isTrue(function () {
-                return h.find('.cmp-navigation__item').size() === 4;
+            .assert.isTrue(function() {
+                return h.find(".cmp-navigation__item").size() === 4;
             })
             .assert.exist(
                 '.cmp-navigation__item.cmp-navigation__item--level-0.cmp-navigation__item--active:contains("Page 1")')
@@ -179,20 +179,20 @@
             .assert.exist('.cmp-navigation__item.cmp-navigation__item--level-2:contains("Page 1.1.3")');
     };
 
-    navigation.testChangeStructureDepthLevel = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new TestCase('Change max depth level', {
+    navigation.testChangeStructureDepthLevel = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Change max depth level", {
             execBefore: tcExecuteBeforeTest,
-            execAfter : tcExecuteAfterTest
+            execAfter: tcExecuteAfterTest
         })
-            .execTestCase(c.tcOpenConfigureDialog('cmpPath'))
-            .fillInput('foundation-autocomplete[name="./navigationRoot"]', '%page_1%')
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .fillInput('foundation-autocomplete[name="./navigationRoot"]', "%page_1%")
             // uncheck
-            .click('input[name="./collectAllPages"]', {after: 1000})
+            .click('input[name="./collectAllPages"]', { after: 1000 })
             .assert.visible('coral-numberinput[name="./structureDepth"]', true)
             .execTestCase(c.tcSaveConfigureDialog)
             .config.changeContext(c.getContentFrame)
-            .assert.isTrue(function () {
-                return h.find('.cmp-navigation__item').size() === 1;
+            .assert.isTrue(function() {
+                return h.find(".cmp-navigation__item").size() === 1;
             })
             .assert.exist(
                 '.cmp-navigation__item.cmp-navigation__item--level-0.cmp-navigation__item--active:contains("Page 1.1")')

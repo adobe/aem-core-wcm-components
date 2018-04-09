@@ -18,6 +18,7 @@
  * Tests for core form option
  */
 ;(function(h, $){
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -26,13 +27,13 @@
     /**
      * v2 specifics
      */
-    var selectors ={
-        help: '.cmp-form-options__help-message',
-        description: '.cmp-form-options__field-description',
-        checkbox: '.cmp-form-options__field--checkbox',
-        radio: '.cmp-form-options__field--radio',
-        dropDown: '.cmp-form-options__field--drop-down',
-        multiDropDown: '.cmp-form-options__field--multi-drop-down'
+    var selectors = {
+        help: ".cmp-form-options__help-message",
+        description: ".cmp-form-options__field-description",
+        checkbox: ".cmp-form-options__field--checkbox",
+        radio: ".cmp-form-options__field--radio",
+        dropDown: ".cmp-form-options__field--drop-down",
+        multiDropDown: ".cmp-form-options__field--multi-drop-down"
     };
 
     var tcExecuteBeforeTest = formOptionsV1.tcExecuteBeforeTest(c.rtFormOptions_v2, "core/wcm/tests/components/test-page-v2");
@@ -41,9 +42,9 @@
     /**
      * The main test suite.
      */
-    new h.TestSuite('Form Options v2', {path: '/apps/core/wcm/test-suites/FormOptions/v2/FormOptions.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Form Options v2", { path: "/apps/core/wcm/test-suites/FormOptions/v2/FormOptions.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(formOptionsV1.checkMandatoryFields(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptionsV1.setTitle(tcExecuteBeforeTest, tcExecuteAfterTest))

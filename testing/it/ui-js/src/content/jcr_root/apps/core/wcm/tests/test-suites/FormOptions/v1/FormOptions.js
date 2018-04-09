@@ -18,6 +18,7 @@
  * Tests for core form option
  */
 ;(function(h, $) {
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -26,13 +27,13 @@
     /**
      * v1 specifics
      */
-    var itemSelector ={
-        help: '.help-block',
-        description: '.form-group input ~ span',
-        checkbox: '.form-group.checkbox',
-        radio: '.form-group.radio',
-        dropDown: '.form-group.drop-down',
-        multiDropDown: '.form-group.multi-drop-down'
+    var itemSelector = {
+        help: ".help-block",
+        description: ".form-group input ~ span",
+        checkbox: ".form-group.checkbox",
+        radio: ".form-group.radio",
+        dropDown: ".form-group.drop-down",
+        multiDropDown: ".form-group.multi-drop-down"
     };
 
     var tcExecuteBeforeTest = formOptions.tcExecuteBeforeTest(c.rtFormOptions_v1);
@@ -41,14 +42,14 @@
     /**
      * The main test suite.
      */
-    new h.TestSuite('Form Options v1', {path: '/apps/core/wcm/tests/test-suites/FormOptions/v1/FormOptions.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Form Options v1", { path: "/apps/core/wcm/tests/test-suites/FormOptions/v1/FormOptions.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(formOptions.checkMandatoryFields(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptions.setTitle(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptions.setElementName(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formOptions.setHelpMessage(itemSelector,tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formOptions.setHelpMessage(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptions.setCheckbox(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptions.setRadioButton(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formOptions.setDropDown(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))

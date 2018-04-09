@@ -19,7 +19,8 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
 /**
  * Tests for the core title component.
  */
-;(function(h, $){
+;(function(h, $) {
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
@@ -29,22 +30,22 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
      * Before Test Case
      */
     title.tcExecuteBeforeTest = function(titleRT, pageRT) {
-        return TestCase("Setup Before Test")
+        return new h.TestCase("Setup Before Test")
             // common set up
             .execTestCase(c.tcExecuteBeforeTest)
             // create the test page , store page path in 'testPagePath'
-            .execFct(function (opts, done) {
-                c.createPage(c.template, c.rootPage, 'page_' + Date.now(), "testPagePath", done, pageRT)
+            .execFct(function(opts, done) {
+                c.createPage(c.template, c.rootPage, "page_" + Date.now(), "testPagePath", done, pageRT);
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(titleRT, c.proxyPath, "compPath", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(titleRT, c.proxyPath, "compPath", done);
             })
 
             // add the component, store component path in 'cmpPath'
-            .execFct(function (opts, done){
-                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done)
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
             })
             // open the new page in the editor
             .navigateTo("/editor.html%testPagePath%.html");
@@ -54,25 +55,25 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
      * After Test Case
      */
     title.tcExecuteAfterTest = function(policyPath, policyAssignmentPath) {
-        return new TestCase("Clean up after Test")
+        return new h.TestCase("Clean up after Test")
             // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
             })
 
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deletePolicy("/title", done, policyPath);
             })
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deletePolicyAssignment("/title", done, policyAssignmentPath);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPath")(opts), done);
-            })
+            });
     };
 
     /**
@@ -81,26 +82,26 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
     title.tcSetTitleValueUsingInlineEditor = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set title using inline editor", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
             // start the inline editor
             .execTestCase(c.tcOpenInlineEditor("cmpPath"))
 
-            //switch to the content frame
+            // switch to the content frame
             .config.changeContext(c.getContentFrame)
 
             // set the example text
             .execFct(function() {
-                h.find(".cmp-title  h1").html("Content test")
+                h.find(".cmp-title  h1").html("Content test");
             })
 
             // remove the focus so it triggers the post request
-            .simulate(".cmp-title  h1","blur")
+            .simulate(".cmp-title  h1", "blur")
 
             // check if text is rendered
             .assert.isTrue(
                 function() {
-                    var actualValue = h.find('.cmp-title  h1').html();
+                    var actualValue = h.find(".cmp-title  h1").html();
                     return actualValue === "Content test";
                 })
 
@@ -110,13 +111,13 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
             // reload the page, to see if the text really got saved
             .navigateTo("/editor.html%testPagePath%.html")
 
-            //switch to the content frame
+            // switch to the content frame
             .config.changeContext(c.getContentFrame)
 
             // check if text is rendered
             .assert.isTrue(
                 function() {
-                    var actualValue = h.find('.cmp-title  h1').html();
+                    var actualValue = h.find(".cmp-title  h1").html();
                     return actualValue === "Content test";
                 });
     };
@@ -124,15 +125,15 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
     /**
      * Test: Set the title value using the design dialog.
      */
-    title.tcSetTitleValueUsingConfigDialog = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Set title using config dialog",{
+    title.tcSetTitleValueUsingConfigDialog = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set title using config dialog", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
             // open the configuration dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // add some example text
-            .fillInput("[name='./jcr:title']","Content name")
+            .fillInput("[name='./jcr:title']", "Content name")
             // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
@@ -141,7 +142,7 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
 
             // check if text is rendered correctly
             .assert.isTrue(function() {
-                var actualValue = h.find('.cmp-title h1').html();
+                var actualValue = h.find(".cmp-title h1").html();
                 return actualValue === "Content name";
             });
     };
@@ -149,10 +150,10 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
     /**
      * Test: Check the existence of all available title types.
      */
-    title.tcCheckExistenceOfTitleTypes = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Check available title types",{
+    title.tcCheckExistenceOfTitleTypes = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Check available title types", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
             // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
@@ -168,102 +169,105 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
     /**
      * Test: Check if setting the title type works.
      */
-    title.tcSetTitleType = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Set the title type",{
+    title.tcSetTitleType = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set the title type", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
-            /// open the edit dialog
+            // / open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .click("coral-selectlist-item[value='h5']")
             .execTestCase(c.tcSaveConfigureDialog)
 
-            .assert.isTrue(function () {
-                return h.find(".cmp-title  h5","#ContentFrame").size() == 1});
+            .assert.isTrue(function() {
+                return h.find(".cmp-title  h5", "#ContentFrame").size() === 1;
+            });
     };
 
     /**
      * Test: Check the existence of all available title types defined in a policy.
      */
-    title.tcCheckExistenceOfTypesUsingPolicy = function (tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
-        return new h.TestCase("Check available title types defined in a policy",{
-                execBefore: tcExecuteBeforeTest,
-                execAfter: tcExecuteAfterTest
+    title.tcCheckExistenceOfTypesUsingPolicy = function(tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
+        return new h.TestCase("Check available title types defined in a policy", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+
+            .execFct(function(opts, done) {
+                var data = {};
+                data["allowedTypes"] = ["h2", "h3", "h4", "h6"];
+                data["jcr:title"] = "New Policy";
+                data["sling:resourceType"] = "wcm/core/components/policy/policy";
+                data["type"] = "h2";
+
+                c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
+
             })
 
-                .execFct(function (opts,done) {
-                    var data = {};
-                    data["allowedTypes"] = ["h2","h3","h4","h6"];
-                    data["jcr:title"] = "New Policy";
-                    data["sling:resourceType"] = "wcm/core/components/policy/policy";
-                    data["type"] = "h2";
+            .execFct(function(opts, done) {
+                var data = {};
+                data["cq:policy"] = policyLocation + policyName + "/new_policy";
+                data["sling:resourceType"] = "wcm/core/components/policies/mapping";
 
-                    c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath)
+                c.assignPolicy(policyName, data, done, policyAssignmentPath);
 
-                })
+            })
 
-                .execFct(function (opts,done) {
-                    var data = {};
-                    data["cq:policy"] = policyLocation + policyName + "/new_policy";
-                    data["sling:resourceType"] = "wcm/core/components/policies/mapping";
+        // open the dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+        // check if all title sizes defined in policy are there
+            .assert.exist("coral-selectlist-item[value='h2']")
+            .assert.exist("coral-selectlist-item[value='h3']")
+            .assert.exist("coral-selectlist-item[value='h4']")
+            .assert.exist("coral-selectlist-item[value='h6']")
 
-                    c.assignPolicy(policyName, data, done, policyAssignmentPath)
+        // check if the default value is selected
+        // .assert.exist("coral-selectlist-item[value='h2'].is-selected")
 
-                })
+            .execTestCase(c.tcSaveConfigureDialog)
 
-                // open the dialog
-                .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-                // check if all title sizes defined in policy are there
-                .assert.exist("coral-selectlist-item[value='h2']")
-                .assert.exist("coral-selectlist-item[value='h3']")
-                .assert.exist("coral-selectlist-item[value='h4']")
-                .assert.exist("coral-selectlist-item[value='h6']")
-
-                //check if the default value is selected
-                //.assert.exist("coral-selectlist-item[value='h2'].is-selected")
-
-                .execTestCase(c.tcSaveConfigureDialog)
-
-                .assert.isTrue(function () {
-                    return h.find(".cmp-title h2","#ContentFrame").size() == 1})
+            .assert.isTrue(function() {
+                return h.find(".cmp-title h2", "#ContentFrame").size() === 1;
+            })
         ;
     };
 
     /**
      * Test: Check the type used when one type is defined in the policy.
      */
-    title.tcCheckExistenceOfOneTypeUsingPolicy = function (tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
-        return new h.TestCase("Check the type used when one type is defined in the policy",{
-                execBefore: tcExecuteBeforeTest,
-                execAfter: tcExecuteAfterTest
+    title.tcCheckExistenceOfOneTypeUsingPolicy = function(tcExecuteBeforeTest, tcExecuteAfterTest, policyName, policyLocation, policyPath, policyAssignmentPath) {
+        return new h.TestCase("Check the type used when one type is defined in the policy", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+
+            .execFct(function(opts, done) {
+                var data = {};
+                data["allowedTypes"] = "h5";
+                data["jcr:title"] = "New Policy";
+                data["sling:resourceType"] = "wcm/core/components/policy/policy";
+                data["type"] = "h5";
+
+                c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
+
             })
 
-                .execFct(function (opts,done) {
-                    var data = {};
-                    data["allowedTypes"] = "h5";
-                    data["jcr:title"] = "New Policy";
-                    data["sling:resourceType"] = "wcm/core/components/policy/policy";
-                    data["type"] = "h5";
+            .execFct(function(opts, done) {
+                var data = {};
+                data["cq:policy"] = policyLocation + policyName + "/new_policy";
+                data["sling:resourceType"] = "wcm/core/components/policies/mapping";
 
-                    c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath)
+                c.assignPolicy(policyName, data, done, policyAssignmentPath);
 
-                })
+            })
 
-                .execFct(function (opts,done) {
-                    var data = {};
-                    data["cq:policy"] = policyLocation + policyName + "/new_policy";
-                    data["sling:resourceType"] = "wcm/core/components/policies/mapping";
+        // open the dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execTestCase(c.tcSaveConfigureDialog)
 
-                    c.assignPolicy(policyName, data, done, policyAssignmentPath)
-
-                })
-
-                // open the dialog
-                .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-                .execTestCase(c.tcSaveConfigureDialog)
-
-                .assert.isTrue(function () {
-                    return h.find(".cmp-title h5","#ContentFrame").size() == 1})
+            .assert.isTrue(function() {
+                return h.find(".cmp-title h5", "#ContentFrame").size() === 1;
+            })
         ;
     };
 

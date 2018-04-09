@@ -19,6 +19,7 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
  * Tests for the core form components
  */
 ;(function(h, $) {
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -27,38 +28,38 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
     // root location where form content will be stored
     var userContent = "/content/usergenerated/core-components";
 
-    formComponents.tcExecuteBeforeTest = function(formContainerRT, formTextRT,formHihhenRT, formOptionsRT, formBUttonRT, pageRT) {
-        return new TestCase("Setup Before Test")
-        //common set up
+    formComponents.tcExecuteBeforeTest = function(formContainerRT, formTextRT, formHihhenRT, formOptionsRT, formBUttonRT, pageRT) {
+        return new h.TestCase("Setup Before Test")
+        // common set up
             .execTestCase(c.tcExecuteBeforeTest)
 
-            //create the test page, store page path in 'testPagePath'
-            .execFct(function (opts, done) {
-                c.createPage(c.template, c.rootPage, 'page_' + Date.now(), "testPagePath", done, pageRT)
+            // create the test page, store page path in 'testPagePath'
+            .execFct(function(opts, done) {
+                c.createPage(c.template, c.rootPage, "page_" + Date.now(), "testPagePath", done, pageRT);
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(formContainerRT, c.proxyPath, "compPathContainer", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(formContainerRT, c.proxyPath, "compPathContainer", done);
             })
 
-            //add the form container component
-            .execFct(function (opts, done) {
-                c.addComponent(h.param("compPathContainer")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done)
+            // add the form container component
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPathContainer")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "containerPath", done);
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(formTextRT, c.proxyPath, "compPathText", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(formTextRT, c.proxyPath, "compPathText", done);
             })
 
-            //inside the form add a form text input field
-            .execFct(function (opts, done) {
-                c.addComponent(h.param("compPathText")(opts), h.param("containerPath")(opts) + "/", "inputPath", done)
+            // inside the form add a form text input field
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPathText")(opts), h.param("containerPath")(opts) + "/", "inputPath", done);
             })
 
-            //set name and default value for the input field
-            .execFct(function (opts, done) {
+            // set name and default value for the input field
+            .execFct(function(opts, done) {
                 var data = {};
                 data.name = "inputName";
                 data.defaultValue = "inputValue";
@@ -66,17 +67,17 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(formHihhenRT, c.proxyPath, "compPathHidden", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(formHihhenRT, c.proxyPath, "compPathHidden", done);
             })
 
-            //inside the form add a hidden field component
-            .execFct(function (opts, done) {
-                c.addComponent(h.param("compPathHidden")(opts), h.param("containerPath")(opts) + "/", "hiddenPath", done)
+            // inside the form add a hidden field component
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPathHidden")(opts), h.param("containerPath")(opts) + "/", "hiddenPath", done);
             })
 
-            //set name and default value for the hidden field component
-            .execFct(function (opts, done) {
+            // set name and default value for the hidden field component
+            .execFct(function(opts, done) {
                 var data = {};
                 data.name = "hiddenName";
                 data.value = "hiddenValue";
@@ -84,18 +85,18 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(formOptionsRT, c.proxyPath, "compPathOptions", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(formOptionsRT, c.proxyPath, "compPathOptions", done);
             })
 
-            //inside the form add a form option component
-            .execFct(function (opts, done) {
-                c.addComponent(h.param("compPathOptions")(opts), h.param("containerPath")(opts) + "/", "optionPath", done)
+            // inside the form add a form option component
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPathOptions")(opts), h.param("containerPath")(opts) + "/", "optionPath", done);
             })
 
-            //create an option list items
-            .execFct(function (opts, done) {
-                //create the option component
+            // create an option list items
+            .execFct(function(opts, done) {
+                // create the option component
                 var data = {};
                 data["./name"] = "optionName";
                 data["./type"] = "checkbox";
@@ -110,24 +111,24 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(formBUttonRT, c.proxyPath, "compPathButton", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(formBUttonRT, c.proxyPath, "compPathButton", done);
             })
 
-            //add a button to the form
-            .execFct(function (opts, done) {
-                c.addComponent(h.param("compPathButton")(opts), h.param("containerPath")(opts) + "/", "buttonPath", done)
+            // add a button to the form
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPathButton")(opts), h.param("containerPath")(opts) + "/", "buttonPath", done);
             })
 
-            //make sure the button is a submit button
-            .execFct(function (opts, done) {
+            // make sure the button is a submit button
+            .execFct(function(opts, done) {
                 var data = {};
                 data.type = "submit";
                 data.caption = "Submit";
                 c.editNodeProperties(h.param("buttonPath")(), data, done);
             })
 
-            //open the page in the editor
+            // open the page in the editor
             .navigateTo("/editor.html%testPagePath%.html");
     };
 
@@ -135,96 +136,98 @@ window.CQ.CoreComponentsIT.FormComponents.v1 = window.CQ.CoreComponentsIT.FormCo
     /**
      * After Test Case
      */
-    formComponents.tcExecuteAfterTest = function(){
-        return new TestCase("Clean up after Test")
+    formComponents.tcExecuteAfterTest = function() {
+        return new h.TestCase("Clean up after Test")
         // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete any user generated content
-            .execFct(function (opts,done){c.deletePage(userContent,done)})
+            .execFct(function(opts, done) {
+                c.deletePage(userContent, done);
+            })
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPathContainer")(opts), done);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPathText")(opts), done);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPathHidden")(opts), done);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPathOptions")(opts), done);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPathButton")(opts), done);
-            })
+            });
     };
 
     /**
      * Test: Check if the action 'Store Content' works.
      */
-    formComponents.storeContent = function(tcExecuteBeforeTest, tcExecuteAfterTest){
-        return new TestCase("Test Store Content action",{
+    formComponents.storeContent = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Test Store Content action", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
-        //open the edit dialog
+        // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("containerPath"))
-            //select action type
-            .execTestCase(c.tcUseDialogSelect("./actionType","foundation/components/form/actions/store"))
-            //store the content path JSON Url in  a hobbes param
-            .execFct(function(opts,done){
-                h.param("contentJsonUrl_allForm",h.find("input[name='./action']").val().slice(0,-1) + ".3.json");
+            // select action type
+            .execTestCase(c.tcUseDialogSelect("./actionType", "foundation/components/form/actions/store"))
+            // store the content path JSON Url in  a hobbes param
+            .execFct(function(opts, done) {
+                h.param("contentJsonUrl_allForm", h.find("input[name='./action']").val().slice(0, -1) + ".3.json");
                 done();
             })
-            //close the dialog
+            // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //switch to the content frame
+            // switch to the content frame
             .config.changeContext(c.getContentFrame)
         // click on the submit button
-            .click("button:contains('Submit')",{expectNav:true})
+            .click("button:contains('Submit')", { expectNav: true })
 
-            //get the json for the content node
-            .execFct(function(opts,done){
-                c.getJSON(h.param("contentJsonUrl_allForm")(opts),"json_allForm",done);
+            // get the json for the content node
+            .execFct(function(opts, done) {
+                c.getJSON(h.param("contentJsonUrl_allForm")(opts), "json_allForm", done);
             })
-            //check if all values for the form components are saved
-            .assert.isTrue(function(){
+            // check if all values for the form components are saved
+            .assert.isTrue(function() {
             // its stored in a child node with random name so we need to find it
-            var data = h.param("json_allForm")();
-            for (var prop in data) {
+                var data = h.param("json_allForm")();
+                for (var prop in data) {
                 // its the only sub object
-                if (typeof data[prop] === 'object') {
+                    if (typeof data[prop] === "object") {
                     // check if the input value is there
-                    if (data[prop].inputName == null || data[prop].inputName != "inputValue") {
-                        return false;
-                    }
-                    // check if the hidden value is there
-                    if (data[prop].hiddenName == null || data[prop].hiddenName != "hiddenValue") {
-                        return false;
-                    }
-                    // check if the option value is there
-                    if (data[prop].optionName == null || data[prop].optionName != "value1") {
-                        return false;
+                        if (data[prop].inputName == null || data[prop].inputName !== "inputValue") {
+                            return false;
+                        }
+                        // check if the hidden value is there
+                        if (data[prop].hiddenName == null || data[prop].hiddenName !== "hiddenValue") {
+                            return false;
+                        }
+                        // check if the option value is there
+                        if (data[prop].optionName == null || data[prop].optionName !== "value1") {
+                            return false;
+                        }
                     }
                 }
-            }
-            // not found
-            return true;
-        });
+                // not found
+                return true;
+            });
     };
 
 }(hobs, jQuery));

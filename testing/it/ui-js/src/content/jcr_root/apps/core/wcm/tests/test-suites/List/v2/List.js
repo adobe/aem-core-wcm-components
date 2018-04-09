@@ -18,6 +18,7 @@
  * Tests for the core text component
  */
 ;(function (h, $) {
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
@@ -32,9 +33,9 @@
     /**
      * The main test suite for Text Component
      */
-    new h.TestSuite('List v2', {path: '/apps/core/wcm/test-suites/List/v2/List.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("List v2", { path: "/apps/core/wcm/test-suites/List/v2/List.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(listV1.tcCreateListDirectChildren(tcExecuteBeforeTest, tcExecuteAfterTest, "core/wcm/tests/components/test-page-v2"))
         .addTestCase(listV1.tcCreateListChildren(tcExecuteBeforeTest, tcExecuteAfterTest))

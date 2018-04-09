@@ -72,48 +72,48 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .fillInput("input[name='./alt']", altText)
             .fillInput("input[name='./jcr:title']", captionText)
             .execTestCase(c.tcSaveConfigureDialog)
-            .asserts.isTrue(function () {
-                return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
+            .asserts.isTrue(function() {
+                return h.find('.cmp-image__image[src*="' + h.param("testPagePath")() +
                     '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + altText + '"][title="' + captionText + '"]',
-                    "#ContentFrame").size() === 1;
+                "#ContentFrame").size() === 1;
             });
     };
 
-    image.tcDisableCaptionAsPopup = function (titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase('Disable Caption as Popup', {
-                execBefore: tcExecuteBeforeTest,
-                execAfter : tcExecuteAfterTest
-            }
+    image.tcDisableCaptionAsPopup = function(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Disable Caption as Popup", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        }
         )
             .execTestCase(image.tcDragImage())
             .click('coral-tab-label:contains("Metadata")')
             .wait(500)
             .click('input[name="./displayPopupTitle"')
             .execTestCase(c.tcSaveConfigureDialog)
-            .asserts.isTrue(function () {
-                return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
-                    '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + originalDamDescription + '"]', '#ContentFrame').size() === 1
-                    && h.find(titleSelector + ':contains("' + originalDamTitle + '")', '#ContentFrame').size() === 1;
+            .asserts.isTrue(function() {
+                return h.find('.cmp-image__image[src*="' + h.param("testPagePath")() +
+                    '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + originalDamDescription + '"]', "#ContentFrame").size() === 1 &&
+                    h.find(titleSelector + ':contains("' + originalDamTitle + '")', "#ContentFrame").size() === 1;
             });
     };
 
     image.tcSetImageAsDecorative = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase('Set Image as decorative',{
+        return new h.TestCase("Set Image as decorative", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest}
+            execAfter: tcExecuteAfterTest }
         )
-        .execTestCase(image.tcDragImage())
-        .click('coral-tab-label:contains("Metadata")')
-        .wait(500)
-        .simulate('foundation-autocomplete[name="./linkURL"] input[type!="hidden"]', 'key-sequence', {sequence: c.rootPage + '{enter}'})
-        .wait(500)
-        .click('input[name="./isDecorative"')
-        .wait(500)
-        .execTestCase(c.tcSaveConfigureDialog)
-        .config.changeContext(c.getContentFrame)
-        .asserts.isTrue(function () {
-            return h.find('.cmp-image__image').attr('alt') === '' && h.find('.cmp-image__link').size() === 0;
-        });
+            .execTestCase(image.tcDragImage())
+            .click('coral-tab-label:contains("Metadata")')
+            .wait(500)
+            .simulate('foundation-autocomplete[name="./linkURL"] input[type!="hidden"]', "key-sequence", { sequence: c.rootPage + "{enter}" })
+            .wait(500)
+            .click('input[name="./isDecorative"')
+            .wait(500)
+            .execTestCase(c.tcSaveConfigureDialog)
+            .config.changeContext(c.getContentFrame)
+            .asserts.isTrue(function() {
+                return h.find(".cmp-image__image").attr("alt") === "" && h.find(".cmp-image__link").size() === 0;
+            });
     };
 
 }(hobs, jQuery));

@@ -15,18 +15,18 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* globals hobs,jQuery */
 ;(function (h, $) {
+    "use strict";
 
-    'use strict';
-    var c                                    = window.CQ.CoreComponentsIT.commons,
-        navigation                           = window.CQ.CoreComponentsIT.Navigation.v1;
+    var c                                    = window.CQ.CoreComponentsIT.commons;
+    var navigation                           = window.CQ.CoreComponentsIT.Navigation.v1;
 
     var tcExecuteBeforeTest = navigation.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtNavigation_v1,
-        'core/wcm/tests/components/test-page-v2');
+        "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest  = navigation.tcExecuteAfterTest(c.tcExecuteAfterTest);
 
-    new h.TestSuite('Navigation v1', {
-        path           : '/apps/core/wcm/test-suites/Navigation/v1/Navigation.js',
-        execBefore     : c.tcExecuteBeforeTestSuite,
+    new h.TestSuite("Navigation v1", {
+        path: "/apps/core/wcm/test-suites/Navigation/v1/Navigation.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     })
         .addTestCase(navigation.testDefaultConfiguration(tcExecuteBeforeTest, tcExecuteAfterTest))

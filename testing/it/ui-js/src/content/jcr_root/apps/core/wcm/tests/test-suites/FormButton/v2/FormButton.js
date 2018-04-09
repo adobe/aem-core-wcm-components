@@ -18,6 +18,7 @@
  * Tests for core form button
  */
 ;(function(h, $){
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
@@ -35,14 +36,14 @@
     /**
      * Test: The main test suite
      */
-    new h.TestSuite("Form Button v2",{path:"/apps/core/wcm/test-suites/FormButton/v2/FormButton.js",
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Form Button v2", { path: "/apps/core/wcm/test-suites/FormButton/v2/FormButton.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
-        .addTestCase(formButtonV1.checkDefaultButtonAttributes(buttonSelector,tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formButtonV1.checkDefaultButtonAttributes(buttonSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formButtonV1.createButton(buttonSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formButtonV1.setButtonText(buttonSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formButtonV1.setButtonName(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formButtonV1.setButtonValue(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formButtonV1.setButtonValueWithoutName(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(formButtonV1.setButtonValueWithoutName(tcExecuteBeforeTest, tcExecuteAfterTest));
 })(hobs, jQuery);

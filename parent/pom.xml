@@ -44,6 +44,9 @@
         <slf4j.version>1.7.6</slf4j.version>
         <aem.java.version>8</aem.java.version>
         <jacoco.version>0.7.9</jacoco.version>
+        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <node.version>v8.10.0</node.version>
+        <npm.version>5.6.0</npm.version>
     </properties>
 
     <!-- ======================================================================= -->
@@ -178,6 +181,8 @@
                             <exclude>**/.settings</exclude>
                             <exclude>**/.DS_Store</exclude>
                             <exclude>**/target/**</exclude>
+                            <exclude>**/node/**</exclude>
+                            <exclude>**/node_modules/**</exclude>
                             <exclude>**/pom.xml</exclude>
                         </excludes>
                         <group>adobe/cq60</group>
@@ -320,6 +325,9 @@
                             <exclude>**/*.editorconfig</exclude>
                             <exclude>**/*.stylelintrc</exclude>
                             <exclude>**/*.eslintignore</exclude>
+                            <!-- Ignore Node and npm -->
+                            <exclude>**/node/**</exclude>
+                            <exclude>**/node_modules/**</exclude>
                         </excludes>
                     </configuration>
                     <executions>
@@ -362,6 +370,11 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${frontend-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

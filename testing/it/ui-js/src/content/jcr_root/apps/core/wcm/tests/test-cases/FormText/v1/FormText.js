@@ -19,12 +19,13 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) {
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
     var formText = window.CQ.CoreComponentsIT.FormText.v1;
-    
+
     // sample text
 
     // element name
@@ -43,22 +44,22 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
      * Before Test Case
      */
     formText.tcExecuteBeforeTest = function(formTextRT, pageRT) {
-        return new TestCase("Setup Before Test")
+        return new h.TestCase("Setup Before Test")
         // common set up
             .execTestCase(c.tcExecuteBeforeTest)
             // create the test page, store page path in 'testPagePath'
-            .execFct(function (opts, done) {
-                c.createPage(c.template, c.rootPage, 'page_' + Date.now(), "testPagePath", done, pageRT)
+            .execFct(function(opts, done) {
+                c.createPage(c.template, c.rootPage, "page_" + Date.now(), "testPagePath", done, pageRT);
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(formTextRT, c.proxyPath, "compPath", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(formTextRT, c.proxyPath, "compPath", done);
             })
 
             // add the component, store component path in 'cmpPath'
-            .execFct(function (opts, done) {
-                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done)
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
             })
             // open the function(tcExecuteBeforeTest, tcExecuteAfterTest) {         return new page in the editor
             .navigateTo("/editor.html%testPagePath%.html");
@@ -67,28 +68,28 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
      * After Test Case
      */
     formText.tcExecuteAfterTest = function() {
-        return new TestCase("Clean up after Test")
+        return new h.TestCase("Clean up after Test")
         // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPath")(opts), done);
-            })
+            });
     };
     /**
      * Helper test case: set the manadatory fields
      */
     formText.setMandatoryFields = new h.TestCase("Set Mandatory Fields")
-            //set mandatory label text
-            .fillInput("[name='./jcr:title']", label)
-            // and the mandatory element name
-            .fillInput("[name='./name']", elemName)
-        ;
+    // set mandatory label text
+        .fillInput("[name='./jcr:title']", label)
+    // and the mandatory element name
+        .fillInput("[name='./name']", elemName)
+    ;
 
     /**
      * Helper test case: sets the input type of the form input field
@@ -119,16 +120,16 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // try to close the edit dialog, NOTE: cant use tc.SaveConfigDialog as in fullscreen mode it would fail
             // since its expects a reload after clicking save
-            .click(c.selSaveConfDialogButton, {expectNav: false})
+            .click(c.selSaveConfDialogButton, { expectNav: false })
             // check if the dialog is still open
             .asserts.visible(c.selConfigDialog)
-            //Check if label marked as invalid
-            .asserts.isTrue(function () {
-                return h.find("input[name='./jcr:title'].is-invalid").size() == 1
+            // Check if label marked as invalid
+            .asserts.isTrue(function() {
+                return h.find("input[name='./jcr:title'].is-invalid").size() === 1;
             })
             // check if element name is marked as invalid
-            .asserts.isTrue(function () {
-                return h.find("input[name='./name'].is-invalid").size() == 1
+            .asserts.isTrue(function() {
+                return h.find("input[name='./name'].is-invalid").size() === 1;
             });
     };
     /**
@@ -146,9 +147,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the label is rendered
-            .asserts.isTrue(function () {
-                return h.find("label", "#ContentFrame").text().trim() == label
+            // Check if the label is rendered
+            .asserts.isTrue(function() {
+                return h.find("label", "#ContentFrame").text().trim() === label;
             });
     };
 
@@ -158,23 +159,23 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             execAfter: tcExecuteAfterTest
         })
 
-        //Open the edit dialog
+        // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .execTestCase(formText.setMandatoryFields)
-            //check the hideTitle checkbox
+            // check the hideTitle checkbox
             .click("input[type='checkbox'][name='./hideTitle'")
-            //close the edit dialog
+            // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check that the label should not be rendered
-            .asserts.isTrue(function () {
-                return h.find("label", "#ContentFrame").size() == 0;
+            // Check that the label should not be rendered
+            .asserts.isTrue(function() {
+                return h.find("label", "#ContentFrame").size() === 0;
             })
 
-            //check if the aria-label attribute has been set on the input field
-            .asserts.isTrue(function () {
+            // check if the aria-label attribute has been set on the input field
+            .asserts.isTrue(function() {
                 return h.find("input[type='text'][name='" + elemName + "'][aria-label='" + label + "']",
-                        "#ContentFrame").size() == 1;
+                    "#ContentFrame").size() === 1;
             })
 
             // test it also for text area input type
@@ -185,10 +186,10 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //check if the aria-label attribute has been set on the textarea element
-            .asserts.isTrue(function () {
+            // check if the aria-label attribute has been set on the textarea element
+            .asserts.isTrue(function() {
                 return h.find("textarea[name='" + elemName + "'][aria-label='" + label + "']",
-                        "#ContentFrame").size() == 1;
+                    "#ContentFrame").size() === 1;
             });
     };
 
@@ -207,9 +208,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if input name is set correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='text'][name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if input name is set correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='text'][name='" + elemName + "']", "#ContentFrame").size() === 1;
             })
 
             // test it also for text area
@@ -220,9 +221,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if input name is set correctly
-            .asserts.isTrue(function () {
-                return h.find("textarea[name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if input name is set correctly
+            .asserts.isTrue(function() {
+                return h.find("textarea[name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -244,9 +245,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if default value is set correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='text'][value='" + defaultValue + "']", "#ContentFrame").size() == 1;
+            // Check if default value is set correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='text'][value='" + defaultValue + "']", "#ContentFrame").size() === 1;
             })
 
             // test it also for text area input type
@@ -257,10 +258,10 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if textarea default value is set correctly
-            .asserts.isTrue(function () {
+            // Check if textarea default value is set correctly
+            .asserts.isTrue(function() {
                 return h.find("textarea[name='" + elemName + "']:contains('" + defaultValue + "')",
-                        "#ContentFrame").size() == 1;
+                    "#ContentFrame").size() === 1;
             });
     };
 
@@ -282,9 +283,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the input is rendered correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='text'][name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if the input is rendered correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='text'][name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -306,9 +307,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the text area is rendered correctly
-            .asserts.isTrue(function () {
-                return h.find("textarea[name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if the text area is rendered correctly
+            .asserts.isTrue(function() {
+                return h.find("textarea[name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -330,9 +331,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the input is rendered correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='email'][name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if the input is rendered correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='email'][name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -354,9 +355,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the input is rendered correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='tel'][name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if the input is rendered correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='tel'][name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -378,9 +379,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the input is rendered correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='date'][name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if the input is rendered correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='date'][name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -402,9 +403,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the input is rendered correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='number'][name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if the input is rendered correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='number'][name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -426,9 +427,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the input is rendered correctly
-            .asserts.isTrue(function () {
-                return h.find("input[type='password'][name='" + elemName + "']", "#ContentFrame").size() == 1;
+            // Check if the input is rendered correctly
+            .asserts.isTrue(function() {
+                return h.find("input[type='password'][name='" + elemName + "']", "#ContentFrame").size() === 1;
             });
     };
 
@@ -452,10 +453,10 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if help message is rendered as a tooltip of the input field
-            .asserts.isTrue(function () {
-                return h.find(itemSelector+":contains('" + helpMessage + "') ~ input[type='text'][name='" +elemName + "']",
-                        "#ContentFrame").size() === 1;
+            // Check if help message is rendered as a tooltip of the input field
+            .asserts.isTrue(function() {
+                return h.find(itemSelector + ":contains('" + helpMessage + "') ~ input[type='text'][name='" + elemName + "']",
+                    "#ContentFrame").size() === 1;
             });
     };
 
@@ -481,10 +482,10 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if help message is rendered as a tooltip of the input field
-            .asserts.isTrue(function () {
+            // Check if help message is rendered as a tooltip of the input field
+            .asserts.isTrue(function() {
                 return h.find("input[type='text'][name='" + elemName + "'][placeholder='" + helpMessage + "']",
-                        "#ContentFrame").size() == 1;
+                    "#ContentFrame").size() === 1;
             });
     };
 
@@ -506,32 +507,32 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             .assert.isVisible("coral-select[name='./type'] coral-selectlist")
             // check if all the constraints are available
             // text
-            .assert.isTrue(function () {
-                return h.find("coral-select[name='./type'] coral-selectlist-item[value='text']").size() == 1
+            .assert.isTrue(function() {
+                return h.find("coral-select[name='./type'] coral-selectlist-item[value='text']").size() === 1;
             })
             // textarea
-            .assert.isTrue(function () {
-                return h.find("coral-select[name='./type'] coral-selectlist-item[value='textarea']").size() == 1
+            .assert.isTrue(function() {
+                return h.find("coral-select[name='./type'] coral-selectlist-item[value='textarea']").size() === 1;
             })
             // email,tel,date,number,password
-            .assert.isTrue(function () {
-                return h.find("coral-select[name='./type'] coral-selectlist-item[value='email']").size() == 1
+            .assert.isTrue(function() {
+                return h.find("coral-select[name='./type'] coral-selectlist-item[value='email']").size() === 1;
             })
             // tel
-            .assert.isTrue(function () {
-                return h.find("coral-select[name='./type'] coral-selectlist-item[value='tel']").size() == 1
+            .assert.isTrue(function() {
+                return h.find("coral-select[name='./type'] coral-selectlist-item[value='tel']").size() === 1;
             })
             // date,number,password
-            .assert.isTrue(function () {
-                return h.find("coral-select[name='./type'] coral-selectlist-item[value='date']").size() == 1
+            .assert.isTrue(function() {
+                return h.find("coral-select[name='./type'] coral-selectlist-item[value='date']").size() === 1;
             })
             // number
-            .assert.isTrue(function () {
-                return h.find("coral-select[name='./type'] coral-selectlist-item[value='number']").size() == 1
+            .assert.isTrue(function() {
+                return h.find("coral-select[name='./type'] coral-selectlist-item[value='number']").size() === 1;
             })
-            //password
-            .assert.isTrue(function () {
-                return h.find("coral-select[name='./type'] coral-selectlist-item[value='password']").size() == 1
+            // password
+            .assert.isTrue(function() {
+                return h.find("coral-select[name='./type'] coral-selectlist-item[value='password']").size() === 1;
             });
     };
 
@@ -555,9 +556,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if input field is set to read only
-            .asserts.isTrue(function () {
-                return h.find("input[type='text'][name='" + elemName + "'][readonly]", "#ContentFrame").size() == 1;
+            // Check if input field is set to read only
+            .asserts.isTrue(function() {
+                return h.find("input[type='text'][name='" + elemName + "'][readonly]", "#ContentFrame").size() === 1;
             })
 
             // also check text area
@@ -568,9 +569,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if input field is set to read only
-            .asserts.isTrue(function () {
-                return h.find("textarea[name='" + elemName + "'][readonly]", "#ContentFrame").size() == 1;
+            // Check if input field is set to read only
+            .asserts.isTrue(function() {
+                return h.find("textarea[name='" + elemName + "'][readonly]", "#ContentFrame").size() === 1;
             });
     };
 
@@ -596,9 +597,9 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if input field is set to read only
-            .asserts.isTrue(function () {
-                return h.find("input[type='text'][name='" + elemName + "'][required]", "#ContentFrame").size() == 1;
+            // Check if input field is set to read only
+            .asserts.isTrue(function() {
+                return h.find("input[type='text'][name='" + elemName + "'][required]", "#ContentFrame").size() === 1;
             })
 
             // also check text area
@@ -609,15 +610,15 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if text area field is set to read only
-            .asserts.isTrue(function () {
-                return h.find("textarea[name='" + elemName + "'][required]", "#ContentFrame").size() == 1;
+            // Check if text area field is set to read only
+            .asserts.isTrue(function() {
+                return h.find("textarea[name='" + elemName + "'][required]", "#ContentFrame").size() === 1;
             })
 
-            //Check if input field is set to read only
-            .asserts.isTrue(function () {
+            // Check if input field is set to read only
+            .asserts.isTrue(function() {
                 return h.find("textarea[name='" + elemName + "'][data-cmp-required='" + requiredMessage + "']",
-                        "#ContentFrame").size() == 1;
+                    "#ContentFrame").size() === 1;
             });
     };
 
@@ -643,10 +644,10 @@ window.CQ.CoreComponentsIT.FormText.v1 = window.CQ.CoreComponentsIT.FormText.v1 
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if input field is set to read only
-            .asserts.isTrue(function () {
+            // Check if input field is set to read only
+            .asserts.isTrue(function() {
                 return h.find("input[name='" + elemName + "'][data-cmp-constraint='" + requiredMessage + "']",
-                        "#ContentFrame").size() == 1;
+                    "#ContentFrame").size() === 1;
             });
     };
 

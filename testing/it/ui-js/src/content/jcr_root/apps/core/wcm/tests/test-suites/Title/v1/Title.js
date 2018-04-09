@@ -18,6 +18,7 @@
  * Tests for the core title component.
  */
 ;(function(h, $){
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
@@ -32,11 +33,11 @@
     /**
      * The main test suite for Title component
      */
-    new h.TestSuite("Title v1", {path:"/apps/core/wcm/tests/test-suites/core-components-suites/Title.js",
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
-        //TODO: Removed for now as it not stable randomly failing
-        //.addTestCase(title.tcSetTitleValueUsingInlineEditor(tcExecuteBeforeTest, tcExecuteAfterTest))
+    new h.TestSuite("Title v1", { path: "/apps/core/wcm/tests/test-suites/core-components-suites/Title.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
+        // TODO: Removed for now as it not stable randomly failing
+        // .addTestCase(title.tcSetTitleValueUsingInlineEditor(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcSetTitleValueUsingConfigDialog(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcCheckExistenceOfTitleTypes(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(title.tcSetTitleType(tcExecuteBeforeTest, tcExecuteAfterTest))

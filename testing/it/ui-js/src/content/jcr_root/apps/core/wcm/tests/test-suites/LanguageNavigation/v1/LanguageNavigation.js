@@ -15,23 +15,23 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* globals hobs,jQuery */
 ;(function (h, $) {
-    'use strict';
+    "use strict";
 
-    var c                                    = window.CQ.CoreComponentsIT.commons,
-        languageNavigation                   = window.CQ.CoreComponentsIT.LanguageNavigation.v1;
+    var c                                    = window.CQ.CoreComponentsIT.commons;
+    var languageNavigation                   = window.CQ.CoreComponentsIT.LanguageNavigation.v1;
 
     var tcExecuteBeforeTest = languageNavigation.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtLanguageNavigation_v1,
-        'core/wcm/tests/components/test-page-v2');
+        "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest  = languageNavigation.tcExecuteAfterTest(c.tcExecuteAfterTest);
 
-    new h.TestSuite('Language Navigation v1', {
-        path           : '/apps/core/wcm/tests/LanguageNavigation/v1/LanguageNavigation.js',
-        execBefore     : c.tcExecuteBeforeTestSuite,
+    new h.TestSuite("Language Navigation v1", {
+        path: "/apps/core/wcm/tests/LanguageNavigation/v1/LanguageNavigation.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     })
         .addTestCase(languageNavigation.testDefaultConfiguration(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(languageNavigation.testChangeStructureDepth(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(languageNavigation.testSetStructureDepthZero(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(languageNavigation.testNavigationRootNoStructure(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(languageNavigation.testNavigationRootNoStructure(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 }(hobs, jQuery));

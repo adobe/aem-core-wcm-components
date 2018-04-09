@@ -18,6 +18,7 @@
  * Tests for the core text component
  */
 ;(function (h, $) {
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
@@ -32,9 +33,9 @@
     /**
      * The main test suite for Text Component
      */
-    new h.TestSuite('List v1', {path: '/apps/core/wcm/tests/test-suites/List/v1/List.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("List v1", { path: "/apps/core/wcm/tests/test-suites/List/v1/List.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(list.tcCreateListDirectChildren(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(list.tcCreateListChildren(tcExecuteBeforeTest, tcExecuteAfterTest))
@@ -48,9 +49,11 @@
         .addTestCase(list.tcOrderByLastModifiedDate(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(list.tcChangeOrderingDate(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(list.tcSetMaxItems(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(list.tcLinkItemsForList(tcExecuteBeforeTest, tcExecuteAfterTest)) 
-        .addTestCase(list.tcShowDescriptionForList(tcExecuteBeforeTest, tcExecuteAfterTest)) 
+        .addTestCase(list.tcLinkItemsForList(tcExecuteBeforeTest, tcExecuteAfterTest))
+
+        .addTestCase(list.tcShowDescriptionForList(tcExecuteBeforeTest, tcExecuteAfterTest))
+
         .addTestCase(list.tcShowDateForList(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/list/v1/list/clientlibs/site.css'));
-    ;
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/list/v1/list/clientlibs/site.css"));
+
 }(hobs, jQuery));

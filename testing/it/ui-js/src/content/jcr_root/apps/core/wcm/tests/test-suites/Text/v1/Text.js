@@ -18,6 +18,7 @@
  * Tests for the core text component
  */
 ;(function (h, $) {
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
@@ -29,16 +30,16 @@
     var tcExecuteBeforeTest = text.tcExecuteBeforeTest(c.rtText_v1);
     var tcExecuteAfterTest = text.tcExecuteAfterTest();
     var selectors = {
-        editor: '.cmp-text.aem-GridColumn p',
-        rendered: '.cmp-text.aem-GridColumn p'
+        editor: ".cmp-text.aem-GridColumn p",
+        rendered: ".cmp-text.aem-GridColumn p"
     };
 
     /**
      * The main test suite for Text Component
      */
-    new h.TestSuite('Text v1', {path: '/apps/core/wcm/tests/test-suites/Text/v1/Text.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Text v1", { path: "/apps/core/wcm/tests/test-suites/Text/v1/Text.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(text.tcSetTextValueUsingInlineEditor(selectors, tcExecuteBeforeTest, tcExecuteAfterTest));
 }(hobs, jQuery));

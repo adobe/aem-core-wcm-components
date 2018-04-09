@@ -20,31 +20,32 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
  * Tests for core form button
  */
 ;(function(h, $){
+    "use strict";
 
-    //short cut
+    // short cut
     var c = window.CQ.CoreComponentsIT.commons;
     var formButton = window.CQ.CoreComponentsIT.FormButton.v1;
 
     /**
      * Before Test Case
      */
-    formButton.tcExecuteBeforeTest = function(formButtonRT, pageRT){
-        return new TestCase("Create Sample Content")
+    formButton.tcExecuteBeforeTest = function(formButtonRT, pageRT) {
+        return new h.TestCase("Create Sample Content")
             // common set up
             .execTestCase(c.tcExecuteBeforeTest)
             // create the test page, store page path in 'testPagePath'
-            .execFct(function (opts,done) {
-                c.createPage(c.template, c.rootPage ,'page_' + Date.now(),"testPagePath",done, pageRT)
+            .execFct(function(opts, done) {
+                c.createPage(c.template, c.rootPage, "page_" + Date.now(), "testPagePath", done, pageRT);
             })
 
             // create a proxy component
-            .execFct(function (opts, done){
-                c.createProxyComponent(formButtonRT, c.proxyPath, "compPath", done)
+            .execFct(function(opts, done) {
+                c.createProxyComponent(formButtonRT, c.proxyPath, "compPath", done);
             })
 
             // add the component, store component path in 'cmpPath'
-            .execFct(function (opts, done){
-                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts)+c.relParentCompPath,"cmpPath",done)
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
             })
             // open the new page in the editor
             .navigateTo("/editor.html%testPagePath%.html")
@@ -55,20 +56,19 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
      * After Test Case
      */
     formButton.tcExecuteAfterTest = function() {
-
-        return new TestCase("Clean up after Test")
+        return new h.TestCase("Clean up after Test")
             // common clean up
             .execTestCase(c.tcExecuteAfterTest)
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
             })
 
             // delete the test page we created
-            .execFct(function (opts, done) {
+            .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPath")(opts), done);
             });
-        ;
+
     };
 
     /**
@@ -80,13 +80,13 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
             execAfter: tcExecuteAfterTest
         })
 
-            //check that the type of button should be "submit"
-            .asserts.isTrue(function () {
-                return h.find(buttonSelector+"[type='submit']", "#ContentFrame").size() === 1
+            // check that the type of button should be "submit"
+            .asserts.isTrue(function() {
+                return h.find(buttonSelector + "[type='submit']", "#ContentFrame").size() === 1;
             })
-            //check that the title on the button should be "Submit"
-            .asserts.isTrue(function () {
-                return h.find(buttonSelector, "#ContentFrame").text().trim() == "Submit"
+            // check that the title on the button should be "Submit"
+            .asserts.isTrue(function() {
+                return h.find(buttonSelector, "#ContentFrame").text().trim() === "Submit";
             })
         ;
     };
@@ -102,17 +102,17 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
 
         // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-            //change the type of the button
+            // change the type of the button
             .click("button[is='coral-button']:contains('Submit')")
             .click("coral-selectlist-item:contains('Button')")
-            //set the button text
+            // set the button text
             .fillInput("[name='./jcr:title']", "BUTTON")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the button tag is rendered with the correct type
-            .asserts.isTrue(function () {
-                return h.find(buttonSelector+"[type='Button']", "#ContentFrame").size() === 1
+            // Check if the button tag is rendered with the correct type
+            .asserts.isTrue(function() {
+                return h.find(buttonSelector + "[type='Button']", "#ContentFrame").size() === 1;
             })
         ;
     };
@@ -120,21 +120,21 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
     /**
      * Test: Set button text
      */
-    formButton.setButtonText = function(buttonSelector, tcExecuteBeforeTest, tcExecuteAfterTest){
-        return new h.TestCase("Set Button Text",{
+    formButton.setButtonText = function(buttonSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set Button Text", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
             // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-            //set the button text
-            .fillInput("[name='./jcr:title']","Test Button")
+            // set the button text
+            .fillInput("[name='./jcr:title']", "Test Button")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the button tag is rendered with the correct type
+            // Check if the button tag is rendered with the correct type
             .asserts.isTrue(function() {
-                return h.find(buttonSelector,"#ContentFrame").text().trim() === "Test Button"
+                return h.find(buttonSelector, "#ContentFrame").text().trim() === "Test Button";
             })
         ;
     };
@@ -142,22 +142,22 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
     /**
      * Test: Set button name
      */
-    formButton.setButtonName = function(tcExecuteBeforeTest, tcExecuteAfterTest){
-        return new h.TestCase("Set Button Name",{
+    formButton.setButtonName = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set Button Name", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
             // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-            //set the button text
-            .fillInput("[name='./name']","button1")
+            // set the button text
+            .fillInput("[name='./name']", "button1")
             // set button title
-            .fillInput("[name='./jcr:title']","BUTTON WITH NAME")
+            .fillInput("[name='./jcr:title']", "BUTTON WITH NAME")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
-            //Check if the button tag is rendered with the correct type
+            // Check if the button tag is rendered with the correct type
             .asserts.isTrue(function() {
-                return h.find("[name='button1']","#ContentFrame").size() === 1
+                return h.find("[name='button1']", "#ContentFrame").size() === 1;
             })
         ;
     };
@@ -165,43 +165,43 @@ window.CQ.CoreComponentsIT.FormButton.v1 = window.CQ.CoreComponentsIT.FormButton
     /**
      * Test: Set button value
      */
-    formButton.setButtonValue = function(tcExecuteBeforeTest, tcExecuteAfterTest){
-        return new h.TestCase("Set Button Value",{
+    formButton.setButtonValue = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set Button Value", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
             // Open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-            //set the button text
-            .fillInput("[name='./name']","button1")
-            //set the button text
-            .fillInput("[name='./value']","thisisthevalue")
+            // set the button text
+            .fillInput("[name='./name']", "button1")
+            // set the button text
+            .fillInput("[name='./value']", "thisisthevalue")
             // set button title
-            .fillInput("[name='./jcr:title']","BUTTON WITH VALUE")
+            .fillInput("[name='./jcr:title']", "BUTTON WITH VALUE")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
-            //Check if the button tag is rendered with the correct type
+            // Check if the button tag is rendered with the correct type
             .asserts.isTrue(function() {
-                return h.find("[value='thisisthevalue']","#ContentFrame").size() === 1
+                return h.find("[value='thisisthevalue']", "#ContentFrame").size() === 1;
             })
         ;
     };
 
-    formButton.setButtonValueWithoutName = function(tcExecuteBeforeTest, tcExecuteAfterTest){
-        return new h.TestCase('Set Button Value without Name', {
+    formButton.setButtonValueWithoutName = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set Button Value without Name", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest})
+            execAfter: tcExecuteAfterTest })
 
             // Open the edit dialog
-            .execTestCase(c.tcOpenConfigureDialog('cmpPath'))
-            .fillInput('[name=\'./jcr:title\']', 'Button with Value But No Name')
-            //set the button's value
-            .fillInput('[name=\'./value\']', 'value')
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .fillInput("[name='./jcr:title']", "Button with Value But No Name")
+            // set the button's value
+            .fillInput("[name='./value']", "value")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
             .asserts.isTrue(function() {
-                return h.find("coral-icon.coral-Form-fielderror").size() === 1
+                return h.find("coral-icon.coral-Form-fielderror").size() === 1;
 
             })
         ;
