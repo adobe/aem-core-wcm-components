@@ -19,8 +19,6 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -76,23 +74,6 @@ public class MockLanguageManager implements LanguageManager {
         return languageRootResource != null ? languageRootResource.adaptTo(Page.class) : null;
     }
 
-    @Nullable
-    @Override
-    public Page getLanguageRoot(Resource resource, boolean b) {
-        return null;
-    }
-
-    @Override
-    public Resource getLanguageRootResource(Resource resource) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Resource getLanguageRootResource(Resource resource, boolean b) {
-        return null;
-    }
-
     @Override
     public Collection<Locale> getLanguages(ResourceResolver resourceResolver, String s) {
         return null;
@@ -105,16 +86,6 @@ public class MockLanguageManager implements LanguageManager {
 
     @Override
     public Collection<Page> getLanguageRoots(ResourceResolver resourceResolver, String s) {
-        return null;
-    }
-
-    @Override
-    public Collection<Resource> getLanguageRootResources(ResourceResolver resourceResolver, String s) {
-        return null;
-    }
-
-    @Override
-    public Collection<Resource> getLanguageRootResources(ResourceResolver resourceResolver, String s, boolean b) {
         return null;
     }
 
