@@ -71,8 +71,7 @@ For ease of build and installation the following profiles are provided:
 This project relies on the unobfuscated AEM 6.3 cq-quickstart. This is publicly available on https://repo.adobe.com
 
 For more details about the UberJar please head over to the
-[How to Build AEM Projects using Apache Maven](https://helpx.adobe.com/experience-manager/6-4/sites/developing/using/ht-projects-maven
-.html) documentation page.
+[How to Build AEM Projects using Apache Maven](https://helpx.adobe.com/experience-manager/6-4/sites/developing/using/ht-projects-maven.html) documentation page.
 
 ### Install everything
 
