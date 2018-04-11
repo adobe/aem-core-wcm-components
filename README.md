@@ -51,8 +51,7 @@ Core Components | AEM                       | Java
 
 ## Installation
 
-The Sandbox components depend on [`AEM 6.3 SP2`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy
-.html?packagePath=/content/companies/public/adobe/packages/cq630/servicepack/AEM-6.3.2.0) or the latest AEM 6.4 release.
+The Sandbox components depend on [`AEM 6.3 SP2`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy.html?packagePath=/content/companies/public/adobe/packages/cq630/servicepack/AEM-6.3.2.0) or the latest AEM 6.4 release.
 
 ## Build
 
