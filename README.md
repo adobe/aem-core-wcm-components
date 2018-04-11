@@ -43,11 +43,16 @@ The components' versioning scheme is documented on the [AEM Core WCM Components'
 
 Core Components | AEM                       | Java
 ----------------|---------------------------|-----
-1.0.0, 1.0.2    | AEM 6.3                   | 1.7
-1.0.4, 1.0.6    | AEM 6.3                   | 1.8
-1.1.0           | AEM 6.3 + FP19614 or SP 1 | 1.8
+[1.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.0), [1.0.2](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.all-1.0.2)    | AEM 6.3                   | 1.7
+[1.0.4](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.4), [1.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.6)    | AEM 6.3                   | 1.8
+[1.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.1.0)           | AEM 6.3 + FP19614 or SP 1 | 1.8
+[2.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.0)           | AEM 6.3 + SP1 + FP20593   | 1.8
+[2.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.6)           | AEM 6.3 + SP2 | 1.8
 
-The Sandbox components depend on the [`cq-6.3.0-featurepack-18678`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy.html?packagePath=/content/companies/public/adobe/packages/cq630/featurepack/cq-6.3.0-featurepack-18678) Feature Pack. This Feature Pack is a tech preview, meaning that changes might happen to it that could break compatibility. It is therefore recommended to not install it on production environments and instead wait until these capabilities are consolidated in a Service Pack.
+## Installation
+
+The Sandbox components depend on [`AEM 6.3 SP2`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy
+.html?packagePath=/content/companies/public/adobe/packages/cq630/servicepack/AEM-6.3.2.0) or the latest AEM 6.4 release.
 
 ## Build
 
@@ -67,8 +72,8 @@ For ease of build and installation the following profiles are provided:
 This project relies on the unobfuscated AEM 6.3 cq-quickstart. This is publicly available on https://repo.adobe.com
 
 For more details about the UberJar please head over to the
-[How to Build AEM Projects using Apache Maven](https://docs.adobe.com/docs/en/aem/6-2/develop/dev-tools/ht-projects-maven.html#What%20is%20the%20UberJar?)
-documentation page.
+[How to Build AEM Projects using Apache Maven](https://helpx.adobe.com/experience-manager/6-4/sites/developing/using/ht-projects-maven
+.html) documentation page.
 
 ### Install everything
 
@@ -89,7 +94,8 @@ Please note that
 
  ### Running the UI tests
 
- The Sandbox components might use features not yet available on AEM 6.3. In order to correctly test the functionality that's still supported for AEM 6.3, the Hobbes UI tests
+ The Sandbox components might use features not yet available on AEM 6.4. In order to correctly test the functionality that's still 
+ supported for AEM 6.4, the Hobbes UI tests
  should be executed using the following request parameters:
 
 ```
