@@ -45,6 +45,7 @@ public class SearchImpl implements Search {
 
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
     public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
+    public static final String PROP_SEARCH_ROOT_DEFAULT = "/content";
 
     @Self
     private SlingHttpServletRequest request;

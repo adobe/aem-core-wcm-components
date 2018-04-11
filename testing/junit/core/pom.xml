@@ -124,6 +124,13 @@
             <artifactId>osgi.annotation</artifactId>
         </dependency>
 
+        <!-- JCR -->
+        <dependency>
+            <groupId>javax.jcr</groupId>
+            <artifactId>jcr</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Utilities -->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>

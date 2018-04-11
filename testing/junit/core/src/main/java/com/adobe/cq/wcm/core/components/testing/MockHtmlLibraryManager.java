@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.jcr.RepositoryException;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.osgi.service.component.annotations.Component;
 
@@ -110,5 +112,10 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
     @Override
     public Collection<ClientLibrary> getThemeLibraries(String[] strings, LibraryType libraryType, String s, boolean b) {
         return null;
+    }
+
+    @Override
+    public void invalidateOutputCache() throws RepositoryException {
+
     }
 }
