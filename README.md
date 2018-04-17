@@ -33,11 +33,11 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 
 * Form components:
-  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
-  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
-  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
-  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
   * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
+  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
