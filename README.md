@@ -19,25 +19,29 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 ## Available Components
 
 * Page authoring components:
-  * [Page component](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
-  * [Breadcrumb component](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
-  * [Title component](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
-  * [Text component](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
-  * [Image component](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
-  * [List component](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
-  * [Sharing component](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
-  * [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
+  * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Content Fragment](extension/contentfragment/content/src/content/jcr_root/apps/core/wcm/extension/components/contentfragment/v1/contentfragment)\*
+  * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
+  * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
+  * [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
+  * [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
   * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
+  * [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
   * [Teaser](content/src/content/jcr_root/apps/core/wcm/sandbox/components/teaser/v1/teaser)
-* Form components:
-  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
-  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
-  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
-  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
-  * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
+  * [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
+  * [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 
-The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page
+* Form components:
+  * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
+  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+
+The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
+
+\* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
 
 ## System Requirements
 
