@@ -63,7 +63,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private boolean hideImageLink;
     private boolean hideTitleLink;
     private boolean hideDescriptionLink;
-    private static final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
+    private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
     }};
@@ -88,18 +88,18 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @PostConstruct
     private void initModel() {
+        hideImageLink = properties.get(Teaser.PN_HIDE_IMAGE_LINK, false);
+        hideTitleLink = properties.get(Teaser.PN_HIDE_TITLE_LINK, false);
+        hideDescriptionLink = properties.get(Teaser.PN_HIDE_DESCRIPTION_LINK, false);
         if (currentStyle != null) {
             hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, false);
             hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, false);
-            hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, false);
-            hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, false);
-            hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, false);
+            hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, hideImageLink);
+            hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, hideTitleLink);
+            hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, hideDescriptionLink);
         } else {
             hideTitle = false;
             hideDescription = false;
-            hideImageLink = properties.get(Teaser.PN_HIDE_IMAGE_LINK, false);
-            hideTitleLink = properties.get(Teaser.PN_HIDE_TITLE_LINK, false);
-            hideDescriptionLink = properties.get(Teaser.PN_HIDE_DESCRIPTION_LINK, false);
         }
         if (hideImageLink) {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);

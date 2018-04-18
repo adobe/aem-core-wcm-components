@@ -55,6 +55,28 @@
                         "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                         "linkURL"           : "/content/teasers",
                         "sling:resourceType": "core/wcm/sandbox/components/teaser/v1/teaser"
+                    },
+                    "teaser-7"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "linkURL"             : "/content/teasers",
+                        "jcr:title"           : "Teaser",
+                        "jcr:description"     : "Description",
+                        "sling:resourceType"  : "core/wcm/sandbox/components/teaser/v1/teaser",
+                        "hideImageLink"       : true,
+                        "hideTitleLink"       : true,
+                        "hideDescriptionLink" : true
+                    },
+                    "teaser-8"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "linkURL"             : "/content/teasers",
+                        "jcr:title"           : "Teaser",
+                        "jcr:description"     : "Description",
+                        "sling:resourceType"  : "core/wcm/sandbox/components/teaser/v1/teaser",
+                        "hideImageLink"       : true,
+                        "hideTitleLink"       : true,
+                        "hideDescriptionLink" : true
                     }
                 }
             }

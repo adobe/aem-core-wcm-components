@@ -1,0 +1,8 @@
+{
+  "linkURL": "/core/content/teasers.html",
+  "hideImageLink": true,
+  "hideTitleLink": true,
+  "hideDescriptionLink": true,
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-8",
+  ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
+}
