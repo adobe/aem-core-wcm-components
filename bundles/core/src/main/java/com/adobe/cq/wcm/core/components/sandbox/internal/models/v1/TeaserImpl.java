@@ -27,6 +27,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -55,10 +58,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String title;
     private String description;
     private String linkURL;
+    private boolean hideTitle;
+    private boolean hideDescription;
+    private boolean hideImageLink;
+    private boolean hideTitleLink;
+    private boolean hideDescriptionLink;
     private static final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
-        add(ImageResource.PN_LINK_URL);
     }};
 
     @ScriptVariable
@@ -70,6 +77,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @ScriptVariable
     private PageManager pageManager;
 
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @JsonIgnore
+    protected Style currentStyle;
+
     @Self
     private SlingHttpServletRequest request;
 
@@ -77,15 +88,39 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @PostConstruct
     private void initModel() {
-        title = properties.get(JcrConstants.JCR_TITLE, String.class);
+        if (currentStyle != null) {
+            hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, false);
+            hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, false);
+            hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, false);
+            hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, false);
+            hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, false);
+        } else {
+            hideTitle = false;
+            hideDescription = false;
+            hideImageLink = properties.get(Teaser.PN_HIDE_IMAGE_LINK, false);
+            hideTitleLink = properties.get(Teaser.PN_HIDE_TITLE_LINK, false);
+            hideDescriptionLink = properties.get(Teaser.PN_HIDE_DESCRIPTION_LINK, false);
+        }
+        if (hideImageLink) {
+            hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+        }
         linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
         targetPage = pageManager.getPage(linkURL);
-        if (StringUtils.isEmpty(title) && targetPage != null) {
-            title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+        if (hideTitle) {
+            title = null;
+        } else {
+            title = properties.get(JcrConstants.JCR_TITLE, String.class);
+            if (StringUtils.isEmpty(title) && targetPage != null) {
+                title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+            }
         }
-        description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
-        if (StringUtils.isEmpty(description) && targetPage != null) {
-            description = targetPage.getDescription();
+        if (hideDescription) {
+            description = null;
+        } else {
+            description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
+            if (StringUtils.isEmpty(description) && targetPage != null) {
+                description = targetPage.getDescription();
+            }
         }
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
@@ -114,16 +149,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
     public String getLinkURL() {
         return linkURL;
     }
@@ -134,6 +159,31 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             return null;
         }
         return image.getPath();
+    }
+
+    @Override
+    public boolean isHideImageLink() {
+        return hideImageLink;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public boolean isHideTitleLink() {
+        return hideTitleLink;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public boolean isHideDescriptionLink() {
+        return hideDescriptionLink;
     }
 
     @Nonnull

@@ -170,6 +170,5 @@ public class TeaserImplTest {
     private void testImageResourceValueMap(ValueMap valueMap) {
         assertFalse(valueMap.containsKey(JcrConstants.JCR_TITLE));
         assertFalse(valueMap.containsKey(JcrConstants.JCR_DESCRIPTION));
-        assertFalse(valueMap.containsKey(ImageResource.PN_LINK_URL));
     }
 }
