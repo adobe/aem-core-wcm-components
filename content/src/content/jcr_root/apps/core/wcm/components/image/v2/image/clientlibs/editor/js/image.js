@@ -31,8 +31,8 @@
         var $dialog        = e.dialog,
             $dialogContent = $dialog.find(dialogContentSelector),
             dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined,
-            isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
         if (dialogContent) {
+            isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
             altTuple          =
                 new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
             $altGroup         = $dialogContent.find('.cmp-image__editor-alt');
