@@ -13,38 +13,39 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* globals hobs,jQuery */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    /* global hobs, jQuery */
+    "use strict";
 
-    'use strict';
-    var c      = window.CQ.CoreComponentsIT.commons,
-        teaser = window.CQ.CoreComponentsIT.Teaser.v1,
-        selectors = {
-            component: {
-                self: '.cmp-teaser',
-                image: '.cmp-teaser__image',
-                title: '.cmp-teaser__title',
-                description: '.cmp-teaser__description',
-                link: '.cmp-teaser__link'
+
+    var c      = window.CQ.CoreComponentsIT.commons;
+    var teaser = window.CQ.CoreComponentsIT.Teaser.v1;
+    var selectors = {
+        component: {
+            self: ".cmp-teaser",
+            image: ".cmp-teaser__image",
+            title: ".cmp-teaser__title",
+            description: ".cmp-teaser__description",
+            link: ".cmp-teaser__link"
+        },
+        editDialog: {
+            assetDrag: function(imagePath) {
+                return 'coral-card.cq-draggable[data-path="' + imagePath + '"]';
             },
-            editDialog: {
-                assetDrag: function (imagePath) {
-                    return 'coral-card.cq-draggable[data-path="' + imagePath + '"]';
-                },
-                assetDrop: 'coral-fileupload[name="./file"',
-                linkURL: 'foundation-autocomplete[name="./linkURL"]',
-                title: 'input[name="./jcr:title"]',
-                description: 'input[name="./jcr:description"]'
-            }
-        };
+            assetDrop: 'coral-fileupload[name="./file"',
+            linkURL: 'foundation-autocomplete[name="./linkURL"]',
+            title: 'input[name="./jcr:title"]',
+            description: 'input[name="./jcr:description"]'
+        }
+    };
 
     var tcExecuteBeforeTest = teaser.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtTeaser_v1,
-        'core/wcm/tests/components/test-page-v2');
+        "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest  = teaser.tcExecuteAfterTest(c.tcExecuteAfterTest);
 
-    new h.TestSuite('Teaser v1', {
-        path           : '/apps/core/wcm/tests/core-components-it/v1/Teaser.js',
-        execBefore     : c.tcExecuteBeforeTestSuite,
+    new h.TestSuite("Teaser v1", {
+        path: "/apps/core/wcm/tests/core-components-it/v1/Teaser.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     }).addTestCase(teaser.testFullyConfiguredTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
 

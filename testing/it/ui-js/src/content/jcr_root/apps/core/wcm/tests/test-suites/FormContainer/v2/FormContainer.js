@@ -14,7 +14,8 @@
  *  limitations under the License.
  */
 
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -28,17 +29,17 @@
     /**
      * The main test suite.
      */
-    new h.TestSuite("Form Container v2",{path:"/apps/core/wcm/test-suites/FormContainer/v2/FormContainer.js",
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Form Container v2", { path: "/apps/core/wcm/test-suites/FormContainer/v2/FormContainer.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(formContainerV1.storeContent(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formContainerV1.setMailAction(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formContainerV1.setContextPath(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formContainerV1.setThankYouPage(tcExecuteBeforeTest, tcExecuteAfterTest))
-        //The View Data button can't be tested because it tries to open a new window and this can't be tested with hobbes
+        // The View Data button can't be tested because it tries to open a new window and this can't be tested with hobbes
         // NOTE: its not possible to test reliably if the test workflow has been started so no workflow test
-        //.addTestCase(startWorkflow)
+        // .addTestCase(startWorkflow)
         // See https://jira.corp.adobe.com/browse/CQ-106130
         // TODO : setting form identifier is going to be replaced by css styles
         // TODO : client validation not implemented yet

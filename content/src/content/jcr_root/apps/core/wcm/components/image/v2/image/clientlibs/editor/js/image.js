@@ -13,41 +13,41 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*global jQuery, Coral*/
-(function ($) {
-    'use strict';
+/* global jQuery, Coral */
+(function($) {
+    "use strict";
 
-    var dialogContentSelector = '.cmp-image__editor',
-        CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1,
-        altTuple,
-        captionTuple,
-        $altGroup,
-        $linkURLGroup,
-        $linkURLField,
-        $cqFileUpload,
-        $cqFileUploadEdit,
-        fileReference         = undefined;
+    var dialogContentSelector = ".cmp-image__editor";
+    var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
+    var altTuple;
+    var captionTuple;
+    var $altGroup;
+    var $linkURLGroup;
+    var $linkURLField;
+    var $cqFileUpload;
+    var $cqFileUploadEdit;
+    var fileReference;
 
-    $(document).on('dialog-loaded', function (e) {
-        var $dialog        = e.dialog,
-            $dialogContent = $dialog.find(dialogContentSelector),
-            dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined,
-            isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
+    $(document).on("dialog-loaded", function(e) {
+        var $dialog        = e.dialog;
+        var $dialogContent = $dialog.find(dialogContentSelector);
+        var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
+        var isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
         if (dialogContent) {
             altTuple          =
                 new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
-            $altGroup         = $dialogContent.find('.cmp-image__editor-alt');
-            $linkURLGroup     = $dialogContent.find('.cmp-image__editor-link');
+            $altGroup         = $dialogContent.find(".cmp-image__editor-alt");
+            $linkURLGroup     = $dialogContent.find(".cmp-image__editor-link");
             $linkURLField     = $linkURLGroup.find('foundation-autocomplete[name="./linkURL"]');
             captionTuple      =
                 new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./titleValueFromDAM"]', 'input[name="./jcr:title"]');
-            $cqFileUpload     = $dialog.find('.cq-FileUpload');
-            $cqFileUploadEdit = $dialog.find('.cq-FileUpload-edit');
+            $cqFileUpload     = $dialog.find(".cq-FileUpload");
+            $cqFileUploadEdit = $dialog.find(".cq-FileUpload-edit");
             if ($cqFileUpload) {
-                $cqFileUpload.on('assetselected', function (e) {
+                $cqFileUpload.on("assetselected", function(e) {
                     fileReference = e.path;
                     retrieveDAMInfo(fileReference).then(
-                        function () {
+                        function() {
                             if (isDecorative) {
                                 altTuple.hideCheckbox(isDecorative.checked);
                             }
@@ -57,11 +57,11 @@
                         }
                     );
                 });
-                $cqFileUpload.on('click', '[coral-fileupload-clear]', function () {
+                $cqFileUpload.on("click", "[coral-fileupload-clear]", function() {
                     altTuple.reset();
                     captionTuple.reset();
                 });
-                $cqFileUpload.on('coral-fileupload:fileadded', function () {
+                $cqFileUpload.on("coral-fileupload:fileadded", function() {
                     if (isDecorative) {
                         altTuple.hideTextfield(isDecorative.checked);
                     }
@@ -72,8 +72,8 @@
                 });
             }
             if ($cqFileUploadEdit) {
-                fileReference = $cqFileUploadEdit.data('cqFileuploadFilereference');
-                if (fileReference === '') {
+                fileReference = $cqFileUploadEdit.data("cqFileuploadFilereference");
+                if (fileReference === "") {
                     fileReference = undefined;
                 }
                 if (fileReference) {
@@ -87,17 +87,17 @@
         }
     });
 
-    $(window).on('focus', function () {
+    $(window).on("focus", function() {
         if (fileReference) {
             retrieveDAMInfo(fileReference);
         }
     });
 
-    $(document).on('dialog-beforeclose', function () {
-        $(window).off('focus');
+    $(document).on("dialog-beforeclose", function() {
+        $(window).off("focus");
     });
 
-    $(document).on('change', dialogContentSelector + ' coral-checkbox[name="./isDecorative"]', function (e) {
+    $(document).on("change", dialogContentSelector + ' coral-checkbox[name="./isDecorative"]', function(e) {
         toggleAlternativeFieldsAndLink(e.target);
     });
 
@@ -110,7 +110,7 @@
                 $altGroup.show();
                 $linkURLGroup.show();
             }
-            $linkURLField.adaptTo('foundation-field').setDisabled(checkbox.checked);
+            $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
             altTuple.hideTextfield(checkbox.checked);
             if (fileReference) {
                 altTuple.hideCheckbox(checkbox.checked);
@@ -120,19 +120,19 @@
 
     function retrieveDAMInfo(fileReference) {
         return $.ajax({
-            url: fileReference + '/_jcr_content/metadata.json'
-        }).done(function (data) {
+            url: fileReference + "/_jcr_content/metadata.json"
+        }).done(function(data) {
             if (data) {
                 if (altTuple) {
-                    var description = data['dc:description'];
-                    if (description === undefined || description.trim() === '') {
-                        description = data['dc:title'];
+                    var description = data["dc:description"];
+                    if (description === undefined || description.trim() === "") {
+                        description = data["dc:title"];
                     }
                     altTuple.seedTextValue(description);
                     altTuple.update();
                 }
                 if (captionTuple) {
-                    var title = data['dc:title'];
+                    var title = data["dc:title"];
                     captionTuple.seedTextValue(title);
                     captionTuple.update();
                 }

@@ -17,32 +17,34 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
     var textV1 = window.CQ.CoreComponentsIT.Text.v1;
     var textV2 = window.CQ.CoreComponentsIT.Text.v2;
     var selectors = {
-        editor: '.text.aem-GridColumn p',
-        editorConf: '.text.aem-GridColumn div',
-        rendered: '.cmp-text > p',
-        renderedConf: '.cmp-text > div'
+        editor: ".text.aem-GridColumn p",
+        editorConf: ".text.aem-GridColumn div",
+        rendered: ".cmp-text > p",
+        renderedConf: ".cmp-text > div"
     };
 
     /**
      * v1 specifics
      */
-    var tcExecuteBeforeTest = textV1.tcExecuteBeforeTest(c.rtText_v2, "core/wcm/tests/components/test-page-v2")
+    var tcExecuteBeforeTest = textV1.tcExecuteBeforeTest(c.rtText_v2, "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest = textV1.tcExecuteAfterTest();
 
     /**
      * The main test suite for Text Component
      */
-    new h.TestSuite('Text v2', {path: '/apps/core/wcm/tests/test-suites/Text/v2/Text.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Text v2", { path: "/apps/core/wcm/tests/test-suites/Text/v2/Text.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(textV1.tcSetTextValueUsingInlineEditor(selectors, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(textV2.tcCheckTextWithXSSProtection(selectors, tcExecuteBeforeTest, tcExecuteAfterTest));
+
 }(hobs, jQuery));

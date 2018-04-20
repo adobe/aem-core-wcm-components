@@ -16,52 +16,50 @@
 /* globals hobs,jQuery */
 window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
 
-(function (h, $) {
+(function(h, $) {
+    "use strict";
 
-    'use strict';
-    var c                      = window.CQ.CoreComponentsIT.commons,
-        image                  = window.CQ.CoreComponentsIT.Image.v2,
-        testImagePath          = '/content/dam/core-components/core-comp-test-image.jpg',
-        altText                = 'Return to Arkham',
-        captionText            = 'The Last Guardian',
-        originalDamTitle       = 'Beach house',
-        originalDamDescription = 'House on a beach with blue sky';
+    var c                      = window.CQ.CoreComponentsIT.commons;
+    var image                  = window.CQ.CoreComponentsIT.Image.v2;
+    var testImagePath          = "/content/dam/core-components/core-comp-test-image.jpg";
+    var altText                = "Return to Arkham";
+    var captionText            = "The Last Guardian";
+    var originalDamTitle       = "Beach house";
+    var originalDamDescription = "House on a beach with blue sky";
 
-    image.tcDragImage = function () {
-        return new TestCase('Drag Asset')
-            .execTestCase(c.tcOpenConfigureDialog('cmpPath'))
-            .execFct(function (opts, done) {
+    image.tcDragImage = function() {
+        return new h.TestCase("Drag Asset")
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
             .cui.dragdrop('coral-card.cq-draggable[data-path="' + testImagePath + '"]', 'coral-fileupload[name="./file"')
             .execTestCase(c.closeSidePanel);
     };
 
-    image.tcAddImage = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase('Add an Image', {
-                execBefore: tcExecuteBeforeTest,
-                execAfter : tcExecuteAfterTest
-            }
-        )
+    image.tcAddImage = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Add an Image", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(image.tcDragImage())
             .execTestCase(c.tcSaveConfigureDialog)
-            .asserts.isTrue(function () {
-                return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
+            .asserts.isTrue(function() {
+                return h.find('.cmp-image__image[src*="' + h.param("testPagePath")() +
                     '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + originalDamDescription + '"][title="' + originalDamTitle +
                     '"]',
-                    '#ContentFrame').size() === 1;
+                "#ContentFrame").size() === 1;
             });
     };
 
     /**
      * Test: set Alt Text and Title
      */
-    image.tcAddAltTextAndTitle = function (tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase('Set Alt and Title Text', {
-                execBefore: tcExecuteBeforeTest,
-                execAfter : tcExecuteAfterTest
-            }
-        )
+    image.tcAddAltTextAndTitle = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set Alt and Title Text", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(image.tcDragImage())
             .click('coral-tab-label:contains("Metadata")')
             .wait(500)
@@ -72,48 +70,47 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .fillInput("input[name='./alt']", altText)
             .fillInput("input[name='./jcr:title']", captionText)
             .execTestCase(c.tcSaveConfigureDialog)
-            .asserts.isTrue(function () {
-                return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
+            .asserts.isTrue(function() {
+                return h.find('.cmp-image__image[src*="' + h.param("testPagePath")() +
                     '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + altText + '"][title="' + captionText + '"]',
-                    "#ContentFrame").size() === 1;
+                "#ContentFrame").size() === 1;
             });
     };
 
-    image.tcDisableCaptionAsPopup = function (titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase('Disable Caption as Popup', {
-                execBefore: tcExecuteBeforeTest,
-                execAfter : tcExecuteAfterTest
-            }
-        )
+    image.tcDisableCaptionAsPopup = function(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Disable Caption as Popup", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+
             .execTestCase(image.tcDragImage())
             .click('coral-tab-label:contains("Metadata")')
             .wait(500)
             .click('input[name="./displayPopupTitle"')
             .execTestCase(c.tcSaveConfigureDialog)
-            .asserts.isTrue(function () {
-                return h.find('.cmp-image__image[src*="' + h.param('testPagePath')() +
-                    '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + originalDamDescription + '"]', '#ContentFrame').size() === 1
-                    && h.find(titleSelector + ':contains("' + originalDamTitle + '")', '#ContentFrame').size() === 1;
+            .asserts.isTrue(function() {
+                return h.find('.cmp-image__image[src*="' + h.param("testPagePath")() +
+                    '/_jcr_content/root/responsivegrid/image.coreimg."][alt="' + originalDamDescription + '"]', "#ContentFrame").size() === 1 &&
+                    h.find(titleSelector + ':contains("' + originalDamTitle + '")', "#ContentFrame").size() === 1;
             });
     };
 
     image.tcSetImageAsDecorative = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase('Set Image as decorative',{
+        return new h.TestCase("Set Image as decorative", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest}
+            execAfter: tcExecuteAfterTest }
         )
-        .execTestCase(image.tcDragImage())
-        .click('coral-tab-label:contains("Metadata")')
-        .wait(500)
-        .simulate('foundation-autocomplete[name="./linkURL"] input[type!="hidden"]', 'key-sequence', {sequence: c.rootPage + '{enter}'})
-        .wait(500)
-        .click('input[name="./isDecorative"')
-        .wait(500)
-        .execTestCase(c.tcSaveConfigureDialog)
-        .config.changeContext(c.getContentFrame)
-        .asserts.isTrue(function () {
-            return h.find('.cmp-image__image').attr('alt') === '' && h.find('.cmp-image__link').size() === 0;
-        });
+            .execTestCase(image.tcDragImage())
+            .click('coral-tab-label:contains("Metadata")')
+            .wait(500)
+            .simulate('foundation-autocomplete[name="./linkURL"] input[type!="hidden"]', "key-sequence", { sequence: c.rootPage + "{enter}" })
+            .wait(500)
+            .click('input[name="./isDecorative"')
+            .wait(500)
+            .execTestCase(c.tcSaveConfigureDialog)
+            .config.changeContext(c.getContentFrame)
+            .asserts.isTrue(function() {
+                return h.find(".cmp-image__image").attr("alt") === "" && h.find(".cmp-image__link").size() === 0;
+            });
     };
 
 }(hobs, jQuery));
