@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
-    'use strict';
+(function() {
+    "use strict";
 
-    var NS = 'cmp';
-    var IS = 'formText';
-    var IS_DASH = 'form-text';
+    var NS = "cmp";
+    var IS = "formText";
+    var IS_DASH = "form-text";
 
     var selectors = {
-        self : '[data-' + NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]'
     };
 
     var properties = {
@@ -42,7 +42,7 @@
         var options = [];
         var capitalized = IS;
         capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-        var reserved = ['is', 'hook' + capitalized];
+        var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
             if (data.hasOwnProperty(key)) {
@@ -65,18 +65,18 @@
     function FormText(config) {
         if (config.element) {
             // prevents multiple initialization
-            config.element.removeAttribute('data-' + NS + '-is');
+            config.element.removeAttribute("data-" + NS + "-is");
         }
 
         this._cacheElements(config.element);
         this._setupProperties(config.options);
 
-        this._elements.input.addEventListener('invalid', this._onInvalid.bind(this));
-        this._elements.input.addEventListener('input', this._onInput.bind(this));
+        this._elements.input.addEventListener("invalid", this._onInvalid.bind(this));
+        this._elements.input.addEventListener("input", this._onInput.bind(this));
     }
 
-    FormText.prototype._onInvalid = function (event) {
-        event.target.setCustomValidity('');
+    FormText.prototype._onInvalid = function(event) {
+        event.target.setCustomValidity("");
         if (event.target.validity.typeMismatch) {
             if (this._properties.constraintMessage) {
                 event.target.setCustomValidity(this._properties.constraintMessage);
@@ -88,19 +88,19 @@
         }
     };
 
-    FormText.prototype._onInput = function (event) {
-        event.target.setCustomValidity('');
+    FormText.prototype._onInput = function(event) {
+        event.target.setCustomValidity("");
     };
 
     FormText.prototype._cacheElements = function(wrapper) {
         this._elements = {};
         this._elements.self = wrapper;
-        var hooks = this._elements.self.querySelectorAll('[data-' + NS + '-hook-' + IS_DASH + ']');
+        var hooks = this._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS_DASH + "]");
         for (var i = 0; i < hooks.length; i++) {
             var hook = hooks[i];
             var capitalized = IS;
             capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-            var key = hook.dataset[NS + 'Hook' + capitalized];
+            var key = hook.dataset[NS + "Hook" + capitalized];
             this._elements[key] = hook;
         }
     };
@@ -112,13 +112,13 @@
             if (properties.hasOwnProperty(key)) {
                 var property = properties[key];
                 if (options && options[key] != null) {
-                    if (property && typeof property.transform === 'function') {
+                    if (property && typeof property.transform === "function") {
                         this._properties[key] = property.transform(options[key]);
                     } else {
                         this._properties[key] = options[key];
                     }
                 } else {
-                    this._properties[key] = properties[key]['default'];
+                    this._properties[key] = properties[key]["default"];
                 }
             }
         }
@@ -131,16 +131,16 @@
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-        var body = document.querySelector('body');
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
+        var body = document.querySelector("body");
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function (addedNode) {
+                    nodesArray.forEach(function(addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function (element) {
+                            elementsArray.forEach(function(element) {
                                 new FormText({ element: element, options: readData(element) });
                             });
                         }
@@ -150,16 +150,16 @@
         });
 
         observer.observe(body, {
-            subtree      : true,
-            childList    : true,
+            subtree: true,
+            childList: true,
             characterData: true
         });
     }
 
-    if (document.readyState != 'loading'){
+    if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
-        document.addEventListener('DOMContentLoaded', onDocumentReady());
+        document.addEventListener("DOMContentLoaded", onDocumentReady());
     }
 
 })();

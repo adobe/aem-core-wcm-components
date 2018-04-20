@@ -14,7 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -29,11 +30,10 @@
     /**
      * The main test suite.
      */
-    new h.TestSuite("Form Components v2",{path:"/apps/core/wcm/test-suites/FormComponents/v2/FormComponents.js",
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Form Components v2", { path: "/apps/core/wcm/test-suites/FormComponents/v2/FormComponents.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
-        .addTestCase(formComponentsV1.storeContent(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(formComponentsV1.storeContent(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 }(hobs, jQuery));

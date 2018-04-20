@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
-    'use strict';
+(function() {
+    "use strict";
 
-    var NS = 'cmp';
-    var IS = 'search';
+    var NS = "cmp";
+    var IS = "search";
 
     var DELAY = 300; // time before fetching new results when the user is typing a search string
     var LOADING_DISPLAY_DELAY = 300; // minimum time during which the loading indicator is displayed
-    var PARAM_RESULTS_OFFSET = 'resultsOffset';
+    var PARAM_RESULTS_OFFSET = "resultsOffset";
 
     var keyCodes = {
         TAB: 9,
@@ -32,11 +32,11 @@
     };
 
     var selectors = {
-        self : '[data-' + NS + '-is="' + IS +'"]',
-        item : {
-            self : '[data-' + NS + '-hook-' + IS + '="item"]',
-            title : '[data-' + NS + '-hook-' + IS + '="itemTitle"]',
-            focused : '.' + NS + '-search__item--is-focused'
+        self: "[data-" + NS + '-is="' + IS + '"]',
+        item: {
+            self: "[data-" + NS + "-hook-" + IS + '="item"]',
+            title: "[data-" + NS + "-hook-" + IS + '="itemTitle"]',
+            focused: "." + NS + "-search__item--is-focused"
         }
     };
 
@@ -45,8 +45,8 @@
          * The minimum required length of the search term before results are fetched.
          */
         minLength: {
-            'default' : 3,
-            transform : function(value) {
+            "default": 3,
+            transform: function(value) {
                 // number
                 value = parseFloat(value);
                 return isNaN(value) ? null : value;
@@ -56,8 +56,8 @@
          * The maximal number of results fetched by a search request.
          */
         resultsSize: {
-            'default' : 10,
-            transform : function(value) {
+            "default": 10,
+            transform: function(value) {
                 // number
                 value = parseFloat(value);
                 return isNaN(value) ? null : value;
@@ -72,7 +72,7 @@
         var options = [];
         var capitalized = IS;
         capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-        var reserved = ['is', 'hook' + capitalized];
+        var reserved = ["is", "hook" + capitalized];
 
         for (var key in data) {
             if (data.hasOwnProperty(key)) {
@@ -95,11 +95,11 @@
     function toggleShow(element, show) {
         if (element) {
             if (show !== false) {
-                element.style.display = 'block';
-                element.setAttribute('aria-hidden', false);
+                element.style.display = "block";
+                element.setAttribute("aria-hidden", false);
             } else {
-                element.style.display = 'none';
-                element.setAttribute('aria-hidden', true);
+                element.style.display = "none";
+                element.setAttribute("aria-hidden", true);
             }
         }
     }
@@ -111,11 +111,11 @@
                 var node = form.elements[i];
                 if (!node.disabled && node.name) {
                     var param = [node.name, encodeURIComponent(node.value)];
-                    query.push(param.join('='));
+                    query.push(param.join("="));
                 }
             }
         }
-        return query.join('&');
+        return query.join("&");
     }
 
     function mark(node, regex) {
@@ -124,13 +124,13 @@
         }
 
         // text nodes
-        if (node.nodeType == 3) {
+        if (node.nodeType === 3) {
             var nodeValue = node.nodeValue;
             var match = regex.exec(nodeValue);
 
             if (nodeValue && match) {
-                var element = document.createElement('mark');
-                element.className = NS + '-search__item-mark';
+                var element = document.createElement("mark");
+                element.className = NS + "-search__item-mark";
                 element.appendChild(document.createTextNode(match[0]));
 
                 var after = node.splitText(match.index);
@@ -148,22 +148,22 @@
     function Search(config) {
         if (config.element) {
             // prevents multiple initialization
-            config.element.removeAttribute('data-' + NS + '-is');
+            config.element.removeAttribute("data-" + NS + "-is");
         }
 
         this._cacheElements(config.element);
         this._setupProperties(config.options);
 
-        this._action = this._elements.form.getAttribute('action');
+        this._action = this._elements.form.getAttribute("action");
         this._resultsOffset = 0;
         this._hasMoreResults = true;
 
-        this._elements.input.addEventListener('input', this._onInput.bind(this));
-        this._elements.input.addEventListener('focus', this._onInput.bind(this));
-        this._elements.input.addEventListener('keydown', this._onKeydown.bind(this));
-        this._elements.clear.addEventListener('click', this._onClearClick.bind(this));
-        document.addEventListener('click', this._onDocumentClick.bind(this));
-        this._elements.results.addEventListener('scroll', this._onScroll.bind(this));
+        this._elements.input.addEventListener("input", this._onInput.bind(this));
+        this._elements.input.addEventListener("focus", this._onInput.bind(this));
+        this._elements.input.addEventListener("keydown", this._onKeydown.bind(this));
+        this._elements.clear.addEventListener("click", this._onClearClick.bind(this));
+        document.addEventListener("click", this._onDocumentClick.bind(this));
+        this._elements.results.addEventListener("scroll", this._onScroll.bind(this));
 
         this._makeAccessible();
     }
@@ -240,7 +240,7 @@
 
     Search.prototype._onClearClick = function(event) {
         event.preventDefault();
-        this._elements.input.value = '';
+        this._elements.input.value = "";
         toggleShow(this._elements.clear, false);
         toggleShow(this._elements.results, false);
     };
@@ -255,32 +255,32 @@
     };
 
     Search.prototype._resultsOpen = function() {
-        return this._elements.results.style.display !== 'none';
+        return this._elements.results.style.display !== "none";
     };
 
     Search.prototype._makeAccessible = function() {
-        var id = NS + '-search-results-' + idCount;
-        this._elements.input.setAttribute('aria-owns', id);
+        var id = NS + "-search-results-" + idCount;
+        this._elements.input.setAttribute("aria-owns", id);
         this._elements.results.id = id;
         idCount++;
     };
 
-    Search.prototype._generateItems = function (data, results) {
+    Search.prototype._generateItems = function(data, results) {
         var self = this;
 
-        data.forEach(function (item) {
-            var el = document.createElement('span');
+        data.forEach(function(item) {
+            var el = document.createElement("span");
             el.innerHTML = self._elements.itemTemplate.innerHTML;
             el.querySelectorAll(selectors.item.title)[0].appendChild(document.createTextNode(item.title));
-            el.querySelectorAll(selectors.item.self)[0].setAttribute('href', item.url);
+            el.querySelectorAll(selectors.item.self)[0].setAttribute("href", item.url);
             results.innerHTML += el.innerHTML;
         });
     };
 
     Search.prototype._markResults = function() {
         var nodeList = this._elements.results.querySelectorAll(selectors.item.self);
-        var escapedTerm = this._elements.input.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-        var regex = new RegExp('(' + escapedTerm + ')', 'gi');
+        var escapedTerm = this._elements.input.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        var regex = new RegExp("(" + escapedTerm + ")", "gi");
 
         for (var i = this._resultsOffset - 1; i < nodeList.length; ++i) {
             var result = nodeList[i];
@@ -293,7 +293,7 @@
         var focused = this._elements.results.querySelector(selectors.item.focused);
         var newFocused;
         var index = Array.prototype.indexOf.call(results, focused);
-        var focusedCssClass = NS + '-search__item--is-focused';
+        var focusedCssClass = NS + "-search__item--is-focused";
 
         if (results.length > 0) {
 
@@ -340,9 +340,9 @@
         var self = this;
         if (self._hasMoreResults) {
             var request = new XMLHttpRequest();
-            var url = self._action + '?' + serialize(self._elements.form) + '&' + PARAM_RESULTS_OFFSET + '=' + self._resultsOffset;
+            var url = self._action + "?" + serialize(self._elements.form) + "&" + PARAM_RESULTS_OFFSET + "=" + self._resultsOffset;
 
-            request.open('GET', url, true);
+            request.open("GET", url, true);
             request.onload = function() {
                 // when the results are loaded: hide the loading indicator and display the search icon after a minimum period
                 setTimeout(function() {
@@ -380,19 +380,19 @@
         this._elements.results.scrollTop = 0;
         this._resultsOffset = 0;
         this._hasMoreResults = true;
-        this._elements.results.innerHTML = '';
+        this._elements.results.innerHTML = "";
     };
 
     Search.prototype._cacheElements = function(wrapper) {
         this._elements = {};
         this._elements.self = wrapper;
-        var hooks = this._elements.self.querySelectorAll('[data-' + NS + '-hook-' + IS + ']');
+        var hooks = this._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
 
         for (var i = 0; i < hooks.length; i++) {
             var hook = hooks[i];
             var capitalized = IS;
             capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-            var key = hook.dataset[NS + 'Hook' + capitalized];
+            var key = hook.dataset[NS + "Hook" + capitalized];
             this._elements[key] = hook;
         }
     };
@@ -404,13 +404,13 @@
             if (properties.hasOwnProperty(key)) {
                 var property = properties[key];
                 if (options && options[key] != null) {
-                    if (property && typeof property.transform === 'function') {
+                    if (property && typeof property.transform === "function") {
                         this._properties[key] = property.transform(options[key]);
                     } else {
                         this._properties[key] = options[key];
                     }
                 } else {
-                    this._properties[key] = properties[key]['default'];
+                    this._properties[key] = properties[key]["default"];
                 }
             }
         }
@@ -423,16 +423,16 @@
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-        var body = document.querySelector('body');
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
+        var body = document.querySelector("body");
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function (addedNode) {
+                    nodesArray.forEach(function(addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function (element) {
+                            elementsArray.forEach(function(element) {
                                 new Search({ element: element, options: readData(element) });
                             });
                         }
@@ -442,16 +442,16 @@
         });
 
         observer.observe(body, {
-            subtree      : true,
-            childList    : true,
+            subtree: true,
+            childList: true,
             characterData: true
         });
     }
 
-    if (document.readyState != 'loading'){
+    if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
-        document.addEventListener('DOMContentLoaded', onDocumentReady());
+        document.addEventListener("DOMContentLoaded", onDocumentReady());
     }
 
 })();
