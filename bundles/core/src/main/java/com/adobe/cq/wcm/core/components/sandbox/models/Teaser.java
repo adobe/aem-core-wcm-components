@@ -29,39 +29,53 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface Teaser extends ComponentExporter {
 
     /**
-     * Name of the resource property that will store if the image link should be hidden.
+     * Name of the property that will store if the image link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_HIDE_IMAGE_LINK = "hideImageLink";
 
     /**
-     * Name of the resource property that will store if the title should be hidden.
+     * Name of the property that will store if the title should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_HIDE_TITLE = "hideTitle";
 
     /**
-     * Name of the resource property that will store if the title link should be hidden.
+     * Name of the property that will store if the title link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_HIDE_TITLE_LINK = "hideTitleLink";
 
     /**
-     * Name of the resource property that will store if the description should be hidden.
+     * Name of the property that will store if the title value should be taken from the linked page.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_TITLE_VALUE_FROM_PAGE = "titleValueFromPage";
+
+    /**
+     * Name of the property that will store if the description should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_HIDE_DESCRIPTION = "hideDescription";
 
     /**
-     * Name of the resource property that will store if the description link should be hidden.
+     * Name of the property that will store if the description link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_HIDE_DESCRIPTION_LINK = "hideDescriptionLink";
+
+    /**
+     * Name of the property that will store if the description value should be taken from the linked page.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_DESCRIPTION_VALUE_FROM_PAGE = "descriptionValueFromPage";
 
     /**
      * Returns the URL to which this teaser links, if one was defined.

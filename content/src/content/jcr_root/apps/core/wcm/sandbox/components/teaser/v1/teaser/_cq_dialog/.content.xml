@@ -9,7 +9,7 @@
     <content
             jcr:primaryType="nt:unstructured"
             sling:resourceType="granite/ui/components/coral/foundation/container"
-            granite:class="cmp-teaser-editDialog">
+            granite:class="cmp-teaser__editor">
         <items jcr:primaryType="nt:unstructured">
             <tabs
                     jcr:primaryType="nt:unstructured"
@@ -30,72 +30,6 @@
                                     name="./linkURL"
                                     required="{Boolean}true"
                                     rootPath="/content"/>
-                            <links
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/container"
-                                    granite:class="coral-Form-fieldwrapper">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <label
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/text"
-                                            text="Don't add links to"
-                                            granite:class="coral-Form-fieldlabel"/>
-                                    <image
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                            text="Image"
-                                            name="./hideImageLink"
-                                            value="{Boolean}true"
-                                            granite:class="inline-block"
-                                            granite:hide="${cqDesign.hideImageLink}"/>
-                                    <imageDisabled
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                            text="Image"
-                                            name="./hideImageLink"
-                                            checked="{Boolean}true"
-                                            disabled="{Boolean}true"
-                                            ignoreData="{Boolean}true"
-                                            granite:class="inline-block"
-                                            granite:hide="${!cqDesign.hideImageLink}"/>
-                                    <title
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                            text="Title"
-                                            name="./hideTitleLink"
-                                            value="{Boolean}true"
-                                            granite:class="inline-block"
-                                            granite:hide="${cqDesign.hideTitle || cqDesign.hideTitleLink}"/>
-                                    <titleDisabled
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                            text="Title"
-                                            name="./hideTitleLink"
-                                            checked="{Boolean}true"
-                                            disabled="{Boolean}true"
-                                            ignoreData="{Boolean}true"
-                                            granite:class="inline-block"
-                                            granite:hide="${cqDesign.hideTitle || !cqDesign.hideTitleLink}"/>
-                                    <description
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                            text="Description"
-                                            name="./hideDescriptionLink"
-                                            value="{Boolean}true"
-                                            granite:class="inline-block"
-                                            granite:hide="${cqDesign.hideDescription || cqDesign.hideDescriptionLink}"/>
-                                    <descriptionDisabled
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                            text="Description"
-                                            name="./hideDescriptionLink"
-                                            checked="{Boolean}true"
-                                            disabled="{Boolean}true"
-                                            ignoreData="{Boolean}true"
-                                            granite:class="inline-block"
-                                            granite:hide="${cqDesign.hideDescription || !cqDesign.hideDescriptionLink}"/>
-                                </items>
-                            </links>
                             <file
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
@@ -114,18 +48,51 @@
                                     required="{Boolean}true"/>
                             <title
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    fieldDescription="The Teaser's title."
-                                    fieldLabel="Title"
-                                    name="./jcr:title"
-                                    granite:hide="${cqDesign.hideTitle}"/>
+                                    sling:resourceType="granite/ui/components/coral/foundation/well">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <value
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldDescription="The Teaser's title."
+                                            fieldLabel="Title"
+                                            name="./jcr:title"
+                                            value="${cqDesign._jcr_description}"
+                                            granite:hide="${cqDesign.hideTitle}"/>
+                                    <fromPage
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                            fieldDescription="When checked, populate the title from the linked page."
+                                            text="Get title from page"
+                                            name="./titleValueFromPage"
+                                            value="{Boolean}true"
+                                            uncheckedValue="{Boolean}false"
+                                            checked="{Boolean}true"
+                                            granite:hide="${cqDesign.hideTitle}"/>
+                                </items>
+                            </title>
                             <description
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                    fieldDescription="The Teaser's description."
-                                    fieldLabel="Description"
-                                    name="./jcr:description"
-                                    granite:hide="${cqDesign.hideDescription}"/>
+                                    sling:resourceType="granite/ui/components/coral/foundation/well">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <value
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                            fieldDescription="The Teaser's description."
+                                            fieldLabel="Description"
+                                            name="./jcr:description"
+                                            granite:hide="${cqDesign.hideDescription}"/>
+                                    <fromPage
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                            fieldDescription="When checked, populate the description from the linked page."
+                                            text="Get description from page"
+                                            name="./descriptionValueFromPage"
+                                            value="{Boolean}true"
+                                            uncheckedValue="{Boolean}false"
+                                            checked="{Boolean}true"
+                                            granite:hide="${cqDesign.hideDescription}"/>
+                                </items>
+                            </description>
                         </items>
                     </properties>
                 </items>

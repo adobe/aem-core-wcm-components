@@ -58,11 +58,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String title;
     private String description;
     private String linkURL;
-    private boolean hideTitle;
-    private boolean hideDescription;
-    private boolean hideImageLink;
-    private boolean hideTitleLink;
-    private boolean hideDescriptionLink;
+    private boolean hideTitle = false;
+    private boolean hideDescription = false;
+    private boolean hideImageLink = false;
+    private boolean hideTitleLink = false;
+    private boolean hideDescriptionLink = false;
+    private boolean titleValueFromPage = false;
+    private boolean descriptionValueFromPage = false;
     private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
@@ -88,12 +90,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @PostConstruct
     private void initModel() {
-        hideImageLink = properties.get(Teaser.PN_HIDE_IMAGE_LINK, false);
-        hideTitleLink = properties.get(Teaser.PN_HIDE_TITLE_LINK, false);
-        hideDescriptionLink = properties.get(Teaser.PN_HIDE_DESCRIPTION_LINK, false);
+        titleValueFromPage = properties.get(Teaser.PN_TITLE_VALUE_FROM_PAGE, titleValueFromPage);
+        descriptionValueFromPage = properties.get(Teaser.PN_DESCRIPTION_VALUE_FROM_PAGE, descriptionValueFromPage);
         if (currentStyle != null) {
-            hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, false);
-            hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, false);
+            hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, hideTitle);
+            hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, hideDescription);
             hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, hideImageLink);
             hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, hideTitleLink);
             hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, hideDescriptionLink);
@@ -110,7 +111,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             title = null;
         } else {
             title = properties.get(JcrConstants.JCR_TITLE, String.class);
-            if (StringUtils.isEmpty(title) && targetPage != null) {
+            if (titleValueFromPage && targetPage != null) {
                 title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
             }
         }
@@ -118,7 +119,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             description = null;
         } else {
             description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            if (StringUtils.isEmpty(description) && targetPage != null) {
+            if (descriptionValueFromPage && targetPage != null) {
                 description = targetPage.getDescription();
             }
         }

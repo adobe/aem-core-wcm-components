@@ -156,19 +156,23 @@ public class TeaserImplTest {
 
     @Test
     public void testTeaserWithHiddenLinks() throws Exception {
-        Teaser teaser = getTeaserUnderTest(TEASER_7);
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Teaser.PN_HIDE_TITLE_LINK, true);
+            put(Teaser.PN_HIDE_DESCRIPTION_LINK, true);
+            put(Teaser.PN_HIDE_IMAGE_LINK, true);
+        }}));
+        Teaser teaser = getTeaserUnderTest(TEASER_7, mockStyle);
+
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser7"));
     }
 
     @Test
-    public void testTeaserWithPolicy() throws Exception {
+    public void testTeaserWithHiddenElements() throws Exception {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
             put(Teaser.PN_HIDE_TITLE, true);
             put(Teaser.PN_HIDE_DESCRIPTION, true);
-            put(Teaser.PN_HIDE_TITLE_LINK, true);
-            put(Teaser.PN_HIDE_DESCRIPTION_LINK, true);
-            put(Teaser.PN_HIDE_IMAGE_LINK, true);
         }}));
 
         Teaser teaser = getTeaserUnderTest(TEASER_8, mockStyle);
