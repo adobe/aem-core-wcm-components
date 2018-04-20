@@ -13,26 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
-    'use strict';
+(function() {
+    "use strict";
 
     function documentReady(fn) {
-        if (document.readyState != 'loading'){
+        if (document.readyState !== "loading") {
             fn();
         } else {
-            document.addEventListener('DOMContentLoaded', fn);
+            document.addEventListener("DOMContentLoaded", fn);
         }
     }
 
-    var INPUT_FIELD = '.cmp-form-field input',
-        REQUIRED_MSG_ATTRIBUTE = 'data-cmp-required',
-        CONSTRAINT_MSG_ATTRIBUTE = 'data-cmp-constraint';
+    var INPUT_FIELD = ".cmp-form-field input";
+    var REQUIRED_MSG_ATTRIBUTE = "data-cmp-required";
+    var CONSTRAINT_MSG_ATTRIBUTE = "data-cmp-constraint";
 
-    documentReady(function () {
-        var inputFields = document.querySelectorAll(INPUT_FIELD), inputField, index;
+    documentReady(function() {
+        var inputFields = document.querySelectorAll(INPUT_FIELD);
+        var inputField;
+        var index;
+
         for (index = 0; index < inputFields.length; index++) {
             inputField = inputFields[index];
-            inputField.addEventListener('invalid', function (e) {
+            inputField.addEventListener("invalid", function(e) {
                 e.target.setCustomValidity("");
                 if (e.target.validity.typeMismatch) {
                     if (inputField.hasAttribute(CONSTRAINT_MSG_ATTRIBUTE)) {
@@ -44,7 +47,7 @@
                     }
                 }
             });
-            inputField.addEventListener('input', function (e) {
+            inputField.addEventListener("input", function(e) {
                 e.target.setCustomValidity("");
             });
         }

@@ -14,7 +14,8 @@
  *  limitations under the License.
  */
 
-;(function(h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -30,7 +31,7 @@
     // the policy assignment path
     c.policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content/root/responsivegrid/core-component/components";
     // proxy components path
-    c.proxyPath = "/apps/core-component/components/"
+    c.proxyPath = "/apps/core-component/components/";
 
     // core component resource types
     // text component
@@ -76,7 +77,7 @@
     c.selConfigDialog = ".cq-dialog.foundation-form.foundation-layout-form";
     // save button on a configuration dialog
     c.selSaveConfDialogButton = ".cq-dialog-actions button[is='coral-button'][title='Done']";
-    c.selCloseConfDialogButton = 'button.cq-dialog-cancel';
+    c.selCloseConfDialogButton = "button.cq-dialog-cancel";
 
     /**
      * Creates a CQ page via POST request, the same as send by the create page wizard.
@@ -88,10 +89,12 @@
      * @param done Mandatory. Callback to be executed when async method has finished.
      * @param [testPageRT='core/wcm/tests/components/test-page'] the resource type of the test page
      */
-    c.createPage = function (templatePath, parentPath, pageName, dynParName, done, testPageRT) {
+    c.createPage = function(templatePath, parentPath, pageName, dynParName, done, testPageRT) {
         // mandatory check
         if (parentPath == null || templatePath == null || pageName == null || done == null) {
-            if (done) done(false, "createPage failed! mandatory parameter(s) missing!");
+            if (done) {
+                done(false, "createPage failed! mandatory parameter(s) missing!");
+            }
             return;
         }
 
@@ -110,14 +113,14 @@
             }
         })
             // when the request was successful
-            .done(function (data, textStatus, jqXHR) {
+            .done(function(data, textStatus, jqXHR) {
                 // extract the created page path from the returned HTML
                 var path = jQuery(data).find("#Path").text();
                 // get the page name
                 var name = path.substring(path.lastIndexOf("/") + 1, path.length);
                 // if the page already existed it will stupidly postfix it with a number this can lead to problems
                 // so at least we should log a warning
-                if (pageName != name) {
+                if (pageName !== name) {
                     done(false, "createPage failed! page was created with different name!");
                 }
                 // store the page path and name as dynamic data for reuse in hobs functions
@@ -126,14 +129,14 @@
                 }
             })
             // request fails
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 // log an error
                 done(false, "createPage failed! POST failed with: " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -142,10 +145,12 @@
      * @param pagePath Mandatory. testPagePath path to the page to be deleted
      * @param done Optional. callback to be executed when the async method has finished.
      */
-    c.deletePage = function (pagePath, done) {
+    c.deletePage = function(pagePath, done) {
         // mandatory check
         if (pagePath == null || done == null) {
-            if (done) done(false, "deletePage failed! mandatory parameter(s) missing!");
+            if (done) {
+                done(false, "deletePage failed! mandatory parameter(s) missing!");
+            }
             return;
         }
         jQuery.ajax({
@@ -155,13 +160,13 @@
                 ":operation": "delete"
             }
         })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "deletePage failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -174,10 +179,12 @@
      * @param dynParName Optional. Hobbes dynamic param to store the generated page path.
      * @param done Mandatory. Callback to be executed when async method has finished.
      */
-    c.createLiveCopy = function (srcPath, destPath, title, label, dynParName, done) {
+    c.createLiveCopy = function(srcPath, destPath, title, label, dynParName, done) {
         // mandatory check
         if (srcPath == null || destPath == null || title == null || label == null || done == null) {
-            if (done) done(false, "createLiveCopy failed! mandatory parameter(s) missing!");
+            if (done) {
+                done(false, "createLiveCopy failed! mandatory parameter(s) missing!");
+            }
             return;
         }
 
@@ -196,7 +203,7 @@
             }
         })
         // when the request was successful
-            .done(function (data, textStatus, jqXHR) {
+            .done(function(data, textStatus, jqXHR) {
                 // extract the created page path from the returned HTML
                 var path = jQuery(data).find("#Path").text();
 
@@ -207,14 +214,14 @@
             })
 
             // request fails
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 // log an error
                 done(false, "createLiveCopy failed! POST failed with: " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -227,16 +234,22 @@
      * @param nameHint           optional hint for the component nodes name, if empty component name is taken
      * @param order              optional where to place component e.g. 'before product_grid', if empty, 'last' is used
      */
-    c.addComponent = function (component, parentCompPath, dynParName, done, nameHint, order) {
+    c.addComponent = function(component, parentCompPath, dynParName, done, nameHint, order) {
         // mandatory check
         if (component == null || parentCompPath == null || done == null) {
-            if (done) done(false, "addComponent failed! mandatory parameter(s) missing!");
+            if (done) {
+                done(false, "addComponent failed! mandatory parameter(s) missing!");
+            }
             return;
         }
 
         // default settings
-        if (nameHint == null) nameHint = component.substring(component.lastIndexOf("/") + 1);
-        if (order == null) order = "last";
+        if (nameHint == null) {
+            nameHint = component.substring(component.lastIndexOf("/") + 1);
+        }
+        if (order == null) {
+            order = "last";
+        }
 
         // the ajax call
         jQuery.ajax({
@@ -253,20 +266,20 @@
 
             }
         })
-            .done(function (data, textStatus, jqXHR) {
+            .done(function(data, textStatus, jqXHR) {
                 // extract the component path from the returned HTML
                 if (dynParName != null) {
                     h.param(dynParName, jQuery(data).find("#Path").text());
                 }
             })
             // in case of failure
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "addComponent failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -279,43 +292,49 @@
      * @param title              mandatory the title of the component
      * @param componentGroup     optional the group of the component, if empty, 'Core' is used
      */
-    c.createProxyComponent = function (component, proxyCompPath, dynParName, done, title, componentGroup) {
+    c.createProxyComponent = function(component, proxyCompPath, dynParName, done, title, componentGroup) {
         // mandatory check
         if (component == null || proxyCompPath == null || done == null) {
-            if (done) done(false, "createProxyComponent failed! mandatory parameter(s) missing!");
+            if (done) {
+                done(false, "createProxyComponent failed! mandatory parameter(s) missing!");
+            }
             return;
         }
 
         // default settings
-        if (title == null) title = component.substring(component.lastIndexOf("/") + 1);
-        if (componentGroup == null) componentGroup = "Core";
+        if (title == null) {
+            title = component.substring(component.lastIndexOf("/") + 1);
+        }
+        if (componentGroup == null) {
+            componentGroup = "Core";
+        }
 
         // the ajax call
         jQuery.ajax({
             url: proxyCompPath,
             method: "POST",
             data: {
-                "jcr:primaryType" : "cq:Component",
+                "jcr:primaryType": "cq:Component",
                 "componentGroup": componentGroup,
                 "jcr:title": title,
                 "jcr:description": title,
                 "sling:resourceSuperType": component
             }
         })
-            .done(function (data, textStatus, jqXHR) {
+            .done(function(data, textStatus, jqXHR) {
                 // extract the component path from the returned HTML
                 if (dynParName != null) {
                     h.param(dynParName, jQuery(data).find("#Path").text());
                 }
             })
             // in case of failure
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "createProxyComponent failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -324,10 +343,12 @@
      * @param pagePath Mandatory. testPagePath path to the page to be deleted
      * @param done Optional. callback to be executed when the async method has finished.
      */
-    c.deleteProxyComponent = function (proxyPath, done) {
+    c.deleteProxyComponent = function(proxyPath, done) {
         // mandatory check
         if (proxyPath == null || done == null) {
-            if (done) done(false, "deletePage failed! mandatory parameter(s) missing!");
+            if (done) {
+                done(false, "deletePage failed! mandatory parameter(s) missing!");
+            }
             return;
         }
         jQuery.ajax({
@@ -337,13 +358,13 @@
                 ":operation": "delete"
             }
         })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "deletePage failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
 
@@ -354,10 +375,12 @@
      * @param data              Mandatory. object with properties to be set on the node.
      * @param done              Mandatory. callback function when post has returned
      */
-    c.editNodeProperties = function (componentPath, data, done) {
+    c.editNodeProperties = function(componentPath, data, done) {
         // check mandatory
         if (componentPath == null || data == null || done == null) {
-            if (done) done(false, "editNodeProperties failed! Mandatory param(s) missing.");
+            if (done) {
+                done(false, "editNodeProperties failed! Mandatory param(s) missing.");
+            }
             return;
         }
         $.ajax({
@@ -367,12 +390,12 @@
             data: data
         })
             // in case of failure
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "editNodeProperties failed: POST failed with " + textStatus + "," + errorThrown);
             })
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -381,10 +404,12 @@
      * @param tag   Mandatory. the tag to be added
      * @param done  Mandatory. the callback to execute when post returns
      */
-    c.addTag = function (tag, done) {
+    c.addTag = function(tag, done) {
         // mandatory check
         if (tag == null || done == null) {
-            if (done) done(false, "addTag failed! Mandatory param(s) missing.");
+            if (done) {
+                done(false, "addTag failed! Mandatory param(s) missing.");
+            }
             return;
         }
         jQuery.ajax({
@@ -398,76 +423,80 @@
 
             }
         })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "addTag failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
      * Create a policy
      *
-     * @param component_path   Mandatory. the path to the component policy
+     * @param componentPath   Mandatory. the path to the component policy
      * @param data Tha policy's data
      * @param done  Mandatory. the callback to execute when post returns
      */
-    c.createPolicy = function (component_path, data, dynParName, done, policyPath) {
+    c.createPolicy = function(componentPath, data, dynParName, done, policyPath) {
         policyPath = policyPath || c.policyPath;
         // mandatory check
-        if (component_path == null || data == null || done == null) {
-            if (done) done(false, "createPolicy failed! Mandatory param(s) missing.");
-            return;
+        if (componentPath == null || data == null || done == null) {
+            if (done) {
+                done(false, "createPolicy failed! Mandatory param(s) missing.");
             }
-            jQuery.ajax({
-                url: policyPath + component_path,
-                method: "POST",
-                data: data
-            })
-            .done(function (data, textStatus, jqXHR) {
+            return;
+        }
+        jQuery.ajax({
+            url: policyPath + componentPath,
+            method: "POST",
+            data: data
+        })
+            .done(function(data, textStatus, jqXHR) {
                 // extract the component path from the returned HTML
                 if (dynParName != null) {
                     h.param(dynParName, jQuery(data).find("#Path").text());
                 }
             })
 
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "createPolicy failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
      * Assign a policy to a core component
      *
-     * @param component_path   Mandatory. the path to the component policy
+     * @param componentPath   Mandatory. the path to the component policy
      * @param data Tha policy's data
      * @param done  Mandatory. the callback to execute when post returns
      */
-    c.assignPolicy = function (component_path, data, done, policyAssignmentPath) {
+    c.assignPolicy = function(componentPath, data, done, policyAssignmentPath) {
         policyAssignmentPath = policyAssignmentPath || c.policyAssignmentPath;
         // mandatory check
-        if (component_path == null || data == null || done == null) {
-            if (done) done(false, "assignPolicy failed! Mandatory param(s) missing.");
+        if (componentPath == null || data == null || done == null) {
+            if (done) {
+                done(false, "assignPolicy failed! Mandatory param(s) missing.");
+            }
             return;
         }
         jQuery.ajax({
-            url: policyAssignmentPath + component_path,
+            url: policyAssignmentPath + componentPath,
             method: "POST",
             data: data
         })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "assignPolicy failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -476,27 +505,29 @@
      * @param policyPath Mandatory. policyPath path to the policy to be deleted
      * @param done Optional. callback to be executed when the async method has finished.
      */
-    c.deletePolicy = function (component_path, done, policyPath) {
+    c.deletePolicy = function(componentPath, done, policyPath) {
         policyPath = policyPath || c.policyPath;
         // mandatory check
-        if (component_path == null || done == null) {
-            if (done) done(false, "deletePolicy failed! mandatory parameter(s) missing!");
+        if (componentPath == null || done == null) {
+            if (done) {
+                done(false, "deletePolicy failed! mandatory parameter(s) missing!");
+            }
             return;
         }
         jQuery.ajax({
-            url: policyPath + component_path,
+            url: policyPath + componentPath,
             method: "POST",
             data: {
                 ":operation": "delete"
             }
         })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "deletePolicy failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
@@ -505,47 +536,51 @@
      * @param policyAllocationPath Mandatory. policyAllocatiionPath path to the policy allocation to be deleted
      * @param done Optional. callback to be executed when the async method has finished.
      */
-    c.deletePolicyAssignment = function (component_path, done, policyAssignmentPath) {
+    c.deletePolicyAssignment = function(componentPath, done, policyAssignmentPath) {
         policyAssignmentPath = policyAssignmentPath || c.policyAssignmentPath;
         // mandatory check
-        if (component_path == null || done == null) {
-            if (done) done(false, "deletePolicyAllocation failed! mandatory parameter(s) missing!");
+        if (componentPath == null || done == null) {
+            if (done) {
+                done(false, "deletePolicyAllocation failed! mandatory parameter(s) missing!");
+            }
             return;
         }
         jQuery.ajax({
-            url: policyAssignmentPath + component_path,
+            url: policyAssignmentPath + componentPath,
             method: "POST",
             data: {
                 ":operation": "delete"
             }
         })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "deletePolicyAllocation failed: POST failed with " + textStatus + "," + errorThrown);
             })
             // always executed, fail or success
-            .then(function () {
+            .then(function() {
                 done(true);
-            })
+            });
     };
 
     /**
      * returns the content frame.
      */
-    c.getContentFrame = function () {
-        return h.find('iframe#ContentFrame').get(0);
+    c.getContentFrame = function() {
+        return h.find("iframe#ContentFrame").get(0);
     };
 
     /**
      * returns the page name.
      */
-    c.setPageName = function (pagePath, pageName, done) {
+    c.setPageName = function(pagePath, pageName, done) {
         // mandatory check
         if (pagePath == null || pageName == null || done == null) {
-            if (done) done(false, "setPageName failed! mandatory parameter(s) missing!");
+            if (done) {
+                done(false, "setPageName failed! mandatory parameter(s) missing!");
+            }
             return;
         }
         var name = pagePath.substring(pagePath.lastIndexOf("/") + 1, pagePath.length);
-        hobs.param(pageName,name);
+        hobs.param(pageName, name);
 
         done(true);
     };
@@ -560,32 +595,38 @@
      * @param maxRetries    optional. number of retries, default 10
      * @param timeout       optional. timout in milliseconds between retries, default 500
      */
-    c.getJSON = function (url, dynParName, done, maxRetries, timeout) {
+    c.getJSON = function(url, dynParName, done, maxRetries, timeout) {
         // check mandatory
         if (url == null || dynParName == null || done == null) {
-            if (done) done(false, "getJSON failed! Mandatory param(s) missing.");
+            if (done) {
+                done(false, "getJSON failed! Mandatory param(s) missing.");
+            }
             return;
         }
 
         // check defaults
-        if (maxRetries == null) maxRetries = 10;
-        if (timeout == null) timeout = 500;
+        if (maxRetries == null) {
+            maxRetries = 10;
+        }
+        if (timeout == null) {
+            timeout = 500;
+        }
 
         // retry counter
         var retries = 0;
 
         // the polling function
-        var poll = function () {
+        var poll = function() {
             $.ajax({
                 url: url,
                 method: "GET",
                 dataType: "json"
             })
-                .done(function (data) {
+                .done(function(data) {
                     h.param(dynParName, data);
                     done(true);
                 })
-                .fail(function (jqXHR, textStatus, errorThrown) {
+                .fail(function(jqXHR, textStatus, errorThrown) {
                     // check if max retries was reached
                     if (retries++ === maxRetries) {
                         done(false, "getJSON failed! GET failed with " + textStatus + "," + errorThrown);
@@ -593,29 +634,26 @@
                     }
                     // set for next retry
                     setTimeout(poll, timeout);
-                })
+                });
         };
         // start polling
         poll();
     };
 
-    c.openSidePanel = function (done) {
-
-        maxRetries = 5;
-        timeout = 500;
-
-        // retry counter
+    c.openSidePanel = function(done) {
+        var maxRetries = 5;
+        var timeout = 500;
         var retries = 0;
 
         // the polling function
-        var poll = function () {
+        var poll = function() {
             // if the panel is closed
-            if (h.find("#SidePanel.sidepanel-closed").size() == 1) {
+            if (h.find("#SidePanel.sidepanel-closed").size() === 1) {
                 // click on the toggle button, wait for the click to finish, then check
-                click(".toggle-sidepanel.editor-GlobalBar-item").exec().then(
-                    function () {
+                h.click(".toggle-sidepanel.editor-GlobalBar-item").exec().then(
+                    function() {
                         // check if the panel is open
-                        if (h.find("#SidePanel.sidepanel-opened").size() == 1) {
+                        if (h.find("#SidePanel.sidepanel-opened").size() === 1) {
                             done(true);
                         } else {
                             // check if max retries was reached
@@ -627,7 +665,7 @@
                             setTimeout(poll, timeout);
                         }
                     }
-                )
+                );
             }
             done();
 
@@ -643,9 +681,9 @@
      * @param cmpPath   mandatory. the absolute component path, used as the value for 'data-path' attribue
      */
     c.tcOpenConfigureDialog = function(cmpPath) {
-        return new TestCase("Open Configure Dialog")
-            //click on the component to see the Editable Toolbar
-            .click(".cq-Overlay.cq-draggable.cq-droptarget%dataPath%",{
+        return new h.TestCase("Open Configure Dialog")
+            // click on the component to see the Editable Toolbar
+            .click(".cq-Overlay.cq-draggable.cq-droptarget%dataPath%", {
                 before: function() {
                     // set the data-path attribute so we target the correct component
                     h.param("dataPath", "[data-path='" + h.param(cmpPath)() + "']");
@@ -663,58 +701,60 @@
     /**
      * Helper test case: switch the config dialog tab
      */
-    c.tcSwitchConfigTab = function(tabTitle){
-        return new TestCase("Switch Config Tab to " +  tabTitle)
+    c.tcSwitchConfigTab = function(tabTitle) {
+        return new h.TestCase("Switch Config Tab to " +  tabTitle)
             // click on the tab
-            .click("coral-tab > coral-tab-label:contains('"+ tabTitle + "')")
+            .click("coral-tab > coral-tab-label:contains('" + tabTitle + "')")
             // check if its selected
-            .assert.isTrue(function(){
-                return h.find("coral-tab[selected] > coral-tab-label:contains('"+ tabTitle + "')").size() == 1
-            })
+            .assert.isTrue(function() {
+                return h.find("coral-tab[selected] > coral-tab-label:contains('" + tabTitle + "')").size() === 1;
+            });
     };
 
-    c.tcUseDialogSelect = function(name,value){
-        return new TestCase("Set Select for '" + name + "' to '" + value + "'")
+    c.tcUseDialogSelect = function(name, value) {
+        return new h.TestCase("Set Select for '" + name + "' to '" + value + "'")
             // open action drop down
             .click("coral-select[name='" + name + "'] > button")
             // check if the dropdown has become visible
             .assert.visible("coral-select[name='" + name + "'] coral-selectlist")
             // select the store action
             .click("coral-select[name='" + name + "'] coral-selectlist " +
-            "coral-selectlist-item[value='" + value + "']")
+            "coral-selectlist-item[value='" + value + "']");
     };
 
     /**
      * Closes any open configuration dialog
      */
-    c.tcSaveConfigureDialog = new TestCase ("Save Configure Dialog")
+    c.tcSaveConfigureDialog = new h.TestCase("Save Configure Dialog")
         // if full Screen mode was used make sure the click waits for the navigation change
         .ifElse(
         // check if the dialog opened in a different URL
-        function(){ return hobs.context().window.location.pathname.startsWith("/mnt/override")}
-        ,
-        TestCase("Close Fullscreen Dialog")
+            function() {
+                return hobs.context().window.location.pathname.startsWith("/mnt/override");
+            }
+            ,
+            h.TestCase("Close Fullscreen Dialog")
             // NOTE: this will cause test to fail if the dialog can't be closed e.g. due to missing mandatory values
-            .click(c.selSaveConfDialogButton,{expectNav:true})
-        ,
-        TestCase("Close Modal Dialog")
-            .click(c.selSaveConfDialogButton,{expectNav:false})
-        ,{ timeout:10 });
+                .click(c.selSaveConfDialogButton, { expectNav: true })
+            ,
+            h.TestCase("Close Modal Dialog")
+                .click(c.selSaveConfDialogButton, { expectNav: false })
+            , { timeout: 10 });
 
-    c.tcCloseConfigureDialog = new TestCase('Close Component Configuration Dialog')
+    c.tcCloseConfigureDialog = new h.TestCase("Close Component Configuration Dialog")
     // if full Screen mode was used make sure the click waits for the navigation change
         .ifElse(
             // check if the dialog opened in a different URL
-            function () {
-                return hobs.context().window.location.pathname.startsWith('/mnt/override')
+            function() {
+                return hobs.context().window.location.pathname.startsWith("/mnt/override");
             },
-            TestCase('Close Fullscreen Dialog')
+            h.TestCase("Close Fullscreen Dialog")
             // NOTE: this will cause test to fail if the dialog can't be closed e.g. due to missing mandatory values
-                .click(c.selCloseConfDialogButton, {expectNav: true})
+                .click(c.selCloseConfDialogButton, { expectNav: true })
             ,
-            TestCase('Close Modal Dialog')
-                .click(c.selCloseConfDialogButton, {expectNav: false}),
-            {timeout: 10});
+            h.TestCase("Close Modal Dialog")
+                .click(c.selCloseConfDialogButton, { expectNav: false }),
+            { timeout: 10 });
 
 
     /**
@@ -724,10 +764,10 @@
      * @param cmpPath   mandatory. the absolute component path, used as the value for 'data-path' attribue
      */
     c.tcOpenInlineEditor = function(cmpPath) {
-        return new TestCase("Open Inline Editor")
-            //click on the component to see the Editable Toolbar
+        return new h.TestCase("Open Inline Editor")
+            // click on the component to see the Editable Toolbar
             .click(".cq-Overlay.cq-draggable.cq-droptarget%dataPath%", {
-                before: function () {
+                before: function() {
                     // set the data-path attribute so we target the correct component
                     h.param("dataPath", "[data-path='" + h.param(cmpPath)() + "']");
                 }
@@ -748,22 +788,22 @@
     /**
      * Closes any previously opened inline editor by clicking on the save button
      */
-    c.tcSaveInlineEditor = new TestCase("Save Inline Editor")
-        //click on the component to see the Editable Toolbar
+    c.tcSaveInlineEditor = new h.TestCase("Save Inline Editor")
+        // click on the component to see the Editable Toolbar
         .click("button[is='coral-button'][title='Save']");
 
-    c.closeSidePanel = new hobs.TestCase("Close side panel", {timeout: 2000})
-        .ifElse(function (opts) {
-            var clickToggle = hobs.find('.toggle-sidepanel.editor-GlobalBar-item').length > 0 &&
-                hobs.find('#SidePanel.sidepanel-opened').length > 0 &&
-                hobs.find('.toggle-sidepanel.editor-GlobalBar-item').length > 0;
+    c.closeSidePanel = new hobs.TestCase("Close side panel", { timeout: 2000 })
+        .ifElse(function(opts) {
+            var clickToggle = hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0 &&
+                hobs.find("#SidePanel.sidepanel-opened").length > 0 &&
+                hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0;
             return clickToggle;
         },
-        click('.toggle-sidepanel.editor-GlobalBar-item')
-    );
+        h.click(".toggle-sidepanel.editor-GlobalBar-item")
+        );
 
     c.disableTutorials = new hobs.TestCase("Disable Tutorials (preferences)")
-        .execFct(function (opts, done) {
+        .execFct(function(opts, done) {
             // set language to config locale value
             var result = Granite.HTTP.eval("/libs/granite/csrf/token.json");
             var user = Granite.HTTP.eval(hobs.config.context_path + "/libs/cq/security/userinfo.json");
@@ -774,27 +814,27 @@
                 "cq.authoring.editor.template.showOnboarding": false,
                 "granite.shell.showonboarding620": false
             };
-            data[':cq_csrf_token'] = result.token;
+            data[":cq_csrf_token"] = result.token;
             jQuery.post(hobs.config.context_path + user.home + "/preferences", data)
-                .always(function () {
+                .always(function() {
                     done();
                 });
         }
-    );
+        );
 
     /**
      * Common stuff that should be done before each test case starts.
      */
-    c.tcExecuteBeforeTest = new TestCase("Common Set up")
+    c.tcExecuteBeforeTest = new h.TestCase("Common Set up")
         // reset the context
         .config.resetContext()
 
         .navigateTo("/content/core-components/core-components-page.html")
         .execFct(function(opts) {
             // make sure we start in edit mode
-            $.cookie('cq-editor-layer.page', 'Edit', { path : "/" });
+            $.cookie("cq-editor-layer.page", "Edit", { path: "/" });
             // make sure the  side panel starts  closed
-            $.cookie('cq-editor-sidepanel', 'closed', { path : "/" });
+            $.cookie("cq-editor-sidepanel", "closed", { path: "/" });
         })
         // editing cookies requires a reload
         .reloadPage();
@@ -802,7 +842,7 @@
     /**
      * Common stuff that should be done at the end of each test case.
      */
-    c.tcExecuteAfterTest = new TestCase("Common Clean Up")
+    c.tcExecuteAfterTest = new h.TestCase("Common Clean Up")
         // reset the context
         .config.resetContext()
         // make sure the side panel is closed
@@ -811,29 +851,29 @@
     /**
      * Stuff that should be done before a testsuite starts
      */
-    c.tcExecuteBeforeTestSuite =  new TestCase("Setup Before Testsuite")
+    c.tcExecuteBeforeTestSuite =  new h.TestCase("Setup Before Testsuite")
         // disable tutorial popups
         .execTestCase(c.disableTutorials)
         // 2 sec wait for Edge to avoid random failing of very first test in a test run
         .wait(2000);
 
     c.tcCheckProxiedClientLibrary = function(libraryPath) {
-        var clientlibraryPath = '/etc.clientlibs' + libraryPath;
-        return new hobs.TestCase('Test proxied client library - ' + libraryPath.substring(libraryPath.lastIndexOf('/') + 1))
-            .execFct(function (opts, done) {
+        var clientlibraryPath = "/etc.clientlibs" + libraryPath;
+        return new hobs.TestCase("Test proxied client library - " + libraryPath.substring(libraryPath.lastIndexOf("/") + 1))
+            .execFct(function(opts, done) {
                 jQuery.ajax({
                     url: clientlibraryPath,
-                    method: 'GET'
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    done(false, 'Trying to access proxied client library ' + clientlibraryPath + ' failed with error: ' + textStatus + "," + errorThrown);
-                }).done(function (data, textStatus, jqXHR) {
+                    method: "GET"
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    done(false, "Trying to access proxied client library " + clientlibraryPath + " failed with error: " + textStatus + "," + errorThrown);
+                }).done(function(data, textStatus, jqXHR) {
                     if (jqXHR.status === 200) {
                         done(true);
                     } else {
-                        done(false, 'Expected 200 status code for proxied client library ' + clientlibraryPath + '; instead got ' + jqXHR.status);
+                        done(false, "Expected 200 status code for proxied client library " + clientlibraryPath + "; instead got " + jqXHR.status);
                     }
                 });
-        });
+            });
     };
 
 }(hobs, jQuery));

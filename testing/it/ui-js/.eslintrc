@@ -1,0 +1,16 @@
+{
+    "env": {
+        "browser": true,
+        "jquery": true
+    },
+    "globals": {
+        "hobs": false,
+        "Granite": false
+    },
+    "rules": {
+        "camelcase": ["error", {
+            "properties": "never"
+        }],
+        "valid-jsdoc": "off"
+    }
+}

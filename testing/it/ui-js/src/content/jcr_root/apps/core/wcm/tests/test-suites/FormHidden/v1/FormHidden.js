@@ -17,9 +17,10 @@
 /**
  * Tests for core form option
  */
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
-    //shortcut
+    // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
     var formHidden = window.CQ.CoreComponentsIT.FormHidden.v1;
 
@@ -32,14 +33,13 @@
     /**
      * The main test suite.
      */
-    new h.TestSuite('Form Hidden v1', {path: '/apps/core/wcm/tests/test-suites/FormHidden/v1/FormHidden.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Form Hidden v1", { path: "/apps/core/wcm/tests/test-suites/FormHidden/v1/FormHidden.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(formHidden.checkMandatoryFields(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formHidden.setElementName(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formHidden.setElementValue(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(formHidden.setElementId(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(formHidden.setElementId(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 })(hobs, jQuery);
