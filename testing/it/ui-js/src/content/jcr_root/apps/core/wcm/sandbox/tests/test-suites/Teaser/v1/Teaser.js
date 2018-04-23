@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global hobs, jQuery */
+/* globals hobs,jQuery */
 ;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
@@ -33,7 +33,9 @@
             },
             assetDrop: 'coral-fileupload[name="./file"',
             linkURL: 'foundation-autocomplete[name="./linkURL"]',
+            titleValueFromPage: 'input[name="./titleValueFromPage"]',
             title: 'input[name="./jcr:title"]',
+            descriptionValueFromPage: 'input[name="./descriptionValueFromPage"]',
             description: 'input[name="./jcr:description"]'
         }
     };
@@ -46,6 +48,8 @@
         path: "/apps/core/wcm/tests/core-components-it/v1/Teaser.js",
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
-    }).addTestCase(teaser.testFullyConfiguredTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
+    })
+        .addTestCase(teaser.testFullyConfiguredTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(teaser.testInheritedPropertiesTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
 
 }(hobs, jQuery));
