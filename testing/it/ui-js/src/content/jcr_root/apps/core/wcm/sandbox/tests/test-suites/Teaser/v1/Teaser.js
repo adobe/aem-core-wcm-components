@@ -13,12 +13,11 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* global hobs, jQuery */
 ;(function(h, $) { // eslint-disable-line no-extra-semi
-    /* global hobs, jQuery */
     "use strict";
 
-
-    var c      = window.CQ.CoreComponentsIT.commons;
+    var c = window.CQ.CoreComponentsIT.commons;
     var teaser = window.CQ.CoreComponentsIT.Teaser.v1;
     var selectors = {
         component: {
