@@ -794,33 +794,33 @@
 
     c.closeSidePanel = new hobs.TestCase("Close side panel", { timeout: 2000 })
         .ifElse(function(opts) {
-                var clickToggle = hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0 &&
-                    hobs.find("#SidePanel.sidepanel-opened").length > 0 &&
-                    hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0;
-                return clickToggle;
-            },
-            new h.TestCase("Toggle side panel")
-                .click(".toggle-sidepanel.editor-GlobalBar-item")
+            var clickToggle = hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0 &&
+                hobs.find("#SidePanel.sidepanel-opened").length > 0 &&
+                hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0;
+            return clickToggle;
+        },
+        new h.TestCase("Toggle side panel")
+            .click(".toggle-sidepanel.editor-GlobalBar-item")
         );
 
     c.disableTutorials = new hobs.TestCase("Disable Tutorials (preferences)")
         .execFct(function(opts, done) {
-                // set language to config locale value
-                var result = Granite.HTTP.eval("/libs/granite/csrf/token.json");
-                var user = Granite.HTTP.eval(hobs.config.context_path + "/libs/cq/security/userinfo.json");
-                var data = {
-                    "cq.authoring.editor.page.showTour62": false,
-                    "cq.authoring.editor.page.showOnboarding62": false,
-                    "cq.authoring.editor.template.showTour": false,
-                    "cq.authoring.editor.template.showOnboarding": false,
-                    "granite.shell.showonboarding620": false
-                };
-                data[":cq_csrf_token"] = result.token;
-                jQuery.post(hobs.config.context_path + user.home + "/preferences", data)
-                    .always(function() {
-                        done();
-                    });
-            }
+            // set language to config locale value
+            var result = Granite.HTTP.eval("/libs/granite/csrf/token.json");
+            var user = Granite.HTTP.eval(hobs.config.context_path + "/libs/cq/security/userinfo.json");
+            var data = {
+                "cq.authoring.editor.page.showTour62": false,
+                "cq.authoring.editor.page.showOnboarding62": false,
+                "cq.authoring.editor.template.showTour": false,
+                "cq.authoring.editor.template.showOnboarding": false,
+                "granite.shell.showonboarding620": false
+            };
+            data[":cq_csrf_token"] = result.token;
+            jQuery.post(hobs.config.context_path + user.home + "/preferences", data)
+                .always(function() {
+                    done();
+                });
+        }
         );
 
     /**
