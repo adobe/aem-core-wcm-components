@@ -112,7 +112,7 @@
                 "./sling:resourceType": testPageRT || "core/wcm/tests/components/test-page"
             }
         })
-            // when the request was successful
+        // when the request was successful
             .done(function(data, textStatus, jqXHR) {
                 // extract the created page path from the returned HTML
                 var path = jQuery(data).find("#Path").text();
@@ -389,7 +389,7 @@
             // POST data to be send in the request
             data: data
         })
-            // in case of failure
+        // in case of failure
             .fail(function(jqXHR, textStatus, errorThrown) {
                 done(false, "editNodeProperties failed: POST failed with " + textStatus + "," + errorThrown);
             })
@@ -650,7 +650,7 @@
             // if the panel is closed
             if (h.find("#SidePanel.sidepanel-closed").size() === 1) {
                 // click on the toggle button, wait for the click to finish, then check
-                h.click(".toggle-sidepanel.editor-GlobalBar-item").exec().then(
+                $.when(h.find(".toggle-sidepanel.editor-GlobalBar-item").click()).done(
                     function() {
                         // check if the panel is open
                         if (h.find("#SidePanel.sidepanel-opened").size() === 1) {
@@ -682,7 +682,7 @@
      */
     c.tcOpenConfigureDialog = function(cmpPath) {
         return new h.TestCase("Open Configure Dialog")
-            // click on the component to see the Editable Toolbar
+        // click on the component to see the Editable Toolbar
             .click(".cq-Overlay.cq-draggable.cq-droptarget%dataPath%", {
                 before: function() {
                     // set the data-path attribute so we target the correct component
@@ -703,7 +703,7 @@
      */
     c.tcSwitchConfigTab = function(tabTitle) {
         return new h.TestCase("Switch Config Tab to " +  tabTitle)
-            // click on the tab
+        // click on the tab
             .click("coral-tab > coral-tab-label:contains('" + tabTitle + "')")
             // check if its selected
             .assert.isTrue(function() {
@@ -713,31 +713,31 @@
 
     c.tcUseDialogSelect = function(name, value) {
         return new h.TestCase("Set Select for '" + name + "' to '" + value + "'")
-            // open action drop down
+        // open action drop down
             .click("coral-select[name='" + name + "'] > button")
             // check if the dropdown has become visible
             .assert.visible("coral-select[name='" + name + "'] coral-selectlist")
             // select the store action
             .click("coral-select[name='" + name + "'] coral-selectlist " +
-            "coral-selectlist-item[value='" + value + "']");
+                "coral-selectlist-item[value='" + value + "']");
     };
 
     /**
      * Closes any open configuration dialog
      */
     c.tcSaveConfigureDialog = new h.TestCase("Save Configure Dialog")
-        // if full Screen mode was used make sure the click waits for the navigation change
+    // if full Screen mode was used make sure the click waits for the navigation change
         .ifElse(
-        // check if the dialog opened in a different URL
+            // check if the dialog opened in a different URL
             function() {
                 return hobs.context().window.location.pathname.startsWith("/mnt/override");
             }
             ,
-            h.TestCase("Close Fullscreen Dialog")
+            new h.TestCase("Close Fullscreen Dialog")
             // NOTE: this will cause test to fail if the dialog can't be closed e.g. due to missing mandatory values
                 .click(c.selSaveConfDialogButton, { expectNav: true })
             ,
-            h.TestCase("Close Modal Dialog")
+            new h.TestCase("Close Modal Dialog")
                 .click(c.selSaveConfDialogButton, { expectNav: false })
             , { timeout: 10 });
 
@@ -748,11 +748,11 @@
             function() {
                 return hobs.context().window.location.pathname.startsWith("/mnt/override");
             },
-            h.TestCase("Close Fullscreen Dialog")
+            new h.TestCase("Close Fullscreen Dialog")
             // NOTE: this will cause test to fail if the dialog can't be closed e.g. due to missing mandatory values
                 .click(c.selCloseConfDialogButton, { expectNav: true })
             ,
-            h.TestCase("Close Modal Dialog")
+            new h.TestCase("Close Modal Dialog")
                 .click(c.selCloseConfDialogButton, { expectNav: false }),
             { timeout: 10 });
 
@@ -765,7 +765,7 @@
      */
     c.tcOpenInlineEditor = function(cmpPath) {
         return new h.TestCase("Open Inline Editor")
-            // click on the component to see the Editable Toolbar
+        // click on the component to see the Editable Toolbar
             .click(".cq-Overlay.cq-draggable.cq-droptarget%dataPath%", {
                 before: function() {
                     // set the data-path attribute so we target the correct component
@@ -789,44 +789,45 @@
      * Closes any previously opened inline editor by clicking on the save button
      */
     c.tcSaveInlineEditor = new h.TestCase("Save Inline Editor")
-        // click on the component to see the Editable Toolbar
+    // click on the component to see the Editable Toolbar
         .click("button[is='coral-button'][title='Save']");
 
     c.closeSidePanel = new hobs.TestCase("Close side panel", { timeout: 2000 })
         .ifElse(function(opts) {
-            var clickToggle = hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0 &&
-                hobs.find("#SidePanel.sidepanel-opened").length > 0 &&
-                hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0;
-            return clickToggle;
-        },
-        h.click(".toggle-sidepanel.editor-GlobalBar-item")
+                var clickToggle = hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0 &&
+                    hobs.find("#SidePanel.sidepanel-opened").length > 0 &&
+                    hobs.find(".toggle-sidepanel.editor-GlobalBar-item").length > 0;
+                return clickToggle;
+            },
+            new h.TestCase("Toggle side panel")
+                .click(".toggle-sidepanel.editor-GlobalBar-item")
         );
 
     c.disableTutorials = new hobs.TestCase("Disable Tutorials (preferences)")
         .execFct(function(opts, done) {
-            // set language to config locale value
-            var result = Granite.HTTP.eval("/libs/granite/csrf/token.json");
-            var user = Granite.HTTP.eval(hobs.config.context_path + "/libs/cq/security/userinfo.json");
-            var data = {
-                "cq.authoring.editor.page.showTour62": false,
-                "cq.authoring.editor.page.showOnboarding62": false,
-                "cq.authoring.editor.template.showTour": false,
-                "cq.authoring.editor.template.showOnboarding": false,
-                "granite.shell.showonboarding620": false
-            };
-            data[":cq_csrf_token"] = result.token;
-            jQuery.post(hobs.config.context_path + user.home + "/preferences", data)
-                .always(function() {
-                    done();
-                });
-        }
+                // set language to config locale value
+                var result = Granite.HTTP.eval("/libs/granite/csrf/token.json");
+                var user = Granite.HTTP.eval(hobs.config.context_path + "/libs/cq/security/userinfo.json");
+                var data = {
+                    "cq.authoring.editor.page.showTour62": false,
+                    "cq.authoring.editor.page.showOnboarding62": false,
+                    "cq.authoring.editor.template.showTour": false,
+                    "cq.authoring.editor.template.showOnboarding": false,
+                    "granite.shell.showonboarding620": false
+                };
+                data[":cq_csrf_token"] = result.token;
+                jQuery.post(hobs.config.context_path + user.home + "/preferences", data)
+                    .always(function() {
+                        done();
+                    });
+            }
         );
 
     /**
      * Common stuff that should be done before each test case starts.
      */
     c.tcExecuteBeforeTest = new h.TestCase("Common Set up")
-        // reset the context
+    // reset the context
         .config.resetContext()
 
         .navigateTo("/content/core-components/core-components-page.html")
@@ -843,7 +844,7 @@
      * Common stuff that should be done at the end of each test case.
      */
     c.tcExecuteAfterTest = new h.TestCase("Common Clean Up")
-        // reset the context
+    // reset the context
         .config.resetContext()
         // make sure the side panel is closed
         .execTestCase(c.closeSidePanel);
@@ -852,7 +853,7 @@
      * Stuff that should be done before a testsuite starts
      */
     c.tcExecuteBeforeTestSuite =  new h.TestCase("Setup Before Testsuite")
-        // disable tutorial popups
+    // disable tutorial popups
         .execTestCase(c.disableTutorials)
         // 2 sec wait for Edge to avoid random failing of very first test in a test run
         .wait(2000);
