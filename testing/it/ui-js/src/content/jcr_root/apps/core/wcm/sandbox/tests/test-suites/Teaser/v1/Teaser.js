@@ -24,8 +24,9 @@
             self: ".cmp-teaser",
             image: ".cmp-teaser__image",
             title: ".cmp-teaser__title",
+            titleLink: ".cmp-teaser__title-link",
             description: ".cmp-teaser__description",
-            link: ".cmp-teaser__link"
+            descriptionLink: ".cmp-teaser__description-link"
         },
         editDialog: {
             assetDrag: function(imagePath) {

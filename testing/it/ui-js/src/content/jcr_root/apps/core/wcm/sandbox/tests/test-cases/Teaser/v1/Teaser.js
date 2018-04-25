@@ -106,11 +106,11 @@
                     '/_jcr_content/root/responsivegrid/teaser"]', "#ContentFrame").size() === 1;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.title + " a" + selectors.component.link + '[href$="' + h.param(pageVar)() + '.html"]';
+                var selector = "a" + selectors.component.titleLink + '[href$="' + h.param(pageVar)() + '.html"]';
                 return h.find(selector, "#ContentFrame").text() === title;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.description + " a" + selectors.component.link + '[href$="' + h.param(pageVar)() + '.html"]';
+                var selector = "a" + selectors.component.descriptionLink + '[href$="' + h.param(pageVar)() + '.html"]';
                 return h.find(selector, "#ContentFrame").text() === description;
             });
 
@@ -134,11 +134,11 @@
                     '/_jcr_content/root/responsivegrid/teaser"]', "#ContentFrame").size() === 1;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.title + " a" + selectors.component.link + '[href$="' + h.param(pageVar)() + '.html"]';
+                var selector = "a" + selectors.component.titleLink + '[href$="' + h.param(pageVar)() + '.html"]';
                 return h.find(selector, "#ContentFrame").text() === pageName;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.description + " a" + selectors.component.link + '[href$="' + h.param(pageVar)() + '.html"]';
+                var selector = "a" + selectors.component.descriptionLink + '[href$="' + h.param(pageVar)() + '.html"]';
                 return h.find(selector, "#ContentFrame").text() === pageDescription;
             });
 
@@ -216,15 +216,18 @@
             .assert.isTrue(function() {
                 var selector = selectors.component.image + ' img[src*="' + h.param(pageVar)() +
                     '/_jcr_content/root/responsivegrid/teaser"]';
+                return h.find(selector, "#ContentFrame").length === 1;
+            })
+            .assert.isTrue(function() {
+                var selector = selectors.component.image + " a";
                 return h.find(selector, "#ContentFrame").length === 0;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.title + " a" + selectors.component.link +
-                    '[href$="' + h.param(pageVar)() + '.html"]';
+                var selector = "a" + selectors.component.titleLink + '[href$="' + h.param(pageVar)() + '.html"]';
                 return h.find(selector, "#ContentFrame").length === 0;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.description + " a" + selectors.component.link + '[href$="' + h.param(pageVar)() + '.html"]';
+                var selector = "a" + selectors.component.descriptionLink + '[href$="' + h.param(pageVar)() + '.html"]';
                 return h.find(selector, "#ContentFrame").length === 0;
             });
     };
