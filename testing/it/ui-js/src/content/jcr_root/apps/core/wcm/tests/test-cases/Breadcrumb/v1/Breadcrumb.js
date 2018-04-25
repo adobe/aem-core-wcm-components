@@ -179,7 +179,7 @@ window.CQ.CoreComponentsIT.Breadcrumb.v1 = window.CQ.CoreComponentsIT.Breadcrumb
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // check the current config setting
             .assert.isTrue(function() {
-                return h.find("input[name='./startLevel']").val() === 2;
+                return h.find("input[name='./startLevel']").val() === "2";
             })
             // increase start level by 2
             .fillInput("input[name='./startLevel']", 4)
