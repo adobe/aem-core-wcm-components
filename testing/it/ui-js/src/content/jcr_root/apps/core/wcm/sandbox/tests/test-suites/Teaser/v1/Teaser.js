@@ -42,7 +42,7 @@
 
     var tcExecuteBeforeTest = teaser.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtTeaser_v1,
         "core/wcm/tests/components/test-page-v2");
-    var tcExecuteAfterTest  = teaser.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath, c.policyAssignmentPath);
+    var tcExecuteAfterTest  = teaser.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath_sandbox, c.policyAssignmentPath_sandbox);
 
     new h.TestSuite("Teaser v1", {
         path: "/apps/core/wcm/tests/core-components-it/v1/Teaser.js",
