@@ -42,7 +42,7 @@
 
     var tcExecuteBeforeTest = teaser.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtTeaser_v1,
         "core/wcm/tests/components/test-page-v2");
-    var tcExecuteAfterTest  = teaser.tcExecuteAfterTest(c.tcExecuteAfterTest);
+    var tcExecuteAfterTest  = teaser.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath, c.policyAssignmentPath);
 
     new h.TestSuite("Teaser v1", {
         path: "/apps/core/wcm/tests/core-components-it/v1/Teaser.js",
@@ -50,6 +50,10 @@
         execInNewWindow: false
     })
         .addTestCase(teaser.testFullyConfiguredTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(teaser.testInheritedPropertiesTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
+        .addTestCase(teaser.testInheritedPropertiesTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(teaser.testHideElementsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
+        .addTestCase(teaser.testLinksToElementsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox));
 
 }(hobs, jQuery));

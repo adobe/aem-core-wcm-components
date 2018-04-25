@@ -48,7 +48,8 @@
                                     required="{Boolean}true"/>
                             <title
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/well">
+                                    sling:resourceType="granite/ui/components/coral/foundation/well"
+                                    granite:hide="${cqDesign.hideTitle}">
                                 <items jcr:primaryType="nt:unstructured">
                                     <value
                                             jcr:primaryType="nt:unstructured"
@@ -56,8 +57,7 @@
                                             fieldDescription="The Teaser's title."
                                             fieldLabel="Title"
                                             name="./jcr:title"
-                                            value="${cqDesign._jcr_description}"
-                                            granite:hide="${cqDesign.hideTitle}"/>
+                                            value="${cqDesign._jcr_description}"/>
                                     <fromPage
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -66,21 +66,20 @@
                                             name="./titleValueFromPage"
                                             value="{Boolean}true"
                                             uncheckedValue="{Boolean}false"
-                                            checked="{Boolean}true"
-                                            granite:hide="${cqDesign.hideTitle}"/>
+                                            checked="{Boolean}true"/>
                                 </items>
                             </title>
                             <description
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/well">
+                                    sling:resourceType="granite/ui/components/coral/foundation/well"
+                                    granite:hide="${cqDesign.hideDescription}">
                                 <items jcr:primaryType="nt:unstructured">
                                     <value
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                             fieldDescription="The Teaser's description."
                                             fieldLabel="Description"
-                                            name="./jcr:description"
-                                            granite:hide="${cqDesign.hideDescription}"/>
+                                            name="./jcr:description"/>
                                     <fromPage
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -89,8 +88,7 @@
                                             name="./descriptionValueFromPage"
                                             value="{Boolean}true"
                                             uncheckedValue="{Boolean}false"
-                                            checked="{Boolean}true"
-                                            granite:hide="${cqDesign.hideDescription}"/>
+                                            checked="{Boolean}true"/>
                                 </items>
                             </description>
                         </items>
