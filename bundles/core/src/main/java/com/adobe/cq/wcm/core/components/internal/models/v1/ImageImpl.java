@@ -16,8 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -73,7 +71,6 @@ public class ImageImpl implements Image {
     protected static final String DOT = ".";
     protected static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
-    private static final List<String> NON_SUPPORTED_IMAGE_MIMETYPE = Collections.singletonList("image/svg+xml");
 
     @Self
     protected SlingHttpServletRequest request;
@@ -166,11 +163,6 @@ public class ImageImpl implements Image {
             // validate if correct mime type (i.e. rasterized image)
             if (!mimeType.startsWith(MIME_TYPE_IMAGE_PREFIX)) {
                 LOGGER.error("Image at {} uses a binary with a non-image mime type ({})", resource.getPath(), mimeType);
-                hasContent = false;
-                return;
-            }
-            if (NON_SUPPORTED_IMAGE_MIMETYPE.contains(mimeType)) {
-                LOGGER.error("Image at {} uses binary with a non-supported image mime type ({})", resource.getPath(), mimeType);
                 hasContent = false;
                 return;
             }
