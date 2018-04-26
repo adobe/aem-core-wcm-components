@@ -611,7 +611,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             .click("coral-tab-label:contains('Cloud Services')", { delay: 1000 })
             // check if the "Cloud Services" option was selected
             .assert.isTrue(function() {
-                return h.find("coral-tab.is-selected coral-tab-label:contains('Cloud Services')").size() === 1;
+                return h.find("coral-tab.is-selected coral-tab-label:contains('Cloud Service')").size() === 1;
             })
 
             .click(".cq-CloudServices-container span:contains('Add Configuration')")
@@ -626,10 +626,10 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
             // save the configuration and open again the page property
             .click("coral-buttongroup button:contains('Save & Close')", { before: 2000, expectNav: true })
             .execTestCase(page.openPageProperties)
-            .click("coral-tab-label:contains('Cloud Services')", { delay: 1000 })
+            .click("coral-tab-label:contains('Cloud Service')", { delay: 1000 })
 
             .assert.isTrue(function() {
-                return h.find("div.js-cq-CloudServices-currentConfig:contains('Cloud Proxy Configuration') coral-select[name='./cq:cloudserviceconfigs'] span:contains('IDS worker')").size() === 1;
+                return h.find("div.js-cq-CloudServices-currentConfig:contains('Cloud Proxy Configuration') coral-select[name='./cq:cloudserviceconfigs']").size() === 1;
             });
     };
 
