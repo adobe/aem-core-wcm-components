@@ -85,6 +85,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
     private static final String DEFAULT_MIME = "image/jpeg";
+    private static final String MIME_TYPE_SVG = "image/svg+xml";
+    private static final String PN_MIME_TYPE = "jcr:mimeType";
     private int defaultResizeWidth;
 
     private MimeTypeService mimeTypeService;
@@ -274,8 +276,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, Asset asset, String
             imageType) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
-        if ("gif".equalsIgnoreCase(extension)) {
-            LOGGER.debug("GIF asset detected; will render the original rendition.");
+        if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
+            LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
             stream(response, asset.getOriginal().getStream(), imageType);
             return;
         }
@@ -386,6 +388,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 LOGGER.debug("GIF file detected; will render the original file.");
                 if (is != null) {
                     stream(response, is, imageType);
+                }
+                return;
+            }
+            if (isSVGFile(imageFile)) {
+                LOGGER.debug("SVG file detected; will render the original file.");
+                if (is != null) {
+                    stream(response, is, MIME_TYPE_SVG);
                 }
                 return;
             }
@@ -652,6 +661,21 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
         return requestLastModified;
+    }
+
+    // Checks if the local file below the image is an SVG file by checking the mime type property
+    private boolean isSVGFile(Resource imageFile) {
+        if (imageFile != null) {
+            Resource jcrContent = imageFile.getChild(JcrConstants.JCR_CONTENT);
+            if (jcrContent != null) {
+                ValueMap properties = jcrContent.adaptTo(ValueMap.class);
+                if (properties != null) {
+                    String mimeType = properties.get(PN_MIME_TYPE, String.class);
+                    return StringUtils.equals(mimeType, MIME_TYPE_SVG);
+                }
+            }
+        }
+        return false;
     }
 
 

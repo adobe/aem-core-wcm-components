@@ -408,5 +408,63 @@
                 }
             }
         }
+    },
+    "Adobe_Systems_logo_and_wordmark.svg": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes": [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy": "admin",
+        "jcr:created": "Thu Apr 26 2017 13:05:04 GMT+0200",
+        "jcr:uuid": "41173855-0934-4c1b-b067-1a1808983da6",
+        "jcr:content": {
+            "jcr:primaryType": "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState": "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "dam:relativePath": "we-retail/en/activities/running/Adobe_Systems_logo_and_wordmark.svg",
+            "renditions": {
+                "jcr:primaryType": "nt:folder",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Thu Apr 26 2017 13:05:04 GMT+0200",
+                "cq5dam.web.1280.1280.jpeg": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "workflow-process-service",
+                    "jcr:created": "Thu Apr 26 2017 13:05:05 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType": "image/jpeg",
+                        "jcr:lastModified": "Thu Apr 26 2017 13:05:05 GMT+0200",
+                        ":jcr:data": 74995
+                    }
+                },
+                "original": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy": "admin",
+                    "jcr:created": "Thu Apr 26 2017 13:05:04 GMT+0200",
+                    "jcr:content": {
+                        "jcr:primaryType": "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType": "image/svg+xml",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        ":jcr:data": 4668
+                    }
+                }
+            },
+            "related": {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:mixinTypes": [
+                    "cq:Taggable"
+                ],
+                "dam:extracted": "Thu Apr 26 2017 13:05:04 GMT+0200",
+                "dc:format": "image/svg+xml",
+                "dam:sha1": "94e4da3bd7023101d939f6c04ea85feba93994b9",
+                "dam:size": 4668
+            }
+        }
     }
 }

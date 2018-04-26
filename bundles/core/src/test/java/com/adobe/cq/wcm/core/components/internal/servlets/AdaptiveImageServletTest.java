@@ -247,6 +247,19 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
     }
 
     @Test
+    public void testSVGFileDirectStream() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE24_PATH, 1489998822138L, "img", "svg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream =
+                this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
+        assertTrue(IOUtils.contentEquals(stream, directStream));
+    }
+
+    @Test
     public void testGIFFileBrowserCached() throws Exception {
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
                 prepareRequestResponsePair(IMAGE5_PATH, 1489998822138L, "img", "gif");
@@ -268,6 +281,19 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
         InputStream directStream =
                 this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.gif");
+        assertTrue(IOUtils.contentEquals(stream, directStream));
+    }
+
+    @Test
+    public void testSVGUploadedToDAM() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
+                prepareRequestResponsePair(IMAGE25_PATH, "img", "svg");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        ByteArrayInputStream stream = new ByteArrayInputStream(response.getOutput());
+        InputStream directStream =
+                this.getClass().getClassLoader().getResourceAsStream("image/Adobe_Systems_logo_and_wordmark.svg");
         assertTrue(IOUtils.contentEquals(stream, directStream));
     }
 
