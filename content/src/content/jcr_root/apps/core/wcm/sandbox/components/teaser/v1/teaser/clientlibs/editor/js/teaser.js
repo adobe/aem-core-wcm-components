@@ -18,12 +18,16 @@
     "use strict";
 
     var dialogContentSelector = ".cmp-teaser__editor";
+    var withCTACheckboxSelector = 'coral-checkbox[name="./withCTA"]';
+    var ctasMultifieldSelector = ".cmp-teaser__editor-multifield_ctas";
     var titleCheckboxSelector = 'coral-checkbox[name="./titleValueFromPage"]';
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionValueFromPage"]';
     var descriptionTextfieldSelector = 'input[name="./jcr:description"]';
+    var linkURLWrapperSelector = ".cmp-teaser__editor-link-url";
     var linkURLSelector = '[name="./linkURL"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
+    var withCTA;
     var titleTuple;
     var descriptionTuple;
     var linkURL;
@@ -41,17 +45,50 @@
             linkURL = $linkURLField.adaptTo("foundation-field").getValue();
             $linkURLField.on("change", function() {
                 linkURL = $linkURLField.adaptTo("foundation-field").getValue();
-                retrievePageInfo();
+                retrievePageInfo($dialogContent);
             });
 
-            retrievePageInfo();
+            var $withCTACheckbox = $dialogContent.find(withCTACheckboxSelector);
+            withCTA = $withCTACheckbox.adaptTo("foundation-field").getValue() === "true";
+            $withCTACheckbox.on("change", function(e) {
+                withCTA = $(e.target).adaptTo("foundation-field").getValue() === "true";
+                toggleInputs($dialogContent);
+                retrievePageInfo($dialogContent);
+            });
+
+            var $ctasMultifield = $dialogContent.find(ctasMultifieldSelector);
+            $ctasMultifield.on("change", function() {
+                retrievePageInfo($dialogContent);
+            });
+
+            toggleInputs($dialogContent);
+            retrievePageInfo($dialogContent);
         }
     });
 
-    function retrievePageInfo() {
-        if (linkURL) {
+    function toggleInputs(dialogContent) {
+        var $linkURLWrapper = dialogContent.find(linkURLWrapperSelector);
+        var $ctasMultifield = dialogContent.find(ctasMultifieldSelector);
+        if (withCTA) {
+            $linkURLWrapper.hide();
+            $ctasMultifield.show();
+        } else {
+            $linkURLWrapper.show();
+            $ctasMultifield.hide();
+        }
+    }
+
+    function retrievePageInfo(dialogContent) {
+        var url;
+        if (withCTA) {
+            url = dialogContent.find('.cmp-teaser__editor-multifield_ctas [name="link"]').val();
+
+        } else {
+            url = linkURL;
+        }
+        if (url) {
             return $.ajax({
-                url: linkURL + "/_jcr_content.json"
+                url: url + "/_jcr_content.json"
             }).done(function(data) {
                 if (data) {
                     titleTuple.seedTextValue(data["jcr:title"]);

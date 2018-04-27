@@ -15,11 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.apache.sling.api.resource.Resource;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 
 /**
  * Defines the {@code Teaser} Sling Model for the {@code /apps/core/wcm/components/teaser} component.
@@ -27,6 +30,20 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
  */
 public interface Teaser extends ComponentExporter {
+
+    /**
+     * Name of the property that will store if the teaser has Call-to-Action elements
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_WITH_CTA = "withCTA";
+
+    /**
+     * Name of the node where the Call-to-Action elements will be stored
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String NN_CTAS = "ctas";
 
     /**
      * Name of the property that will store if the image link should be hidden.
@@ -78,6 +95,26 @@ public interface Teaser extends ComponentExporter {
     String PN_DESCRIPTION_VALUE_FROM_PAGE = "descriptionValueFromPage";
 
     /**
+     * Checks if teaser has Call-to-Action elements
+     *
+     * @return {@code true} if teaser has CTAs, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    default boolean isWithCTA() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the list of Call-to-Action elements
+     *
+     * @return the list of CTAs
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    default List<ListItem> getCTAs() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the URL to which this teaser links, if one was defined.
      *
      * @return the URL to which teaser links or {@code null}
@@ -89,6 +126,7 @@ public interface Teaser extends ComponentExporter {
 
     /**
      * Returns the image resource for this teaser.
+     *
      * @return the image resource for this teaser or {@code null}
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
