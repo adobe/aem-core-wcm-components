@@ -20,9 +20,11 @@
 
     <div class="cmp-teaser__image" data-sly-resource="${teaser.imageResource}"></div>
 
-    <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}">${title}</h2>
-    <h3 class="cmp-teaser__description" data-sly-test.description="${teaser.description}">${description}</h3>
-
-    <a class="cmp-teaser__link" href="${teaser.linkURL}">${teaser.linkText}</a>
+    <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}">
+        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${teaser.hideTitleLink}">${title}</a>
+    </h2>
+    <h3 class="cmp-teaser__description" data-sly-test.description="${teaser.description}">
+        <a class="cmp-teaser__description-link" href="${teaser.linkURL}" data-sly-unwrap="${teaser.hideDescriptionLink}">${description}</a>
+    </h3>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"/>

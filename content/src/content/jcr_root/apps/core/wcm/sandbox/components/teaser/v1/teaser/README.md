@@ -44,8 +44,9 @@ The following properties are written to JCR for this Teaser component and are ex
 BLOCK cmp-teaser
     ELEMENT cmp-teaser__image
     ELEMENT cmp-teaser__title
+    ELEMENT cmp-teaser__title-link
     ELEMENT cmp-teaser__description
-    ELEMENT cmp-teaser__link
+    ELEMENT cmp-teaser__description-link    
 ```
 
 ## Information

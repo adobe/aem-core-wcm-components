@@ -1,10 +1,8 @@
 {
-  "title": "Teaser",
-  "description": "Description",
   "linkURL": "/core/content/teasers.html",
   "hideImageLink": false,
   "hideTitleLink": false,
   "hideDescriptionLink": false,
-  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-5",
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-8",
   ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
 }

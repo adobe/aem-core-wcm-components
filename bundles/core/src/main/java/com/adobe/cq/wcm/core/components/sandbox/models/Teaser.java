@@ -24,25 +24,105 @@ import com.adobe.cq.export.json.ComponentExporter;
 /**
  * Defines the {@code Teaser} Sling Model for the {@code /apps/core/wcm/components/teaser} component.
  *
- * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+ * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
  */
 public interface Teaser extends ComponentExporter {
 
     /**
-     * Name of the resource property that will store the link text for a {@code Teaser}.
+     * Name of the property that will store if the image link should be hidden.
      *
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
+    String PN_HIDE_IMAGE_LINK = "hideImageLink";
 
-    String PN_LINK_TEXT = "linkText";
+    /**
+     * Name of the property that will store if the title should be hidden.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_HIDE_TITLE = "hideTitle";
+
+    /**
+     * Name of the property that will store if the title link should be hidden.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_HIDE_TITLE_LINK = "hideTitleLink";
+
+    /**
+     * Name of the property that will store if the title value should be taken from the linked page.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_TITLE_VALUE_FROM_PAGE = "titleValueFromPage";
+
+    /**
+     * Name of the property that will store if the description should be hidden.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_HIDE_DESCRIPTION = "hideDescription";
+
+    /**
+     * Name of the property that will store if the description link should be hidden.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_HIDE_DESCRIPTION_LINK = "hideDescriptionLink";
+
+    /**
+     * Name of the property that will store if the description value should be taken from the linked page.
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_DESCRIPTION_VALUE_FROM_PAGE = "descriptionValueFromPage";
+
+    /**
+     * Returns the URL to which this teaser links, if one was defined.
+     *
+     * @return the URL to which teaser links or {@code null}
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    default String getLinkURL() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the image resource for this teaser.
+     * @return the image resource for this teaser or {@code null}
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    default Resource getImageResource() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if link should be hidden on the image.
+     *
+     * @return {@code true} if link should be hidden on the image, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    default boolean isHideImageLink() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Returns this teaser's title, if one was defined.
      *
      * @return the teaser's title or {@code null}
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if link should be hidden on the title.
+     *
+     * @return {@code true} if link should be hidden on the title, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    default boolean isHideTitleLink() {
         throw new UnsupportedOperationException();
     }
 
@@ -50,44 +130,24 @@ public interface Teaser extends ComponentExporter {
      * Returns this teaser's description, if one was defined.
      *
      * @return the teaser's description or {@code null}
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     default String getDescription() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns the URL to which this teaser links, if one was defined.
+     * Checks if link should be hidden on the description.
      *
-     * @return the URL to which teaser links or {@code null}
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
+     * @return {@code true} if link should be hidden on the description, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    default String getLinkURL() {
+    default boolean isHideDescriptionLink() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns the text of the URL to which this teaser links, if one was defined.
-     *
-     * @return the text of the URL to which teaser links or {@code null}
-     * @see #getLinkURL()
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
-     */
-    default String getLinkText() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the image resource for this teaser.
-     * @return the image resource for this teaser or {@code null}
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 2.3.0
-     */
-    default Resource getImageResource() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 3.1.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     @Nonnull
     @Override

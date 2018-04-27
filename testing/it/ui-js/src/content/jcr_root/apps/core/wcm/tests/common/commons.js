@@ -89,7 +89,7 @@
      * @param done Mandatory. Callback to be executed when async method has finished.
      * @param [testPageRT='core/wcm/tests/components/test-page'] the resource type of the test page
      */
-    c.createPage = function(templatePath, parentPath, pageName, dynParName, done, testPageRT) {
+    c.createPage = function(templatePath, parentPath, pageName, dynParName, done, testPageRT, description) {
         // mandatory check
         if (parentPath == null || templatePath == null || pageName == null || done == null) {
             if (done) {
@@ -109,7 +109,8 @@
                 "_charset_": "utf-8",
                 "./jcr:title": pageName,
                 "pageName": pageName,
-                "./sling:resourceType": testPageRT || "core/wcm/tests/components/test-page"
+                "./sling:resourceType": testPageRT || "core/wcm/tests/components/test-page",
+                "./jcr:description": description
             }
         })
         // when the request was successful

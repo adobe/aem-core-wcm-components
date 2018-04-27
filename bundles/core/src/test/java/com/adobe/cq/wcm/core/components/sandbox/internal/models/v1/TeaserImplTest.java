@@ -24,10 +24,12 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.apache.sling.testing.resourceresolver.MockValueMap;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +38,13 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
+import com.adobe.cq.wcm.core.components.testing.MockContentPolicy;
+import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.api.policies.ContentPolicy;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.*;
@@ -56,12 +62,14 @@ public class TeaserImplTest {
     private static final String TITLE = "Teaser";
     private static final String DESCRIPTION = "Description";
     private static final String LINK = "https://www.adobe.com";
-    private static final String LINK_TEXT = "Adobe";
     private static final String TEASER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-1";
     private static final String TEASER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-2";
     private static final String TEASER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-3";
     private static final String TEASER_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-4";
     private static final String TEASER_5 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-5";
+    private static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
+    private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
+    private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
     private Logger teaserLogger;
 
     @ClassRule
@@ -98,7 +106,6 @@ public class TeaserImplTest {
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(LINK, teaser.getLinkURL());
-        assertEquals(LINK_TEXT, teaser.getLinkText());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
 
@@ -114,8 +121,14 @@ public class TeaserImplTest {
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(CONTEXT_PATH + "/content/teasers.html", teaser.getLinkURL());
-        assertEquals(LINK_TEXT, teaser.getLinkText());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser5"));
+    }
+
+    @Test
+    public void testPageInheritedProperties() {
+        Teaser teaser = getTeaserUnderTest(TEASER_6);
+        assertEquals("Teasers Test", teaser.getTitle());
+        assertEquals("Teasers description", teaser.getDescription());
     }
 
     @Test
@@ -141,7 +154,36 @@ public class TeaserImplTest {
         assertNull(teaser.getLinkURL());
     }
 
+    @Test
+    public void testTeaserWithHiddenLinks() throws Exception {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Teaser.PN_HIDE_TITLE_LINK, true);
+            put(Teaser.PN_HIDE_DESCRIPTION_LINK, true);
+            put(Teaser.PN_HIDE_IMAGE_LINK, true);
+        }}));
+        Teaser teaser = getTeaserUnderTest(TEASER_7, mockStyle);
+
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser7"));
+    }
+
+    @Test
+    public void testTeaserWithHiddenElements() throws Exception {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Teaser.PN_HIDE_TITLE, true);
+            put(Teaser.PN_HIDE_DESCRIPTION, true);
+        }}));
+
+        Teaser teaser = getTeaserUnderTest(TEASER_8, mockStyle);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser8"));
+    }
+
     private Teaser getTeaserUnderTest(String resourcePath) {
+        return getTeaserUnderTest(resourcePath, null);
+    }
+
+    private Teaser getTeaserUnderTest(String resourcePath, Style currentStyle) {
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
@@ -153,6 +195,9 @@ public class TeaserImplTest {
         SlingBindings slingBindings = new SlingBindings();
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
+        if (currentStyle != null) {
+            slingBindings.put(WCMBindings.CURRENT_STYLE, currentStyle);
+        }
         Component component = mock(Component.class);
         when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
             put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
@@ -165,6 +210,5 @@ public class TeaserImplTest {
     private void testImageResourceValueMap(ValueMap valueMap) {
         assertFalse(valueMap.containsKey(JcrConstants.JCR_TITLE));
         assertFalse(valueMap.containsKey(JcrConstants.JCR_DESCRIPTION));
-        assertFalse(valueMap.containsKey(ImageResource.PN_LINK_URL));
     }
 }
