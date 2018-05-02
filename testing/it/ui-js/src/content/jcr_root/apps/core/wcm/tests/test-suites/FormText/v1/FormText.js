@@ -17,7 +17,8 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -26,16 +27,16 @@
     /**
      * v1 specifics
      */
-    var itemSelector = '.help-block';
+    var itemSelector = ".help-block";
     var tcExecuteBeforeTest = formText.tcExecuteBeforeTest(c.rtFormText_v1);
     var tcExecuteAfterTest = formText.tcExecuteAfterTest();
 
     /**
      * The main test suite for Text Component
      */
-    new h.TestSuite('Form Text v1', {path: '/apps/core/wcm/tests/test-suites/FormText/v1/FormText.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Form Text v1", { path: "/apps/core/wcm/tests/test-suites/FormText/v1/FormText.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(formText.checkLabelMandatory(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formText.setLabel(tcExecuteBeforeTest, tcExecuteAfterTest))
@@ -55,6 +56,6 @@
         .addTestCase(formText.setReadOnly(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formText.setRequired(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(formText.setConstraintMessage(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/form/text/v1/text/clientlibs/site.js'))
-    ;
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/form/text/v1/text/clientlibs/site.js"));
+
 }(hobs, jQuery));

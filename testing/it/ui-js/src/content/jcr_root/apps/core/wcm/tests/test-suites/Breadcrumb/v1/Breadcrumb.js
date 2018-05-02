@@ -17,7 +17,8 @@
 /**
  * Test for the breadcrumb component
  */
-;(function(h, $){
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
@@ -37,15 +38,15 @@
     /**
      * The main test suite.
      */
-    new h.TestSuite("Breadcrumb v1", {path:"/apps/core/wcm/tests/test-suites/Breadcrumb/v1/Breadcrumb.js",
+    new h.TestSuite("Breadcrumb v1", { path: "/apps/core/wcm/tests/test-suites/Breadcrumb/v1/Breadcrumb.js",
         execBefore: c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+        execInNewWindow: false })
 
         .addTestCase(breadcrumb.testHideCurrent(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumb.testShowHidden(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumb.changeStartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumb.setZeroStartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumb.set100StartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css'));
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/breadcrumb/v1/breadcrumb/clientlibs/site.css"));
 
 }(hobs, jQuery));

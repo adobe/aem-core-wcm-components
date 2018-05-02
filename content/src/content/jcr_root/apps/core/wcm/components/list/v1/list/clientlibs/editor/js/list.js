@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/*global
+/* global
     Granite, Coral
  */
-(function (document, $, Coral) {
+(function(document, $, Coral) {
     "use strict";
 
-    $(document).on("foundation-contentloaded", function (e) {
-        $(".cmp-list--editor coral-select.cq-dialog-dropdown-showhide", e.target).each(function (i, element) {
+    $(document).on("foundation-contentloaded", function(e) {
+        $(".cmp-list--editor coral-select.cq-dialog-dropdown-showhide", e.target).each(function(i, element) {
             var target = $(element).data("cqDialogDropdownShowhideTarget");
             if (target) {
-                Coral.commons.ready(element, function (component) {
+                Coral.commons.ready(element, function(component) {
                     showHide(component, target);
-                    component.on("change", function () {
+                    component.on("change", function() {
                         showHide(component, target);
                     });
                 });

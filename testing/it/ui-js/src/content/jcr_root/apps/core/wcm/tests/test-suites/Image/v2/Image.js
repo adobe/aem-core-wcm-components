@@ -17,7 +17,8 @@
 /**
  * Tests for the core text component
  */
-;(function (h, $) {
+;(function(h, $) { // eslint-disable-line no-extra-semi
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
@@ -34,14 +35,15 @@
     /**
      * The main test suite for Image Component
      */
-    new h.TestSuite('Image v2', {path: '/apps/core/wcm/test-suites/Image/v2/Image.js',
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Image v2", { path: "/apps/core/wcm/test-suites/Image/v2/Image.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(imageV2.tcAddImage(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV2.tcAddAltTextAndTitle(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV1.tcSetLink(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV2.tcDisableCaptionAsPopup(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV2.tcSetImageAsDecorative(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(c.tcCheckProxiedClientLibrary('/core/wcm/components/image/v2/image/clientlibs/site.js'));
+        .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/image/v2/image/clientlibs/site.js"));
+
 }(hobs, jQuery));

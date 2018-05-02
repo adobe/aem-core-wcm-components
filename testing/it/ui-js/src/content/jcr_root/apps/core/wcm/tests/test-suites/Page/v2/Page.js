@@ -14,23 +14,24 @@
  * limitations under the License.
  ******************************************************************************/
 
-window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {}
+window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {};
 
 /**
  * Tests for the core page component.
  */
-;(function(h, $){
+(function(h, $) {
+    "use strict";
 
     // shortcut
     var c = window.CQ.CoreComponentsIT.commons;
     var pageV1 = window.CQ.CoreComponentsIT.Page.v1;
     var pageV2 = window.CQ.CoreComponentsIT.Page.v2;
 
-     /**
+    /**
      * v2 specifics
      */
-    var pageSelector={
-        segmentPath: '/conf/we-retail/settings/wcm/segments'
+    var pageSelector = {
+        segmentPath: "/conf/we-retail/settings/wcm/segments"
     };
     var tcExecuteBeforeTest = pageV1.tcExecuteBeforeTest("core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest = pageV1.tcExecuteAfterTest();
@@ -38,9 +39,9 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {}
     /**
      * The main test suite for Page component
      */
-    new h.TestSuite("Page v2", {path:"/apps/core/wcm/test-suites/Page/v2/Page.js",
-        execBefore:c.tcExecuteBeforeTestSuite,
-        execInNewWindow : false})
+    new h.TestSuite("Page v2", { path: "/apps/core/wcm/test-suites/Page/v2/Page.js",
+        execBefore: c.tcExecuteBeforeTestSuite,
+        execInNewWindow: false })
 
         .addTestCase(pageV1.tcBasicTitleAndTagsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(pageV1.tcBasicTitlesAndDescriptionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
@@ -59,7 +60,6 @@ window.CQ.CoreComponentsIT.Page.v2 = window.CQ.CoreComponentsIT.Page.v2 || {}
         .addTestCase(pageV1.tcEditUserGroupPermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(pageV1.tcEffectivePermissionsPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(pageV2.tcBlueprintPageProperties64(tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(pageV1.tcLiveCopyPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest))
-    ;
+        .addTestCase(pageV1.tcLiveCopyPageProperties(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 }(hobs, jQuery));
