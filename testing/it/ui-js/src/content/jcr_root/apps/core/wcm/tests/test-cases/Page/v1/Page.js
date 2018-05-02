@@ -675,7 +675,7 @@ window.CQ.CoreComponentsIT.Page.v1 = window.CQ.CoreComponentsIT.Page.v1 || {}
                 return h.find("input[name='./cq:contextHubSegmentsPath']").val() === pageSelector.segmentPath;
             })
             // check the brand
-            .assert.exist("section.coral-Form-fieldset h4:contains('Core Component Brand')");
+            .assert.exist("section.coral-Form-fieldset :contains('Core Component Brand')");
     };
 
     /**
