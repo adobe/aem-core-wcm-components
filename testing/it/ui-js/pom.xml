@@ -168,6 +168,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes combine.children="append">
+                        <!-- Ignore lint-files -->
+                        <exclude>**/*.eslintrc</exclude>
+                        <exclude>**/*.editorconfig</exclude>
+                        <exclude>**/*.stylelintrc.yaml</exclude>
+                        <exclude>**/*.eslintignore</exclude>
+                        <!-- Ignore Node and npm -->
+                        <exclude>**/node/**</exclude>
+                        <exclude>**/node_modules/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
