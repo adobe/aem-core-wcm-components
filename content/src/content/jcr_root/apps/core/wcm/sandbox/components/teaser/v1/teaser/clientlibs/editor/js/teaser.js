@@ -57,7 +57,11 @@
             });
 
             var $ctasMultifield = $dialogContent.find(ctasMultifieldSelector);
-            $ctasMultifield.on("change", function() {
+            $ctasMultifield.on("change", function(event) {
+                var $target = $(event.target);
+                if ($target.is("foundation-autocomplete")) {
+                    updateText($target);
+                }
                 retrievePageInfo($dialogContent);
             });
 
@@ -72,6 +76,20 @@
         if (withCTA) {
             $linkURLWrapper.hide();
             $ctasMultifield.show();
+            if ($ctasMultifield.size() > 0) {
+                var ctasMultifield = $ctasMultifield[0];
+                if (ctasMultifield.items.length < 1) {
+                    var newMultifieldItem = new Coral.Multifield.Item();
+                    ctasMultifield.items.add(newMultifieldItem);
+                    Coral.commons.ready(newMultifieldItem, function(element) {
+                        var linkField = $(element).find('foundation-autocomplete[name="link"]');
+                        if (linkField) {
+                            linkField.val(linkURL);
+                            linkField.trigger("change");
+                        }
+                    });
+                }
+            }
         } else {
             $linkURLWrapper.show();
             $ctasMultifield.hide();
@@ -82,11 +100,10 @@
         var url;
         if (withCTA) {
             url = dialogContent.find('.cmp-teaser__editor-multifield_ctas [name="link"]').val();
-
         } else {
             url = linkURL;
         }
-        if (url) {
+        if (url && url.startsWith("/")) {
             return $.ajax({
                 url: url + "/_jcr_content.json"
             }).done(function(data) {
@@ -100,6 +117,22 @@
         } else {
             titleTuple.update();
             descriptionTuple.update();
+        }
+    }
+
+    function updateText(target) {
+        var url = target.val();
+        if (url && url.startsWith("/")) {
+            var textField = target.parents("coral-multifield-item").find('[name="text"]');
+            if (textField && !textField.val()) {
+                $.ajax({
+                    url: url + "/_jcr_content.json"
+                }).done(function(data) {
+                    if (data) {
+                        textField.val(data["jcr:title"]);
+                    }
+                });
+            }
         }
     }
 })(jQuery);

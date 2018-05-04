@@ -42,12 +42,6 @@
                                         name="./ctas">
                                     <items
                                             jcr:primaryType="nt:unstructured">
-                                        <text
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Call-to-Action text."
-                                                fieldLabel="Text"
-                                                name="text"/>
                                         <link
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
@@ -56,6 +50,12 @@
                                                 name="link"
                                                 required="{Boolean}true"
                                                 rootPath="/content"/>
+                                        <text
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Call-to-Action text."
+                                                fieldLabel="Text"
+                                                name="text"/>
                                     </items>
                                 </field>
                             </ctas>
