@@ -118,16 +118,24 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             title = null;
         } else {
             title = properties.get(JcrConstants.JCR_TITLE, String.class);
-            if (titleValueFromPage && targetPage != null) {
-                title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+            if (titleValueFromPage) {
+                if (targetPage != null) {
+                    title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+                } else {
+                    title = null;
+                }
             }
         }
         if (hideDescription) {
             description = null;
         } else {
             description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            if (descriptionValueFromPage && targetPage != null) {
-                description = targetPage.getDescription();
+            if (descriptionValueFromPage) {
+                if (targetPage != null) {
+                    description = targetPage.getDescription();
+                } else {
+                    description = null;
+                }
             }
         }
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
@@ -148,7 +156,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 hasImage = false;
             }
         }
-        if (StringUtils.isNotEmpty(linkURL) && hasImage) {
+        if (hasImage) {
             if (targetPage != null) {
                 linkURL = Utils.getURL(request, targetPage);
             }

@@ -15,19 +15,19 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.teaser="com.adobe.cq.wcm.core.components.sandbox.models.Teaser"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     data-sly-test.hasContent="${teaser.linkURL && teaser.imageResource}"
+     data-sly-test.hasContent="${teaser.imageResource}"
      class="cmp-teaser${!wcmmode.disabled ? ' cq-dd-image' : ''}">
 
     <div class="cmp-teaser__image" data-sly-resource="${teaser.imageResource}"></div>
     <sly data-sly-test.withCTA="${teaser.withCTA}" data-sly-list="${teaser.CTAs}">
-        <a class="btn btn-action btn-primary" href="${item.path}">${item.title}</a>
+        <a class="cmp-teaser__call-to-action-link" href="${item.path}">${item.title}</a>
     </sly>
 
     <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}">
-        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${withCTA || teaser.hideTitleLink}">${title}</a>
+        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || withCTA || teaser.hideTitleLink}">${title}</a>
     </h2>
-    <h3 class="cmp-teaser__description" data-sly-test.description="${teaser.description}">
-        <a class="cmp-teaser__description-link" href="${teaser.linkURL}" data-sly-unwrap="${withCTA || teaser.hideDescriptionLink}">${description}</a>
-    </h3>
+    <p class="cmp-teaser__description" data-sly-test.description="${teaser.description}">
+        <a class="cmp-teaser__description-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || withCTA || teaser.hideDescriptionLink}">${description}</a>
+    </p>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"/>

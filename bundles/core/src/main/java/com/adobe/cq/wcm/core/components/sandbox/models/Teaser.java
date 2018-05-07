@@ -32,14 +32,14 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 public interface Teaser extends ComponentExporter {
 
     /**
-     * Name of the property that will store if the teaser has Call-to-Action elements
+     * Name of the property that stores if the teaser has Call-to-Action elements
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_WITH_CTA = "withCTA";
 
     /**
-     * Name of the node where the Call-to-Action elements will be stored
+     * Name of the parent node where the Call-to-Action elements are stored
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */

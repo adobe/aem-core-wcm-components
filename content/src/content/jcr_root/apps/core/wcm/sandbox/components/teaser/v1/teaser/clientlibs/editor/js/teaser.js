@@ -23,7 +23,7 @@
     var titleCheckboxSelector = 'coral-checkbox[name="./titleValueFromPage"]';
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionValueFromPage"]';
-    var descriptionTextfieldSelector = 'input[name="./jcr:description"]';
+    var descriptionTextfieldSelector = 'textarea[name="./jcr:description"]';
     var linkURLWrapperSelector = ".cmp-teaser__editor-link-url";
     var linkURLSelector = '[name="./linkURL"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
@@ -49,21 +49,23 @@
             });
 
             var $withCTACheckbox = $dialogContent.find(withCTACheckboxSelector);
-            withCTA = $withCTACheckbox.adaptTo("foundation-field").getValue() === "true";
-            $withCTACheckbox.on("change", function(e) {
-                withCTA = $(e.target).adaptTo("foundation-field").getValue() === "true";
-                toggleInputs($dialogContent);
-                retrievePageInfo($dialogContent);
-            });
+            if ($withCTACheckbox.size() > 0) {
+                withCTA = $withCTACheckbox.adaptTo("foundation-field").getValue() === "true";
+                $withCTACheckbox.on("change", function(e) {
+                    withCTA = $(e.target).adaptTo("foundation-field").getValue() === "true";
+                    toggleInputs($dialogContent);
+                    retrievePageInfo($dialogContent);
+                });
 
-            var $ctasMultifield = $dialogContent.find(ctasMultifieldSelector);
-            $ctasMultifield.on("change", function(event) {
-                var $target = $(event.target);
-                if ($target.is("foundation-autocomplete")) {
-                    updateText($target);
-                }
-                retrievePageInfo($dialogContent);
-            });
+                var $ctasMultifield = $dialogContent.find(ctasMultifieldSelector);
+                $ctasMultifield.on("change", function(event) {
+                    var $target = $(event.target);
+                    if ($target.is("foundation-autocomplete")) {
+                        updateText($target);
+                    }
+                    retrievePageInfo($dialogContent);
+                });
+            }
 
             toggleInputs($dialogContent);
             retrievePageInfo($dialogContent);
