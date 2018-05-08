@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -37,6 +39,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
@@ -58,6 +61,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String title;
     private String description;
     private String linkURL;
+    private boolean withCTA = false;
     private boolean hideTitle = false;
     private boolean hideDescription = false;
     private boolean hideImageLink = false;
@@ -65,6 +69,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private boolean hideDescriptionLink = false;
     private boolean titleValueFromPage = false;
     private boolean descriptionValueFromPage = false;
+    private List<ListItem> ctas = new ArrayList<>();
     private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
@@ -75,6 +80,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @ScriptVariable
     private ValueMap properties;
+
+    @Inject
+    private Resource resource;
 
     @ScriptVariable
     private PageManager pageManager;
@@ -90,37 +98,44 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @PostConstruct
     private void initModel() {
+        withCTA = properties.get(Teaser.PN_WITH_CTA, withCTA);
         titleValueFromPage = properties.get(Teaser.PN_TITLE_VALUE_FROM_PAGE, titleValueFromPage);
         descriptionValueFromPage = properties.get(Teaser.PN_DESCRIPTION_VALUE_FROM_PAGE, descriptionValueFromPage);
-        if (currentStyle != null) {
-            hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, hideTitle);
-            hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, hideDescription);
-            hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, hideImageLink);
-            hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, hideTitleLink);
-            hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, hideDescriptionLink);
-        } else {
-            hideTitle = false;
-            hideDescription = false;
-        }
-        if (hideImageLink) {
-            hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-        }
         linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
-        targetPage = pageManager.getPage(linkURL);
+        populateStyleProperties();
+        if (withCTA) {
+            populateCTAs();
+            if (ctas.size() > 0) {
+                ListItem firstCTA = ctas.get(0);
+                if (firstCTA.getPath() != null) {
+                    targetPage = pageManager.getPage(firstCTA.getPath());
+                }
+            }
+        } else {
+            targetPage = pageManager.getPage(linkURL);
+        }
         if (hideTitle) {
             title = null;
         } else {
             title = properties.get(JcrConstants.JCR_TITLE, String.class);
-            if (titleValueFromPage && targetPage != null) {
-                title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+            if (titleValueFromPage) {
+                if (targetPage != null) {
+                    title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+                } else {
+                    title = null;
+                }
             }
         }
         if (hideDescription) {
             description = null;
         } else {
             description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            if (descriptionValueFromPage && targetPage != null) {
-                description = targetPage.getDescription();
+            if (descriptionValueFromPage) {
+                if (targetPage != null) {
+                    description = targetPage.getDescription();
+                } else {
+                    description = null;
+                }
             }
         }
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
@@ -141,12 +156,63 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 hasImage = false;
             }
         }
-        if (StringUtils.isNotEmpty(linkURL) && hasImage) {
+        if (hasImage) {
             if (targetPage != null) {
                 linkURL = Utils.getURL(request, targetPage);
             }
             setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
+    }
+
+    private void populateStyleProperties() {
+        if (currentStyle != null) {
+            hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, hideTitle);
+            hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, hideDescription);
+            hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, hideImageLink);
+            hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, hideTitleLink);
+            hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, hideDescriptionLink);
+            if (hideImageLink) {
+                hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+            }
+        }
+    }
+
+    private void populateCTAs() {
+        Resource ctasNode = resource.getChild(Teaser.NN_CTAS);
+        if (ctasNode != null) {
+            for(Resource cta : ctasNode.getChildren()) {
+                ctas.add(new ListItem() {
+
+                    private ValueMap properties = cta.getValueMap();
+                    private String title = properties.get("text", String.class);
+                    private String url = properties.get("link", String.class);
+
+                    @Nullable
+                    @Override
+                    public String getTitle() {
+                        return title;
+                    }
+
+                    @Nullable
+                    @Override
+                    public String getPath() {
+                        return url;
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isWithCTA() {
+        return withCTA;
+    }
+
+    @Override
+    @JsonIgnore
+    public List<ListItem> getCTAs() {
+        return ctas;
     }
 
     @Override

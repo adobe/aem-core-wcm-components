@@ -37,6 +37,7 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
 import com.adobe.cq.wcm.core.components.testing.MockContentPolicy;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
@@ -70,6 +71,7 @@ public class TeaserImplTest {
     private static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
     private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
     private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
+    private static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
     private Logger teaserLogger;
 
     @ClassRule
@@ -179,6 +181,16 @@ public class TeaserImplTest {
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser8"));
     }
 
+    @Test
+    public void testTeaserWithCTAs() {
+        Teaser teaser = getTeaserUnderTest(TEASER_9);
+        assertTrue("Expected teaser with CTA", teaser.isWithCTA());
+        assertEquals("Expected to find two CTAs", 2, teaser.getCTAs().size());
+        ListItem cta = teaser.getCTAs().get(0);
+        assertEquals("CTA link does not match", "http://www.adobe.com", cta.getPath());
+        assertEquals("CTA text does not match", "Adobe", cta.getTitle());
+    }
+
     private Teaser getTeaserUnderTest(String resourcePath) {
         return getTeaserUnderTest(resourcePath, null);
     }
@@ -193,6 +205,7 @@ public class TeaserImplTest {
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
         SlingBindings slingBindings = new SlingBindings();
+        slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
         if (currentStyle != null) {
