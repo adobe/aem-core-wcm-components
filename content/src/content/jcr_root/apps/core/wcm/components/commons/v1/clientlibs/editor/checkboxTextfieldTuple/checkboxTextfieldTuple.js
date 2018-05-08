@@ -29,7 +29,7 @@
      * @param {String} textfieldSelector The selector for the text field.
      * @constructor
      */
-    var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector) {
+    var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector, isRichText) {
         var self                  = this;
         self.ATTR_PREVIOUS_VALUE  = "data-previous-value";
         self.ATTR_SEEDED_VALUE    = "data-seeded-value";
@@ -40,6 +40,7 @@
         self._textfield           = dialog.querySelector(textfieldSelector);
         self._textfieldSelector   = textfieldSelector;
         self._textfieldFoundation = $(self._textfield).adaptTo("foundation-field");
+        self._isRichText          = isRichText;
         if (self._checkbox && self._checkboxFoundation) {
             self._checkbox.setAttribute(self.ATTR_PREVIOUS_VALUE, self._checkboxFoundation.getValue());
             self._checkbox.addEventListener("change", function() {
@@ -63,7 +64,7 @@
                             $(self._checkbox).parent().hide();
                             var previousValue = self._textfield.getAttribute(self.ATTR_PREVIOUS_VALUE);
                             if (previousValue !== undefined && previousValue !== null) {
-                                self._textfieldFoundation.setValue(previousValue);
+                                self._setTextfieldValue(previousValue);
                             }
                         }
                     };
@@ -71,7 +72,7 @@
             });
         }
         if (self._textfield) {
-            self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._textfield.value);
+            self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
             $(window).adaptTo("foundation-registry").register("foundation.adapters", {
                 type: "foundation-toggleable",
                 selector: self._textfieldSelector,
@@ -81,11 +82,11 @@
                             return !self._textfieldFoundation.isDisabled();
                         },
                         show: function() {
-                            self._textfieldFoundation.setDisabled(false);
+                            self._disableTextfield(false);
                             $(self._textfield).parent().show();
                         },
                         hide: function() {
-                            self._textfieldFoundation.setDisabled(true);
+                            self._disableTextfield(true);
                             $(self._textfield).parent().hide();
                         }
                     };
@@ -105,16 +106,16 @@
      * The text field will be disabled when the checkbox is checked, or enabled if the checkbox is not checked.
      */
     CheckboxTextfieldTuple.prototype.update = function() {
-        if (this._checkboxFoundation && this._textfieldFoundation && this._textfield) {
+        if (this._checkboxFoundation && (this._textfieldFoundation || this._isRichText) && this._textfield) {
             if (this._checkboxFoundation.getValue() === "true") {
-                this._textfieldFoundation.setValue(this._textfield.getAttribute(this.ATTR_SEEDED_VALUE));
-                this._textfieldFoundation.setDisabled(true);
+                this._setTextfieldValue(this._textfield.getAttribute(this.ATTR_SEEDED_VALUE));
+                this._disableTextfield(true);
             } else {
                 var previousValue = this._textfield.getAttribute(this.ATTR_PREVIOUS_VALUE);
                 if (previousValue !== undefined && previousValue !== null && previousValue.trim() !== "") {
-                    this._textfieldFoundation.setValue(previousValue);
+                    this._setTextfieldValue(previousValue);
                 }
-                this._textfieldFoundation.setDisabled(false);
+                this._disableTextfield(false);
             }
         }
     };
@@ -147,9 +148,9 @@
             this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
             var previousValue = this._textfield.getAttribute(this.ATTR_PREVIOUS_VALUE);
             if (previousValue !== undefined && previousValue !== null) {
-                this._textfieldFoundation.setValue(previousValue);
+                this._setTextfieldValue(previousValue);
             }
-            this._textfieldFoundation.setDisabled(false);
+            this._disableTextfield(false);
         }
     };
 
@@ -195,6 +196,47 @@
             } else {
                 textfield.show();
             }
+        }
+    };
+
+    /**
+     * Gets the value of the text field, accounting for it being a rich-text
+     *
+     * @private
+     */
+    CheckboxTextfieldTuple.prototype._getTextfieldValue = function() {
+        if (this._isRichText) {
+            return $(this._textfield).html();
+        } else {
+            this._textfield.value;
+        }
+    };
+
+    /**
+     * Sets the value of the text field, accounting for it being a rich-text
+     *
+     * @param value - The value to set
+     * @private
+     */
+    CheckboxTextfieldTuple.prototype._setTextfieldValue = function(value) {
+        if (this._isRichText) {
+            $(this._textfield).html(value);
+        } else {
+            this._textfieldFoundation.setValue(value);
+        }
+    };
+
+    /**
+     * Disables the text field, accounting for it being a rich-text
+     *
+     * @param disabled - {@code true} to disable, {@code false} to enable the field
+     * @private
+     */
+    CheckboxTextfieldTuple.prototype._disableTextfield = function(disabled) {
+        if (this._isRichText) {
+            $(this._textfield).attr("contenteditable", !disabled);
+        } else {
+            this._textfieldFoundation.setDisabled(disabled);
         }
     };
 

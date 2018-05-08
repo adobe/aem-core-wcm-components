@@ -23,7 +23,7 @@
     var titleCheckboxSelector = 'coral-checkbox[name="./titleValueFromPage"]';
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionValueFromPage"]';
-    var descriptionTextfieldSelector = 'textarea[name="./jcr:description"]';
+    var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
     var linkURLWrapperSelector = ".cmp-teaser__editor-link-url";
     var linkURLSelector = '[name="./linkURL"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
@@ -39,7 +39,7 @@
 
         if (dialogContent) {
             titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector);
-            descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector);
+            descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
 
             var $linkURLField = $dialogContent.find(linkURLSelector);
             linkURL = $linkURLField.adaptTo("foundation-field").getValue();
