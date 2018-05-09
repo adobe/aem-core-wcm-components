@@ -125,9 +125,13 @@ public class AdaptiveImageServletMappingConfigurationConsumerTest {
         });
 
         ServiceRegistration<AdaptiveImageServletMappingConfigurationFactory> registration1 = slingContext.bundleContext().registerService
-                (AdaptiveImageServletMappingConfigurationFactory.class, config1, new Hashtable<>());
+                (AdaptiveImageServletMappingConfigurationFactory.class, config1, new Hashtable() {{
+                        put(Constants.SERVICE_PID, "pid1");
+                    }});
         ServiceRegistration<AdaptiveImageServletMappingConfigurationFactory> registration2 = slingContext.bundleContext().registerService
-                (AdaptiveImageServletMappingConfigurationFactory.class, config2, new Hashtable<>());
+                (AdaptiveImageServletMappingConfigurationFactory.class, config2, new Hashtable() {{
+                    put(Constants.SERVICE_PID, "pid2");
+                }});
         testServiceRegistrations(2, configurationConsumer);
 
         Collection<ServiceReference<Servlet>> servletServiceReferences = slingContext.bundleContext().getServiceReferences(Servlet.class,

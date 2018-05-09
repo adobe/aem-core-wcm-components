@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
 
     private BundleContext bundleContext;
 
-    private List<AdaptiveImageServletMappingConfigurationFactory> configs = new ArrayList<>();
+    private Map<String, AdaptiveImageServletMappingConfigurationFactory> configs = new HashMap<>();
 
     private List<ServiceRegistration> serviceRegistrations = new ArrayList<>();
 
@@ -118,10 +119,11 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
      *
      * @param configurationFactory - {@link AdaptiveImageServletMappingConfigurationFactory} instance
      */
-    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-    protected synchronized void bindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory) {
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, updated = "bindAdaptiveImageServletConfigurationFactory")
+    protected synchronized void bindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory, Map<String, ?> properties) {
+        String servicePid = (String)properties.get(Constants.SERVICE_PID);
         applyValidConfiguration(configurationFactory, () -> {
-            configs.add(configurationFactory);
+            configs.put(servicePid, configurationFactory);
             updateServletRegistrations();
         });
     }
@@ -131,8 +133,9 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
      *
      * @param configurationFactory - {@link AdaptiveImageServletMappingConfigurationFactory} instance
      */
-    protected synchronized void unbindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory) {
-        configs.remove(configurationFactory);
+    protected synchronized void unbindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory, Map<String, ?> properties) {
+        String servicePid = (String)properties.get(Constants.SERVICE_PID);
+        configs.remove(servicePid);
         updateServletRegistrations();
     }
 
@@ -149,7 +152,7 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
         serviceRegistrations.clear();
 
         if (bundleContext != null) {
-            for (AdaptiveImageServletMappingConfigurationFactory config : configs) {
+            for (AdaptiveImageServletMappingConfigurationFactory config : configs.values()) {
                 final Hashtable<String, Object> properties = new Hashtable<>();
                 properties.put("sling.servlet.methods", new String[]{"GET"});
                 properties.put("sling.servlet.resourceTypes", config.getResourceTypes());
