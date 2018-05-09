@@ -12,11 +12,9 @@
     "scripts": {
         "eslint": "eslint .",
         "eslint:fix": "eslint . --fix",
-        "lint": "npm run eslint",
-        "sync-pom-version": "sync-pom-version"
+        "lint": "npm run eslint"
     },
     "devDependencies": {
-        "eslint": "^4.19.1",
-        "sync-pom-version-to-package": "^1.2.0"
+        "eslint": "^4.19.1"
     }
 }

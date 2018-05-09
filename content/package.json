@@ -14,15 +14,13 @@
         "eslint:fix": "eslint . --fix",
         "lint": "npm-run-all --parallel eslint stylelint",
         "stylelint": "stylelint '**/*.css' '**/*.less'",
-        "stylelint:fix": "stylelint '**/*.css' '**/*.less' --fix",
-        "sync-pom-version": "sync-pom-version"
+        "stylelint:fix": "stylelint '**/*.css' '**/*.less' --fix"
     },
     "devDependencies": {
         "eslint": "^4.19.1",
         "npm-run-all": "^4.1.2",
         "stylelint": "^9.2.0",
         "stylelint-config-recommended": "^2.1.0",
-        "stylelint-selector-bem-pattern": "^2.0.0",
-        "sync-pom-version-to-package": "^1.2.0"
+        "stylelint-selector-bem-pattern": "^2.0.0"
     }
 }
