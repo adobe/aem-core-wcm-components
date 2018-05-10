@@ -46,6 +46,20 @@ public interface Teaser extends ComponentExporter {
     String NN_CTAS = "ctas";
 
     /**
+     * Name of the property that stores the Call-to-Action link
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_CTA_LINK = "link";
+
+    /**
+     * Name of the property that stores the Call-to-Action text
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_CTA_TEXT = "text";
+
+    /**
      * Name of the property that will store if the image link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0

@@ -12,7 +12,7 @@
     },
     {
       "title": "Teasers",
-      "path": "/content/teasers"
+      "path": "/core/content/teasers.html"
     }
   ],
   "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-7",

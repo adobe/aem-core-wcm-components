@@ -185,8 +185,16 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 ctas.add(new ListItem() {
 
                     private ValueMap properties = cta.getValueMap();
-                    private String title = properties.get("text", String.class);
-                    private String url = properties.get("link", String.class);
+                    private String title = properties.get(PN_CTA_TEXT, String.class);
+                    private String url = properties.get(PN_CTA_LINK, String.class);
+                    {
+                        if (url != null && url.startsWith("/")) {
+                            Page page = pageManager.getPage(url);
+                            if (page != null) {
+                                url = Utils.getURL(request, page);
+                            }
+                        }
+                    }
 
                     @Nullable
                     @Override
