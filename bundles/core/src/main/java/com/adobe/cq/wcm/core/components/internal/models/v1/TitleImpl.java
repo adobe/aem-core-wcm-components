@@ -19,6 +19,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -59,9 +60,9 @@ public class TitleImpl implements Title {
     private String type;
 
     /**
-     * The {@link Heading} object for the type of this title.
+     * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
      */
-    private Heading heading;
+    private Utils.Heading heading;
 
     @PostConstruct
     private void initModel() {
@@ -70,9 +71,9 @@ public class TitleImpl implements Title {
         }
 
         if (heading == null) {
-            heading = Heading.getHeading(type);
+            heading = Utils.Heading.getHeading(type);
             if (heading == null) {
-                heading = Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
+                heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
             }
         }
     }
@@ -94,35 +95,6 @@ public class TitleImpl implements Title {
     @Override
     public String getExportedType() {
         return resource.getResourceType();
-    }
-
-    private enum Heading {
-
-        H1("h1"),
-        H2("h2"),
-        H3("h3"),
-        H4("h4"),
-        H5("h5"),
-        H6("h6");
-
-        private String element;
-
-        Heading(String element) {
-            this.element = element;
-        }
-
-        private static Heading getHeading(String value) {
-            for (Heading heading : values()) {
-                if (StringUtils.equalsIgnoreCase(heading.element, value)) {
-                    return heading;
-                }
-            }
-            return null;
-        }
-
-        public String getElement() {
-            return element;
-        }
     }
 
 }

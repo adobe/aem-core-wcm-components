@@ -4,7 +4,8 @@
   "linkURL": "https://www.adobe.com",
   "hideImageLink": false,
   "hideTitleLink": false,
-  "hideDescriptionLink": false,
+  "withCTA": false,
+  "ctas": [ ],
   "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-1",
   ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
 }

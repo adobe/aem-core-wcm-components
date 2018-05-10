@@ -95,6 +95,14 @@ public interface Teaser extends ComponentExporter {
     String PN_DESCRIPTION_VALUE_FROM_PAGE = "descriptionValueFromPage";
 
     /**
+     * Name of the configuration policy property that will store the value for this title's HTML element type.
+     *
+     * @see #getTitleType()
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_TITLE_TYPE = "titleType";
+
+    /**
      * Checks if teaser has Call-to-Action elements
      *
      * @return {@code true} if teaser has CTAs, {@code false} otherwise
@@ -175,12 +183,12 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Checks if link should be hidden on the description.
+     * Returns the HTML element type (h1-h6) used for the markup.
      *
-     * @return {@code true} if link should be hidden on the description, {@code false} otherwise
+     * @return the element type
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    default boolean isHideDescriptionLink() {
+    default String getTitleType() {
         throw new UnsupportedOperationException();
     }
 

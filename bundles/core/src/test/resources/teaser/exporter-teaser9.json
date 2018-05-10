@@ -1,0 +1,20 @@
+{
+  "title": "Teaser",
+  "description": "Description",
+  "linkURL": "/content/teasers",
+  "withCTA": true,
+  "hideImageLink": false,
+  "hideTitleLink": false,
+  "ctas": [
+    {
+      "title": "Adobe",
+      "path": "http://www.adobe.com"
+    },
+    {
+      "title": "Teasers",
+      "path": "/content/teasers"
+    }
+  ],
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-7",
+  ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
+}

@@ -64,22 +64,6 @@
                         "linkURL"             : "/content/teasers",
                         "jcr:title"           : "Teaser",
                         "jcr:description"     : "Description",
-                        "sling:resourceType"  : "core/wcm/sandbox/components/teaser/v1/teaser"
-                    },
-                    "teaser-8"          : {
-                        "jcr:primaryType"     : "nt:unstructured",
-                        "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                        "linkURL"             : "/content/teasers",
-                        "jcr:title"           : "Teaser",
-                        "jcr:description"     : "Description",
-                        "sling:resourceType"  : "core/wcm/sandbox/components/teaser/v1/teaser"
-                    },
-                    "teaser-9"          : {
-                        "jcr:primaryType"     : "nt:unstructured",
-                        "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                        "linkURL"             : "/content/teasers",
-                        "jcr:title"           : "Teaser",
-                        "jcr:description"     : "Description",
                         "withCTA"             : true,
                         "sling:resourceType"  : "core/wcm/sandbox/components/teaser/v1/teaser",
                         "ctas"                : {

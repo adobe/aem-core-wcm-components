@@ -23,11 +23,11 @@
         <a class="cmp-teaser__call-to-action-link" href="${item.path}">${item.title}</a>
     </sly>
 
-    <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}">
+    <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}" data-sly-element="${teaser.titleType}">
         <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || withCTA || teaser.hideTitleLink}">${title}</a>
     </h2>
-    <p class="cmp-teaser__description" data-sly-test.description="${teaser.description}">
-        <a class="cmp-teaser__description-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || withCTA || teaser.hideDescriptionLink}">${description}</a>
-    </p>
+    <div class="cmp-teaser__description" data-sly-test.description="${teaser.description}">
+        ${teaser.description @ context="html"}
+    </div>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"/>

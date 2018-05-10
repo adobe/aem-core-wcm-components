@@ -1,11 +1,12 @@
 {
   "title": "Teaser",
   "description": "Description",
-  "linkURL": "/core/content/teasers.html",
+  "linkURL": "https://www.adobe.com",
+  "titleType": "h5",
   "hideImageLink": false,
   "hideTitleLink": false,
   "withCTA": false,
   "ctas": [ ],
-  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-5",
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-1",
   ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
 }

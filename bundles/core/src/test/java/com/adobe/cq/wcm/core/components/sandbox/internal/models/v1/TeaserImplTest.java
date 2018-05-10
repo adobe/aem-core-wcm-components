@@ -70,8 +70,6 @@ public class TeaserImplTest {
     private static final String TEASER_5 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-5";
     private static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
     private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
-    private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
-    private static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
     private Logger teaserLogger;
 
     @ClassRule
@@ -161,11 +159,9 @@ public class TeaserImplTest {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
             put(Teaser.PN_HIDE_TITLE_LINK, true);
-            put(Teaser.PN_HIDE_DESCRIPTION_LINK, true);
             put(Teaser.PN_HIDE_IMAGE_LINK, true);
         }}));
-        Teaser teaser = getTeaserUnderTest(TEASER_7, mockStyle);
-
+        Teaser teaser = getTeaserUnderTest(TEASER_5, mockStyle);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser7"));
     }
 
@@ -177,18 +173,42 @@ public class TeaserImplTest {
             put(Teaser.PN_HIDE_DESCRIPTION, true);
         }}));
 
-        Teaser teaser = getTeaserUnderTest(TEASER_8, mockStyle);
+        Teaser teaser = getTeaserUnderTest(TEASER_5, mockStyle);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser8"));
     }
 
     @Test
     public void testTeaserWithCTAs() {
-        Teaser teaser = getTeaserUnderTest(TEASER_9);
+        Teaser teaser = getTeaserUnderTest(TEASER_7);
         assertTrue("Expected teaser with CTA", teaser.isWithCTA());
         assertEquals("Expected to find two CTAs", 2, teaser.getCTAs().size());
         ListItem cta = teaser.getCTAs().get(0);
         assertEquals("CTA link does not match", "http://www.adobe.com", cta.getPath());
         assertEquals("CTA text does not match", "Adobe", cta.getTitle());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser9"));
+    }
+
+    @Test
+    public void testTeaserWithTitleType() throws Exception {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Teaser.PN_TITLE_TYPE, "h5");
+        }}));
+
+        Teaser teaser = getTeaserUnderTest(TEASER_1, mockStyle);
+        assertEquals("Expected title type is not correct", "h5", teaser.getTitleType());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser2"));
+
+    }
+
+    @Test
+    public void testTeaserWithDefaultTitleType() throws Exception {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource);
+
+        Teaser teaser = getTeaserUnderTest(TEASER_1, mockStyle);
+        assertEquals("Expected the default title type is not correct", null, teaser.getTitleType());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
 
     private Teaser getTeaserUnderTest(String resourcePath) {

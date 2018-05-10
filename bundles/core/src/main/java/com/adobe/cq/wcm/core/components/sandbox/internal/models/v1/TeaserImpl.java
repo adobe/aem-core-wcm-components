@@ -32,6 +32,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,12 +62,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String title;
     private String description;
     private String linkURL;
+    private String titleType;
     private boolean withCTA = false;
     private boolean hideTitle = false;
     private boolean hideDescription = false;
     private boolean hideImageLink = false;
     private boolean hideTitleLink = false;
-    private boolean hideDescriptionLink = false;
     private boolean titleValueFromPage = false;
     private boolean descriptionValueFromPage = false;
     private List<ListItem> ctas = new ArrayList<>();
@@ -168,9 +169,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         if (currentStyle != null) {
             hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, hideTitle);
             hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, hideDescription);
+            titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
             hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, hideImageLink);
             hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, hideTitleLink);
-            hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, hideDescriptionLink);
             if (hideImageLink) {
                 hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
             }
@@ -204,13 +205,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    @JsonIgnore
     public boolean isWithCTA() {
         return withCTA;
     }
 
     @Override
-    @JsonIgnore
     public List<ListItem> getCTAs() {
         return ctas;
     }
@@ -249,8 +248,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public boolean isHideDescriptionLink() {
-        return hideDescriptionLink;
+    public String getTitleType() {
+        Utils.Heading heading = Utils.Heading.getHeading(titleType);
+        if (heading != null) {
+            return heading.getElement();
+        }
+        return null;
     }
 
     @Nonnull

@@ -123,12 +123,6 @@
                                             text="Don't add links to title"
                                             name="./hideTitleLink"
                                             value="{Boolean}true"/>
-                                    <description
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                            text="Don't add links to description"
-                                            name="./hideDescriptionLink"
-                                            value="{Boolean}true"/>
                                 </items>
                             </links>
                             <imageDelegate
