@@ -108,6 +108,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             populateCTAs();
             if (ctas.size() > 0) {
                 ListItem firstCTA = ctas.get(0);
+                linkURL = firstCTA.getPath();
                 if (firstCTA.getPath() != null) {
                     targetPage = pageManager.getPage(firstCTA.getPath());
                 }
