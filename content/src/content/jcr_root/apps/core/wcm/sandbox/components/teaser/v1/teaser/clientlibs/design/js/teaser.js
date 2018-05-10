@@ -20,8 +20,6 @@
     var dialogContentSelector = ".cmp-teaser__design";
     var hideTitleCheckboxSelector = 'coral-checkbox[name="./hideTitle"]';
     var hideTitleLinkCheckboxSelector = 'coral-checkbox[name="./hideTitleLink"]';
-    var hideDescriptionCheckboxSelector = 'coral-checkbox[name="./hideDescription"]';
-    var hideDescriptionLinkCheckboxSelector = 'coral-checkbox[name="./hideDescriptionLink"]';
     var titleTypeSelectSelector = '.coral-Form-fieldwrapper:has(coral-select[name="./titleType"])';
 
     $(document).on("dialog-loaded", function(e) {
@@ -40,17 +38,6 @@
                     var hideTitle = $(event.target).adaptTo("foundation-field").getValue() === "true";
                     toggle($dialogContent, titleTypeSelectSelector, !hideTitle);
                     toggle($dialogContent, hideTitleLinkCheckboxSelector, !hideTitle);
-                });
-            }
-
-            var $hideDescriptionCheckbox = $dialogContent.find(hideDescriptionCheckboxSelector);
-            if ($hideDescriptionCheckbox.size() > 0) {
-                var hideDescription = $hideDescriptionCheckbox.adaptTo("foundation-field").getValue() === "true";
-                toggle($dialogContent, hideDescriptionLinkCheckboxSelector, !hideDescription);
-
-                $hideDescriptionCheckbox.on("change", function(event) {
-                    var hideDescription = $(event.target).adaptTo("foundation-field").getValue() === "true";
-                    toggle($dialogContent, hideDescriptionLinkCheckboxSelector, !hideDescription);
                 });
             }
         }

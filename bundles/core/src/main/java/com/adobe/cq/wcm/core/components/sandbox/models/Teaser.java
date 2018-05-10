@@ -81,13 +81,6 @@ public interface Teaser extends ComponentExporter {
     String PN_HIDE_DESCRIPTION = "hideDescription";
 
     /**
-     * Name of the property that will store if the description link should be hidden.
-     *
-     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
-     */
-    String PN_HIDE_DESCRIPTION_LINK = "hideDescriptionLink";
-
-    /**
      * Name of the property that will store if the description value should be taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0

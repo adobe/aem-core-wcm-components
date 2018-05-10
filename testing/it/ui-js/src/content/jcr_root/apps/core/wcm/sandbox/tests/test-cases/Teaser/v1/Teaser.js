@@ -188,7 +188,6 @@
                 data["sling:resourceType"] = "wcm/core/components/policy/policy";
                 data["hideImageLink"] = "true";
                 data["hideTitleLink"] = "true";
-                data["hideDescriptionLink"] = "true";
 
                 c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
 
