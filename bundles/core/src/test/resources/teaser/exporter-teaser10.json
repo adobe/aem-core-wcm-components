@@ -1,0 +1,11 @@
+{
+  "title": "Teaser",
+  "description": "Description",
+  "linkURL": "/core/content/teasers.html",
+  "withCTA": false,
+  "hideImageLink": false,
+  "hideTitleLink": false,
+  "ctas": [],
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-7",
+  ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
+}

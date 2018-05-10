@@ -100,10 +100,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @PostConstruct
     private void initModel() {
         withCTA = properties.get(Teaser.PN_WITH_CTA, withCTA);
+
+        populateStyleProperties();
+
         titleValueFromPage = properties.get(Teaser.PN_TITLE_VALUE_FROM_PAGE, titleValueFromPage);
         descriptionValueFromPage = properties.get(Teaser.PN_DESCRIPTION_VALUE_FROM_PAGE, descriptionValueFromPage);
         linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
-        populateStyleProperties();
+
         if (withCTA) {
             populateCTAs();
             if (ctas.size() > 0) {
@@ -175,6 +178,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, hideTitleLink);
             if (hideImageLink) {
                 hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+            }
+            if (currentStyle.get(Teaser.PN_DISABLE_CTA, false)) {
+                withCTA = false;
             }
         }
     }

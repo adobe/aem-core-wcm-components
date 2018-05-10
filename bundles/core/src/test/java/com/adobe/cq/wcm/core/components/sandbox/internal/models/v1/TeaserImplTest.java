@@ -189,6 +189,17 @@ public class TeaserImplTest {
     }
 
     @Test
+    public void testTeaserWithDisabledCTAs() {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Teaser.PN_DISABLE_CTA, true);
+        }}));
+
+        Teaser teaser = getTeaserUnderTest(TEASER_7, mockStyle);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser10"));
+    }
+
+    @Test
     public void testTeaserWithTitleType() throws Exception {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{

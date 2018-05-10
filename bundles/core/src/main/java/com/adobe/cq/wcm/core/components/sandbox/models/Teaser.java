@@ -60,6 +60,13 @@ public interface Teaser extends ComponentExporter {
     String PN_CTA_TEXT = "text";
 
     /**
+     * Name of the property that stores if the Call-to-Action is disabled
+     *
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    String PN_DISABLE_CTA = "disableCTA";
+
+    /**
      * Name of the property that will store if the image link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
