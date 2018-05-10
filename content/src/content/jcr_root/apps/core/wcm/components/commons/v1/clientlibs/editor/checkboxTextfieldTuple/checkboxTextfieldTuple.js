@@ -208,7 +208,7 @@
         if (this._isRichText) {
             return $(this._textfield).html();
         } else {
-            this._textfield.value;
+            return this._textfield.value;
         }
     };
 
