@@ -1,0 +1,35 @@
+{
+    "alt"                   : "Adobe Systems Logo and Wordmark in PNG format",
+    "title"                 : "Adobe Systems Logo and Wordmark",
+    "src"                   : "/core/content/test/_jcr_content/root/image24.coreimg.png/1494867377756.png",
+    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image24.coreimg{.width}.png/1494867377756.png",
+    "areas": [
+        {
+            "shape": "circle",
+            "coordinates": "256,256,256",
+            "relativeCoordinates": "0.2000,0.3001,0.2000",
+            "href": "http://adobe.com",
+            "target": "",
+            "alt": ""
+        },
+        {
+            "shape": "rect",
+            "coordinates": "256,171,1023,682",
+            "relativeCoordinates": "0.1992,0.2005,0.7992,0.7995",
+            "href": "http://adobe.com",
+            "target": "",
+            "alt": "altText"
+        },
+        {
+            "shape": "poly",
+            "coordinates": "917,344,1280,852,532,852",
+            "relativeCoordinates": "0.7164,0.4033,1.0000,0.9988,0.4156,0.9988",
+            "href": "http://adobe.com",
+            "target": "_blank",
+            "alt": ""
+        }
+    ],
+    "widths": [],
+    "lazyEnabled"           : false,
+    ":type"                 : "core/wcm/components/image/v2/image"
+}
