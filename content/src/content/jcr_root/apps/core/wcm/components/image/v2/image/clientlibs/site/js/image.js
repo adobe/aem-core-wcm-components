@@ -254,7 +254,6 @@
                             for (var j = 0; j < coordinates.length; j++) {
                                 if (j % 2 === 0) {
                                     coordinates[j] = parseInt(relativeCoordinates[j] * width);
-                                    coordinates[j] = (coordinates[j] > width) ? width : coordinates[j];
                                 } else {
                                     coordinates[j] = parseInt(relativeCoordinates[j] * height);
                                 }
