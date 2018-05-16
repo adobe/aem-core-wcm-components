@@ -26,7 +26,7 @@
             title: ".cmp-teaser__title",
             titleLink: ".cmp-teaser__title-link",
             description: ".cmp-teaser__description",
-            descriptionLink: ".cmp-teaser__description-link"
+            ctaLink: "a.cmp-teaser__call-to-action-link"
         },
         editDialog: {
             assetDrag: function(imagePath) {
@@ -37,7 +37,10 @@
             titleValueFromPage: 'input[name="./titleValueFromPage"]',
             title: 'input[name="./jcr:title"]',
             descriptionValueFromPage: 'input[name="./descriptionValueFromPage"]',
-            description: 'input[name="./jcr:description"]'
+            description: 'input[name="./jcr:description"]',
+            withCTA: 'coral-checkbox[name="./withCTA"]',
+            ctaLinkURL: 'foundation-autocomplete[name="link"]',
+            ctaText: 'input[name="text"]'
         }
     };
 
@@ -55,6 +58,10 @@
         .addTestCase(teaser.testHideElementsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
         .addTestCase(teaser.testLinksToElementsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
-            c.policyPath_sandbox, c.policyAssignmentPath_sandbox));
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
+        .addTestCase(teaser.testDisableCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
+        .addTestCase(teaser.testWithCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"));
+
 
 }(hobs, jQuery));
