@@ -26,10 +26,10 @@
     var description                      = "Teaser Description";
     var pageName                         = "teaser-page";
     var pageVar                          = "teaser_page";
-    var secondPageName                   = "teaser-page-second";
-    var secondPageVar                    = "teaser_page_second";
+    var secondPageName                   = "teaser-second-page";
+    var secondPageVar                    = "teaser_second_page";
     var pageDescription                  = "teaser page description";
-    var ctaText1                         = "CTA Text 1";
+    //var ctaText1                         = "CTA Text 1";
     var ctaText2                         = "CTA Text 2";
     var ctaExternalLink                  = "http://www.adobe.com";
     var ctaExternalText                  = "Adobe";
@@ -45,12 +45,12 @@
                 c.createPage(c.template, c.rootPage, secondPageName, secondPageVar, done, pageRT, pageDescription);
             })
 
-        // create a proxy component
+            // create a proxy component
             .execFct(function(opts, done) {
                 c.createProxyComponent(teaserRT, c.proxyPath_sandbox, "proxyPath", done);
             })
 
-        // create a proxy component for an image
+            // create a proxy component for an image
             .execFct(function(opts, done) {
                 c.createProxyComponent(c.rtImage_v2, c.proxyPath_sandbox, "imageProxyPath", done);
             })
@@ -284,13 +284,16 @@
 
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
-            //.fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
             .click(selectors.editDialog.withCTA)
-            .fillInput(selectors.editDialog.ctaLinkURL, "%" + pageVar + "%")
-            .fillInput(selectors.editDialog.ctaText, ctaText1)
+            //.fillInput(selectors.editDialog.ctaLinkURL, "%" + pageVar + "%")
+            .simulate(selectors.editDialog.ctaLinkURL + " input[type!='hidden']", "key-sequence",
+                { sequence: "%" + pageVar + "%{enter}" })
+            //.fillInput(selectors.editDialog.ctaText, ctaText1)
             .click("button:contains('Add')")
-            .fillInput(selectors.editDialog.ctaLinkURL + ":eq(1)", "%" + secondPageVar + "%")
-            .fillInput(selectors.editDialog.ctaText + ":eq(1)", ctaText2)
+            //.fillInput(selectors.editDialog.ctaLinkURL + ":eq(1)", "%" + secondPageVar + "%")
+            .simulate(selectors.editDialog.ctaLinkURL + ":eq(1) input[type!='hidden']", "key-sequence",
+                { sequence: "%" + secondPageVar + "%{enter}" })
+            //.fillInput(selectors.editDialog.ctaText + ":eq(1)", ctaText2)
 
             .execTestCase(c.tcSaveConfigureDialog)
 
@@ -314,11 +317,11 @@
             })
 
             .assert.isTrue(function() {
-                var selector = selectors.component.ctaLink + ":contains('" + ctaText1 + "')";
+                var selector = selectors.component.ctaLink + ":contains('" + pageName + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.ctaLink + ":contains('" + ctaText2 + "')";
+                var selector = selectors.component.ctaLink + ":contains('" + secondPageName + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
             });
     };
@@ -336,7 +339,6 @@
 
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
-            //.fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
             .click(selectors.editDialog.withCTA)
             .fillInput(selectors.editDialog.ctaLinkURL, ctaExternalLink)
             .fillInput(selectors.editDialog.ctaText, ctaExternalText)
