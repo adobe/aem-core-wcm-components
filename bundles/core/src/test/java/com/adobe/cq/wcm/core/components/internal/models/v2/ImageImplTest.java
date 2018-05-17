@@ -125,9 +125,9 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0." + selector + ".600.png/1490005239000.png\"," +
-            "\"/core/content/test/_jcr_content/root/image0." + selector + ".700.png/1490005239000.png\",\"/core/content/test/_jcr_content/root/image0" +
-            "." + selector + ".800.png/1490005239000.png\",\"/core/content/test/_jcr_content/root/image0." + selector + ".2000.png/1490005239000.png\", " +
-            "\"/core/content/test/_jcr_content/root/image0." + selector + ".2500.png/1490005239000.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":false}";
+                "\"/core/content/test/_jcr_content/root/image0." + selector + ".700.png/1490005239000.png\",\"/core/content/test/_jcr_content/root/image0" +
+                "." + selector + ".800.png/1490005239000.png\",\"/core/content/test/_jcr_content/root/image0." + selector + ".2000.png/1490005239000.png\", " +
+                "\"/core/content/test/_jcr_content/root/image0." + selector + ".2500.png/1490005239000.png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
         assertTrue(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
