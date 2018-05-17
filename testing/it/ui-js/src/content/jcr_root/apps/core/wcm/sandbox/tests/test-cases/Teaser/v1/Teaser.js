@@ -30,9 +30,9 @@
     var secondPageVar                    = "teaser_page_second";
     var pageDescription                  = "teaser page description";
     var ctaText1                         = "CTA Text 1";
-    //var ctaLink1                         = "adobe.com";
     var ctaText2                         = "CTA Text 2";
-    //var ctaLink2                         = "www.adobe.com";
+    var ctaExternalLink                  = "http://www.adobe.com";
+    var ctaExternalText                  = "Adobe";
 
     teaser.tcExecuteBeforeTest = function(tcExecuteBeforeTest, teaserRT, pageRT) {
         return new h.TestCase("Create sample content", {
@@ -293,11 +293,17 @@
             .fillInput(selectors.editDialog.ctaText + ":eq(1)", ctaText2)
 
             .execTestCase(c.tcSaveConfigureDialog)
-            /*
+
             .assert.isTrue(function() {
                 return h.find(selectors.component.image + ' img[src*="' + h.param(pageVar)() +
                         '/_jcr_content/root/responsivegrid/teaser"]', "#ContentFrame").size() === 1;
             })
+
+            .assert.isTrue(function() {
+                var selector = selectors.component.image + " a";
+                return h.find(selector, "#ContentFrame").length === 0;
+            })
+
             .assert.isTrue(function() {
                 var selector = "a" + selectors.component.titleLink + '[href$="' + h.param(pageVar)() + '.html"]';
                 return h.find(selector, "#ContentFrame").text() === pageName;
@@ -306,9 +312,61 @@
                 var selector = selectors.component.description;
                 return h.find(selector, "#ContentFrame").html().trim() === pageDescription;
             })
-             */
+
             .assert.isTrue(function() {
                 var selector = selectors.component.ctaLink + ":contains('" + ctaText1 + "')";
+                return h.find(selector, "#ContentFrame").size() === 1;
+            })
+            .assert.isTrue(function() {
+                var selector = selectors.component.ctaLink + ":contains('" + ctaText2 + "')";
+                return h.find(selector, "#ContentFrame").size() === 1;
+            });
+    };
+
+    teaser.testWithExternalCtaTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Teaser with External CTAs", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+        // open the dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execFct(function(opts, done) {
+                c.openSidePanel(done);
+            })
+
+            // drag'n'drop the test image
+            .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
+            //.fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
+            .click(selectors.editDialog.withCTA)
+            .fillInput(selectors.editDialog.ctaLinkURL, ctaExternalLink)
+            .fillInput(selectors.editDialog.ctaText, ctaExternalText)
+            .click("button:contains('Add')")
+            .fillInput(selectors.editDialog.ctaLinkURL + ":eq(1)", "%" + secondPageVar + "%")
+            .fillInput(selectors.editDialog.ctaText + ":eq(1)", ctaText2)
+
+            .execTestCase(c.tcSaveConfigureDialog)
+
+            .assert.isTrue(function() {
+                return h.find(selectors.component.image + ' img[src*="' + h.param(pageVar)() +
+                        '/_jcr_content/root/responsivegrid/teaser"]', "#ContentFrame").size() === 1;
+            })
+
+            .assert.isTrue(function() {
+                var selector = selectors.component.image + " a";
+                return h.find(selector, "#ContentFrame").length === 0;
+            })
+
+            .assert.isTrue(function() {
+                var selector = selectors.component.titleLink;
+                return h.find(selector, "#ContentFrame").size() === 0;
+            })
+            .assert.isTrue(function() {
+                var selector = selectors.component.description;
+                return h.find(selector, "#ContentFrame").size() === 0;
+            })
+
+            .assert.isTrue(function() {
+                var selector = selectors.component.ctaLink + ":contains('" + ctaExternalText + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
             })
             .assert.isTrue(function() {

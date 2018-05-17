@@ -61,7 +61,6 @@
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
         .addTestCase(teaser.testDisableCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(teaser.testWithCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"));
-
-
+        .addTestCase(teaser.testWithCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"))
+        .addTestCase(teaser.testWithExternalCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"));
 }(hobs, jQuery));
