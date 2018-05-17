@@ -134,17 +134,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         areas = new ArrayList<>();
         String mapProperty = properties.get(Image.PN_MAP, String.class);
         if (StringUtils.isNotEmpty(mapProperty)) {
-            /*
-             * Parse the image map format as stored at {@code Image.PN_MAP}
-             *
-             * [area1][area2][...]
-             *
-             * Area:
-             * [SHAPE(COORDINATES)"HREF"|"TARGET"|"ALT"|(RELATIVE_COORDINATES)]
-             *
-             * Example:
-             * [rect(0,0,10,10)"http://www.adobe.com"|"_self"|"alt"|(0,0,0.8,0.8)]
-             */
+            // Parse the image map areas as defined at {@code Image.PN_MAP}
             String[] mapAreas = StringUtils.split(mapProperty, "][");
             for (String area : mapAreas) {
                 int coordinatesEndIndex = area.indexOf(")");

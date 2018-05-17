@@ -119,6 +119,15 @@ public interface Image extends ComponentExporter {
     /**
      * Name of the resource property that defines areas of an image map.
      *
+     * The property stores map areas as follows:
+     * [area1][area2][...]
+     *
+     * Area format:
+     * [SHAPE(COORDINATES)"HREF"|"TARGET"|"ALT"|(RELATIVE_COORDINATES)]
+     *
+     * Example:
+     * [rect(0,0,10,10)"http://www.adobe.com"|"_self"|"alt"|(0,0,0.8,0.8)][circle(10,10,10)"http://www.adobe.com"|"_self"|"alt"|(0.8,0.8,0.8)]
+     *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     String PN_MAP = "imageMap";
