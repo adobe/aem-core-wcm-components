@@ -23,7 +23,7 @@ List component written in HTL that renders a configurable collection of items or
   * List tagged items
   * List query result
   * List static items
-* Ordering, pagination and limit
+* Ordering and limit
 * Styles
 
 ### Use Object
