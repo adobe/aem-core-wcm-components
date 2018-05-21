@@ -36,77 +36,77 @@ public interface Teaser extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_WITH_CTA = "withCTA";
+    String PN_ACTIONS_ENABLED = "actionsEnabled";
 
     /**
      * Name of the parent node where the Call-to-Action elements are stored
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String NN_CTAS = "ctas";
+    String NN_ACTIONS = "actions";
 
     /**
      * Name of the property that stores the Call-to-Action link
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_CTA_LINK = "link";
+    String PN_ACTION_LINK = "link";
 
     /**
      * Name of the property that stores the Call-to-Action text
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_CTA_TEXT = "text";
+    String PN_ACTION_TEXT = "text";
 
     /**
      * Name of the property that stores if the Call-to-Action is disabled
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_DISABLE_CTA = "disableCTA";
+    String PN_ACTIONS_DISABLED = "disabled";
 
     /**
      * Name of the property that will store if the image link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_HIDE_IMAGE_LINK = "hideImageLink";
+    String PN_IMAGE_LINK_HIDDEN = "imageLinkHidden";
 
     /**
      * Name of the property that will store if the title should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_HIDE_TITLE = "hideTitle";
+    String PN_TITLE_HIDDEN = "titleHidden";
 
     /**
      * Name of the property that will store if the title link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_HIDE_TITLE_LINK = "hideTitleLink";
+    String PN_TITLE_LINK_HIDDEN = "titleLinkHidden";
 
     /**
      * Name of the property that will store if the title value should be taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_TITLE_VALUE_FROM_PAGE = "titleValueFromPage";
+    String PN_TITLE_FROM_PAGE = "titleFromPage";
 
     /**
      * Name of the property that will store if the description should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_HIDE_DESCRIPTION = "hideDescription";
+    String PN_DESCRIPTION_HIDDEN = "descriptionHidden";
 
     /**
      * Name of the property that will store if the description value should be taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_DESCRIPTION_VALUE_FROM_PAGE = "descriptionValueFromPage";
+    String PN_DESCRIPTION_FROM_PAGE = "descriptionFromPage";
 
     /**
      * Name of the configuration policy property that will store the value for this title's HTML element type.
@@ -122,7 +122,7 @@ public interface Teaser extends ComponentExporter {
      * @return {@code true} if teaser has CTAs, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    default boolean isWithCTA() {
+    default boolean isActionsEnabled() {
         throw new UnsupportedOperationException();
     }
 
@@ -132,7 +132,7 @@ public interface Teaser extends ComponentExporter {
      * @return the list of CTAs
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    default List<ListItem> getCTAs() {
+    default List<ListItem> getActions() {
         throw new UnsupportedOperationException();
     }
 
@@ -162,7 +162,7 @@ public interface Teaser extends ComponentExporter {
      * @return {@code true} if link should be hidden on the image, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    default boolean isHideImageLink() {
+    default boolean isImageLinkHidden() {
         throw new UnsupportedOperationException();
     }
 
@@ -182,7 +182,7 @@ public interface Teaser extends ComponentExporter {
      * @return {@code true} if link should be hidden on the title, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    default boolean isHideTitleLink() {
+    default boolean isTitleLinkHidden() {
         throw new UnsupportedOperationException();
     }
 

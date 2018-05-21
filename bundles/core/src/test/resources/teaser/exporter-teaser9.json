@@ -2,17 +2,17 @@
   "title": "Teaser",
   "description": "Description",
   "linkURL": "http://www.adobe.com",
-  "withCTA": true,
-  "hideImageLink": false,
-  "hideTitleLink": false,
-  "ctas": [
+  "actionsEnabled": true,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [
     {
       "title": "Adobe",
-      "path": "http://www.adobe.com"
+      "url": "http://www.adobe.com"
     },
     {
       "title": "Teasers",
-      "path": "/core/content/teasers.html"
+      "url": "/core/content/teasers.html"
     }
   ],
   "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-7",

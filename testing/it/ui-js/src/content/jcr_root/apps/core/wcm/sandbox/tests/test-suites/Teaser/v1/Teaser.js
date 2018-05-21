@@ -26,7 +26,7 @@
             title: ".cmp-teaser__title",
             titleLink: ".cmp-teaser__title-link",
             description: ".cmp-teaser__description",
-            ctaLink: "a.cmp-teaser__call-to-action-link"
+            actionLink: "a.cmp-teaser__action-link"
         },
         editDialog: {
             assetDrag: function(imagePath) {
@@ -34,13 +34,13 @@
             },
             assetDrop: 'coral-fileupload[name="./file"',
             linkURL: 'foundation-autocomplete[name="./linkURL"]',
-            titleValueFromPage: 'input[name="./titleValueFromPage"]',
+            titleFromPage: 'input[name="./titleFromPage"]',
             title: 'input[name="./jcr:title"]',
-            descriptionValueFromPage: 'input[name="./descriptionValueFromPage"]',
+            descriptionFromPage: 'input[name="./descriptionFromPage"]',
             description: 'input[name="./jcr:description"]',
-            withCTA: 'coral-checkbox[name="./withCTA"]',
-            ctaLinkURL: 'foundation-autocomplete[name="link"]',
-            ctaText: 'input[name="text"]'
+            actionsEnabled: 'coral-checkbox[name="./actionsEnabled"]',
+            actionLinkURL: 'foundation-autocomplete[name="link"]',
+            actionText: 'input[name="text"]'
         }
     };
 
@@ -59,8 +59,8 @@
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
         .addTestCase(teaser.testLinksToElementsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(teaser.testDisableCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
+        .addTestCase(teaser.testDisableActionsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
-        .addTestCase(teaser.testWithCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"))
-        .addTestCase(teaser.testWithExternalCtaTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"));
+        .addTestCase(teaser.testWithActionsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"))
+        .addTestCase(teaser.testWithExternalActionsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox"));
 }(hobs, jQuery));

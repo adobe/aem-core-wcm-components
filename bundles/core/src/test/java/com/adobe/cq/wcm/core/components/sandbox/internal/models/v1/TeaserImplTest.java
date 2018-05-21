@@ -70,6 +70,7 @@ public class TeaserImplTest {
     private static final String TEASER_5 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-5";
     private static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
     private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
+    private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
     private Logger teaserLogger;
 
     @ClassRule
@@ -158,8 +159,8 @@ public class TeaserImplTest {
     public void testTeaserWithHiddenLinks() throws Exception {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Teaser.PN_HIDE_TITLE_LINK, true);
-            put(Teaser.PN_HIDE_IMAGE_LINK, true);
+            put(Teaser.PN_TITLE_LINK_HIDDEN, true);
+            put(Teaser.PN_IMAGE_LINK_HIDDEN, true);
         }}));
         Teaser teaser = getTeaserUnderTest(TEASER_5, mockStyle);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser7"));
@@ -169,8 +170,8 @@ public class TeaserImplTest {
     public void testTeaserWithHiddenElements() throws Exception {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Teaser.PN_HIDE_TITLE, true);
-            put(Teaser.PN_HIDE_DESCRIPTION, true);
+            put(Teaser.PN_TITLE_HIDDEN, true);
+            put(Teaser.PN_DESCRIPTION_HIDDEN, true);
         }}));
 
         Teaser teaser = getTeaserUnderTest(TEASER_5, mockStyle);
@@ -178,25 +179,35 @@ public class TeaserImplTest {
     }
 
     @Test
-    public void testTeaserWithCTAs() {
+    public void testTeaserWithActions() {
         Teaser teaser = getTeaserUnderTest(TEASER_7);
-        assertTrue("Expected teaser with CTA", teaser.isWithCTA());
-        assertEquals("Expected to find two CTAs", 2, teaser.getCTAs().size());
-        ListItem cta = teaser.getCTAs().get(0);
-        assertEquals("CTA link does not match", "http://www.adobe.com", cta.getPath());
-        assertEquals("CTA text does not match", "Adobe", cta.getTitle());
+        assertTrue("Expected teaser with actions", teaser.isActionsEnabled());
+        assertEquals("Expected to find two actions", 2, teaser.getActions().size());
+        ListItem action = teaser.getActions().get(0);
+        assertEquals("Action link does not match", "http://www.adobe.com", action.getPath());
+        assertEquals("Action text does not match", "Adobe", action.getTitle());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser9"));
     }
 
     @Test
-    public void testTeaserWithDisabledCTAs() {
+    public void testTeaserWithActionsDisabled() {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Teaser.PN_DISABLE_CTA, true);
+            put(Teaser.PN_ACTIONS_DISABLED, true);
         }}));
 
         Teaser teaser = getTeaserUnderTest(TEASER_7, mockStyle);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser10"));
+    }
+
+    @Test
+    public void testTeaserWithTitleAndDescriptionFromActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_8);
+        assertTrue("Expected teaser with actions", teaser.isActionsEnabled());
+        assertEquals("Expected to find two Actions", 2, teaser.getActions().size());
+        assertEquals("Teasers Test", teaser.getTitle());
+        assertEquals("Teasers description", teaser.getDescription());
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser11"));
     }
 
     @Test

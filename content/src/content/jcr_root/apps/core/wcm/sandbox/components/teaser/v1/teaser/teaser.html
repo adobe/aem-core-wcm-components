@@ -19,11 +19,11 @@
      class="cmp-teaser${!wcmmode.disabled ? ' cq-dd-image' : ''}">
     <div class="cmp-teaser__image" data-sly-resource="${teaser.imageResource}"></div>
     <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}" data-sly-element="${teaser.titleType}">
-        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || teaser.hideTitleLink}">${title}</a>
+        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || teaser.titleLinkHidden}">${title}</a>
     </h2>
     <div class="cmp-teaser__description" data-sly-test.description="${teaser.description}">${teaser.description @ context="html"}</div>
-    <div class="cmp-teaser__call-to-action-container" data-sly-test.withCTA="${teaser.withCTA}" data-sly-list="${teaser.CTAs}">
-        <a class="cmp-teaser__call-to-action-link" href="${item.path}">${item.title}</a>
+    <div class="cmp-teaser__action-container" data-sly-test.withCTA="${teaser.actionsEnabled}" data-sly-list="${teaser.actions}">
+        <a class="cmp-teaser__action-link" href="${item.url}">${item.title}</a>
     </div>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"/>

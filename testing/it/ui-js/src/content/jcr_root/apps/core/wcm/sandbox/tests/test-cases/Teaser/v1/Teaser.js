@@ -29,10 +29,10 @@
     var secondPageName                   = "teaser-second-page";
     var secondPageVar                    = "teaser_second_page";
     var pageDescription                  = "teaser page description";
-    //var ctaText1                         = "CTA Text 1";
-    var ctaText2                         = "CTA Text 2";
-    var ctaExternalLink                  = "http://www.adobe.com";
-    var ctaExternalText                  = "Adobe";
+    //var actionText1                         = "Action Text 1";
+    var actionText2                         = "Action Text 2";
+    var actionExternalLink                  = "http://www.adobe.com";
+    var actionExternalText                  = "Adobe";
 
     teaser.tcExecuteBeforeTest = function(tcExecuteBeforeTest, teaserRT, pageRT) {
         return new h.TestCase("Create sample content", {
@@ -110,9 +110,9 @@
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
-            .click(selectors.editDialog.titleValueFromPage)
+            .click(selectors.editDialog.titleFromPage)
             .fillInput(selectors.editDialog.title, title)
-            .click(selectors.editDialog.descriptionValueFromPage)
+            .click(selectors.editDialog.descriptionFromPage)
             .fillInput(selectors.editDialog.description, description)
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function() {
@@ -168,8 +168,8 @@
                 var data = {};
                 data["jcr:title"] = "New Policy";
                 data["sling:resourceType"] = "wcm/core/components/policy/policy";
-                data["hideTitle"] = "true";
-                data["hideDescription"] = "true";
+                data["titleHidden"] = "true";
+                data["descriptionHidden"] = "true";
 
                 c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
             })
@@ -198,8 +198,8 @@
                 var data = {};
                 data["jcr:title"] = "New Policy";
                 data["sling:resourceType"] = "wcm/core/components/policy/policy";
-                data["hideImageLink"] = "true";
-                data["hideTitleLink"] = "true";
+                data["imageLinkHidden"] = "true";
+                data["titleLinkHidden"] = "true";
 
                 c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
             })
@@ -237,8 +237,8 @@
             });
     };
 
-    teaser.testDisableCtaTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath) {
-        return new h.TestCase("Disable CTAs for Teaser", {
+    teaser.testDisableActionsTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath) {
+        return new h.TestCase("Disable Actions for Teaser", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest
         })
@@ -246,7 +246,7 @@
                 var data = {};
                 data["jcr:title"] = "New Policy";
                 data["sling:resourceType"] = "wcm/core/components/policy/policy";
-                data["disableCTA"] = "true";
+                data["disabled"] = "true";
 
                 c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
             })
@@ -266,13 +266,13 @@
             })
 
             .assert.isTrue(function() {
-                var selector = selectors.editDialog.withCTA;
+                var selector = selectors.editDialog.actionsEnabled;
                 return h.find(selector).length === 0;
             });
     };
 
-    teaser.testWithCtaTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
-        return new h.TestCase("Teaser with CTAs", {
+    teaser.testWithActionsTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Teaser with Actions", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest
         })
@@ -284,16 +284,16 @@
 
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
-            .click(selectors.editDialog.withCTA)
-            //.fillInput(selectors.editDialog.ctaLinkURL, "%" + pageVar + "%")
-            .simulate(selectors.editDialog.ctaLinkURL + " input[type!='hidden']", "key-sequence",
+            .click(selectors.editDialog.actionsEnabled)
+            //.fillInput(selectors.editDialog.actionLinkURL, "%" + pageVar + "%")
+            .simulate(selectors.editDialog.actionLinkURL + " input[type!='hidden']", "key-sequence",
                 { sequence: "%" + pageVar + "%{enter}" })
-            //.fillInput(selectors.editDialog.ctaText, ctaText1)
+            //.fillInput(selectors.editDialog.actionText, actionText1)
             .click("button:contains('Add')")
-            //.fillInput(selectors.editDialog.ctaLinkURL + ":eq(1)", "%" + secondPageVar + "%")
-            .simulate(selectors.editDialog.ctaLinkURL + ":eq(1) input[type!='hidden']", "key-sequence",
+            //.fillInput(selectors.editDialog.actionLinkURL + ":eq(1)", "%" + secondPageVar + "%")
+            .simulate(selectors.editDialog.actionLinkURL + ":eq(1) input[type!='hidden']", "key-sequence",
                 { sequence: "%" + secondPageVar + "%{enter}" })
-            //.fillInput(selectors.editDialog.ctaText + ":eq(1)", ctaText2)
+            //.fillInput(selectors.editDialog.actionText + ":eq(1)", actionText2)
 
             .execTestCase(c.tcSaveConfigureDialog)
 
@@ -317,17 +317,17 @@
             })
 
             .assert.isTrue(function() {
-                var selector = selectors.component.ctaLink + ":contains('" + pageName + "')";
+                var selector = selectors.component.actionLink + ":contains('" + pageName + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.ctaLink + ":contains('" + secondPageName + "')";
+                var selector = selectors.component.actionLink + ":contains('" + secondPageName + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
             });
     };
 
-    teaser.testWithExternalCtaTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
-        return new h.TestCase("Teaser with External CTAs", {
+    teaser.testWithExternalActionsTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Teaser with External Actions", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest
         })
@@ -339,12 +339,12 @@
 
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
-            .click(selectors.editDialog.withCTA)
-            .fillInput(selectors.editDialog.ctaLinkURL, ctaExternalLink)
-            .fillInput(selectors.editDialog.ctaText, ctaExternalText)
+            .click(selectors.editDialog.actionsEnabled)
+            .fillInput(selectors.editDialog.actionLinkURL, actionExternalLink)
+            .fillInput(selectors.editDialog.actionText, actionExternalText)
             .click("button:contains('Add')")
-            .fillInput(selectors.editDialog.ctaLinkURL + ":eq(1)", "%" + secondPageVar + "%")
-            .fillInput(selectors.editDialog.ctaText + ":eq(1)", ctaText2)
+            .fillInput(selectors.editDialog.actionLinkURL + ":eq(1)", "%" + secondPageVar + "%")
+            .fillInput(selectors.editDialog.actionText + ":eq(1)", actionText2)
 
             .execTestCase(c.tcSaveConfigureDialog)
 
@@ -368,11 +368,11 @@
             })
 
             .assert.isTrue(function() {
-                var selector = selectors.component.ctaLink + ":contains('" + ctaExternalText + "')";
+                var selector = selectors.component.actionLink + ":contains('" + actionExternalText + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
             })
             .assert.isTrue(function() {
-                var selector = selectors.component.ctaLink + ":contains('" + ctaText2 + "')";
+                var selector = selectors.component.actionLink + ":contains('" + actionText2 + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
             });
     };

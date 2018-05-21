@@ -18,16 +18,16 @@
     "use strict";
 
     var dialogContentSelector = ".cmp-teaser__editor";
-    var withCTACheckboxSelector = 'coral-checkbox[name="./withCTA"]';
-    var ctasMultifieldSelector = ".cmp-teaser__editor-multifield_ctas";
-    var titleCheckboxSelector = 'coral-checkbox[name="./titleValueFromPage"]';
+    var actionsEnabledCheckboxSelector = 'coral-checkbox[name="./actionsEnabled"]';
+    var actionsMultifieldSelector = ".cmp-teaser__editor-multifield_actions";
+    var titleCheckboxSelector = 'coral-checkbox[name="./titleFromPage"]';
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
-    var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionValueFromPage"]';
+    var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
     var linkURLWrapperSelector = ".cmp-teaser__editor-link-url";
     var linkURLSelector = '[name="./linkURL"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
-    var withCTA;
+    var actionsEnabled;
     var titleTuple;
     var descriptionTuple;
     var linkURL;
@@ -48,17 +48,17 @@
                 retrievePageInfo($dialogContent);
             });
 
-            var $withCTACheckbox = $dialogContent.find(withCTACheckboxSelector);
-            if ($withCTACheckbox.size() > 0) {
-                withCTA = $withCTACheckbox.adaptTo("foundation-field").getValue() === "true";
-                $withCTACheckbox.on("change", function(e) {
-                    withCTA = $(e.target).adaptTo("foundation-field").getValue() === "true";
+            var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
+            if ($actionsEnabledCheckbox.size() > 0) {
+                actionsEnabled = $actionsEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
+                $actionsEnabledCheckbox.on("change", function(e) {
+                    actionsEnabled = $(e.target).adaptTo("foundation-field").getValue() === "true";
                     toggleInputs($dialogContent);
                     retrievePageInfo($dialogContent);
                 });
 
-                var $ctasMultifield = $dialogContent.find(ctasMultifieldSelector);
-                $ctasMultifield.on("change", function(event) {
+                var $actionsMultifield = $dialogContent.find(actionsMultifieldSelector);
+                $actionsMultifield.on("change", function(event) {
                     var $target = $(event.target);
                     if ($target.is("foundation-autocomplete")) {
                         updateText($target);
@@ -74,15 +74,15 @@
 
     function toggleInputs(dialogContent) {
         var $linkURLWrapper = dialogContent.find(linkURLWrapperSelector);
-        var $ctasMultifield = dialogContent.find(ctasMultifieldSelector);
-        if (withCTA) {
+        var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
+        if (actionsEnabled) {
             $linkURLWrapper.hide();
-            $ctasMultifield.show();
-            if ($ctasMultifield.size() > 0) {
-                var ctasMultifield = $ctasMultifield[0];
-                if (ctasMultifield.items.length < 1) {
+            $actionsMultifield.show();
+            if ($actionsMultifield.size() > 0) {
+                var actionsMultifield = $actionsMultifield[0];
+                if (actionsMultifield.items.length < 1) {
                     var newMultifieldItem = new Coral.Multifield.Item();
-                    ctasMultifield.items.add(newMultifieldItem);
+                    actionsMultifield.items.add(newMultifieldItem);
                     Coral.commons.ready(newMultifieldItem, function(element) {
                         var linkField = $(element).find('foundation-autocomplete[name="link"]');
                         if (linkField) {
@@ -94,14 +94,14 @@
             }
         } else {
             $linkURLWrapper.show();
-            $ctasMultifield.hide();
+            $actionsMultifield.hide();
         }
     }
 
     function retrievePageInfo(dialogContent) {
         var url;
-        if (withCTA) {
-            url = dialogContent.find('.cmp-teaser__editor-multifield_ctas [name="link"]').val();
+        if (actionsEnabled) {
+            url = dialogContent.find('.cmp-teaser__editor-multifield_actions [name="link"]').val();
         } else {
             url = linkURL;
         }

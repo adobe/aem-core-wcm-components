@@ -19,7 +19,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -30,6 +29,7 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
