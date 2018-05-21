@@ -39,77 +39,77 @@ public interface Teaser extends ComponentExporter {
     String PN_ACTIONS_ENABLED = "actionsEnabled";
 
     /**
-     * Name of the parent node where the Call-to-Action elements are stored
+     * Name of the child node where the Call-to-Action elements are stored
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String NN_ACTIONS = "actions";
 
     /**
-     * Name of the property that stores the Call-to-Action link
+     * Name of the resource property that stores the Call-to-Action link
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_ACTION_LINK = "link";
 
     /**
-     * Name of the property that stores the Call-to-Action text
+     * Name of the resource property that stores the Call-to-Action text
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_ACTION_TEXT = "text";
 
     /**
-     * Name of the property that stores if the Call-to-Action is disabled
+     * Name of the policy property that stores if the Call-to-Action is disabled
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_ACTIONS_DISABLED = "disabled";
 
     /**
-     * Name of the property that will store if the image link should be hidden.
+     * Name of the policy property that will store if the image link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_IMAGE_LINK_HIDDEN = "imageLinkHidden";
 
     /**
-     * Name of the property that will store if the title should be hidden.
+     * Name of the policy property that will store if the title should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_HIDDEN = "titleHidden";
 
     /**
-     * Name of the property that will store if the title link should be hidden.
+     * Name of the policy property that will store if the title link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_LINK_HIDDEN = "titleLinkHidden";
 
     /**
-     * Name of the property that will store if the title value should be taken from the linked page.
+     * Name of the resource property that will store if the title value should be taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_FROM_PAGE = "titleFromPage";
 
     /**
-     * Name of the property that will store if the description should be hidden.
+     * Name of the policy property that will store if the description should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_DESCRIPTION_HIDDEN = "descriptionHidden";
 
     /**
-     * Name of the property that will store if the description value should be taken from the linked page.
+     * Name of the resource property that will store if the description value should be taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_DESCRIPTION_FROM_PAGE = "descriptionFromPage";
 
     /**
-     * Name of the configuration policy property that will store the value for this title's HTML element type.
+     * Name of the policy property that will store the value for this title's HTML element type.
      *
      * @see #getTitleType()
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
