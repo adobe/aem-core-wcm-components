@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe Systems Incorporated
+  ~ Copyright 2018 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.teaser="com.adobe.cq.wcm.core.components.sandbox.models.Teaser"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     data-sly-use.imageTpl="image.html"
+     data-sly-use.titleTpl="title.html"
+     data-sly-use.descriptionTpl="description.html"
+     data-sly-use.actionsTpl="actions.html"
      data-sly-test.hasContent="${teaser.imageResource}"
      class="cmp-teaser${!wcmmode.disabled ? ' cq-dd-image' : ''}">
-    <div class="cmp-teaser__image" data-sly-resource="${teaser.imageResource}"></div>
-    <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}" data-sly-element="${teaser.titleType}">
-        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || teaser.titleLinkHidden}">${title}</a>
-    </h2>
-    <div class="cmp-teaser__description" data-sly-test.description="${teaser.description}">${teaser.description @ context="html"}</div>
-    <div class="cmp-teaser__action-container" data-sly-test.withCTA="${teaser.actionsEnabled}" data-sly-list="${teaser.actions}">
-        <a class="cmp-teaser__action-link" href="${item.url}">${item.title}</a>
-    </div>
+    <sly data-sly-call="${imageTpl.image @ teaser=teaser}"></sly>
+    <sly data-sly-call="${titleTpl.title @ teaser=teaser}"></sly>
+    <sly data-sly-call="${descriptionTpl.description @ teaser=teaser}"></sly>
+    <sly data-sly-call="${actionsTpl.actions @ teaser=teaser}"></sly>
 </div>
-<sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"/>
+<sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"></sly>
