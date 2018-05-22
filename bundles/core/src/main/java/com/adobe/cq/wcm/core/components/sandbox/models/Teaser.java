@@ -67,42 +67,42 @@ public interface Teaser extends ComponentExporter {
     String PN_ACTIONS_DISABLED = "actionsDisabled";
 
     /**
-     * Name of the policy property that defines whether or not the image link should be hidden.
+     * Name of the policy property that defines whether or not the image link is hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_IMAGE_LINK_HIDDEN = "imageLinkHidden";
 
     /**
-     * Name of the policy property that defines whether or not the title should be hidden.
+     * Name of the policy property that defines whether or not the title is hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_HIDDEN = "titleHidden";
 
     /**
-     * Name of the policy property that defines whether or not the title link should be hidden.
+     * Name of the policy property that defines whether or not the title link is hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_LINK_HIDDEN = "titleLinkHidden";
 
     /**
-     * Name of the resource property that defines whether or not the title value should be taken from the linked page.
+     * Name of the resource property that defines whether or not the title value is taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_FROM_PAGE = "titleFromPage";
 
     /**
-     * Name of the policy property that defines whether or not the description should be hidden.
+     * Name of the policy property that defines whether or not the description is hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_DESCRIPTION_HIDDEN = "descriptionHidden";
 
     /**
-     * Name of the resource property that defines whether or not the description value should be taken from the linked page.
+     * Name of the resource property that defines whether or not the description value is taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
@@ -157,9 +157,9 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Checks if link should be hidden on the image.
+     * Checks if link is hidden on the image.
      *
-     * @return {@code true} if link should be hidden on the image, {@code false} otherwise
+     * @return {@code true} if link is hidden on the image, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     default boolean isImageLinkHidden() {
@@ -177,9 +177,9 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Checks if link should be hidden on the title.
+     * Checks if link is hidden on the title.
      *
-     * @return {@code true} if link should be hidden on the title, {@code false} otherwise
+     * @return {@code true} if link is hidden on the title, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     default boolean isTitleLinkHidden() {
