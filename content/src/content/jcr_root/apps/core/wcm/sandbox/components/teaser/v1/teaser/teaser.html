@@ -15,15 +15,15 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.teaser="com.adobe.cq.wcm.core.components.sandbox.models.Teaser"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     data-sly-use.imageTpl="image.html"
-     data-sly-use.titleTpl="title.html"
-     data-sly-use.descriptionTpl="description.html"
-     data-sly-use.actionsTpl="actions.html"
+     data-sly-use.imageTemplate="image.html"
+     data-sly-use.titleTemplate="title.html"
+     data-sly-use.descriptionTemplate="description.html"
+     data-sly-use.actionsTemplate="actions.html"
      data-sly-test.hasContent="${teaser.imageResource}"
      class="cmp-teaser${!wcmmode.disabled ? ' cq-dd-image' : ''}">
-    <sly data-sly-call="${imageTpl.image @ teaser=teaser}"></sly>
-    <sly data-sly-call="${titleTpl.title @ teaser=teaser}"></sly>
-    <sly data-sly-call="${descriptionTpl.description @ teaser=teaser}"></sly>
-    <sly data-sly-call="${actionsTpl.actions @ teaser=teaser}"></sly>
+    <sly data-sly-call="${imageTemplate.image @ teaser=teaser}"></sly>
+    <sly data-sly-call="${titleTemplate.title @ teaser=teaser}"></sly>
+    <sly data-sly-call="${descriptionTemplate.description @ teaser=teaser}"></sly>
+    <sly data-sly-call="${actionsTemplate.actions @ teaser=teaser}"></sly>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"></sly>

@@ -15,7 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
 <sly data-sly-template.actions="${@ teaser}">
-    <div class="cmp-teaser__action-container" data-sly-test="${teaser.actionsEnabled}" data-sly-list="${teaser.actions}" data-sly-use.actionTpl="action.html">
-        <sly data-sly-call="${actionTpl.action @ action=item}"></sly>
+    <div class="cmp-teaser__action-container" data-sly-test="${teaser.actionsEnabled}" data-sly-list="${teaser.actions}" data-sly-use.actionTemplate="action.html">
+        <sly data-sly-call="${actionTemplate.action @ action=item}"></sly>
     </div>
 </sly>
