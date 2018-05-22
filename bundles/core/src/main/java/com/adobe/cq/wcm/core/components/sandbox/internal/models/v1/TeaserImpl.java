@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,7 +111,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             populateActions();
             if (actions.size() > 0) {
                 ListItem firstAction = actions.get(0);
-                linkURL = firstAction.getPath();
+                if (firstAction != null) {
+                    linkURL = firstAction.getPath();
+                }
             }
         }
 

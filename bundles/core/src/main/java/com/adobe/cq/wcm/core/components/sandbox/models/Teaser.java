@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 public interface Teaser extends ComponentExporter {
 
     /**
-     * Name of the property that stores if the teaser has Call-to-Action elements
+     * Name of the resource property that defines whether or not the teaser has Call-to-Action elements
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
@@ -60,56 +60,56 @@ public interface Teaser extends ComponentExporter {
     String PN_ACTION_TEXT = "text";
 
     /**
-     * Name of the policy property that stores if the Call-to-Action is disabled
+     * Name of the policy property that defines whether or not Call-to-Actions are disabled
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
-    String PN_ACTIONS_DISABLED = "disabled";
+    String PN_ACTIONS_DISABLED = "actionsDisabled";
 
     /**
-     * Name of the policy property that will store if the image link should be hidden.
+     * Name of the policy property that defines whether or not the image link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_IMAGE_LINK_HIDDEN = "imageLinkHidden";
 
     /**
-     * Name of the policy property that will store if the title should be hidden.
+     * Name of the policy property that defines whether or not the title should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_HIDDEN = "titleHidden";
 
     /**
-     * Name of the policy property that will store if the title link should be hidden.
+     * Name of the policy property that defines whether or not the title link should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_LINK_HIDDEN = "titleLinkHidden";
 
     /**
-     * Name of the resource property that will store if the title value should be taken from the linked page.
+     * Name of the resource property that defines whether or not the title value should be taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_TITLE_FROM_PAGE = "titleFromPage";
 
     /**
-     * Name of the policy property that will store if the description should be hidden.
+     * Name of the policy property that defines whether or not the description should be hidden.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_DESCRIPTION_HIDDEN = "descriptionHidden";
 
     /**
-     * Name of the resource property that will store if the description value should be taken from the linked page.
+     * Name of the resource property that defines whether or not the description value should be taken from the linked page.
      *
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_DESCRIPTION_FROM_PAGE = "descriptionFromPage";
 
     /**
-     * Name of the policy property that will store the value for this title's HTML element type.
+     * Name of the policy property that stores the value for this title's HTML element type.
      *
      * @see #getTitleType()
      * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0

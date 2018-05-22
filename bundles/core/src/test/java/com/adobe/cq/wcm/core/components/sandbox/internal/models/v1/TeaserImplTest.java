@@ -29,7 +29,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,13 +38,10 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
-import com.adobe.cq.wcm.core.components.testing.MockContentPolicy;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
-import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
-import com.day.cq.wcm.api.policies.ContentPolicy;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.*;
