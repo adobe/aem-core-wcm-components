@@ -158,6 +158,36 @@
 
     };
 
+    teaser.testNoImageTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Teaser with title, description and without image and link", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execFct(function(opts, done) {
+                c.openSidePanel(done);
+            })
+
+            .click(selectors.editDialog.titleFromPage)
+            .fillInput(selectors.editDialog.title, title)
+            .click(selectors.editDialog.descriptionFromPage)
+            .fillInput(selectors.editDialog.description, description)
+            .execTestCase(c.tcSaveConfigureDialog)
+            .assert.isTrue(function() {
+                return h.find(selectors.component.image + ' img[src*="' + h.param(pageVar)() +
+                        '/_jcr_content/root/responsivegrid/teaser"]', "#ContentFrame").size() === 0;
+            })
+            .assert.isTrue(function() {
+                var selector = selectors.component.title;
+                return h.find(selector, "#ContentFrame").text().trim() === title;
+            })
+            .assert.isTrue(function() {
+                var selector = selectors.component.description;
+                return h.find(selector, "#ContentFrame").html().trim() === description;
+            });
+
+    };
+
     teaser.testHideElementsTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath) {
         return new h.TestCase("Hide elements for Teaser", {
             execBefore: tcExecuteBeforeTest,

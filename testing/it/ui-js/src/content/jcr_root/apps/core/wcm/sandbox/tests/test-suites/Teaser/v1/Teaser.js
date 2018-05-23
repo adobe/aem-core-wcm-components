@@ -55,6 +55,7 @@
     })
         .addTestCase(teaser.testFullyConfiguredTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(teaser.testInheritedPropertiesTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(teaser.testNoImageTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(teaser.testHideElementsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox))
         .addTestCase(teaser.testLinksToElementsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components/sandbox",
