@@ -24,7 +24,6 @@
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
     var descriptionTextfieldSelector = '.cq-RichText-editable[name="./jcr:description"]';
-    var linkURLWrapperSelector = ".cmp-teaser__editor-link-url";
     var linkURLSelector = '[name="./linkURL"]';
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
     var actionsEnabled;
@@ -73,11 +72,12 @@
     });
 
     function toggleInputs(dialogContent) {
-        var $linkURLWrapper = dialogContent.find(linkURLWrapperSelector);
         var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
+        var linkURLField = dialogContent.find(linkURLSelector).adaptTo("foundation-field");
+        var actions = $actionsMultifield.adaptTo("foundation-field");
         if (actionsEnabled) {
-            $linkURLWrapper.hide();
-            $actionsMultifield.show();
+            linkURLField.setDisabled(true);
+            actions.setDisabled(false);
             if ($actionsMultifield.size() > 0) {
                 var actionsMultifield = $actionsMultifield[0];
                 if (actionsMultifield.items.length < 1) {
@@ -90,12 +90,27 @@
                             linkField.trigger("change");
                         }
                     });
+                } else {
+                    toggleActionItems($actionsMultifield, false);
                 }
             }
         } else {
-            $linkURLWrapper.show();
-            $actionsMultifield.hide();
+            linkURLField.setDisabled(false);
+            actions.setDisabled(true);
+            toggleActionItems($actionsMultifield, true);
         }
+    }
+
+    function toggleActionItems(actionsMultifield, disabled) {
+        actionsMultifield.find("coral-multifield-item").each(function(ix, item) {
+            var linkField = $(item).find("foundation-autocomplete[name='link']").adaptTo("foundation-field");
+            var textField = $(item).find("input[name='text']").adaptTo("foundation-field");
+            if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
+                $(item).remove();
+            }
+            linkField.setDisabled(disabled);
+            textField.setDisabled(disabled);
+        });
     }
 
     function retrievePageInfo(dialogContent) {
