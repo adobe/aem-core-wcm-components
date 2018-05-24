@@ -330,6 +330,8 @@
                             <!-- Ignore Node and npm -->
                             <exclude>**/node/**</exclude>
                             <exclude>**/node_modules/**</exclude>
+                            <!-- Ignore github templates -->
+                            <exclude>**/.github/**</exclude>
                         </excludes>
                     </configuration>
                     <executions>
