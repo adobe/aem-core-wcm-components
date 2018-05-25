@@ -106,7 +106,7 @@
             var linkField = $(item).find("foundation-autocomplete[name='link']").adaptTo("foundation-field");
             var textField = $(item).find("input[name='text']").adaptTo("foundation-field");
             if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
-                $(item).remove();
+                actionsMultifield[0].items.remove(item);
             }
             linkField.setDisabled(disabled);
             textField.setDisabled(disabled);
