@@ -2,9 +2,10 @@
   "title": "Teaser",
   "description": "Description",
   "linkURL": "https://www.adobe.com",
-  "hideImageLink": false,
-  "hideTitleLink": false,
-  "hideDescriptionLink": false,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actionsEnabled": false,
+  "actions": [ ],
   "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-1",
   ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
 }
