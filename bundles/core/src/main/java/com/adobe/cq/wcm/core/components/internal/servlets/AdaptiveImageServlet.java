@@ -71,7 +71,7 @@ import com.google.common.base.Joiner;
  * Registration of the servlet is handled by the {@link AdaptiveImageServletMappingConfigurationConsumer}
  * based on {@link AdaptiveImageServletMappingConfigurationFactory} configurations.
  *
- * The following configurations are provided out-of-box for {@code ['jpg','jpeg','gif','png']} extensions:
+ * The following configurations are provided out-of-box for {@code ['jpg','jpeg','gif','png','svg']} extensions:
  * <ul>
  *   <li>{@code RTs=['core/wcm/components/image'], selectors=['img']} - for Image v1 URLs</li>
  *   <li>{@code RTs=['core/wcm/components/image','cq/Page'], selectors=['coreimg']} - for Image v2 URLs</li>
@@ -384,17 +384,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         InputStream is = null;
         try {
             is = imageFile.adaptTo(InputStream.class);
-            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
-                LOGGER.debug("GIF file detected; will render the original file.");
+            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
+                    || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
+                LOGGER.debug("GIF or SVG file detected; will render the original file.");
                 if (is != null) {
                     stream(response, is, imageType);
-                }
-                return;
-            }
-            if (isSVGFile(imageFile)) {
-                LOGGER.debug("SVG file detected; will render the original file.");
-                if (is != null) {
-                    stream(response, is, MIME_TYPE_SVG);
                 }
                 return;
             }
@@ -662,23 +656,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         return requestLastModified;
     }
-
-    // Checks if the local file below the image is an SVG file by checking the mime type property
-    private boolean isSVGFile(Resource imageFile) {
-        if (imageFile != null) {
-            Resource jcrContent = imageFile.getChild(JcrConstants.JCR_CONTENT);
-            if (jcrContent != null) {
-                ValueMap properties = jcrContent.adaptTo(ValueMap.class);
-                if (properties != null) {
-                    String mimeType = properties.get(PN_MIME_TYPE, String.class);
-                    return StringUtils.equals(mimeType, MIME_TYPE_SVG);
-                }
-            }
-        }
-        return false;
-    }
-
-
 
     private enum Source {
         ASSET,

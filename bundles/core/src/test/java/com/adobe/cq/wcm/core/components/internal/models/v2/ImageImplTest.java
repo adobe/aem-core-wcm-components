@@ -35,6 +35,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     protected static String SELECTOR = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
     private static final String IMAGE20_PATH = PAGE + "/jcr:content/root/image20";
     private static final String IMAGE21_PATH = PAGE + "/jcr:content/root/image21";
+    private static final String IMAGE22_PATH = PAGE + "/jcr:content/root/image22";
 
     @BeforeClass
     public static void setUp() {
@@ -155,6 +156,12 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         assertTrue(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_PATH));
+    }
+
+    @Test
+    public void testSVGImage() {
+        Image image = getImageUnderTest(IMAGE22_PATH);
+        assertTrue(image.getWidths().length == 0);
     }
 
     private Image getImageUnderTest(String resourcePath, String contentPolicyDelegatePath) {

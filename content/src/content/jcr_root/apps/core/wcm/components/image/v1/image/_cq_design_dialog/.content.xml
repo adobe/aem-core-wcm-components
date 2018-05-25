@@ -28,7 +28,7 @@
                                         granite:class="core-image-widths"
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                        fieldDescription="Define a list of allowed widths in pixels for the image to automatically load the most appropriate width from the list."
+                                        fieldDescription="Define a list of allowed widths in pixels for the image to automatically load the most appropriate width from the list. Note that this setting has no effect on SVG images."
                                         fieldLabel="Allowed widths">
                                         <field
                                             jcr:primaryType="nt:unstructured"
