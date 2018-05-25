@@ -70,6 +70,7 @@ public class ImageImpl implements Image {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
     protected static final String DOT = ".";
     protected static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
+    protected static final String MIME_TYPE_IMAGE_SVG = "image/svg+xml";
     private static final String MIME_TYPE_IMAGE_PREFIX = "image/";
 
     @Self
@@ -185,9 +186,6 @@ public class ImageImpl implements Image {
                 extension = DEFAULT_EXTENSION;
             }
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
-            Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
-            smartImages = new String[supportedRenditionWidths.size()];
-            smartSizes = new int[supportedRenditionWidths.size()];
             int index = 0;
             Template template = currentPage.getTemplate();
             if (template != null && resource.getPath().startsWith(template.getPath())) {
@@ -198,13 +196,21 @@ public class ImageImpl implements Image {
                 baseResourcePath = resource.getPath();
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
-            for (Integer width : supportedRenditionWidths) {
-                smartImages[index] = baseResourcePath + DOT +
+            if (smartSizesSupported()) {
+                Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
+                smartImages = new String[supportedRenditionWidths.size()];
+                smartSizes = new int[supportedRenditionWidths.size()];
+                for (Integer width : supportedRenditionWidths) {
+                    smartImages[index] = baseResourcePath + DOT +
                         selector + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                         (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
-                smartSizes[index] = width;
-                index++;
+                    smartSizes[index] = width;
+                    index++;
+                }
+            } else {
+                smartImages = new String[0];
+                smartSizes = new int[0];
             }
             src = baseResourcePath + DOT + selector + DOT;
             if (smartSizes.length == 1) {
@@ -297,4 +303,10 @@ public class ImageImpl implements Image {
         }
         return allowedRenditionWidths;
     }
+
+    private boolean smartSizesSupported() {
+        // "smart sizes" is supported for all images except SVG
+        return !StringUtils.equals(mimeType, MIME_TYPE_IMAGE_SVG);
+    }
+
 }
