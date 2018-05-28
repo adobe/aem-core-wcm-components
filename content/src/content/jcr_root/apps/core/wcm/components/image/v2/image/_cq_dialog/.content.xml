@@ -54,7 +54,7 @@
                                                 class="cq-droptarget"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
-                                                mimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+                                                mimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff,image/svg+xml]"
                                                 multiple="{Boolean}false"
                                                 name="./file"
                                                 title="Upload Image Asset"

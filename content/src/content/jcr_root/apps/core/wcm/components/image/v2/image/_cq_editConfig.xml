@@ -4,7 +4,7 @@
     <cq:dropTargets jcr:primaryType="nt:unstructured">
         <image
             jcr:primaryType="cq:DropTargetConfig"
-            accept="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+            accept="[image/gif,image/jpeg,image/png,image/webp,image/tiff,image/svg+xml]"
             groups="[media]"
             propertyName="./fileReference">
             <parameters

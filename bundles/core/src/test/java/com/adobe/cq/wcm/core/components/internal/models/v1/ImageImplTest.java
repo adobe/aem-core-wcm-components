@@ -22,7 +22,6 @@ import javax.json.Json;
 import javax.json.JsonReader;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
@@ -115,13 +114,6 @@ public class ImageImplTest extends AbstractImageTest {
                         "\":true}",
                 image.getJson());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE4_PATH));
-    }
-
-    @Test
-    public void testInvalidAssetTypeImage() {
-        Image image = getImageUnderTest(IMAGE17_PATH);
-        assertNull(image.getSrc());
-        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE17_PATH));
     }
 
     @Test
