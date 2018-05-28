@@ -210,12 +210,13 @@
                 data["sling:resourceType"] = "wcm/core/components/policies/mapping";
 
                 c.assignPolicy(policyName, data, done, policyAssignmentPath);
-            })
+            }, { after: 1000 })
+
             // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
-            .assert.exist(selectors.component.title, false)
-            .assert.exist(selectors.component.description, false);
+            .assert.exist(selectors.editDialog.descriptionFromPage, false)
+            .assert.exist(selectors.editDialog.titleFromPage, false);
     };
 
     teaser.testLinksToElementsTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath) {
@@ -240,7 +241,8 @@
                 data["sling:resourceType"] = "wcm/core/components/policies/mapping";
 
                 c.assignPolicy(policyName, data, done, policyAssignmentPath);
-            })
+            }, { after: 1000 })
+
             // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .execFct(function(opts, done) {
@@ -287,7 +289,7 @@
                 data["sling:resourceType"] = "wcm/core/components/policies/mapping";
 
                 c.assignPolicy(policyName, data, done, policyAssignmentPath);
-            })
+            }, { after: 1000 })
 
             // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
