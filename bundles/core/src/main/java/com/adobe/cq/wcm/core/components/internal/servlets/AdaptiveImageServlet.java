@@ -384,11 +384,22 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         InputStream is = null;
         try {
             is = imageFile.adaptTo(InputStream.class);
-            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
-                    || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
-                LOGGER.debug("GIF or SVG file detected; will render the original file.");
+            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
+                LOGGER.debug("GIF file detected; will render the original file.");
                 if (is != null) {
                     stream(response, is, imageType);
+                }
+                return;
+            }
+            // Render the original file with the SVG mime type:
+            // - if the URL extension is .svg or
+            // - if the mime type of the uploaded image is the SVG one, even if the URL extension is not .svg
+            // (e.g. when requesting the thumbnail in the fileupload widget)
+            if ("svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
+                || isSVG(imageFile)) {
+                LOGGER.debug("SVG file detected; will render the original file.");
+                if (is != null) {
+                    stream(response, is, MIME_TYPE_SVG);
                 }
                 return;
             }
@@ -688,4 +699,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
     }
+
+    // Checks if the uploaded image file has the SVG mime type
+    private boolean isSVG(Resource imageFile) {
+        if (imageFile != null) {
+            Resource contentRes = imageFile.getChild("jcr:content");
+            if (contentRes != null) {
+                ValueMap props = contentRes.getValueMap();
+                String mimeType = props.get(PN_MIME_TYPE, String.class);
+                return StringUtils.equals(mimeType, MIME_TYPE_SVG);
+            }
+        }
+        return false;
+    }
+
 }
