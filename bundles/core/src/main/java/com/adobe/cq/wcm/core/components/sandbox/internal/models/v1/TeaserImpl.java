@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -61,15 +61,15 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String title;
     private String description;
     private String linkURL;
-    private boolean withCTA = false;
-    private boolean hideTitle = false;
-    private boolean hideDescription = false;
-    private boolean hideImageLink = false;
-    private boolean hideTitleLink = false;
-    private boolean hideDescriptionLink = false;
-    private boolean titleValueFromPage = false;
-    private boolean descriptionValueFromPage = false;
-    private List<ListItem> ctas = new ArrayList<>();
+    private String titleType;
+    private boolean actionsEnabled = false;
+    private boolean titleHidden = false;
+    private boolean descriptionHidden = false;
+    private boolean imageLinkHidden = false;
+    private boolean titleLinkHidden = false;
+    private boolean titleFromPage = false;
+    private boolean descriptionFromPage = false;
+    private List<ListItem> actions = new ArrayList<>();
     private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
@@ -98,27 +98,32 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @PostConstruct
     private void initModel() {
-        withCTA = properties.get(Teaser.PN_WITH_CTA, withCTA);
-        titleValueFromPage = properties.get(Teaser.PN_TITLE_VALUE_FROM_PAGE, titleValueFromPage);
-        descriptionValueFromPage = properties.get(Teaser.PN_DESCRIPTION_VALUE_FROM_PAGE, descriptionValueFromPage);
-        linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
+        actionsEnabled = properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled);
+
         populateStyleProperties();
-        if (withCTA) {
-            populateCTAs();
-            if (ctas.size() > 0) {
-                ListItem firstCTA = ctas.get(0);
-                if (firstCTA.getPath() != null) {
-                    targetPage = pageManager.getPage(firstCTA.getPath());
+
+        titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
+        descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
+        linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
+
+        if (actionsEnabled) {
+            hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+            populateActions();
+            if (actions.size() > 0) {
+                ListItem firstAction = actions.get(0);
+                if (firstAction != null) {
+                    linkURL = firstAction.getPath();
                 }
             }
-        } else {
-            targetPage = pageManager.getPage(linkURL);
         }
-        if (hideTitle) {
+
+        targetPage = pageManager.getPage(linkURL);
+
+        if (titleHidden) {
             title = null;
         } else {
             title = properties.get(JcrConstants.JCR_TITLE, String.class);
-            if (titleValueFromPage) {
+            if (titleFromPage) {
                 if (targetPage != null) {
                     title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
                 } else {
@@ -126,11 +131,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 }
             }
         }
-        if (hideDescription) {
+        if (descriptionHidden) {
             description = null;
         } else {
             description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            if (descriptionValueFromPage) {
+            if (descriptionFromPage) {
                 if (targetPage != null) {
                     description = targetPage.getDescription();
                 } else {
@@ -166,26 +171,35 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     private void populateStyleProperties() {
         if (currentStyle != null) {
-            hideTitle = currentStyle.get(Teaser.PN_HIDE_TITLE, hideTitle);
-            hideDescription = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION, hideDescription);
-            hideImageLink = currentStyle.get(Teaser.PN_HIDE_IMAGE_LINK, hideImageLink);
-            hideTitleLink = currentStyle.get(Teaser.PN_HIDE_TITLE_LINK, hideTitleLink);
-            hideDescriptionLink = currentStyle.get(Teaser.PN_HIDE_DESCRIPTION_LINK, hideDescriptionLink);
-            if (hideImageLink) {
+            titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
+            descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
+            titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
+            imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
+            titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
+            if (imageLinkHidden) {
                 hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+            }
+            if (currentStyle.get(Teaser.PN_ACTIONS_DISABLED, false)) {
+                actionsEnabled = false;
             }
         }
     }
 
-    private void populateCTAs() {
-        Resource ctasNode = resource.getChild(Teaser.NN_CTAS);
-        if (ctasNode != null) {
-            for(Resource cta : ctasNode.getChildren()) {
-                ctas.add(new ListItem() {
+    private void populateActions() {
+        Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
+        if (actionsNode != null) {
+            for(Resource action : actionsNode.getChildren()) {
+                actions.add(new ListItem() {
 
-                    private ValueMap properties = cta.getValueMap();
-                    private String title = properties.get("text", String.class);
-                    private String url = properties.get("link", String.class);
+                    private ValueMap properties = action.getValueMap();
+                    private String title = properties.get(PN_ACTION_TEXT, String.class);
+                    private String url = properties.get(PN_ACTION_LINK, String.class);
+                    private Page page = null;
+                    {
+                        if (url != null && url.startsWith("/")) {
+                            page = pageManager.getPage(url);
+                        }
+                    }
 
                     @Nullable
                     @Override
@@ -195,8 +209,19 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
                     @Nullable
                     @Override
+                    @JsonIgnore
                     public String getPath() {
                         return url;
+                    }
+
+                    @Nullable
+                    @Override
+                    public String getURL() {
+                        if (page != null) {
+                            return Utils.getURL(request, page);
+                        } else {
+                            return url;
+                        }
                     }
                 });
             }
@@ -204,15 +229,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    @JsonIgnore
-    public boolean isWithCTA() {
-        return withCTA;
+    public boolean isActionsEnabled() {
+        return actionsEnabled;
     }
 
     @Override
-    @JsonIgnore
-    public List<ListItem> getCTAs() {
-        return ctas;
+    public List<ListItem> getActions() {
+        return actions;
     }
 
     @Override
@@ -229,8 +252,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public boolean isHideImageLink() {
-        return hideImageLink;
+    public boolean isImageLinkHidden() {
+        return imageLinkHidden;
     }
 
     @Override
@@ -239,8 +262,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public boolean isHideTitleLink() {
-        return hideTitleLink;
+    public boolean isTitleLinkHidden() {
+        return titleLinkHidden;
     }
 
     @Override
@@ -249,8 +272,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public boolean isHideDescriptionLink() {
-        return hideDescriptionLink;
+    public String getTitleType() {
+        Utils.Heading heading = Utils.Heading.getHeading(titleType);
+        if (heading != null) {
+            return heading.getElement();
+        }
+        return null;
     }
 
     @Nonnull

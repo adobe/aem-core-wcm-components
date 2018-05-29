@@ -15,14 +15,27 @@ limitations under the License.
 -->
 Teaser (v1 - sandbox)
 ====
-Teaser component written in HTL.
+Teaser component written in HTL, showing an image, a title, a rich-text and possibly some actions/links. Variations can include 
+only parts of the teaser.
 
 ## Features
+
+* Combines image, title, text and links/actions.
+* Allows disabling sections through policy configuration.
+* Can control if title and text should be inherited from a linked page.
 
 ### Use Object
 The Teaser component uses the `com.adobe.cq.wcm.core.components.sandbox.models.Teaser` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
+The teaser component has the following configuration properties:
+1. `actionsDisabled` - defines whether or not Call-to-Actions are disabled
+2. `titleHidden` - defines whether or not the title is hidden
+3. `descriptionHidden` - defines whether or not the description is hidden
+4. `imageLinkHidden` - defines whether or not the image link is hidden
+5. `titleLinkHidden` - defines whether or not the title link is hidden
+6. `titleType` - stores the value for this title's HTML element type
+
 The following configuration properties are inherited from the image component:
 
 1. `./allowedWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
@@ -33,11 +46,16 @@ device)
 ### Edit Dialog Properties
 The following properties are written to JCR for this Teaser component and are expected to be available as `Resource` properties:
 
-1. `./fileReference` property or `file` child node - will store either a reference to the image file, or the image file
-2. `./linkURL` - required URL to which the teaser will link to
-3. `./linkText` - Call to Action link text
-4. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
-5. `./jcr:description` - defines the value of the teaser description 
+1. `./actionsEnabled` - property that defines whether or not the teaser has Call-to-Action elements
+2. `./actions` - child node where the Call-to-Action elements are stored as a list of `item` nodes with the following properties
+    1. `link` - property that stores the Call-to-Action link
+    2. `text` - property that stores the Call-to-Action text
+3. `./fileReference` - property or `file` child node - will store either a reference to the image file, or the image file
+4. `./linkURL` - required URL to which the teaser will link to
+5. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
+6. `./titleFromPage` - defines whether or not the title value is taken from the linked page
+7. `./jcr:description` - defines the value of the teaser description 
+8. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
 
 ## BEM Description
 ```
@@ -46,7 +64,8 @@ BLOCK cmp-teaser
     ELEMENT cmp-teaser__title
     ELEMENT cmp-teaser__title-link
     ELEMENT cmp-teaser__description
-    ELEMENT cmp-teaser__description-link    
+    ELEMENT cmp-teaser__action-container
+    ELEMENT cmp-teaser__action-link
 ```
 
 ## Information

@@ -71,7 +71,7 @@ import com.google.common.base.Joiner;
  * Registration of the servlet is handled by the {@link AdaptiveImageServletMappingConfigurationConsumer}
  * based on {@link AdaptiveImageServletMappingConfigurationFactory} configurations.
  *
- * The following configurations are provided out-of-box for {@code ['jpg','jpeg','gif','png']} extensions:
+ * The following configurations are provided out-of-box for {@code ['jpg','jpeg','gif','png','svg']} extensions:
  * <ul>
  *   <li>{@code RTs=['core/wcm/components/image'], selectors=['img']} - for Image v1 URLs</li>
  *   <li>{@code RTs=['core/wcm/components/image','cq/Page'], selectors=['coreimg']} - for Image v2 URLs</li>
@@ -85,6 +85,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
     private static final String DEFAULT_MIME = "image/jpeg";
+    private static final String MIME_TYPE_SVG = "image/svg+xml";
+    private static final String PN_MIME_TYPE = "jcr:mimeType";
     private int defaultResizeWidth;
 
     private MimeTypeService mimeTypeService;
@@ -274,8 +276,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, Asset asset, String
             imageType) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
-        if ("gif".equalsIgnoreCase(extension)) {
-            LOGGER.debug("GIF asset detected; will render the original rendition.");
+        if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
+            LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
             stream(response, asset.getOriginal().getStream(), imageType);
             return;
         }
@@ -382,8 +384,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         InputStream is = null;
         try {
             is = imageFile.adaptTo(InputStream.class);
-            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
-                LOGGER.debug("GIF file detected; will render the original file.");
+            if ("gif".equalsIgnoreCase(mimeTypeService.getExtension(imageType))
+                    || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
+                LOGGER.debug("GIF or SVG file detected; will render the original file.");
                 if (is != null) {
                     stream(response, is, imageType);
                 }
@@ -653,8 +656,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         return requestLastModified;
     }
-
-
 
     private enum Source {
         ASSET,

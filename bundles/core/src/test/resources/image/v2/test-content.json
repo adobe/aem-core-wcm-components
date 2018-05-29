@@ -220,27 +220,6 @@
                     "linkURL"           : "https://www.adobe.com",
                     "alt"               : "Adobe Logo"
                 },
-                "image17"           : {
-                    "jcr:primaryType"   : "nt:unstructured",
-                    "jcr:createdBy"     : "admin",
-                    "sling:resourceType": "core/wcm/components/image/v2/image",
-                    "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
-                    "alt"               : "Adobe Logo",
-                    "jcr:title"         : "Adobe Logo",
-                    "linkURL"           : "https://www.adobe.com",
-                    "fileName"          : "Adobe_Systems_logo_and_wordmark.png",
-                    "file"              : {
-                        "jcr:primaryType": "nt:file",
-                        "jcr:createdBy"  : "admin",
-                        "jcr:content"    : {
-                            "jcr:primaryType"   : "nt:resource",
-                            "jcr:lastModifiedBy": "admin",
-                            "jcr:mimeType"      : "image/svg+xml",
-                            ":jcr:data"         : 10453365,
-                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
-                        }
-                    }
-                },
                 "image18"           : {
                     "imageCrop"         : "186,950,1076,1280",
                     "imageRotate"       : 90,
@@ -274,6 +253,28 @@
                     "altValueFromDAM"    : "true",
                     "titleValueFromDAM"  : "true"
                 },
+                "image22"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "2017-03-20T09:33:42.138+01:00",
+                    "sling:resourceType": "core/wcm/components/image/v2/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
+                    "alt"               : "Adobe Logo",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkURL"           : "https://www.adobe.com",
+                    "fileName"          : "Adobe_Systems_logo_and_wordmark.svg",
+                    "file"              : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/svg+xml",
+                            ":jcr:data"         : 450,
+                            "jcr:uuid"          : "efd67232-7672-49ad-b155-0063daee3d22"
+                        }
+                    }
+                },
                 "image24"            : {
                     "jcr:primaryType"   : "nt:unstructured",
                     "jcr:createdBy"     : "admin",
@@ -281,7 +282,8 @@
                     "sling:resourceType": "core/wcm/components/image/v2/image",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                     "imageMap"          : "[circle(256,256,256)\"http://adobe.com\"|\"\"|\"\"|(0.2000,0.3001,0.2000)][rect(256,171,1023,682)\"http://adobe.com\"|\"\"|\"altText\"|(0.1992,0.2005,0.7992,0.7995)][poly(917,344,1280,852,532,852)\"http://adobe.com\"|\"_blank\"|\"\"|(0.7164,0.4033,1.0000,0.9988,0.4156,0.9988)]"
-                }
+                    "titleValueFromDAM": "true"
+                },
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
         }

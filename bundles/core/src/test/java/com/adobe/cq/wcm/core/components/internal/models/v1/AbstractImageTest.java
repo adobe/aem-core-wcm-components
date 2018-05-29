@@ -40,6 +40,8 @@ public class AbstractImageTest {
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext();
 
+    protected static final String MIME_TYPE_SVG = "image/svg+xml";
+
     protected static final String CONTEXT_PATH = "/core";
     protected static final String TEST_CONTENT_ROOT = "/content";
     protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
@@ -62,13 +64,13 @@ public class AbstractImageTest {
     protected static final String IMAGE14_PATH = PAGE + "/jcr:content/root/image14";
     protected static final String IMAGE15_PATH = PAGE + "/jcr:content/root/image15";
     protected static final String IMAGE16_PATH = PAGE + "/jcr:content/root/image16";
-    protected static final String IMAGE17_PATH = PAGE + "/jcr:content/root/image17";
     protected static final String IMAGE18_PATH = PAGE + "/jcr:content/root/image18";
     protected static final String IMAGE19_PATH = PAGE + "/jcr:content/root/image19";
     protected static final String IMAGE20_PATH = PAGE + "/jcr:content/root/image20";
     protected static final String IMAGE22_PATH = PAGE + "/jcr:content/root/image22";
     protected static final String IMAGE23_PATH = PAGE + "/jcr:content/root/image23";
     protected static final String IMAGE24_PATH = PAGE + "/jcr:content/root/image24";
+    protected static final String IMAGE25_PATH = PAGE + "/jcr:content/root/image25";
     protected static final String TEMPLATE_PATH = "/conf/coretest/settings/wcm/templates/testtemplate";
     protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
@@ -76,10 +78,12 @@ public class AbstractImageTest {
     protected static final String GIF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.gif";
     protected static final String _1PX_IMAGE_BINARY_NAME = "1x1.png";
     protected static final String TIFF_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.tiff";
+    protected static final String SVG_IMAGE_BINARY_NAME = "Adobe_Systems_logo_and_wordmark.svg";
     protected static final String PNG_ASSET_PATH = "/content/dam/core/images/" + PNG_IMAGE_BINARY_NAME;
     protected static final String PNG_ASSET_PATH_WITHOUT_EXTENSION = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark";
     protected static final String GIF_ASSET_PATH = "/content/dam/core/images/" + GIF_IMAGE_BINARY_NAME;
     protected static final String TIFF_ASSET_PATH = "/content/dam/core/images/" + TIFF_IMAGE_BINARY_NAME;
+    protected static final String SVG_ASSET_PATH = "/content/dam/core/images/" + SVG_IMAGE_BINARY_NAME;
     protected static final String GIF5_FILE_PATH = IMAGE5_PATH + "/file";
     protected static final String PNG3_FILE_PATH = IMAGE3_PATH + "/file";
     protected static final String PNG10_FILE_PATH = IMAGE10_PATH + "/file";
@@ -87,6 +91,7 @@ public class AbstractImageTest {
     protected static final String PNG14_FILE_PATH = IMAGE14_PATH + "/file";
     protected static final String PNG20_FILE_PATH = IMAGE20_PATH + "/file";
     protected static final String PNG23_FILE_PATH = IMAGE23_PATH + "/file";
+    protected static final String SVG_FILE_PATH = IMAGE24_PATH + "/file";
 
     protected static ContentPolicyManager contentPolicyManager;
     protected static MimeTypeService mockedMimeTypeService;
@@ -103,10 +108,12 @@ public class AbstractImageTest {
         when(mockedMimeTypeService.getMimeType("jpg")).thenReturn(StandardImageHandler.JPEG_MIMETYPE);
         when(mockedMimeTypeService.getMimeType("jpeg")).thenReturn(StandardImageHandler.JPEG_MIMETYPE);
         when(mockedMimeTypeService.getMimeType("gif")).thenReturn(StandardImageHandler.GIF_MIMETYPE);
+        when(mockedMimeTypeService.getMimeType("svg")).thenReturn(MIME_TYPE_SVG);
         when(mockedMimeTypeService.getExtension(StandardImageHandler.TIFF_MIMETYPE)).thenReturn("tiff");
         when(mockedMimeTypeService.getExtension(StandardImageHandler.JPEG_MIMETYPE)).thenReturn("jpeg");
         when(mockedMimeTypeService.getExtension(StandardImageHandler.PNG1_MIMETYPE)).thenReturn("png");
         when(mockedMimeTypeService.getExtension(StandardImageHandler.GIF_MIMETYPE)).thenReturn("gif");
+        when(mockedMimeTypeService.getExtension(MIME_TYPE_SVG)).thenReturn("svg");
         aemContext.load().json(testBase + "/test-conf.json", "/conf");
         aemContext.load().json("/image/test-content-dam.json", "/content/dam/core/images");
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
@@ -118,6 +125,7 @@ public class AbstractImageTest {
         aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH + "/jcr:content/renditions/original");
         aemContext.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.gif");
+        aemContext.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_ASSET_PATH + "/jcr:content/renditions/original");
         aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF5_FILE_PATH, StandardImageHandler.GIF_MIMETYPE);
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG3_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG10_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
@@ -126,6 +134,7 @@ public class AbstractImageTest {
         aemContext.load().binaryFile("/image/" + TIFF_IMAGE_BINARY_NAME, TIFF_ASSET_PATH + "/jcr:content/renditions/original");
         aemContext.load().binaryFile("/image/" + _1PX_IMAGE_BINARY_NAME, PNG20_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
         aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG23_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        aemContext.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_FILE_PATH, MIME_TYPE_SVG);
         aemContext.registerInjectActivateService(new MockAdapterFactory());
         contentPolicyManager = mock(ContentPolicyManager.class);
         aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
