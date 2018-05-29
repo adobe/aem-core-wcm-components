@@ -161,12 +161,12 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
 
                 c.editNodeProperties(h.param("cmpPath")(), data, done);
             })
-            .wait(500)
+            .wait(5000)
 
             // refresh the component rendering
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .execTestCase(c.tcSaveConfigureDialog)
-            .wait(1000)
+            .wait(5000)
 
             // verify the map area is available
             .asserts.isTrue(function() {
