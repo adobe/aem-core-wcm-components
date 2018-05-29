@@ -166,11 +166,11 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             // refresh the component rendering
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .execTestCase(c.tcSaveConfigureDialog)
+            .wait(1000)
 
             // verify the map area is available
             .asserts.isTrue(function() {
-                return h.find(selectors.elements.map + '[name*="' + h.param("testPagePath")() +
-                    '/jcr:content/root/responsivegrid/image"] ' + selectors.elements.area, "#ContentFrame").size() === 1;
+                return h.find(selectors.elements.area, "#ContentFrame").size() === 1;
             })
             .wait(500)
 
