@@ -189,27 +189,17 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
 
             // manually resize the test image to a narrow width and trigger a window resize
             .execFct(function() {
-                h.find(selectors.elements.image).width(100);
+                h.find(selectors.elements.image).width(300);
                 $(h.context().window).trigger("resize");
             })
-            .wait(500)
+            .wait(2000)
 
             // verify that the applied coordinates are correct in relation to the new image size
             .asserts.isTrue(function() {
                 var area = h.find(selectors.elements.area)[0];
-                var image = h.find(selectors.elements.image)[0];
                 var coords = area.coords.split(",");
-                var relativeCoords = area.dataset.cmpRelcoords.split(",");
-                var width = image.width;
-                var height = image.height;
+                var expectedCoords = [0, 0, 58, 38];
                 var passed = true;
-
-                var expectedCoords = [
-                    Math.floor((relativeCoords[0] * width)),
-                    Math.floor((relativeCoords[1] * height)),
-                    Math.floor((relativeCoords[2] * width)),
-                    Math.floor((relativeCoords[3] * height))
-                ];
 
                 for (var i = 0; i < coords.length; i++) {
                     if (parseInt(coords[i]) !== expectedCoords[i]) {
