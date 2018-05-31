@@ -167,7 +167,11 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
                 h.find(selectors.elements.image).width(300);
                 $(h.context().window).trigger("resize");
             })
-            .wait(4000)
+            .wait(2000)
+            .execFct(function() {
+                $(h.context().window).trigger("resize");
+            })
+            .wait(3000)
 
             // verify that the adjusted coordinates are correct
             .asserts.isTrue(function() {

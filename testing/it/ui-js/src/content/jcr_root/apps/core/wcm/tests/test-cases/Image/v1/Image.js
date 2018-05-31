@@ -63,6 +63,8 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
                     data["disableLazyLoading"] = "false";
 
                     c.createPolicy("/image" + "/new_policy", data, "policyPath", done, c.policyPath);
+                } else {
+                    done();
                 }
             })
 
@@ -73,6 +75,8 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
                     data["sling:resourceType"] = "wcm/core/components/policies/mapping";
 
                     c.assignPolicy("/image", data, done, c.policyAssignmentPath);
+                } else {
+                    done();
                 }
             })
 
