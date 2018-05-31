@@ -59,7 +59,11 @@
                 var $actionsMultifield = $dialogContent.find(actionsMultifieldSelector);
                 $actionsMultifield.on("change", function(event) {
                     var $target = $(event.target);
-                    if ($target.is("foundation-autocomplete")) {
+                    if ($target.is("coral-multifield") && event.target.items && event.target.items.length === 0) {
+                        actionsEnabled = false;
+                        $actionsEnabledCheckbox.adaptTo("foundation-field").setValue(false);
+                        toggleInputs($dialogContent);
+                    } else if ($target.is("foundation-autocomplete")) {
                         updateText($target);
                     }
                     retrievePageInfo($dialogContent);

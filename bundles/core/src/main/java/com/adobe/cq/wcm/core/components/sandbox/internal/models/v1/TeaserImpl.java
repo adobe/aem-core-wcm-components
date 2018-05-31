@@ -108,16 +108,17 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         if (actionsEnabled) {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
+            linkURL = null;
             populateActions();
             if (actions.size() > 0) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
-                    linkURL = firstAction.getPath();
+                    targetPage = pageManager.getPage(firstAction.getPath());
                 }
             }
+        } else {
+            targetPage = pageManager.getPage(linkURL);
         }
-
-        targetPage = pageManager.getPage(linkURL);
 
         if (titleHidden) {
             title = null;
@@ -146,11 +147,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
         if (StringUtils.isEmpty(linkURL)) {
-            LOGGER.debug("Teaser component from " + request.getResource().getPath() + " requires a link.");
+            LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
         }
         if (StringUtils.isEmpty(fileReference)) {
             if (request.getResource().getChild(DownloadResource.NN_FILE) == null) {
-                LOGGER.debug("Teaser component from " + request.getResource().getPath() + " requires an asset or an image file " +
+                LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not have an asset or an image file " +
                         "configured.");
                 hasImage = false;
             }
