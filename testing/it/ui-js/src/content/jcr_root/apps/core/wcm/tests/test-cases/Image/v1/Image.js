@@ -55,8 +55,6 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             // create and assign a content policy to enable lazy loading; which initializes the frontend handling
             .execFct(function(opts, done) {
                 if (jsComponentEnabled) {
-                    // var componentPath = h.param("cmpPath")();
-                    // h.param("cmpNodeName", componentPath.substr(componentPath.lastIndexOf("/")));
                     var data = {};
                     data["jcr:title"] = "New Policy";
                     data["sling:resourceType"] = "wcm/core/components/policy/policy";
