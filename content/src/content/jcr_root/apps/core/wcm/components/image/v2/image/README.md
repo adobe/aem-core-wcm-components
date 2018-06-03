@@ -112,8 +112,7 @@ The `data-cmp-widths` option must be provided with more than one width, as well 
 with a URI template representation of the source.
 
 ## SVG
-SVG MIME-types are supported, but have some specific handling. In contrast to lazy loading, which is still possible for SVG image types,
-alternative image sizes defined at the component policy dialog are ignored. In addition, SVG image types have a more limited set of
+SVG MIME-types are supported, but have some specific handling. Alternative image sizes defined in the component policy dialog are ignored for SVG images. In addition, SVG image types have a more limited set of
 editing options available in the AEM inline image editor.
 
 ## Information

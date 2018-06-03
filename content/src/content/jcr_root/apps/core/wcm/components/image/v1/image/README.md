@@ -108,8 +108,7 @@ It also provides a `core.wcm.components.image.v1.editor` editor client library c
 JavaScript handling for dialog interaction. It is already included by its edit dialog.
 
 ## SVG
-SVG MIME-types are supported, but have some specific handling. In contrast to lazy loading, which is still possible for SVG image types,
-alternative image sizes defined at the component policy dialog are ignored. In addition, SVG image types have a more limited set of
+SVG MIME-types are supported, but have some specific handling. Alternative image sizes defined in the component policy dialog are ignored for SVG images. In addition, SVG image types have a more limited set of
 editing options available in the AEM inline image editor.
 
 ## Information
