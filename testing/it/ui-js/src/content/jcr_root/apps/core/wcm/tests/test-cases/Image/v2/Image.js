@@ -134,7 +134,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
                 .execFct(function(opts, done) {
                     var data = {};
                     var cmpPath = h.param("cmpPath")();
-                    data.imageMap = "[rect(0,0,226,230)\"/content/we-retail/us/en\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]";
+                    data.imageMap = "[rect(0,0,226,230)\"/content/core-components/core-components-page\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]";
                     data.fileReference = testImagePath;
 
                     c.editNodeProperties(cmpPath, data, done);
@@ -159,7 +159,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .click(selectors.elements.area)
             .asserts.isTrue(function() {
                 var pathname = h.context().window.location.pathname;
-                return pathname.includes("/content/we-retail/us/en");
+                return pathname.includes("/content/core-components/core-components-page");
             })
 
             // navigate back to the test page
