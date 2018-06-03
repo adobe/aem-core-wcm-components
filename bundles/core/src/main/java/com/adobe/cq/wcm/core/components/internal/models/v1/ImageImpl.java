@@ -80,7 +80,7 @@ public class ImageImpl implements Image {
     protected Resource resource;
 
     @ScriptVariable
-    private PageManager pageManager;
+    protected PageManager pageManager;
 
     @ScriptVariable
     private Page currentPage;

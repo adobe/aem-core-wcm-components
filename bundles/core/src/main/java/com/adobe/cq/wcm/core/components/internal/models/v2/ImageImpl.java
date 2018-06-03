@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
@@ -31,8 +33,11 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 
@@ -46,6 +51,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
 
     private String srcUriTemplate;
+    private List<ImageArea> areas;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
@@ -100,6 +106,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
             }
 
+            buildAreas();
             buildJson();
         }
     }
@@ -118,6 +125,46 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     public boolean isLazyEnabled() {
         return !disableLazyLoading;
+    }
+
+    @Override
+    public List<ImageArea> getAreas() { return areas; }
+
+    protected void buildAreas() {
+        areas = new ArrayList<>();
+        String mapProperty = properties.get(Image.PN_MAP, String.class);
+        if (StringUtils.isNotEmpty(mapProperty)) {
+            // Parse the image map areas as defined at {@code Image.PN_MAP}
+            String[] mapAreas = StringUtils.split(mapProperty, "][");
+            for (String area : mapAreas) {
+                int coordinatesEndIndex = area.indexOf(")");
+                if (coordinatesEndIndex < 0) {
+                    break;
+                }
+                String shapeAndCoords = StringUtils.substring(area, 0, coordinatesEndIndex + 1);
+                String shape = StringUtils.substringBefore(shapeAndCoords, "(");
+                String coordinates = StringUtils.substringBetween(shapeAndCoords, "(", ")");
+                String remaining = StringUtils.substring(area, coordinatesEndIndex + 1);
+                String[] remainingTokens = StringUtils.split(remaining, "|");
+                if (StringUtils.isBlank(shape) || StringUtils.isBlank(coordinates)) {
+                    break;
+                }
+                if (remainingTokens.length > 0) {
+                    String href = StringUtils.removeAll(remainingTokens[0], "\"");
+                    if (StringUtils.isBlank(href)) {
+                        break;
+                    }
+                    String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
+                    String alt = remainingTokens.length > 2 ? StringUtils.removeAll(remainingTokens[2], "\"") : "";
+                    String relativeCoordinates = remainingTokens.length > 3 ? remainingTokens[3] : "";
+                    relativeCoordinates = StringUtils.substringBetween(relativeCoordinates, "(", ")");
+                    if (href.startsWith("/")) {
+                        href = Utils.getURL(request, pageManager, href);
+                    }
+                    areas.add(new ImageAreaImpl(shape, coordinates, relativeCoordinates, href, target, alt));
+                }
+            }
+        }
     }
 
 }

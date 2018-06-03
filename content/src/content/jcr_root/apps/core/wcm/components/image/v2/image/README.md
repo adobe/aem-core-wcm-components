@@ -19,7 +19,8 @@ Image component written in HTL that renders an adaptive image.
 
 ## Features
 * Smart loading of optimal rendition
-* In-place editing, cropping, rotating, and resizing
+* In-place editing, cropping, rotating, resizing and image map definition
+* Responsive image map resizing
 * Image title, description, accessibility text and link
 * Styles
 
@@ -98,10 +99,12 @@ A hook attribute from the following should be added to the corresponding element
  data-cmp-hook-image="image"
  data-cmp-hook-image="link"
  data-cmp-hook-image="noscript"
+ data-cmp-hook-image="map"
+ data-cmp-hook-image="area"
 ```
 
-The `img` should be placed inside a `noscript` element with the `data-cmp-hook-image="noscript"` attribute.
-It will be inserted into the DOM by the JavaScript component.
+The `img` and an optional image `map` should be placed inside a `noscript` element with the `data-cmp-hook-image="noscript"` attribute.
+They will be inserted into the DOM by the JavaScript component.
 
 To allow lazy loading it is expected that the `data-cmp-lazy` and `data-cmp-src` options are supplied.
 
@@ -109,6 +112,13 @@ It is possible to configure the JavaScript component such that the most appropri
 The most appropriate width being the one which is at least as wide as the image's container.
 The `data-cmp-widths` option must be provided with more than one width, as well as the `data-cmp-src` option,
 with a URI template representation of the source.
+
+To allow responsive recalculation of image map areas, a `data-cmp-relcoords` attribute should be added to each map `area`. The coordinates
+are represented as comma-separated decimal percentages:
+
+```
+    <area shape="rect" coords="0,0,10,10" data-cmp-relcoords="0,0,0.5,0.5" href="http://www.adobe.com">
+```
 
 ## Information
 * **Vendor**: Adobe

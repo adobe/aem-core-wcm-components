@@ -27,8 +27,17 @@
        class="cmp-image__link" href="${image.link}"
        data-cmp-hook-image="link">
         <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1}" data-cmp-hook-image="noscript">
+            <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
             <img src="${image.src}" class="cmp-image__image" data-cmp-hook-image="image"
+                 data-sly-attribute.usemap="${image.areas ? usemap : ''}"
                  alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+            <map data-sly-test="${image.areas}"
+                 data-sly-list.area="${image.areas}"
+                 name="${resource.path}"
+                 data-cmp-hook-image="map">
+                <area shape="${area.shape}" coords="${area.coordinates}" href="${area.href}" target="${area.target}" alt="${area.alt}"
+                      data-cmp-hook-image="area" data-cmp-relcoords="${area.relativeCoordinates}">
+            </map>
         </noscript>
     </a>
     <span class="cmp-image__title" data-sly-test="${!image.displayPopupTitle && image.title}">${image.title}</span>

@@ -33,7 +33,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
     /**
      * Before Test Case
      */
-    image.tcExecuteBeforeTest = function(imageRT, pageRT) {
+    image.tcExecuteBeforeTest = function(imageRT, pageRT, jsComponentEnabled) {
         return new h.TestCase("Setup Before Test")
             // common set up
             .execTestCase(c.tcExecuteBeforeTest)
@@ -51,6 +51,33 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             .execFct(function(opts, done) {
                 c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
             })
+
+            // create and assign a content policy to enable lazy loading; which initializes the frontend handling
+            .execFct(function(opts, done) {
+                if (jsComponentEnabled) {
+                    var data = {};
+                    data["jcr:title"] = "New Policy";
+                    data["sling:resourceType"] = "wcm/core/components/policy/policy";
+                    data["disableLazyLoading"] = "false";
+
+                    c.createPolicy("/image" + "/new_policy", data, "policyPath", done, c.policyPath);
+                } else {
+                    done();
+                }
+            })
+
+            .execFct(function(opts, done) {
+                if (jsComponentEnabled) {
+                    var data = {};
+                    data["cq:policy"] = "core-component/components" + "/image" + "/new_policy";
+                    data["sling:resourceType"] = "wcm/core/components/policies/mapping";
+
+                    c.assignPolicy("/image", data, done, c.policyAssignmentPath);
+                } else {
+                    done();
+                }
+            })
+
             // open the new page in the editor
             .navigateTo("/editor.html%testPagePath%.html");
     };
@@ -62,12 +89,23 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
         return new h.TestCase("Clean up after Test")
             // common clean up
             .execTestCase(c.tcExecuteAfterTest)
+
             // delete the test page we created
             .execFct(function(opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
             })
 
-            // delete the test page we created
+            // delete the policy
+            .execFct(function(opts, done) {
+                c.deletePolicy("/image", done, c.policyPath);
+            })
+
+            // remove the policy assignment
+            .execFct(function(opts, done) {
+                c.deletePolicyAssignment("/image", done, c.policyAssignmentPath);
+            })
+
+            // delete the proxy component we created
             .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPath")(opts), done);
             });
