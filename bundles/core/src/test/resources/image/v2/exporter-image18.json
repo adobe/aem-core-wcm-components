@@ -9,6 +9,7 @@
         1920,
         2048
     ],
+    "areas": [],
     "lazyEnabled"           : true,
     "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image18.coreimg{.width}.png/1490005239000.png",
     "src"                   : "/core/content/test/_jcr_content/root/image18.coreimg.png/1490005239000.png",

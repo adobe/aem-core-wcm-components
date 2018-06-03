@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.osgi.annotation.versioning.ConsumerType;
@@ -85,7 +86,6 @@ public interface Image extends ComponentExporter {
     @Deprecated
     String JSON_LAZY_ENABLED = "lazyEnabled";
 
-
     /**
      * Name of the configuration policy property that will indicate if the value of the {@code alt} attribute should be populated from
      * DAM if the component is configured with a file reference.
@@ -102,7 +102,6 @@ public interface Image extends ComponentExporter {
      */
     String PN_TITLE_VALUE_FROM_DAM = "titleValueFromDAM";
 
-
     /**
      * Name of the resource property that will indicate if the current image should be flipped horizontally.
      *
@@ -117,6 +116,21 @@ public interface Image extends ComponentExporter {
      */
     String PN_FLIP_VERTICAL = "imageFlipVertical";
 
+    /**
+     * Name of the resource property that defines areas of an image map.
+     *
+     * The property stores map areas as follows:
+     * [area1][area2][...]
+     *
+     * Area format:
+     * [SHAPE(COORDINATES)"HREF"|"TARGET"|"ALT"|(RELATIVE_COORDINATES)]
+     *
+     * Example:
+     * [rect(0,0,10,10)"http://www.adobe.com"|"_self"|"alt"|(0,0,0.8,0.8)][circle(10,10,10)"http://www.adobe.com"|"_self"|"alt"|(0.8,0.8,0.8)]
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_MAP = "imageMap";
 
     /**
      * Returns the value for the {@code src} attribute of the image.
@@ -229,6 +243,16 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default boolean isLazyEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns a list of image map areas.
+     *
+     * @return the image map areas
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default List<ImageArea> getAreas() {
         throw new UnsupportedOperationException();
     }
 
