@@ -22,6 +22,7 @@ Image component written in HTL that renders an adaptive image.
 * In-place editing, cropping, rotating, resizing and image map definition
 * Responsive image map resizing
 * Image title, description, accessibility text and link
+* SVG support
 * Styles
 
 ### Use Object
@@ -119,6 +120,10 @@ are represented as comma-separated decimal percentages:
 ```
     <area shape="rect" coords="0,0,10,10" data-cmp-relcoords="0,0,0.5,0.5" href="http://www.adobe.com">
 ```
+
+## SVG
+SVG MIME-types are supported, but have some specific handling. Alternative smart image widths defined at the component policy dialog are ignored for SVG images, with `Image#getWidths` returning an empty array.
+In addition, SVG image types have a more limited set of editing options available in the AEM inline image editor. The lazy loading feature is still supported for SVG images.
 
 ## Information
 * **Vendor**: Adobe
