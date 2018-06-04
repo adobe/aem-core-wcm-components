@@ -21,6 +21,7 @@ Image component written in HTL that renders an adaptive image.
 * Smart loading of optimal rendition
 * In-place editing, cropping, rotating, and resizing
 * Image title, description, accessibility text and link
+* SVG support
 * Styles
 
 ### Use Object
@@ -109,6 +110,10 @@ It is possible to configure the JavaScript component such that the most appropri
 The most appropriate width being the one which is at least as wide as the image's container.
 The `data-cmp-widths` option must be provided with more than one width, as well as the `data-cmp-src` option,
 with a URI template representation of the source.
+
+## SVG
+SVG MIME-types are supported, but have some specific handling. Alternative smart image widths defined at the component policy dialog are ignored for SVG images, with `Image#getWidths` returning an empty array.
+In addition, SVG image types have a more limited set of editing options available in the AEM inline image editor. The lazy loading feature is still supported for SVG images.
 
 ## Information
 * **Vendor**: Adobe

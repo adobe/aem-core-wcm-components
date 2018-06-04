@@ -21,6 +21,7 @@ Image component written in HTL that renders a smart adaptive image.
 * Smart loading of optimal rendition
 * In-place editing, cropping, rotating, and resizing
 * Image title, description, accessibility text and link
+* SVG support
 * Styles
 
 ### Use Object
@@ -105,6 +106,10 @@ CSS styling. It should be added to a relevant site client library using the `emb
 
 It also provides a `core.wcm.components.image.v1.editor` editor client library category that includes
 JavaScript handling for dialog interaction. It is already included by its edit dialog.
+
+## SVG
+SVG MIME-types are supported, but have some specific handling. Alternative smart image widths defined at the component policy dialog are ignored for SVG images, with `Image#getWidths` returning an empty array.
+In addition, SVG image types have a more limited set of editing options available in the AEM inline image editor. The lazy loading feature is still supported for SVG images.
 
 ## Information
 * **Vendor**: Adobe
