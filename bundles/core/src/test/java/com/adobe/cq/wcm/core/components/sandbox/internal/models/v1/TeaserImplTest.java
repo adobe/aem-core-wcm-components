@@ -140,14 +140,14 @@ public class TeaserImplTest {
     public void testEmptyFileReference() throws Exception {
         Teaser teaser = getTeaserUnderTest(TEASER_3);
         verify(teaserLogger)
-                .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 requires an asset or an image file configured.");
+                .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.");
         assertNull(teaser.getImageResource());
     }
 
     @Test
     public void testTeaserWithoutLink() throws Exception {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
-        verify(teaserLogger).debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 requires a link.");
+        verify(teaserLogger).debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.");
         assertNull(teaser.getLinkURL());
     }
 
