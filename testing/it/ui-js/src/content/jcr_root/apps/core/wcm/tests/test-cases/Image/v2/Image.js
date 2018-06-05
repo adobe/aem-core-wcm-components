@@ -144,11 +144,6 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
                 .navigateTo("/editor.html%testPagePath%.html"),
             execAfter: tcExecuteAfterTest }
         )
-            // verify the JS component is enabled
-            .asserts.isTrue(function() {
-                return h.find(selectors.elements.self + "[data-cmp-lazy]", "#ContentFrame").size() === 1;
-            })
-
             // verify the map area is available
             .asserts.isTrue(function() {
                 return h.find(selectors.elements.area, "#ContentFrame").size() === 1;
