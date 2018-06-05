@@ -29,7 +29,7 @@
      * v2 specifics
      */
     var titleSelector = ".cmp-image__title";
-    var tcExecuteBeforeTest = imageV1.tcExecuteBeforeTest(c.rtImage_v2, "core/wcm/tests/components/test-page-v2", true);
+    var tcExecuteBeforeTest = imageV1.tcExecuteBeforeTest(c.rtImage_v2, "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest = imageV1.tcExecuteAfterTest();
 
     /**
