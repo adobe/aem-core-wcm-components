@@ -5,5 +5,5 @@
   "actionsEnabled": false,
   "actions": [ ],
   "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-5",
-  ":type": "core/wcm/sandbox/components/teaser/v1/teaser"
+  ":type": "core/wcm/components/teaser/v1/teaser"
 }

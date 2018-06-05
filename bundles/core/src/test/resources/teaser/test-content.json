@@ -18,7 +18,7 @@
                         "jcr:title"         : "Teaser",
                         "jcr:description"   : "Description",
                         "linkURL"           : "https://www.adobe.com",
-                        "sling:resourceType": "core/wcm/sandbox/components/teaser/v1/teaser"
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                     },
                     "teaser-2"          : {
                         "jcr:primaryType"   : "nt:unstructured",
@@ -26,21 +26,21 @@
                         "jcr:title"         : "Teaser",
                         "jcr:description"   : "Description",
                         "linkURL"           : "https://www.adobe.com",
-                        "sling:resourceType": "core/wcm/sandbox/components/teaser/v1/teaser"
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                     },
                     "teaser-3"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:title"         : "Teaser",
                         "jcr:description"   : "Description",
                         "linkURL"           : "https://www.adobe.com",
-                        "sling:resourceType": "core/wcm/sandbox/components/teaser/v1/teaser"
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                     },
                     "teaser-4"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                         "jcr:title"         : "Teaser",
                         "jcr:description"   : "Description",
-                        "sling:resourceType": "core/wcm/sandbox/components/teaser/v1/teaser"
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                     },
                     "teaser-5"          : {
                         "jcr:primaryType"   : "nt:unstructured",
@@ -48,13 +48,13 @@
                         "jcr:title"         : "Teaser",
                         "jcr:description"   : "Description",
                         "linkURL"           : "/content/teasers",
-                        "sling:resourceType": "core/wcm/sandbox/components/teaser/v1/teaser"
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                     },
                     "teaser-6"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                         "linkURL"           : "/content/teasers",
-                        "sling:resourceType": "core/wcm/sandbox/components/teaser/v1/teaser",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser",
                         "titleFromPage": true,
                         "descriptionFromPage": true
                     },
@@ -65,7 +65,7 @@
                         "jcr:title"           : "Teaser",
                         "jcr:description"     : "Description",
                         "actionsEnabled"             : true,
-                        "sling:resourceType"  : "core/wcm/sandbox/components/teaser/v1/teaser",
+                        "sling:resourceType"  : "core/wcm/components/teaser/v1/teaser",
                         "actions"                : {
                             "jcr:primaryType" : "nt:unstructured",
                             "item0" : {
@@ -84,7 +84,7 @@
                         "jcr:primaryType"     : "nt:unstructured",
                         "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                         "actionsEnabled"             : true,
-                        "sling:resourceType"  : "core/wcm/sandbox/components/teaser/v1/teaser",
+                        "sling:resourceType"  : "core/wcm/components/teaser/v1/teaser",
                         "titleFromPage": true,
                         "descriptionFromPage": true,
                         "actions"                : {

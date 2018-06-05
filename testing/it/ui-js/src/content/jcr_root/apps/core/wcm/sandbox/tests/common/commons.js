@@ -28,7 +28,5 @@
     c.proxyPath_sandbox = "/apps/core-component/components/sandbox/";
 
     // core component resource types
-    // teaser component
-    c.rtTeaser_v1 = "core/wcm/sandbox/components/teaser/v1/teaser";
 
 }(hobs, jQuery));

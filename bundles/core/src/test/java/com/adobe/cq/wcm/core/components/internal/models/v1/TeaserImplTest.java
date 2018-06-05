@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.sandbox.internal.models.v1;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -36,8 +36,9 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
+import com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
+import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;

@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.sandbox.internal.models.v1;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.sandbox.models.Teaser;
+import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -56,7 +55,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TeaserImpl.class);
 
-    public final static String RESOURCE_TYPE = "core/wcm/sandbox/components/teaser/v1/teaser";
+    public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v1/teaser";
 
     private String title;
     private String description;

@@ -17,7 +17,7 @@
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:primaryType="cq:ClientLibraryFolder"
     categories="[granite.testing.hobbes.tests,
-        aem.core-components.testsuite.sandbox,
+        aem.core-components.testsuite,
         aem.core-components.testsuite.teaser,
         aem.core-components.testsuite.teaser.v1]"
     dependencies="[aem.core-components.tests.teaser.v1]"/>
