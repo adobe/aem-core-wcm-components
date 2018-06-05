@@ -33,7 +33,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
     /**
      * Before Test Case
      */
-    image.tcExecuteBeforeTest = function(imageRT, pageRT, jsComponentEnabled) {
+    image.tcExecuteBeforeTest = function(imageRT, pageRT) {
         return new h.TestCase("Setup Before Test")
             // common set up
             .execTestCase(c.tcExecuteBeforeTest)
@@ -50,32 +50,6 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             // add the component, store component path in 'cmpPath'
             .execFct(function(opts, done) {
                 c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
-            })
-
-            // create and assign a content policy to enable lazy loading; which initializes the frontend handling
-            .execFct(function(opts, done) {
-                if (jsComponentEnabled) {
-                    var data = {};
-                    data["jcr:title"] = "New Policy";
-                    data["sling:resourceType"] = "wcm/core/components/policy/policy";
-                    data["disableLazyLoading"] = "false";
-
-                    c.createPolicy("/image" + "/new_policy", data, "policyPath", done, c.policyPath);
-                } else {
-                    done();
-                }
-            })
-
-            .execFct(function(opts, done) {
-                if (jsComponentEnabled) {
-                    var data = {};
-                    data["cq:policy"] = "core-component/components" + "/image" + "/new_policy";
-                    data["sling:resourceType"] = "wcm/core/components/policies/mapping";
-
-                    c.assignPolicy("/image", data, done, c.policyAssignmentPath);
-                } else {
-                    done();
-                }
             })
 
             // open the new page in the editor
