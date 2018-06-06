@@ -64,8 +64,8 @@
                 <configuration>
                     <exportScr>true</exportScr>
                     <instructions>
-                        <!-- The Sling-Model-Packages instruction needs to point to the implementation package -->
-                        <Sling-Model-Packages>com.adobe.cq.wcm.core.components.internal.models,com.adobe.cq.wcm.core.components.sandbox.internal.models</Sling-Model-Packages>
+                        <!-- Enable registration of Sling Models classes via bnd plugin -->
+                        <_plugin>org.apache.sling.bnd.models.ModelsScannerPlugin</_plugin>
                         <!-- Enable processing of OSGI DS component annotations -->
                         <_dsannotations>*</_dsannotations>
                         <!-- Enable processing of OSGI metatype annotations -->
@@ -73,6 +73,13 @@
                     </instructions>
                     <comparisonVersion>(,${project.parent.version}]</comparisonVersion>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.sling</groupId>
+                        <artifactId>org.apache.sling.bnd.models</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
