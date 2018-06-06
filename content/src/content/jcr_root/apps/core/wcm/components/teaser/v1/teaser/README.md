@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Teaser (v1 - sandbox)
+Teaser (v1)
 ====
 Teaser component written in HTL, showing an image, a title, a rich-text and possibly some actions/links. Variations can include 
 only parts of the teaser.
@@ -25,7 +25,7 @@ only parts of the teaser.
 * Can control if title and text should be inherited from a linked page.
 
 ### Use Object
-The Teaser component uses the `com.adobe.cq.wcm.core.components.sandbox.models.Teaser` Sling model as its Use-object.
+The Teaser component uses the `com.adobe.cq.wcm.core.components.models.Teaser` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
 The teaser component has the following configuration properties:
@@ -70,7 +70,7 @@ BLOCK cmp-teaser
 
 ## Information
 * **Vendor**: Adobe
-* **Version**: v1 - sandbox
+* **Version**: v1
 * **Compatibility**: AEM 6.3
 * **Status**: preview
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_teaser\_v1](https://www.adobe.com/go/aem_cmp_teaser_v1)

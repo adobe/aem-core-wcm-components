@@ -18,4 +18,4 @@
     jcr:primaryType="cq:ClientLibraryFolder"
     categories="[granite.testing.hobbes.tests,
         aem.core-components.tests.teaser.v1]"
-    dependencies="[aem.core-components.tests.commons.sandbox]"/>
+    dependencies="[aem.core-components.tests.commons]"/>

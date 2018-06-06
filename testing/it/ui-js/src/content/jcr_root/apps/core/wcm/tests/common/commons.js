@@ -55,6 +55,8 @@
     c.rtLanguageNavigation_v1 = "core/wcm/components/languagenavigation/v1/languagenavigation";
     // search component
     c.rtSearch_v1 = "core/wcm/components/search/v1/search";
+    // teaser component
+    c.rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
     // form container
     c.rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
     c.rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
