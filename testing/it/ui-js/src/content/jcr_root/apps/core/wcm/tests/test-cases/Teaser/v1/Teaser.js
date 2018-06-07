@@ -298,8 +298,8 @@
             })
 
             .assert.isTrue(function() {
-                var selector = selectors.editDialog.actionsEnabled;
-                return h.find(selector).length === 0;
+                var actionsEnabled = h.find(selectors.editDialog.actionsEnabled);
+                return actionsEnabled.prop("disabled") === true && actionsEnabled.prop("checked") === false;
             });
     };
 
