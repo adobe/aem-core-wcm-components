@@ -276,7 +276,7 @@
                                                 name="./actionsEnabled"
                                                 value="{Boolean}true"
                                                 uncheckedValue="{Boolean}false"
-                                                granite:hide="${cqDesign.disabled}">
+                                                granite:hide="${cqDesign.actionsDisabled}">
                                             </actionsEnabled>
                                             <actions
                                                 jcr:primaryType="nt:unstructured"

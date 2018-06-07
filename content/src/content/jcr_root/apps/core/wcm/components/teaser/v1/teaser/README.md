@@ -57,6 +57,15 @@ The following properties are written to JCR for this Teaser component and are ex
 7. `./jcr:description` - defines the value of the teaser description 
 8. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
 
+### Extending the Teaser Component
+When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for 
+the proxy component and point it to the designated Image component.
+
+For example:
+```
+imageDelegate="core/wcm/components/image/v2/image"
+```
+
 ## BEM Description
 ```
 BLOCK cmp-teaser

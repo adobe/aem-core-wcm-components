@@ -278,7 +278,7 @@
                 var data = {};
                 data["jcr:title"] = "New Policy";
                 data["sling:resourceType"] = "wcm/core/components/policy/policy";
-                data["disabled"] = "true";
+                data["actionsDisabled"] = "true";
 
                 c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
             })

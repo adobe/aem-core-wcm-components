@@ -36,7 +36,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                         text="Disable Call-To-Actions"
-                                        name="./disabled"
+                                        name="./actionsDisabled"
                                         value="{Boolean}true"/>
                                 </items>
                             </actions>
