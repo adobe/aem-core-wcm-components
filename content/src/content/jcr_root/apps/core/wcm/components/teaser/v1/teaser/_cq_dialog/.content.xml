@@ -275,15 +275,33 @@
                                                 text="Enable Call-To-Actions"
                                                 name="./actionsEnabled"
                                                 value="{Boolean}true"
-                                                uncheckedValue="{Boolean}false"
-                                                granite:hide="${cqDesign.actionsDisabled}">
+                                                uncheckedValue="{Boolean}false">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="/libs/granite/ui/components/coral/foundation/renderconditions/simple"
+                                                    expression="${!cqDesign.actionsDisabled}"/>
                                             </actionsEnabled>
+                                            <actionsDisabled
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="When checked, enables definition of Call-To-Actions. The link of the first Call-To-Action in the list is used as the link for other teaser elements."
+                                                text="Enable Call-To-Actions"
+                                                name="./actionsEnabled"
+                                                value="{Boolean}true"
+                                                uncheckedValue="{Boolean}false"
+                                                checked="{Boolean}false"
+                                                ignoreData="{Boolean}true"
+                                                disabled="{Boolean}true">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="/libs/granite/ui/components/coral/foundation/renderconditions/simple"
+                                                    expression="${cqDesign.actionsDisabled}"/>
+                                            </actionsDisabled>
                                             <actions
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                                 composite="{Boolean}true"
-                                                granite:class="foundation-toggleable cmp-teaser__editor-multifield_actions"
-                                                granite:hide="${cqDesign.disabled}">
+                                                granite:class="foundation-toggleable cmp-teaser__editor-multifield_actions">
                                                 <field
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="granite/ui/components/coral/foundation/container"
