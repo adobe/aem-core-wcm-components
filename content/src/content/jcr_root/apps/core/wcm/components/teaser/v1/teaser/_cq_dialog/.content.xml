@@ -271,7 +271,7 @@
                                             <actionsEnabled
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                fieldDescription="When checked, enables definition of Call-To-Actions. The link of the first Call-To-Action in the list is used as the link for other teaser elements."
+                                                fieldDescription="When checked, enables definition of Call-To-Actions. The linked page of the first Call-To-Action is used when populating title and description."
                                                 text="Enable Call-To-Actions"
                                                 name="./actionsEnabled"
                                                 value="{Boolean}true"
@@ -284,7 +284,7 @@
                                             <actionsDisabled
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                fieldDescription="When checked, enables definition of Call-To-Actions. The link of the first Call-To-Action in the list is used as the link for other teaser elements."
+                                                fieldDescription="When checked, enables definition of Call-To-Actions. The linked page of the first Call-To-Action is used when populating title and description."
                                                 text="Enable Call-To-Actions"
                                                 name="./actionsEnabled"
                                                 value="{Boolean}true"
