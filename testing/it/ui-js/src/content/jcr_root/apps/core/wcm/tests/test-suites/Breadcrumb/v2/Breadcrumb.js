@@ -53,7 +53,7 @@
         .addTestCase(breadcrumbV1.changeStartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumbV1.setZeroStartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumbV1.set100StartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
-        .addTestCase(breadcrumbV2.testStructureData(listSelector ,itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(breadcrumbV2.testStructureData(listSelector, itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/breadcrumb/v2/breadcrumb/clientlibs/site.css"));
 
 }(hobs, jQuery));
