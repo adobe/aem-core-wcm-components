@@ -1,0 +1,31 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2016 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly data-sly-test="${wcmmode.edit}" data-sly-use.allowed="com.day.cq.wcm.foundation.AllowedComponentList"></sly>
+<div data-sly-use.api="com.day.cq.wcm.foundation.model.responsivegrid.ResponsiveGrid" class="${api.cssClass} ${allowed.cssClass}">
+    <sly data-sly-test.isAllowedApplicable="${allowed.isApplicable}"
+         data-sly-test="${isAllowedApplicable}"
+         data-sly-use.allowedTemplate="/libs/wcm/foundation/components/parsys/allowedcomponents/allowedcomponents-tpl.html"
+         data-sly-call="${allowedTemplate.allowedcomponents @ title=allowed.title, components=allowed.components}"></sly>
+    <sly data-sly-test="${!isAllowedApplicable}"
+         data-sly-list.child="${api.paragraphs}">
+        <sly data-sly-test="${childList.first}"
+             data-sly-resource="${child.path @ resourceType=child.resourceType, decoration='true', cssClassName=child.cssClass}"></sly>
+        <sly data-sly-test="${!childList.first}"
+             data-sly-resource="${child.path @ resourceType='core/wcm/components/responsivegrid/collapsed', decoration='true', cssClassName=child.cssClass}"></sly>
+    </sly>
+    <sly data-sly-test="${!isAllowedApplicable && wcmmode.edit}"
+         data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/responsivegrid/new', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}" />
+</div>
