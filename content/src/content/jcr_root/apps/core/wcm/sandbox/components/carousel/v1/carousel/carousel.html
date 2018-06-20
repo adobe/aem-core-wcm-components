@@ -13,6 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     data-sly-test="${false}"></div>
-<sly data-sly-call="${templates.placeholder @ isEmpty = true, classAppend = 'cmp-carousel'}"></sly>
+<div data-sly-use.carousel="com.adobe.cq.wcm.core.components.sandbox.models.Carousel"
+     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     data-sly-test.show="${carousel.items && carousel.items.size > 0}"
+     class="cmp-carousel" >
+    <sly data-sly-repeat.item="${carousel.items}" data-sly-resource="${item @ decorationTagName='div'}"></sly>
+</div>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !show, classAppend = 'cmp-carousel'}"></sly>
