@@ -18,5 +18,7 @@
      data-sly-test.show="${carousel.items && carousel.items.size > 0}"
      class="cmp-carousel" >
     <sly data-sly-repeat.item="${carousel.items}" data-sly-resource="${item @ decorationTagName='div'}"></sly>
+    <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
+         data-sly-test="${wcmmode.edit || wcmmode.preview}"></sly>
 </div>
-<sly data-sly-call="${templates.placeholder @ isEmpty = !show, classAppend = 'cmp-carousel'}"></sly>
+<!--/*<sly data-sly-call="${templates.placeholder @ isEmpty = !show, classAppend = 'cmp-carousel'}"></sly>*/-->

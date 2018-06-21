@@ -56,9 +56,8 @@ public class CarouselImpl implements Carousel {
 
     private void readItems() {
         items = new ArrayList<>();
-        Resource itemsNode = resource.getChild(Carousel.NN_ITEMS);
-        if (itemsNode != null) {
-            for(Resource res : itemsNode.getChildren()) {
+        if (resource != null) {
+            for(Resource res : resource.getChildren()) {
                 items.add(res);
             }
         }

@@ -36,11 +36,6 @@ import com.adobe.cq.export.json.ContainerExporter;
 public interface Carousel extends ContainerExporter {
 
     /**
-     * Node that stores the carousel items
-     */
-    public static String NN_ITEMS = "items";
-
-    /**
      * Returns the list of items in the carousel
      *
      * @return List of {@link Resource}

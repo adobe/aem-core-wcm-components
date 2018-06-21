@@ -16,11 +16,8 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:title"         : "Carousel 1",
                         "sling:resourceType": "core/wcm/components/sandbox/carousel/v1/carousel",
-                        "items"             : {
-                            "jcr:primaryType"   : "nt:unstructured",
-                            "item_1": {},
-                            "item_2": {}
-                        }
+                        "item_1": {},
+                        "item_2": {}
                     }
                 }
             }
