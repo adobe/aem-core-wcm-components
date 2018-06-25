@@ -20,43 +20,17 @@
     "use strict";
 
     channel.on("cq-editor-loaded", function (event) {
-        //alert(1);
-        ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", getEditAction());
+        ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
     });
 
     if (ns && ns.EditorFrame && ns.EditorFrame.editableToolbar) {
-        alert(2);
-        ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", getEditAction());
+        ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
     } else {
-        //alert(3);
         channel.on("cq-editor-loaded", function (event) {
             if (event.layer === "Edit") {
-                alert(4);
-                ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", getEditAction());
+                ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
             }
         });
-    }
-
-    function getEditAction() {
-        if (ns && ns.ui) {
-            return new ns.ui.ToolbarAction({
-                name      : "EDIT_CAROUSEL",
-                text      : Granite.I18n.get("Edit Carousel Items"),
-                icon      : "edit",
-                order     : "first",
-                execute   : function (editable) {
-                    //alert(5);
-                    console.log(editable);
-                    console.log(editable.getChildren());
-                    console.log(ns.editables.getChildren(editable, true));
-                },
-                condition : function (editable) {
-                    // TODO: improve with super type
-                    return "core/wcm/sandbox/components/carousel/v1/carousel" === editable.type;
-                },
-                isNonMulti: true
-            });
-        }
     }
 
 }(jQuery, Granite.author, jQuery(document), this));

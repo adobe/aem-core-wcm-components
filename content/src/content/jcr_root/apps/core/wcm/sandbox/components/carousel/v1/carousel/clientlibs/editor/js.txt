@@ -15,3 +15,4 @@
 ###############################################################################
 
 js/carousel.js
+js/edit.ToolbarActions.EDIT_CAROUSEL.js
