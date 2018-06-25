@@ -81,15 +81,6 @@
                 </dependencies>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <jacoco-agent.destfile>${jacoco.data.file}</jacoco-agent.destfile>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
             </plugin>
@@ -157,8 +148,6 @@
                                         <!-- private enum; cannot test valueOf / values -->
                                         <exclude>**/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
                                         <exclude>**/AdaptiveImageServlet$Source.class</exclude>
-                                        <!-- this class has only a constant -->
-                                        <exclude>**/AbstractImageDelegatingModel.class</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>

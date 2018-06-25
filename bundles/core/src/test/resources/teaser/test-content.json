@@ -1,0 +1,109 @@
+{
+    "teasers": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Teasers Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description"   : "Teasers description",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "teaser-1"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "linkURL"           : "https://www.adobe.com",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                    },
+                    "teaser-2"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "linkURL"           : "https://www.adobe.com",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                    },
+                    "teaser-3"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "linkURL"           : "https://www.adobe.com",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                    },
+                    "teaser-4"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                    },
+                    "teaser-5"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "linkURL"           : "/content/teasers",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                    },
+                    "teaser-6"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "linkURL"           : "/content/teasers",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser",
+                        "titleFromPage": true,
+                        "descriptionFromPage": true
+                    },
+                    "teaser-7"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "linkURL"             : "/content/teasers",
+                        "jcr:title"           : "Teaser",
+                        "jcr:description"     : "Description",
+                        "actionsEnabled"             : true,
+                        "sling:resourceType"  : "core/wcm/components/teaser/v1/teaser",
+                        "actions"                : {
+                            "jcr:primaryType" : "nt:unstructured",
+                            "item0" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "http://www.adobe.com",
+                                "text": "Adobe"
+                            },
+                            "item1" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "/content/teasers",
+                                "text": "Teasers"
+                            }
+                        }
+                    },
+                    "teaser-8"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "fileReference"       : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                        "actionsEnabled"             : true,
+                        "sling:resourceType"  : "core/wcm/components/teaser/v1/teaser",
+                        "titleFromPage": true,
+                        "descriptionFromPage": true,
+                        "actions"                : {
+                            "jcr:primaryType" : "nt:unstructured",
+                            "item0" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "/content/teasers",
+                                "text": "Teasers"
+                            },
+                            "item1" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "http://www.adobe.com",
+                                "text": "Adobe"
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
