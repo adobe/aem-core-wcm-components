@@ -1,0 +1,12 @@
+{
+  "title": "Teaser",
+  "description": "Description",
+  "linkURL": "https://www.adobe.com",
+  "titleType": "h5",
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actionsEnabled": false,
+  "actions": [ ],
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-1",
+  ":type": "core/wcm/components/teaser/v1/teaser"
+}
