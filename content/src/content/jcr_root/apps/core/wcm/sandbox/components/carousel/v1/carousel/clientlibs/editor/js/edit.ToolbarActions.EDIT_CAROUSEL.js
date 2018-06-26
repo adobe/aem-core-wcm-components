@@ -100,10 +100,13 @@
             table.append($('<tr is="coral-table-row"><td is="coral-table-cell">' + items[i]["title"] + '</td>' +
                 '<td is="coral-table-cell">' +
                 '<button is="coral-button" type="button" variant="minimal" icon="reorder" coral-table-roworder></button>' +
-                '<button is="coral-button" type="button" variant="minimal" icon="delete"></button>' +
                 '</td></tr>'));
         }
-        table.append($('<tr is="coral-table-row"><td is="coral-table-cell" colspan="2"><button is="coral-button" type="button" variant="minimal" icon="add"></button></td></tr>'));
+        table.on("coral-table:change", function(event) {
+            var row = event.target.selectedItem;
+            var ix = Array.prototype.slice.call(row.parentElement.children).indexOf(row);
+            Granite.author.ContentFrame.postMessage("carousel", {slide: ix});
+        });
         $(table).appendTo(popover.content);
         ui.clearWait();
     }

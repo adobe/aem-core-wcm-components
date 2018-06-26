@@ -41,6 +41,14 @@
             that._active = 0;
             refreshActive();
             initControls();
+
+            if (Granite && Granite.author) {
+                new Granite.author.MessageChannel('cqauthor', window).subscribeRequestMessage("carousel", function(message) {
+                    if (message.data) {
+                        slide(message.data.slide);
+                    };
+                })
+            }
         }
 
         function cacheElements(wrapper) {
