@@ -14,3 +14,109 @@
  *  limitations under the License.
  */
 
+.cmp-carousel__content {
+    position: relative;
+}
+
+.cmp-carousel__item {
+    display: none;
+
+    &.cmp-carousel__item--active {
+        display:  block;
+    }
+}
+
+.cmp-carousel__action--prev, .cmp-carousel__action--next {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    width: 15%;
+    color: #fff;
+    text-align: center;
+    opacity: .5;
+
+    &:hover {
+        background-color: #999;
+    }
+}
+
+.cmp-carousel__action--prev {
+    left: 0;
+}
+
+.cmp-carousel__action--next {
+    right: 0;
+}
+
+.cmp-carousel__icon--prev, .cmp-carousel__icon--next {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: transparent no-repeat center center;
+    background-size: 100% 100%;
+}
+
+.cmp-carousel__icon--prev {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+}
+
+.cmp-carousel__icon--next {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+}
+
+.cmp-carousel__text--prev, .cmp-carousel__text--next {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    border: 0;
+}
+
+.cmp-carousel__indicators {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-left: 0;
+    list-style: none;
+    background-color: #999;
+    margin: 0;
+}
+
+.cmp-carousel__indicator {
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 3px;
+    margin-left: 3px;
+    text-indent: -999px;
+    background-color: rgba(255,255,255,.5);
+}
+
+.cmp-carousel__indicator--active {
+    background-color: #fff;
+}

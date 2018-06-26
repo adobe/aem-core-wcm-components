@@ -16,9 +16,21 @@
 <div data-sly-use.carousel="com.adobe.cq.wcm.core.components.sandbox.models.Carousel"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test.show="${carousel.items && carousel.items.size > 0}"
-     class="cmp-carousel" >
-    <sly data-sly-repeat.item="${carousel.items}" data-sly-resource="${item @ decorationTagName='div'}"></sly>
+     class="cmp-carousel">
+    <div data-cmp-is="carousel" class="cmp-carousel__content" data-sly-test="${carousel && carousel.items}" >
+        <div data-sly-repeat.item="${carousel.items}" data-sly-resource="${item @ decorationTagName='div'}" class="cmp-carousel__item" data-cmp-hook-carousel="item"></div>
+        <a class="cmp-carousel__action--prev" data-cmp-hook-carousel="prev" href="#prev">
+            <span class="cmp-carousel__icon--prev"></span>
+            <span class="cmp-carousel__text--prev">${'Previous' @ i18n}</span>
+        </a>
+        <a class="cmp-carousel__action--next" data-cmp-hook-carousel="next" href="#next">
+            <span class="cmp-carousel__icon--next"></span>
+            <span class="cmp-carousel__text--next">${'Next' @ i18n}</span>
+        </a>
+        <ol class="cmp-carousel__indicators">
+            <li data-sly-repeat.item="${carousel.items}" class="cmp-carousel__indicator" data-cmp-hook-carousel="indicator" data-slide="${itemList.index}"></li>
+        </ol>
+    </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
          data-sly-test="${wcmmode.edit || wcmmode.preview}"></sly>
 </div>
-<!--/*<sly data-sly-call="${templates.placeholder @ isEmpty = !show, classAppend = 'cmp-carousel'}"></sly>*/-->
