@@ -14,16 +14,16 @@
  * limitations under the License.
  ******************************************************************************/
 /* global
- Granite, Coral
+ Granite
  */
-;(function () {
+(function() {
     "use strict";
 
     var NS = "cmp";
     var IS = "carousel";
 
     var selectors = {
-        self: '[data-' +  NS + '-is="' + IS + '"]'
+        self: "[data-" +  NS + '-is="' + IS + '"]'
     };
 
     function Carousel(config) {
@@ -43,11 +43,11 @@
             initControls();
 
             if (Granite && Granite.author) {
-                new Granite.author.MessageChannel('cqauthor', window).subscribeRequestMessage("carousel", function(message) {
+                new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("carousel", function(message) {
                     if (message.data) {
                         slide(message.data.slide);
-                    };
-                })
+                    }
+                });
             }
         }
 
@@ -102,7 +102,7 @@
             for (var i = 0; i < indicators.length; i++) {
                 indicators[i].addEventListener("click", function(event) {
                     slide(event.target.dataset["slide"]);
-                })
+                });
             }
         }
 
@@ -110,7 +110,7 @@
             var items = that._elements["item"];
             var indicators = that._elements["indicator"];
             for (var i = 0; i < items.length; i++) {
-                if (i == that._active) {
+                if (i === parseInt(that._active)) {
                     items[i].classList.add("cmp-carousel__item--active");
                     indicators[i].classList.add("cmp-carousel__indicator--active");
                 } else {

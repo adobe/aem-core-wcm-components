@@ -15,9 +15,8 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.carousel="com.adobe.cq.wcm.core.components.sandbox.models.Carousel"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     data-sly-test.show="${carousel.items && carousel.items.size > 0}"
      class="cmp-carousel">
-    <div data-cmp-is="carousel" class="cmp-carousel__content" data-sly-test="${carousel && carousel.items}" >
+    <div data-cmp-is="carousel" class="cmp-carousel__content" data-sly-test="${carousel.items && carousel.items.size > 0}" >
         <div data-sly-repeat.item="${carousel.items}" data-sly-resource="${item @ decorationTagName='div'}" class="cmp-carousel__item" data-cmp-hook-carousel="item"></div>
         <a class="cmp-carousel__action--prev" data-cmp-hook-carousel="prev" href="#prev">
             <span class="cmp-carousel__icon--prev"></span>

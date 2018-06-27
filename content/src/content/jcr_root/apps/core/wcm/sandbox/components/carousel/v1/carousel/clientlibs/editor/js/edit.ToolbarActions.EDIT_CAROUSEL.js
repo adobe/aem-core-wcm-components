@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-;(function ($, ns, channel, window) {
+(function($, ns, channel, window) {
     "use strict";
 
     var ui = $(window).adaptTo("foundation-ui");
@@ -22,11 +22,11 @@
      * The toolbar item for editing the carousel
      */
     ns.edit.ToolbarActions.EDIT_CAROUSEL = new ns.ui.ToolbarAction({
-        name      : "EDIT_CAROUSEL",
-        text      : Granite.I18n.get("Edit Carousel Items"),
-        icon      : "imageCarousel",
-        order     : "first",
-        execute   : function (editable, selectableParents, target) {
+        name: "EDIT_CAROUSEL",
+        text: Granite.I18n.get("Edit Carousel Items"),
+        icon: "imageCarousel",
+        order: "first",
+        execute: function(editable, selectableParents, target) {
             var popover = new Coral.Popover().set({
                 alignAt: Coral.Overlay.align.LEFT_BOTTOM,
                 alignMy: Coral.Overlay.align.LEFT_TOP,
@@ -47,7 +47,7 @@
             // Do not close the toolbar
             return false;
         },
-        condition : function (editable) {
+        condition: function(editable) {
             // TODO: improve with super type
             return "core/wcm/sandbox/components/carousel/v1/carousel" === editable.type;
         },
@@ -58,7 +58,7 @@
         ui.wait(popover);
         $.ajax({
             url: path + ".model.json"
-        }).done(function (data) {
+        }).done(function(data) {
             if (data && data.items) {
                 var items = new Array(data.items.length);
                 for (var i = 0; i < data.items.length; i++) {
@@ -80,7 +80,7 @@
         if (item) {
             if (item["jcr:title"]) {
                 title = item["jcr:title"];
-            } else if (typeof item == "object") {
+            } else if (typeof item === "object") {
                 for (var property in item) {
                     if (item.hasOwnProperty(property)) {
                         title = getTitle(item[property]);
@@ -97,15 +97,15 @@
     function populateCarouselItems(popover, items) {
         var table = $('<table is="coral-table" selectable orderable></table>');
         for (var i = 0; i < items.length; i++) {
-            table.append($('<tr is="coral-table-row"><td is="coral-table-cell">' + items[i]["title"] + '</td>' +
+            table.append($('<tr is="coral-table-row"><td is="coral-table-cell">' + items[i]["title"] + "</td>" +
                 '<td is="coral-table-cell">' +
                 '<button is="coral-button" type="button" variant="minimal" icon="reorder" coral-table-roworder></button>' +
-                '</td></tr>'));
+                "</td></tr>"));
         }
         table.on("coral-table:change", function(event) {
             var row = event.target.selectedItem;
             var ix = Array.prototype.slice.call(row.parentElement.children).indexOf(row);
-            Granite.author.ContentFrame.postMessage("carousel", {slide: ix});
+            Granite.author.ContentFrame.postMessage("carousel", { slide: ix });
         });
         $(table).appendTo(popover.content);
         ui.clearWait();

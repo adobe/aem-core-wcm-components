@@ -16,17 +16,17 @@
 /* global
  Granite, Coral
  */
-;(function ($, ns, channel, window) {
+(function($, ns, channel, window) {
     "use strict";
 
-    channel.on("cq-editor-loaded", function (event) {
+    channel.on("cq-editor-loaded", function(event) {
         ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
     });
 
     if (ns && ns.EditorFrame && ns.EditorFrame.editableToolbar) {
         ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
     } else {
-        channel.on("cq-editor-loaded", function (event) {
+        channel.on("cq-editor-loaded", function(event) {
             if (event.layer === "Edit") {
                 ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
             }

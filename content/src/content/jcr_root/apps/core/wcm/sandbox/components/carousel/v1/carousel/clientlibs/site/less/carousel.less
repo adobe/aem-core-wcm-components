@@ -22,30 +22,7 @@
     display: none;
 
     &.cmp-carousel__item--active {
-        display:  block;
-    }
-}
-
-.cmp-carousel__action--prev, .cmp-carousel__action--next {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    width: 15%;
-    color: #fff;
-    text-align: center;
-    opacity: .5;
-
-    &:hover {
-        background-color: #999;
+        display: block;
     }
 }
 
@@ -55,6 +32,29 @@
 
 .cmp-carousel__action--next {
     right: 0;
+}
+
+.cmp-carousel__action--prev, .cmp-carousel__action--next {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    //display: -webkit-box;
+    //display: -ms-flexbox;
+    display: flex;
+    //-webkit-box-align: center;
+    //-ms-flex-align: center;
+    align-items: center;
+    //-webkit-box-pack: center;
+    //-ms-flex-pack: center;
+    justify-content: center;
+    width: 15%;
+    color: #fff;
+    text-align: center;
+    opacity: .5;
+
+    &:hover {
+        background-color: #999;
+    }
 }
 
 .cmp-carousel__icon--prev, .cmp-carousel__icon--next {
@@ -79,9 +79,9 @@
     height: 1px;
     padding: 0;
     overflow: hidden;
-    clip: rect(0,0,0,0);
+    clip: rect(0, 0, 0, 0);
     white-space: nowrap;
-    -webkit-clip-path: inset(50%);
+    //-webkit-clip-path: inset(50%);
     clip-path: inset(50%);
     border: 0;
 }
@@ -90,12 +90,12 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0px;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    bottom: 0;
+    //display: -webkit-box;
+    //display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
+    //-webkit-box-pack: center;
+    //-ms-flex-pack: center;
     justify-content: center;
     padding-left: 0;
     list-style: none;
@@ -105,8 +105,8 @@
 
 .cmp-carousel__indicator {
     position: relative;
-    -webkit-box-flex: 0;
-    -ms-flex: 0 1 auto;
+    //-webkit-box-flex: 0;
+    //-ms-flex: 0 1 auto;
     flex: 0 1 auto;
     width: 10px;
     height: 10px;
@@ -114,7 +114,7 @@
     margin-right: 3px;
     margin-left: 3px;
     text-indent: -999px;
-    background-color: rgba(255,255,255,.5);
+    background-color: rgba(255, 255, 255, .5);
 }
 
 .cmp-carousel__indicator--active {
