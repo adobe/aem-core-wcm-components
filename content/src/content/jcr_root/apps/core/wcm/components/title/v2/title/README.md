@@ -21,6 +21,7 @@ Title component written in HTL, allowing to define a section heading.
 
 * In-place editing
 * HTML element configuration (`h1` - `h6`)
+* URL and Page Links
 * Styles
 
 ### Use Object
@@ -37,6 +38,7 @@ The following properties are written to JCR for this Title component and are exp
 1. `./jcr:title` - will store the text of the title to be rendered
 2. `./type` - will store the HTML heading element type which will be used for rendering; if no value is defined, the component will fallback
 to the value defined by the component's policy
+3. `./linkURL` - will allow defining a URL to which the Title will link to.
 
 ## Client Libraries
 The component provides a `core.wcm.components.title.v2.editor` editor client library category that includes JavaScript
@@ -46,6 +48,7 @@ handling for dialog interaction. It is already included by its edit and design d
 ```
 BLOCK cmp-title
     ELEMENT cmp-title__text
+    ELEMENT cmp-title__link
 ```
 
 ## Information
