@@ -97,7 +97,7 @@
                                             </defaulttypes>
                                             <linkURL
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                sling:resourceType="cq/gui/components/coral/common/form/pagefield"
                                                 fieldDescription="Make the title a link to another resource."
                                                 fieldLabel="Link"
                                                 name="./linkURL"
