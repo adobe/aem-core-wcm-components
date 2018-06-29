@@ -95,6 +95,17 @@
                                                         value="h6"/>
                                                 </items>
                                             </defaulttypes>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Leave empty to use the current title as ID. If not empty, all spaces will be automatically removed."
+                                                fieldLabel="ID"
+                                                name="./id">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                    expression="${!cqDesign.disableId}"/>
+                                            </id>
                                         </items>
                                     </column>
                                 </items>

@@ -59,6 +59,16 @@ public interface Title extends ComponentExporter {
     }
 
     /**
+     * Returns the ID for the title component.
+     *
+     * @return the title's ID, if one was set, or predefined.
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     */
+    default String getId() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
