@@ -59,6 +59,9 @@ public class TitleImpl implements Title {
     @ValueMapValue(optional = true)
     private String type;
 
+    @ValueMapValue(optional = true)
+    private String id;
+
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
      */
@@ -76,6 +79,15 @@ public class TitleImpl implements Title {
                 heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
             }
         }
+
+        if (StringUtils.isBlank(id)) {
+            if (title != null ) {
+                id = title;
+            }
+        }
+        if (id != null) {
+            id = id.replaceAll("\\s", "");
+        }
     }
 
     @Override
@@ -89,6 +101,11 @@ public class TitleImpl implements Title {
             return heading.getElement();
         }
         return null;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Nonnull
