@@ -1,5 +1,6 @@
 {
     "type": "h2",
     "text": "Hello World",
+    "linkDisabled": false,
     ":type": "core/wcm/components/title/v1/title"
 }

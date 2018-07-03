@@ -16,9 +16,11 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.apache.sling.testing.resourceresolver.MockValueMap;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -28,6 +30,8 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
+
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -97,6 +101,16 @@ public class TitleImplTest {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
         assertEquals("https://www.adobe.com", title.getLinkURL());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+    }
+
+    @Test
+    public void testTeaserWithHiddenLinks() throws Exception {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Title.PN_TITLE_LINK_DISABLED, true);
+        }}));
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2, mockStyle);
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, "title-linkdisabled"));
     }
 
     private Title getTitleUnderTest(String resourcePath) {

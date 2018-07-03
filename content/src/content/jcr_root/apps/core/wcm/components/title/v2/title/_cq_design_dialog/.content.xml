@@ -31,9 +31,9 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <sizes
+                    <title
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Sizes"
+                        jcr:title="Title"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -128,38 +128,23 @@
                                                 value="h6"/>
                                         </items>
                                     </type>
-                                </items>
-                            </column>
-                        </items>
-                    </sizes>
-                    <styletab
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/include"
-                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
-                    <features
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Features"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <content
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                margin="{Boolean}false">
-                                <items jcr:primaryType="nt:unstructured">
                                     <disableLink
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                         fieldDescription="Check to disable support for links."
-                                        name="./disableLink"
+                                        name="./linkDisabled"
                                         text="Disable Link"
                                         checked="{Boolean}false"
                                         uncheckedValue="false"
                                         value="true"/>
                                 </items>
-                            </content>
+                            </column>
                         </items>
-                    </features>
+                    </title>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
                 </items>
             </tabs>
         </items>
