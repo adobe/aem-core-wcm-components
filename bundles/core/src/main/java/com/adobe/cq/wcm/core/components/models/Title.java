@@ -69,7 +69,7 @@ public interface Title extends ComponentExporter {
      * Returns the Title's link URL, if one was set.
      *
      * @return the title's link URL, if one was set, or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.4.0
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default String getLinkURL() {
         throw new UnsupportedOperationException();
