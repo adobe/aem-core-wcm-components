@@ -31,7 +31,7 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <title
+                    <sizes
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Title"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
@@ -140,7 +140,7 @@
                                 </items>
                             </column>
                         </items>
-                    </title>
+                    </sizes>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
