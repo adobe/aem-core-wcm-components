@@ -104,7 +104,7 @@ public class TitleImplTest {
     }
 
     @Test
-    public void testTeaserWithHiddenLinks() throws Exception {
+    public void testTitleWithLinksDisabled() throws Exception {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
             put(Title.PN_TITLE_LINK_DISABLED, true);
