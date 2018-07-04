@@ -77,6 +77,7 @@ public class TitleImplTest {
     public void testGetTitleResourcePageStyleType() {
         Style style = mock(Style.class);
         when(style.get(Title.PN_DESIGN_DEFAULT_TYPE, String.class)).thenReturn("h2");
+        when(style.get(Title.PN_TITLE_LINK_DISABLED, false)).thenReturn(false);
         Title title = getTitleUnderTest(TITLE_NOPROPS, style);
         assertEquals("h2", title.getType());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_NOPROPS));
@@ -131,6 +132,7 @@ public class TitleImplTest {
         bindings.put(WCMBindings.PAGE_MANAGER, CONTEXT.pageManager());
         if (style == null) {
             style = mock(Style.class);
+            when(style.get(Title.PN_TITLE_LINK_DISABLED, false)).thenReturn(false);
         }
         bindings.put(WCMBindings.CURRENT_STYLE, style);
         request.setResource(resource);

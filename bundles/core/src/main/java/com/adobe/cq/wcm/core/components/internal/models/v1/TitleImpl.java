@@ -48,7 +48,7 @@ public class TitleImpl implements Title {
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/title/v1/title";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/title/v2/title";
 
-    private boolean linkDisabled;
+    private boolean linkDisabled = false;
 
     @Self
     private SlingHttpServletRequest request;
@@ -64,7 +64,7 @@ public class TitleImpl implements Title {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
-    protected Style currentStyle;
+    private Style currentStyle;
 
     @ValueMapValue(optional = true, name = JcrConstants.JCR_TITLE)
     private String title;
@@ -74,8 +74,6 @@ public class TitleImpl implements Title {
 
     @ValueMapValue(optional = true)
     private String linkURL;
-
-    private Boolean linkDisabledObj;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
@@ -87,6 +85,7 @@ public class TitleImpl implements Title {
         if (StringUtils.isBlank(title)) {
             title = StringUtils.defaultIfEmpty(currentPage.getPageTitle(), currentPage.getTitle());
         }
+
         if (heading == null) {
             heading = Utils.Heading.getHeading(type);
             if (heading == null) {
@@ -101,10 +100,7 @@ public class TitleImpl implements Title {
         }
 
         if(currentStyle != null) {
-            linkDisabledObj = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, Boolean.class);
-            if(linkDisabledObj != null){
-                linkDisabled=linkDisabledObj;
-            }
+            linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);
         }
     }
 
