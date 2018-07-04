@@ -14,5 +14,7 @@
 # limitations under the License.
 ###############################################################################
 
-js/carousel.js
-js/edit.ToolbarActions.EDIT_CAROUSEL.js
+#base=js
+
+carousel.js
+edit.ToolbarActions.EDIT_CAROUSEL.js

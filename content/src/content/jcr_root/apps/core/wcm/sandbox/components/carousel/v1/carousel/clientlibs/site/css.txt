@@ -14,4 +14,6 @@
 # limitations under the License.
 ###############################################################################
 
-less/carousel.less
+#base=css
+
+carousel.less
