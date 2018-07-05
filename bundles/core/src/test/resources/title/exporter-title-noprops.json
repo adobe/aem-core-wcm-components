@@ -1,4 +1,5 @@
 {
     "type": "h2",
+    "linkDisabled": false,
     ":type": "core/wcm/components/title/v1/title"
 }

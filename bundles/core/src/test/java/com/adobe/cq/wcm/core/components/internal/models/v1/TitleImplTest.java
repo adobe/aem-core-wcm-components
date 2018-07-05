@@ -16,9 +16,11 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.apache.sling.testing.resourceresolver.MockValueMap;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -28,6 +30,8 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
+
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -43,6 +47,7 @@ public class TitleImplTest {
     private static final String TITLE_NOPROPS = TEST_PAGE + "/jcr:content/par/title-noprops";
     private static final String TITLE_WRONGTYPE = TEST_PAGE + "/jcr:content/par/title-wrongtype";
     private static final String TITLE_RESOURCE_JCR_TITLE_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-v2";
+    private static final String TITLE_RESOURCE_JCR_TITLE_LINK_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-link-v2";
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, TEST_PAGE);
@@ -72,6 +77,7 @@ public class TitleImplTest {
     public void testGetTitleResourcePageStyleType() {
         Style style = mock(Style.class);
         when(style.get(Title.PN_DESIGN_DEFAULT_TYPE, String.class)).thenReturn("h2");
+        when(style.get(Title.PN_TITLE_LINK_DISABLED, false)).thenReturn(false);
         Title title = getTitleUnderTest(TITLE_NOPROPS, style);
         assertEquals("h2", title.getType());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_NOPROPS));
@@ -87,7 +93,25 @@ public class TitleImplTest {
     @Test
     public void testV2JSONExport() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_V2);
+        assertNull(title.getLinkURL());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_V2));
+    }
+
+    @Test
+    public void testGetLink() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
+        assertEquals("https://www.adobe.com", title.getLinkURL());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
+    }
+
+    @Test
+    public void testTitleWithLinksDisabled() throws Exception {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Title.PN_TITLE_LINK_DISABLED, true);
+        }}));
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2, mockStyle);
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, "title-linkdisabled"));
     }
 
     private Title getTitleUnderTest(String resourcePath) {
@@ -105,8 +129,10 @@ public class TitleImplTest {
         bindings.put(SlingBindings.REQUEST, request);
         bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
         bindings.put(WCMBindings.CURRENT_PAGE, CONTEXT.pageManager().getPage(TEST_PAGE));
+        bindings.put(WCMBindings.PAGE_MANAGER, CONTEXT.pageManager());
         if (style == null) {
             style = mock(Style.class);
+            when(style.get(Title.PN_TITLE_LINK_DISABLED, false)).thenReturn(false);
         }
         bindings.put(WCMBindings.CURRENT_STYLE, style);
         request.setResource(resource);
