@@ -43,6 +43,8 @@ public class TitleImplTest {
     private static final String TITLE_NOPROPS = TEST_PAGE + "/jcr:content/par/title-noprops";
     private static final String TITLE_WRONGTYPE = TEST_PAGE + "/jcr:content/par/title-wrongtype";
     private static final String TITLE_RESOURCE_JCR_TITLE_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-v2";
+    private static final String TITLE_RESOURCE_JCR_TITLE_ID_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-id-v2";
+    private static final String TITLE_RESOURCE_JCR_TITLE_IDNULL_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-idnull-v2";
 
     @ClassRule
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, TEST_PAGE);
@@ -88,6 +90,20 @@ public class TitleImplTest {
     public void testV2JSONExport() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_V2);
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_V2));
+    }
+
+    @Test
+    public void testGetId() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_ID_V2);
+        assertEquals("HelloWorld", title.getId());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_ID_V2));
+    }
+
+    @Test
+    public void testIdNull() {
+        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_IDNULL_V2);
+        assertNull(title.getId());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_IDNULL_V2));
     }
 
     private Title getTitleUnderTest(String resourcePath) {
