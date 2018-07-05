@@ -45,43 +45,54 @@
         }
     });
 
+    function processRequests() {
+        var requests = [];
+
+        // Process removed items
+        for (var i = 0; i < deletedItems.length; i++) {
+            var itemPath = deletedItems[i];
+            requests.push(
+                {
+                    type: "POST",
+                    url: itemPath,
+                    data: {':operation': "delete"}
+                }
+            );
+        }
+        deletedItems = [];
+
+        // Process re-ordered items
+        $("coral-multifield-item").each(function(idx) {
+            var $item = $(this);
+            var itemPath = $item.data("path");
+            requests.push(
+                {
+                    type: "POST",
+                    url: itemPath,
+                    data: {':order': idx}
+                }
+            );
+        });
+
+        var chain = $.when();
+        requests.forEach(function (request) {
+            chain = chain.then(function() {
+                return $.ajax(request);
+            });
+        });
+
+    }
+
     $(window).adaptTo("foundation-registry").register("foundation.form.submit", {
         selector: "*",
         handler: function(formEl) {
 
-            var cleanups = [];
-
-            // Process removed items
-            for (var i = 0; i < deletedItems.length; i++) {
-                var itemPath = deletedItems[i];
-                cleanups.push(
-                    $.ajax({
-                        type: "POST",
-                        url: itemPath,
-                        data: {':operation': "delete"}
-                    })
-                );
-            }
-            deletedItems = [];
-
-            // Process re-ordered items
-            $("coral-multifield-item").each(function(idx) {
-                var $item = $(this);
-                var itemPath = $item.data("path");
-                cleanups.push(
-                    $.ajax({
-                        type: "POST",
-                        url: itemPath,
-                        data: {':order': idx}
-                    })
-                );
-            });
             /*
             */
 
             return {
                 post: function() {
-                    $.when.apply(null, cleanups);
+                    processRequests();
                 }
             };
         }
