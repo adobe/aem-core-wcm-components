@@ -18,6 +18,6 @@
      data-sly-test.text="${textModel.text}"
      class="cmp-text">
     <p class="cmp-text__paragraph"
-       data-sly-unwrap="${textModel.isRichText}">${text @ context =textModel.isRichText ? 'html' : 'text'}</p>
+       data-sly-unwrap="${textModel.isRichText}">${text @ context = textModel.isRichText ? 'html' : 'text'}</p>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !text, classAppend='cmp-text'}"></sly>
