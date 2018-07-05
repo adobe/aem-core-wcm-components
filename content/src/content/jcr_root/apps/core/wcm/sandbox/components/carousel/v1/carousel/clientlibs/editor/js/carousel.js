@@ -20,15 +20,15 @@
     "use strict";
 
     channel.on("cq-editor-loaded", function(event) {
-        ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
+        ns.EditorFrame.editableToolbar.registerAction("PANEL", ns.edit.ToolbarActions.PANEL);
     });
 
     if (ns && ns.EditorFrame && ns.EditorFrame.editableToolbar) {
-        ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
+        ns.EditorFrame.editableToolbar.registerAction("PANEL", ns.edit.ToolbarActions.PANEL);
     } else {
         channel.on("cq-editor-loaded", function(event) {
             if (event.layer === "Edit") {
-                ns.EditorFrame.editableToolbar.registerAction("EDIT_CAROUSEL", ns.edit.ToolbarActions.EDIT_CAROUSEL);
+                ns.EditorFrame.editableToolbar.registerAction("PANEL", ns.edit.ToolbarActions.PANEL);
             }
         });
     }

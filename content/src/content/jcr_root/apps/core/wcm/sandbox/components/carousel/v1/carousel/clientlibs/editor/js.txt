@@ -17,4 +17,4 @@
 #base=js
 
 carousel.js
-edit.ToolbarActions.EDIT_CAROUSEL.js
+edit.ToolbarActions.PANEL.js
