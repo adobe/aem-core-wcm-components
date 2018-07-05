@@ -41,7 +41,7 @@ public interface Title extends ComponentExporter {
     /**
      * Name of the policy property that defines whether or not the title link is disabled.
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     String PN_TITLE_LINK_DISABLED = "linkDisabled";
 
