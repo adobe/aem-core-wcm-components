@@ -21,6 +21,7 @@ Title component written in HTL, allowing to define a section heading.
 
 * In-place editing
 * HTML element configuration (`h1` - `h6`)
+* Linkable to content pages, external URLs or page anchors
 * Styles
 
 ### Use Object
@@ -30,6 +31,7 @@ The Title component uses the `com.adobe.cq.wcm.core.components.models.Title` Sli
 The following configuration properties are used:
 
 1. `./type` - defines the default HTML heading element type (`h1` - `h6`) this component will use for its rendering
+2. `./linkDisabled` - defines whether or not the title link is disabled
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Title component and are expected to be available as `Resource` properties:
@@ -37,6 +39,7 @@ The following properties are written to JCR for this Title component and are exp
 1. `./jcr:title` - will store the text of the title to be rendered
 2. `./type` - will store the HTML heading element type which will be used for rendering; if no value is defined, the component will fallback
 to the value defined by the component's policy
+3. `./linkURL` - will allow definition of a content page path, external URL or page anchor for linking the title.
 
 ## Client Libraries
 The component provides a `core.wcm.components.title.v2.editor` editor client library category that includes JavaScript
@@ -46,6 +49,7 @@ handling for dialog interaction. It is already included by its edit and design d
 ```
 BLOCK cmp-title
     ELEMENT cmp-title__text
+    ELEMENT cmp-title__link
 ```
 
 ## Information
