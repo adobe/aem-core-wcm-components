@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-;(function ($, ns, channel, window) {
+(function($, ns, channel, window) {
     "use strict";
 
     var deletedItems = [];
@@ -55,7 +55,7 @@
                 {
                     type: "POST",
                     url: itemPath,
-                    data: {':operation': "delete"}
+                    data: { ":operation": "delete" }
                 }
             );
         }
@@ -69,13 +69,13 @@
                 {
                     type: "POST",
                     url: itemPath,
-                    data: {':order': idx}
+                    data: { ":order": idx }
                 }
             );
         });
 
         var chain = $.when();
-        requests.forEach(function (request) {
+        requests.forEach(function(request) {
             chain = chain.then(function() {
                 return $.ajax(request);
             });
