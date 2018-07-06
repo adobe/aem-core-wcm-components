@@ -14,6 +14,6 @@
 # limitations under the License.
 ###############################################################################
 
-#base=js
+#base=css
 
-carousel.js
+panelselector.less

@@ -16,6 +16,10 @@
 (function($, ns, channel, window) {
     "use strict";
 
+    var ui = $(window).adaptTo("foundation-ui");
+
+    var popover;
+
     /**
      * Toolbar action that presents a UI for selecting and reordering child
      * items of a toggleable panel container component for display.
@@ -28,37 +32,21 @@
         icon: "multipleCheck",
         order: "after CONFIGURE",
         execute: function(editable, param, target) {
-            var popover = new Coral.Popover().set({
-                "class": "cq-editor-panel-popover",
+            popover = new Coral.Popover().set({
                 alignAt: Coral.Overlay.align.LEFT_BOTTOM,
                 alignMy: Coral.Overlay.align.LEFT_TOP,
                 target: target[0],
                 open: true
             });
 
+            popover.on("coral-overlay:close", function() {
+                popover.parentNode.removeChild(popover);
+            });
+
+            popover.classList.add("editor-PanelSelector");
+
             var table = new Coral.Table().set({
                 selectable: true
-            });
-            popover.appendChild(table);
-
-            // add items
-            if (editable.isContainer()) {
-                var children = editable.getChildren();
-                var items = [];
-
-                children.filter(isDisplayable).forEach(function(child) {
-                    items.push({
-                        id: child.path,
-                        title: ns.editableHelper.getEditableDisplayableName(child)
-                    });
-                });
-
-                appendItems(table, items);
-            }
-
-            // event handling
-            popover.on("coral-overlay:close", function() {
-                $(popover).remove();
             });
 
             table.on("coral-table:change", function(event) {
@@ -68,7 +56,44 @@
                 Granite.author.ContentFrame.postMessage("carousel", { slide: index });
             });
 
+            popover.appendChild(table);
             ns.ContentFrame.scrollView[0].appendChild(popover);
+
+            // determine editable children
+            var children = [];
+            if (editable.isContainer()) {
+                children = editable.getChildren().filter(isDisplayable);
+            }
+
+            // read model JSON
+            var promise = readJSON(editable.path);
+
+            promise.done(function(data) {
+                if (data && data.items) {
+                    var items = [];
+                    for (var i = 0; i < data.items.length; i++) {
+                        items.push({
+                            id: children[i].path,
+                            title: getTitle(children[i], data.items[i], i + 1)
+                        });
+                    }
+                    appendItems(table, items);
+                }
+            }).fail(function() {
+                // fallback: editable children
+                var items = [];
+
+                children.forEach(function(child, index) {
+                    items.push({
+                        id: child.path,
+                        title: getTitle(child, null, index + 1)
+                    });
+                });
+
+                appendItems(table, items);
+            }).always(function() {
+                ui.clearWait();
+            });
 
             // do not close the toolbar
             return false;
@@ -82,11 +107,45 @@
     });
 
     /**
+     * Reads items from component model json
+     *
+     * @param {String} path to the component
+     * @returns {$.Deferred} A promise for handling read success
+     */
+    function readJSON(path) {
+        ui.wait(popover);
+        return $.ajax({
+            url: path + ".model.json"
+        });
+    }
+
+    /**
+     * Retrieves a title from item data. If no item data exists, or it doesn't have a jcr:title
+     * instead lookup the editable display name of the corresponding editable. Prefixes each title with an index.
+     *
+     * @param {Granite.author.Editable} editable The editable representing the item
+     * @param {Object} item The item data
+     * @param {Number} index Index of the item
+     * @returns {String} The title
+     */
+    function getTitle(editable, item, index) {
+        var title = "<span class='foundation-layout-util-subtletext'>" + index + "</span> ";
+
+        if (item && item["jcr:title"]) {
+            title = title + " " + Granite.I18n.getVar(item["jcr:title"]);
+        } else {
+            title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
+        }
+
+        return title;
+    }
+
+    /**
      * Appends panel items to a Coral.Table
      *
      * @param {Coral.Table} table The table to append to
      * @param {Object[]} items Array of data items
-     * @param {String} items[].id Unique ID for the item (path)
+     * @param {String} items[].id Item ID (path)
      * @param {String} items[].title Item title
      */
     function appendItems(table, items) {
@@ -94,7 +153,7 @@
             var row = table.items.add({});
             row.appendChild(new Coral.Table.Cell().set({
                 content: {
-                    textContent: items[i].title
+                    innerHTML: items[i].title
                 }
             }));
         }
