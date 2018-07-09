@@ -156,6 +156,31 @@
         for (var i = 0; i < elements.length; i++) {
             new Carousel({ element: elements[i], options: readData(elements[i]) });
         }
+
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var body             = document.querySelector("body");
+        var observer         = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                // needed for IE
+                var nodesArray = [].slice.call(mutation.addedNodes);
+                if (nodesArray.length > 0) {
+                    nodesArray.forEach(function(addedNode) {
+                        if (addedNode.querySelectorAll) {
+                            var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
+                            elementsArray.forEach(function(element) {
+                                new Carousel({ element: element, options: readData(element) });
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(body, {
+            subtree: true,
+            childList: true,
+            characterData: true
+        });
     }
 
     if (document.readyState !== "loading") {
