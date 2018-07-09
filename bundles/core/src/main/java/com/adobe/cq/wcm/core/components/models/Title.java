@@ -86,6 +86,16 @@ public interface Title extends ComponentExporter {
     }
 
     /**
+     * Returns an unique identifier for this field, if one was not set, else returns set ID.
+     *
+     * @return an unique identifier/manual ID for the field
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default String getId() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */

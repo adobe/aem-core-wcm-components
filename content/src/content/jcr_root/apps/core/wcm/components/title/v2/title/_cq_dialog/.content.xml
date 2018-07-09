@@ -107,6 +107,12 @@
                                                     sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
                                                     expression="${!cqDesign.linkDisabled}"/>
                                             </linkURL>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Leave empty to use a auto generated ID. Spaces are automatically removed in manually entered IDs."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

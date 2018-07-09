@@ -1,6 +1,5 @@
 {
-    "text": "Hello World",
-    "id": "HelloWorld-259658182",
+    "id": "HelloWorld",
     "linkDisabled": false,
     ":type": "core/wcm/components/title/v2/title"
 }

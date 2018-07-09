@@ -75,6 +75,9 @@ public class TitleImpl implements Title {
     @ValueMapValue(optional = true)
     private String linkURL;
 
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String id;
+
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
      */
@@ -84,6 +87,13 @@ public class TitleImpl implements Title {
     private void initModel() {
         if (StringUtils.isBlank(title)) {
             title = StringUtils.defaultIfEmpty(currentPage.getPageTitle(), currentPage.getTitle());
+        }
+
+        if (StringUtils.isBlank(id) && title != null) {
+            id = title + "-" + String.valueOf(Math.abs(resource.getPath().hashCode() - 1));
+        }
+        if (id != null) {
+            id = id.replaceAll("\\s", "").replaceAll("\\u00a0", "");
         }
 
         if (heading == null) {
@@ -125,6 +135,11 @@ public class TitleImpl implements Title {
     @Override
     public boolean isLinkDisabled() {
         return linkDisabled;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Nonnull
