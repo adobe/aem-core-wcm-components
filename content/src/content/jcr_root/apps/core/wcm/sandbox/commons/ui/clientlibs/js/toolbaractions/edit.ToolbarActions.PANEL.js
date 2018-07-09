@@ -145,9 +145,18 @@
         },
         condition: function(editable) {
             // TODO: improve with super type
-            // TODO: or better, a config for determining any toggle container
-            // TODO: and must be at least two panels for this to make sense
-            return "core/wcm/sandbox/components/carousel/v1/carousel" === editable.type || "weretail/components/content/carousel" === editable.type;
+            // TODO: or better, a config for determining any toggle container so we don't have to maintain this list
+            var supportedResourceTypes = [
+                "core/wcm/sandbox/components/carousel/v1/carousel",
+                "weretail/components/content/carousel"
+            ];
+
+            var children = [];
+            if (editable.isContainer()) {
+                children = editable.getChildren().filter(isDisplayable);
+            }
+
+            return (children.length > 1) && (supportedResourceTypes.indexOf(editable.type) > -1);
         },
         isNonMulti: true
     });
