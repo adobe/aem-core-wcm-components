@@ -32,9 +32,9 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <carousel
+                    <slides
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Carousel"
+                        jcr:title="Slides"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -57,7 +57,7 @@
                                 </items>
                             </columns>
                         </items>
-                    </carousel>
+                    </slides>
                 </items>
             </tabs>
         </items>

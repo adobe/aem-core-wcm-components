@@ -13,10 +13,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<coral-multifield data-sly-use.editor="com.adobe.cq.wcm.core.components.sandbox.ui.ChildrenEditor"
-                  data-parent-path = "${editor.parent.path}">
+<coral-multifield data-sly-use.editor="com.adobe.cq.wcm.core.components.sandbox.ui.ChildrenEditor" class="childreneditor"
+                  data-container-path = "${editor.container.path}">
 
-    <coral-multifield-item data-sly-repeat.child="${editor.children}" data-path="${child.path}">
+    <coral-multifield-item data-sly-repeat.child="${editor.children}" data-name="${child.name}">
         <input is="coral-textfield" name="./${child.name}/jcr:title" value="${child.jcr:title}" type="text">
     </coral-multifield-item>
 

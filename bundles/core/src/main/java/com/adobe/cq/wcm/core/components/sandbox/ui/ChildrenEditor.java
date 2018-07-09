@@ -26,7 +26,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +39,7 @@ public class ChildrenEditor {
     @Self
     private SlingHttpServletRequest request;
 
-    private Resource parent;
+    private Resource container;
 
     private List<Resource> children;
 
@@ -51,12 +50,12 @@ public class ChildrenEditor {
 
     private void readChildren() {
         children = new ArrayList<>();
-        String parentPath = request.getRequestPathInfo().getSuffix();
-        if (StringUtils.isNotEmpty(parentPath)) {
+        String containerPath = request.getRequestPathInfo().getSuffix();
+        if (StringUtils.isNotEmpty(containerPath)) {
             ResourceResolver resolver = request.getResourceResolver();
-            parent = resolver.getResource(parentPath);
-            if (parent != null) {
-                for(Resource res : parent.getChildren()) {
+            container = resolver.getResource(containerPath);
+            if (container != null) {
+                for(Resource res : container.getChildren()) {
                     children.add(res);
                 }
             }
@@ -67,7 +66,7 @@ public class ChildrenEditor {
         return children;
     }
 
-    public Resource getParent() {
-        return parent;
+    public Resource getContainer() {
+        return container;
     }
 }

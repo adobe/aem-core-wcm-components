@@ -13,90 +13,81 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function($, ns, channel, window) {
+;(function ($, ns, channel, window) {
     "use strict";
 
-    var deletedItems = [];
+    var deletedChildren = [];
+    var orderedChildren = [];
+    // TODO: check why below selector does not get triggered
+    //    var REMOVE_BUTTON_SELECTOR = ".childreneditor button[handle='remove']";
+    var REMOVE_BUTTON_SELECTOR = "button[handle='remove']";
+    var ADD_BUTTON_SELECTOR = ".childreneditor button[coral-multifield-add]";
+    var EDITOR_SELECTOR = ".childreneditor";
+    var EDITOR_URL_SELECTOR = "childreneditor";
+    var CHILD_SELECTOR = "coral-multifield-item";
+    var CONTAINER_PATH_DATA_ATTR = "containerPath";
+    var TITLE_PROP_NAME = "jcr:title";
 
-    // Remove item
-    $(document).on("coral-collection:remove", "coral-multifield", function(event) {
-        var $item = $(event.detail.item);
-        var path = $item.data("path");
-        deletedItems.push(path);
+    // Remove child
+    $(document).on("click", REMOVE_BUTTON_SELECTOR, function(event) {
+        var $button = $(this);
+        var childName = $button.closest(CHILD_SELECTOR).data("name");
+        deletedChildren.push(childName);
     });
 
-    // Add item
-    $(document).on("coral-collection:add", "coral-multifield", function(event) {
-        if (this === event.target) {
-            // We need one more frame to make sure the item renders the template in the DOM
-            Coral.commons.nextFrame(function() {
-                $(this).trigger("foundation-contentloaded");
-                var $item = $(event.detail.item);
-
-                var parentPath = $item.closest("coral-multifield").data("parentPath");
-
-                var itemName = "item_" + Date.now();
-                var inputName = "./" + itemName + "/jcr:title";
-                var itemPath = parentPath + "/" + itemName;
-                $item.attr("data-path", itemPath);
-                var $input = $item.find("input");
-                $input.attr("name", inputName);
-            }.bind(this));
-        }
+    // Add a new child
+    $(document).on("click", ADD_BUTTON_SELECTOR, function(event) {
+        var $button = $(this);
+        // We need one more frame to make sure the item renders the template in the DOM
+        Coral.commons.nextFrame(function() {
+            $button.trigger("foundation-contentloaded");
+            var $editor = $button.closest(EDITOR_SELECTOR)
+            var $child = $editor.find(CHILD_SELECTOR).last();
+            var childName = "item_" + Date.now();
+            var inputName = "./" + childName + "/" + TITLE_PROP_NAME;
+            $child.data("name", childName);
+            var $input = $child.find("input");
+            $input.attr("name", inputName);
+        }.bind(this));
     });
 
-    function processRequests() {
-        var requests = [];
-
-        // Process removed items
-        for (var i = 0; i < deletedItems.length; i++) {
-            var itemPath = deletedItems[i];
-            requests.push(
-                {
-                    type: "POST",
-                    url: itemPath,
-                    data: { ":operation": "delete" }
-                }
-            );
-        }
-        deletedItems = [];
+    // Trigger POST request to add, remove, re-order children nodes
+    function processChildren($editor) {
 
         // Process re-ordered items
-        $("coral-multifield-item").each(function(idx) {
-            var $item = $(this);
-            var itemPath = $item.data("path");
-            requests.push(
-                {
-                    type: "POST",
-                    url: itemPath,
-                    data: { ":order": idx }
+        $editor.find(CHILD_SELECTOR).each(function() {
+            var $child = $(this);
+            var childName = $child.data("name");
+            orderedChildren.push(childName);
+        });
+
+        var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
+        var url = containerPath + "." + EDITOR_URL_SELECTOR + ".html";
+        $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    'deletedChildren': deletedChildren,
+                    'orderedChildren': orderedChildren
                 }
-            );
-        });
+            }
+        );
 
-        var chain = $.when();
-        requests.forEach(function(request) {
-            chain = chain.then(function() {
-                return $.ajax(request);
-            });
-        });
-
+        deletedChildren = [];
+        orderedChildren = [];
     }
 
+    // Submit hook to process the children
     $(window).adaptTo("foundation-registry").register("foundation.form.submit", {
         selector: "*",
         handler: function(formEl) {
-
-            /*
-            */
-
+            var $editor = $(formEl).find(EDITOR_SELECTOR);
             return {
                 post: function() {
-                    processRequests();
+                    processChildren($editor);
                 }
             };
         }
     });
-
 
 }(jQuery, Granite.author, jQuery(document), this));
