@@ -19,6 +19,9 @@
     var ui = $(window).adaptTo("foundation-ui");
 
     var popover;
+    var table;
+
+    // TODO - add to CoreComponents namespace
 
     /**
      * Toolbar action that presents a UI for selecting and reordering child
@@ -45,15 +48,57 @@
 
             popover.classList.add("editor-PanelSelector");
 
-            var table = new Coral.Table().set({
+            table = new Coral.Table().set({
+                orderable: true,
                 selectable: true
             });
 
+            var colgroup = document.createElement('colgroup');
+            colgroup.appendChild(new Coral.Table.Column());
+            colgroup.appendChild(new Coral.Table.Column().set({
+                fixedWidth: true
+            }));
+            table.appendChild(colgroup);
+
             table.on("coral-table:change", function(event) {
-                var row = event.target.selectedItem;
-                var index = Array.prototype.slice.call(row.parentElement.children).indexOf(row);
-                // TODO: make a generic message handler which calls the appropriate widget from a registry
-                Granite.author.ContentFrame.postMessage("carousel", { slide: index });
+                // ensure selection of a single item
+                if (event.detail.selection.length === 0) {
+                    if (event.detail.oldSelection.length) {
+                        Coral.commons.nextFrame(function() {
+                            event.detail.oldSelection[0].setAttribute("selected", true);
+                        });
+                    }
+                }
+
+                if (event.detail.selection !== event.detail.oldSelection) {
+                    navigate();
+                }
+            });
+
+            table.on("coral-table:roworder", function(event) {
+                var before = event.detail.before;
+
+                if (before && before.dataset.id) {
+                    var editable = ns.editables.find({
+                        path: event.detail.row.dataset.id
+                    })[0];
+                    var insertBehavior = ns.persistence.PARAGRAPH_ORDER.before;
+                    var editableNeighbor = ns.editables.find({
+                        path: before.dataset.id
+                    })[0];
+
+                    // TODO: add undo/redo behaviour. It's turned off for now.
+                    var historyConfig = {
+                        preventAddHistory: true
+                    };
+
+                    ns.edit.EditableActions.MOVE.execute(editable, insertBehavior, editableNeighbor, historyConfig).done(function() {
+                        navigate();
+                        markRowIndexes();
+                    });
+
+                    // TODO: move fail handler
+                }
             });
 
             popover.appendChild(table);
@@ -101,7 +146,8 @@
         condition: function(editable) {
             // TODO: improve with super type
             // TODO: or better, a config for determining any toggle container
-            return "core/wcm/sandbox/components/carousel/v1/carousel" === editable.type;
+            // TODO: and must be at least two panels for this to make sense
+            return "core/wcm/sandbox/components/carousel/v1/carousel" === editable.type || "weretail/components/content/carousel" === editable.type;
         },
         isNonMulti: true
     });
@@ -120,6 +166,43 @@
     }
 
     /**
+     * Reads the selected item from the table and posts
+     * the navigation message to the content frame to implement the change
+     */
+    function navigate() {
+        if (!table) {
+            return;
+        }
+
+        var selectedItem = table.selectedItem;
+
+        if (selectedItem) {
+            var index = Array.prototype.slice.call(selectedItem.parentElement.children).indexOf(selectedItem);
+            // TODO: make a generic message handler which calls the appropriate widget from a registry
+            // TODO: not hardcoded to carousel (could be tabs, accordion, ...)
+            Granite.author.ContentFrame.postMessage("carousel", { slide: index });
+        }
+    }
+
+
+    /**
+     * Sets the text content of a row's index span
+     * to match to its actual position in the table
+     */
+    function markRowIndexes() {
+        if (!table) {
+            return;
+        }
+
+        var rows = table.items.getAll();
+
+        for (var i = 0; i < rows.length; i++) {
+            var indexSpan = rows[i].getElementsByTagName("span");
+            indexSpan[0].textContent = i + 1;
+        }
+    }
+
+    /**
      * Retrieves a title from item data. If no item data exists, or it doesn't have a jcr:title
      * instead lookup the editable display name of the corresponding editable. Prefixes each title with an index.
      *
@@ -129,10 +212,10 @@
      * @returns {String} The title
      */
     function getTitle(editable, item, index) {
-        var title = "<span class='foundation-layout-util-subtletext'>" + index + "</span> ";
+        var title = "<span class='foundation-layout-util-subtletext'>" + index + "</span>&nbsp;&nbsp;";
 
         if (item && item["jcr:title"]) {
-            title = title + " " + Granite.I18n.getVar(item["jcr:title"]);
+            title = title + " " + item["jcr:title"];
         } else {
             title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
         }
@@ -151,11 +234,23 @@
     function appendItems(table, items) {
         for (var i = 0; i < items.length; i++) {
             var row = table.items.add({});
-            row.appendChild(new Coral.Table.Cell().set({
+            row.dataset.id = items[i].id;
+            var titleCell = new Coral.Table.Cell().set({
                 content: {
                     innerHTML: items[i].title
                 }
-            }));
+            });
+            var button = new Coral.Button().set({
+                icon: "dragHandle",
+                iconSize: "S",
+                variant: "minimal"
+            });
+            button.setAttribute("coral-table-roworder", true);
+            var dragHandleCell = new Coral.Table.Cell();
+            dragHandleCell.appendChild(button);
+
+            row.appendChild(titleCell);
+            row.appendChild(dragHandleCell);
         }
     }
 

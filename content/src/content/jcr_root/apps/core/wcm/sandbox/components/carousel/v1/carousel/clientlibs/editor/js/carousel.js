@@ -19,6 +19,7 @@
 (function($, ns, channel, window) {
     "use strict";
 
+    // TODO: move this file to commons location
     channel.on("cq-editor-loaded", function(event) {
         ns.EditorFrame.editableToolbar.registerAction("PANEL", ns.edit.ToolbarActions.PANEL);
     });
