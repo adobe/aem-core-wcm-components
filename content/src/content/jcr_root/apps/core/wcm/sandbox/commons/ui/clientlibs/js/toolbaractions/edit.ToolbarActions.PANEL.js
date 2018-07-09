@@ -77,28 +77,35 @@
 
             table.on("coral-table:roworder", function(event) {
                 var before = event.detail.before;
+                var insertBehavior = ns.persistence.PARAGRAPH_ORDER.before;
+                var editable = ns.editables.find({
+                    path: event.detail.row.dataset.id
+                })[0];
+                var editableNeighbor;
+                // TODO: add undo/redo behaviour. It's turned off for now.
+                var historyConfig = {
+                    preventAddHistory: true
+                };
 
-                if (before && before.dataset.id) {
-                    var editable = ns.editables.find({
-                        path: event.detail.row.dataset.id
-                    })[0];
-                    var insertBehavior = ns.persistence.PARAGRAPH_ORDER.before;
-                    var editableNeighbor = ns.editables.find({
+                if (before) {
+                    editableNeighbor = ns.editables.find({
                         path: before.dataset.id
                     })[0];
+                } else {
+                    // dragged row to table end
+                    var after = event.detail.row.previousElementSibling;
+                    insertBehavior = ns.persistence.PARAGRAPH_ORDER.after;
+                    editableNeighbor = ns.editables.find({
+                        path: after.dataset.id
+                    })[0];
+                }
 
-                    // TODO: add undo/redo behaviour. It's turned off for now.
-                    var historyConfig = {
-                        preventAddHistory: true
-                    };
-
-                    ns.edit.EditableActions.MOVE.execute(editable, insertBehavior, editableNeighbor, historyConfig).done(function() {
-                        navigate();
-                        markRowIndexes();
-                    });
+                ns.edit.EditableActions.MOVE.execute(editable, insertBehavior, editableNeighbor, historyConfig).done(function() {
+                    navigate();
+                    markRowIndexes();
 
                     // TODO: move fail handler
-                }
+                });
             });
 
             popover.appendChild(table);
