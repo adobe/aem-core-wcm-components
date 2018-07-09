@@ -27,6 +27,7 @@
      * @param {HTMLElement} dialog The dialog where the two elements are found.
      * @param {String} checkboxSelector The selector for the checkbox.
      * @param {String} textfieldSelector The selector for the text field.
+     * @param {Boolean} isRichText Defines whether the text field is a rich text editor.
      * @constructor
      */
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector, isRichText) {
@@ -202,6 +203,7 @@
     /**
      * Gets the value of the text field, accounting for it being a rich-text
      *
+     * @returns {String} The text field value
      * @private
      */
     CheckboxTextfieldTuple.prototype._getTextfieldValue = function() {
@@ -215,7 +217,7 @@
     /**
      * Sets the value of the text field, accounting for it being a rich-text
      *
-     * @param value - The value to set
+     * @param {String} value The value to set
      * @private
      */
     CheckboxTextfieldTuple.prototype._setTextfieldValue = function(value) {
@@ -229,7 +231,7 @@
     /**
      * Disables the text field, accounting for it being a rich-text
      *
-     * @param disabled - {@code true} to disable, {@code false} to enable the field
+     * @param {Boolean} disabled {@code true} to disable, {@code false} to enable the field
      * @private
      */
     CheckboxTextfieldTuple.prototype._disableTextfield = function(disabled) {
