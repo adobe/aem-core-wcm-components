@@ -117,7 +117,7 @@ public interface Teaser extends ComponentExporter {
     String PN_TITLE_TYPE = "titleType";
 
     /**
-     * Checks if teaser has Call-to-Action elements
+     * Checks if the teaser has Call-to-Action elements
      *
      * @return {@code true} if teaser has CTAs, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
@@ -157,7 +157,7 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Checks if link is hidden on the image.
+     * Checks if the link on the image is hidden.
      *
      * @return {@code true} if link is hidden on the image, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
@@ -177,7 +177,7 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Checks if link is hidden on the title.
+     * Checks if the link on the title is hidden.
      *
      * @return {@code true} if link is hidden on the title, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
@@ -197,7 +197,7 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Returns the HTML element type (h1-h6) used for the markup.
+     * Returns the HTML element type (h1-h6) used for the title.
      *
      * @return the element type
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
