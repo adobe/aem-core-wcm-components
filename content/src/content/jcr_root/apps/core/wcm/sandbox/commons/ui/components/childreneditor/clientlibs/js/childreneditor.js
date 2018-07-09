@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-;(function ($, ns, channel, window) {
+(function($, ns, channel, window) {
     "use strict";
 
     var deletedChildren = [];
@@ -41,7 +41,7 @@
         // We need one more frame to make sure the item renders the template in the DOM
         Coral.commons.nextFrame(function() {
             $button.trigger("foundation-contentloaded");
-            var $editor = $button.closest(EDITOR_SELECTOR)
+            var $editor = $button.closest(EDITOR_SELECTOR);
             var $child = $editor.find(CHILD_SELECTOR).last();
             var childName = "item_" + Date.now();
             var inputName = "./" + childName + "/" + TITLE_PROP_NAME;
@@ -64,13 +64,13 @@
         var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
         var url = containerPath + "." + EDITOR_URL_SELECTOR + ".html";
         $.ajax({
-                type: "POST",
-                url: url,
-                data: {
-                    'deletedChildren': deletedChildren,
-                    'orderedChildren': orderedChildren
-                }
+            type: "POST",
+            url: url,
+            data: {
+                "deletedChildren": deletedChildren,
+                "orderedChildren": orderedChildren
             }
+        }
         );
 
         deletedChildren = [];
