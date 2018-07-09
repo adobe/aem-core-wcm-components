@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2018 Adobe Systems Incorporated
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,33 +15,33 @@ limitations under the License.
 -->
 Teaser (v1)
 ====
-Teaser component written in HTL, showing an image, a title, a rich-text and possibly some actions/links. Variations can include 
-only parts of the teaser.
+Teaser component written in HTL, allowing definition of an image, title, rich text description and actions/links.
+Teaser variations can include some or all of these elements.
 
 ## Features
-
-* Combines image, title, text and links/actions.
-* Allows disabling sections through policy configuration.
-* Can control if title and text should be inherited from a linked page.
+* Combines image, title, rich text description and actions/links.
+* Allows disabling of teaser elements through policy configuration.
+* Allows control over whether title and description should be inherited from a linked page.
 
 ### Use Object
 The Teaser component uses the `com.adobe.cq.wcm.core.components.models.Teaser` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
-The teaser component has the following configuration properties:
-1. `actionsDisabled` - defines whether or not Call-to-Actions are disabled
-2. `titleHidden` - defines whether or not the title is hidden
-3. `descriptionHidden` - defines whether or not the description is hidden
-4. `imageLinkHidden` - defines whether or not the image link is hidden
-5. `titleLinkHidden` - defines whether or not the title link is hidden
-6. `titleType` - stores the value for this title's HTML element type
+The following configuration properties are used:
+
+1. `./actionsDisabled` - defines whether or not Call-to-Actions are disabled
+2. `./titleHidden` - defines whether or not the title is hidden
+3. `./descriptionHidden` - defines whether or not the description is hidden
+4. `./imageLinkHidden` - defines whether or not the image link is hidden
+5. `./titleLinkHidden` - defines whether or not the title link is hidden
+6. `./titleType` - stores the value for this title's HTML element type
 
 The following configuration properties are inherited from the image component:
 
-1. `./allowedWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
-component; the actual size will be requested by the client device;
-2. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
-device)
+1. `./allowedRenditionWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
+component; the actual size will be requested by the client device
+2. `./disableLazyLoading` - if `true`, the lazy loading of images (loading only when the image is visible on the client
+device) is disabled
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Teaser component and are expected to be available as `Resource` properties:
@@ -51,14 +51,14 @@ The following properties are written to JCR for this Teaser component and are ex
     1. `link` - property that stores the Call-to-Action link
     2. `text` - property that stores the Call-to-Action text
 3. `./fileReference` - property or `file` child node - will store either a reference to the image file, or the image file
-4. `./linkURL` - required URL to which the teaser will link to
+4. `./linkURL` - link applied to teaser elements. URL or path to a content page
 5. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
 6. `./titleFromPage` - defines whether or not the title value is taken from the linked page
-7. `./jcr:description` - defines the value of the teaser description 
+7. `./jcr:description` - defines the value of the teaser description
 8. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
 
 ### Extending the Teaser Component
-When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for 
+When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for
 the proxy component and point it to the designated Image component.
 
 For example:
@@ -83,4 +83,3 @@ BLOCK cmp-teaser
 * **Compatibility**: AEM 6.3
 * **Status**: preview
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_teaser\_v1](https://www.adobe.com/go/aem_cmp_teaser_v1)
-
