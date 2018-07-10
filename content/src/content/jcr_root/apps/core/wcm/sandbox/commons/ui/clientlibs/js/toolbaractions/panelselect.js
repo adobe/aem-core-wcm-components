@@ -54,7 +54,16 @@
             colgroup.appendChild(new Coral.Table.Column().set({
                 fixedWidth: true
             }));
+            var tableHead = new Coral.Table.Head().set({
+                sticky: true
+            });
+            tableHead.appendChild(new Coral.Table.HeaderCell());
+            tableHead.appendChild(new Coral.Table.HeaderCell());
+            tableHead.classList.add("editable-PanelSelector-tableHead");
+
             table.appendChild(colgroup);
+            table.appendChild(tableHead);
+            table.classList.add("editor-PanelSelector-table");
 
             table.on("coral-table:change", function(event) {
                 // ensure selection of a single item
@@ -265,6 +274,9 @@
             row.appendChild(titleCell);
             row.appendChild(dragHandleCell);
         }
+
+        // set the height of the table based on its content to allow scrolling when dragging rows
+        table.style.height = table.offsetHeight + "px";
     }
 
     /**
