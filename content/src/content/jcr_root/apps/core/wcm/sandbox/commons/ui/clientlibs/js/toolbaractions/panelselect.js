@@ -21,15 +21,11 @@
     var popover;
     var table;
 
-    // TODO - add to CoreComponents namespace
-
     /**
      * Toolbar action that presents a UI for selecting and reordering child
      * items of a toggleable panel container component for display.
-     *
-     * @alias Granite.author.edit.ToolbarActions.PANEL
      */
-    ns.edit.ToolbarActions.PANEL = new ns.ui.ToolbarAction({
+    var panelSelect = new ns.ui.ToolbarAction({
         name: "PANEL",
         text: Granite.I18n.get("Select panel"),
         icon: "multipleCheck",
@@ -53,7 +49,7 @@
                 selectable: true
             });
 
-            var colgroup = document.createElement('colgroup');
+            var colgroup = document.createElement("colgroup");
             colgroup.appendChild(new Coral.Table.Column());
             colgroup.appendChild(new Coral.Table.Column().set({
                 fixedWidth: true
@@ -78,7 +74,7 @@
             table.on("coral-table:roworder", function(event) {
                 var before = event.detail.before;
                 var insertBehavior = ns.persistence.PARAGRAPH_ORDER.before;
-                var editable = ns.editables.find({
+                var childEditable = ns.editables.find({
                     path: event.detail.row.dataset.id
                 })[0];
                 var editableNeighbor;
@@ -100,10 +96,12 @@
                     })[0];
                 }
 
-                ns.edit.EditableActions.MOVE.execute(editable, insertBehavior, editableNeighbor, historyConfig).done(function() {
-                    navigate();
-                    markRowIndexes();
+                markRowIndexes();
 
+                ns.edit.EditableActions.MOVE.execute(childEditable, insertBehavior, editableNeighbor, historyConfig).done(function() {
+                    ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
+                        navigate();
+                    });
                     // TODO: move fail handler
                 });
             });
@@ -200,7 +198,6 @@
         }
     }
 
-
     /**
      * Sets the text content of a row's index span
      * to match to its actual position in the table
@@ -280,5 +277,11 @@
         return (editable instanceof ns.Editable &&
         (editable.isContainer() || (editable.hasActionsAvailable() && !editable.isNewSection())));
     }
+
+    channel.on("cq-layer-activated", function(event) {
+        if (event.layer === "Edit") {
+            ns.EditorFrame.editableToolbar.registerAction("PANEL_SELECT", panelSelect);
+        }
+    });
 
 }(jQuery, Granite.author, jQuery(document), this));

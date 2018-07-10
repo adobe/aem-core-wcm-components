@@ -16,4 +16,4 @@
 
 #base=js
 
-toolbaractions/edit.ToolbarActions.PANEL.js
+toolbaractions/panelselect.js
