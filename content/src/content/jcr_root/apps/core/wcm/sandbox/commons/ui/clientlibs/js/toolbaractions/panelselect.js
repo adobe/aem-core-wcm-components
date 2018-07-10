@@ -18,6 +18,8 @@
 
     var ui = $(window).adaptTo("foundation-ui");
 
+    var NS = '.editor-panelselect';
+
     var popover;
     var table;
 
@@ -117,6 +119,14 @@
 
             popover.appendChild(table);
             ns.ContentFrame.scrollView[0].appendChild(popover);
+
+            // reposition the popover with overlay change,
+            // as the editable toolbar can jump following navigation to a panel
+            channel.off('cq-overlays-repositioned' + NS).on('cq-overlays-repositioned' + NS, function() {
+                if (popover) {
+                    popover.reposition();
+                }
+            });
 
             // determine editable children
             var children = [];
