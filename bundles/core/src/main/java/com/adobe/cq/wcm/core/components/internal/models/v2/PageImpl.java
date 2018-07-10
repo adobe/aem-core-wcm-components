@@ -14,16 +14,16 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
+import com.day.cq.wcm.api.Template;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -56,6 +56,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
 
     private Boolean hasCloudconfigSupport;
+    protected String[] headClientLibCategories = new String[0];
+    protected static final String PN_HEADCLIENTLIBS = "headclientlibs";
 
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
@@ -89,6 +91,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             }
         }
         setRedirect();
+        populateHeadClientlibCategories();
     }
 
     private void setRedirect() {
@@ -116,9 +119,24 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return path;
     }
 
+
+    protected void populateHeadClientlibCategories() {
+        if (currentStyle != null) {
+                headClientLibCategories = currentStyle.get(PN_HEADCLIENTLIBS, ArrayUtils.EMPTY_STRING_ARRAY);
+        }
+    }
+
+
     @Override
     protected void loadFavicons(String designPath) {
     }
+
+    @Override
+    @JsonIgnore
+    public String[] getHeadClientLibCategories() {
+        return Arrays.copyOf(headClientLibCategories, headClientLibCategories.length);
+    }
+
 
     @Override
     public Map<String, String> getFavicons() {

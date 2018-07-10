@@ -80,6 +80,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         keywords.addAll(Arrays.asList(keywordsArray));
         assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
         assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
+        assertEquals("coretest.product-page-head", page.getHeadClientLibCategories()[0]);
         assertEquals("product-page", page.getTemplateName());
         Utils.testJSONExport(page, Utils.getTestExporterJSONPath(TEST_BASE, PAGE));
     }
