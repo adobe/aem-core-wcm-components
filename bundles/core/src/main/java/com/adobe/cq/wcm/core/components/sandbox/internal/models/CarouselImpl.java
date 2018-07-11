@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.sandbox.models.Carousel;
+import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.components.ComponentManager;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -57,8 +59,12 @@ public class CarouselImpl implements Carousel {
     private void readItems() {
         items = new ArrayList<>();
         if (resource != null) {
-            for(Resource res : resource.getChildren()) {
-                items.add(res);
+            ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
+            for (Resource res : resource.getChildren()) {
+                Component component = componentManager.getComponentOfResource(res);
+                if (component != null) {
+                    items.add(res);
+                }
             }
         }
     }
