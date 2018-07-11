@@ -40,7 +40,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/heading"
                                 level="{Long}4"
-                                text="Client-Side Libraries for Body element"/>
+                                text="Client-Side Javascript Libraries for Body element"/>
                             <well
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/well">
@@ -49,7 +49,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                         class="foundation-layout-util-maximized-alt"
-                                        fieldDescription="The client-side libraries that are to be loaded in the body element.">
+                                        fieldDescription="The client-side javascript libraries that are to be loaded in the body element.">
                                         <field
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -62,7 +62,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/heading"
                                 level="{Long}4"
-                                text="Client-Side Libraries for Head element"/>
+                                text="Client-Side Javascript Libraries for Head element"/>
                             <headjs
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/well">
@@ -71,11 +71,11 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                         class="foundation-layout-util-maximized-alt"
-                                        fieldDescription="The client-side libraries that are to be loaded in the head element.">
+                                        fieldDescription="The client-side javascript libraries that are to be loaded in the head element.">
                                         <field
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                            name="./headclientlibs"
+                                            name="./headClientlibs"
                                             required="{Boolean}true"/>
                                     </clientlibs>
                                 </items>

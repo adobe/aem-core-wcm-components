@@ -36,7 +36,7 @@
                                 "clientlibs": [
                                     "coretest.product-page"
                                 ],
-                                "headclientlibs": [
+                                "headClientlibs": [
                                     "coretest.product-page-head"
                                 ],
                                 "appResourcesClientlib": "coretest.product-page.appResources",

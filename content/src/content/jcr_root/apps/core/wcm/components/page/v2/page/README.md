@@ -38,6 +38,7 @@ libsScript from all referenced [cloud service configurations](https://docs.adobe
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set | CSS | Head
 `<designpath>.css` | only if design is set for current page | CSS | Head
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set | JS | Body
+`<headclientlibs>` being set in component policy | only if `<headclientlibs>` is set | JS | Head
 
 ## Use Object
 The Page component uses the following use objects:

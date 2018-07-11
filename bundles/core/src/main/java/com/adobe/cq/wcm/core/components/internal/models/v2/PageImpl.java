@@ -14,10 +14,13 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
-import com.day.cq.wcm.api.Template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +60,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     private Boolean hasCloudconfigSupport;
     protected String[] headClientLibCategories = new String[0];
-    protected static final String PN_HEADCLIENTLIBS = "headclientlibs";
+    protected static final String PN_HEAD_CLIENTLIBS = "headClientlibs";
 
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
@@ -90,8 +93,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 appResourcesPath = getProxyPath(clientLibraryList.get(0));
             }
         }
-        setRedirect();
         populateHeadClientlibCategories();
+        setRedirect();
     }
 
     private void setRedirect() {
@@ -122,10 +125,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     protected void populateHeadClientlibCategories() {
         if (currentStyle != null) {
-                headClientLibCategories = currentStyle.get(PN_HEADCLIENTLIBS, ArrayUtils.EMPTY_STRING_ARRAY);
+            headClientLibCategories = currentStyle.get(PN_HEAD_CLIENTLIBS, ArrayUtils.EMPTY_STRING_ARRAY);
         }
     }
-
 
     @Override
     protected void loadFavicons(String designPath) {
