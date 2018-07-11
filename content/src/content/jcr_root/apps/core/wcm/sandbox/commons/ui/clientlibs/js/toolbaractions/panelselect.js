@@ -28,7 +28,7 @@
      * items of a toggleable panel container component for display.
      */
     var panelSelect = new ns.ui.ToolbarAction({
-        name: "PANEL",
+        name: "PANEL_SELECT",
         text: Granite.I18n.get("Select panel"),
         icon: "multipleCheck",
         order: "after CONFIGURE",
