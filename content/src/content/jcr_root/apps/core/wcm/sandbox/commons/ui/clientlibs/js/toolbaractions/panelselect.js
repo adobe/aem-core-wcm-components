@@ -18,7 +18,7 @@
 
     var ui = $(window).adaptTo("foundation-ui");
 
-    var NS = '.editor-panelselect';
+    var NS = ".editor-panelselect";
 
     var popover;
     var table;
@@ -122,7 +122,7 @@
 
             // reposition the popover with overlay change,
             // as the editable toolbar can jump following navigation to a panel
-            channel.off('cq-overlays-repositioned' + NS).on('cq-overlays-repositioned' + NS, function() {
+            channel.off("cq-overlays-repositioned" + NS).on("cq-overlays-repositioned" + NS, function() {
                 if (popover) {
                     popover.reposition();
                 }
