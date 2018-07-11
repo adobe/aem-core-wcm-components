@@ -16,5 +16,4 @@
 
 #base=js
 
-model/PanelContainer.js
 toolbaractions/panelselect.js
