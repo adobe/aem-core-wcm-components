@@ -22,6 +22,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -40,9 +41,15 @@ public class CarouselImplTest {
     private static final String TEST_ROOT_PAGE = "/content/carousel";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
+    private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     @ClassRule
     public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+
+    @BeforeClass
+    public static void init() {
+        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+    }
 
     @Test
     public void testEmptyCarousel() {
