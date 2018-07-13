@@ -14,4 +14,7 @@
 # limitations under the License.
 ###############################################################################
 
-js/childreneditor.js
+#base=js
+
+childreneditor.js
+edit.childreneditor.Actions.ADDITEM.js

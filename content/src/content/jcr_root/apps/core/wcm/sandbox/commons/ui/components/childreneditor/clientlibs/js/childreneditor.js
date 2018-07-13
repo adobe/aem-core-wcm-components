@@ -35,19 +35,34 @@
         deletedChildren.push(childName);
     });
 
-    // Add a new child
+    // Display the allowed components popup when adding a new child
     $(document).on("click", ADD_BUTTON_SELECTOR, function(event) {
-        var $button = $(this);
+        var $editor = $(EDITOR_SELECTOR);
+        var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
+        var editable = ns.editables.find(containerPath)[0];
+        ns.edit.childreneditor.Actions.ADDITEM.execute(editable);
+    });
+
+    // Adapt the form when selecting a component from the list of allowed components
+    $(document).on('coral-selectlist:change', function(event) {
+        var resourceType = ns.edit.childreneditor.Actions.ADDITEM.getResourceType();
+        var $editor = $(EDITOR_SELECTOR);
         // We need one more frame to make sure the item renders the template in the DOM
         Coral.commons.nextFrame(function() {
-            $button.trigger("foundation-contentloaded");
-            var $editor = $button.closest(EDITOR_SELECTOR);
             var $child = $editor.find(CHILD_SELECTOR).last();
             var childName = "item_" + Date.now();
             var inputName = "./" + childName + "/" + TITLE_PROP_NAME;
             $child.data("name", childName);
             var $input = $child.find("input");
             $input.attr("name", inputName);
+
+            // append hidden input element for the resource type
+            $('<input>').attr({
+                type: 'hidden',
+                name: "./" + childName + "/" + 'sling:resourceType',
+                value: resourceType
+            }).insertAfter($input);
+
         }.bind(this));
     });
 
