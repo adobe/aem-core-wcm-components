@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 (function($, ns, channel, window) {
-    "use strict";
+    "use strict"; //test
 
     var deletedChildren = [];
     var orderedChildren = [];
