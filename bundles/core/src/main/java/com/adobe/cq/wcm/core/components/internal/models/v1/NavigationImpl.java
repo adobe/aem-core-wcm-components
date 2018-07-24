@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -61,19 +62,19 @@ public class NavigationImpl implements Navigation {
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
 
     @Self
-    private SlingHttpServletRequest request;
+    protected SlingHttpServletRequest request;
 
     @SlingObject
     private ResourceResolver resourceResolver;
 
     @ScriptVariable
-    private Page currentPage;
+    protected Page currentPage;
 
     @ScriptVariable
-    private ValueMap properties;
+    protected ValueMap properties;
 
     @ScriptVariable
-    private Style currentStyle;
+    protected Style currentStyle;
 
     @OSGiService
     private LanguageManager languageManager;
@@ -81,13 +82,14 @@ public class NavigationImpl implements Navigation {
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
-    private int structureDepth;
-    private String navigationRootPage;
-    private List<NavigationItem> items;
+    protected int structureDepth;
+    protected String navigationRootPage;
+    protected List<NavigationItem> items;
     private boolean skipNavigationRoot;
 
+
     @PostConstruct
-    private void initModel() {
+    protected void initModel() {
         structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, -1));
         boolean collectAllPages = properties.get(PN_COLLECT_ALL_PAGES, currentStyle.get(PN_COLLECT_ALL_PAGES, true));
         if (collectAllPages) {
@@ -132,13 +134,7 @@ public class NavigationImpl implements Navigation {
                         }
                     }
                 }
-                items = getItems(navigationRoot, navigationRoot.page);
-                if (!skipNavigationRoot) {
-                    boolean isSelected = checkSelected(navigationRoot.page);
-                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, items);
-                    items = new ArrayList<>();
-                    items.add(root);
-                }
+                items = getNavigationTree(navigationRoot);
             } else {
                 items = Collections.emptyList();
             }
@@ -159,26 +155,34 @@ public class NavigationImpl implements Navigation {
      * @param subtreeRoot the current sub-tree root (changes depending on the level of recursion)
      * @return the list of collected navigation trees
      */
-    private List<NavigationItem> getItems(NavigationRoot navigationRoot, Page subtreeRoot) {
+    protected List<NavigationItem> getItems(NavigationRoot navigationRoot, Page subtreeRoot) {
         List<NavigationItem> pages = new ArrayList<>();
         if (navigationRoot.structureDepth == -1 || getLevel(subtreeRoot) < navigationRoot.structureDepth) {
             Iterator<Page> it = subtreeRoot.listChildren(new PageFilter());
             while (it.hasNext()) {
                 Page page = it.next();
-                int pageLevel = getLevel(page);
-                int level = pageLevel - navigationRoot.startLevel;
                 List<NavigationItem> children = getItems(navigationRoot, page);
                 boolean isSelected = checkSelected(page);
-                if (skipNavigationRoot) {
-                    level = level - 1;
-                }
+                int level = getTreeLevel(page, navigationRoot);
                 pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
             }
         }
         return pages;
     }
 
-    private boolean checkSelected(Page page) {
+    protected List<NavigationItem> getNavigationTree(NavigationRoot navigationRoot) {
+        List<NavigationItem> itemtree;
+        itemtree = getItems(navigationRoot, navigationRoot.page);
+        if (!skipNavigationRoot) {
+            boolean isSelected = checkSelected(navigationRoot.page);
+            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemtree);
+            itemtree = new ArrayList<>();
+            itemtree.add(root);
+        }
+        return  itemtree;
+    }
+
+    protected boolean checkSelected(Page page) {
         return this.currentPage.equals(page) ||
                 this.currentPage.getPath().startsWith(page.getPath() + "/") ||
                 currentPageIsRedirectTarget(page);
@@ -203,8 +207,17 @@ public class NavigationImpl implements Navigation {
         return currentPageIsRedirectTarget;
     }
 
-    private int getLevel(Page page) {
+    protected int getLevel(Page page) {
         return StringUtils.countMatches(page.getPath(), "/") - 1;
+    }
+
+    protected int getTreeLevel(Page page, NavigationRoot navigationRoot) {
+        int pageLevel = getLevel(page);
+        int level = pageLevel - navigationRoot.startLevel;
+        if (skipNavigationRoot) {
+            level = level - 1;
+        }
+        return level;
     }
 
     @CheckForNull
@@ -217,12 +230,12 @@ public class NavigationImpl implements Navigation {
         return null;
     }
 
-    private class NavigationRoot {
-        Page page;
-        int startLevel;
-        int structureDepth = -1;
+    protected class NavigationRoot {
+        public Page page;
+        public int startLevel;
+        public int structureDepth = -1;
 
-        private NavigationRoot(@Nonnull Page navigationRoot, int configuredStructureDepth) {
+        public NavigationRoot(@Nonnull Page navigationRoot, int configuredStructureDepth) {
             page = navigationRoot;
             this.startLevel = getLevel(navigationRoot);
             if (configuredStructureDepth > -1) {

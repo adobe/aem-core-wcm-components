@@ -53,7 +53,6 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -68,7 +67,7 @@ public class NavigationImplTest {
 
     private static final ContentPolicyManager POLICY_MANAGER = mock(ContentPolicyManager.class);
     private static final String CONTEXT_PATH = "/core";
-    private static final String TEST_ROOT = "/content/navigation";
+    protected static final String TEST_ROOT = "/content/navigation";
     private static final String NAV_COMPONENT_1 = TEST_ROOT + "/jcr:content/root/navigation-component-1";
     private static final String NAV_COMPONENT_2 = TEST_ROOT + "/navigation-2/jcr:content/root/navigation-component-2";
     private static final String NAV_COMPONENT_3 = TEST_ROOT + "/navigation-2/jcr:content/root/navigation-component-3";
@@ -88,57 +87,61 @@ public class NavigationImplTest {
 
     @BeforeClass
     public static void init() throws WCMException {
-        AEM_CONTEXT.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
-                (Function<ResourceResolver, ContentPolicyManager>) resourceResolver -> contentPolicyManager
+        setup(AEM_CONTEXT);
+    }
+
+    protected static void setup(AemContext aemContext) throws WCMException {
+        aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
+            (Function<ResourceResolver, ContentPolicyManager>) resourceResolver -> contentPolicyManager
         );
-        AEM_CONTEXT.load().json("/navigation/test-conf.json", "/conf");
-        AEM_CONTEXT.registerService(LanguageManager.class, new MockLanguageManager());
+        aemContext.load().json(TEST_BASE+"/test-conf.json", "/conf");
+        aemContext.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.getLiveRelationships(any(Resource.class), any(String.class), any(RolloutManager.Trigger.class))).then(
-                invocation -> {
-                    Object[] arguments = invocation.getArguments();
-                    Resource resource = (Resource) arguments[0];
-                    if ("/content/navigation-blueprint".equals(resource.getPath())) {
-                        LiveRelationship liveRelationship = mock(LiveRelationship.class);
-                        when(liveRelationship.getTargetPath()).thenReturn("/content/navigation-livecopy");
-                        final ArrayList<LiveRelationship> relationships = new ArrayList<>();
-                        relationships.add(liveRelationship);
-                        final Iterator iterator = relationships.iterator();
-                        return new RangeIterator() {
+            invocation -> {
+                Object[] arguments = invocation.getArguments();
+                Resource resource = (Resource) arguments[0];
+                if ("/content/navigation-blueprint".equals(resource.getPath())) {
+                    LiveRelationship liveRelationship = mock(LiveRelationship.class);
+                    when(liveRelationship.getTargetPath()).thenReturn("/content/navigation-livecopy");
+                    final ArrayList<LiveRelationship> relationships = new ArrayList<>();
+                    relationships.add(liveRelationship);
+                    final Iterator iterator = relationships.iterator();
+                    return new RangeIterator() {
 
-                            int index = 0;
+                        int index = 0;
 
-                            @Override
-                            public void skip(long skipNum) {
+                        @Override
+                        public void skip(long skipNum) {
 
-                            }
+                        }
 
-                            @Override
-                            public long getSize() {
-                                return relationships.size();
-                            }
+                        @Override
+                        public long getSize() {
+                            return relationships.size();
+                        }
 
-                            @Override
-                            public long getPosition() {
-                                return index;
-                            }
+                        @Override
+                        public long getPosition() {
+                            return index;
+                        }
 
-                            @Override
-                            public boolean hasNext() {
-                                return iterator.hasNext();
-                            }
+                        @Override
+                        public boolean hasNext() {
+                            return iterator.hasNext();
+                        }
 
-                            @Override
-                            public Object next() {
-                                index++;
-                                return iterator.next();
-                            }
-                        };
-                    }
-                    return null;
+                        @Override
+                        public Object next() {
+                            index++;
+                            return iterator.next();
+                        }
+                    };
                 }
+                return null;
+            }
         );
-        AEM_CONTEXT.registerService(LiveRelationshipManager.class, relationshipManager);
+        aemContext.registerService(LiveRelationshipManager.class, relationshipManager);
     }
 
     @Test
@@ -302,7 +305,11 @@ public class NavigationImplTest {
     }
 
     private Navigation getNavigationUnderTest(String resourcePath) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
+        return getNavigationUnderTest(resourcePath, AEM_CONTEXT);
+    }
+
+    protected Navigation getNavigationUnderTest(String resourcePath, AemContext aemContext) {
+        Resource resource = aemContext.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
@@ -312,10 +319,10 @@ public class NavigationImplTest {
             contentPolicy = mapping.getPolicy();
         }
         final MockSlingHttpServletRequest request =
-                new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
+            new MockSlingHttpServletRequest(aemContext.resourceResolver(), aemContext.bundleContext());
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
-        Page currentPage = AEM_CONTEXT.pageManager().getContainingPage(resource);
+        Page currentPage = aemContext.pageManager().getContainingPage(resource);
         SlingBindings slingBindings = new SlingBindings();
         Style currentStyle;
         if (contentPolicy != null) {
@@ -324,7 +331,7 @@ public class NavigationImplTest {
         } else {
             currentStyle = mock(Style.class);
             when(currentStyle.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
-                    invocation -> invocation.getArguments()[1]
+                invocation -> invocation.getArguments()[1]
             );
         }
         slingBindings.put(SlingBindings.RESOURCE, resource);
@@ -335,7 +342,7 @@ public class NavigationImplTest {
         return request.adaptTo(Navigation.class);
     }
 
-    private List<NavigationItem> getNavigationItems(Navigation navigation) {
+    protected List<NavigationItem> getNavigationItems(Navigation navigation) {
         List<NavigationItem> items = new LinkedList<>();
         for (NavigationItem item : navigation.getItems()) {
             collect(items, item);
@@ -350,7 +357,7 @@ public class NavigationImplTest {
         }
     }
 
-    private void verifyNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
+    protected void verifyNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
         assertEquals("The navigation tree contains a different number of pages than expected.", expectedPages.length, items.size());
         int index = 0;
         for (NavigationItem item : items) {
