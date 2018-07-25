@@ -16,68 +16,100 @@
 (function($, ns, channel, window) {
     "use strict";
 
-    var deletedChildren = [];
-    var orderedChildren = [];
-    // TODO: check why below selector does not get triggered
-    //    var REMOVE_BUTTON_SELECTOR = ".childreneditor button[handle='remove']";
-    var REMOVE_BUTTON_SELECTOR = "button[handle='remove']";
-    var ADD_BUTTON_SELECTOR = ".childreneditor button[coral-multifield-add]";
-    var EDITOR_SELECTOR = ".childreneditor";
-    var EDITOR_URL_SELECTOR = "childreneditor";
-    var CHILD_SELECTOR = "coral-multifield-item";
+    var EDITOR_CLASS = "childreneditor";
+    var POST_URL_SELECTOR = "childreneditor";
     var CONTAINER_PATH_DATA_ATTR = "containerPath";
     var TITLE_PROP_NAME = "jcr:title";
+    var SELECT_LIST_CHANGE_EVENT = "coral-selectlist:change";
+    var SLING_RESOURCE_TYPE = "sling:resourceType";
+    var CHILD_NAME_PREFIX = "item_";
 
-    // Remove child
-    $(document).on("click", REMOVE_BUTTON_SELECTOR, function(event) {
+    var defaultInsertFct = ns.editableHelper.actions.INSERT.execute;
+    var doNothingFct = function () {}; // "do nothing" function
+
+    var selectors = {
+        editor: ".childreneditor",
+        child: "coral-multifield-item",
+        addButton: ".childreneditor [coral-multifield-add]",
+        removeButton: "button[handle='remove']",
+        allowedComponentsDialog: "coral-dialog.InsertComponentDialog",
+        allowedComponentsList: "coral-dialog.InsertComponentDialog.childreneditor coral-selectlist"
+    };
+    var deletedChildren = [];
+    var orderedChildren = [];
+
+    // Remove the child item when clicking the remove button
+    $(document).on("click", selectors.removeButton, function(event) {
+
         var $button = $(this);
-        var childName = $button.closest(CHILD_SELECTOR).data("name");
+        var childName = $button.closest(selectors.child).data("name");
         deletedChildren.push(childName);
+
     });
 
-    // Display the allowed components popup when adding a new child
-    $(document).on("click", ADD_BUTTON_SELECTOR, function(event) {
-        var $editor = $(EDITOR_SELECTOR);
+    // Display the allowed components popup when clicking the add button
+    $(document).on("click", selectors.addButton, function(event) {
+
+        var $button = $(this);
+        var $editor = $button.closest(selectors.editor);
         var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
         var editable = ns.editables.find(containerPath)[0];
-        ns.edit.childreneditor.Actions.ADDITEM.execute(editable);
+
+        // Display the 'add allowed components' popup
+        ns.edit.ToolbarActions.INSERT.execute(editable);
+        var $allowedComponentsDialog = $(selectors.allowedComponentsDialog);
+        $allowedComponentsDialog.addClass(EDITOR_CLASS);
+
     });
 
-    // Adapt the form when selecting a component from the list of allowed components
-    $(document).on("coral-selectlist:change", function(event) {
-        var resourceType = ns.edit.childreneditor.Actions.ADDITEM.getResourceType();
-        var $editor = $(EDITOR_SELECTOR);
-        // We need one more frame to make sure the item renders the template in the DOM
-        Coral.commons.nextFrame(function() {
-            var $child = $editor.find(CHILD_SELECTOR).last();
-            var childName = "item_" + Date.now();
-            var inputName = "./" + childName + "/" + TITLE_PROP_NAME;
-            $child.data("name", childName);
-            var $input = $child.find("input");
-            $input.attr("name", inputName);
+    // Set the resource type parameter when selecting a component from the "allowed components" popup
+    $(document).off(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList).on(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList, function(event) {
 
-            // append hidden input element for the resource type
-            $("<input>").attr({
-                type: "hidden",
-                name: "./" + childName + "/" + "sling:resourceType",
-                value: resourceType
-            }).insertAfter($input);
+            $(selectors.allowedComponentsList).off(SELECT_LIST_CHANGE_EVENT);
 
-        }.bind(this));
-    });
+            var resourceType;
+            var $allowedComponentsDialog = $(this).closest(selectors.allowedComponentsDialog)
+            $allowedComponentsDialog.hide();
+
+            var component = ns.components.find(event.detail.selection.value);
+            if (component.length > 0) {
+                resourceType = component[0].getResourceType();
+            }
+
+            var $editor = $(selectors.editor);
+            // We need one more frame to make sure the item renders the template in the DOM
+            Coral.commons.nextFrame(function() {
+
+                var $child = $editor.find(selectors.child).last();
+                var childName = CHILD_NAME_PREFIX + Date.now();
+                var inputName = "./" + childName + "/" + TITLE_PROP_NAME;
+                $child.data("name", childName);
+                var $input = $child.find("input");
+                $input.attr("name", inputName);
+
+                // append hidden input element for the resource type
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "./" + childName + "/" + SLING_RESOURCE_TYPE,
+                    value: resourceType
+                }).insertAfter($input);
+
+            }.bind(this));
+
+        });
 
     // Trigger POST request to add, remove, re-order children nodes
     function processChildren($editor) {
 
         // Process re-ordered items
-        $editor.find(CHILD_SELECTOR).each(function() {
+        $editor.find(selectors.child).each(function() {
             var $child = $(this);
             var childName = $child.data("name");
             orderedChildren.push(childName);
         });
 
         var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
-        var url = containerPath + "." + EDITOR_URL_SELECTOR + ".html";
+        var url = containerPath + "." + POST_URL_SELECTOR + ".html";
         $.ajax({
             type: "POST",
             url: url,
@@ -96,7 +128,7 @@
     $(window).adaptTo("foundation-registry").register("foundation.form.submit", {
         selector: "*",
         handler: function(formEl) {
-            var $editor = $(formEl).find(EDITOR_SELECTOR);
+            var $editor = $(formEl).find(selectors.editor);
             return {
                 post: function() {
                     processChildren($editor);
@@ -104,5 +136,48 @@
             };
         }
     });
+
+    // Modify the behavior of the INSERT action:
+    // - disable it when the children editor is opened (as we don't want to insert a component on the page)
+    // - re-enable it when the children editor is closed
+    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+    var body             = document.querySelector("body");
+    var observer         = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+
+            // Disable the default INSERT action when the children editor is opened
+            var addedNodesArray = [].slice.call(mutation.addedNodes);
+            if (addedNodesArray.length > 0) {
+                addedNodesArray.forEach(function(addedNode) {
+                    if (addedNode.querySelectorAll) {
+                        var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.editor));
+                        if (elementsArray.length > 0) {
+                            ns.editableHelper.actions.INSERT.execute = doNothingFct;
+                        }
+                    }
+                });
+            }
+
+            // Re-enable the default INSERT action when the children editor is closed
+            var removedNodesArray = [].slice.call(mutation.removedNodes);
+            if (removedNodesArray.length > 0) {
+                removedNodesArray.forEach(function(removedNode) {
+                    if (removedNode.querySelectorAll) {
+                        var elementsArray = [].slice.call(removedNode.querySelectorAll(selectors.editor));
+                        if (elementsArray.length > 0) {
+                            ns.editableHelper.actions.INSERT.execute = defaultInsertFct;
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    observer.observe(body, {
+        subtree: true,
+        childList: true,
+        characterData: true
+    });
+
 
 }(jQuery, Granite.author, jQuery(document), this));
