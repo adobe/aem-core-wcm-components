@@ -44,7 +44,7 @@
     });
 
     // Adapt the form when selecting a component from the list of allowed components
-    $(document).on('coral-selectlist:change', function(event) {
+    $(document).on("coral-selectlist:change", function(event) {
         var resourceType = ns.edit.childreneditor.Actions.ADDITEM.getResourceType();
         var $editor = $(EDITOR_SELECTOR);
         // We need one more frame to make sure the item renders the template in the DOM
@@ -57,9 +57,9 @@
             $input.attr("name", inputName);
 
             // append hidden input element for the resource type
-            $('<input>').attr({
-                type: 'hidden',
-                name: "./" + childName + "/" + 'sling:resourceType',
+            $("<input>").attr({
+                type: "hidden",
+                name: "./" + childName + "/" + "sling:resourceType",
                 value: resourceType
             }).insertAfter($input);
 

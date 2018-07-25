@@ -293,7 +293,7 @@
      * Test whether an Editable is displayable in the panel popover. Ignore Inspectables and Placeholders.
      *
      * @param {Granite.author.Editable} editable The Editable to test
-     * @returns {Boolean}
+     * @returns {Boolean} Whether the Editable is displayed in the panel popover, or not
      */
     function isDisplayable(editable) {
         return (editable instanceof ns.Editable &&

@@ -25,16 +25,16 @@
         activeIndex: 0,
         data: {},
 
-        constructor: function PanelContainer(config) { // NB: Use only config object parameter; other form is deprecated
+        constructor: function PanelContainer(config) {
             this.config = config;
 
             this._readData();
         },
 
         /**
-         * Navigates to the provided index
+         * Navigates to the panel at the provided index
          *
-         * @returns {Object} The panel container items data
+         * @param {Number} index Index of the panel to navigate to
          */
         navigate: function(index) {
             // internally messages the relevant UI widget to do the work.
@@ -42,7 +42,7 @@
         },
 
         /**
-         * Get the index of the currently active panel
+         * Gets the index of the currently active panel
          *
          * @returns {Object} The panel container items data
          */
@@ -51,7 +51,7 @@
         },
 
         /**
-         * Get the items data for this panel container
+         * Gets the items data for this panel container
          *
          * @returns {Object} The panel container items data
          */
@@ -60,7 +60,7 @@
         },
 
         /**
-         * Path to the component represented by this panel container
+         * Returns the path to the component represented by this panel container
          *
          * @returns {String} The path of this panel container
          */
@@ -71,18 +71,18 @@
         /**
          * Persists item updates to an endpoint, returns a deferred for handling
          *
-         * @param {Array} order IDs of the items in order
+         * @param {Array} ordered IDs of the items in order
          * @param {Array} deleted IDs of the deleted items
          * @returns {$.Deferred} The deferred for callback handling
          */
-        update: function(order, deleted) {
+        update: function(ordered, deleted) {
             var myDeferred = {};
             // should read the data once complete.
             return myDeferred;
         },
 
         /**
-         * Reads model json data from component path
+         * Reads model json data from the component path
          *
          * @returns {Object} The panel container items data
          */
