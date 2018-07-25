@@ -19,10 +19,10 @@
     var EDITOR_CLASS = "childreneditor";
     var POST_URL_SELECTOR = "childreneditor";
     var CONTAINER_PATH_DATA_ATTR = "containerPath";
-    var TITLE_PROP_NAME = "jcr:title";
     var SELECT_LIST_CHANGE_EVENT = "coral-selectlist:change";
-    var SLING_RESOURCE_TYPE = "sling:resourceType";
-    var CHILD_NAME_PREFIX = "item_";
+    var NN_PREFIX = "item_";
+    var PN_TITLE = "jcr:title";
+    var PN_RESOURCE_TYPE = "sling:resourceType";
 
     var defaultInsertFct = ns.editableHelper.actions.INSERT.execute;
     var doNothingFct = function () {}; // "do nothing" function
@@ -32,7 +32,7 @@
         child: "coral-multifield-item",
         addButton: ".childreneditor [coral-multifield-add]",
         removeButton: "button[handle='remove']",
-        allowedComponentsDialog: "coral-dialog.InsertComponentDialog",
+        insertComponentDialog: "coral-dialog.InsertComponentDialog",
         allowedComponentsList: "coral-dialog.InsertComponentDialog.childreneditor coral-selectlist"
     };
     var deletedChildren = [];
@@ -47,7 +47,7 @@
 
     });
 
-    // Display the allowed components popup when clicking the add button
+    // Display the "Insert New Components" dialog when clicking the add button
     $(document).on("click", selectors.addButton, function(event) {
 
         var $button = $(this);
@@ -55,21 +55,21 @@
         var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
         var editable = ns.editables.find(containerPath)[0];
 
-        // Display the 'add allowed components' popup
+        // Display the "Insert New Components" dialog
         ns.edit.ToolbarActions.INSERT.execute(editable);
-        var $allowedComponentsDialog = $(selectors.allowedComponentsDialog);
-        $allowedComponentsDialog.addClass(EDITOR_CLASS);
+        var $insertComponentDialog = $(selectors.insertComponentDialog);
+        $insertComponentDialog.addClass(EDITOR_CLASS);
 
     });
 
-    // Set the resource type parameter when selecting a component from the "allowed components" popup
+    // Set the resource type parameter when selecting a component from the "Insert New Components" dialog
     $(document).off(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList).on(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList, function(event) {
 
             $(selectors.allowedComponentsList).off(SELECT_LIST_CHANGE_EVENT);
 
             var resourceType;
-            var $allowedComponentsDialog = $(this).closest(selectors.allowedComponentsDialog)
-            $allowedComponentsDialog.hide();
+            var $insertComponentDialog = $(this).closest(selectors.insertComponentDialog)
+            $insertComponentDialog.hide();
 
             var component = ns.components.find(event.detail.selection.value);
             if (component.length > 0) {
@@ -81,8 +81,8 @@
             Coral.commons.nextFrame(function() {
 
                 var $child = $editor.find(selectors.child).last();
-                var childName = CHILD_NAME_PREFIX + Date.now();
-                var inputName = "./" + childName + "/" + TITLE_PROP_NAME;
+                var childName = NN_PREFIX + Date.now();
+                var inputName = "./" + childName + "/" + PN_TITLE;
                 $child.data("name", childName);
                 var $input = $child.find("input");
                 $input.attr("name", inputName);
@@ -90,7 +90,7 @@
                 // append hidden input element for the resource type
                 $("<input>").attr({
                     type: "hidden",
-                    name: "./" + childName + "/" + SLING_RESOURCE_TYPE,
+                    name: "./" + childName + "/" + PN_RESOURCE_TYPE,
                     value: resourceType
                 }).insertAfter($input);
 
@@ -98,7 +98,7 @@
 
         });
 
-    // Trigger POST request to add, remove, re-order children nodes
+    // Trigger the POST request to add, remove, re-order children nodes
     function processChildren($editor) {
 
         // Process re-ordered items
@@ -137,7 +137,7 @@
         }
     });
 
-    // Modify the behavior of the INSERT action:
+    // Modify the behavior of the default INSERT action (ns.editableHelper.actions.INSERT.execute):
     // - disable it when the children editor is opened (as we don't want to insert a component on the page)
     // - re-enable it when the children editor is closed
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
