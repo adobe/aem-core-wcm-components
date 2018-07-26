@@ -16,7 +16,7 @@
 <coral-multifield data-sly-use.editor="com.adobe.cq.wcm.core.components.sandbox.ui.ChildrenEditor" class="childreneditor"
                   data-container-path = "${editor.container.path}">
 
-    <coral-multifield-item data-sly-repeat.child="${editor.children}" data-name="${child.name}">
+    <coral-multifield-item data-sly-repeat.child="${editor.children}" data-name="${child.name}" data-child-path="${child.path}">
         <input is="coral-textfield" name="./${child.name}/jcr:title" value="${child.jcr:title}" type="text">
     </coral-multifield-item>
 

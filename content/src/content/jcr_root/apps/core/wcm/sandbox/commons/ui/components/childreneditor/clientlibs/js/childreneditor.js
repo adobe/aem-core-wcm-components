@@ -17,6 +17,7 @@
     "use strict";
 
     var EDITOR_CLASS = "childreneditor";
+    var CONFIG_BUTTON_CLASS = "coral-Multifield-config";
     var POST_URL_SELECTOR = "childreneditor";
     var CONTAINER_PATH_DATA_ATTR = "containerPath";
     var SELECT_LIST_CHANGE_EVENT = "coral-selectlist:change";
@@ -32,6 +33,7 @@
         child: "coral-multifield-item",
         addButton: ".childreneditor [coral-multifield-add]",
         removeButton: "button[handle='remove']",
+        configButton: "button[handle='config']",
         insertComponentDialog: "coral-dialog.InsertComponentDialog",
         allowedComponentsList: "coral-dialog.InsertComponentDialog.childreneditor coral-selectlist"
     };
@@ -40,26 +42,39 @@
 
     // Remove the child item when clicking the remove button
     $(document).on("click", selectors.removeButton, function(event) {
-
         var $button = $(this);
         var childName = $button.closest(selectors.child).data("name");
         deletedChildren.push(childName);
+    });
 
+    // Open the edit dialog of the child item when clicking the config button
+    $(document).on("click", selectors.configButton, function(event) {
+        var $button = $(this);
+        var $editor = $button.closest(selectors.editor);
+        if ($editor.length == 1) {
+            var childPath = $button.closest(selectors.child).data("childPath");
+            var editable = ns.editables.find(childPath)[0];
+            var childDialog = new ns.edit.Dialog(editable);
+            ns.DialogFrame.isOpened = function () {
+                return false;
+            };
+            ns.DialogFrame.openDialog(childDialog);
+        }
     });
 
     // Display the "Insert New Components" dialog when clicking the add button
     $(document).on("click", selectors.addButton, function(event) {
-
         var $button = $(this);
         var $editor = $button.closest(selectors.editor);
-        var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
-        var editable = ns.editables.find(containerPath)[0];
+        if ($editor.length == 1) {
+            var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
+            var editable = ns.editables.find(containerPath)[0];
 
-        // Display the "Insert New Components" dialog
-        ns.edit.ToolbarActions.INSERT.execute(editable);
-        var $insertComponentDialog = $(selectors.insertComponentDialog);
-        $insertComponentDialog.addClass(EDITOR_CLASS);
-
+            // Display the "Insert New Components" dialog
+            ns.edit.ToolbarActions.INSERT.execute(editable);
+            var $insertComponentDialog = $(selectors.insertComponentDialog);
+            $insertComponentDialog.addClass(EDITOR_CLASS);
+        }
     });
 
     // Set the resource type parameter when selecting a component from the "Insert New Components" dialog
@@ -151,8 +166,10 @@
                 addedNodesArray.forEach(function(addedNode) {
                     if (addedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.editor));
-                        if (elementsArray.length > 0) {
+                        if (elementsArray.length == 1) {
                             ns.editableHelper.actions.INSERT.execute = doNothingFct;
+                            var $editor = $(elementsArray[0]);
+                            addConfigButtons($editor);
                         }
                     }
                 });
@@ -164,7 +181,7 @@
                 removedNodesArray.forEach(function(removedNode) {
                     if (removedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(removedNode.querySelectorAll(selectors.editor));
-                        if (elementsArray.length > 0) {
+                        if (elementsArray.length == 1) {
                             ns.editableHelper.actions.INSERT.execute = defaultInsertFct;
                         }
                     }
@@ -179,5 +196,26 @@
         characterData: true
     });
 
+    // Add a config button to each child item
+    function addConfigButtons ($editor) {
+        $editor.find(selectors.child).each(function() {
+            var $child = $(this);
+            var $configButton = $child.find(selectors.configButton);
+            // Don't add a button if there is already one
+            if ($configButton.length == 0) {
+                var $removeButton = $child.find(selectors.removeButton);
+                var el = document.createElement("button","coral-button");
+                el.setAttribute("type", "button");
+                el.setAttribute("is", "coral-button");
+                el.setAttribute("handle", "config");
+                el.setAttribute("variant", "quiet");
+                el.setAttribute("icon", "wrench");
+                el.setAttribute("iconsize", "S");
+                el.className += " ";
+                el.className += CONFIG_BUTTON_CLASS;
+                $(el).insertBefore($removeButton);
+            }
+        });
+    }
 
 }(jQuery, Granite.author, jQuery(document), this));
