@@ -51,11 +51,11 @@
     $(document).on("click", selectors.configButton, function(event) {
         var $button = $(this);
         var $editor = $button.closest(selectors.editor);
-        if ($editor.length == 1) {
+        if ($editor.length === 1) {
             var childPath = $button.closest(selectors.child).data("childPath");
             var editable = ns.editables.find(childPath)[0];
             var childDialog = new ns.edit.Dialog(editable);
-            ns.DialogFrame.isOpened = function () {
+            ns.DialogFrame.isOpened = function() {
                 return false;
             };
             ns.DialogFrame.openDialog(childDialog);
@@ -66,7 +66,7 @@
     $(document).on("click", selectors.addButton, function(event) {
         var $button = $(this);
         var $editor = $button.closest(selectors.editor);
-        if ($editor.length == 1) {
+        if ($editor.length === 1) {
             var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
             var editable = ns.editables.find(containerPath)[0];
 
@@ -166,7 +166,7 @@
                 addedNodesArray.forEach(function(addedNode) {
                     if (addedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.editor));
-                        if (elementsArray.length == 1) {
+                        if (elementsArray.length === 1) {
                             ns.editableHelper.actions.INSERT.execute = doNothingFct;
                             var $editor = $(elementsArray[0]);
                             addConfigButtons($editor);
@@ -181,7 +181,7 @@
                 removedNodesArray.forEach(function(removedNode) {
                     if (removedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(removedNode.querySelectorAll(selectors.editor));
-                        if (elementsArray.length == 1) {
+                        if (elementsArray.length === 1) {
                             ns.editableHelper.actions.INSERT.execute = defaultInsertFct;
                         }
                     }
@@ -197,14 +197,14 @@
     });
 
     // Add a config button to each child item
-    function addConfigButtons ($editor) {
+    function addConfigButtons($editor) {
         $editor.find(selectors.child).each(function() {
             var $child = $(this);
             var $configButton = $child.find(selectors.configButton);
             // Don't add a button if there is already one
-            if ($configButton.length == 0) {
+            if ($configButton.length === 0) {
                 var $removeButton = $child.find(selectors.removeButton);
-                var el = document.createElement("button","coral-button");
+                var el = document.createElement("button", "coral-button");
                 el.setAttribute("type", "button");
                 el.setAttribute("is", "coral-button");
                 el.setAttribute("handle", "config");
