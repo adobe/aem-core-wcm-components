@@ -67,7 +67,7 @@ public class NavigationImplTest {
 
     private static final ContentPolicyManager POLICY_MANAGER = mock(ContentPolicyManager.class);
     private static final String CONTEXT_PATH = "/core";
-    protected static final String TEST_ROOT = "/content/navigation";
+    private static final String TEST_ROOT = "/content/navigation";
     private static final String NAV_COMPONENT_1 = TEST_ROOT + "/jcr:content/root/navigation-component-1";
     private static final String NAV_COMPONENT_2 = TEST_ROOT + "/navigation-2/jcr:content/root/navigation-component-2";
     private static final String NAV_COMPONENT_3 = TEST_ROOT + "/navigation-2/jcr:content/root/navigation-component-3";
@@ -82,6 +82,9 @@ public class NavigationImplTest {
     private static final String NAV_COMPONENT_9 = TEST_ROOT + "/jcr:content/root/navigation-component-9";
     // points to the nav component used for invalidRedirectTest()
     private static final String NAV_COMPONENT_10 = TEST_ROOT + "/jcr:content/root/navigation-component-10";
+    private static final String NAV_COMPONENT_11 = TEST_ROOT + "/jcr:content/root/navigation-component-11";
+    private static final String NAV_COMPONENT_12 = TEST_ROOT + "/jcr:content/root/navigation-component-12";
+    private static final String NAV_COMPONENT_13 = TEST_ROOT + "/jcr:content/root/navigation-component-13";
 
     private static final ContentPolicyManager contentPolicyManager = mock(ContentPolicyManager.class);
 
@@ -90,56 +93,56 @@ public class NavigationImplTest {
         setup(AEM_CONTEXT);
     }
 
-    protected static void setup(AemContext aemContext) throws WCMException {
+    private static void setup(AemContext aemContext) throws WCMException {
         aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
-            (Function<ResourceResolver, ContentPolicyManager>) resourceResolver -> contentPolicyManager
+                (Function<ResourceResolver, ContentPolicyManager>) resourceResolver -> contentPolicyManager
         );
         aemContext.load().json(TEST_BASE+"/test-conf.json", "/conf");
         aemContext.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.getLiveRelationships(any(Resource.class), any(String.class), any(RolloutManager.Trigger.class))).then(
-            invocation -> {
-                Object[] arguments = invocation.getArguments();
-                Resource resource = (Resource) arguments[0];
-                if ("/content/navigation-blueprint".equals(resource.getPath())) {
-                    LiveRelationship liveRelationship = mock(LiveRelationship.class);
-                    when(liveRelationship.getTargetPath()).thenReturn("/content/navigation-livecopy");
-                    final ArrayList<LiveRelationship> relationships = new ArrayList<>();
-                    relationships.add(liveRelationship);
-                    final Iterator iterator = relationships.iterator();
-                    return new RangeIterator() {
+                invocation -> {
+                    Object[] arguments = invocation.getArguments();
+                    Resource resource = (Resource) arguments[0];
+                    if ("/content/navigation-blueprint".equals(resource.getPath())) {
+                        LiveRelationship liveRelationship = mock(LiveRelationship.class);
+                        when(liveRelationship.getTargetPath()).thenReturn("/content/navigation-livecopy");
+                        final ArrayList<LiveRelationship> relationships = new ArrayList<>();
+                        relationships.add(liveRelationship);
+                        final Iterator iterator = relationships.iterator();
+                        return new RangeIterator() {
 
-                        int index = 0;
+                            int index = 0;
 
-                        @Override
-                        public void skip(long skipNum) {
+                            @Override
+                            public void skip(long skipNum) {
 
-                        }
+                            }
 
-                        @Override
-                        public long getSize() {
-                            return relationships.size();
-                        }
+                            @Override
+                            public long getSize() {
+                                return relationships.size();
+                            }
 
-                        @Override
-                        public long getPosition() {
-                            return index;
-                        }
+                            @Override
+                            public long getPosition() {
+                                return index;
+                            }
 
-                        @Override
-                        public boolean hasNext() {
-                            return iterator.hasNext();
-                        }
+                            @Override
+                            public boolean hasNext() {
+                                return iterator.hasNext();
+                            }
 
-                        @Override
-                        public Object next() {
-                            index++;
-                            return iterator.next();
-                        }
-                    };
+                            @Override
+                            public Object next() {
+                                index++;
+                                return iterator.next();
+                            }
+                        };
+                    }
+                    return null;
                 }
-                return null;
-            }
         );
         aemContext.registerService(LiveRelationshipManager.class, relationshipManager);
     }
@@ -304,12 +307,67 @@ public class NavigationImplTest {
         getNavigationItems(navigation);
     }
 
-    private Navigation getNavigationUnderTest(String resourcePath) {
-        return getNavigationUnderTest(resourcePath, AEM_CONTEXT);
+    @Test
+    public void testRootLevelZero() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_11);
+        Object[][] expectedPages = {
+            {"/content/navigation", 0, true, "/content/navigation.html"},
+            {"/content/navigation/navigation-1", 1, false, "/navigation-1-vanity"},
+            {"/content/navigation/navigation-1/navigation-1-1", 2, false, "/content/navigation/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 4, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation/navigation-2", 1, false, "/content/navigation/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation11"));
     }
 
-    protected Navigation getNavigationUnderTest(String resourcePath, AemContext aemContext) {
-        Resource resource = aemContext.resourceResolver().getResource(resourcePath);
+    @Test
+    public void testRootLevelOne() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_12);
+        Object[][] expectedPages = {
+            {"/content/navigation/navigation-1", 0, false, "/navigation-1-vanity"},
+            {"/content/navigation/navigation-1/navigation-1-1", 1, false, "/content/navigation/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation12"));
+    }
+
+    @Test
+    public void testRootLevelTwo() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_13);
+        Object[][] expectedPages = {
+            {"/content/navigation/navigation-1/navigation-1-1", 0, false, "/content/navigation/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 1, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 1, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation13"));
+    }
+
+    private Navigation getNavigationUnderTest(String resourcePath) {
+        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
@@ -319,10 +377,10 @@ public class NavigationImplTest {
             contentPolicy = mapping.getPolicy();
         }
         final MockSlingHttpServletRequest request =
-            new MockSlingHttpServletRequest(aemContext.resourceResolver(), aemContext.bundleContext());
+                new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
-        Page currentPage = aemContext.pageManager().getContainingPage(resource);
+        Page currentPage = AEM_CONTEXT.pageManager().getContainingPage(resource);
         SlingBindings slingBindings = new SlingBindings();
         Style currentStyle;
         if (contentPolicy != null) {
@@ -331,7 +389,7 @@ public class NavigationImplTest {
         } else {
             currentStyle = mock(Style.class);
             when(currentStyle.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
-                invocation -> invocation.getArguments()[1]
+                    invocation -> invocation.getArguments()[1]
             );
         }
         slingBindings.put(SlingBindings.RESOURCE, resource);
@@ -342,7 +400,7 @@ public class NavigationImplTest {
         return request.adaptTo(Navigation.class);
     }
 
-    protected List<NavigationItem> getNavigationItems(Navigation navigation) {
+    private List<NavigationItem> getNavigationItems(Navigation navigation) {
         List<NavigationItem> items = new LinkedList<>();
         for (NavigationItem item : navigation.getItems()) {
             collect(items, item);
@@ -357,7 +415,7 @@ public class NavigationImplTest {
         }
     }
 
-    protected void verifyNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
+    private void verifyNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
         assertEquals("The navigation tree contains a different number of pages than expected.", expectedPages.length, items.size());
         int index = 0;
         for (NavigationItem item : items) {

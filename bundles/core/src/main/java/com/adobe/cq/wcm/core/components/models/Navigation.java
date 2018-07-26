@@ -41,7 +41,9 @@ public interface Navigation extends ComponentExporter {
      * omitted, {@code false} otherwise).
      *
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @deprecated since 12.4.0
      */
+    @Deprecated
     String PN_SKIP_NAVIGATION_ROOT = "skipNavigationRoot";
 
     /**

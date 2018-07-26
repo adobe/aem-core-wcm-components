@@ -74,5 +74,5 @@
             "children": []
         }
     ],
-    ":type": "core/wcm/components/navigation/v2/navigation"
+    ":type": "core/wcm/components/navigation/v1/navigation"
 }
