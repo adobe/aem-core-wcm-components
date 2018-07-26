@@ -25,7 +25,7 @@
     var PN_RESOURCE_TYPE = "sling:resourceType";
 
     var defaultInsertFct = ns.editableHelper.actions.INSERT.execute;
-    var doNothingFct = function () {}; // "do nothing" function
+    var doNothingFct = function() {}; // "do nothing" function
 
     var selectors = {
         editor: ".childreneditor",
@@ -65,38 +65,38 @@
     // Set the resource type parameter when selecting a component from the "Insert New Components" dialog
     $(document).off(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList).on(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList, function(event) {
 
-            $(selectors.allowedComponentsList).off(SELECT_LIST_CHANGE_EVENT);
+        $(selectors.allowedComponentsList).off(SELECT_LIST_CHANGE_EVENT);
 
-            var resourceType;
-            var $insertComponentDialog = $(this).closest(selectors.insertComponentDialog)
-            $insertComponentDialog.hide();
+        var resourceType;
+        var $insertComponentDialog = $(this).closest(selectors.insertComponentDialog);
+        $insertComponentDialog.hide();
 
-            var component = ns.components.find(event.detail.selection.value);
-            if (component.length > 0) {
-                resourceType = component[0].getResourceType();
-            }
+        var component = ns.components.find(event.detail.selection.value);
+        if (component.length > 0) {
+            resourceType = component[0].getResourceType();
+        }
 
-            var $editor = $(selectors.editor);
-            // We need one more frame to make sure the item renders the template in the DOM
-            Coral.commons.nextFrame(function() {
+        var $editor = $(selectors.editor);
+        // We need one more frame to make sure the item renders the template in the DOM
+        Coral.commons.nextFrame(function() {
 
-                var $child = $editor.find(selectors.child).last();
-                var childName = NN_PREFIX + Date.now();
-                var inputName = "./" + childName + "/" + PN_TITLE;
-                $child.data("name", childName);
-                var $input = $child.find("input");
-                $input.attr("name", inputName);
+            var $child = $editor.find(selectors.child).last();
+            var childName = NN_PREFIX + Date.now();
+            var inputName = "./" + childName + "/" + PN_TITLE;
+            $child.data("name", childName);
+            var $input = $child.find("input");
+            $input.attr("name", inputName);
 
-                // append hidden input element for the resource type
-                $("<input>").attr({
-                    type: "hidden",
-                    name: "./" + childName + "/" + PN_RESOURCE_TYPE,
-                    value: resourceType
-                }).insertAfter($input);
+            // append hidden input element for the resource type
+            $("<input>").attr({
+                type: "hidden",
+                name: "./" + childName + "/" + PN_RESOURCE_TYPE,
+                value: resourceType
+            }).insertAfter($input);
 
-            }.bind(this));
+        }.bind(this));
 
-        });
+    });
 
     // Trigger the POST request to add, remove, re-order children nodes
     function processChildren($editor) {
