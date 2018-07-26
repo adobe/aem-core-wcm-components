@@ -56,12 +56,12 @@
         constructor: function PanelSelector(config) {
             this._config = config;
 
-            var panelContainer = CQ.CoreComponents.panelcontainer.utils.getPanelContainer(this._config.editable);
+            var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(this._config.editable);
 
-            if (panelContainer) {
+            if (panelContainerType) {
                 this._panelContainer = new CQ.CoreComponents.PanelContainer({
                     path: this._config.editable.path,
-                    panelContainer: panelContainer,
+                    panelContainerType: panelContainerType,
                     el: this._config.editable.dom
                 });
 

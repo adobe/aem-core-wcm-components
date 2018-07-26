@@ -27,43 +27,43 @@
     CQ.CoreComponents.panelcontainer.utils = {
 
         /**
-         * Checks whether an Editable is a panel container
+         * Checks whether an [Editable]{@link Granite.author.Editable} is a panel container
          *
-         * @param {Granite.author.Editable} editable The Editable to check
+         * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} to check
          * @returns {Boolean} True if the Editable is a panel container, false otherwise
          */
         isPanelContainer: function(editable) {
-            var panelContainer = getPanelContainer(editable);
-            return (panelContainer !== undefined);
+            var panelContainerType = getPanelContainerType(editable);
+            return (panelContainerType !== undefined);
         },
 
         /**
-         * Returns the panel container definition associated with an Editable
+         * Returns the panel container definition associated with an [Editable]{@link Granite.author.Editable}
          *
-         * @param {Granite.author.Editable} editable The Editable to check
-         * @returns {Object} The panel container definition, undefined if none is associated
+         * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} to check
+         * @returns {Object} The Panel Container Type definition, undefined if none is associated
          */
-        getPanelContainer: function(editable) {
-            return getPanelContainer(editable);
+        getPanelContainerType: function(editable) {
+            return getPanelContainerType(editable);
         }
     };
 
-    function getPanelContainer(editable) {
-        var panelContainer;
-        var panelContainers = CQ.CoreComponents.panelcontainer.registry.getAll();
+    function getPanelContainerType(editable) {
+        var panelContainerType;
+        var panelContainerTypes = CQ.CoreComponents.panelcontainer.registry.getAll();
 
         if (editable && editable.dom) {
-            for (var i = 0; i < panelContainers.length; i++) {
-                var container = panelContainers[i];
+            for (var i = 0; i < panelContainerTypes.length; i++) {
+                var container = panelContainerTypes[i];
                 var match = editable.dom.find(container.selector).addBack(editable.dom).length > 0;
                 if (match) {
-                    panelContainer = container;
+                    panelContainerType = container;
                     break;
                 }
             }
         }
 
-        return panelContainer;
+        return panelContainerType;
     }
 
 })();

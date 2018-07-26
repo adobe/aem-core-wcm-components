@@ -22,8 +22,8 @@
 
     /**
      * @typedef {Object} PanelContainerConfig Represents a Panel Container configuration object
-     * @property {string} path The path to the panel container component represented
-     * @property {Object} [panelContainer] The panel container definition for the panel container type related to this component
+     * @property {String} path The path to the Panel Container component represented
+     * @property {PanelContainerType} [panelContainerType] The Panel Container Type definition
      * @property {HTMLElement} [el] The HTMLElement in the Granite.author.ContentFrame related to this panel container
      */
 
@@ -63,8 +63,8 @@
          * @param {Number} index Index of the panel to navigate to
          */
         navigate: function(index) {
-            if (this._config.panelContainer) {
-                Granite.author.ContentFrame.postMessage(this._config.panelContainer.name, { panel: index });
+            if (this._config.panelContainerType) {
+                Granite.author.ContentFrame.postMessage(this._config.panelContainerType.name, { panel: index });
             }
         },
 
@@ -76,10 +76,10 @@
         getActiveIndex: function() {
             var that = this;
             var activeIndex = 0;
-            if (that._config.el && that._config.panelContainer) {
-                var items = $(this._config.el).find(that._config.panelContainer.itemSelector);
+            if (that._config.el && that._config.panelContainerType) {
+                var items = $(this._config.el).find(that._config.panelContainerType.itemSelector);
                 items.each(function(index) {
-                    if ($(this).is(that._config.panelContainer.itemActiveSelector)) {
+                    if ($(this).is(that._config.panelContainerType.itemActiveSelector)) {
                         activeIndex = index;
                         return false;
                     }
@@ -126,7 +126,7 @@
         },
 
         /**
-         * Persists item updates to an endpoint, returns a deferred for handling
+         * Persists item updates to an endpoint, returns a Promise for handling
          *
          * @param {Array} ordered IDs of the items in order
          * @param {Array} [deleted] IDs of the deleted items

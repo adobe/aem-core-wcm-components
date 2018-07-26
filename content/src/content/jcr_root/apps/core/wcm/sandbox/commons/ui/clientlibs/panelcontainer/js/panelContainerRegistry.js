@@ -20,6 +20,14 @@
     var registry = new Map();
 
     /**
+     * @typedef {Object} PanelContainerTypeConfig Represents a Panel Container Type configuration object
+     * @property {String} name Name of the Panel Container Type
+     * @property {String} selector Selector for identifying components representing this type
+     * @property {String} itemSelector Selector for child items of components representing this type
+     * @property {String} itemActiveSelector Selector for the active child item of components representing this type
+     */
+
+    /**
      * Panel Container Registry
      *
      * @namespace
@@ -29,13 +37,13 @@
     CQ.CoreComponents.panelcontainer.registry = {
 
         /**
-         * Registers a panel container definition by name to the registry
+         * Registers a Panel Container Type definition by name to the registry
          *
-         * @param {Object} panelContainer The panel container definition
+         * @param {PanelContainerTypeConfig} panelContainerType The panel container type definition
          */
-        register: function(panelContainer) {
-            if (panelContainer !== null && typeof panelContainer === "object" && panelContainer.name) {
-                registry.set(panelContainer.name, panelContainer);
+        register: function(panelContainerType) {
+            if (panelContainerType !== null && typeof panelContainerType === "object" && panelContainerType.name) {
+                registry.set(panelContainerType.name, panelContainerType);
             }
         },
 
