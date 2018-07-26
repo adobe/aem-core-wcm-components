@@ -263,6 +263,7 @@
 
                 that._panelContainer.update(ordered).done(function() {
                     ns.edit.EditableActions.REFRESH.execute(that._config.editable).done(function() {
+                        that._config.editable.overlay.setSelected(true);
                         that._navigate();
                     });
                 });
