@@ -16,4 +16,6 @@
 
 #base=js
 
-toolbaractions/panelselect.js
+namespace.js
+PanelSelector.js
+panelSelect.js

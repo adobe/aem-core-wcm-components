@@ -43,9 +43,9 @@
             initControls();
 
             if (Granite && Granite.author) {
-                new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("carousel", function(message) {
+                new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp-carousel", function(message) {
                     if (message.data) {
-                        slide(message.data.slide);
+                        slide(message.data.panel);
                     }
                 });
             }
