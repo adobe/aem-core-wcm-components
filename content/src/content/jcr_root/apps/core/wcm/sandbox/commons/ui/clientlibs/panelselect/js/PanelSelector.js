@@ -21,6 +21,10 @@
 
     var NS = ".editor-panelselector";
 
+    var selectors = {
+        indexMarker: ".editor-PanelSelector-indexMarker"
+    };
+
     /**
      * @typedef {Object} PanelSelectorConfig Represents a Panel Selector configuration object
      * @property {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} against which to create the panel selector
@@ -123,7 +127,7 @@
             });
             tableHead.appendChild(new Coral.Table.HeaderCell());
             tableHead.appendChild(new Coral.Table.HeaderCell());
-            tableHead.classList.add("editable-PanelSelector-tableHead");
+            tableHead.classList.add("editor-PanelSelector-tableHead");
 
             table.appendChild(colgroup);
             table.appendChild(tableHead);
@@ -297,8 +301,10 @@
             var rows = this._elements.table.items.getAll();
 
             for (var i = 0; i < rows.length; i++) {
-                var indexSpan = rows[i].getElementsByTagName("span");
-                indexSpan[0].textContent = i + 1;
+                var indexSpan = rows[i].querySelector(selectors.indexMarker);
+                if (indexSpan) {
+                    indexSpan.textContent = i + 1;
+                }
             }
         },
 
@@ -329,7 +335,7 @@
      * @returns {String} The title
      */
     function getTitle(editable, item, index) {
-        var title = "<span class='foundation-layout-util-subtletext'>" + index + "</span>&nbsp;&nbsp;";
+        var title = "<span class='foundation-layout-util-subtletext editor-PanelSelector-indexMarker'>" + index + "</span>&nbsp;&nbsp;";
 
         if (item && item["jcr:title"]) {
             title = title + " " + item["jcr:title"];

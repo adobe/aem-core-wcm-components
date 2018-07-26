@@ -63,7 +63,7 @@
          */
         navigate: function(index) {
             if (this._config.panelContainer) {
-                Granite.author.ContentFrame.postMessage(this._config.panelContainer.type, { panel: index });
+                Granite.author.ContentFrame.postMessage(this._config.panelContainer.name, { panel: index });
             }
         },
 
@@ -78,8 +78,9 @@
             if (that._config.el && that._config.panelContainer) {
                 var items = $(this._config.el).find(that._config.panelContainer.itemSelector);
                 items.each(function(index) {
-                    if (items[index].is(that._config.panelContainer.itemActiveSelector)) {
+                    if ($(this).is(that._config.panelContainer.itemActiveSelector)) {
                         activeIndex = index;
+                        return false;
                     }
                 });
             }
