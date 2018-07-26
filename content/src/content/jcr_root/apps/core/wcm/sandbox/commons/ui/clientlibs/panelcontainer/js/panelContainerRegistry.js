@@ -27,6 +27,7 @@
      * @type {{}}
      */
     CQ.CoreComponents.panelcontainer.registry = {
+
         /**
          * Registers a panel container definition by name to the registry
          *

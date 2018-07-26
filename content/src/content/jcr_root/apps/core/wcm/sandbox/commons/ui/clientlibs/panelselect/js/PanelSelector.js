@@ -21,9 +21,32 @@
 
     var NS = ".editor-panelselector";
 
+    /**
+     * @typedef {Object} PanelSelectorConfig Represents a Panel Selector configuration object
+     * @property {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} against which to create the panel selector
+     * @property {HTMLElement} target The target against which to attach the panel selector UI
+     */
+
+    /**
+     * @class CQ.CoreComponents.PanelSelector
+     * @classdesc A Panel Selector creates a UI consisting of a [Coral.Popover]{@link Coral.Popover} and [Coral.Table]{@link Coral.Table}
+     * which allows selection of panel container items for editing, as well as other operations such as reordering of panels.
+     * @param {PanelSelectorConfig} config The Panel Selector configuration object
+     */
     CQ.CoreComponents.PanelSelector = ns.util.createClass({
 
+        /**
+         * The Panel Selector Object used to configure its behavior
+         *
+         * @member {PanelSelectorConfig} CQ.CoreComponents.PanelSelector#_config
+         */
         _config: {},
+
+        /**
+         * An Object that is used to cache HTMLElement hooks for this Class
+         *
+         * @member {Object} CQ.CoreComponents.PanelSelector#_elements
+         */
         _elements: {},
 
         constructor: function PanelSelector(config) {
@@ -35,7 +58,7 @@
                 this._panelContainer = new CQ.CoreComponents.PanelContainer({
                     path: this._config.editable.path,
                     panelContainer: panelContainer,
-                    el: this._config.editable.dom,
+                    el: this._config.editable.dom
                 });
 
                 this._render();
@@ -43,6 +66,11 @@
             }
         },
 
+        /**
+         * Renders the Panel Selector, adds its items and attaches it to the DOM
+         *
+         * @private
+         */
         _render: function() {
             this._createPopover();
             this._createTable();
@@ -53,6 +81,11 @@
             this._renderItems();
         },
 
+        /**
+         * Creates the [Coral.Popover]{@link Coral.Popover} for this Panel Selector
+         *
+         * @private
+         */
         _createPopover: function() {
             var that = this;
 
@@ -68,6 +101,11 @@
             this._elements.popover = popover;
         },
 
+        /**
+         * Creates the [Coral.Table]{@link Coral.Table} for this Panel Selector
+         *
+         * @private
+         */
         _createTable: function() {
             var table = new Coral.Table().set({
                 orderable: true,
@@ -94,6 +132,12 @@
             this._elements.table = table;
         },
 
+        /**
+         * Fetches items for the related [Panel Container]{@link CQ.CoreComponents.PanelContainer} and renders them
+         * to the [Coral.Table]{@link Coral.Table}
+         *
+         * @private
+         */
         _renderItems: function() {
             var that = this;
 
@@ -103,7 +147,6 @@
                 children = that._config.editable.getChildren().filter(isDisplayable);
             }
 
-            // read model JSON
             ui.wait(that._elements.popover);
             that._panelContainer.getItems().done(function(items) {
                 if (items) {
@@ -134,8 +177,9 @@
         },
 
         /**
-         * Appends panel items to a Coral.Table
+         * Appends panel items to a [Coral.Table]{Coral.Table}
          *
+         * @private
          * @param {Object[]} items Array of data items
          * @param {String} items[].id Item ID (path)
          * @param {String} items[].title Item title
@@ -172,6 +216,11 @@
             this._elements.table.style.height = this._elements.table.offsetHeight + "px";
         },
 
+        /**
+         * Binds interaction events
+         *
+         * @private
+         */
         _bindEvents: function() {
             var that = this;
 
@@ -240,7 +289,9 @@
 
         /**
          * Sets the text content of a row's index span
-         * to match to its actual position in the table
+         * to match to its actual position in the [Coral.Table]{Coral.Table}
+         *
+         * @private
          */
         _markRowIndexes: function() {
             var rows = this._elements.table.items.getAll();
@@ -252,8 +303,10 @@
         },
 
         /**
-         * Reads the selected item from the table and
-         * calls the panelContainer to handle the navigation.
+         * Reads the selected item from the [Coral.Table]{Coral.Table} and
+         * calls the [Panel Container]{@link CQ.CoreComponents.PanelContainer} to handle the navigation
+         *
+         * @private
          */
         _navigate: function() {
             var selectedItem = this._elements.table.selectedItem;
@@ -267,9 +320,10 @@
 
     /**
      * Retrieves a title from item data. If no item data exists, or it doesn't have a jcr:title
-     * instead lookup the editable display name of the corresponding editable. Prefixes each title with an index.
+     * instead lookup the editable display name of the corresponding [Editable]{@link Granite.author.Editable}.
+     * Prefixes each title with an index.
      *
-     * @param {Granite.author.Editable} editable The editable representing the item
+     * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} representing the item
      * @param {Object} item The item data
      * @param {Number} index Index of the item
      * @returns {String} The title
@@ -287,10 +341,11 @@
     }
 
     /**
-     * Test whether an Editable is displayable in the panel popover. Ignore Inspectables and Placeholders.
+     * Test whether an [Editable]{@link Granite.author.Editable} is displayable in the panel popover.
+     * Ignore [Inspectables]{@link Granite.author.Inspectable} and Placeholders.
      *
-     * @param {Granite.author.Editable} editable The Editable to test
-     * @returns {Boolean} Whether the Editable is displayed in the panel popover, or not
+     * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} to test
+     * @returns {Boolean} Whether the [Editable]{@link Granite.author.Editable} is displayed in the panel popover, or not
      */
     function isDisplayable(editable) {
         return (editable instanceof ns.Editable &&
