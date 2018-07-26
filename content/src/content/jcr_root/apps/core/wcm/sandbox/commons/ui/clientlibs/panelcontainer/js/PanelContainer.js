@@ -17,7 +17,8 @@
 (function($, ns, channel, window, undefined) {
     "use strict";
 
-    var DATA_ENDPOINT_SUFFIX = ".model.json";
+    var GET_DATA_SUFFIX = ".model.json";
+    var POST_SUFFIX = ".childreneditor.html";
 
     /**
      * @typedef {Object} PanelContainerConfig Represents a Panel Container configuration object
@@ -102,7 +103,7 @@
             }
 
             $.ajax({
-                url: that._config.path + DATA_ENDPOINT_SUFFIX
+                url: that._config.path + GET_DATA_SUFFIX
             }).done(function(data) {
                 if (data) {
                     that._data = data;
@@ -132,8 +133,16 @@
          * @returns {Promise} The promise for completion handling
          */
         update: function(ordered, deleted) {
-            var deferred = $.Deferred;
-            return deferred.promise();
+            var url = this._config.path + POST_SUFFIX;
+
+            return $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    "deletedChildren": deleted,
+                    "orderedChildren": ordered
+                }
+            });
         }
     });
 

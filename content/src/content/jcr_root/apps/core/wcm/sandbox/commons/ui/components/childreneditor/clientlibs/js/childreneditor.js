@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
+/* global CQ */
 (function($, ns, channel, window) {
     "use strict";
 
     var EDITOR_CLASS = "childreneditor";
     var CONFIG_BUTTON_CLASS = "coral-Multifield-config";
-    var POST_URL_SELECTOR = "childreneditor";
     var CONTAINER_PATH_DATA_ATTR = "containerPath";
     var SELECT_LIST_CHANGE_EVENT = "coral-selectlist:change";
     var NN_PREFIX = "item_";
@@ -123,17 +123,12 @@
             orderedChildren.push(childName);
         });
 
-        var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
-        var url = containerPath + "." + POST_URL_SELECTOR + ".html";
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {
-                "deletedChildren": deletedChildren,
-                "orderedChildren": orderedChildren
-            }
-        }
-        );
+        var path = $editor.data(CONTAINER_PATH_DATA_ATTR);
+        var panelContainer = new CQ.CoreComponents.PanelContainer({
+            path: path
+        });
+
+        panelContainer.update(orderedChildren, deletedChildren);
 
         deletedChildren = [];
         orderedChildren = [];

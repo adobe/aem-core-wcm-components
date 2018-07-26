@@ -229,7 +229,9 @@
             var that = this;
 
             that._elements.popover.on("coral-overlay:close", function() {
-                that._elements.popover.parentNode.removeChild(that._elements.popover);
+                if (that._elements.popover && that._elements.popover.parentNode) {
+                    that._elements.popover.parentNode.removeChild(that._elements.popover);
+                }
             });
 
             that._elements.table.on("coral-table:change", function(event) {
