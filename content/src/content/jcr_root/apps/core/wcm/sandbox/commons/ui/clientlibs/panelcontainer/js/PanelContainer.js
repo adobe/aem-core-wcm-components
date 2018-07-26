@@ -129,7 +129,7 @@
          * Persists item updates to an endpoint, returns a deferred for handling
          *
          * @param {Array} ordered IDs of the items in order
-         * @param {Array} deleted IDs of the deleted items
+         * @param {Array} [deleted] IDs of the deleted items
          * @returns {Promise} The promise for completion handling
          */
         update: function(ordered, deleted) {

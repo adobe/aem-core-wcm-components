@@ -158,6 +158,7 @@
                     for (var i = 0; i < items.length; i++) {
                         itemsData.push({
                             id: children[i].path,
+                            name: children[i].name,
                             title: getTitle(children[i], items[i], i + 1)
                         });
                     }
@@ -170,6 +171,7 @@
                 children.forEach(function(child, index) {
                     items.push({
                         id: child.path,
+                        name: child.name,
                         title: getTitle(child, null, index + 1)
                     });
                 });
@@ -194,6 +196,7 @@
             for (var i = 0; i < items.length; i++) {
                 var row = this._elements.table.items.add({});
                 row.dataset.id = items[i].id;
+                row.dataset.name = items[i].name;
                 var titleCell = new Coral.Table.Cell().set({
                     content: {
                         innerHTML: items[i].title
@@ -250,37 +253,18 @@
             });
 
             that._elements.table.on("coral-table:roworder", function(event) {
-                var before = event.detail.before;
-                var insertBehavior = ns.persistence.PARAGRAPH_ORDER.before;
-                var childEditable = ns.editables.find({
-                    path: event.detail.row.dataset.id
-                })[0];
-                var editableNeighbor;
-                // TODO: add undo/redo behaviour
-                var historyConfig = {
-                    preventAddHistory: true
-                };
-
-                if (before) {
-                    editableNeighbor = ns.editables.find({
-                        path: before.dataset.id
-                    })[0];
-                } else {
-                    // dragged row to table end
-                    var after = event.detail.row.previousElementSibling;
-                    insertBehavior = ns.persistence.PARAGRAPH_ORDER.after;
-                    editableNeighbor = ns.editables.find({
-                        path: after.dataset.id
-                    })[0];
-                }
-
                 that._markRowIndexes();
 
-                ns.edit.EditableActions.MOVE.execute(childEditable, insertBehavior, editableNeighbor, historyConfig).done(function() {
+                var items = that._elements.table.items.getAll();
+                var ordered = [];
+                for (var i = 0; i < items.length; i++) {
+                    ordered.push(items[i].name);
+                }
+
+                that._panelContainer.update(ordered).done(function() {
                     ns.edit.EditableActions.REFRESH.execute(that._config.editable).done(function() {
                         that._navigate();
                     });
-                    // TODO: move fail handler
                 });
             });
 
