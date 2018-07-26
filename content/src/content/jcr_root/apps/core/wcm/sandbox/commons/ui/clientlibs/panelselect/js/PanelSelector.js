@@ -34,9 +34,8 @@
             if (panelContainer) {
                 this._panelContainer = new CQ.CoreComponents.PanelContainer({
                     path: this._config.editable.path,
-                    type: panelContainer.name,
+                    panelContainer: panelContainer,
                     el: this._config.editable.dom,
-                    panelContainer: panelContainer
                 });
 
                 this._render();

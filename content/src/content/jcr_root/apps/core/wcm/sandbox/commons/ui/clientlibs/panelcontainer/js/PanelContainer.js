@@ -19,9 +19,35 @@
 
     var DATA_ENDPOINT_SUFFIX = ".model.json";
 
+    /**
+     * @typedef {Object} PanelContainerConfig Represents a Panel Container configuration object
+     * @property {string} path The path to the panel container component represented
+     * @property {Object} [panelContainer] The panel container definition for the panel container type related to this component
+     * @property {HTMLElement} [el] The HTMLElement in the Granite.author.ContentFrame related to this panel container
+     */
+
+    /**
+     * @class CQ.CoreComponents.PanelContainer
+     * @classdesc A Panel Container relates to a component concept whereby child items (panels) are hidden/shown. This class provides
+     * operations that allow editing functionality, including the ability to navigate to panels for editing,
+     * fetching panel items, determining the active panel and persisting updates to the server.
+     * @param {PanelContainerConfig} config The Panel Container configuration object
+     */
     CQ.CoreComponents.PanelContainer = ns.util.createClass({
 
+        /**
+         * The Panel Container object used to configure its behavior
+         *
+         * @member {PanelContainerConfig} CQ.CoreComponents.PanelContainer#_config
+         */
         _config: {},
+
+        /**
+         * The data object used retrieved from an endpoint for this Panel Container that represents its properties
+         * and child items
+         *
+         * @member {Object} CQ.CoreComponents.PanelContainer#_data
+         */
         _data: {},
 
         constructor: function PanelContainer(config) {
@@ -30,13 +56,15 @@
         },
 
         /**
-         * Navigates to the panel at the provided index. Posts a message to the content
-         * frame and lets the UI widget related to this container do the navigation.
+         * Navigates to the panel at the provided index. Posts a message to the
+         * [Content Frame]{@link Granite.author.ContentFrame} and lets the related UI widget handle the operation.
          *
          * @param {Number} index Index of the panel to navigate to
          */
         navigate: function(index) {
-            Granite.author.ContentFrame.postMessage(this._config.type, { panel: index });
+            if (this._config.panelContainer) {
+                Granite.author.ContentFrame.postMessage(this._config.panelContainer.type, { panel: index });
+            }
         },
 
         /**
