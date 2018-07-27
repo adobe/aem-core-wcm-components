@@ -54,19 +54,21 @@
         _elements: {},
 
         constructor: function PanelSelector(config) {
-            this._config = config;
+            var that = this;
+            that._config = config;
 
-            var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(this._config.editable);
+            var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(that._config.editable);
 
             if (panelContainerType) {
-                this._panelContainer = new CQ.CoreComponents.PanelContainer({
-                    path: this._config.editable.path,
+                that._panelContainer = new CQ.CoreComponents.PanelContainer({
+                    path: that._config.editable.path,
                     panelContainerType: panelContainerType,
-                    el: this._config.editable.dom
+                    el: that._config.editable.dom
                 });
 
-                this._render();
-                this._bindEvents();
+                that._render().done(function() {
+                    that._bindEvents();
+                });
             }
         },
 
@@ -74,6 +76,7 @@
          * Renders the Panel Selector, adds its items and attaches it to the DOM
          *
          * @private
+         * @returns {Promise} A promise to handle render completion
          */
         _render: function() {
             this._createPopover();
@@ -82,7 +85,7 @@
             this._elements.popover.appendChild(this._elements.table);
             ns.ContentFrame.scrollView[0].appendChild(this._elements.popover);
 
-            this._renderItems();
+            return this._renderItems();
         },
 
         /**
@@ -141,8 +144,10 @@
          * to the [Coral.Table]{@link Coral.Table}
          *
          * @private
+         * @returns {Promise} A promise to handle render completion
          */
         _renderItems: function() {
+            var deferred = $.Deferred();
             var that = this;
 
             // determine editable children
@@ -163,6 +168,7 @@
                         });
                     }
                     that._createItems(itemsData);
+                    deferred.resolve();
                 }
             }).fail(function() {
                 // fallback: editable children
@@ -177,9 +183,12 @@
                 });
 
                 that._createItems(items);
+                deferred.resolve();
             }).always(function() {
                 ui.clearWait();
             });
+
+            return deferred.promise();
         },
 
         /**
@@ -192,6 +201,7 @@
          */
         _createItems: function(items) {
             var activeIndex = this._panelContainer.getActiveIndex();
+            this._elements.reorderButtons = [];
 
             for (var i = 0; i < items.length; i++) {
                 var row = this._elements.table.items.add({});
@@ -210,6 +220,7 @@
                 button.setAttribute("coral-table-roworder", true);
                 var dragHandleCell = new Coral.Table.Cell();
                 dragHandleCell.appendChild(button);
+                this._elements.reorderButtons.push(button);
 
                 row.appendChild(titleCell);
                 row.appendChild(dragHandleCell);
@@ -252,22 +263,33 @@
                 }
             });
 
-            that._elements.table.on("coral-table:roworder", function(event) {
-                that._markRowIndexes();
 
-                var items = that._elements.table.items.getAll();
-                var ordered = [];
-                for (var i = 0; i < items.length; i++) {
-                    ordered.push(items[i].name);
-                }
+            for (var i = 0; i < that._elements.reorderButtons.length; i++) {
+                $(that._elements.reorderButtons[i]).on("mousedown", function() {
+                    var selectedId = that._elements.table.selectedItem.dataset.id;
 
-                that._panelContainer.update(ordered).done(function() {
-                    ns.edit.EditableActions.REFRESH.execute(that._config.editable).done(function() {
-                        that._config.editable.overlay.setSelected(true);
-                        that._navigate();
+                    that._elements.table.off("coral-table:roworder").on("coral-table:roworder", function(event) {
+                        that._markRowIndexes();
+
+                        var items = that._elements.table.items.getAll();
+                        var ordered = [];
+                        for (var i = 0; i < items.length; i++) {
+                            ordered.push(items[i].name);
+                        }
+
+                        that._panelContainer.update(ordered).done(function() {
+                            ns.edit.EditableActions.REFRESH.execute(that._config.editable).done(function() {
+                                that._config.editable.overlay.setSelected(true);
+                                that._navigate();
+                            });
+                        });
+
+                        if (event.detail.row.dataset.id === selectedId) {
+                            event.detail.row.selected = true;
+                        }
                     });
                 });
-            });
+            }
 
             // reposition the popover with overlay change,
             // as the editable toolbar can jump following navigation to a panel
