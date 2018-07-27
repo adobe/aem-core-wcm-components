@@ -53,6 +53,13 @@ public interface Image extends ComponentExporter {
     String PN_IS_DECORATIVE = "isDecorative";
 
     /**
+     * Name of the policy property that defines whether or not the UUID is disabled.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_DISABLE_UUID = "uuidDisabled";
+
+    /**
      * Name of the resource property that will indicate if the image's caption will be rendered as a popup.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
@@ -159,6 +166,26 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the value for the image's {@code uuid} attribute, if one was set.
+     *
+     * @return the value for the image's {@code uuid} attribute, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.4.0
+     */
+    default String getUuid() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if UUID is disabled on the asset.
+     *
+     * @return {@code true} if UUID is disabled on the asset, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default boolean isUuidDisabled() {
         throw new UnsupportedOperationException();
     }
 

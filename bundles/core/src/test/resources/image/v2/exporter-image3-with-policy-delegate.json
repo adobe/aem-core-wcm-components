@@ -4,6 +4,7 @@
     ],
     "areas": [],
     "lazyEnabled"           : false,
+    "uuidDisabled"          : true,
     "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image3.coreimg{.width}.png?contentPolicyDelegatePath=/content/test/jcr:content/root/image0",
     "title"                 : "Adobe Logo",
     "alt"                   : "Adobe Logo",

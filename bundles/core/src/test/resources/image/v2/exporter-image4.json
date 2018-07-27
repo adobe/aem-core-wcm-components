@@ -3,6 +3,7 @@
     "widths": [],
     "areas": [],
     "lazyEnabled"           : false,
+    "uuidDisabled"          : true,
     "title"                 : "Adobe Systems Logo and Wordmark",
     "src"                   : "/core/content/test/_jcr_content/root/image4.coreimg.png/1494867377756.png",
     ":type"                 : "core/wcm/components/image/v2/image"

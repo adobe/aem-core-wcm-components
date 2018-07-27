@@ -9,6 +9,7 @@
     ],
     "areas": [],
     "lazyEnabled"   : false,
+    "uuidDisabled"  : true,
     "title"         : "Adobe Systems Logo and Wordmark",
     "alt"           : "Adobe Systems Logo and Wordmark in PNG format",
     "link"          : "/core/content/test-image.html",
