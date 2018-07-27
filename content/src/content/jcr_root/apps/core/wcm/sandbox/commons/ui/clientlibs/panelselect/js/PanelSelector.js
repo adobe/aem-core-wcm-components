@@ -17,8 +17,6 @@
 (function($, ns, channel, window, undefined) {
     "use strict";
 
-    var ui = $(window).adaptTo("foundation-ui");
-
     var NS = ".editor-panelselector";
 
     var selectors = {
@@ -313,6 +311,7 @@
          * @private
          */
         _unbindEvents: function() {
+            var that = this;
             that._elements.popover.off("coral-overlay:close");
             that._elements.table.off("coral-table:change");
             for (var i = 0; i < that._elements.reorderButtons.length; i++) {

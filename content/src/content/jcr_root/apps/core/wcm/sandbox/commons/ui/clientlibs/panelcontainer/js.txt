@@ -20,3 +20,4 @@ namespace.js
 PanelContainer.js
 panelContainerRegistry.js
 panelContainerUtils.js
+panelContainerActions.js
