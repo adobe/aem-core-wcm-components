@@ -66,9 +66,8 @@
                     el: that._config.editable.dom
                 });
 
-                that._render().done(function() {
-                    that._bindEvents();
-                });
+                that._render();
+                that._bindEvents();
             }
         },
 
@@ -76,7 +75,6 @@
          * Renders the Panel Selector, adds its items and attaches it to the DOM
          *
          * @private
-         * @returns {Promise} A promise to handle render completion
          */
         _render: function() {
             this._createPopover();
@@ -85,7 +83,7 @@
             this._elements.popover.appendChild(this._elements.table);
             ns.ContentFrame.scrollView[0].appendChild(this._elements.popover);
 
-            return this._renderItems();
+            this._renderItems();
         },
 
         /**
@@ -144,10 +142,8 @@
          * to the [Coral.Table]{@link Coral.Table}
          *
          * @private
-         * @returns {Promise} A promise to handle render completion
          */
         _renderItems: function() {
-            var deferred = $.Deferred();
             var that = this;
 
             // determine editable children
@@ -156,39 +152,17 @@
                 children = that._config.editable.getChildren().filter(isDisplayable);
             }
 
-            ui.wait(that._elements.popover);
-            that._panelContainer.getItems().done(function(items) {
-                if (items) {
-                    var itemsData = [];
-                    for (var i = 0; i < items.length; i++) {
-                        itemsData.push({
-                            id: children[i].path,
-                            name: children[i].name,
-                            title: getTitle(children[i], items[i], i + 1)
-                        });
-                    }
-                    that._createItems(itemsData);
-                    deferred.resolve();
-                }
-            }).fail(function() {
-                // fallback: editable children
-                var items = [];
+            var items = [];
 
-                children.forEach(function(child, index) {
-                    items.push({
-                        id: child.path,
-                        name: child.name,
-                        title: getTitle(child, null, index + 1)
-                    });
+            children.forEach(function(child, index) {
+                items.push({
+                    id: child.path,
+                    name: child.name,
+                    title: getTitle(child, null, index + 1)
                 });
-
-                that._createItems(items);
-                deferred.resolve();
-            }).always(function() {
-                ui.clearWait();
             });
 
-            return deferred.promise();
+            that._createItems(items);
         },
 
         /**
