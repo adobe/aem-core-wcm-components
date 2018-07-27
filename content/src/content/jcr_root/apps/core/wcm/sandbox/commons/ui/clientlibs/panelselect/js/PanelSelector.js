@@ -242,13 +242,14 @@
         _bindEvents: function() {
             var that = this;
 
-            that._elements.popover.on("coral-overlay:close", function() {
+            that._elements.popover.off("coral-overlay:close").on("coral-overlay:close", function() {
                 if (that._elements.popover && that._elements.popover.parentNode) {
+                    that._unbindEvents();
                     that._elements.popover.parentNode.removeChild(that._elements.popover);
                 }
             });
 
-            that._elements.table.on("coral-table:change", function(event) {
+            that._elements.table.off("coral-table:change").on("coral-table:change", function(event) {
                 // ensure at least one item is selected
                 if (event.detail.selection.length === 0) {
                     if (event.detail.oldSelection.length) {
@@ -329,6 +330,19 @@
             if (selectedItem) {
                 var index = Array.prototype.slice.call(selectedItem.parentElement.children).indexOf(selectedItem);
                 this._panelContainer.navigate(index);
+            }
+        },
+
+        /**
+         * Unbinds event handlers
+         *
+         * @private
+         */
+        _unbindEvents: function() {
+            that._elements.popover.off("coral-overlay:close");
+            that._elements.table.off("coral-table:change");
+            for (var i = 0; i < that._elements.reorderButtons.length; i++) {
+                $(that._elements.reorderButtons[i]).off("mousedown");
             }
         }
     });
