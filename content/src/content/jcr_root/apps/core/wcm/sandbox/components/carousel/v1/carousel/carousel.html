@@ -31,5 +31,5 @@
         </ol>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
-         data-sly-test="${wcmmode.edit || wcmmode.preview}"></sly>
+         data-sly-test="${(wcmmode.edit || wcmmode.preview) && carousel.items.size < 1}"></sly>
 </div>
