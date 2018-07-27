@@ -274,7 +274,7 @@
                         var items = that._elements.table.items.getAll();
                         var ordered = [];
                         for (var i = 0; i < items.length; i++) {
-                            ordered.push(items[i].name);
+                            ordered.push(items[i].dataset.name);
                         }
 
                         that._panelContainer.update(ordered).done(function() {
