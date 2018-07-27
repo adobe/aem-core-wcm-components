@@ -21,7 +21,7 @@
             window.CQ.CoreComponents.panelcontainer.registry.register({
                 name: "cmp-carousel",
                 selector: "[data-cmp-is='carousel']",
-                itemSelector: ".cmp-carousel__item",
+                itemSelector: "[data-cmp-hook-carousel='item']",
                 itemActiveSelector: ".cmp-carousel__item--active"
             });
         }
