@@ -78,7 +78,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (assetResource != null) {
                 Asset asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
-                    if(!uuidDisabled) {
+                    if (!uuidDisabled) {
                         uuid = asset.getID();
                     }
                     else {
