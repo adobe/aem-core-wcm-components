@@ -17,17 +17,20 @@
 (function($, ns, channel, window) {
     "use strict";
 
-    var EDITOR_CLASS = "childreneditor";
-    var CONFIG_BUTTON_CLASS = "coral-Multifield-config";
-    var CONTAINER_PATH_DATA_ATTR = "containerPath";
-    var SELECT_LIST_CHANGE_EVENT = "coral-selectlist:change";
+    var CLASS_EDITOR = "childreneditor";
+    var CLASS_CONFIG_BUTTON = "coral-Multifield-config";
+    var DATA_ATTRIBUTE_CONTAINER_PATH = "containerPath";
+    var EVENT_SELECT_LIST_CHANGE = "coral-selectlist:change";
     var NN_PREFIX = "item_";
     var PN_TITLE = "jcr:title";
     var PN_RESOURCE_TYPE = "sling:resourceType";
 
     var defaultInsertFct = ns.editableHelper.actions.INSERT.execute;
-    var doNothingFct = function() {}; // "do nothing" function
+    var customInsertFct = function() {}; // "do nothing" function
+    var defaultIsOpenedFct = ns.DialogFrame.isOpened;
+    var customIsOpenedFct = function() {return false;};
 
+    // TODO: make all the selectors more specific to the children editor
     var selectors = {
         editor: ".childreneditor",
         child: "coral-multifield-item",
@@ -39,6 +42,49 @@
     };
     var deletedChildren = [];
     var orderedChildren = [];
+
+    // Add a config button to open the edit dialog of each child item
+    function addConfigButtons($editor) {
+        $editor.find(selectors.child).each(function() {
+            var $child = $(this);
+            var $configButton = $child.find(selectors.configButton);
+            // Don't add a button if there is already one
+            if ($configButton.length === 0) {
+                var $removeButton = $child.find(selectors.removeButton);
+                var el = document.createElement("button", "coral-button");
+                el.setAttribute("type", "button");
+                el.setAttribute("is", "coral-button");
+                el.setAttribute("handle", "config");
+                el.setAttribute("variant", "quiet");
+                el.setAttribute("icon", "wrench");
+                el.setAttribute("iconsize", "S");
+                el.className += " ";
+                el.className += CLASS_CONFIG_BUTTON;
+                $(el).insertBefore($removeButton);
+            }
+        });
+    }
+
+    // Trigger the POST request to add, remove, re-order children nodes
+    function processChildren($editor) {
+
+        // Process re-ordered items
+        $editor.find(selectors.child).each(function() {
+            var $child = $(this);
+            var childName = $child.data("name");
+            orderedChildren.push(childName);
+        });
+
+        var path = $editor.data(DATA_ATTRIBUTE_CONTAINER_PATH);
+        var panelContainer = new CQ.CoreComponents.PanelContainer({
+            path: path
+        });
+
+        panelContainer.update(orderedChildren, deletedChildren);
+
+        deletedChildren = [];
+        orderedChildren = [];
+    }
 
     // Remove the child item when clicking the remove button
     $(document).on("click", selectors.removeButton, function(event) {
@@ -55,10 +101,10 @@
             var childPath = $button.closest(selectors.child).data("childPath");
             var editable = ns.editables.find(childPath)[0];
             var childDialog = new ns.edit.Dialog(editable);
-            ns.DialogFrame.isOpened = function() {
-                return false;
-            };
+            // TODO: revisit this hack that enables the dialog of the child to open on top of the carousel dialog
+            ns.DialogFrame.isOpened = customIsOpenedFct;
             ns.DialogFrame.openDialog(childDialog);
+            ns.DialogFrame.isOpened = defaultIsOpenedFct;
         }
     });
 
@@ -67,20 +113,20 @@
         var $button = $(this);
         var $editor = $button.closest(selectors.editor);
         if ($editor.length === 1) {
-            var containerPath = $editor.data(CONTAINER_PATH_DATA_ATTR);
+            var containerPath = $editor.data(DATA_ATTRIBUTE_CONTAINER_PATH);
             var editable = ns.editables.find(containerPath)[0];
 
             // Display the "Insert New Components" dialog
             ns.edit.ToolbarActions.INSERT.execute(editable);
             var $insertComponentDialog = $(selectors.insertComponentDialog);
-            $insertComponentDialog.addClass(EDITOR_CLASS);
+            $insertComponentDialog.addClass(CLASS_EDITOR);
         }
     });
 
     // Set the resource type parameter when selecting a component from the "Insert New Components" dialog
-    $(document).off(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList).on(SELECT_LIST_CHANGE_EVENT, selectors.allowedComponentsList, function(event) {
+    $(document).off(EVENT_SELECT_LIST_CHANGE, selectors.allowedComponentsList).on(EVENT_SELECT_LIST_CHANGE, selectors.allowedComponentsList, function(event) {
 
-        $(selectors.allowedComponentsList).off(SELECT_LIST_CHANGE_EVENT);
+        $(selectors.allowedComponentsList).off(EVENT_SELECT_LIST_CHANGE);
 
         var resourceType;
         var $insertComponentDialog = $(this).closest(selectors.insertComponentDialog);
@@ -113,27 +159,6 @@
 
     });
 
-    // Trigger the POST request to add, remove, re-order children nodes
-    function processChildren($editor) {
-
-        // Process re-ordered items
-        $editor.find(selectors.child).each(function() {
-            var $child = $(this);
-            var childName = $child.data("name");
-            orderedChildren.push(childName);
-        });
-
-        var path = $editor.data(CONTAINER_PATH_DATA_ATTR);
-        var panelContainer = new CQ.CoreComponents.PanelContainer({
-            path: path
-        });
-
-        panelContainer.update(orderedChildren, deletedChildren);
-
-        deletedChildren = [];
-        orderedChildren = [];
-    }
-
     // Submit hook to process the children
     $(window).adaptTo("foundation-registry").register("foundation.form.submit", {
         selector: "*",
@@ -146,6 +171,16 @@
             };
         }
     });
+
+    function initChildrenEditor($editor) {
+        ns.editableHelper.actions.INSERT.execute = customInsertFct;
+        addConfigButtons($editor);
+    }
+
+    function exitChildrenEditor() {
+        ns.editableHelper.actions.INSERT.execute = defaultInsertFct;
+    }
+
 
     // Modify the behavior of the default INSERT action (ns.editableHelper.actions.INSERT.execute):
     // - disable it when the children editor is opened (as we don't want to insert a component on the page)
@@ -161,10 +196,10 @@
                 addedNodesArray.forEach(function(addedNode) {
                     if (addedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.editor));
+                        // TODO: support having more than one children editor in a dialog?
                         if (elementsArray.length === 1) {
-                            ns.editableHelper.actions.INSERT.execute = doNothingFct;
                             var $editor = $(elementsArray[0]);
-                            addConfigButtons($editor);
+                            initChildrenEditor($editor);
                         }
                     }
                 });
@@ -177,7 +212,7 @@
                     if (removedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(removedNode.querySelectorAll(selectors.editor));
                         if (elementsArray.length === 1) {
-                            ns.editableHelper.actions.INSERT.execute = defaultInsertFct;
+                            exitChildrenEditor();
                         }
                     }
                 });
@@ -190,27 +225,5 @@
         childList: true,
         characterData: true
     });
-
-    // Add a config button to each child item
-    function addConfigButtons($editor) {
-        $editor.find(selectors.child).each(function() {
-            var $child = $(this);
-            var $configButton = $child.find(selectors.configButton);
-            // Don't add a button if there is already one
-            if ($configButton.length === 0) {
-                var $removeButton = $child.find(selectors.removeButton);
-                var el = document.createElement("button", "coral-button");
-                el.setAttribute("type", "button");
-                el.setAttribute("is", "coral-button");
-                el.setAttribute("handle", "config");
-                el.setAttribute("variant", "quiet");
-                el.setAttribute("icon", "wrench");
-                el.setAttribute("iconsize", "S");
-                el.className += " ";
-                el.className += CONFIG_BUTTON_CLASS;
-                $(el).insertBefore($removeButton);
-            }
-        });
-    }
 
 }(jQuery, Granite.author, jQuery(document), this));
