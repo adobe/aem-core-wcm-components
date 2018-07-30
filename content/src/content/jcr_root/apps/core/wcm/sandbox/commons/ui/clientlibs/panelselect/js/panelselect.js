@@ -41,10 +41,7 @@
                 isPanelContainer = CQ.CoreComponents.panelcontainer.utils.isPanelContainer(editable);
             }
 
-            var children = [];
-            if (editable.isContainer()) {
-                children = editable.getChildren().filter(isDisplayable);
-            }
+            var children = CQ.CoreComponents.panelcontainer.utils.getPanelContainerItems(editable);
 
             return (children.length > 1 && isPanelContainer);
         },
@@ -56,16 +53,5 @@
             ns.EditorFrame.editableToolbar.registerAction("PANEL_SELECT", panelSelect);
         }
     });
-
-    /**
-     * Test whether an Editable is displayable in the panel popover. Ignore Inspectables and Placeholders.
-     *
-     * @param {Granite.author.Editable} editable The Editable to test
-     * @returns {Boolean} Whether the Editable is displayed in the panel popover, or not
-     */
-    function isDisplayable(editable) {
-        return (editable instanceof ns.Editable &&
-        (editable.isContainer() || (editable.hasActionsAvailable() && !editable.isNewSection())));
-    }
 
 }(jQuery, Granite.author, jQuery(document), this));

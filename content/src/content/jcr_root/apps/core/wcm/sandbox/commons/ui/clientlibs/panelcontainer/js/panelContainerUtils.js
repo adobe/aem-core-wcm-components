@@ -14,7 +14,7 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* global CQ */
-(function() {
+(function(ns) {
     "use strict";
 
     /**
@@ -40,14 +40,34 @@
         /**
          * Returns the panel container definition associated with an [Editable]{@link Granite.author.Editable}
          *
-         * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} to check
+         * @param {Granite.author.Editable} editable The Panel Container [Editable]{@link Granite.author.Editable}
          * @returns {Object} The Panel Container Type definition, undefined if none is associated
          */
         getPanelContainerType: function(editable) {
             return getPanelContainerType(editable);
+        },
+
+        /**
+         * Returns panel container [Editable]{@link Granite.author.Editable}'s child items
+         *
+         * @param {Granite.author.Editable} editable The Panel Container {@link Granite.author.Editable}
+         * @returns {Array<Granite.author.editable>} The Panel Container child editables
+         */
+        getPanelContainerItems: function(editable) {
+            var children = [];
+            if (editable.isContainer()) {
+                children = editable.getChildren().filter(isDisplayable);
+            }
+            return children;
         }
     };
 
+    /**
+     * Returns the panel container definition associated with an [Editable]{@link Granite.author.Editable}
+     *
+     * @param {Granite.author.Editable} editable The Panel Container [Editable]{@link Granite.author.Editable}
+     * @returns {Object} The Panel Container Type definition, undefined if none is associated
+     */
     function getPanelContainerType(editable) {
         var panelContainerType;
         var panelContainerTypes = CQ.CoreComponents.panelcontainer.registry.getAll();
@@ -66,4 +86,16 @@
         return panelContainerType;
     }
 
-})();
+    /**
+     * Test whether an [Editable]{@link Granite.author.Editable} is displayable in the panel popover.
+     * Ignore [Inspectables]{@link Granite.author.Inspectable} and Placeholders.
+     *
+     * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} to test
+     * @returns {Boolean} Whether the [Editable]{@link Granite.author.Editable} is displayed in the panel popover, or not
+     */
+    function isDisplayable(editable) {
+        return (editable instanceof ns.Editable &&
+        (editable.isContainer() || (editable.hasActionsAvailable() && !editable.isNewSection())));
+    }
+
+})(Granite.author);

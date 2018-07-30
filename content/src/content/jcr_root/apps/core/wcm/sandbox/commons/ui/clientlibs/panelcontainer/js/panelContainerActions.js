@@ -33,16 +33,13 @@
         }
 
         ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
-            var children = [];
             var index = 0;
 
             if (isSelected) {
                 editable.overlay.setSelected(true);
             }
 
-            if (editable.isContainer()) {
-                children = editable.getChildren().filter(isDisplayable);
-            }
+            var children = CQ.CoreComponents.panelcontainer.utils.getPanelContainerItems(editable);
 
             for (var i = 0; i < children.length; i++) {
                 if (children[i].path === path) {
@@ -76,19 +73,5 @@
             }
         });
     };
-
-    /**
-     * Test whether an [Editable]{@link Granite.author.Editable} is displayable in the panel popover.
-     * Ignore [Inspectables]{@link Granite.author.Inspectable} and Placeholders.
-     *
-     * // TODO - make reusable, it's also in PanelSelector, could move to PanelContainer utils
-     *
-     * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} to test
-     * @returns {Boolean} Whether the [Editable]{@link Granite.author.Editable} is displayed in the panel popover, or not
-     */
-    function isDisplayable(editable) {
-        return (editable instanceof ns.Editable &&
-        (editable.isContainer() || (editable.hasActionsAvailable() && !editable.isNewSection())));
-    }
 
 }(jQuery, Granite.author, jQuery(document), this));
