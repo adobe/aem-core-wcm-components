@@ -4,5 +4,6 @@
     <cq:listeners
         jcr:primaryType="cq:EditListenersConfig"
         afterchilddelete="CQ.CoreComponents.panelcontainer.AFTER_CHILD_DELETE"
-        afterchildinsert="CQ.CoreComponents.panelcontainer.AFTER_CHILD_INSERT"/>
+        afterchildinsert="CQ.CoreComponents.panelcontainer.AFTER_CHILD_INSERT"
+        afterchildmove="CQ.CoreComponents.panelcontainer.AFTER_CHILD_MOVE"/>
 </jcr:root>

@@ -74,4 +74,26 @@
         });
     };
 
+    CQ.CoreComponents.panelcontainer.AFTER_CHILD_MOVE = function() {
+        var editable = this;
+        var panelContainer;
+
+        var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(editable);
+        if (panelContainerType) {
+            panelContainer = new CQ.CoreComponents.PanelContainer({
+                path: editable.path,
+                panelContainerType: panelContainerType,
+                el: editable.dom
+            });
+        }
+
+        var index = panelContainer.getActiveIndex() - 1;
+
+        ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
+            if (!(index < 0)) {
+                panelContainer.navigate(index);
+            }
+        });
+    };
+
 }(jQuery, Granite.author, jQuery(document), this));
