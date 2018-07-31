@@ -267,4 +267,54 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
         ;
     };
 
+    /**
+     * Test: Check if the format of auto generated id is correct.
+     */
+    title.tcCheckAutoId = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Check if automatic id is generated correctly", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+
+            // open the configuration dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // add some example text
+            .fillInput("[name='./jcr:title']", "Content name")
+            // close the dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+            // switch to content frame
+            .config.changeContext(c.getContentFrame)
+
+            // check if id is rendered correctly
+            .assert.isTrue(function() {
+                var selector = "h1.cmp-title__text";
+                return h.find(selector).attr("id").startsWith("Contentname");
+            })
+        ;
+    };
+
+    /**
+     * Test: Check manually entered id.
+     */
+    title.tcCheckManualId = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Check the manually entered id", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+
+            // open the configuration dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // add some example text
+            .fillInput("[name='./id']", "Content name")
+            // close the dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+            // switch to content frame
+            .config.changeContext(c.getContentFrame)
+
+            // check if id is rendered correctly
+            .assert.isTrue(function() {
+                var selector = "h1.cmp-title__text";
+                return h.find(selector).attr("id") === "Contentname";
+            })
+        ;
+    };
+
 }(hobs, jQuery));
