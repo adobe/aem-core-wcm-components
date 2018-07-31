@@ -22,7 +22,7 @@
     /**
      * @typedef {Object} PanelContainerTypeConfig Represents a Panel Container Type configuration object
      * @property {String} name Name of the Panel Container Type
-     * @property {String} selector Selector for identifying components representing this type
+     * @property {String} selector Selector for identifying components representing this type. Lookup is made against the wrapper element or its children.
      * @property {String} itemSelector Selector for child items of components representing this type
      * @property {String} itemActiveSelector Selector for the active child item of components representing this type
      */

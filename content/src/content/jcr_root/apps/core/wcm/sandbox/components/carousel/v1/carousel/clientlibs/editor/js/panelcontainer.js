@@ -20,7 +20,7 @@
         if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.panelcontainer && window.CQ.CoreComponents.panelcontainer.registry) {
             window.CQ.CoreComponents.panelcontainer.registry.register({
                 name: "cmp-carousel",
-                selector: "[data-cmp-is='carousel']",
+                selector: ".cmp-carousel",
                 itemSelector: "[data-cmp-hook-carousel='item']",
                 itemActiveSelector: ".cmp-carousel__item--active"
             });

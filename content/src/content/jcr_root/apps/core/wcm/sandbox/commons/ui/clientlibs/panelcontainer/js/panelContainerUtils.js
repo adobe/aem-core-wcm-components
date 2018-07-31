@@ -75,7 +75,19 @@
         if (editable && editable.dom) {
             for (var i = 0; i < panelContainerTypes.length; i++) {
                 var container = panelContainerTypes[i];
-                var match = editable.dom.find(container.selector).addBack(editable.dom).length > 0;
+                var match = editable.dom[0].matches(container.selector);
+
+                // look for a match at the editable DOM wrapper, if none is found, try its children.
+                if (!match) {
+                    var children = editable.dom[0].children;
+                    for (var j = 0; j < children.length; j++) {
+                        var child = children[0];
+                        match = child.matches(container.selector);
+                        if (match) {
+                            break;
+                        }
+                    }
+                }
                 if (match) {
                     panelContainerType = container;
                     break;
