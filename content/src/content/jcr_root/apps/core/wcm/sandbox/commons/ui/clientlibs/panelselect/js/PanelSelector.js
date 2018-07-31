@@ -64,8 +64,9 @@
                     el: that._config.editable.dom
                 });
 
-                that._render();
-                that._bindEvents();
+                that._render().done(function() {
+                    that._bindEvents();
+                });
             }
         },
 
@@ -73,6 +74,7 @@
          * Renders the Panel Selector, adds its items and attaches it to the DOM
          *
          * @private
+         * @returns {Promise} Promise for handling completion
          */
         _render: function() {
             this._createPopover();
@@ -81,7 +83,7 @@
             this._elements.popover.appendChild(this._elements.table);
             ns.ContentFrame.scrollView[0].appendChild(this._elements.popover);
 
-            this._renderItems();
+            return this._renderItems();
         },
 
         /**
@@ -140,22 +142,29 @@
          * to the [Coral.Table]{@link Coral.Table}
          *
          * @private
+         * @returns {Promise} Promise for handling completion
          */
         _renderItems: function() {
+            var deferred = $.Deferred();
             var that = this;
 
             var children = CQ.CoreComponents.panelcontainer.utils.getPanelContainerItems(that._config.editable);
-            var items = [];
+            that._panelContainer.getItems().done(function(panelContainerItems) {
+                var items = [];
 
-            children.forEach(function(child, index) {
-                items.push({
-                    id: child.path,
-                    name: child.name,
-                    title: getTitle(child, null, index + 1)
+                children.forEach(function(child, index) {
+                    items.push({
+                        id: child.path,
+                        name: child.name,
+                        title: getTitle(child, panelContainerItems[index], index + 1)
+                    });
                 });
+
+                that._createItems(items);
+                deferred.resolve();
             });
 
-            that._createItems(items);
+            return deferred.promise();
         },
 
         /**
