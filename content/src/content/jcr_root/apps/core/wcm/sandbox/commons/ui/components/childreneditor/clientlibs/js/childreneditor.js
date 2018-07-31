@@ -28,7 +28,9 @@
     var defaultInsertFct = ns.editableHelper.actions.INSERT.execute;
     var customInsertFct = function() {}; // "do nothing" function
     var defaultIsOpenedFct = ns.DialogFrame.isOpened;
-    var customIsOpenedFct = function() {return false;};
+    var customIsOpenedFct = function() {
+        return false;
+    };
 
     // TODO: make all the selectors more specific to the children editor
     var selectors = {
