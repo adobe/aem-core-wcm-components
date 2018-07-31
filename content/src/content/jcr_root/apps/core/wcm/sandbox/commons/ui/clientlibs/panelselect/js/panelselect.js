@@ -17,6 +17,8 @@
 (function($, ns, channel, window) {
     "use strict";
 
+    var panelSelector;
+
     /**
      * Toolbar action that presents a UI for selecting and reordering child
      * items of a toggleable panel container component for display.
@@ -27,10 +29,12 @@
         icon: "multipleCheck",
         order: "after CONFIGURE",
         execute: function(editable, param, target) {
-            new CQ.CoreComponents.PanelSelector({
-                "editable": editable,
-                "target": target[0]
-            });
+            if (!panelSelector || !panelSelector.isOpen()) {
+                panelSelector = new CQ.CoreComponents.PanelSelector({
+                    "editable": editable,
+                    "target": target[0]
+                });
+            }
 
             // do not close the toolbar
             return false;

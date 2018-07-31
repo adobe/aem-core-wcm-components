@@ -70,6 +70,10 @@
             }
         },
 
+        isOpen: function() {
+            return (this._elements.popover && this._elements.popover.open);
+        },
+
         /**
          * Renders the Panel Selector, adds its items and attaches it to the DOM
          *
@@ -98,6 +102,7 @@
                 alignAt: Coral.Overlay.align.LEFT_BOTTOM,
                 alignMy: Coral.Overlay.align.LEFT_TOP,
                 target: that._config.target,
+                interaction: Coral.Popover.interaction.OFF,
                 open: true
             });
 
@@ -218,14 +223,18 @@
         _bindEvents: function() {
             var that = this;
 
-            that._elements.popover.off("coral-overlay:close").on("coral-overlay:close", function() {
-                if (that._elements.popover && that._elements.popover.parentNode) {
-                    that._unbindEvents();
-                    that._elements.popover.parentNode.removeChild(that._elements.popover);
+            $(document).off("click" + NS).on("click" + NS, function(event) {
+                // out of area click
+                if (!$(event.target).closest(that._elements.popover).length) {
+                    if (that._elements.popover && that._elements.popover.parentNode) {
+                        that._elements.popover.open = false;
+                        that._unbindEvents();
+                        that._elements.popover.parentNode.removeChild(that._elements.popover);
+                    }
                 }
             });
 
-            that._elements.table.off("coral-table:change").on("coral-table:change", function(event) {
+            that._elements.table.on("coral-table:change", function(event) {
                 // ensure at least one item is selected
                 if (event.detail.selection.length === 0) {
                     if (event.detail.oldSelection.length) {
@@ -316,7 +325,7 @@
          */
         _unbindEvents: function() {
             var that = this;
-            that._elements.popover.off("coral-overlay:close");
+            $(document).off("click" + NS);
             that._elements.table.off("coral-table:change");
             for (var i = 0; i < that._elements.reorderButtons.length; i++) {
                 $(that._elements.reorderButtons[i]).off("mousedown");
