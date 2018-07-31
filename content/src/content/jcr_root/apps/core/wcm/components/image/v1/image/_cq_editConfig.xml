@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:EditConfig">
     <cq:dropTargets jcr:primaryType="nt:unstructured">
         <image
             jcr:primaryType="cq:DropTargetConfig"
-            accept="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+            accept="[image/gif,image/jpeg,image/png,image/webp,image/tiff,image/svg+xml]"
             groups="[media]"
             propertyName="./fileReference">
             <parameters
@@ -22,7 +22,8 @@
             <plugins jcr:primaryType="nt:unstructured">
                 <crop
                     jcr:primaryType="nt:unstructured"
-                    features="*">
+                    features="*"
+                    supportedMimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]">
                     <aspectRatios jcr:primaryType="nt:unstructured">
                         <wideLandscape
                             jcr:primaryType="nt:unstructured"
@@ -44,13 +45,15 @@
                 </crop>
                 <flip
                     jcr:primaryType="nt:unstructured"
-                    features="-"/>
+                    features="-"
+                    supportedMimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"/>
                 <map
                     jcr:primaryType="nt:unstructured"
                     features="*"/>
                 <rotate
                     jcr:primaryType="nt:unstructured"
-                    features="*"/>
+                    features="*"
+                    supportedMimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"/>
                 <zoom
                     jcr:primaryType="nt:unstructured"
                     features="*"/>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Adobe Systems Incorporated
+ * Copyright 2018 Adobe Systems Incorporated
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,21 @@
     // shortcuts
     var c = window.CQ.CoreComponentsIT.commons;
     var breadcrumbV1 = window.CQ.CoreComponentsIT.Breadcrumb.v1;
+    var breadcrumbV2 = window.CQ.CoreComponentsIT.Breadcrumb.v2;
 
     /**
      * v2 specifics
      */
     var itemSelector = {
         normal: ".cmp-breadcrumb__item",
-        active: ".cmp-breadcrumb__item--active"
+        active: ".cmp-breadcrumb__item--active",
+        itemType: ".cmp-breadcrumb__item[itemtype='http://schema.org/ListItem']"
     };
+
+    var listSelector = {
+        itemType: ".cmp-breadcrumb__list[itemtype='http://schema.org/BreadcrumbList']"
+    };
+
     var tcExecuteBeforeTest = breadcrumbV1.tcExecuteBeforeTest(c.rtBreadcrumb_v2, "core/wcm/tests/components/test-page-v2");
     var tcExecuteAfterTest = breadcrumbV1.tcExecuteAfterTest();
 
@@ -46,6 +53,7 @@
         .addTestCase(breadcrumbV1.changeStartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumbV1.setZeroStartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(breadcrumbV1.set100StartLevel(itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(breadcrumbV2.testStructureData(listSelector, itemSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/breadcrumb/v2/breadcrumb/clientlibs/site.css"));
 
 }(hobs, jQuery));

@@ -88,6 +88,22 @@
                                                             jcr:primaryType="nt:unstructured"
                                                             plugin-root-name="rtePlugins"/>
                                                     </find-replace>
+                                                    <undo-redo
+                                                        granite:class="js-cq-IPEPlugin-group"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                        <items jcr:primaryType="nt:unstructured">
+                                                            <undo
+                                                                jcr:primaryType="nt:unstructured"
+                                                                jcr:title="Show undo &amp; redo options"
+                                                                sling:resourceType="cq/gui/components/authoring/dialog/inplaceediting/configuration/plugin"
+                                                                features="*"
+                                                                name="undo"/>
+                                                        </items>
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            plugin-root-name="rtePlugins"/>
+                                                    </undo-redo>
                                                     <spellcheck
                                                         granite:class="js-cq-IPEPlugin-group"
                                                         jcr:primaryType="nt:unstructured"
@@ -104,6 +120,22 @@
                                                             jcr:primaryType="nt:unstructured"
                                                             plugin-root-name="rtePlugins"/>
                                                     </spellcheck>
+                                                    <image
+                                                        granite:class="js-cq-IPEPlugin-group"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                        <items jcr:primaryType="nt:unstructured">
+                                                            <image
+                                                                jcr:primaryType="nt:unstructured"
+                                                                jcr:title="Show inserted image modification options"
+                                                                sling:resourceType="cq/gui/components/authoring/dialog/inplaceediting/configuration/plugin"
+                                                                features="*"
+                                                                name="image"/>
+                                                        </items>
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            plugin-root-name="rtePlugins"/>
+                                                    </image>
                                                     <editHTML
                                                         granite:class="js-cq-IPEPlugin-group"
                                                         jcr:primaryType="nt:unstructured"

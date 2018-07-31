@@ -90,11 +90,12 @@ public class FormStructureHelperImpl implements FormStructureHelper {
     }
 
     private boolean isButtonElement(Resource resource) {
-        if (resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V1) || resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V2)) {
+        if (resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V1) ||
+                resource.isResourceType(FormConstants.RT_CORE_FORM_BUTTON_V2)) {
             ValueMap valueMap = resource.adaptTo(ValueMap.class);
-            if(valueMap != null) {
+            if (valueMap != null) {
                 String type = valueMap.get("type", String.class);
-                if(StringUtils.equalsIgnoreCase(Button.Type.SUBMIT.name(), type)) {
+                if (StringUtils.equalsIgnoreCase(Button.Type.SUBMIT.name(), type)) {
                     return true;
                 }
             }
@@ -106,7 +107,7 @@ public class FormStructureHelperImpl implements FormStructureHelper {
         if (resource.getResourceType().startsWith(FormConstants.RT_CORE_FORM_PREFIX)) {
             return true;
         } else {
-            if(scriptingResourceResolverProvider != null) {
+            if (scriptingResourceResolverProvider != null) {
                 final ResourceResolver scriptResourceResolver = scriptingResourceResolverProvider.getRequestScopedResourceResolver();
                 if (ifFormResourceSuperType(scriptResourceResolver, resource)) {
                     return true;
@@ -141,26 +142,21 @@ public class FormStructureHelperImpl implements FormStructureHelper {
     @Override
     public Resource updateFormStructure(Resource formResource) {
         if (formResource != null) {
-            ResourceResolver resolver = formResource.getResourceResolver();
             if (isFormContainer(formResource)) {
                 // add default action type, form id and action path
                 ModifiableValueMap formProperties = formResource.adaptTo(ModifiableValueMap.class);
                 if (formProperties != null) {
-                    try {
-                        if (formProperties.get(FormsConstants.START_PROPERTY_ACTION_TYPE,
-                                String.class) == null) {
-                            formProperties.put(FormsConstants.START_PROPERTY_ACTION_TYPE,
-                                    FormsConstants.DEFAULT_ACTION_TYPE);
-                            String defaultContentPath = "/content/usergenerated" +
-                                    formResource.getPath().replaceAll("^.content", "").replaceAll("jcr.content.*", "") +
-                                    "cq-gen" + System.currentTimeMillis() + "/";
-                            formProperties.put(FormsConstants.START_PROPERTY_ACTION_PATH,
-                                    defaultContentPath);
-                        }
-                        resolver.commit();
-                    } catch (PersistenceException e) {
-                        LOGGER.error("Unable to add default action type and form id " + formResource, e);
+                    if (formProperties.get(FormsConstants.START_PROPERTY_ACTION_TYPE,
+                            String.class) == null) {
+                        formProperties.put(FormsConstants.START_PROPERTY_ACTION_TYPE,
+                                FormsConstants.DEFAULT_ACTION_TYPE);
+                        String defaultContentPath = "/content/usergenerated" +
+                                formResource.getPath().replaceAll("^.content", "").replaceAll("jcr.content.*", "") +
+                                "cq-gen" + System.currentTimeMillis() + "/";
+                        formProperties.put(FormsConstants.START_PROPERTY_ACTION_PATH,
+                                defaultContentPath);
                     }
+
                 } else {
                     LOGGER.error("Resource is not adaptable to ValueMap - unable to add default action type and " +
                             "form id for " + formResource);

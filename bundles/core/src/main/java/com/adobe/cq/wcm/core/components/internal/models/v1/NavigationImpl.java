@@ -194,7 +194,7 @@ public class NavigationImpl implements Navigation {
                 PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
                 if (pageManager != null) {
                     Page redirectPage = pageManager.getPage(redirectTarget);
-                    if (redirectPage.equals(currentPage)) {
+                    if (currentPage.equals(redirectPage)) {
                         currentPageIsRedirectTarget = true;
                     }
                 }

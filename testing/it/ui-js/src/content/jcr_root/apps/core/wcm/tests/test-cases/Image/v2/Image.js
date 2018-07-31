@@ -27,6 +27,15 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
     var originalDamTitle       = "Beach house";
     var originalDamDescription = "House on a beach with blue sky";
 
+    var selectors = {
+        elements: {
+            self: ".cmp-image",
+            image: "[data-cmp-hook-image='image']",
+            map: "[data-cmp-hook-image='map']",
+            area: "[data-cmp-hook-image='area']"
+        }
+    };
+
     image.tcDragImage = function() {
         return new h.TestCase("Drag Asset")
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
@@ -110,6 +119,76 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .config.changeContext(c.getContentFrame)
             .asserts.isTrue(function() {
                 return h.find(".cmp-image__image").attr("alt") === "" && h.find(".cmp-image__link").size() === 0;
+            });
+    };
+
+    /**
+     * Test: Check image map areas are rendered, navigate correctly and are responsively adjusted on window resize
+     */
+    image.tcCheckMapAreaNavigationAndResponsiveResize = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Check map area navigation and responsive resize", {
+            execBefore: new hobs.TestCase("Before Test")
+                .execTestCase(tcExecuteBeforeTest)
+
+                // persist a test image map with a single map area
+                .execFct(function(opts, done) {
+                    var data = {};
+                    var cmpPath = h.param("cmpPath")();
+                    data.imageMap = "[rect(0,0,226,230)\"/content/core-components/core-components-page\"|\"\"|\"Alt Text\"|(0.0000,0.0000,0.1948,0.2295)]";
+                    data.fileReference = testImagePath;
+
+                    c.editNodeProperties(cmpPath, data, done);
+                })
+
+                // refresh the component
+                .navigateTo("/editor.html%testPagePath%.html"),
+            execAfter: tcExecuteAfterTest }
+        )
+            // verify the map area is available
+            .asserts.isTrue(function() {
+                return h.find(selectors.elements.area, "#ContentFrame").size() === 1;
+            })
+
+            // switch to the content frame, click the area link and verify navigation
+            .config.changeContext(c.getContentFrame)
+            .click(selectors.elements.area)
+            .asserts.isTrue(function() {
+                var pathname = h.context().window.location.pathname;
+                return pathname.includes("/content/core-components/core-components-page");
+            })
+
+            // navigate back to the test page
+            .config.resetContext()
+            .navigateTo("/editor.html%testPagePath%.html")
+            .config.changeContext(c.getContentFrame)
+            .wait(2000)
+
+            // manually resize the test image to a narrow width
+            .execFct(function() {
+                h.find(selectors.elements.image).width(300);
+            })
+
+            // trigger a window resize event
+            .execFct(function() {
+                h.context().window.dispatchEvent(new Event("resize"));
+            })
+            .wait(2000)
+
+            // verify that the adjusted coordinates are correct
+            .asserts.isTrue(function() {
+                var area = h.find(selectors.elements.area)[0];
+                var coords = area.coords.split(",");
+                var expectedCoords = [0, 0, 58, 38];
+                var passed = true;
+
+                for (var i = 0; i < coords.length; i++) {
+                    if (parseInt(coords[i]) !== expectedCoords[i]) {
+                        passed = false;
+                        break;
+                    }
+                }
+
+                return passed;
             });
     };
 

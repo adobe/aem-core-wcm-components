@@ -1,4 +1,4 @@
-# AEM Core WCM Components
+# AEM Sites Core Components
 [![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=master)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
 [![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
 
@@ -32,6 +32,7 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
   * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
   * [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+  * [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
   * [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
   * [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 
@@ -55,7 +56,8 @@ Core Components | AEM                       | Java
 [1.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.1.0)           | AEM 6.3 + FP19614 or SP 1 | 1.8
 [2.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.0)           | AEM 6.3 + SP1 + FP20593   | 1.8
 [2.0.4](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.4)           | AEM 6.3 + SP1 + CFP2 + FP20593 + FP20696 | 1.8
-[2.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.6)           | AEM 6.3 + SP2 | 1.8
+[2.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.6), [2.0.8](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.8)           | AEM 6.3 + SP2 | 1.8
+[2.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.6)           | AEM 6.3.2.2 + FP24268, AEM 6.4.1.0 + FP24267 | 1.8
 
 ## Installation
 
@@ -103,17 +105,17 @@ Please note that
 
 ## Include core components as subpackage into your own project maven build
 
-The released version of the core components are available on the public maven repository at https://repo.adobe.com. To include the 
+The released version of the core components are available on the public maven repository at https://repo.adobe.com. To include the
 core components package into your own project maven build you can add the dependency
  ```
  <dependency>
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.0.6</version>
+     <version>2.1.0</version>
  </dependency>
  ```
- 
+
  and sub package section
  ```
  <subPackage>
@@ -122,8 +124,8 @@ core components package into your own project maven build you can add the depend
      <filter>true</filter>
  </subPackage>
  ```
- 
+
  to the `content-package-maven-plugin`.
- 
- For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the 
+
+ For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)

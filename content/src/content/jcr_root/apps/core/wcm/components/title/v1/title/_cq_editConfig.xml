@@ -7,6 +7,6 @@
         editorType="title">
         <config
             jcr:primaryType="nt:unstructured"
-            titleTag="[h1,h2,h3,h4]"/>
+            titleTag="[h1,h2,h3,h4,h5,h6]"/>
     </cq:inplaceEditing>
 </jcr:root>

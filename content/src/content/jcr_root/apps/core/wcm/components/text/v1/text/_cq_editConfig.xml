@@ -51,6 +51,10 @@
                             jcr:primaryType="nt:unstructured"
                             description="Quote"
                             tag="blockquote"/>
+                        <default_hr
+                            jcr:primaryType="nt:unstructured"
+                            description="Horizontal Rule (visual line break)"
+                            tag="hr"/>
                         <default_pre
                             jcr:primaryType="nt:unstructured"
                             description="Preformatted"

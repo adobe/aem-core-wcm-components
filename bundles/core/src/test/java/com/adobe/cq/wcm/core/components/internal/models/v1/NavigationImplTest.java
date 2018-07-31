@@ -81,6 +81,8 @@ public class NavigationImplTest {
     private static final String NAV_COMPONENT_7 = "/content/navigation-3-region/us/en/2/jcr:content/root/navigation-component-7";
     private static final String NAV_COMPONENT_8 = "/content/navigation-livecopy/2/jcr:content/root/navigation-component-8";
     private static final String NAV_COMPONENT_9 = TEST_ROOT + "/jcr:content/root/navigation-component-9";
+    // points to the nav component used for invalidRedirectTest()
+    private static final String NAV_COMPONENT_10 = TEST_ROOT + "/jcr:content/root/navigation-component-10";
 
     private static final ContentPolicyManager contentPolicyManager = mock(ContentPolicyManager.class);
 
@@ -285,6 +287,18 @@ public class NavigationImplTest {
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation9"));
+    }
+
+    /**
+     * Test to verify #189 : Null Pointer Exception in NavigationImpl when Redirect Target is not found
+     * @throws Exception
+     */
+    @Test
+    public void invalidRedirectTest() throws Exception {
+        // get the navigation component
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_10);
+        // get the elements, an NPE will cause the test to fail
+        getNavigationItems(navigation);
     }
 
     private Navigation getNavigationUnderTest(String resourcePath) {

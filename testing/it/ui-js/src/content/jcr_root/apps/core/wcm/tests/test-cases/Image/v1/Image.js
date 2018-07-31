@@ -51,6 +51,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             .execFct(function(opts, done) {
                 c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
             })
+
             // open the new page in the editor
             .navigateTo("/editor.html%testPagePath%.html");
     };
@@ -62,12 +63,23 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
         return new h.TestCase("Clean up after Test")
             // common clean up
             .execTestCase(c.tcExecuteAfterTest)
+
             // delete the test page we created
             .execFct(function(opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
             })
 
-            // delete the test page we created
+            // delete the policy
+            .execFct(function(opts, done) {
+                c.deletePolicy("/image", done, c.policyPath);
+            })
+
+            // remove the policy assignment
+            .execFct(function(opts, done) {
+                c.deletePolicyAssignment("/image", done, c.policyAssignmentPath);
+            })
+
+            // delete the proxy component we created
             .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("compPath")(opts), done);
             });

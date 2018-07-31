@@ -1,0 +1,19 @@
+{
+  "title": "Teaser",
+  "description": "Description",
+  "actionsEnabled": true,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [
+    {
+      "title": "Adobe",
+      "url": "http://www.adobe.com"
+    },
+    {
+      "title": "Teasers",
+      "url": "/core/content/teasers.html"
+    }
+  ],
+  "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-7",
+  ":type": "core/wcm/components/teaser/v1/teaser"
+}
