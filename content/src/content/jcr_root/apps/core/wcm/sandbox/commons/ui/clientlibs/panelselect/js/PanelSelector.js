@@ -346,10 +346,10 @@
     function getTitle(editable, item, index) {
         var title = "<span class='foundation-layout-util-subtletext editor-PanelSelector-indexMarker'>" + index + "</span>&nbsp;&nbsp;";
 
+        title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
+
         if (item && item["jcr:title"]) {
-            title = title + " " + item["jcr:title"];
-        } else {
-            title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
+            title = title + ": <span class='foundation-layout-util-subtletext'>" + item["jcr:title"] + "</span>";
         }
 
         return title;
