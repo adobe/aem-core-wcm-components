@@ -223,14 +223,17 @@
         _bindEvents: function() {
             var that = this;
 
+            // escape key
+            $(document).off("keyup" + NS).on("keyup" + NS, function(event) {
+                if (event.keyCode === 27) {
+                    that._finish();
+                }
+            });
+
+            // out of area click
             $(document).off("click" + NS).on("click" + NS, function(event) {
-                // out of area click
                 if (!$(event.target).closest(that._elements.popover).length) {
-                    if (that._elements.popover && that._elements.popover.parentNode) {
-                        that._elements.popover.open = false;
-                        that._unbindEvents();
-                        that._elements.popover.parentNode.removeChild(that._elements.popover);
-                    }
+                    that._finish();
                 }
             });
 
@@ -329,6 +332,21 @@
             that._elements.table.off("coral-table:change");
             for (var i = 0; i < that._elements.reorderButtons.length; i++) {
                 $(that._elements.reorderButtons[i]).off("mousedown");
+            }
+        },
+
+        /**
+         * Finishes panel selection session. Cleans up Panel Selector.
+         *
+         * @private
+         */
+        _finish: function() {
+            var that = this;
+
+            if (that._elements.popover && that._elements.popover.parentNode) {
+                that._elements.popover.open = false;
+                that._unbindEvents();
+                that._elements.popover.parentNode.removeChild(that._elements.popover);
             }
         }
     });
