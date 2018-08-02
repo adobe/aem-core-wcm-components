@@ -80,8 +80,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 if (asset != null) {
                     if (!uuidDisabled) {
                         uuid = asset.getID();
-                    }
-                    else {
+                    } else {
                         uuid = null;
                     }
                     if (!isDecorative && altValueFromDAM) {
@@ -148,11 +147,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     public String getUuid() {
         return uuid;
-    }
-
-    @Override
-    public boolean isUuidDisabled() {
-        return uuidDisabled;
     }
 
     protected void buildAreas() {

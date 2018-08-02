@@ -180,16 +180,6 @@ public interface Image extends ComponentExporter {
     }
 
     /**
-     * Checks if UUID is disabled on the asset.
-     *
-     * @return {@code true} if UUID is disabled on the asset, {@code false} otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     */
-    default boolean isUuidDisabled() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * Returns the image's link URL, if one was set.
      *
      * @return the image's link URL, if one was set, or {@code null}
