@@ -57,7 +57,7 @@ public interface Image extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    String PN_DISABLE_UUID = "uuidDisabled";
+    String PN_UUID_DISABLED = "uuidDisabled";
 
     /**
      * Name of the resource property that will indicate if the image's caption will be rendered as a popup.
@@ -170,10 +170,10 @@ public interface Image extends ComponentExporter {
     }
 
     /**
-     * Returns the value for the image's {@code uuid} attribute, if one was set.
+     * Returns the value for the image's uuid, if one was set.
      *
-     * @return the value for the image's {@code uuid} attribute, if one was set, or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.4.0
+     * @return the value for the image's uuid, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0;
      */
     default String getUuid() {
         throw new UnsupportedOperationException();

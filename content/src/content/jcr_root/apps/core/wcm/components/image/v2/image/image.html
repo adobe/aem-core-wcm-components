@@ -16,12 +16,12 @@
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${image.src}"
-     data-cq-asset-id="${image.uuid}"
      data-cmp-is="image"
      data-cmp-lazy="${image.lazyEnabled}"
      data-cmp-src="${image.srcUriTemplate ? image.srcUriTemplate : image.src}"
      data-cmp-widths="${image.widths}"
      data-asset="${image.fileReference}"
+     data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}">
     <a data-sly-unwrap="${!image.link}"
