@@ -18,7 +18,6 @@
     "use strict";
 
     var CLASS_EDITOR = "childreneditor";
-    var CLASS_CONFIG_BUTTON = "coral-Multifield-config";
     var DATA_ATTRIBUTE_CONTAINER_PATH = "containerPath";
     var EVENT_SELECT_LIST_CHANGE = "coral-selectlist:change";
     var NN_PREFIX = "item_";
@@ -27,45 +26,17 @@
 
     var defaultInsertFct = ns.editableHelper.actions.INSERT.execute;
     var customInsertFct = function() {}; // "do nothing" function
-    var defaultIsOpenedFct = ns.DialogFrame.isOpened;
-    var customIsOpenedFct = function() {
-        return false;
-    };
 
-    // TODO: make all the selectors more specific to the children editor
     var selectors = {
         editor: ".childreneditor",
         child: "coral-multifield-item",
         addButton: ".childreneditor [coral-multifield-add]",
         removeButton: "button[handle='remove']",
-        configButton: "button[handle='config']",
         insertComponentDialog: "coral-dialog.InsertComponentDialog",
         allowedComponentsList: "coral-dialog.InsertComponentDialog.childreneditor coral-selectlist"
     };
     var deletedChildren = [];
     var orderedChildren = [];
-
-    // Add a config button to open the edit dialog of each child item
-    function addConfigButtons($editor) {
-        $editor.find(selectors.child).each(function() {
-            var $child = $(this);
-            var $configButton = $child.find(selectors.configButton);
-            // Don't add a button if there is already one
-            if ($configButton.length === 0) {
-                var $removeButton = $child.find(selectors.removeButton);
-                var el = document.createElement("button", "coral-button");
-                el.setAttribute("type", "button");
-                el.setAttribute("is", "coral-button");
-                el.setAttribute("handle", "config");
-                el.setAttribute("variant", "quiet");
-                el.setAttribute("icon", "wrench");
-                el.setAttribute("iconsize", "S");
-                el.className += " ";
-                el.className += CLASS_CONFIG_BUTTON;
-                $(el).insertBefore($removeButton);
-            }
-        });
-    }
 
     // Trigger the POST request to add, remove, re-order children nodes
     function processChildren($editor) {
@@ -93,21 +64,6 @@
         var $button = $(this);
         var childName = $button.closest(selectors.child).data("name");
         deletedChildren.push(childName);
-    });
-
-    // Open the edit dialog of the child item when clicking the config button
-    $(document).on("click", selectors.configButton, function(event) {
-        var $button = $(this);
-        var $editor = $button.closest(selectors.editor);
-        if ($editor.length === 1) {
-            var childPath = $button.closest(selectors.child).data("childPath");
-            var editable = ns.editables.find(childPath)[0];
-            var childDialog = new ns.edit.Dialog(editable);
-            // TODO: revisit this hack that enables the dialog of the child to open on top of the carousel dialog
-            ns.DialogFrame.isOpened = customIsOpenedFct;
-            ns.DialogFrame.openDialog(childDialog);
-            ns.DialogFrame.isOpened = defaultIsOpenedFct;
-        }
     });
 
     // Display the "Insert New Components" dialog when clicking the add button
@@ -174,47 +130,47 @@
         }
     });
 
-    function initChildrenEditor($editor) {
+    // Redefine the behavior of the default INSERT action (ns.editableHelper.actions.INSERT.execute):
+    // - disable it when the children editor is opened (as we don't want to insert a component on the page)
+    function onStart($editor) {
         ns.editableHelper.actions.INSERT.execute = customInsertFct;
-        addConfigButtons($editor);
     }
 
-    function exitChildrenEditor() {
+    // Reset the behavior of the default INSERT action (ns.editableHelper.actions.INSERT.execute):
+    // - re-enable it when the children editor is closed
+    function onEnd() {
         ns.editableHelper.actions.INSERT.execute = defaultInsertFct;
     }
 
-
-    // Modify the behavior of the default INSERT action (ns.editableHelper.actions.INSERT.execute):
-    // - disable it when the children editor is opened (as we don't want to insert a component on the page)
-    // - re-enable it when the children editor is closed
+    // Perform actions when the children editor is opened or closed
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
     var body             = document.querySelector("body");
     var observer         = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
 
-            // Disable the default INSERT action when the children editor is opened
+            // Perform actions when the children editor is opened
             var addedNodesArray = [].slice.call(mutation.addedNodes);
             if (addedNodesArray.length > 0) {
                 addedNodesArray.forEach(function(addedNode) {
                     if (addedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.editor));
-                        // TODO: support having more than one children editor in a dialog?
+                        // We support only one children editor in a dialog
                         if (elementsArray.length === 1) {
                             var $editor = $(elementsArray[0]);
-                            initChildrenEditor($editor);
+                            onStart($editor);
                         }
                     }
                 });
             }
 
-            // Re-enable the default INSERT action when the children editor is closed
+            // Perform actions when the children editor is closed
             var removedNodesArray = [].slice.call(mutation.removedNodes);
             if (removedNodesArray.length > 0) {
                 removedNodesArray.forEach(function(removedNode) {
                     if (removedNode.querySelectorAll) {
                         var elementsArray = [].slice.call(removedNode.querySelectorAll(selectors.editor));
                         if (elementsArray.length === 1) {
-                            exitChildrenEditor();
+                            onEnd();
                         }
                     }
                 });
