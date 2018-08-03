@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
@@ -57,7 +58,7 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
         ResourceResolver resolver = request.getResourceResolver();
         Resource container = request.getResource();
 
-        // Remove children
+        // Remove the child items
         String[] deletedChildrenNames = request.getParameterValues(PARAM_DELETED_CHILDREN);
         if (deletedChildrenNames != null && deletedChildrenNames.length > 0) {
             for (String childName: deletedChildrenNames) {
@@ -69,26 +70,35 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
             }
         }
 
-        // Order children
+        // Re-order the child items
         String[] orderedChildrenNames = request.getParameterValues(PARAM_OREDERED_CHILDREN);
         if (orderedChildrenNames != null && orderedChildrenNames.length > 0) {
             final Node containerNode = container.adaptTo(Node.class);
             if (containerNode != null) {
-                for (int i = orderedChildrenNames.length - 1; i >=0 ; i--) {
+
+                // Create the items if they don't exist
+                for (int i = 0; i < orderedChildrenNames.length; i++) {
                     try {
-                        // TODO: revisit this assumption: it could lead to concurrency issues
-                        // if the child node does not exist, we create it so that it can be ordered
                         if (!containerNode.hasNode(orderedChildrenNames[i])) {
                             containerNode.addNode(orderedChildrenNames[i]);
                         }
+                    } catch (RepositoryException e) {
+                        LOGGER.error("Could not create the item '{}': {}", orderedChildrenNames[i], e);
+                    }
+                }
+                resolver.commit();
+
+                // Re-order the items
+                for (int i = orderedChildrenNames.length - 1; i >=0; i--) {
+                    try {
+                        // Put the last item at the end
                         if (i == orderedChildrenNames.length - 1) {
-                            // Put the last item at the end
                             containerNode.orderBefore(orderedChildrenNames[i], null);
                         } else {
                             containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i+1]);
                         }
                     } catch (RepositoryException e) {
-                        LOGGER.error("Could not re-order the items: {}", e);
+                        LOGGER.error("Could not re-order the item: {}: {}", orderedChildrenNames[i], e);
                     }
                     resolver.commit();
                 }

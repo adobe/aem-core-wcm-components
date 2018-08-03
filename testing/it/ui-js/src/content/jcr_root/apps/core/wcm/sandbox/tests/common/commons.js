@@ -28,5 +28,8 @@
     c.proxyPath_sandbox = "/apps/core-component/components/sandbox/";
 
     // core component resource types
+    // carousel component
+    c.rtCarousel_v1 = "core/wcm/sandbox/components/carousel/v1/carousel";
+
 
 }(hobs, jQuery));
