@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=master)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
 [![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
 
-A set of standardized components that can be used to speed up development of websites.
+A set of standardized components for 6.3+ that can be used to speed up development of websites.
 
 ## Documentation
 
