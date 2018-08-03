@@ -45,6 +45,7 @@
         .addTestCase(titleV1.tcCheckExistenceOfTypesUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
         .addTestCase(titleV1.tcCheckExistenceOfOneTypeUsingPolicy(tcExecuteBeforeTest, tcExecuteAfterTest, "/title", "core-component/components",
-            c.policyPath, c.policyAssignmentPath));
+            c.policyPath, c.policyAssignmentPath))
+        .addTestCase(titleV1.tcSetLink(tcExecuteBeforeTest, tcExecuteAfterTest));
 
 }(hobs, jQuery));
