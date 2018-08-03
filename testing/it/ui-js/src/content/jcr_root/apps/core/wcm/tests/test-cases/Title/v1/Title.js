@@ -278,7 +278,7 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
             // open the config dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // enter the link
-            .simulate("foundation-autocomplete[name='./linkURL'] input[type!='hidden']", "key-sequence",
+            .simulate("foundation-autocomplete[name='./linkURL'] input[is='coral-textfield']", "key-sequence",
                 { sequence: c.rootPage + "{enter}" })
             // save the dialog
             .execTestCase(c.tcSaveConfigureDialog)
@@ -286,7 +286,7 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
             // switch to content frame
             .config.changeContext(c.getContentFrame)
             // click on the title
-            .click("div.cmp-title a", { expectNav: true })
+            .click(".cmp-title__link", { expectNav: true })
             // go back to top frame
             .config.resetContext()
             // check if the url is correct
