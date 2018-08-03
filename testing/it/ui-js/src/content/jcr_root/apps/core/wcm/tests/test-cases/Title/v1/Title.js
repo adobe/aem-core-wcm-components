@@ -267,4 +267,33 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
         ;
     };
 
+    /**
+     * Test: set link on title
+     */
+    title.tcSetLink = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set Link", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+
+            // open the config dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // enter the link
+            .simulate("foundation-autocomplete[name='./linkURL'] input[type!='hidden']", "key-sequence",
+                { sequence: c.rootPage + "{enter}" })
+            // save the dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+
+            // switch to content frame
+            .config.changeContext(c.getContentFrame)
+            // click on the title
+            .click("div.cmp-title a", { expectNav: true })
+            // go back to top frame
+            .config.resetContext()
+            // check if the url is correct
+            .asserts.isTrue(function() {
+                return hobs.context().window.location.pathname.endsWith(c.rootPage + ".html");
+            })
+        ;
+    };
+
 }(hobs, jQuery));
