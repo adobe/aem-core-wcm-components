@@ -38,7 +38,7 @@
     CQ.CoreComponents.PanelSelector = ns.util.createClass({
 
         /**
-         * The Panel Selector Object used to configure its behavior
+         * The Panel Selector configuration Object
          *
          * @member {PanelSelectorConfig} CQ.CoreComponents.PanelSelector#_config
          */

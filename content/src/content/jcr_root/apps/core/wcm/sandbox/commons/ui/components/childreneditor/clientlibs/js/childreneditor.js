@@ -17,171 +17,190 @@
 (function($, ns, channel, window) {
     "use strict";
 
-    var CLASS_EDITOR = "childreneditor";
-    var DATA_ATTRIBUTE_CONTAINER_PATH = "containerPath";
-    var EVENT_SELECT_LIST_CHANGE = "coral-selectlist:change";
+    var NS = ".childreneditor";
     var NN_PREFIX = "item_";
     var PN_TITLE = "jcr:title";
     var PN_RESOURCE_TYPE = "sling:resourceType";
 
-    var defaultInsertFct = ns.editableHelper.actions.INSERT.execute;
-    var customInsertFct = function() {}; // "do nothing" function
-
     var selectors = {
-        editor: ".childreneditor",
-        child: "coral-multifield-item",
-        addButton: ".childreneditor [coral-multifield-add]",
-        removeButton: "button[handle='remove']",
-        insertComponentDialog: "coral-dialog.InsertComponentDialog",
-        allowedComponentsList: "coral-dialog.InsertComponentDialog.childreneditor coral-selectlist"
+        self: "[data-cmp-is='childreneditor']",
+        add: "[data-cmp-hook-childreneditor='add']",
+        insertComponentDialog: {
+            self: "coral-dialog.InsertComponentDialog",
+            selectList: "coral-selectlist"
+        },
+        item: {
+            input: "[data-cmp-hook-childreneditor='itemInput']",
+            hiddenInput: "[data-cmp-hook-childreneditor='itemHiddenInput']"
+        }
     };
-    var deletedChildren = [];
-    var orderedChildren = [];
 
-    // Trigger the POST request to add, remove, re-order children nodes
-    function processChildren($editor) {
+    /**
+     * @class ChildrenEditor
+     * @classdesc A Children Editor is a dialog component based on a multifield that allows editing (adding, removing, renaming, re-ordering)
+     * the child items of panel container components.
+     * @param {Object} config The Children Editor configuration object
+     */
+    var ChildrenEditor = ns.util.createClass({
 
-        // Process re-ordered items
-        $editor.find(selectors.child).each(function() {
-            var $child = $(this);
-            var childName = $child.data("name");
-            orderedChildren.push(childName);
-        });
+        /**
+         * The Children Editor configuration Object
+         *
+         * @member {Object} ChildrenEditor#_config
+         */
+        _config: {},
 
-        var path = $editor.data(DATA_ATTRIBUTE_CONTAINER_PATH);
-        var panelContainer = new CQ.CoreComponents.PanelContainer({
-            path: path
-        });
+        /**
+         * An Object that is used to cache HTMLElement hooks for this Class
+         *
+         * @member {Object} ChildrenEditor#_elements
+         */
+        _elements: {},
 
-        panelContainer.update(orderedChildren, deletedChildren);
+        /**
+         * Path to the Container related to this Children Editor
+         *
+         * @member {String} ChildrenEditor#_path
+         */
+        _path: "",
 
-        deletedChildren = [];
-        orderedChildren = [];
-    }
+        /**
+         * Panel Container related to this Children Editor
+         *
+         * @member {CQ.CoreComponents.PanelContainer} ChildrenEditor#_panelContainer
+         */
+        _panelContainer: null,
 
-    // Remove the child item when clicking the remove button
-    $(document).on("click", selectors.removeButton, function(event) {
-        var $button = $(this);
-        var childName = $button.closest(selectors.child).data("name");
-        deletedChildren.push(childName);
-    });
+        /**
+         * Stores the deleted chidren, for processing on form submit
+         *
+         * @member {Array} ChildrenEditor#_deletedChildren
+         */
+        _deletedChildren: [],
 
-    // Display the "Insert New Components" dialog when clicking the add button
-    $(document).on("click", selectors.addButton, function(event) {
-        var $button = $(this);
-        var $editor = $button.closest(selectors.editor);
-        if ($editor.length === 1) {
-            var containerPath = $editor.data(DATA_ATTRIBUTE_CONTAINER_PATH);
-            var editable = ns.editables.find(containerPath)[0];
+        constructor: function ChildrenEditor(config) {
+            this._config = config;
+            this._elements.self = this._config.el;
+            this._elements.add = this._elements.self.querySelectorAll(selectors.add)[0];
+            this._path = this._elements.self.dataset["containerPath"];
+            this._panelContainer = new CQ.CoreComponents.PanelContainer({
+                path: this._path
+            });
 
-            // Display the "Insert New Components" dialog
-            ns.edit.ToolbarActions.INSERT.execute(editable);
-            var $insertComponentDialog = $(selectors.insertComponentDialog);
-            $insertComponentDialog.addClass(CLASS_EDITOR);
+            // store a reference to the Children Editor object
+            $(this._elements.self).data("childrenEditor", this);
+
+            this._bindEvents();
+        },
+
+        /**
+         * Binds Children Editor events
+         *
+         * @private
+         */
+        _bindEvents: function() {
+            var that = this;
+
+            that._elements.add.on("click", function() {
+                var editable = ns.editables.find(that._path)[0];
+                var children = editable.getChildren();
+
+                // create the insert component dialog relative to a child item
+                // - against which allowed components are calculated.
+                if (children.length > 0) {
+                    // display the insert component dialog
+                    ns.edit.ToolbarActions.INSERT.execute(children[0]);
+
+                    var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
+                    insertComponentDialog.off("coral-overlay:open" + NS).on("coral-overlay:open" + NS, function() {
+                        var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+
+                        // override default handling for component selection
+                        selectList.off("coral-selectlist:change").on("coral-selectlist:change", function() {
+                            var resourceType = "";
+                            var componentTitle = "";
+
+                            insertComponentDialog.hide();
+
+                            var item = that._elements.self.items.add(new Coral.Multifield.Item());
+                            that._elements.self.trigger("change");
+
+                            var component = ns.components.find(event.detail.selection.value);
+                            if (component.length > 0) {
+                                resourceType = component[0].getResourceType();
+                                componentTitle = component[0].getTitle();
+                            }
+
+                            // wait one frame to ensure the item template is rendered in the DOM
+                            Coral.commons.nextFrame(function() {
+                                var name = NN_PREFIX + Date.now();
+                                item.dataset["name"] = name;
+
+                                var input = item.querySelectorAll(selectors.item.input)[0];
+                                input.name = "./" + name + "/" + PN_TITLE;
+                                input.placeholder = Granite.I18n.get(componentTitle) + " " + Granite.I18n.get("title");
+
+                                var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
+                                hiddenInput.value = resourceType;
+                                hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+                            });
+                        });
+                    });
+                }
+            });
+
+            that._elements.self.on("coral-collection:remove", function(event) {
+                var name = event.detail.item.dataset["name"];
+                that._deletedChildren.push(name);
+            });
+        },
+
+        /**
+         * Reads state of the children and
+         * triggers a POST request to add, remove and re-order child nodes
+         *
+         * @private
+         * @returns {Promise} Promise for handling completion
+         */
+        _processChildren: function() {
+            var items = this._elements.self.items.getAll();
+            var orderedChildren = [];
+
+            for (var i = 0; i < items.length; i++) {
+                var name = items[i].dataset["name"];
+                orderedChildren.push(name);
+            }
+
+            return this._panelContainer.update(orderedChildren, this._deletedChildren);
         }
     });
 
-    // Set the resource type parameter when selecting a component from the "Insert New Components" dialog
-    $(document).off(EVENT_SELECT_LIST_CHANGE, selectors.allowedComponentsList).on(EVENT_SELECT_LIST_CHANGE, selectors.allowedComponentsList, function(event) {
-
-        $(selectors.allowedComponentsList).off(EVENT_SELECT_LIST_CHANGE);
-
-        var resourceType;
-        var $insertComponentDialog = $(this).closest(selectors.insertComponentDialog);
-        $insertComponentDialog.hide();
-
-        var component = ns.components.find(event.detail.selection.value);
-        if (component.length > 0) {
-            resourceType = component[0].getResourceType();
-        }
-
-        var $editor = $(selectors.editor);
-        // We need one more frame to make sure the item renders the template in the DOM
-        Coral.commons.nextFrame(function() {
-
-            var $child = $editor.find(selectors.child).last();
-            var childName = NN_PREFIX + Date.now();
-            var inputName = "./" + childName + "/" + PN_TITLE;
-            $child.data("name", childName);
-            var $input = $child.find("input");
-            $input.attr("name", inputName);
-
-            // append hidden input element for the resource type
-            $("<input>").attr({
-                type: "hidden",
-                name: "./" + childName + "/" + PN_RESOURCE_TYPE,
-                value: resourceType
-            }).insertAfter($input);
-
-        }.bind(this));
-
+    /**
+     * Initializes Children Editors as necessary on content loaded event
+     */
+    channel.on("foundation-contentloaded", function(event) {
+        $(event.target).find(selectors.self).each(function() {
+            new ChildrenEditor({
+                el: this
+            });
+        });
     });
 
-    // Submit hook to process the children
+    /**
+     * Form pre-submit handler to process child updates
+     */
     $(window).adaptTo("foundation-registry").register("foundation.form.submit", {
         selector: "*",
-        handler: function(formEl) {
-            var $editor = $(formEl).find(selectors.editor);
+        handler: function(form) {
+            // one children editor per form
+            var el = form.querySelectorAll(selectors.self)[0];
+            var childrenEditor = $(el).data("childrenEditor");
             return {
                 post: function() {
-                    processChildren($editor);
+                    childrenEditor._processChildren();
                 }
             };
         }
-    });
-
-    // Redefine the behavior of the default INSERT action (ns.editableHelper.actions.INSERT.execute):
-    // - disable it when the children editor is opened (as we don't want to insert a component on the page)
-    function onStart($editor) {
-        ns.editableHelper.actions.INSERT.execute = customInsertFct;
-    }
-
-    // Reset the behavior of the default INSERT action (ns.editableHelper.actions.INSERT.execute):
-    // - re-enable it when the children editor is closed
-    function onEnd() {
-        ns.editableHelper.actions.INSERT.execute = defaultInsertFct;
-    }
-
-    // Perform actions when the children editor is opened or closed
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-    var body             = document.querySelector("body");
-    var observer         = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-
-            // Perform actions when the children editor is opened
-            var addedNodesArray = [].slice.call(mutation.addedNodes);
-            if (addedNodesArray.length > 0) {
-                addedNodesArray.forEach(function(addedNode) {
-                    if (addedNode.querySelectorAll) {
-                        var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.editor));
-                        // We support only one children editor in a dialog
-                        if (elementsArray.length === 1) {
-                            var $editor = $(elementsArray[0]);
-                            onStart($editor);
-                        }
-                    }
-                });
-            }
-
-            // Perform actions when the children editor is closed
-            var removedNodesArray = [].slice.call(mutation.removedNodes);
-            if (removedNodesArray.length > 0) {
-                removedNodesArray.forEach(function(removedNode) {
-                    if (removedNode.querySelectorAll) {
-                        var elementsArray = [].slice.call(removedNode.querySelectorAll(selectors.editor));
-                        if (elementsArray.length === 1) {
-                            onEnd();
-                        }
-                    }
-                });
-            }
-        });
-    });
-
-    observer.observe(body, {
-        subtree: true,
-        childList: true,
-        characterData: true
     });
 
 }(jQuery, Granite.author, jQuery(document), this));

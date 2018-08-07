@@ -37,7 +37,7 @@
     CQ.CoreComponents.PanelContainer = ns.util.createClass({
 
         /**
-         * The Panel Container Object used to configure its behavior
+         * The Panel Container Object
          *
          * @member {PanelContainerConfig} CQ.CoreComponents.PanelContainer#_config
          */

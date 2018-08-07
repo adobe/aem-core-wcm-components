@@ -13,17 +13,19 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<coral-multifield data-sly-use.editor="com.adobe.cq.wcm.core.components.sandbox.ui.ChildrenEditor" class="childreneditor"
+<coral-multifield data-sly-use.editor="com.adobe.cq.wcm.core.components.sandbox.ui.ChildrenEditor"
+                  data-cmp-is="childreneditor"
+                  class="cmp-childreneditor"
                   data-container-path = "${editor.container.path}">
-
     <coral-multifield-item data-sly-repeat.child="${editor.children}" data-name="${child.name}">
-        <input is="coral-textfield" name="./${child.name}/jcr:title" value="${child.jcr:title}" type="text">
+        <input is="coral-textfield"
+               type="text"
+               name="./${child.name}/jcr:title"
+               value="${child.jcr:title}">
     </coral-multifield-item>
-
-    <button coral-multifield-add type="button" is="coral-button">Add</button>
-
+    <button data-cmp-hook-childreneditor="add" type="button" is="coral-button">${'Add' @ i18n}</button>
     <template coral-multifield-template="">
-        <input is="coral-textfield" type="text">
+        <input data-cmp-hook-childreneditor="itemInput" is="coral-textfield" type="text">
+        <input data-cmp-hook-childreneditor="itemHiddenInput" type="hidden">
     </template>
-
 </coral-multifield>
