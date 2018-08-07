@@ -35,7 +35,14 @@
 
             // create a proxy component
             .execFct(function(opts, done) {
-                c.createProxyComponent(carouselRT, c.proxyPath, "proxyPath", done);
+                c.createProxyComponent(carouselRT, c.proxyPath_sandbox, "proxyPath", done);
+            })
+
+            .execFct(function(opts, done) {
+                // we need to set property cq:isContainer to true
+                var data = {};
+                data["cq:isContainer"] = "true";
+                c.editNodeProperties(h.param("proxyPath")(opts), data, done);
             })
 
             .execFct(function(opts, done) {
@@ -172,6 +179,84 @@
                     $(children[1]).val() === "item2";
             })
             .execTestCase(c.tcSaveConfigureDialog);
+    };
+
+    /**
+     * Test: Allowed components for Carousel
+     */
+    carousel.tcAllowedComponents = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath, pageRT, carouselRT) {
+        return new h.TestCase("Allowed components for Carousel", {
+            execAfter: tcExecuteAfterTest
+        })
+            // create a proxy component for a teaser
+            .execFct(function(opts, done) {
+                c.createProxyComponent(c.rtTeaser_v1, c.proxyPath_sandbox, "teaserProxyPath", done);
+            })
+
+            //add a policy for carousel component
+            .execFct(function(opts, done) {
+                var data = {};
+                data["jcr:title"] = "New Policy";
+                data["sling:resourceType"] = "wcm/core/components/policy/policy";
+                data["components"] = h.param("teaserProxyPath")(opts);
+
+                c.createPolicy(policyName + "/new_policy", data, "policyPath", done, policyPath);
+            })
+
+            .execFct(function(opts, done) {
+                var data = {};
+                data["cq:policy"] = policyLocation + policyName + "/new_policy";
+                data["sling:resourceType"] = "wcm/core/components/policies/mapping";
+
+                c.assignPolicy(policyName, data, done, policyAssignmentPath);
+            }, { after: 1000 })
+
+            // create a proxy component
+            .execFct(function(opts, done) {
+                c.createProxyComponent(carouselRT, c.proxyPath_sandbox, "proxyPath", done);
+            })
+
+            .execFct(function(opts, done) {
+                // we need to set property cq:isContainer to true
+                var data = {};
+                data["cq:isContainer"] = "true";
+                c.editNodeProperties(h.param("proxyPath")(opts), data, done);
+            })
+
+            .execFct(function(opts, done) {
+                c.createPage(c.template, c.rootPage, pageName, pageVar, done, pageRT, pageDescription);
+            })
+
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("proxyPath")(opts), h.param(pageVar)(opts) + c.relParentCompPath, "cmpPath", done);
+            })
+            .navigateTo("/editor.html%" + pageVar + "%.html")
+
+            .click(".cq-Overlay.cq-droptarget%dataPath%", {
+                before: function() {
+                    // set the data-path attribute so we target the correct component
+                    h.param("dataPath", "[data-path='" + h.param("cmpPath")() + "/*']");
+                }
+            })
+
+            // make sure its visible
+            .asserts.visible("#EditableToolbar")
+            // click on the 'insert component' button
+            .click("button.cq-editable-action[is='coral-button'][title='Insert component']")
+            // verify if teaser is on the allowed components list
+            .asserts.visible("coral-selectlist-item[value='%teaserProxyPath%']")
+
+            //delete the teaser component
+            .execFct(function(opts, done) {
+                c.deleteProxyComponent(h.param("teaserProxyPath")(opts), done);
+            })
+
+            .execFct(function(opts, done) {
+                c.deletePolicy("/carousel", done, policyPath);
+            })
+            .execFct(function(opts, done) {
+                c.deletePolicyAssignment("/carousel", done, policyAssignmentPath);
+            });
     };
 
 }(hobs, jQuery));
