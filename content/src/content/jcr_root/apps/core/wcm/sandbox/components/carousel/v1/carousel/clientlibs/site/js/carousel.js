@@ -39,8 +39,11 @@
 
             cacheElements(config.element);
             that._active = 0;
-            refreshActive();
-            initControls();
+
+            if (that._elements.items) {
+                refreshActive();
+                initControls();
+            }
 
             if (Granite && Granite.author) {
                 new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp-carousel", function(message) {
@@ -99,10 +102,13 @@
             }
 
             var indicators = that._elements["indicator"];
-            for (var i = 0; i < indicators.length; i++) {
-                indicators[i].addEventListener("click", function(event) {
-                    slide(event.target.dataset["slide"]);
-                });
+
+            if (indicators) {
+                for (var i = 0; i < indicators.length; i++) {
+                    indicators[i].addEventListener("click", function(event) {
+                        slide(event.target.dataset["slide"]);
+                    });
+                }
             }
         }
 
@@ -110,20 +116,22 @@
             var items = that._elements["item"];
             var indicators = that._elements["indicator"];
 
-            if (Array.isArray(items)) {
-                for (var i = 0; i < items.length; i++) {
-                    if (i === parseInt(that._active)) {
-                        items[i].classList.add("cmp-carousel__item--active");
-                        indicators[i].classList.add("cmp-carousel__indicator--active");
-                    } else {
-                        items[i].classList.remove("cmp-carousel__item--active");
-                        indicators[i].classList.remove("cmp-carousel__indicator--active");
+            if (items) {
+                if (Array.isArray(items)) {
+                    for (var i = 0; i < items.length; i++) {
+                        if (i === parseInt(that._active)) {
+                            items[i].classList.add("cmp-carousel__item--active");
+                            indicators[i].classList.add("cmp-carousel__indicator--active");
+                        } else {
+                            items[i].classList.remove("cmp-carousel__item--active");
+                            indicators[i].classList.remove("cmp-carousel__indicator--active");
+                        }
                     }
+                } else {
+                    // only one item
+                    items.classList.add("cmp-carousel__item--active");
+                    indicators.classList.add("cmp-carousel__indicator--active");
                 }
-            } else {
-                // only one item
-                items.classList.add("cmp-carousel__item--active");
-                indicators.classList.add("cmp-carousel__indicator--active");
             }
         }
 
