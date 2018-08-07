@@ -30,6 +30,7 @@
             selectList: "coral-selectlist"
         },
         item: {
+            icon: "[data-cmp-hook-childreneditor='itemIcon']",
             input: "[data-cmp-hook-childreneditor='itemInput']",
             hiddenInput: "[data-cmp-hook-childreneditor='itemHiddenInput']"
         }
@@ -90,7 +91,33 @@
             // store a reference to the Children Editor object
             $(this._elements.self).data("childrenEditor", this);
 
+            this._renderItems();
             this._bindEvents();
+        },
+
+        /**
+         * Renders icons and placeholders for each child item
+         *
+         * @private
+         */
+        _renderItems: function() {
+            var items = this._elements.self.items.getAll();
+
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var input = item.querySelectorAll(selectors.item.input)[0];
+                var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
+                var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
+                var components = ns.components.find({
+                    resourceType: hiddenInput.value
+                });
+
+                if (components.length > 0) {
+                    itemIcon.appendChild(renderIcon(components[0]));
+                    var componentTitle = components[0].getTitle();
+                    input.placeholder = Granite.I18n.get(componentTitle) + " " + Granite.I18n.get("title");
+                }
+            }
         },
 
         /**
@@ -122,28 +149,32 @@
 
                             insertComponentDialog.hide();
 
-                            var item = that._elements.self.items.add(new Coral.Multifield.Item());
-                            that._elements.self.trigger("change");
+                            var components = ns.components.find(event.detail.selection.value);
+                            if (components.length > 0) {
+                                resourceType = components[0].getResourceType();
+                                componentTitle = components[0].getTitle();
 
-                            var component = ns.components.find(event.detail.selection.value);
-                            if (component.length > 0) {
-                                resourceType = component[0].getResourceType();
-                                componentTitle = component[0].getTitle();
+                                var item = that._elements.self.items.add(new Coral.Multifield.Item());
+                                that._elements.self.trigger("change");
+
+                                // wait one frame to ensure the item template is rendered in the DOM
+                                Coral.commons.nextFrame(function() {
+                                    var name = NN_PREFIX + Date.now();
+                                    item.dataset["name"] = name;
+
+                                    var input = item.querySelectorAll(selectors.item.input)[0];
+                                    input.name = "./" + name + "/" + PN_TITLE;
+                                    input.placeholder = Granite.I18n.get(componentTitle) + " " + Granite.I18n.get("title");
+
+                                    var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
+                                    hiddenInput.value = resourceType;
+                                    hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+
+                                    var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
+                                    var icon = renderIcon(components[0]);
+                                    itemIcon.appendChild(icon);
+                                });
                             }
-
-                            // wait one frame to ensure the item template is rendered in the DOM
-                            Coral.commons.nextFrame(function() {
-                                var name = NN_PREFIX + Date.now();
-                                item.dataset["name"] = name;
-
-                                var input = item.querySelectorAll(selectors.item.input)[0];
-                                input.name = "./" + name + "/" + PN_TITLE;
-                                input.placeholder = Granite.I18n.get(componentTitle) + " " + Granite.I18n.get("title");
-
-                                var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
-                                hiddenInput.value = resourceType;
-                                hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
-                            });
                         });
                     });
                 }
@@ -202,5 +233,40 @@
             };
         }
     });
+
+    /**
+     * Renders a component icon
+     *
+     * @param {Granite.author.Component} component The component to render the icon for
+     * @returns {HTMLElement} The rendered icon
+     */
+    function renderIcon(component) {
+        var iconHTML;
+        var iconName = component.componentConfig.iconName;
+        var iconPath = component.componentConfig.iconPath;
+        var abbreviation = component.componentConfig.abbreviation;
+
+        if (iconName) {
+            iconHTML = new Coral.Icon().set({
+                icon: iconName
+            });
+        } else if (iconPath) {
+            iconHTML = document.createElement("img");
+            iconHTML.src = iconPath;
+        } else {
+            iconHTML = new Coral.Tag().set({
+                color: "grey",
+                size: "M",
+                label: {
+                    textContent: abbreviation
+                }
+            });
+            iconHTML.classList.add("cmp-childreneditor__tag");
+        }
+
+        iconHTML.title = component.getTitle();
+
+        return iconHTML;
+    }
 
 }(jQuery, Granite.author, jQuery(document), this));

@@ -18,14 +18,29 @@
                   class="cmp-childreneditor"
                   data-container-path = "${editor.container.path}">
     <coral-multifield-item data-sly-repeat.child="${editor.children}" data-name="${child.name}">
-        <input is="coral-textfield"
-               type="text"
-               name="./${child.name}/jcr:title"
-               value="${child.jcr:title}">
+        <div>
+            <span class="cmp-childreneditor__icon"
+                  data-cmp-hook-childreneditor="itemIcon"></span>
+            <input is="coral-textfield"
+                   class="cmp-childreneditor__input"
+                   data-cmp-hook-childreneditor="itemInput"
+                   name="./${child.name}/jcr:title"
+                   value="${child.jcr:title}">
+            <input type="hidden"
+                   data-cmp-hook-childreneditor="itemHiddenInput"
+                   name="./${child.name}/sling:resourceType"
+                   value="${child.sling:resourceType}">
+        </div>
     </coral-multifield-item>
     <button data-cmp-hook-childreneditor="add" type="button" is="coral-button">${'Add' @ i18n}</button>
     <template coral-multifield-template="">
-        <input data-cmp-hook-childreneditor="itemInput" is="coral-textfield" type="text">
-        <input data-cmp-hook-childreneditor="itemHiddenInput" type="hidden">
+        <div>
+            <span class="cmp-childreneditor__icon"
+                  data-cmp-hook-childreneditor="itemIcon"></span>
+            <input is="coral-textfield"
+                   class="cmp-childreneditor__input"
+                   data-cmp-hook-childreneditor="itemInput">
+            <input type="hidden" data-cmp-hook-childreneditor="itemHiddenInput">
+        </div>
     </template>
 </coral-multifield>
