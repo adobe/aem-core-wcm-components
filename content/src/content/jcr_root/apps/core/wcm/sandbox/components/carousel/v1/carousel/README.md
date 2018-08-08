@@ -33,6 +33,10 @@ The component policy dialog allows definition of allowed components for the Caro
 ### Edit Dialog Properties
 The edit dialog allows editing of Carousel slides (adding, removing, deleting, naming, re-ordering).
 
+## Client Libraries
+The component provides a `core.wcm.components.carousel.v1` client library category that contains a recommended base
+CSS styling and JavaScript component. It should be added to a relevant site client library using the `embed` property.
+
 ## BEM Description
 ```
 BLOCK cmp-carousel
