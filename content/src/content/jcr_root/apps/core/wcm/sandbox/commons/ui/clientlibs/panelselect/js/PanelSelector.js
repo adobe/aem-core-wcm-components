@@ -139,7 +139,7 @@
 
             table.appendChild(colgroup);
             table.appendChild(tableHead);
-            table.classList.add("cmp-panelselector_table");
+            table.classList.add("cmp-panelselector__table");
 
             this._elements.table = table;
         },
