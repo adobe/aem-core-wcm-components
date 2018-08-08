@@ -67,6 +67,8 @@
                 that._render().done(function() {
                     that._bindEvents();
                 });
+
+                that._handleOutOfAreaClickBound = that._handleOutOfAreaClick.bind(that);
             }
         },
 
@@ -231,11 +233,8 @@
             });
 
             // out of area click
-            $(document).off("click" + NS).on("click" + NS, function(event) {
-                if (!$(event.target).closest(that._elements.popover).length) {
-                    that._finish();
-                }
-            });
+            document.removeEventListener("click", that._handleOutOfAreaClickBound);
+            document.addEventListener("click", that._handleOutOfAreaClickBound, true);
 
             that._elements.table.on("coral-table:change", function(event) {
                 // ensure at least one item is selected
@@ -287,6 +286,13 @@
                     that._elements.popover.reposition();
                 }
             });
+        },
+
+        _handleOutOfAreaClick: function(event) {
+            var that = this;
+            if (!$(event.target).closest(that._elements.popover).length) {
+                that._finish();
+            }
         },
 
         /**
