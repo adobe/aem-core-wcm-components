@@ -184,6 +184,15 @@
                 var name = event.detail.item.dataset["name"];
                 that._deletedChildren.push(name);
             });
+
+            that._elements.self.on("coral-collection:add", function(event) {
+                var name = event.detail.item.dataset["name"];
+                var index = that._deletedChildren.indexOf(name);
+
+                if (index > -1) {
+                    that._deletedChildren.splice(index, 1);
+                }
+            });
         },
 
         /**
