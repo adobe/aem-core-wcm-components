@@ -115,7 +115,7 @@
                 if (components.length > 0) {
                     itemIcon.appendChild(renderIcon(components[0]));
                     var componentTitle = components[0].getTitle();
-                    input.placeholder = Granite.I18n.get(componentTitle) + " " + Granite.I18n.get("title");
+                    input.placeholder = Granite.I18n.get(componentTitle);
                 }
             }
         },
@@ -164,7 +164,7 @@
 
                                     var input = item.querySelectorAll(selectors.item.input)[0];
                                     input.name = "./" + name + "/" + PN_TITLE;
-                                    input.placeholder = Granite.I18n.get(componentTitle) + " " + Granite.I18n.get("title");
+                                    input.placeholder = Granite.I18n.get(componentTitle);
 
                                     var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
                                     hiddenInput.value = resourceType;
