@@ -17,7 +17,7 @@
 (function($, ns, channel, window) {
     "use strict";
 
-    var NS = ".childreneditor";
+    var NS = ".cmp-childreneditor";
     var NN_PREFIX = "item_";
     var PN_TITLE = "jcr:title";
     var PN_RESOURCE_TYPE = "sling:resourceType";

@@ -17,10 +17,10 @@
 (function($, ns, channel, window, undefined) {
     "use strict";
 
-    var NS = ".editor-panelselector";
+    var NS = ".cmp-panelselector";
 
     var selectors = {
-        indexMarker: ".editor-PanelSelector-indexMarker"
+        indexMarker: ".cmp-panelselector__indexMarker"
     };
 
     /**
@@ -106,7 +106,7 @@
                 open: true
             });
 
-            popover.classList.add("editor-PanelSelector");
+            popover.classList.add("cmp-panelselector");
 
             this._elements.popover = popover;
         },
@@ -133,11 +133,11 @@
             });
             tableHead.appendChild(new Coral.Table.HeaderCell());
             tableHead.appendChild(new Coral.Table.HeaderCell());
-            tableHead.classList.add("editor-PanelSelector-tableHead");
+            tableHead.classList.add("cmp-panelselector__tableHead");
 
             table.appendChild(colgroup);
             table.appendChild(tableHead);
-            table.classList.add("editor-PanelSelector-table");
+            table.classList.add("cmp-panelselector_table");
 
             this._elements.table = table;
         },
@@ -362,7 +362,7 @@
      * @returns {String} The title
      */
     function getTitle(editable, item, index) {
-        var title = "<span class='foundation-layout-util-subtletext editor-PanelSelector-indexMarker'>" + index + "</span>&nbsp;&nbsp;";
+        var title = "<span class='foundation-layout-util-subtletext cmp-panelselector__indexMarker'>" + index + "</span>&nbsp;&nbsp;";
 
         title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
 
