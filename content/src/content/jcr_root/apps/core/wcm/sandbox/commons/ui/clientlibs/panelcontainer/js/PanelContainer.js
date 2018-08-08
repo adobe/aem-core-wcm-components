@@ -18,7 +18,7 @@
     "use strict";
 
     var GET_DATA_SUFFIX = ".model.json";
-    var POST_SUFFIX = ".childreneditor.html";
+    var POST_SUFFIX = ".children.html";
 
     /**
      * @typedef {Object} PanelContainerConfig Represents a Panel Container configuration object
