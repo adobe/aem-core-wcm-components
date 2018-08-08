@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/* global
- Granite
- */
+/* global Granite */
 (function() {
     "use strict";
 
@@ -40,7 +38,7 @@
             cacheElements(config.element);
             that._active = 0;
 
-            if (that._elements.items) {
+            if (that._elements.item) {
                 refreshActive();
                 initControls();
             }
