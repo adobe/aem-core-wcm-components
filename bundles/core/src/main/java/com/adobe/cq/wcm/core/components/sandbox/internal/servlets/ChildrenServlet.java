@@ -53,7 +53,6 @@ public class ChildrenServlet extends SlingAllMethodsServlet {
                           final SlingHttpServletResponse response)
         throws ServletException, IOException {
 
-
         ResourceResolver resolver = request.getResourceResolver();
         Resource container = request.getResource();
 
@@ -88,7 +87,7 @@ public class ChildrenServlet extends SlingAllMethodsServlet {
                 resolver.commit();
 
                 // Re-order the items
-                for (int i = orderedChildrenNames.length - 1; i >=0; i--) {
+                for (int i = orderedChildrenNames.length - 1; i >= 0; i--) {
                     try {
                         // Put the last item at the end
                         if (i == orderedChildrenNames.length - 1) {

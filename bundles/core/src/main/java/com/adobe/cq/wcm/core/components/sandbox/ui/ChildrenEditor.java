@@ -55,8 +55,8 @@ public class ChildrenEditor {
             ResourceResolver resolver = request.getResourceResolver();
             container = resolver.getResource(containerPath);
             if (container != null) {
-                for (Resource res : container.getChildren()) {
-                    children.add(res);
+                for (Resource resource : container.getChildren()) {
+                    children.add(resource);
                 }
             }
         }

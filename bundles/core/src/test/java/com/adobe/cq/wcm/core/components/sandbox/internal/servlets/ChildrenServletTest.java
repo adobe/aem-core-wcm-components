@@ -130,18 +130,16 @@ public class ChildrenServletTest {
     }
 
     /**
-     * Reorder children
+     * Reorder children.
+     *
+     * TODO: re-enable, missing orderBefore implementation in MockNode
+     * (https://github.com/apache/sling-org-apache-sling-testing-jcr-mock/blob/master/src/main/java/org/apache/sling/testing/mock/jcr/MockNode.java)
      *
      * @throws ServletException
      * @throws IOException
      */
-    /*
-
-    TODO : orderAbove is currently not implemented in MockNode
-
-    @Test
+    /*@Test
     public void testReorderChildren() throws ServletException, IOException {
-
         // define the new order
         String[] reorderedChildren = new String[]{"item_3","item_2","item_1"};
         // set the param
@@ -155,6 +153,5 @@ public class ChildrenServletTest {
         for (Resource resource : childrenIterator) {
             assertEquals("Reordering children failed", resource.getName(), expectedIterator.next());
         }
-    }
-    */
+    }*/
 }
