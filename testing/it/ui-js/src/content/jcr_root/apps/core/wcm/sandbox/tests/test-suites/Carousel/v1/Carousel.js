@@ -21,13 +21,30 @@
     var carousel = window.CQ.CoreComponentsIT.Carousel.v1;
     var selectors = {
         editDialog: {
-            addButton: ".childreneditor [coral-multifield-add]",
-            firstRemoveButton: ".childreneditor button[handle='remove']:first",
-            responsiveGridComponent: ".InsertComponentDialog.childreneditor coral-selectlist-item[value='/libs/wcm/foundation/components/responsivegrid']",
-            firstItem: ".childreneditor coral-multifield-item:first",
-            lastItem: ".childreneditor coral-multifield-item:last",
-            lastItemInput: ".childreneditor coral-multifield-item:last input:first",
-            itemInput: ".childreneditor coral-multifield-item input"
+            childrenEditor: {
+                self: ".cmp-childreneditor",
+                addButton: "[data-cmp-hook-childreneditor='add']",
+                removeButton: "button[handle='remove']",
+                item: {
+                    self: "coral-multifield-item",
+                    first: "coral-multifield-item:first",
+                    last: "coral-multifield-item:last",
+                    input: "[data-cmp-hook-childreneditor='itemInput']",
+                    hiddenInput: "[data-cmp-hook-childreneditor='itemHiddenInput']"
+                }
+            },
+            insertComponentDialog: {
+                self: ".InsertComponentDialog",
+                components: {
+                    responsiveGrid: "coral-selectlist-item[value='/libs/wcm/foundation/components/responsivegrid']"
+                }
+            },
+            editableToolbar: {
+                self: "#EditableToolbar",
+                actions: {
+                    insert: ".cq-editable-action[data-action='INSERT']"
+                }
+            }
         }
     };
 
@@ -41,8 +58,8 @@
         execInNewWindow: false
     })
         .addTestCase(carousel.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carousel.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/carousel", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox, "core/wcm/tests/components/test-page-v2", c.rtCarousel_v1));
 }(hobs, jQuery));

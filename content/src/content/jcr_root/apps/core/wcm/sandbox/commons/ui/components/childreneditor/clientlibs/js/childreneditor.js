@@ -129,11 +129,12 @@
                     ns.edit.ToolbarActions.INSERT.execute(children[0]);
 
                     var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
-                    insertComponentDialog.off("coral-overlay:open" + NS).on("coral-overlay:open" + NS, function() {
-                        var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+                    var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
 
-                        // override default handling for component selection
-                        selectList.off("coral-selectlist:change").on("coral-selectlist:change", function() {
+                    // next frame to ensure we remove the default event handler
+                    Coral.commons.nextFrame(function() {
+                        selectList.off("coral-selectlist:change");
+                        selectList.on("coral-selectlist:change" + NS, function() {
                             var resourceType = "";
                             var componentTitle = "";
 
@@ -147,7 +148,7 @@
                                 var item = that._elements.self.items.add(new Coral.Multifield.Item());
                                 that._elements.self.trigger("change");
 
-                                // wait one frame to ensure the item template is rendered in the DOM
+                                // next frame to ensure the item template is rendered in the DOM
                                 Coral.commons.nextFrame(function() {
                                     var name = NN_PREFIX + Date.now();
                                     item.dataset["name"] = name;
@@ -166,6 +167,11 @@
                                 });
                             }
                         });
+                    });
+
+                    // unbind events on dialog close
+                    channel.one("dialog-closed", function() {
+                        selectList.off("coral-selectlist:change" + NS);
                     });
                 }
             });

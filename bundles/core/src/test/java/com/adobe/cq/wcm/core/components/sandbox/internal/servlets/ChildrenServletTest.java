@@ -60,7 +60,7 @@ public class ChildrenServletTest {
     private MockSlingHttpServletResponse response;
 
     @Rule
-    public AemContext AEM_CONTEXT  = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    public AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
 
     @Before
     public void setUp() {

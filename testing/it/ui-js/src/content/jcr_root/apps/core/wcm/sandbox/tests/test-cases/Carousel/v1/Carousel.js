@@ -13,14 +13,13 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-;(function(h, $) { // eslint-disable-line no-extra-semi
 /* global hobs, jQuery */
+;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
     window.CQ.CoreComponentsIT.Carousel.v1 = window.CQ.CoreComponentsIT.Carousel.v1 || {};
     var c                                = window.CQ.CoreComponentsIT.commons;
-    var carousel                           = window.CQ.CoreComponentsIT.Carousel.v1;
+    var carousel                         = window.CQ.CoreComponentsIT.Carousel.v1;
     var pageName                         = "carousel-page";
     var pageVar                          = "carousel_page";
     var pageDescription                  = "carousel page description";
@@ -55,7 +54,6 @@
         return new h.TestCase("Clean up after test", {
             execAfter: tcExecuteAfterTest
         })
-
             // delete the test proxies we created
             .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("proxyPath")(opts), done);
@@ -71,43 +69,43 @@
      */
     carousel.tcCreateItems = function(selectors) {
         return new h.TestCase("Create child items")
-        // open the edit dialog
+            // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-            .click(selectors.editDialog.addButton)
+            .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.editDialog.responsiveGridComponent)
+            .click(selectors.editDialog.insertComponentDialog.components.responsiveGrid)
             .wait(200)
-            .fillInput(selectors.editDialog.lastItemInput, "item0")
-            .click(selectors.editDialog.addButton)
+            .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item0")
+            .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.editDialog.responsiveGridComponent)
+            .click(selectors.editDialog.insertComponentDialog.components.responsiveGrid)
             .wait(200)
-            .fillInput(selectors.editDialog.lastItemInput, "item1")
-            .click(selectors.editDialog.addButton)
+            .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item1")
+            .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.editDialog.responsiveGridComponent)
+            .click(selectors.editDialog.insertComponentDialog.components.responsiveGrid)
             .wait(200)
-            .fillInput(selectors.editDialog.lastItemInput, "item2")
+            .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item2")
             // save the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
             .wait(200);
     };
 
     /**
-     * Test: Add child items with the edit dialog
+     * Test: Edit Dialog: Add child items
      */
     carousel.tcAddItems = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
-        return new h.TestCase("Add child items (edit dialog)", {
+        return new h.TestCase("Edit Dialog : Add child items", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest
         })
-            // create new items with new titles
+            // create new items with titles
             .execTestCase(carousel.tcCreateItems(selectors))
             // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // verify that 3 items have been created
             .asserts.isTrue(function() {
-                var children = h.find(selectors.editDialog.itemInput);
+                var children = h.find(selectors.editDialog.childrenEditor.item.input);
                 return children.size() === 3 &&
                     $(children[0]).val() === "item0" &&
                     $(children[1]).val() === "item1" &&
@@ -118,21 +116,50 @@
     };
 
     /**
-     * Test: Re-order child items with the edit dialog
+     * Test: Edit Dialog : Remove child items
      */
-    carousel.tcReorderItems = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
-        return new h.TestCase("Re-order child items (edit dialog)", {
+    carousel.tcRemoveItems = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Edit Dialog : Remove child items", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest
         })
-            // create new items with new titles
+            // create new items with titles
+            .execTestCase(carousel.tcCreateItems(selectors))
+            // open the edit dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // remove the first item
+            .click(selectors.editDialog.childrenEditor.item.first + " " + selectors.editDialog.childrenEditor.removeButton)
+            .wait(200)
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200)
+            // open the edit dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // verify that the first item has been removed
+            .asserts.isTrue(function() {
+                var children = h.find(selectors.editDialog.childrenEditor.item.input);
+                return children.size() === 2 &&
+                    $(children[0]).val() === "item1" &&
+                    $(children[1]).val() === "item2";
+            })
+            .execTestCase(c.tcSaveConfigureDialog);
+    };
+
+    /**
+     * Test: Edit Dialog : Re-order children
+     */
+    carousel.tcReorderItems = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Edit Dialog : Re-order children", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
             .execTestCase(carousel.tcCreateItems(selectors))
             // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // move last item before the first one
             .execFct(function(opts, done) {
-                var $first = h.find(selectors.editDialog.firstItem);
-                var $last = h.find(selectors.editDialog.lastItem);
+                var $first = h.find(selectors.editDialog.childrenEditor.item.first);
+                var $last = h.find(selectors.editDialog.childrenEditor.item.last);
                 $last.detach().insertBefore($first);
                 done(true);
             })
@@ -143,7 +170,7 @@
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // verify the new order
             .asserts.isTrue(function() {
-                var children = h.find(selectors.editDialog.itemInput);
+                var children = h.find(selectors.editDialog.childrenEditor.item.input);
                 return children.size() === 3 &&
                     $(children[0]).val() === "item2" &&
                     $(children[1]).val() === "item0" &&
@@ -153,39 +180,10 @@
     };
 
     /**
-     * Test: Remove child items with the edit dialog
-     */
-    carousel.tcRemoveItems = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
-        return new h.TestCase("Remove child items (edit dialog)", {
-            execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
-            // create new items with new titles
-            .execTestCase(carousel.tcCreateItems(selectors))
-            // open the edit dialog
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-            // remove the first item
-            .click(selectors.editDialog.firstRemoveButton)
-            .wait(200)
-            .execTestCase(c.tcSaveConfigureDialog)
-            .wait(200)
-            // open the edit dialog
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-            // verify that the first item has been removed
-            .asserts.isTrue(function() {
-                var children = h.find(selectors.editDialog.itemInput);
-                return children.size() === 2 &&
-                    $(children[0]).val() === "item1" &&
-                    $(children[1]).val() === "item2";
-            })
-            .execTestCase(c.tcSaveConfigureDialog);
-    };
-
-    /**
-     * Test: Allowed components for Carousel
+     * Test: Allowed components
      */
     carousel.tcAllowedComponents = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath, pageRT, carouselRT) {
-        return new h.TestCase("Allowed components for Carousel", {
+        return new h.TestCase("Allowed components", {
             execAfter: tcExecuteAfterTest
         })
             // create a proxy component for a teaser
@@ -193,7 +191,7 @@
                 c.createProxyComponent(c.rtTeaser_v1, c.proxyPath_sandbox, "teaserProxyPath", done);
             })
 
-            //add a policy for carousel component
+            // add a policy for carousel component
             .execFct(function(opts, done) {
                 var data = {};
                 data["jcr:title"] = "New Policy";
@@ -240,13 +238,13 @@
             })
 
             // make sure its visible
-            .asserts.visible("#EditableToolbar")
+            .asserts.visible(selectors.editDialog.editableToolbar.self)
             // click on the 'insert component' button
-            .click("button.cq-editable-action[is='coral-button'][title='Insert component']")
-            // verify if teaser is on the allowed components list
+            .click(selectors.editDialog.editableToolbar.actions.insert)
+            // verify teaser is in the list of allowed components
             .asserts.visible("coral-selectlist-item[value='%teaserProxyPath%']")
 
-            //delete the teaser component
+            // delete the teaser component
             .execFct(function(opts, done) {
                 c.deleteProxyComponent(h.param("teaserProxyPath")(opts), done);
             })
