@@ -73,17 +73,17 @@
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.editDialog.insertComponentDialog.components.responsiveGrid)
+            .click(selectors.insertComponentDialog.components.responsiveGrid)
             .wait(200)
             .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item0")
             .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.editDialog.insertComponentDialog.components.responsiveGrid)
+            .click(selectors.insertComponentDialog.components.responsiveGrid)
             .wait(200)
             .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item1")
             .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.editDialog.insertComponentDialog.components.responsiveGrid)
+            .click(selectors.insertComponentDialog.components.responsiveGrid)
             .wait(200)
             .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item2")
             // save the edit dialog
@@ -180,6 +180,49 @@
     };
 
     /**
+     * Test: Panel Select
+     */
+    carousel.tcPanelSelect = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Panel Select", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // open the toolbar
+            .click(selectors.overlay.self + "[data-path='%cmpPath%']")
+            .asserts.visible(selectors.editableToolbar.self)
+
+            // verify that initially no panel select action is available
+            .asserts.visible(selectors.editableToolbar.actions.panelSelect, false)
+
+            // create new items with titles
+            .execTestCase(carousel.tcCreateItems(selectors))
+
+            // open the toolbar
+            .click(selectors.overlay.self + "[data-path='%cmpPath%']")
+            .asserts.visible(selectors.editableToolbar.self)
+
+            // verify the panel select action is available
+            .asserts.visible(selectors.editableToolbar.actions.panelSelect)
+
+            // open the panel selector and verify it's open
+            .click(selectors.editableToolbar.actions.panelSelect)
+            .asserts.visible(selectors.panelSelector.self)
+
+            // verify that 3 items are available in the panel selector and the correct titles are visible
+            .asserts.isTrue(function() {
+                var items = h.find(selectors.panelSelector.item);
+                return items.size() === 3 &&
+                    $(items[0]).is(selectors.panelSelector.item + ":contains(item0)") &&
+                    $(items[1]).is(selectors.panelSelector.item + ":contains(item1)") &&
+                    $(items[2]).is(selectors.panelSelector.item + ":contains(item2)");
+            })
+
+            // click elsewhere and verify an out of area click closes the panel selector
+            .click(selectors.overlay.carouselItem)
+            .asserts.visible(selectors.panelSelector.self, false);
+    };
+
+    /**
      * Test: Allowed components
      */
     carousel.tcAllowedComponents = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath, pageRT, carouselRT) {
@@ -230,17 +273,12 @@
             })
             .navigateTo("/editor.html%" + pageVar + "%.html")
 
-            .click(".cq-Overlay.cq-droptarget%dataPath%", {
-                before: function() {
-                    // set the data-path attribute so we target the correct component
-                    h.param("dataPath", "[data-path='" + h.param("cmpPath")() + "/*']");
-                }
-            })
+            .click(selectors.overlay.self + "[data-path='%cmpPath%/*']")
 
             // make sure its visible
-            .asserts.visible(selectors.editDialog.editableToolbar.self)
+            .asserts.visible(selectors.editableToolbar.self)
             // click on the 'insert component' button
-            .click(selectors.editDialog.editableToolbar.actions.insert)
+            .click(selectors.editableToolbar.actions.insert)
             // verify teaser is in the list of allowed components
             .asserts.visible("coral-selectlist-item[value='%teaserProxyPath%']")
 

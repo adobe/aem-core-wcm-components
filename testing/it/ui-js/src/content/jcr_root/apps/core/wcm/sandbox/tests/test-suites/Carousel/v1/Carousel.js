@@ -32,19 +32,28 @@
                     input: "[data-cmp-hook-childreneditor='itemInput']",
                     hiddenInput: "[data-cmp-hook-childreneditor='itemHiddenInput']"
                 }
-            },
-            insertComponentDialog: {
-                self: ".InsertComponentDialog",
-                components: {
-                    responsiveGrid: "coral-selectlist-item[value='/libs/wcm/foundation/components/responsivegrid']"
-                }
-            },
-            editableToolbar: {
-                self: "#EditableToolbar",
-                actions: {
-                    insert: ".cq-editable-action[data-action='INSERT']"
-                }
             }
+        },
+        insertComponentDialog: {
+            self: ".InsertComponentDialog",
+            components: {
+                responsiveGrid: "coral-selectlist-item[value='/libs/wcm/foundation/components/responsivegrid']"
+            }
+        },
+        editableToolbar: {
+            self: "#EditableToolbar",
+            actions: {
+                insert: ".cq-editable-action[data-action='INSERT']",
+                panelSelect: ".cq-editable-action[data-action='PANEL_SELECT']"
+            }
+        },
+        panelSelector: {
+            self: ".cmp-panelselector",
+            item: ".cmp-panelselector__table [is='coral-table-row']"
+        },
+        overlay: {
+            self: ".cq-Overlay",
+            carouselItem: ".cq-Overlay [data-path^='/content/core-components/core-components-page/carousel-page/jcr:content/root/responsivegrid/carousel/item']"
         }
     };
 
@@ -60,6 +69,7 @@
         .addTestCase(carousel.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carousel.tcPanelSelect(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/carousel", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox, "core/wcm/tests/components/test-page-v2", c.rtCarousel_v1));
 }(hobs, jQuery));
