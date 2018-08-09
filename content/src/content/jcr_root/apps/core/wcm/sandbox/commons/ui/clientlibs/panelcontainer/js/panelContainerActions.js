@@ -17,6 +17,12 @@
 (function($, ns, channel, window, undefined) {
     "use strict";
 
+    /**
+     * Handles an afterChildInsert listener for a Panel Container component.
+     * Refreshes the component and navigates to the correct active item.
+     *
+     * @param {Granite.author.Editable} The inserted child [Editable]{@link Granite.author.Editable}
+     */
     CQ.CoreComponents.panelcontainer.AFTER_CHILD_INSERT = function(childEditable) {
         var editable = ns.editables.getParent(childEditable);
         var path = childEditable.path;
@@ -28,7 +34,7 @@
             panelContainer = new CQ.CoreComponents.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: editable.dom
+                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -48,10 +54,20 @@
                 }
             }
 
+            // update the Panel Container element following refresh
+            var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+            panelContainer.setElement(element);
+
             panelContainer.navigate(index);
         });
     };
 
+    /**
+     * Handles an afterChildDelete listener for a Panel Container component.
+     * Refreshes the component and navigates to the correct active item.
+     *
+     * @param {Granite.author.Editable} The deleted child [Editable]{@link Granite.author.Editable}
+     */
     CQ.CoreComponents.panelcontainer.AFTER_CHILD_DELETE = function(childEditable) {
         var editable = ns.editables.getParent(childEditable);
         var panelContainer;
@@ -61,7 +77,7 @@
             panelContainer = new CQ.CoreComponents.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: editable.dom
+                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -69,11 +85,19 @@
 
         ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
             if (!(index < 0)) {
+                // update the Panel Container element following refresh
+                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+                panelContainer.setElement(element);
+
                 panelContainer.navigate(index);
             }
         });
     };
 
+    /**
+     * Handles an afterChildMove listener for a Panel Container component.
+     * Refreshes the component and navigates to the correct active item.
+     */
     CQ.CoreComponents.panelcontainer.AFTER_CHILD_MOVE = function() {
         var editable = this;
         var panelContainer;
@@ -83,7 +107,7 @@
             panelContainer = new CQ.CoreComponents.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: editable.dom
+                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -91,6 +115,10 @@
 
         ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
             if (!(index < 0)) {
+                // update the Panel Container element following refresh
+                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+                panelContainer.setElement(element);
+
                 panelContainer.navigate(index);
             }
         });

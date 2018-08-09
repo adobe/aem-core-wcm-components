@@ -19,6 +19,7 @@
 
     var GET_DATA_SUFFIX = ".model.json";
     var POST_SUFFIX = ".children.html";
+    var MESSAGE_ID = "cmp.panelcontainer";
 
     /**
      * @typedef {Object} PanelContainerConfig Represents a Panel Container configuration object
@@ -64,7 +65,16 @@
          */
         navigate: function(index) {
             if (this._config.panelContainerType) {
-                Granite.author.ContentFrame.postMessage(this._config.panelContainerType.name, { panel: index });
+                // assign a path-based ID data attribute to the panel container HTMLElement
+                // for correct forwarding of operations in the content frame message subscription.
+                this._config.el.dataset["cmpPanelcontainerId"] = this._config.path;
+
+                Granite.author.ContentFrame.postMessage(MESSAGE_ID, {
+                    id: this._config.path,
+                    type: this._config.panelContainerType.name,
+                    operation: "navigate",
+                    index: index
+                });
             }
         },
 
@@ -123,6 +133,16 @@
          */
         getPath: function() {
             return this._config.path;
+        },
+
+        /**
+         * Sets the HTMLElement for this Panel Container, useful for updating a Panel Container
+         * following a component refresh
+         *
+         * @returns {HTMLElement} The updated HTMLElement for this panel container
+         */
+        setElement: function(element) {
+            this._config.el = element;
         },
 
         /**

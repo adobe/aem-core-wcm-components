@@ -58,10 +58,11 @@
             var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(that._config.editable);
 
             if (panelContainerType) {
+                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(that._config.editable);
                 that._panelContainer = new CQ.CoreComponents.PanelContainer({
                     path: that._config.editable.path,
                     panelContainerType: panelContainerType,
-                    el: that._config.editable.dom
+                    el: element
                 });
 
                 that._render().done(function() {
@@ -72,6 +73,11 @@
             }
         },
 
+        /**
+         * Determines whether this Panel Selector is open
+         *
+         * @returns {Boolean} True if open, False otherwise
+         */
         isOpen: function() {
             return (this._elements.popover && this._elements.popover.open);
         },
@@ -268,6 +274,11 @@
                         that._panelContainer.update(ordered).done(function() {
                             ns.edit.EditableActions.REFRESH.execute(that._config.editable).done(function() {
                                 that._config.editable.overlay.setSelected(true);
+
+                                // update the Panel Container element following refresh
+                                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(that._config.editable);
+                                that._panelContainer.setElement(element);
+
                                 that._navigate();
                             });
                         });
@@ -288,6 +299,11 @@
             });
         },
 
+        /**
+         * Handles clicks outside of the Panel Selector popover
+         *
+         * @private
+         */
         _handleOutOfAreaClick: function(event) {
             var that = this;
             if (!$(event.target).closest(that._elements.popover).length) {
