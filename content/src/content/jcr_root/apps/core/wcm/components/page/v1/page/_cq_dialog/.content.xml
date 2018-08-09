@@ -4,7 +4,7 @@
     jcr:title="Page"
     sling:resourceType="cq/gui/components/authoring/dialog"
     helpPath="https://www.adobe.com/go/aem_cmp_page_v1"
-    extraClientlibs="[cq.common.wcm,core.wcm.components.page.v1.editor,cq.wcm.msm.properties,granite.contexthub.configuration]"
+    extraClientlibs="[cq.common.wcm,core.wcm.components.page.v1.editor,cq.wcm.msm.properties,granite.contexthub.configuration,cq.siteadmin.admin.properties]"
     mode="edit">
     <content
         granite:class="cq-dialog-content-page"
