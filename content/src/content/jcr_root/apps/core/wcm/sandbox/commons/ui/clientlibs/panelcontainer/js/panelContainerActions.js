@@ -48,6 +48,10 @@
                 }
             }
 
+            // update the Panel Container element following refresh
+            var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+            panelContainer.setElement(element);
+
             panelContainer.navigate(index);
         });
     };
@@ -69,6 +73,10 @@
 
         ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
             if (!(index < 0)) {
+                // update the Panel Container element following refresh
+                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+                panelContainer.setElement(element);
+
                 panelContainer.navigate(index);
             }
         });
@@ -91,6 +99,10 @@
 
         ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
             if (!(index < 0)) {
+                // update the Panel Container element following refresh
+                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+                panelContainer.setElement(element);
+
                 panelContainer.navigate(index);
             }
         });

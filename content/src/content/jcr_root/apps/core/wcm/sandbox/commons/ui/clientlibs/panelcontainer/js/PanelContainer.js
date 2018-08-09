@@ -55,10 +55,6 @@
         constructor: function PanelContainer(config) {
             this._config = config;
             this.getItems();
-
-            // assign a path-based ID data attribute to the panel container HTMLElement
-            // for correct forwarding of operations in the content frame message subscription.
-            this._config.el.dataset["cmpPanelcontainerId"] = this._config.path;
         },
 
         /**
@@ -69,6 +65,10 @@
          */
         navigate: function(index) {
             if (this._config.panelContainerType) {
+                // assign a path-based ID data attribute to the panel container HTMLElement
+                // for correct forwarding of operations in the content frame message subscription.
+                this._config.el.dataset["cmpPanelcontainerId"] = this._config.path;
+
                 Granite.author.ContentFrame.postMessage(MESSAGE_ID, {
                     id: this._config.path,
                     type: this._config.panelContainerType.name,
@@ -133,6 +133,16 @@
          */
         getPath: function() {
             return this._config.path;
+        },
+
+        /**
+         * Sets the HTMLElement for this Panel Container, useful for updating a Panel Container
+         * following a component refresh
+         *
+         * @returns {HTMLElement} The updated HTMLElement for this panel container
+         */
+        setElement: function(element) {
+            this._config.el = element;
         },
 
         /**
