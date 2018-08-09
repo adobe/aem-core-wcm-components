@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/* global CQ */
 (function($, ns, channel, window) {
     "use strict";
 
@@ -21,6 +20,7 @@
     var NN_PREFIX = "item_";
     var PN_TITLE = "jcr:title";
     var PN_RESOURCE_TYPE = "sling:resourceType";
+    var POST_SUFFIX = ".children.html";
 
     var selectors = {
         self: "[data-cmp-is='childreneditor']",
@@ -66,13 +66,6 @@
         _path: "",
 
         /**
-         * Panel Container related to this Children Editor
-         *
-         * @member {CQ.CoreComponents.PanelContainer} ChildrenEditor#_panelContainer
-         */
-        _panelContainer: null,
-
-        /**
          * Stores the deleted chidren, for processing on form submit
          *
          * @member {Array} ChildrenEditor#_deletedChildren
@@ -84,9 +77,6 @@
             this._elements.self = this._config.el;
             this._elements.add = this._elements.self.querySelectorAll(selectors.add)[0];
             this._path = this._elements.self.dataset["containerPath"];
-            this._panelContainer = new CQ.CoreComponents.PanelContainer({
-                path: this._path
-            });
 
             // store a reference to the Children Editor object
             $(this._elements.self).data("childrenEditor", this);
@@ -211,7 +201,27 @@
                 orderedChildren.push(name);
             }
 
-            return this._panelContainer.update(orderedChildren, this._deletedChildren);
+            return this._update(orderedChildren, this._deletedChildren);
+        },
+
+        /**
+         * Persists item updates to an endpoint, returns a Promise for handling
+         *
+         * @param {Array} ordered IDs of the items in order
+         * @param {Array} [deleted] IDs of the deleted items
+         * @returns {Promise} The promise for completion handling
+         */
+        _update: function(ordered, deleted) {
+            var url = this._path + POST_SUFFIX;
+
+            return $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    "deletedChildren": deleted,
+                    "orderedChildren": ordered
+                }
+            });
         }
     });
 
@@ -237,7 +247,7 @@
             var childrenEditor = $(el).data("childrenEditor");
             return {
                 post: function() {
-                    childrenEditor._processChildren();
+                    return childrenEditor._processChildren();
                 }
             };
         }
