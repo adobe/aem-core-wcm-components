@@ -27,10 +27,10 @@
     CQ.CoreComponents.panelcontainer.utils = {
 
         /**
-         * Checks whether an [Editable]{@link Granite.author.Editable} is a panel container
+         * Checks whether an [Editable]{@link Granite.author.Editable} is a Panel Container
          *
          * @param {Granite.author.Editable} editable The [Editable]{@link Granite.author.Editable} to check
-         * @returns {Boolean} True if the Editable is a panel container, false otherwise
+         * @returns {Boolean} True if the Editable is a Panel Container, false otherwise
          */
         isPanelContainer: function(editable) {
             var panelContainerType = getPanelContainerType(editable);
@@ -38,7 +38,7 @@
         },
 
         /**
-         * Returns the panel container definition associated with an [Editable]{@link Granite.author.Editable}
+         * Returns the Panel Container definition associated with an [Editable]{@link Granite.author.Editable}
          *
          * @param {Granite.author.Editable} editable The Panel Container [Editable]{@link Granite.author.Editable}
          * @returns {Object} The Panel Container Type definition, undefined if none is associated
@@ -48,7 +48,35 @@
         },
 
         /**
-         * Returns panel container [Editable]{@link Granite.author.Editable}'s child items
+         * Returns the Panel Container HTML element associated with an [Editable]{@link Granite.author.Editable}
+         *
+         * @param {Granite.author.Editable} editable The Panel Container [Editable]{@link Granite.author.Editable}
+         * @returns {HTMLElement} The HTML Element match for the Panel Container, undefined if none is associated
+         */
+        getPanelContainerHTMLElement: function(editable) {
+            var container = getPanelContainerType(editable);
+            var element;
+
+            if (container) {
+                if (editable.dom[0].matches(container.selector)) {
+                    element = editable.dom[0];
+                } else {
+                    var children = editable.dom[0].children;
+                    for (var i = 0; i < children.length; i++) {
+                        var child = children[0];
+                        if (child.matches(container.selector)) {
+                            element = child;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return element;
+        },
+
+        /**
+         * Returns Panel Container [Editable]{@link Granite.author.Editable}'s child items
          *
          * @param {Granite.author.Editable} editable The Panel Container {@link Granite.author.Editable}
          * @returns {Array<Granite.author.editable>} The Panel Container child editables
@@ -63,7 +91,7 @@
     };
 
     /**
-     * Returns the panel container definition associated with an [Editable]{@link Granite.author.Editable}
+     * Returns the Panel Container definition associated with an [Editable]{@link Granite.author.Editable}
      *
      * @param {Granite.author.Editable} editable The Panel Container [Editable]{@link Granite.author.Editable}
      * @returns {Object} The Panel Container Type definition, undefined if none is associated

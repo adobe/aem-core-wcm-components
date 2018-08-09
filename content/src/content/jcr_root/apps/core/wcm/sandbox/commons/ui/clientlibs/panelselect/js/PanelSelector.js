@@ -58,10 +58,11 @@
             var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(that._config.editable);
 
             if (panelContainerType) {
+                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(that._config.editable);
                 that._panelContainer = new CQ.CoreComponents.PanelContainer({
                     path: that._config.editable.path,
                     panelContainerType: panelContainerType,
-                    el: that._config.editable.dom
+                    el: element
                 });
 
                 that._render().done(function() {

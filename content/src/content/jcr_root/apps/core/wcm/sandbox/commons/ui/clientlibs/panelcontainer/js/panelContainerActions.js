@@ -28,7 +28,7 @@
             panelContainer = new CQ.CoreComponents.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: editable.dom
+                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -61,7 +61,7 @@
             panelContainer = new CQ.CoreComponents.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: editable.dom
+                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -83,7 +83,7 @@
             panelContainer = new CQ.CoreComponents.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: editable.dom
+                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
             });
         }
 

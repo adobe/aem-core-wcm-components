@@ -44,9 +44,11 @@
             }
 
             if (Granite && Granite.author) {
-                new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp-carousel", function(message) {
-                    if (message.data) {
-                        slide(message.data.panel);
+                new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                    if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
+                        if (message.data.operation === "navigate") {
+                            navigate(message.data.index);
+                        }
                     }
                 });
             }
@@ -100,11 +102,10 @@
             }
 
             var indicators = that._elements["indicator"];
-
             if (indicators) {
                 for (var i = 0; i < indicators.length; i++) {
                     indicators[i].addEventListener("click", function(event) {
-                        slide(event.target.dataset["slide"]);
+                        navigate(event.target.dataset["slide"]);
                     });
                 }
             }
@@ -133,7 +134,7 @@
             }
         }
 
-        function slide(index) {
+        function navigate(index) {
             that._active = index;
             refreshActive();
         }
