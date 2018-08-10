@@ -1,5 +1,5 @@
 {
-    "srcUriTemplate": "/core/content/test.coreimg{.width}.png/structure/jcr:content/root/image_template/1490005239000.png",
+    "srcUriTemplate": "/core/content/test.coreimg.82{.width}.png/structure/jcr:content/root/image_template/1490005239000.png",
     "widths" : [
         600,
         700,
