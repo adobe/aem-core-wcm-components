@@ -27,7 +27,8 @@ import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,15 +44,21 @@ public class ChildrenEditorTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorTest.class);
     // root folder in resources
     private static final String TEST_BASE = "/carousel";
+    // apps root folder
+    private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
     // root of content
     private static final String CONTENT_ROOT = "/content";
     // path to container node
     private static final String CAROUSEL_PATH =
         "/content/carousel/jcr:content/root/responsivegrid/carousel-1";
 
-    // content used for testing
-    @Rule
-    public AemContext AEM_CONTEXT  = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    @ClassRule
+    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+
+    @BeforeClass
+    public static void init() {
+        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+    }
 
     /**
      * Test getChildren() method.
@@ -60,11 +67,11 @@ public class ChildrenEditorTest {
     public void testGetChildren() {
         ChildrenEditor childrenEditor = getChildrenEditor(CAROUSEL_PATH);
         List<Resource> children = childrenEditor.getChildren();
-        assertEquals("Number of children is not the same", 3, children.size());
-        Iterator<String> it = Arrays.asList("item_1", "item_2", "item_3").iterator();
+        assertEquals("Number of children is not the same.", 2, children.size());
+        Iterator<String> it = Arrays.asList("item_1", "item_2").iterator();
         for (Iterator<Resource> it1 = children.iterator(); it1.hasNext(); ) {
             Resource child = it1.next();
-            assertEquals("Child not found", child.getName(), it.next());
+            assertEquals("Child not found.", child.getName(), it.next());
         }
     }
 
@@ -77,7 +84,7 @@ public class ChildrenEditorTest {
         Resource r = childrenEditor.getContainer();
         Iterator<String> it = Arrays.asList("item_1", "item_2", "item_3").iterator();
         for (Resource child : r.getChildren()) {
-            assertEquals("Child not found", child.getName(), it.next());
+            assertEquals("Child not found.", child.getName(), it.next());
         }
     }
 
@@ -88,7 +95,7 @@ public class ChildrenEditorTest {
     public void testEmptySuffix() {
         ChildrenEditor childrenEditor = getChildrenEditor("");
         Resource resource = childrenEditor.getContainer();
-        assertNull("For an empty suffix, expected container resource to be null", resource);
+        assertNull("For an empty suffix, expected container resource to be null.", resource);
     }
 
     /**
@@ -98,14 +105,14 @@ public class ChildrenEditorTest {
     public void testInvalidSuffix() {
         ChildrenEditor childrenEditor = getChildrenEditor("/asdf/adf/asdf");
         Resource resource = childrenEditor.getContainer();
-        assertNull("For an invalid suffix, expected container resource to be null", resource);
+        assertNull("For an invalid suffix, expected container resource to be null.", resource);
     }
 
-    private ChildrenEditor getChildrenEditor(String suffix){
+    private ChildrenEditor getChildrenEditor(String suffix) {
         // get the carousel component node resource
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(CAROUSEL_PATH);
         // prepare the request object
-        MockSlingHttpServletRequest request = AEM_CONTEXT.request();
+        final MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
         // set the suffix
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix(suffix);

@@ -29,6 +29,9 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.components.ComponentManager;
+
 @Model(adaptables = {SlingHttpServletRequest.class})
 public class ChildrenEditor {
 
@@ -55,8 +58,14 @@ public class ChildrenEditor {
             ResourceResolver resolver = request.getResourceResolver();
             container = resolver.getResource(containerPath);
             if (container != null) {
+                ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
                 for (Resource resource : container.getChildren()) {
-                    children.add(resource);
+                    if (resource != null) {
+                        Component component = componentManager.getComponentOfResource(resource);
+                        if (component != null) {
+                            children.add(resource);
+                        }
+                    }
                 }
             }
         }
