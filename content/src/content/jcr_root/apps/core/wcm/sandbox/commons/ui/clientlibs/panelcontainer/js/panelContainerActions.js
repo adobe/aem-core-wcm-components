@@ -21,7 +21,7 @@
      * Handles an afterChildInsert listener for a Panel Container component.
      * Refreshes the component and navigates to the correct active item.
      *
-     * @param {Granite.author.Editable} The inserted child [Editable]{@link Granite.author.Editable}
+     * @param {Granite.author.Editable} childEditable The inserted child [Editable]{@link Granite.author.Editable}
      */
     CQ.CoreComponents.panelcontainer.AFTER_CHILD_INSERT = function(childEditable) {
         var editable = ns.editables.getParent(childEditable);
@@ -66,7 +66,7 @@
      * Handles an afterChildDelete listener for a Panel Container component.
      * Refreshes the component and navigates to the correct active item.
      *
-     * @param {Granite.author.Editable} The deleted child [Editable]{@link Granite.author.Editable}
+     * @param {Granite.author.Editable} childEditable The deleted child [Editable]{@link Granite.author.Editable}
      */
     CQ.CoreComponents.panelcontainer.AFTER_CHILD_DELETE = function(childEditable) {
         var editable = ns.editables.getParent(childEditable);

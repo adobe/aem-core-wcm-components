@@ -303,6 +303,7 @@
          * Handles clicks outside of the Panel Selector popover
          *
          * @private
+         * @param {jQuery.Event} event The click event
          */
         _handleOutOfAreaClick: function(event) {
             var that = this;

@@ -139,7 +139,7 @@
          * Sets the HTMLElement for this Panel Container, useful for updating a Panel Container
          * following a component refresh
          *
-         * @returns {HTMLElement} The updated HTMLElement for this panel container
+         * @param {HTMLElement} element The updated HTMLElement for this panel container
          */
         setElement: function(element) {
             this._config.el = element;

@@ -37,199 +37,267 @@
     };
 
     /**
+     * @typedef {Object} ChildrenEditorConfig Represents a Children Editor configuration object
+     * @property {HTMLElement} el The HTMLElement representing this Children Editor
+     */
+
+    /**
+     * Children Editor
+     *
      * @class ChildrenEditor
      * @classdesc A Children Editor is a dialog component based on a multifield that allows editing (adding, removing, renaming, re-ordering)
      * the child items of panel container components.
-     * @param {Object} config The Children Editor configuration object
+     * @param {ChildrenEditorConfig} config The Children Editor configuration object
      */
-    var ChildrenEditor = ns.util.createClass({
+    var ChildrenEditor = function(config) {
+        this._config = config;
+        this._init();
+    };
 
-        /**
-         * The Children Editor configuration Object
-         *
-         * @member {Object} ChildrenEditor#_config
-         */
-        _config: {},
+    ChildrenEditor.prototype = (function() {
 
-        /**
-         * An Object that is used to cache HTMLElement hooks for this Class
-         *
-         * @member {Object} ChildrenEditor#_elements
-         */
-        _elements: {},
+        return {
 
-        /**
-         * Path to the Container related to this Children Editor
-         *
-         * @member {String} ChildrenEditor#_path
-         */
-        _path: "",
+            constructor: ChildrenEditor,
 
-        /**
-         * Stores the deleted chidren, for processing on form submit
-         *
-         * @member {Array} ChildrenEditor#_deletedChildren
-         */
-        _deletedChildren: [],
+            /**
+             * The Children Editor configuration Object
+             *
+             * @member {ChildrenEditorConfig} ChildrenEditor#_config
+             */
+            _config: {},
 
-        constructor: function ChildrenEditor(config) {
-            this._config = config;
-            this._elements.self = this._config.el;
-            this._elements.add = this._elements.self.querySelectorAll(selectors.add)[0];
-            this._path = this._elements.self.dataset["containerPath"];
+            /**
+             * An Object that is used to cache HTMLElement hooks for this Class
+             *
+             * @member {Object} ChildrenEditor#_elements
+             */
+            _elements: {},
 
-            // store a reference to the Children Editor object
-            $(this._elements.self).data("childrenEditor", this);
+            /**
+             * Path to the component related to this Children Editor
+             *
+             * @member {String} ChildrenEditor#_path
+             */
+            _path: "",
 
-            this._renderItems();
-            this._bindEvents();
-        },
+            /**
+             * Stores the ordered children, for persistence via ChildrenEditor#update
+             *
+             * @member {Array} ChildrenEditor#_orderedChildren
+             */
+            _orderedChildren: [],
 
-        /**
-         * Renders icons and placeholders for each child item
-         *
-         * @private
-         */
-        _renderItems: function() {
-            var items = this._elements.self.items.getAll();
+            /**
+             * Stores the deleted children, for persistence via ChildrenEditor#update
+             *
+             * @member {Array} ChildrenEditor#_deletedChildren
+             */
+            _deletedChildren: [],
 
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                var input = item.querySelectorAll(selectors.item.input)[0];
-                var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
-                var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
-                var components = ns.components.find({
-                    resourceType: hiddenInput.value
+            /**
+             * Persists item updates to an endpoint, returns a Promise for handling
+             *
+             * @returns {Promise} The promise for completion handling
+             */
+            update: function() {
+                var url = this._path + POST_SUFFIX;
+
+                this._processChildren();
+
+                return $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        "deletedChildren": this._deletedChildren,
+                        "orderedChildren": this._orderedChildren
+                    }
+                });
+            },
+
+            /**
+             * Initializes the Children Editor
+             *
+             * @private
+             */
+            _init: function() {
+                this._elements.self = this._config.el;
+                this._elements.add = this._elements.self.querySelectorAll(selectors.add)[0];
+                this._path = this._elements.self.dataset["containerPath"];
+
+                // store a reference to the Children Editor object
+                $(this._elements.self).data("childrenEditor", this);
+
+                this._renderItems();
+                this._bindEvents();
+            },
+
+            /**
+             * Renders icons and placeholders for each child item
+             *
+             * @private
+             */
+            _renderItems: function() {
+                var items = this._elements.self.items.getAll();
+
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var input = item.querySelectorAll(selectors.item.input)[0];
+                    var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
+                    var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
+
+                    if (ns) {
+                        var components = ns.components.find({
+                            resourceType: hiddenInput.value
+                        });
+
+                        if (components.length > 0) {
+                            itemIcon.appendChild(this._renderIcon(components[0]));
+                            var componentTitle = components[0].getTitle();
+                            input.placeholder = Granite.I18n.get(componentTitle);
+                        }
+                    }
+                }
+            },
+
+            /**
+             * Renders a component icon
+             *
+             * @private
+             * @param {Granite.author.Component} component The component to render the icon for
+             * @returns {HTMLElement} The rendered icon
+             */
+            _renderIcon: function(component) {
+                var iconHTML;
+                var iconName = component.componentConfig.iconName;
+                var iconPath = component.componentConfig.iconPath;
+                var abbreviation = component.componentConfig.abbreviation;
+
+                if (iconName) {
+                    iconHTML = new Coral.Icon().set({
+                        icon: iconName
+                    });
+                } else if (iconPath) {
+                    iconHTML = document.createElement("img");
+                    iconHTML.src = iconPath;
+                } else {
+                    iconHTML = new Coral.Tag().set({
+                        color: "grey",
+                        size: "M",
+                        label: {
+                            textContent: abbreviation
+                        }
+                    });
+                    iconHTML.classList.add("cmp-childreneditor__tag");
+                }
+
+                iconHTML.title = component.getTitle();
+
+                return iconHTML;
+            },
+
+            /**
+             * Binds Children Editor events
+             *
+             * @private
+             */
+            _bindEvents: function() {
+                var that = this;
+
+                if (ns) {
+                    that._elements.add.on("click", function() {
+                        var editable = ns.editables.find(that._path)[0];
+                        var children = editable.getChildren();
+
+                        // create the insert component dialog relative to a child item
+                        // - against which allowed components are calculated.
+                        if (children.length > 0) {
+                            // display the insert component dialog
+                            ns.edit.ToolbarActions.INSERT.execute(children[0]);
+
+                            var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
+                            var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+
+                            // next frame to ensure we remove the default event handler
+                            Coral.commons.nextFrame(function() {
+                                selectList.off("coral-selectlist:change");
+                                selectList.on("coral-selectlist:change" + NS, function() {
+                                    var resourceType = "";
+                                    var componentTitle = "";
+
+                                    insertComponentDialog.hide();
+
+                                    var components = ns.components.find(event.detail.selection.value);
+                                    if (components.length > 0) {
+                                        resourceType = components[0].getResourceType();
+                                        componentTitle = components[0].getTitle();
+
+                                        var item = that._elements.self.items.add(new Coral.Multifield.Item());
+                                        that._elements.self.trigger("change");
+
+                                        // next frame to ensure the item template is rendered in the DOM
+                                        Coral.commons.nextFrame(function() {
+                                            var name = NN_PREFIX + Date.now();
+                                            item.dataset["name"] = name;
+
+                                            var input = item.querySelectorAll(selectors.item.input)[0];
+                                            input.name = "./" + name + "/" + PN_TITLE;
+                                            input.placeholder = Granite.I18n.get(componentTitle);
+
+                                            var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
+                                            hiddenInput.value = resourceType;
+                                            hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+
+                                            var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
+                                            var icon = that._renderIcon(components[0]);
+                                            itemIcon.appendChild(icon);
+                                        });
+                                    }
+                                });
+                            });
+
+                            // unbind events on dialog close
+                            channel.one("dialog-closed", function() {
+                                selectList.off("coral-selectlist:change" + NS);
+                            });
+                        }
+                    });
+                } else {
+                    // editor layer unavailable, remove the insert component action
+                    that._elements.add.parentNode.removeChild(that._elements.add);
+                }
+
+                that._elements.self.on("coral-collection:remove", function(event) {
+                    var name = event.detail.item.dataset["name"];
+                    that._deletedChildren.push(name);
                 });
 
-                if (components.length > 0) {
-                    itemIcon.appendChild(renderIcon(components[0]));
-                    var componentTitle = components[0].getTitle();
-                    input.placeholder = Granite.I18n.get(componentTitle);
+                that._elements.self.on("coral-collection:add", function(event) {
+                    var name = event.detail.item.dataset["name"];
+                    var index = that._deletedChildren.indexOf(name);
+
+                    if (index > -1) {
+                        that._deletedChildren.splice(index, 1);
+                    }
+                });
+            },
+
+            /**
+             * Reads state of the children and
+             * triggers a POST request to add, remove and re-order child nodes
+             *
+             * @private
+             */
+            _processChildren: function() {
+                var items = this._elements.self.items.getAll();
+
+                for (var i = 0; i < items.length; i++) {
+                    var name = items[i].dataset["name"];
+                    this._orderedChildren.push(name);
                 }
             }
-        },
-
-        /**
-         * Binds Children Editor events
-         *
-         * @private
-         */
-        _bindEvents: function() {
-            var that = this;
-
-            that._elements.add.on("click", function() {
-                var editable = ns.editables.find(that._path)[0];
-                var children = editable.getChildren();
-
-                // create the insert component dialog relative to a child item
-                // - against which allowed components are calculated.
-                if (children.length > 0) {
-                    // display the insert component dialog
-                    ns.edit.ToolbarActions.INSERT.execute(children[0]);
-
-                    var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
-                    var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
-
-                    // next frame to ensure we remove the default event handler
-                    Coral.commons.nextFrame(function() {
-                        selectList.off("coral-selectlist:change");
-                        selectList.on("coral-selectlist:change" + NS, function() {
-                            var resourceType = "";
-                            var componentTitle = "";
-
-                            insertComponentDialog.hide();
-
-                            var components = ns.components.find(event.detail.selection.value);
-                            if (components.length > 0) {
-                                resourceType = components[0].getResourceType();
-                                componentTitle = components[0].getTitle();
-
-                                var item = that._elements.self.items.add(new Coral.Multifield.Item());
-                                that._elements.self.trigger("change");
-
-                                // next frame to ensure the item template is rendered in the DOM
-                                Coral.commons.nextFrame(function() {
-                                    var name = NN_PREFIX + Date.now();
-                                    item.dataset["name"] = name;
-
-                                    var input = item.querySelectorAll(selectors.item.input)[0];
-                                    input.name = "./" + name + "/" + PN_TITLE;
-                                    input.placeholder = Granite.I18n.get(componentTitle);
-
-                                    var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
-                                    hiddenInput.value = resourceType;
-                                    hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
-
-                                    var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
-                                    var icon = renderIcon(components[0]);
-                                    itemIcon.appendChild(icon);
-                                });
-                            }
-                        });
-                    });
-
-                    // unbind events on dialog close
-                    channel.one("dialog-closed", function() {
-                        selectList.off("coral-selectlist:change" + NS);
-                    });
-                }
-            });
-
-            that._elements.self.on("coral-collection:remove", function(event) {
-                var name = event.detail.item.dataset["name"];
-                that._deletedChildren.push(name);
-            });
-
-            that._elements.self.on("coral-collection:add", function(event) {
-                var name = event.detail.item.dataset["name"];
-                var index = that._deletedChildren.indexOf(name);
-
-                if (index > -1) {
-                    that._deletedChildren.splice(index, 1);
-                }
-            });
-        },
-
-        /**
-         * Reads state of the children and
-         * triggers a POST request to add, remove and re-order child nodes
-         *
-         * @private
-         * @returns {Promise} Promise for handling completion
-         */
-        _processChildren: function() {
-            var items = this._elements.self.items.getAll();
-            var orderedChildren = [];
-
-            for (var i = 0; i < items.length; i++) {
-                var name = items[i].dataset["name"];
-                orderedChildren.push(name);
-            }
-
-            return this._update(orderedChildren, this._deletedChildren);
-        },
-
-        /**
-         * Persists item updates to an endpoint, returns a Promise for handling
-         *
-         * @param {Array} ordered IDs of the items in order
-         * @param {Array} [deleted] IDs of the deleted items
-         * @returns {Promise} The promise for completion handling
-         */
-        _update: function(ordered, deleted) {
-            var url = this._path + POST_SUFFIX;
-
-            return $.ajax({
-                type: "POST",
-                url: url,
-                data: {
-                    "deletedChildren": deleted,
-                    "orderedChildren": ordered
-                }
-            });
-        }
-    });
+        };
+    })();
 
     /**
      * Initializes Children Editors as necessary on content loaded event
@@ -253,45 +321,10 @@
             var childrenEditor = $(el).data("childrenEditor");
             return {
                 post: function() {
-                    return childrenEditor._processChildren();
+                    return childrenEditor.update();
                 }
             };
         }
     });
-
-    /**
-     * Renders a component icon
-     *
-     * @param {Granite.author.Component} component The component to render the icon for
-     * @returns {HTMLElement} The rendered icon
-     */
-    function renderIcon(component) {
-        var iconHTML;
-        var iconName = component.componentConfig.iconName;
-        var iconPath = component.componentConfig.iconPath;
-        var abbreviation = component.componentConfig.abbreviation;
-
-        if (iconName) {
-            iconHTML = new Coral.Icon().set({
-                icon: iconName
-            });
-        } else if (iconPath) {
-            iconHTML = document.createElement("img");
-            iconHTML.src = iconPath;
-        } else {
-            iconHTML = new Coral.Tag().set({
-                color: "grey",
-                size: "M",
-                label: {
-                    textContent: abbreviation
-                }
-            });
-            iconHTML.classList.add("cmp-childreneditor__tag");
-        }
-
-        iconHTML.title = component.getTitle();
-
-        return iconHTML;
-    }
 
 }(jQuery, Granite.author, jQuery(document), this));
