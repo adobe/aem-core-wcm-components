@@ -39,6 +39,13 @@ public interface Image extends ComponentExporter {
     String PN_DESIGN_ALLOWED_RENDITION_WIDTHS = "allowedRenditionWidths";
 
     /**
+     * Name of the configuration policy property that will store the image quality for an image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    String PN_DESIGN_JPEG_QUALITY = "jpegQuality";
+
+    /**
      * Name of the configuration policy property that will indicate if lazy loading should be disabled.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0

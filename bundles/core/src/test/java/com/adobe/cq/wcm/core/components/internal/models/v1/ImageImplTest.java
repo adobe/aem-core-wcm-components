@@ -92,7 +92,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertNull("Did not expect a file reference.", image.getFileReference());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertEquals(IMAGE_LINK, image.getLink());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".600.png/1490005239000.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".82.600.png/1490005239000.png", image.getSrc());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image3." + selector + ".600.png/1490005239000.png\"]," +
                 "\"smartSizes\":[600]," +
                 "\"lazyEnabled\":false}";
