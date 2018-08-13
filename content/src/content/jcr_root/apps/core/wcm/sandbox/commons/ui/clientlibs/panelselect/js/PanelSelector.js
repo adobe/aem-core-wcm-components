@@ -257,7 +257,6 @@
                 }
             });
 
-
             for (var i = 0; i < that._elements.reorderButtons.length; i++) {
                 $(that._elements.reorderButtons[i]).on("mousedown", function() {
                     var selectedId = that._elements.table.selectedItem.dataset.id;

@@ -18,13 +18,30 @@
                         "sling:resourceType": "core/wcm/sandbox/components/carousel/v1/carousel",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "My Teaser 1",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
                         "item_2": {
                             "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "My Teaser 2",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
-                        "item_3": {}
+                        "item_3": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "My Teaser 3",
+                            "sling:resourceType": "core/wcm/components/teaserAbbreviated"
+                        },
+                        "item_4": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "My Teaser 4",
+                            "sling:resourceType": "core/wcm/components/teaserAutoAbbreviated"
+                        },
+                        "item_5": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "My Teaser 5",
+                            "sling:resourceType": "core/wcm/components/teaserIconSVG"
+                        },
+                        "item_6": {}
                     }
                 }
             }

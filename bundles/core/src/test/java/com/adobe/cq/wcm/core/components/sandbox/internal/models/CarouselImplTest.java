@@ -61,7 +61,7 @@ public class CarouselImplTest {
     @Test
     public void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
-        assertEquals(2, carousel.getItems().size());
+        assertEquals(5, carousel.getItems().size());
         //Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
 

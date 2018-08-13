@@ -44,7 +44,7 @@ public class ChildrenEditor {
 
     private Resource container;
 
-    private List<Resource> children;
+    private List<ChildrenEditorItem> items;
 
     @PostConstruct
     private void initModel() {
@@ -52,7 +52,7 @@ public class ChildrenEditor {
     }
 
     private void readChildren() {
-        children = new ArrayList<>();
+        items = new ArrayList<>();
         String containerPath = request.getRequestPathInfo().getSuffix();
         if (StringUtils.isNotEmpty(containerPath)) {
             ResourceResolver resolver = request.getResourceResolver();
@@ -63,7 +63,7 @@ public class ChildrenEditor {
                     if (resource != null) {
                         Component component = componentManager.getComponentOfResource(resource);
                         if (component != null) {
-                            children.add(resource);
+                            items.add(new ChildrenEditorItem(request, resource));
                         }
                     }
                 }
@@ -71,8 +71,8 @@ public class ChildrenEditor {
         }
     }
 
-    public List<Resource> getChildren() {
-        return children;
+    public List<ChildrenEditorItem> getItems() {
+        return items;
     }
 
     public Resource getContainer() {

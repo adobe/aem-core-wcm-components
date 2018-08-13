@@ -24,12 +24,15 @@ import org.apache.jackrabbit.oak.plugins.document.NodeDocument;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.i18n.ResourceBundleProvider;
+import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,26 +55,45 @@ public class ChildrenEditorTest {
     private static final String CAROUSEL_PATH =
         "/content/carousel/jcr:content/root/responsivegrid/carousel-1";
 
+    private static final RootResourceBundle RESOURCE_BUNDLE = new RootResourceBundle();
+
     @ClassRule
     public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
 
     @BeforeClass
     public static void init() {
         AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+        ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
+        AEM_CONTEXT.registerService(ResourceBundleProvider.class, resourceBundleProvider);
+        Mockito.when(resourceBundleProvider.getResourceBundle(null)).thenReturn(RESOURCE_BUNDLE);
+        Mockito.when(resourceBundleProvider.getResourceBundle(null, null)).thenReturn(RESOURCE_BUNDLE);
     }
 
     /**
-     * Test getChildren() method.
+     * Test getItems() method.
      */
     @Test
-    public void testGetChildren() {
-        ChildrenEditor childrenEditor = getChildrenEditor(CAROUSEL_PATH);
-        List<Resource> children = childrenEditor.getChildren();
-        assertEquals("Number of children is not the same.", 2, children.size());
-        Iterator<String> it = Arrays.asList("item_1", "item_2").iterator();
-        for (Iterator<Resource> it1 = children.iterator(); it1.hasNext(); ) {
-            Resource child = it1.next();
-            assertEquals("Child not found.", child.getName(), it.next());
+    public void testGetItems() {
+        ChildrenEditor childrenEditor = getItemsEditor(CAROUSEL_PATH);
+        List<ChildrenEditorItem> items = childrenEditor.getItems();
+        assertEquals("Number of items is not the same.", 5, items.size());
+        Object[][] expectedItems = {
+            {"item_1", "My Teaser 1", "Teaser (v1)", "image", null, null},
+            {"item_2", "My Teaser 2", "Teaser (v1)", "image", null, null},
+            {"item_3", "My Teaser 3", "Teaser Abbreviated", null, null, "Te"},
+            {"item_4", "My Teaser 4", "Teaser Auto Abbreviated", null, null, "Te"},
+            {"item_5", "My Teaser 5", "Teaser Icon SVG", null, "/apps/core/wcm/components/teaserIconSVG/cq:icon.svg", null},
+        };
+        int index = 0;
+        for (Iterator<ChildrenEditorItem> it1 = items.iterator(); it1.hasNext(); ) {
+            ChildrenEditorItem item = it1.next();
+            assertEquals("Item name does not match the expected.", expectedItems[index][0], item.getName());
+            assertEquals("Item value does not match the expected.", expectedItems[index][1], item.getValue());
+            assertEquals("Item title does not match the expected.", expectedItems[index][2], item.getTitle());
+            assertEquals("Item icon name does not match the expected.", expectedItems[index][3], item.getIconName());
+            assertEquals("Item icon path does not match the expected.", expectedItems[index][4], item.getIconPath());
+            assertEquals("Item icon abbreviation does not match the expected.", expectedItems[index][5], item.getIconAbbreviation());
+            index++;
         }
     }
 
@@ -80,9 +102,9 @@ public class ChildrenEditorTest {
      */
     @Test
     public void testGetContainer() {
-        ChildrenEditor childrenEditor = getChildrenEditor(CAROUSEL_PATH);
+        ChildrenEditor childrenEditor = getItemsEditor(CAROUSEL_PATH);
         Resource r = childrenEditor.getContainer();
-        Iterator<String> it = Arrays.asList("item_1", "item_2", "item_3").iterator();
+        Iterator<String> it = Arrays.asList("item_1", "item_2", "item_3", "item_4", "item_5", "item_6").iterator();
         for (Resource child : r.getChildren()) {
             assertEquals("Child not found.", child.getName(), it.next());
         }
@@ -93,7 +115,7 @@ public class ChildrenEditorTest {
      */
     @Test
     public void testEmptySuffix() {
-        ChildrenEditor childrenEditor = getChildrenEditor("");
+        ChildrenEditor childrenEditor = getItemsEditor("");
         Resource resource = childrenEditor.getContainer();
         assertNull("For an empty suffix, expected container resource to be null.", resource);
     }
@@ -103,12 +125,12 @@ public class ChildrenEditorTest {
      */
     @Test
     public void testInvalidSuffix() {
-        ChildrenEditor childrenEditor = getChildrenEditor("/asdf/adf/asdf");
+        ChildrenEditor childrenEditor = getItemsEditor("/asdf/adf/asdf");
         Resource resource = childrenEditor.getContainer();
         assertNull("For an invalid suffix, expected container resource to be null.", resource);
     }
 
-    private ChildrenEditor getChildrenEditor(String suffix) {
+    private ChildrenEditor getItemsEditor(String suffix) {
         // get the carousel component node resource
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(CAROUSEL_PATH);
         // prepare the request object

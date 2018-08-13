@@ -97,36 +97,7 @@
                 // store a reference to the Children Editor object
                 $(this._elements.self).data("childrenEditor", this);
 
-                this._renderItems();
                 this._bindEvents();
-            },
-
-            /**
-             * Renders icons and placeholders for each child item
-             *
-             * @private
-             */
-            _renderItems: function() {
-                var items = this._elements.self.items.getAll();
-
-                for (var i = 0; i < items.length; i++) {
-                    var item = items[i];
-                    var input = item.querySelectorAll(selectors.item.input)[0];
-                    var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
-                    var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
-
-                    if (ns) {
-                        var components = ns.components.find({
-                            resourceType: hiddenInput.value
-                        });
-
-                        if (components.length > 0) {
-                            itemIcon.appendChild(this._renderIcon(components[0]));
-                            var componentTitle = components[0].getTitle();
-                            input.placeholder = Granite.I18n.get(componentTitle);
-                        }
-                    }
-                }
             },
 
             /**
