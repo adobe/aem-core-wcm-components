@@ -51,6 +51,10 @@
      */
     var ChildrenEditor = function(config) {
         this._config = config;
+        this._elements = {};
+        this._path = "";
+        this._orderedChildren = [];
+        this._deletedChildren = [];
         this._init();
     };
 
@@ -59,41 +63,6 @@
         return {
 
             constructor: ChildrenEditor,
-
-            /**
-             * The Children Editor configuration Object
-             *
-             * @member {ChildrenEditorConfig} ChildrenEditor#_config
-             */
-            _config: {},
-
-            /**
-             * An Object that is used to cache HTMLElement hooks for this Class
-             *
-             * @member {Object} ChildrenEditor#_elements
-             */
-            _elements: {},
-
-            /**
-             * Path to the component related to this Children Editor
-             *
-             * @member {String} ChildrenEditor#_path
-             */
-            _path: "",
-
-            /**
-             * Stores the ordered children, for persistence via ChildrenEditor#update
-             *
-             * @member {Array} ChildrenEditor#_orderedChildren
-             */
-            _orderedChildren: [],
-
-            /**
-             * Stores the deleted children, for persistence via ChildrenEditor#update
-             *
-             * @member {Array} ChildrenEditor#_deletedChildren
-             */
-            _deletedChildren: [],
 
             /**
              * Persists item updates to an endpoint, returns a Promise for handling
@@ -289,6 +258,7 @@
              * @private
              */
             _processChildren: function() {
+                this._orderedChildren = [];
                 var items = this._elements.self.items.getAll();
 
                 for (var i = 0; i < items.length; i++) {
