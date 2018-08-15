@@ -32,7 +32,8 @@ The following configuration properties are used:
 
 1. `./allowedWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
 component; the actual size will be requested by the client device;
-2. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
+2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
+3. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
 device)
 
 ### Edit Dialog Properties
@@ -94,10 +95,10 @@ The images are loaded through the `com.adobe.cq.wcm.core.components.internal.ser
 
 ```
 Author:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>/<timestamp>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<quality>.<width>.<extension>/<timestamp>.<extension>
 
 Publish:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<quality>.<width>.<extension>
 ```
 
 ## Client Libraries
