@@ -36,7 +36,7 @@
             <li data-sly-repeat.item="${carousel.items}"
                 role="tab"
                 class="cmp-carousel__indicator"
-                data-cmp-hook-carousel="indicator"></li>
+                data-cmp-hook-carousel="indicator">${item.jcr:title}</li>
         </ol>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
