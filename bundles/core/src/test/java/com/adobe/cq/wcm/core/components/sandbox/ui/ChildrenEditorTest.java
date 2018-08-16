@@ -46,14 +46,14 @@ import static org.junit.Assert.assertNull;
 public class ChildrenEditorTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorTest.class);
     // root folder in resources
-    private static final String TEST_BASE = "/carousel";
+    private static final String TEST_BASE = "/ui/childreneditor";
     // apps root folder
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
     // root of content
     private static final String CONTENT_ROOT = "/content";
     // path to container node
     private static final String CAROUSEL_PATH =
-        "/content/carousel/jcr:content/root/responsivegrid/carousel-1";
+        "/content/childreneditor/jcr:content/root/responsivegrid/carousel-1";
 
     private static final RootResourceBundle RESOURCE_BUNDLE = new RootResourceBundle();
 
@@ -78,11 +78,11 @@ public class ChildrenEditorTest {
         List<ChildrenEditorItem> items = childrenEditor.getItems();
         assertEquals("Number of items is not the same.", 5, items.size());
         Object[][] expectedItems = {
-            {"item_1", "My Teaser 1", "Teaser (v1)", "image", null, null},
-            {"item_2", "My Teaser 2", "Teaser (v1)", "image", null, null},
-            {"item_3", "My Teaser 3", "Teaser Abbreviated", null, null, "Te"},
-            {"item_4", "My Teaser 4", "Teaser Auto Abbreviated", null, null, "Te"},
-            {"item_5", "My Teaser 5", "Teaser Icon SVG", null, "/apps/core/wcm/components/teaserIconSVG/cq:icon.svg", null},
+            {"item_1", "Teaser 1", "Teaser (v1)", "image", null, null},
+            {"item_2", "Teaser 2", "Teaser Icon Abbreviation", null, null, "Aa"},
+            {"item_3", "Teaser 3", "Teaser Icon Auto Abbreviation", null, null, "Te"},
+            {"item_4", "Teaser 4", "Teaser Icon SVG", null, "/apps/core/wcm/components/teaserIconSVG/cq:icon.svg", null},
+            {"item_5", "Teaser 5", "Teaser Icon PNG", null, "/apps/core/wcm/components/teaserIconPNG/cq:icon.png", null}
         };
         int index = 0;
         for (Iterator<ChildrenEditorItem> it1 = items.iterator(); it1.hasNext(); ) {
