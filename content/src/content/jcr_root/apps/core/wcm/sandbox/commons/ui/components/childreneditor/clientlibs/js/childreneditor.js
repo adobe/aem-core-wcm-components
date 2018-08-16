@@ -260,11 +260,13 @@
             // one children editor per form
             var el = form.querySelectorAll(selectors.self)[0];
             var childrenEditor = $(el).data("childrenEditor");
-            return {
-                post: function() {
-                    return childrenEditor.update();
-                }
-            };
+            if (childrenEditor) {
+                return {
+                    post: function() {
+                        return childrenEditor.update();
+                    }
+                };
+            }
         }
     });
 
