@@ -104,9 +104,11 @@
             var indicators = that._elements["indicator"];
             if (indicators) {
                 for (var i = 0; i < indicators.length; i++) {
-                    indicators[i].addEventListener("click", function(event) {
-                        navigate(event.target.dataset["slide"]);
-                    });
+                    (function(index) {
+                        indicators[i].addEventListener("click", function(event) {
+                            navigate(index);
+                        });
+                    })(i);
                 }
             }
         }
