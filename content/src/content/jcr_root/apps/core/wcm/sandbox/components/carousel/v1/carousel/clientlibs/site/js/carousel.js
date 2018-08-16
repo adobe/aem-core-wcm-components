@@ -122,12 +122,12 @@
                     for (var i = 0; i < items.length; i++) {
                         if (i === parseInt(that._active)) {
                             items[i].classList.add("cmp-carousel__item--active");
-                            items[i].setAttribute("aria-selected", true);
+                            items[i].removeAttribute("aria-hidden");
                             indicators[i].classList.add("cmp-carousel__indicator--active");
                             indicators[i].setAttribute("aria-selected", true);
                         } else {
                             items[i].classList.remove("cmp-carousel__item--active");
-                            items[i].setAttribute("aria-selected", false);
+                            items[i].setAttribute("aria-hidden", true);
                             indicators[i].classList.remove("cmp-carousel__indicator--active");
                             indicators[i].setAttribute("aria-selected", false);
                         }
