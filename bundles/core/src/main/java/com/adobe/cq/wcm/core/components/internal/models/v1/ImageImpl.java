@@ -123,6 +123,7 @@ public class ImageImpl implements Image {
     protected String baseResourcePath;
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
+    protected int jpegQuality;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -186,6 +187,7 @@ public class ImageImpl implements Image {
                 extension = DEFAULT_EXTENSION;
             }
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+            jpegQuality = currentStyle.get(PN_DESIGN_JPEG_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_QUALITY);
             int index = 0;
             Template template = currentPage.getTemplate();
             if (template != null && resource.getPath().startsWith(template.getPath())) {
@@ -202,7 +204,7 @@ public class ImageImpl implements Image {
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = baseResourcePath + DOT +
-                        selector + DOT + width + DOT + extension +
+                        selector + DOT + jpegQuality + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                         (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
                     smartSizes[index] = width;
@@ -214,7 +216,7 @@ public class ImageImpl implements Image {
             }
             src = baseResourcePath + DOT + selector + DOT;
             if (smartSizes.length == 1) {
-                src += smartSizes[0] + DOT + extension;
+                src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
             } else {
                 src += extension;
             }
