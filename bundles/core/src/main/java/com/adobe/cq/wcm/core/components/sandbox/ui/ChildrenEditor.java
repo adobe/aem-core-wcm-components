@@ -37,8 +37,6 @@ public class ChildrenEditor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditor.class);
 
-    public final static String RESOURCE_TYPE = "core/wcm/sandbox/commons/ui/childreneditor";
-
     @Self
     private SlingHttpServletRequest request;
 

@@ -31,8 +31,8 @@
         },
         item: {
             icon: "[data-cmp-hook-childreneditor='itemIcon']",
-            input: "[data-cmp-hook-childreneditor='itemInput']",
-            hiddenInput: "[data-cmp-hook-childreneditor='itemHiddenInput']"
+            input: "[data-cmp-hook-childreneditor='itemTitle']",
+            hiddenInput: "[data-cmp-hook-childreneditor='itemResourceType']"
         }
     };
 
@@ -128,7 +128,7 @@
                             textContent: abbreviation
                         }
                     });
-                    iconHTML.classList.add("cmp-childreneditor__tag");
+                    iconHTML.classList.add("cmp-childreneditor__item-tag");
                 }
 
                 iconHTML.title = component.getTitle();
@@ -223,8 +223,7 @@
             },
 
             /**
-             * Reads state of the children and
-             * triggers a POST request to add, remove and re-order child nodes
+             * Reads the current state and updates ordered children cache
              *
              * @private
              */

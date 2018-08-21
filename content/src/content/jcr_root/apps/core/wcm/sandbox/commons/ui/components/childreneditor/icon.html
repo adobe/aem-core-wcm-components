@@ -14,12 +14,12 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-template.icon="${@ item}">
-    <span class="cmp-childreneditor__icon"
+    <span class="cmp-childreneditor__item-icon"
           data-cmp-hook-childreneditor="itemIcon">
         <coral-icon data-sly-test="${item.iconName}" icon="${item.iconName}" title="${item.title}"></coral-icon>
         <img data-sly-test="${!item.iconName && item.iconPath}" src="${item.iconPath}" title="${item.title}"/>
         <coral-tag data-sly-test="${!item.iconName && !item.iconPath && item.iconAbbreviation}"
-                   class="cmp-childreneditor__tag"
+                   class="cmp-childreneditor__item-tag"
                    color="grey"
                    size="M"
                    title="${item.title}">${item.iconAbbreviation}</coral-tag>

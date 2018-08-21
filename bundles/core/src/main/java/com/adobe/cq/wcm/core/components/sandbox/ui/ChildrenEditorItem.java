@@ -20,6 +20,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
 
 import com.day.cq.i18n.I18n;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.text.Text;
@@ -33,6 +34,31 @@ public class ChildrenEditorItem {
     protected String iconPath;
     protected String iconAbbreviation;
 
+    /**
+     * Name of the resource property that defines a component icon
+     */
+    String PN_ICON = "cq:icon";
+
+    /**
+     * Name of the resource property that defines a two letter component abbreviation
+     */
+    String PN_ABBREVIATION = "abbreviation";
+
+    /**
+     * Name of the resource property that defines a translation context for the component abbreviation
+     */
+    String PN_ABBREVIATION_I18N = "abbreviation_commentI18n";
+
+    /**
+     * Name of a component child node that defines an icon in PNG format
+     */
+    String NN_ICON_PNG = "cq:icon.png";
+
+    /**
+     * Name of a component child node that defines an icon in SVG format
+     */
+    String NN_ICON_SVG = "cq:icon.svg";
+
     public ChildrenEditorItem(SlingHttpServletRequest request, Resource resource) {
         String translationContext = null;
         String titleI18n = null;
@@ -41,7 +67,7 @@ public class ChildrenEditorItem {
             name = resource.getName();
             ValueMap vm = resource.adaptTo(ValueMap.class);
             if (vm != null) {
-                value = vm.get("jcr:title", String.class);
+                value = vm.get(JcrConstants.JCR_TITLE, String.class);
             }
         }
         ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
@@ -58,21 +84,21 @@ public class ChildrenEditorItem {
                 Resource res = component.adaptTo(Resource.class);
                 if (res != null) {
                     ValueMap valueMap = res.getValueMap();
-                    iconName = valueMap.get("cq:icon", String.class);
+                    iconName = valueMap.get(PN_ICON, String.class);
                     if (iconName != null) {
                         break;
                     }
-                    iconAbbreviation = valueMap.get("abbreviation", String.class);
+                    iconAbbreviation = valueMap.get(PN_ABBREVIATION, String.class);
                     if (iconAbbreviation != null) {
-                        translationContext = valueMap.get("abbreviation_commentI18n", String.class);
+                        translationContext = valueMap.get(PN_ABBREVIATION_I18N, String.class);
                         break;
                     }
-                    Resource png = res.getChild("cq:icon.png");
+                    Resource png = res.getChild(NN_ICON_PNG);
                     if (png != null) {
                         iconPath = png.getPath();
                         break;
                     } else {
-                        Resource svg = res.getChild("cq:icon.svg");
+                        Resource svg = res.getChild(NN_ICON_SVG);
                         if (svg != null) {
                             iconPath = svg.getPath();
                             break;
