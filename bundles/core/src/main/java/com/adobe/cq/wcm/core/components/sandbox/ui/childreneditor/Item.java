@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.sandbox.ui;
+package com.adobe.cq.wcm.core.components.sandbox.ui.childreneditor;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -25,7 +25,10 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.text.Text;
 
-public class ChildrenEditorItem {
+/**
+ * Defines an {@code Item} class, used by the children editor {@code Editor} Sling Model.
+ */
+public class Item {
 
     protected String name;
     protected String value;
@@ -59,7 +62,7 @@ public class ChildrenEditorItem {
      */
     String NN_ICON_SVG = "cq:icon.svg";
 
-    public ChildrenEditorItem(SlingHttpServletRequest request, Resource resource) {
+    public Item(SlingHttpServletRequest request, Resource resource) {
         String translationContext = null;
         String titleI18n = null;
         I18n i18n = new I18n(request);
@@ -123,26 +126,56 @@ public class ChildrenEditorItem {
         }
     }
 
+    /**
+     * Retrieves the node name of this children editor item.
+     *
+     * @return the {@code Item} name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Retrieves the value ({@code jcr:title}) of this children editor item.
+     *
+     * @return the {@code Item} value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Retrieves the title (component name) of this children editor item.
+     *
+     * @return the {@code Item} title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Retrieves the icon name of this children editor item.
+     *
+     * @return the {@code Item} icon name
+     */
     public String getIconName() {
         return iconName;
     }
 
+    /**
+     * Retrieves the icon path of this children editor item.
+     *
+     * @return the {@code Item} icon path
+     */
     public String getIconPath() {
         return iconPath;
     }
 
+    /**
+     * Retrieves the icon abbreviation of this children editor item.
+     *
+     * @return the {@code Item} icon abbreviation
+     */
     public String getIconAbbreviation() {
         return iconAbbreviation;
     }

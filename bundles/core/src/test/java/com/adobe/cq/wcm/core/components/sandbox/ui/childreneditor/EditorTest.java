@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.sandbox.ui;
+package com.adobe.cq.wcm.core.components.sandbox.ui.childreneditor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,8 +43,8 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class ChildrenEditorTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorTest.class);
+public class EditorTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EditorTest.class);
     // root folder in resources
     private static final String TEST_BASE = "/ui/childreneditor";
     // apps root folder
@@ -74,8 +74,8 @@ public class ChildrenEditorTest {
      */
     @Test
     public void testGetItems() {
-        ChildrenEditor childrenEditor = getItemsEditor(CAROUSEL_PATH);
-        List<ChildrenEditorItem> items = childrenEditor.getItems();
+        Editor childrenEditor = getItemsEditor(CAROUSEL_PATH);
+        List<Item> items = childrenEditor.getItems();
         assertEquals("Number of items is not the same.", 5, items.size());
         Object[][] expectedItems = {
             {"item_1", "Teaser 1", "Teaser (v1)", "image", null, null},
@@ -85,8 +85,8 @@ public class ChildrenEditorTest {
             {"item_5", "Teaser 5", "Teaser Icon PNG", null, "/apps/core/wcm/components/teaserIconPNG/cq:icon.png", null}
         };
         int index = 0;
-        for (Iterator<ChildrenEditorItem> it1 = items.iterator(); it1.hasNext(); ) {
-            ChildrenEditorItem item = it1.next();
+        for (Iterator<Item> it1 = items.iterator(); it1.hasNext(); ) {
+            Item item = it1.next();
             assertEquals("Item name does not match the expected.", expectedItems[index][0], item.getName());
             assertEquals("Item value does not match the expected.", expectedItems[index][1], item.getValue());
             assertEquals("Item title does not match the expected.", expectedItems[index][2], item.getTitle());
@@ -102,7 +102,7 @@ public class ChildrenEditorTest {
      */
     @Test
     public void testGetContainer() {
-        ChildrenEditor childrenEditor = getItemsEditor(CAROUSEL_PATH);
+        Editor childrenEditor = getItemsEditor(CAROUSEL_PATH);
         Resource r = childrenEditor.getContainer();
         Iterator<String> it = Arrays.asList("item_1", "item_2", "item_3", "item_4", "item_5", "item_6").iterator();
         for (Resource child : r.getChildren()) {
@@ -115,7 +115,7 @@ public class ChildrenEditorTest {
      */
     @Test
     public void testEmptySuffix() {
-        ChildrenEditor childrenEditor = getItemsEditor("");
+        Editor childrenEditor = getItemsEditor("");
         Resource resource = childrenEditor.getContainer();
         assertNull("For an empty suffix, expected container resource to be null.", resource);
     }
@@ -125,12 +125,12 @@ public class ChildrenEditorTest {
      */
     @Test
     public void testInvalidSuffix() {
-        ChildrenEditor childrenEditor = getItemsEditor("/asdf/adf/asdf");
+        Editor childrenEditor = getItemsEditor("/asdf/adf/asdf");
         Resource resource = childrenEditor.getContainer();
         assertNull("For an invalid suffix, expected container resource to be null.", resource);
     }
 
-    private ChildrenEditor getItemsEditor(String suffix) {
+    private Editor getItemsEditor(String suffix) {
         // get the carousel component node resource
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(CAROUSEL_PATH);
         // prepare the request object
@@ -145,6 +145,6 @@ public class ChildrenEditorTest {
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         // adapt to the class to test
-        return request.adaptTo(ChildrenEditor.class);
+        return request.adaptTo(Editor.class);
     }
 }

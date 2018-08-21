@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.sandbox.ui;
+package com.adobe.cq.wcm.core.components.sandbox.ui.childreneditor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +32,20 @@ import org.slf4j.LoggerFactory;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
+/**
+ * Defines an {@code Editor} Sling Model used by the {@code /apps/core/wcm/sandbox/commons/ui/components/childreneditor} UI component.
+ */
 @Model(adaptables = {SlingHttpServletRequest.class})
-public class ChildrenEditor {
+public class Editor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Editor.class);
 
     @Self
     private SlingHttpServletRequest request;
 
     private Resource container;
 
-    private List<ChildrenEditorItem> items;
+    private List<Item> items;
 
     @PostConstruct
     private void initModel() {
@@ -61,7 +64,7 @@ public class ChildrenEditor {
                     if (resource != null) {
                         Component component = componentManager.getComponentOfResource(resource);
                         if (component != null) {
-                            items.add(new ChildrenEditorItem(request, resource));
+                            items.add(new Item(request, resource));
                         }
                     }
                 }
@@ -69,10 +72,20 @@ public class ChildrenEditor {
         }
     }
 
-    public List<ChildrenEditorItem> getItems() {
+    /**
+     * Retrieves the child items associated with this children editor.
+     *
+     * @return a list of child items
+     */
+    public List<Item> getItems() {
         return items;
     }
 
+    /**
+     * Retrieves the container resource associated with this children editor.
+     *
+     * @return the container resource, or {@code null} if no container can be found
+     */
     public Resource getContainer() {
         return container;
     }
