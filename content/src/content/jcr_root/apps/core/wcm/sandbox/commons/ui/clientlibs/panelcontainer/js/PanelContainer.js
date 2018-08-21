@@ -81,7 +81,7 @@
         /**
          * Gets the index of the currently active panel
          *
-         * @returns {Object} The panel container items data
+         * @returns {Number} The index of the active panel item
          */
         getActiveIndex: function() {
             var that = this;
