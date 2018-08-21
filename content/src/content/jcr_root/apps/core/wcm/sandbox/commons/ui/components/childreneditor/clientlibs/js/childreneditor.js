@@ -20,7 +20,7 @@
     var NN_PREFIX = "item_";
     var PN_TITLE = "jcr:title";
     var PN_RESOURCE_TYPE = "sling:resourceType";
-    var POST_SUFFIX = ".children.html";
+    var POST_SUFFIX = ".childreneditor.html";
 
     var selectors = {
         self: "[data-cmp-is='childreneditor']",

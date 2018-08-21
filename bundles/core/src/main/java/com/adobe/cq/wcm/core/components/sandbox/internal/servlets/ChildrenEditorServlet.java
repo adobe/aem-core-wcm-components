@@ -36,15 +36,15 @@ import org.slf4j.LoggerFactory;
     property = {
         "sling.servlet.methods=POST",
         "sling.servlet.resourceTypes=sling/servlet/default",
-        "sling.servlet.selectors=" + ChildrenServlet.SELECTOR,
+        "sling.servlet.selectors=" + ChildrenEditorServlet.SELECTOR,
         "sling.servlet.extensions=html"
     }
 )
-public class ChildrenServlet extends SlingAllMethodsServlet {
+public class ChildrenEditorServlet extends SlingAllMethodsServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorServlet.class);
 
-    protected static final String SELECTOR = "children";
+    protected static final String SELECTOR = "childreneditor";
     private static final String PARAM_DELETED_CHILDREN = "deletedChildren";
     private static final String PARAM_OREDERED_CHILDREN = "orderedChildren";
 

@@ -38,7 +38,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class ChildrenServletTest {
+public class ChildrenEditorServletTest {
     // root folder in resources
     private static final String TEST_BASE = "/carousel";
     // root of content
@@ -52,7 +52,7 @@ public class ChildrenServletTest {
     // request parameter for ordering children
     private static final String PARAM_ORDERED_CHILDREN = "orderedChildren";
     // servlet under test
-    private ChildrenServlet servlet = new ChildrenServlet();
+    private ChildrenEditorServlet servlet = new ChildrenEditorServlet();
 
     // mock request object
     private MockSlingHttpServletRequest request;

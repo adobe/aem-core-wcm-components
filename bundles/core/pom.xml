@@ -151,7 +151,7 @@
                                         <exclude>**/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
                                         <exclude>**/AdaptiveImageServlet$Source.class</exclude>
                                         <!-- TODO: temporarily excluded from coverage checks -->
-                                        <exclude>**/ChildrenServlet.class</exclude>
+                                        <exclude>**/ChildrenEditorServlet.class</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
