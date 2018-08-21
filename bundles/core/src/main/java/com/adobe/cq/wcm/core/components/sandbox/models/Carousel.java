@@ -27,16 +27,15 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
 /**
- * Defines the {@code Carousel} model used by the Core Components
+ * Defines the {@code Carousel} Sling Model used for the {@code /apps/core/wcm/sandbox/components/carousel} component.
  *
- * @since TODO
- *
+ * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
  */
 @ConsumerType
 public interface Carousel extends ContainerExporter {
 
     /**
-     * Returns the list of items in the carousel
+     * Returns the list of Carousel items
      *
      * @return List of {@link Resource}
      */

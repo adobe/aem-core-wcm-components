@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-@childeditor-icon-width: 48px;
-@childeditor-icon-height: 38px;
-@childeditor-icon-margin-right: 8px;
-@childeditor-input-buffer: 10px;
+@cmp-childreneditor-icon-width: 48px;
+@cmp-childreneditor-icon-height: 38px;
+@cmp-childreneditor-icon-margin-right: 8px;
+@cmp-childreneditor-input-buffer: 10px;
 
 .cmp-childreneditor {
     width: 100%;
@@ -25,10 +25,10 @@
 
 .cmp-childreneditor__icon {
     display: inline-block;
-    width: @childeditor-icon-width;
-    height: @childeditor-icon-height;
-    margin-right: @childeditor-icon-margin-right;
-    line-height: @childeditor-icon-height;
+    width: @cmp-childreneditor-icon-width;
+    height: @cmp-childreneditor-icon-height;
+    margin-right: @cmp-childreneditor-icon-margin-right;
+    line-height: @cmp-childreneditor-icon-height;
     text-align: center;
 
     color: #707070;
@@ -42,5 +42,5 @@
 }
 
 .cmp-childreneditor__input {
-    width: ~"calc(100% - (@{childeditor-icon-width} + @{childeditor-icon-margin-right} + @{childeditor-input-buffer}))";
+    width: ~"calc(100% - (@{cmp-childreneditor-icon-width} + @{cmp-childreneditor-icon-margin-right} + @{cmp-childreneditor-input-buffer}))";
 }

@@ -45,12 +45,8 @@ BLOCK cmp-carousel
     ELEMENT cmp-carousel__action
         MOD cmp-carousel__action--prev
         MOD cmp-carousel__action--next
-    ELEMENT cmp-carousel__icon
-        MOD cmp-carousel__icon--prev
-        MOD cmp-carousel__icon--next
-    ELEMENT cmp-carousel__text
-        MOD cmp-carousel__text--prev
-        MOD cmp-carousel__text--next
+    ELEMENT cmp-carousel__action-icon
+    ELEMENT cmp-carousel__action-text
     ELEMENT cmp-carousel__indicators
     ELEMENT cmp-carousel__indicator
 ```
