@@ -32,13 +32,13 @@
      * @class CQ.CoreComponents.PanelContainer
      * @classdesc A Panel Container relates to a component concept whereby child items (panels) are hidden/shown. This Class provides
      * operations that allow editing functionality, including the ability to navigate to panels for editing,
-     * fetching panel items, determining the active panel and persisting updates to the server.
+     * fetching panel items, determining the active panel and persisting updates (deletion and reordering) to the server.
      * @param {PanelContainerConfig} config The Panel Container configuration object
      */
     CQ.CoreComponents.PanelContainer = ns.util.createClass({
 
         /**
-         * The Panel Container Object
+         * The Panel Container Configuration Object
          *
          * @member {PanelContainerConfig} CQ.CoreComponents.PanelContainer#_config
          */
