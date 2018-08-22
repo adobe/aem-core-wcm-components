@@ -22,7 +22,7 @@ Carousel component written in HTL.
 * Allows addition of slide components of varying resource type.
 * Allowed components can be configured through policy configuration.
 * Carousel navigation via next/previous and position indicators.
-* Editing features for slides (adding, removing, deleting, editing, re-ordering).
+* Editing features for slides (adding, removing, editing, re-ordering).
 
 ### Use Object
 The Carousel component uses the `com.adobe.cq.wcm.core.components.models.Carousel` Sling model as its Use-object.
