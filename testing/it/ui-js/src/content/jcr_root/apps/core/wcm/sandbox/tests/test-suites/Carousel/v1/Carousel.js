@@ -60,7 +60,7 @@
     };
 
     var tcExecuteBeforeTest = carousel.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtCarousel_v1,
-        "core/wcm/tests/components/test-page-v2");
+        "core/wcm/tests/components/test-page-v2", "core.wcm.components.carousel.v1");
     var tcExecuteAfterTest  = carousel.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath_sandbox, c.policyAssignmentPath_sandbox);
 
     new h.TestSuite("Carousel v1", {

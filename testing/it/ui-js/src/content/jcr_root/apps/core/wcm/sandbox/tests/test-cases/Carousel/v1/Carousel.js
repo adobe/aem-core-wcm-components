@@ -24,12 +24,36 @@
     var pageVar                          = "carousel_page";
     var pageDescription                  = "carousel page description";
 
-    carousel.tcExecuteBeforeTest = function(tcExecuteBeforeTest, carouselRT, pageRT) {
+    carousel.tcExecuteBeforeTest = function(tcExecuteBeforeTest, carouselRT, pageRT, clientlibs) {
         return new h.TestCase("Create sample content", {
             execBefore: tcExecuteBeforeTest
         })
             .execFct(function(opts, done) {
                 c.createPage(c.template, c.rootPage, pageName, pageVar, done, pageRT, pageDescription);
+            })
+
+            // create clientlib page policy and assignment
+            .execFct(function(opts, done) {
+                var policySuffix = "/structure/page/new_policy";
+                var data = {
+                    "jcr:title": "New Policy",
+                    "sling:resourceType": "wcm/core/components/policy/policy",
+                    "clientlibs": clientlibs
+                };
+
+                c.createPolicy(policySuffix, data, "policyPath", done, c.policyPath_sandbox);
+            })
+
+            .execFct(function(opts, done) {
+                var policySuffix = "/structure/page/new_policy";
+                var policyLocation = "core-component/components/sandbox";
+                var policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content";
+                var data = {
+                    "cq:policy": policyLocation + policySuffix,
+                    "sling:resourceType": "wcm/core/components/policies/mappings"
+                };
+
+                c.assignPolicy("", data, done, policyAssignmentPath);
             })
 
             // create a proxy component
@@ -61,6 +85,20 @@
 
             .execFct(function(opts, done) {
                 c.deletePage(h.param(pageVar)(opts), done);
+            })
+
+            // delete clientlib page policy and re-assign the default
+            .execFct(function(opts, done) {
+                c.deletePolicy("/structure/page", done, c.policyPath_sandbox);
+            })
+            .execFct(function(opts, done) {
+                var policyAssignmentPath = "/conf/core-components/settings/wcm/templates/core-components/policies/jcr:content";
+                var data = {
+                    "cq:policy": "wcm/foundation/components/page/default",
+                    "sling:resourceType": "wcm/core/components/policies/mappings"
+                };
+
+                c.assignPolicy("", data, done, policyAssignmentPath);
             });
     };
 
