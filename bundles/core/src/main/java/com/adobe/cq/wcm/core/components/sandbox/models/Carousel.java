@@ -25,6 +25,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 
 /**
  * Defines the {@code Carousel} Sling Model used for the {@code /apps/core/wcm/sandbox/components/carousel} component.
@@ -37,9 +38,9 @@ public interface Carousel extends ContainerExporter {
     /**
      * Returns the list of Carousel items
      *
-     * @return List of {@link Resource}
+     * @return List of Carousel items
      */
-    default List<Resource> getItems() {
+    default List<ListItem> getItems() {
         throw new UnsupportedOperationException();
     }
 

@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Carousel;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -54,14 +55,18 @@ public class CarouselImplTest {
     @Test
     public void testEmptyCarousel() {
         Carousel carousel = new CarouselImpl();
-        List<Resource> items = carousel.getItems();
+        List<ListItem> items = carousel.getItems();
         Assert.assertTrue("", items == null || items.size() == 0);
     }
 
     @Test
     public void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
-        assertEquals(2, carousel.getItems().size());
+        Object[][] expectedItems = {
+            {"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1", "Teaser 1", "Teaser 1 description"},
+            {"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2", "Teaser 2", "Teaser 2 description"},
+        };
+        verifyCarouselItems(expectedItems, carousel.getItems());
         //Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
 
@@ -80,5 +85,19 @@ public class CarouselImplTest {
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Carousel.class);
+    }
+
+    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items) {
+        assertEquals("The carousel contains a different number of items than expected.", expectedItems.length, items.size());
+        int index = 0;
+        for (ListItem item : items) {
+            assertEquals("The carousel item's path is not what was expected.",
+                expectedItems[index][0], item.getPath());
+            assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
+                expectedItems[index][1], item.getTitle());
+            assertEquals("The carousel item's description is not what was expected: " + item.getDescription(),
+                expectedItems[index][2], item.getDescription());
+            index++;
+        }
     }
 }

@@ -18,12 +18,14 @@
                         "sling:resourceType": "core/wcm/sandbox/components/carousel/v1/carousel",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
-                            "jcr:title"         : "My Teaser 1",
+                            "jcr:title"         : "Teaser 1",
+                            "jcr:description"   : "Teaser 1 description",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
                         "item_2": {
                             "jcr:primaryType"   : "nt:unstructured",
-                            "jcr:title"         : "My Teaser 2",
+                            "jcr:title"         : "Teaser 2",
+                            "jcr:description"   : "Teaser 2 description",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
                         "item_3": {}
