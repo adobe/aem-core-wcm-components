@@ -64,7 +64,7 @@ data-cmp-hook-carousel="indicator"
 ```
 
 ### Enabling Carousel Editing Functionality
-The following properties and child nodes are required to enable full editing functionality for the Carousel:
+The following properties and child nodes are required in the proxy component to enable full editing functionality for the Carousel:
 
 1. `./cq:isContainer` - set to `true`, marks the Carousel as a container component
 2. `./cq:editConfig` - `afterchilddelete`, `afterchildinsert` and `afterchildmove` listeners should be provided via
