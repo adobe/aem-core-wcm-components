@@ -45,7 +45,14 @@
         _config: {},
 
         /**
-         * An Object that is used to cache HTMLElement hooks for this Class
+         * The [CQ.CoreComponents.PanelContainer]{@link CQ.CoreComponents.PanelContainer} Object that is related to this Panel Selector
+         *
+         * @member {Object} CQ.CoreComponents.PanelSelector#_panelContainer
+         */
+        _panelContainer: {},
+
+        /**
+         * An Object that is used to cache the internal HTMLElements for this Panel Selector
          *
          * @member {Object} CQ.CoreComponents.PanelSelector#_elements
          */
