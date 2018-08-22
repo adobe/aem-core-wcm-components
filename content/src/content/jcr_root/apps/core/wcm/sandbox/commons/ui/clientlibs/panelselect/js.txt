@@ -17,5 +17,4 @@
 #base=js
 
 namespace.js
-PanelSelector.js
 panelselect.js
