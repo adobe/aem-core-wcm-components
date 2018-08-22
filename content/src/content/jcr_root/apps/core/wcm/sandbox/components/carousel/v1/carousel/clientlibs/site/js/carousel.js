@@ -24,6 +24,17 @@
         self: "[data-" +  NS + '-is="' + IS + '"]'
     };
 
+    /**
+     * @typedef {Object} CarouselConfig Represents a Carousel configuration
+     * @property {HTMLElement} element The HTMLElement representing the Carousel
+     * @property {Object} options The Carousel options
+     */
+
+    /**
+     * @class Carousel
+     * @classdesc An interative Carousel component for navigating a list of generic items
+     * @param {CarouselConfig} config The Carousel configuration
+     */
     function Carousel(config) {
         var that = this;
 
@@ -31,6 +42,12 @@
             init(config);
         }
 
+        /**
+         * Initializes the Carousel
+         *
+         * @private
+         * @param {CarouselConfig} config The Carousel configuration
+         */
         function init(config) {
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
@@ -40,7 +57,7 @@
 
             if (that._elements.item) {
                 refreshActive();
-                initControls();
+                bindEvents();
             }
 
             if (Granite && Granite.author) {
@@ -54,6 +71,12 @@
             }
         }
 
+        /**
+         * Caches the Carousel elements as defined via the {@code data-carousel-hook="ELEMENT_NAME"} markup API
+         *
+         * @private
+         * @param {HTMLElement} wrapper The Carousel wrapper element
+         */
         function cacheElements(wrapper) {
             that._elements = {};
             that._elements.self = wrapper;
@@ -76,7 +99,12 @@
             }
         }
 
-        function initControls() {
+        /**
+         * Binds Carousel event handling
+         *
+         * @private
+         */
+        function bindEvents() {
             var prev = that._elements["prev"];
             if (prev) {
                 prev.addEventListener("click", function() {
@@ -113,6 +141,11 @@
             }
         }
 
+        /**
+         * Refreshes the item markup based on the current {@code Carousel#_active} index
+         *
+         * @private
+         */
         function refreshActive() {
             var items = that._elements["item"];
             var indicators = that._elements["indicator"];
@@ -140,12 +173,24 @@
             }
         }
 
+        /**
+         * Navigates to the item at the provided index
+         *
+         * @private
+         * @param {Number} index The index of the item to navigate to
+         */
         function navigate(index) {
             that._active = index;
             refreshActive();
         }
     }
 
+    /**
+     * Reads options data from the Carousel wrapper element, defined via {@code data-cmp-*} data attributes
+     *
+     * @private
+     * @param {HTMLElement} element The Carousel element to read options data from
+     */
     function readData(element) {
         var data = element.dataset;
         var options = [];
@@ -171,6 +216,11 @@
         return options;
     }
 
+    /**
+     * Document ready handler and DOM mutation observers. Initializes Carousel components as necessary.
+     *
+     * @private
+     */
     function onDocumentReady() {
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
