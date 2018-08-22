@@ -63,6 +63,28 @@ data-cmp-hook-carousel="next"
 data-cmp-hook-carousel="indicator"
 ```
 
+### Enabling Carousel Editing Functionality
+The following properties and child nodes are required to enable full editing functionality for the Carousel:
+
+1. `./cq:isContainer` - set to `true`, marks the Carousel as a container component
+2. `./cq:editConfig` - `afterchilddelete`, `afterchildinsert` and `afterchildmove` listeners should be provided via
+the edit configuration of the proxy. `_cq_editConfig.xml` contains the recommended actions and can be copied to the proxy component.
+
+In addition, a message request handler should be registered in the site Client Library:
+```
+new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+    if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
+        if (message.data.operation === "navigate") {
+            // handle navigation
+        }
+    }
+});
+```
+
+The handler should subscribe to a `cmp.panelcontainer` message that allows routing of a `navigate` operation to ensure
+that the UI component is updated when the active item is switched in the editor layer.
+The default Carousel site Client Library provides this out of the box.
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
