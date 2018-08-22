@@ -31,7 +31,7 @@ The Carousel component uses the `com.adobe.cq.wcm.core.components.models.Carouse
 The component policy dialog allows definition of allowed components for the Carousel.
 
 ### Edit Dialog Properties
-The edit dialog allows editing of Carousel slides (adding, removing, deleting, naming, re-ordering).
+The edit dialog allows editing of Carousel slides (adding, removing, naming, re-ordering).
 
 ## Client Libraries
 The component provides a `core.wcm.components.carousel.v1` client library category that contains a recommended base
