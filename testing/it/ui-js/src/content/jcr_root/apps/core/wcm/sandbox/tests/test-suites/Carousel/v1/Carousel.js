@@ -29,8 +29,8 @@
                     self: "coral-multifield-item",
                     first: "coral-multifield-item:first",
                     last: "coral-multifield-item:last",
-                    input: "[data-cmp-hook-childreneditor='itemInput']",
-                    hiddenInput: "[data-cmp-hook-childreneditor='itemHiddenInput']"
+                    input: "[data-cmp-hook-childreneditor='itemTitle']",
+                    hiddenInput: "[data-cmp-hook-childreneditor='itemResourceType']"
                 }
             }
         },
@@ -53,7 +53,9 @@
         },
         overlay: {
             self: ".cq-Overlay",
-            carouselItem: ".cq-Overlay [data-path^='/content/core-components/core-components-page/carousel-page/jcr:content/root/responsivegrid/carousel/item']"
+            responsiveGrid: {
+                placeholder: ".cq-Overlay[data-path='/content/core-components/core-components-page/carousel-page/jcr:content/root/responsivegrid/*']"
+            }
         }
     };
 

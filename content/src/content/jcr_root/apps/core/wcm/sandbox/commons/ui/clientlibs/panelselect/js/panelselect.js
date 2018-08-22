@@ -421,7 +421,7 @@
     });
 
     /**
-     * Retrieves a title from item data. If no item data exists, or it doesn't have a jcr:title
+     * Retrieves a title from item data. If no item data exists, or it doesn't have a title
      * instead lookup the editable display name of the corresponding [Editable]{@link Granite.author.Editable}.
      * Prefixes each title with an index.
      *
@@ -435,8 +435,8 @@
 
         title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
 
-        if (item && item["jcr:title"]) {
-            title = title + ": <span class='foundation-layout-util-subtletext'>" + item["jcr:title"] + "</span>";
+        if (item && item.title) {
+            title = title + ": <span class='foundation-layout-util-subtletext'>" + item.title + "</span>";
         }
 
         return title;

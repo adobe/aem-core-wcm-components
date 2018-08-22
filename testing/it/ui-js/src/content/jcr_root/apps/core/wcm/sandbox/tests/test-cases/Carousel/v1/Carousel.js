@@ -218,7 +218,7 @@
             })
 
             // click elsewhere and verify an out of area click closes the panel selector
-            .click(selectors.overlay.carouselItem)
+            .click(selectors.overlay.responsiveGrid.placeholder)
             .asserts.visible(selectors.panelSelector.self, false);
     };
 
