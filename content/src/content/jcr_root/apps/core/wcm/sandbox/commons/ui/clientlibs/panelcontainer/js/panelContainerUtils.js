@@ -83,8 +83,11 @@
          */
         getPanelContainerItems: function(editable) {
             var children = [];
-            if (editable.isContainer()) {
-                children = editable.getChildren().filter(isDisplayable);
+            var container = getPanelContainerType(editable);
+            if (container) {
+                if (editable.isContainer()) {
+                    children = editable.getChildren().filter(isDisplayable);
+                }
             }
             return children;
         }

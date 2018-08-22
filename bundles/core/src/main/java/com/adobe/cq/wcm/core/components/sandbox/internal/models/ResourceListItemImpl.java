@@ -28,9 +28,9 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
-public class CarouselListItemImpl implements ListItem {
+public class ResourceListItemImpl implements ListItem {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CarouselListItemImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceListItemImpl.class);
 
     protected String url;
     protected String title;
@@ -38,7 +38,7 @@ public class CarouselListItemImpl implements ListItem {
     protected Calendar lastModified;
     protected String path;
 
-    public CarouselListItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
+    public ResourceListItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
