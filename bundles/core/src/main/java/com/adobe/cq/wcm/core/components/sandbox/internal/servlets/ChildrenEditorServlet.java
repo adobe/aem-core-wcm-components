@@ -31,20 +31,27 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Servlet that deletes or reorders the child items of a Carousel component.
+ */
 @Component(
     service = Servlet.class,
     property = {
-        "sling.servlet.methods=POST",
-        "sling.servlet.resourceTypes=sling/servlet/default",
+        "sling.servlet.methods=" + ChildrenEditorServlet.METHOD,
+        "sling.servlet.resourceTypes=" + ChildrenEditorServlet.RT_CAROUSEL,
         "sling.servlet.selectors=" + ChildrenEditorServlet.SELECTOR,
-        "sling.servlet.extensions=html"
+        "sling.servlet.extensions=" + ChildrenEditorServlet.EXTENSION
     }
 )
 public class ChildrenEditorServlet extends SlingAllMethodsServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorServlet.class);
 
+    protected static final String METHOD = "POST";
+    protected static final String RT_CAROUSEL = "core/wcm/sandbox/components/carousel/v1/carousel";
     protected static final String SELECTOR = "childreneditor";
+    protected static final String EXTENSION = "html";
+
     private static final String PARAM_DELETED_CHILDREN = "deletedChildren";
     private static final String PARAM_ORDERED_CHILDREN = "orderedChildren";
 
@@ -56,7 +63,7 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
         ResourceResolver resolver = request.getResourceResolver();
         Resource container = request.getResource();
 
-        // Remove the child items
+        // Delete the child items
         String[] deletedChildrenNames = request.getParameterValues(PARAM_DELETED_CHILDREN);
         if (deletedChildrenNames != null && deletedChildrenNames.length > 0) {
             for (String childName: deletedChildrenNames) {
