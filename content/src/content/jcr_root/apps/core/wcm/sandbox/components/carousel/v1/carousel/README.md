@@ -74,7 +74,7 @@ The default Carousel site Client Library provides a handler for message requests
 If the built-in Client Library is not used, a message request handler should be registered:
 ```
 new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
-    if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
+    if (message.data && message.data.type === "cmp-carousel" && message.data.id === myCarouselHTMLElement.dataset["cmpPanelcontainerId"]) {
         if (message.data.operation === "navigate") {
             // handle navigation
         }
