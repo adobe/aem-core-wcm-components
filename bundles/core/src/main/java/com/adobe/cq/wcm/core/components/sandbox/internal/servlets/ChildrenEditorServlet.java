@@ -46,7 +46,7 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
 
     protected static final String SELECTOR = "childreneditor";
     private static final String PARAM_DELETED_CHILDREN = "deletedChildren";
-    private static final String PARAM_OREDERED_CHILDREN = "orderedChildren";
+    private static final String PARAM_ORDERED_CHILDREN = "orderedChildren";
 
     @Override
     protected void doPost(SlingHttpServletRequest request,
@@ -70,7 +70,7 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
 
         // Re-order the child items
         try {
-            String[] orderedChildrenNames = request.getParameterValues(PARAM_OREDERED_CHILDREN);
+            String[] orderedChildrenNames = request.getParameterValues(PARAM_ORDERED_CHILDREN);
             if (orderedChildrenNames != null && orderedChildrenNames.length > 0) {
                 final Node containerNode = container.adaptTo(Node.class);
                 if (containerNode != null) {
