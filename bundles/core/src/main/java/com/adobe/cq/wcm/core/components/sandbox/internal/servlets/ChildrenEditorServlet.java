@@ -69,38 +69,35 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
         }
 
         // Re-order the child items
-        String[] orderedChildrenNames = request.getParameterValues(PARAM_OREDERED_CHILDREN);
-        if (orderedChildrenNames != null && orderedChildrenNames.length > 0) {
-            final Node containerNode = container.adaptTo(Node.class);
-            if (containerNode != null) {
+        try {
+            String[] orderedChildrenNames = request.getParameterValues(PARAM_OREDERED_CHILDREN);
+            if (orderedChildrenNames != null && orderedChildrenNames.length > 0) {
+                final Node containerNode = container.adaptTo(Node.class);
+                if (containerNode != null) {
 
-                // Create the items if they don't exist
-                for (int i = 0; i < orderedChildrenNames.length; i++) {
-                    try {
+                    // Create the items if they don't exist
+                    for (int i = 0; i < orderedChildrenNames.length; i++) {
                         if (!containerNode.hasNode(orderedChildrenNames[i])) {
                             containerNode.addNode(orderedChildrenNames[i]);
                         }
-                    } catch (RepositoryException e) {
-                        LOGGER.error("Could not create the item '{}': {}", orderedChildrenNames[i], e);
                     }
-                }
-                resolver.commit();
 
-                // Re-order the items
-                for (int i = orderedChildrenNames.length - 1; i >= 0; i--) {
-                    try {
+                    // Re-order the items
+                    for (int i = orderedChildrenNames.length - 1; i >= 0; i--) {
                         // Put the last item at the end
                         if (i == orderedChildrenNames.length - 1) {
                             containerNode.orderBefore(orderedChildrenNames[i], null);
                         } else {
                             containerNode.orderBefore(orderedChildrenNames[i], orderedChildrenNames[i+1]);
                         }
-                    } catch (RepositoryException e) {
-                        LOGGER.error("Could not re-order the item: {}: {}", orderedChildrenNames[i], e);
                     }
+
+                    // Persist the changes
                     resolver.commit();
                 }
             }
+        } catch (RepositoryException e) {
+            LOGGER.error("Could not reorder the items of the container at {}: {}", container.getPath(), e);
         }
 
     }
