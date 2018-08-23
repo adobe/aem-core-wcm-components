@@ -32,7 +32,7 @@
 
     /**
      * @class Carousel
-     * @classdesc An interative Carousel component for navigating a list of generic items
+     * @classdesc An interactive Carousel component for navigating a list of generic items
      * @param {CarouselConfig} config The Carousel configuration
      */
     function Carousel(config) {

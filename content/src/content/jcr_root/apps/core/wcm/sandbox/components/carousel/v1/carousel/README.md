@@ -70,7 +70,8 @@ The following properties and child nodes are required in the proxy component to 
 2. `./cq:editConfig` - `afterchilddelete`, `afterchildinsert` and `afterchildmove` listeners should be provided via
 the edit configuration of the proxy. `_cq_editConfig.xml` contains the recommended actions and can be copied to the proxy component.
 
-In addition, a message request handler should be registered in the site Client Library:
+The default Carousel site Client Library provides a handler for message requests between the editor and the Carousel.
+If the built-in Client Library is not used, a message request handler should be registered:
 ```
 new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
     if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
@@ -83,7 +84,6 @@ new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("c
 
 The handler should subscribe to a `cmp.panelcontainer` message that allows routing of a `navigate` operation to ensure
 that the UI component is updated when the active item is switched in the editor layer.
-The default Carousel site Client Library provides this out of the box.
 
 ## Information
 * **Vendor**: Adobe
