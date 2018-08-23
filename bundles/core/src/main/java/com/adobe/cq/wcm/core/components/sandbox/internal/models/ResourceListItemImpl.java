@@ -46,6 +46,7 @@ public class ResourceListItemImpl implements ListItem {
             lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         }
         path = resource.getPath();
+        url = null;
     }
 
     @Override
