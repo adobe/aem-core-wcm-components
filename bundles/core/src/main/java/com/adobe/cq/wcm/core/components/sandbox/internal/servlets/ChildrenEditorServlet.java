@@ -21,6 +21,7 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -105,6 +106,7 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
             }
         } catch (RepositoryException e) {
             LOGGER.error("Could not reorder the items of the container at {}: {}", container.getPath(), e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
     }
