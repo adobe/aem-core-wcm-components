@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="imageCarousel"
+    cq:isContainer="true"
+    jcr:description="Cycles through a list of generic content items"
+    jcr:primaryType="cq:Component"
+    jcr:title="Carousel (v1 - sandbox)"
+    componentGroup=".core-wcm"/>

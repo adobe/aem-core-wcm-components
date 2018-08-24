@@ -1,0 +1,126 @@
+/*
+ *  Copyright 2018 Adobe Systems Incorporated
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+@cmp-carousel-indicator-size: 10px;
+@cmp-carousel-action-icon-size: 24px;
+
+.cmp-carousel__content {
+    position: relative;
+}
+
+.cmp-carousel__item {
+    display: none;
+
+    &--active {
+        display: block;
+    }
+}
+
+.cmp-carousel__action {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+
+    text-align: center;
+    opacity: 0;
+    background-color: rgba(255, 255, 255, .1);
+    transition: opacity .2s;
+    outline: none;
+}
+
+.cmp-carousel:hover {
+    .cmp-carousel__action {
+        opacity: 1;
+    }
+}
+
+.cmp-carousel__action-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: transparent no-repeat center center;
+    background-size: 100% 100%;
+}
+
+.cmp-carousel__action--prev {
+    left: 0;
+
+    .cmp-carousel__action-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+    }
+}
+
+.cmp-carousel__action--next {
+    right: 0;
+
+    .cmp-carousel__action-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+    }
+}
+
+.cmp-carousel__action-text {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+}
+
+.cmp-carousel__indicators {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    margin: 0;
+    padding: 0;
+
+    justify-content: center;
+
+    list-style: none;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.cmp-carousel__indicator {
+    position: relative;
+
+    flex: 0 1 auto;
+    width: @cmp-carousel-indicator-size;
+    height: @cmp-carousel-indicator-size;
+    margin: 6px 4px;
+    border-radius: 50%;
+
+    font-size: 0;
+    text-indent: -3000px;
+
+    background-color: rgba(255, 255, 255, .5);
+
+    &--active {
+        background-color: rgba(255, 255, 255, .9);
+    }
+}
