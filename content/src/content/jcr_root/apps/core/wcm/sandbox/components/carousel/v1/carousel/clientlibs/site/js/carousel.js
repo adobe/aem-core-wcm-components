@@ -60,7 +60,7 @@
                 bindEvents();
             }
 
-            if (Granite && Granite.author) {
+            if (Granite && Granite.author && Granite.author.MessageChannel) {
                 /*
                  * Editor message handling:
                  * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
