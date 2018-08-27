@@ -389,7 +389,7 @@
         name: "PANEL_SELECT",
         text: Granite.I18n.get("Select panel"),
         icon: "multipleCheck",
-        order: "after CONFIGURE",
+        order: "before COPY",
         execute: function(editable, param, target) {
             if (!panelSelector || !panelSelector.isOpen()) {
                 panelSelector = new PanelSelector({

@@ -56,6 +56,13 @@
             responsiveGrid: {
                 placeholder: ".cq-Overlay[data-path='/content/core-components/core-components-page/carousel-page/jcr:content/root/responsivegrid/*']"
             }
+        },
+        carousel: {
+            self: ".cmp-carousel",
+            item: ".cmp-carousel__item",
+            itemActive: ".cmp-carousel__item--active",
+            indicator: ".cmp-carousel__indicator",
+            indicatorActive: ".cmp-carousel__indicator--active"
         }
     };
 
