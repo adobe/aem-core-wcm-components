@@ -18,7 +18,7 @@
     "use strict";
 
     var GET_DATA_SUFFIX = ".model.json";
-    var POST_SUFFIX = ".children.html";
+    var POST_SUFFIX = ".childreneditor.html";
     var MESSAGE_ID = "cmp.panelcontainer";
 
     /**

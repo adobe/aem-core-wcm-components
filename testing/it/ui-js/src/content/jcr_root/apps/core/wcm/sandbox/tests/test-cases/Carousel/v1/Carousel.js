@@ -255,6 +255,19 @@
                     $(items[2]).is(selectors.panelSelector.item + ":contains(item2)");
             })
 
+            // verify initial Carousel DOM item order is as expected
+            .config.changeContext(c.getContentFrame)
+            .assert.exist(selectors.carousel.indicator + ":contains('item0'):first-child", true)
+            .config.resetContext()
+
+            // drag to reorder
+            .cui.dragdrop(selectors.panelSelector.item  + ":contains(item0)" + " [coral-table-roworder='true']", selectors.panelSelector.item  + ":contains(item2)")
+
+            // verify new Carousel DOM item order is as expected
+            .config.changeContext(c.getContentFrame)
+            .assert.exist(selectors.carousel.indicator + ":contains('item0'):last-child", true)
+            .config.resetContext()
+
             // click elsewhere and verify an out of area click closes the panel selector
             .click(selectors.overlay.responsiveGrid.placeholder)
             .asserts.visible(selectors.panelSelector.self, false);
