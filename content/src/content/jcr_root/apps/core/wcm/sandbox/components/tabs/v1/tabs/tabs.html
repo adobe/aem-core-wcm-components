@@ -17,11 +17,11 @@
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      class="cmp-tabs"
      data-cmp-is="tabs">
-    <ul role="tablist" class="cmp-tabs__tabheaders" data-sly-test="${tabs.items && tabs.items.size > 0}" >
+    <ul role="tablist" class="cmp-tabs__tablist" data-sly-test="${tabs.items && tabs.items.size > 0}" >
         <li data-sly-repeat.item="${tabs.items}"
             role="tab"
-            class="cmp-tabs__tabheader"
-            data-cmp-hook-tabs="tabheader">${item.title}</li>
+            class="cmp-tabs__tab"
+            data-cmp-hook-tabs="tab">${item.title}</li>
     </ul>
     <div data-sly-repeat.item="${tabs.items}"
          data-sly-resource="${item.path @ decorationTagName='div'}"

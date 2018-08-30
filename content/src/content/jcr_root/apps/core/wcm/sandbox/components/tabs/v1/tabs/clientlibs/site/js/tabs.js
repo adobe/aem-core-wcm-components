@@ -111,11 +111,11 @@
          * @private
          */
         function bindEvents() {
-            var tabheaders = that._elements["tabheader"];
-            if (tabheaders) {
-                for (var i = 0; i < tabheaders.length; i++) {
+            var tabs = that._elements["tab"];
+            if (tabs) {
+                for (var i = 0; i < tabs.length; i++) {
                     (function(index) {
-                        tabheaders[i].addEventListener("click", function(event) {
+                        tabs[i].addEventListener("click", function(event) {
                             navigate(index);
                         });
                     })(i);
@@ -130,7 +130,7 @@
          */
         function refreshActive() {
             var tabpanels = that._elements["tabpanel"];
-            var tabheaders = that._elements["tabheader"];
+            var tabs = that._elements["tab"];
 
             if (tabpanels) {
                 if (Array.isArray(tabpanels)) {
@@ -138,19 +138,19 @@
                         if (i === parseInt(that._active)) {
                             tabpanels[i].classList.add("cmp-tabs__tabpanel--active");
                             tabpanels[i].removeAttribute("aria-hidden");
-                            tabheaders[i].classList.add("cmp-tabs__tabheader--active");
-                            tabheaders[i].setAttribute("aria-selected", true);
+                            tabs[i].classList.add("cmp-tabs__tab--active");
+                            tabs[i].setAttribute("aria-selected", true);
                         } else {
                             tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
                             tabpanels[i].setAttribute("aria-hidden", true);
-                            tabheaders[i].classList.remove("cmp-tabs__tabheader--active");
-                            tabheaders[i].setAttribute("aria-selected", false);
+                            tabs[i].classList.remove("cmp-tabs__tab--active");
+                            tabs[i].setAttribute("aria-selected", false);
                         }
                     }
                 } else {
                     // only one tab
                     tabpanels.classList.add("cmp-tabs__tabpanel--active");
-                    tabheaders.classList.add("cmp-tabs__tabheader--active");
+                    tabs.classList.add("cmp-tabs__tab--active");
                 }
             }
         }
