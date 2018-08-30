@@ -21,8 +21,8 @@
             window.CQ.CoreComponents.panelcontainer.registry.register({
                 name: "cmp-tabs",
                 selector: ".cmp-tabs",
-                itemSelector: "[data-cmp-hook-tabs='item']",
-                itemActiveSelector: ".cmp-tabs__item--active"
+                itemSelector: "[data-cmp-hook-tabs='tabpanel']",
+                itemActiveSelector: ".cmp-tabs__tabpanel--active"
             });
         }
     });
