@@ -34,13 +34,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Servlet that deletes or reorders the child items of a Carousel component.
+ * Servlet that deletes or reorders the child items of a Carousel or a Tabs component.
  */
 @Component(
     service = Servlet.class,
     property = {
         "sling.servlet.methods=" + HttpConstants.METHOD_POST,
         "sling.servlet.resourceTypes=" + ChildrenEditorServlet.RT_CAROUSEL,
+        "sling.servlet.resourceTypes=" + ChildrenEditorServlet.RT_TABS,
         "sling.servlet.selectors=" + ChildrenEditorServlet.SELECTOR,
         "sling.servlet.extensions=" + ChildrenEditorServlet.EXTENSION
     }
@@ -50,6 +51,7 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorServlet.class);
 
     protected static final String RT_CAROUSEL = "core/wcm/sandbox/components/carousel/v1/carousel";
+    protected static final String RT_TABS = "core/wcm/sandbox/components/tabs/v1/tabs";
     protected static final String SELECTOR = "childreneditor";
     protected static final String EXTENSION = "html";
 

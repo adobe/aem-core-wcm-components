@@ -1,0 +1,244 @@
+/*******************************************************************************
+ * Copyright 2018 Adobe Systems Incorporated
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+/* global Granite */
+(function() {
+    "use strict";
+
+    var NS = "cmp";
+    var IS = "tabs";
+
+    var selectors = {
+        self: "[data-" +  NS + '-is="' + IS + '"]'
+    };
+
+    /**
+     * @typedef {Object} TabsConfig Represents a Tabs configuration
+     * @property {HTMLElement} element The HTMLElement representing the Tabs
+     * @property {Object} options The Tabs options
+     */
+
+    /**
+     * @class Tabs
+     * @classdesc An interactive Tabs component for navigating a list of tabs
+     * @param {TabsConfig} config The Tabs configuration
+     */
+    function Tabs(config) {
+        var that = this;
+
+        if (config && config.element) {
+            init(config);
+        }
+
+        /**
+         * Initializes the Tabs
+         *
+         * @private
+         * @param {TabsConfig} config The Tabs configuration
+         */
+        function init(config) {
+            // prevents multiple initialization
+            config.element.removeAttribute("data-" + NS + "-is");
+
+            cacheElements(config.element);
+            that._active = 0;
+
+            if (that._elements.tabpanel) {
+                refreshActive();
+                bindEvents();
+            }
+
+            if (Granite && Granite.author && Granite.author.MessageChannel) {
+                /*
+                 * Editor message handling:
+                 * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
+                 * - check that the message data panel container type is correct and that the id (path) matches this specific Tabs component
+                 * - if so, route the "navigate" operation to enact a navigation of the Tabs based on index data
+                 */
+                new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                    if (message.data && message.data.type === "cmp-tabs" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
+                        if (message.data.operation === "navigate") {
+                            navigate(message.data.index);
+                        }
+                    }
+                });
+            }
+        }
+
+        /**
+         * Caches the Tabs elements as defined via the {@code data-tabs-hook="ELEMENT_NAME"} markup API
+         *
+         * @private
+         * @param {HTMLElement} wrapper The Tabs wrapper element
+         */
+        function cacheElements(wrapper) {
+            that._elements = {};
+            that._elements.self = wrapper;
+            var hooks = that._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
+
+            for (var i = 0; i < hooks.length; i++) {
+                var hook = hooks[i];
+                var capitalized = IS;
+                capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+                var key = hook.dataset[NS + "Hook" + capitalized];
+                if (that._elements[key]) {
+                    if (!Array.isArray(that._elements[key])) {
+                        var tmp = that._elements[key];
+                        that._elements[key] = [tmp];
+                    }
+                    that._elements[key].push(hook);
+                } else {
+                    that._elements[key] = hook;
+                }
+            }
+        }
+
+        /**
+         * Binds Tabs event handling
+         *
+         * @private
+         */
+        function bindEvents() {
+            var tabheaders = that._elements["tabheader"];
+            if (tabheaders) {
+                for (var i = 0; i < tabheaders.length; i++) {
+                    (function(index) {
+                        tabheaders[i].addEventListener("click", function(event) {
+                            navigate(index);
+                        });
+                    })(i);
+                }
+            }
+        }
+
+        /**
+         * Refreshes the tab markup based on the current {@code Tabs#_active} index
+         *
+         * @private
+         */
+        function refreshActive() {
+            var tabpanels = that._elements["tabpanel"];
+            var tabheaders = that._elements["tabheader"];
+
+            if (tabpanels) {
+                if (Array.isArray(tabpanels)) {
+                    for (var i = 0; i < tabpanels.length; i++) {
+                        if (i === parseInt(that._active)) {
+                            tabpanels[i].classList.add("cmp-tabs__tabpanel--active");
+                            tabpanels[i].removeAttribute("aria-hidden");
+                            tabheaders[i].classList.add("cmp-tabs__tabheader--active");
+                            tabheaders[i].setAttribute("aria-selected", true);
+                        } else {
+                            tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
+                            tabpanels[i].setAttribute("aria-hidden", true);
+                            tabheaders[i].classList.remove("cmp-tabs__tabheader--active");
+                            tabheaders[i].setAttribute("aria-selected", false);
+                        }
+                    }
+                } else {
+                    // only one tab
+                    tabpanels.classList.add("cmp-tabs__tabpanel--active");
+                    tabheaders.classList.add("cmp-tabs__tabheader--active");
+                }
+            }
+        }
+
+        /**
+         * Navigates to the tab at the provided index
+         *
+         * @private
+         * @param {Number} index The index of the tab to navigate to
+         */
+        function navigate(index) {
+            that._active = index;
+            refreshActive();
+        }
+    }
+
+    /**
+     * Reads options data from the Tabs wrapper element, defined via {@code data-cmp-*} data attributes
+     *
+     * @private
+     * @param {HTMLElement} element The Tabs element to read options data from
+     */
+    function readData(element) {
+        var data = element.dataset;
+        var options = [];
+        var capitalized = IS;
+        capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+        var reserved = ["is", "hook" + capitalized];
+
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                var value = data[key];
+
+                if (key.indexOf(NS) === 0) {
+                    key = key.slice(NS.length);
+                    key = key.charAt(0).toLowerCase() + key.substring(1);
+
+                    if (reserved.indexOf(key) === -1) {
+                        options[key] = value;
+                    }
+                }
+            }
+        }
+
+        return options;
+    }
+
+    /**
+     * Document ready handler and DOM mutation observers. Initializes Tabs components as necessary.
+     *
+     * @private
+     */
+    function onDocumentReady() {
+        var elements = document.querySelectorAll(selectors.self);
+        for (var i = 0; i < elements.length; i++) {
+            new Tabs({ element: elements[i], options: readData(elements[i]) });
+        }
+
+        var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        var body             = document.querySelector("body");
+        var observer         = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                // needed for IE
+                var nodesArray = [].slice.call(mutation.addedNodes);
+                if (nodesArray.length > 0) {
+                    nodesArray.forEach(function(addedNode) {
+                        if (addedNode.querySelectorAll) {
+                            var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
+                            elementsArray.forEach(function(element) {
+                                new Tabs({ element: element, options: readData(element) });
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(body, {
+            subtree: true,
+            childList: true,
+            characterData: true
+        });
+    }
+
+    if (document.readyState !== "loading") {
+        onDocumentReady();
+    } else {
+        document.addEventListener("DOMContentLoaded", onDocumentReady());
+    }
+
+}());

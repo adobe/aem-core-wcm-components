@@ -33,11 +33,11 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Carousel;
-import com.adobe.cq.wcm.core.components.sandbox.internal.models.ResourceListItemImpl;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
+// TODO: remove the Tabs resource type once the Tabs has its onw Sling model
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class}, resourceType = {CarouselImpl.RESOURCE_TYPE, "core/wcm/sandbox/components/tabs/v1/tabs"})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class CarouselImpl implements Carousel {
 
