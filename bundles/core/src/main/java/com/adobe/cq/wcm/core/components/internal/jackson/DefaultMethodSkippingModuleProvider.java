@@ -52,6 +52,7 @@ public class DefaultMethodSkippingModuleProvider implements ModuleProvider {
                         final Method method = (Method) member;
                         if (method.isDefault()) {
                             try {
+                                // only exclude default methods if they are defined on interfaces from the core components
                                 String className = beanDesc.getBeanClass().getMethod(method.getName()).getDeclaringClass().getName();
                                 return !className.startsWith(PACKAGE_CORE_COMPONENTS) ||
                                     (className.startsWith(PACKAGE_CORE_COMPONENTS) &&
