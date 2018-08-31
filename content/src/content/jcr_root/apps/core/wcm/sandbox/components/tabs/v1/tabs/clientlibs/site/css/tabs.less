@@ -15,26 +15,19 @@
  */
 
 .cmp-tabs__tablist {
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #dee2e6;
     display: flex;
-    list-style: none;
     padding-left: 0;
+    list-style: none;
 }
 
 .cmp-tabs__tab {
-    border: 1px solid transparent;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+    box-sizing: border-box;
+    border-bottom: 1px solid transparent;
     padding: .5rem 1rem;
-    color: #007bff;
     cursor: pointer;
 
     &--active {
-        color: #495057;
-        background-color: #fff;
-        border-color: #dee2e6 #dee2e6 #fff;
-        margin-bottom: -1px;
+        border-color: inherit;
     }
 }
 
