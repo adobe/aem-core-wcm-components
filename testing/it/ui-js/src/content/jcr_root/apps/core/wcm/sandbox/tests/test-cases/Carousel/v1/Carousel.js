@@ -24,6 +24,8 @@
     var pageVar                          = "carousel_page";
     var pageDescription                  = "carousel page description";
 
+    var PANEL_SELECTOR_ITEM_HEIGHT = 60;
+
     carousel.tcExecuteBeforeTest = function(tcExecuteBeforeTest, carouselRT, pageRT, clientlibs) {
         return new h.TestCase("Create sample content", {
             execBefore: tcExecuteBeforeTest
@@ -261,11 +263,14 @@
             .config.resetContext()
 
             // drag to reorder
-            .cui.dragdrop(selectors.panelSelector.item  + ":contains(item0)" + " [coral-table-roworder='true']", selectors.panelSelector.item  + ":contains(item2)")
+            .execFct(function(options, done) {
+                hobs.find(selectors.panelSelector.item  + ":contains(item0) [coral-table-roworder='true']").simulate("drag-n-drop", { dx: 0, dy: PANEL_SELECTOR_ITEM_HEIGHT });
+                done();
+            })
 
             // verify new Carousel DOM item order is as expected
             .config.changeContext(c.getContentFrame)
-            .assert.exist(selectors.carousel.indicator + ":contains('item0'):last-child", true)
+            .assert.exist(selectors.carousel.indicator + ":contains('item0'):nth-child(2)", true)
             .config.resetContext()
 
             // click elsewhere and verify an out of area click closes the panel selector
