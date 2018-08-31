@@ -16,45 +16,37 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
 import javax.servlet.Servlet;
 
 import org.apache.sling.testing.mock.osgi.MockOsgi;
-import org.apache.sling.testing.mock.osgi.junit.OsgiContext;
-import org.apache.sling.testing.mock.sling.junit.SlingContext;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.component.ComponentContext;
 import org.powermock.reflect.Whitebox;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.dam.api.handler.store.AssetStore;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AdaptiveImageServletMappingConfigurationConsumerTest {
 
     @Rule
-    public final SlingContext slingContext = new SlingContext();
+    public final AemContext slingContext = CoreComponentTestContext.createContext();
 
     @Before
     public void setUp() {

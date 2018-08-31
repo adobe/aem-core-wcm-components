@@ -69,7 +69,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
-        assertEquals(page.getLastModifiedDate(), calendar);
+        assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
         assertEquals("Templated Page", page.getTitle());
         assertEquals(DESIGN_PATH, page.getDesignPath());

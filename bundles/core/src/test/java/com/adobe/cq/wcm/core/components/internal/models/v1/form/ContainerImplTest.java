@@ -51,6 +51,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -67,9 +68,6 @@ public class ContainerImplTest {
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTAINING_PAGE);
 
     @Mock
-    private FormStructureHelperFactory formStructureHelperFactory;
-
-    @Mock
     private FormStructureHelper formStructureHelper;
 
     @Mock
@@ -80,9 +78,13 @@ public class ContainerImplTest {
 
     @Before
     public void setUp() {
-        when(formStructureHelperFactory.getFormStructureHelper(any(Resource.class))).thenReturn(formStructureHelper);
         when(requestDispatcherFactory.getRequestDispatcher(any(Resource.class), any())).thenReturn(requestDispatcher);
-        CONTEXT.registerService(FormStructureHelperFactory.class, formStructureHelperFactory);
+        CONTEXT.registerService(FormStructureHelperFactory.class, new FormStructureHelperFactory() {
+            @Override
+            public FormStructureHelper getFormStructureHelper(Resource resource) {
+                return formStructureHelper;
+            }
+        });
         CONTEXT.registerService(SlingModelFilter.class, new SlingModelFilter() {
 
             private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{

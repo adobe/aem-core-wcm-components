@@ -23,7 +23,7 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.apache.sling.servlethelpers.MockSlingHttpServletResponse;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,6 +33,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHandlingServletHelper;
 import com.day.cq.wcm.foundation.security.SaferSlingPostValidator;
@@ -58,8 +59,8 @@ public class CoreFormHandlingServletTest {
     @InjectMocks
     CoreFormHandlingServlet servlet;
 
-    @Rule
-    public final AemContext context = new AemContext();
+    @ClassRule
+    public final AemContext context = CoreComponentTestContext.createContext();
 
     private static final String[] NAME_WHITELIST = {"param-text", "param-button"};
 
