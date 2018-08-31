@@ -20,7 +20,6 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Tabs"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.tabs.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_tabs_v1">
     <content
         jcr:primaryType="nt:unstructured"
