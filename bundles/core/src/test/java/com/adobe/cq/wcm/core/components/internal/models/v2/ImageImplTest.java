@@ -57,6 +57,19 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     @Test
+    public void testGetUuid() {
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE0_PATH);
+        assertEquals("60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5", image.getUuid());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE0_PATH));
+    }
+
+    @Test
+    public void testGetUuidNull() {
+        Image image = getImageUnderTest(IMAGE22_PATH);
+        assertEquals(null, image.getUuid());
+    }
+
+    @Test
     public void testImageWithOneSmartSize() {
         Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
 

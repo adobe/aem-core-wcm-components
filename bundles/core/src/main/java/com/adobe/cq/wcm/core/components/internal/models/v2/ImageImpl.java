@@ -26,8 +26,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceMetadata;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +42,7 @@ import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 
@@ -52,10 +57,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private String srcUriTemplate;
     private List<ImageArea> areas;
+    private boolean uuidDisabled;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
     }
+
+    protected String uuid;
 
     @PostConstruct
     protected void initModel() {
@@ -63,12 +71,18 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
+        uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
             if (assetResource != null) {
                 Asset asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
+                    if (!uuidDisabled) {
+                        uuid = asset.getID();
+                    } else {
+                        uuid = null;
+                    }
                     if (!isDecorative && altValueFromDAM) {
                         String damDescription = asset.getMetadataValue(DamConstants.DC_DESCRIPTION);
                         if(StringUtils.isEmpty(damDescription)) {
@@ -134,6 +148,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public List<ImageArea> getAreas() { return areas; }
+
+    @Override
+    public String getUuid() {
+        return uuid;
+    }
 
     protected void buildAreas() {
         areas = new ArrayList<>();
