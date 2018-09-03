@@ -54,7 +54,6 @@ public final class CoreComponentTestContext {
     public static AemContext createContext(final String testBase, final String contentRoot) {
         return new AemContext(
                 (AemContextCallback) context -> {
-                    context.registerService(FormStructureHelperFactory.class, resource -> null);
                     context.registerService(ImplementationPicker.class, new ResourceTypeBasedResourcePicker());
                     if (testBase != null) {
                         if (StringUtils.isNotEmpty(testBase)) {
