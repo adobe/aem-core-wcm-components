@@ -116,8 +116,6 @@ public class PageImplTest {
         aemContext.addModelsForClasses(MockResponsiveGrid.class);
         aemContext.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
         aemContext.load().json(testBase + "/default-tags.json", "/etc/tags/default");
-        SlingModelFilter slingModelFilter = mock(SlingModelFilter.class);
-        aemContext.registerService(SlingModelFilter.class, slingModelFilter);
         aemContext.registerService(SlingModelFilter.class, new SlingModelFilter() {
 
             private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
@@ -155,7 +153,7 @@ public class PageImplTest {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
-        assertEquals(page.getLastModifiedDate(), calendar);
+        assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
         assertEquals("Templated Page", page.getTitle());
         assertEquals(DESIGN_PATH, page.getDesignPath());
