@@ -23,7 +23,7 @@
                                     "policy_1478854677326": {
                                         "jcr:primaryType"       : "nt:unstructured",
                                         "jcr:title"             : "images",
-                                        "uuidDisabled"           : true,
+                                        "uuidDisabled"           : false,
                                         "allowedRenditionWidths": [
                                             600,
                                             700,
