@@ -20,6 +20,15 @@
     var NS = "cmp";
     var IS = "tabs";
 
+    var keyCodes = {
+        END: 35,
+        HOME: 36,
+        ARROW_LEFT: 37,
+        ARROW_UP: 38,
+        ARROW_RIGHT: 39,
+        ARROW_DOWN: 40
+    };
+
     var selectors = {
         self: "[data-" +  NS + '-is="' + IS + '"]'
     };
@@ -113,13 +122,50 @@
         function bindEvents() {
             var tabs = that._elements["tab"];
             if (tabs) {
+                var lastIndex = tabs.length - 1;
                 for (var i = 0; i < tabs.length; i++) {
                     (function(index) {
                         tabs[i].addEventListener("click", function(event) {
                             navigate(index);
                         });
+                        tabs[i].addEventListener("keydown", function(event) {
+                            onKeyDown(event, index, lastIndex);
+                        });
                     })(i);
                 }
+            }
+        }
+
+        /**
+         * Handles keydowns when a tab is selected
+         *
+         * @private
+         * @param {jQuery.Event} event The keydown event
+         * @param {Number} index The index of the selected tab
+         * @param {Number} lastIndex The index of the last tab
+         */
+        function onKeyDown(event, index, lastIndex) {
+            switch (event.keyCode) {
+                case keyCodes.ARROW_LEFT:
+                case keyCodes.ARROW_UP:
+                    if (index > 0) {
+                        navigate(index - 1);
+                    }
+                    break;
+                case keyCodes.ARROW_RIGHT:
+                case keyCodes.ARROW_DOWN:
+                    if (index < lastIndex) {
+                        navigate(index + 1);
+                    }
+                    break;
+                case keyCodes.HOME:
+                    navigate(0);
+                    break;
+                case keyCodes.END:
+                    navigate(lastIndex);
+                    break;
+                default:
+                    return;
             }
         }
 
@@ -140,11 +186,18 @@
                             tabpanels[i].removeAttribute("aria-hidden");
                             tabs[i].classList.add("cmp-tabs__tab--active");
                             tabs[i].setAttribute("aria-selected", true);
+                            // Accessibilty feature: we set tabindex to 0 to make the selected tab tabbable
+                            tabs[i].setAttribute("tabindex", "0");
+                            tabs[i].focus();
                         } else {
                             tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
                             tabpanels[i].setAttribute("aria-hidden", true);
                             tabs[i].classList.remove("cmp-tabs__tab--active");
                             tabs[i].setAttribute("aria-selected", false);
+                            // Accessibilty feature: we set tabindex to -1 to make the non selected tabs untabbable:
+                            // if there are 10-12 tab controls on the web page, user’s of assistive technology
+                            // will now not have to tab through all of them to reach the content in the tab panel.
+                            tabs[i].setAttribute("tabindex", "-1");
                         }
                     }
                 } else {
