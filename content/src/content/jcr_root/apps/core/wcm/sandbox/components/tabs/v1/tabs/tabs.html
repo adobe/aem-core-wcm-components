@@ -17,10 +17,10 @@
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      class="cmp-tabs"
      data-cmp-is="tabs">
-    <ol role="tablist"
-        aria-multiselectable="false"
+    <ol data-sly-test="${tabs.items && tabs.items.size > 0}"
+        role="tablist"
         class="cmp-tabs__tablist"
-        data-sly-test="${tabs.items && tabs.items.size > 0}" >
+        aria-multiselectable="false">
         <li data-sly-repeat.item="${tabs.items}"
             role="tab"
             class="cmp-tabs__tab"

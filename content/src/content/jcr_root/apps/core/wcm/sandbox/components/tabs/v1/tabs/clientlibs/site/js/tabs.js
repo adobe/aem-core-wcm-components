@@ -136,35 +136,33 @@
         }
 
         /**
-         * Handles keydowns when a tab is selected
+         * Handles tab keydown events
          *
          * @private
-         * @param {jQuery.Event} event The keydown event
+         * @param {Object} event The keydown event
          */
         function onKeyDown(event) {
+            event.preventDefault();
             var index = that._active;
             var lastIndex = that._elements["tab"].length - 1;
+
             switch (event.keyCode) {
                 case keyCodes.ARROW_LEFT:
                 case keyCodes.ARROW_UP:
-                    event.preventDefault();
                     if (index > 0) {
                         navigate(index - 1);
                     }
                     break;
                 case keyCodes.ARROW_RIGHT:
                 case keyCodes.ARROW_DOWN:
-                    event.preventDefault();
                     if (index < lastIndex) {
                         navigate(index + 1);
                     }
                     break;
                 case keyCodes.HOME:
-                    event.preventDefault();
                     navigate(0);
                     break;
                 case keyCodes.END:
-                    event.preventDefault();
                     navigate(lastIndex);
                     break;
                 default:
