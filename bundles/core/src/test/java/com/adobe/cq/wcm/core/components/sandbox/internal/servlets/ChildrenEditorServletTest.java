@@ -131,10 +131,6 @@ public class ChildrenEditorServletTest {
 
     /**
      * Reorder children.
-     *
-     * TODO: re-enable, missing orderBefore implementation in MockNode
-     * (https://github.com/apache/sling-org-apache-sling-testing-jcr-mock/blob/master/src/main/java/org/apache/sling/testing/mock/jcr/MockNode.java)
-     *
      * @throws ServletException
      * @throws IOException
      */
