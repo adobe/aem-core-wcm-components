@@ -15,17 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.models;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 
 /**
  * Defines the {@code Tabs} Sling Model used for the {@code /apps/core/wcm/sandbox/components/tabs} component.
@@ -33,32 +23,5 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
  * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
  */
 @ConsumerType
-public interface Tabs extends ContainerExporter {
-
-    /**
-     * Returns the list of Tab items
-     *
-     * @return List of Tab items
-     */
-    default List<ListItem> getItems() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Nonnull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Nonnull
-    @Override
-    default Map<String, ? extends ComponentExporter> getExportedItems() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Nonnull
-    @Override
-    default String[] getExportedItemsOrder() {
-        throw new UnsupportedOperationException();
-    }
+public interface Tabs extends Container {
 }

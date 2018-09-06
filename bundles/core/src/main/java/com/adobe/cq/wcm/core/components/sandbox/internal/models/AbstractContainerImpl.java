@@ -18,29 +18,48 @@ package com.adobe.cq.wcm.core.components.sandbox.internal.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.sandbox.models.Tabs;
+import com.adobe.cq.wcm.core.components.sandbox.models.Container;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TabsImpl extends AbstractContainerImpl implements Tabs {
+/**
+ * Abstract class which can be used as base class for {@link Container} implementations.
+ */
+public class AbstractContainerImpl implements Container {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TabsImpl.class);
+    @SlingObject
+    private Resource resource;
 
-    public final static String RESOURCE_TYPE = "core/wcm/sandbox/components/tabs/v1/tabs";
+    @Self
+    private SlingHttpServletRequest request;
+
+    private List<ListItem> items;
+
+    private List<ListItem> readItems() {
+        List<ListItem> items = new ArrayList<>();
+        if (resource != null) {
+            ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
+            for (Resource res : resource.getChildren()) {
+                Component component = componentManager.getComponentOfResource(res);
+                if (component != null) {
+                    items.add(new ResourceListItemImpl(request, res));
+                }
+            }
+        }
+        return items;
+    }
+
+    @Override
+    public List<ListItem> getItems() {
+        if (items == null) {
+            items = readItems();
+        }
+        return items;
+    }
 }

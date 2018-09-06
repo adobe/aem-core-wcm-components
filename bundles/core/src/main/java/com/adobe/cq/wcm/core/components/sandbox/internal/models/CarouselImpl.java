@@ -21,11 +21,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,40 +35,9 @@ import com.day.cq.wcm.api.components.ComponentManager;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class CarouselImpl implements Carousel {
+public class CarouselImpl extends AbstractContainerImpl implements Carousel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarouselImpl.class);
 
     public final static String RESOURCE_TYPE = "core/wcm/sandbox/components/carousel/v1/carousel";
-
-    @SlingObject
-    private Resource resource;
-
-    @Self
-    private SlingHttpServletRequest request;
-
-    private List<ListItem> items;
-
-    @PostConstruct
-    private void initModel() {
-        readItems();
-    }
-
-    private void readItems() {
-        items = new ArrayList<>();
-        if (resource != null) {
-            ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
-            for (Resource res : resource.getChildren()) {
-                Component component = componentManager.getComponentOfResource(res);
-                if (component != null) {
-                    items.add(new ResourceListItemImpl(request, res));
-                }
-            }
-        }
-    }
-
-    @Override
-    public List<ListItem> getItems() {
-        return items;
-    }
 }
