@@ -32,17 +32,17 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.sandbox.models.Carousel;
+import com.adobe.cq.wcm.core.components.sandbox.models.Tabs;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class CarouselImpl implements Carousel {
+public class TabsImpl implements Tabs {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CarouselImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TabsImpl.class);
 
-    public final static String RESOURCE_TYPE = "core/wcm/sandbox/components/carousel/v1/carousel";
+    public final static String RESOURCE_TYPE = "core/wcm/sandbox/components/tabs/v1/tabs";
 
     @SlingObject
     private Resource resource;
