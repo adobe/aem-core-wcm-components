@@ -31,6 +31,7 @@
     </scm>
 
     <properties>
+        <project.previousRelease>2.1.0</project.previousRelease>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <aem.host>localhost</aem.host>
         <aem.port>4502</aem.port>

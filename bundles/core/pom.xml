@@ -71,7 +71,7 @@
                         <!-- Enable processing of OSGI metatype annotations -->
                         <_metatypeannotations>*</_metatypeannotations>
                     </instructions>
-                    <comparisonVersion>(,${project.parent.version}]</comparisonVersion>
+                    <comparisonVersion>(,${project.previousRelease}]</comparisonVersion>
                 </configuration>
                 <dependencies>
                     <dependency>
