@@ -89,7 +89,7 @@
                                     <disableUuidTracking
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        fieldDescription="Check to disable tracking of assset's UUID."
+                                        fieldDescription="Check to disable tracking of asset's UUID."
                                         name="./uuidDisabled"
                                         text="Disable UUID tracking"
                                         checked="{Boolean}true"
@@ -109,7 +109,7 @@
                                             name="./allowedRenditionWidths"
                                             required="{Boolean}true"/>
                                     </widths>
-                                    <jpegQuality 
+                                    <jpegQuality
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
                                         fieldDescription="The quality factor (in percentage from 0 and 100) for transformed (e.g. scaled or cropped) JPEG images."
