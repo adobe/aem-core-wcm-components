@@ -24,6 +24,15 @@
     var pageVar                        = "tabs_page";
     var pageDescription                = "tabs page description";
 
+    var keyCodes = {
+        END: 35,
+        HOME: 36,
+        ARROW_LEFT: 37,
+        ARROW_UP: 38,
+        ARROW_RIGHT: 39,
+        ARROW_DOWN: 40
+    };
+
     tabs.tcExecuteBeforeTest = function(tcExecuteBeforeTest, tabsRT, pageRT, clientlibs) {
         return new h.TestCase("Create sample content", {
             execBefore: tcExecuteBeforeTest
@@ -343,6 +352,110 @@
             })
             .execFct(function(opts, done) {
                 c.deletePolicyAssignment("/tabs", done, policyAssignmentPath);
+            });
+    };
+
+    /**
+     * Test: Accessibility : Navigate Right
+     */
+    tabs.tcAccessibilityNavigateRight = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath, pageRT, tabsRT) {
+        return new h.TestCase("Accessibility : Navigate Right", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(tabs.tcCreateItems(selectors))
+
+            // switch to the content frame and focus the first tab
+            .config.changeContext(c.getContentFrame)
+            .click(selectors.tabs.tab + ":first-child")
+
+            // simulate a right arrow keydown event and verify right navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_RIGHT })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item1')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 2;
+            })
+
+            // simulate a down arrow keydown event and verify right navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_DOWN })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item2')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 3;
+            })
+
+            // simulate a right arrow keydown event and verify no further navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_RIGHT })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item2')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 3;
+            });
+    };
+
+    /**
+     * Test: Accessibility : Navigate Left
+     */
+    tabs.tcAccessibilityNavigateLeft = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath, pageRT, tabsRT) {
+        return new h.TestCase("Accessibility : Navigate Left", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(tabs.tcCreateItems(selectors))
+
+            // switch to the content frame and focus the last tab
+            .config.changeContext(c.getContentFrame)
+            .click(selectors.tabs.tab + ":last-child")
+
+            // simulate a left arrow keydown event and verify left navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_LEFT })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item1')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 2;
+            })
+
+            // simulate an up arrow keydown event and verify left navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_UP })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item0')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 1;
+            })
+
+            // simulate a left arrow keydown event and verify no further navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_LEFT })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item0')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 1;
+            });
+    };
+
+    /**
+     * Test: Keys : Navigate end / start
+     */
+    tabs.tcAccessibilityNavigateEndStart = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath, pageRT, tabsRT) {
+        return new h.TestCase("Accessibility : Navigate End / Start", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(tabs.tcCreateItems(selectors))
+
+            // switch to the content frame and focus the last tab
+            .config.changeContext(c.getContentFrame)
+            .click(selectors.tabs.tab + ":first-child")
+
+            // simulate an end arrow keydown event and verify end navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.END })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item2')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 3;
+            })
+
+            // simulate a home arrow keydown event and verify start navigation
+            .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.HOME })
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item0')");
+                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 1;
             });
     };
 

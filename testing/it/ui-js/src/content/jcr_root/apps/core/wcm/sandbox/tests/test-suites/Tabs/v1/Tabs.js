@@ -80,5 +80,8 @@
         .addTestCase(tabs.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcPanelSelect(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/tabs", "core-component/components/sandbox",
-            c.policyPath_sandbox, c.policyAssignmentPath_sandbox, "core/wcm/tests/components/test-page-v2", c.rtTabs_v1));
+            c.policyPath_sandbox, c.policyAssignmentPath_sandbox, "core/wcm/tests/components/test-page-v2", c.rtTabs_v1))
+        .addTestCase(tabs.tcAccessibilityNavigateRight(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(tabs.tcAccessibilityNavigateLeft(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(tabs.tcAccessibilityNavigateEndStart(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
 }(hobs, jQuery));
