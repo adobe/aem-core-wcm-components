@@ -27,6 +27,7 @@ import org.osgi.service.component.annotations.Component;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.NoSuchMethodException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 public class DefaultMethodSkippingModuleProvider implements ModuleProvider {
 
     private static final String PACKAGE_CORE_COMPONENTS = "com.adobe.cq.wcm.core.components";
+    private static final String PACKAGE_IMPL_INTERNAL = "internal.models";
 
     private SimpleModule module;
 
@@ -49,8 +51,13 @@ public class DefaultMethodSkippingModuleProvider implements ModuleProvider {
                     if (member instanceof Method) {
                         final Method method = (Method) member;
                         if (method.isDefault()) {
-                            // only exclude default methods if they are defined on interfaces from the core components
-                            return !method.getDeclaringClass().getName().startsWith(PACKAGE_CORE_COMPONENTS);
+                            try {
+                                // only exclude default methods if they are defined on interfaces from the core components
+                                String className = beanDesc.getBeanClass().getMethod(method.getName()).getDeclaringClass().getName();
+                                return !className.startsWith(PACKAGE_CORE_COMPONENTS) || className.contains(PACKAGE_IMPL_INTERNAL);
+                            } catch (NoSuchMethodException e) {
+                                return false;
+                            }
                         }
                     }
                     return true;
