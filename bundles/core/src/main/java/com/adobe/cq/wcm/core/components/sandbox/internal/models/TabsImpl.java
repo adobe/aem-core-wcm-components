@@ -37,7 +37,7 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TabsImpl extends AbstractContainerImpl implements Tabs {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TabsImpl.class);

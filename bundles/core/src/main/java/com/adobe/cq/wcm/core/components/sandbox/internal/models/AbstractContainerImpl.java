@@ -31,7 +31,7 @@ import com.day.cq.wcm.api.components.ComponentManager;
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
  */
-public class AbstractContainerImpl implements Container {
+public abstract class AbstractContainerImpl implements Container {
 
     @SlingObject
     private Resource resource;

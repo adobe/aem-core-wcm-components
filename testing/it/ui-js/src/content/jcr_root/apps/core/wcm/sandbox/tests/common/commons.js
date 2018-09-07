@@ -30,6 +30,8 @@
     // core component resource types
     // carousel component
     c.rtCarousel_v1 = "core/wcm/sandbox/components/carousel/v1/carousel";
+    // tabs component
+    c.rtTabs_v1 = "core/wcm/sandbox/components/tabs/v1/tabs";
 
 
 }(hobs, jQuery));
