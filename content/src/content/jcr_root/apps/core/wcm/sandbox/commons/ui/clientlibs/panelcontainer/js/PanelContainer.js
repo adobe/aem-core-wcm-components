@@ -20,6 +20,7 @@
     var GET_DATA_SUFFIX = ".model.json";
     var POST_SUFFIX = ".childreneditor.html";
     var MESSAGE_ID = "cmp.panelcontainer";
+    var NAVIGATE_DELAY = 200;
 
     /**
      * @typedef {Object} PanelContainerConfig Represents a Panel Container configuration object
@@ -62,6 +63,7 @@
          * [Content Frame]{@link Granite.author.ContentFrame} and lets the related UI widget handle the operation.
          *
          * @param {Number} index Index of the panel to navigate to
+         * @fires CQ.CoreComponents.PanelContainer#cmp-panelcontainer-navigated
          */
         navigate: function(index) {
             if (this._config.panelContainerType) {
@@ -69,12 +71,22 @@
                 // for correct forwarding of operations in the content frame message subscription.
                 this._config.el.dataset["cmpPanelcontainerId"] = this._config.path;
 
-                Granite.author.ContentFrame.postMessage(MESSAGE_ID, {
+                var data = {
                     id: this._config.path,
                     type: this._config.panelContainerType.name,
                     operation: "navigate",
                     index: index
-                });
+                };
+
+                Granite.author.ContentFrame.postMessage(MESSAGE_ID, data);
+
+                setTimeout(function() {
+                    channel.trigger({
+                        type: "cmp-panelcontainer-navigated",
+                        id: data.id,
+                        index: data.index
+                    });
+                }, NAVIGATE_DELAY);
             }
         },
 
@@ -164,6 +176,15 @@
                 }
             });
         }
+
+        /**
+         * Triggered when the Panel Container has navigated.
+         *
+         * @event CQ.CoreComponents.PanelContainer#cmp-panelcontainer-navigated
+         * @param {Object} event Event object.
+         * @param {String} event.id The Panel Container ID (path)
+         * @param {Number} event.index Index of the navigated to Panel Container item
+         */
     });
 
 }(jQuery, Granite.author, jQuery(document), this));
