@@ -1,15 +1,18 @@
 {
     "items": [
         {
-            "url"   : "/content/breadcrumb/women.html",
-            "title" : "Women",
-            "active": false
+            "url": null,
+            "title": "Teaser 1",
+            "description": "Teaser 1 description",
+            "lastModified": null,
+            "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1"
         },
         {
-            "url"   : "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
-            "title" : "Devi Sleeveless Shirt",
-            "active": true
+            "url": null,
+            "title": "Teaser 2",
+            "description": "Teaser 2 description",
+            "lastModified": null,
+            "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2"
         }
-    ],
-    ":type": "core/wcm/components/breadcrumb"
+    ]
 }
