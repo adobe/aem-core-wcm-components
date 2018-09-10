@@ -183,7 +183,7 @@
          * @event CQ.CoreComponents.PanelContainer#cmp-panelcontainer-navigated
          * @param {Object} event Event object.
          * @param {String} event.id The Panel Container ID (path)
-         * @param {Number} event.index Index of the navigated to Panel Container item
+         * @param {Number} event.index Index of the Panel Container item that is navigated to
          */
     });
 

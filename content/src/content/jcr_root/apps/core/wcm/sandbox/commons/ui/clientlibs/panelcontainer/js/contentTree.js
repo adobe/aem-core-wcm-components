@@ -27,9 +27,10 @@
      */
 
     /**
-     * Sync Panel Container child {@link Granite.author.Editable} overlay disabled states on navigate,
-     * to prevent the Content Tree selection logic from triggering a click on
-     * overlays that aren't yet visible in the Content Frame.
+     * Disable/enable {@link Granite.author.ui.Overlay}s for Panel Container items on navigate.
+     * The overlays of the non-active Panel Container items are disabled.
+     * Necessary for preventing the default Content Tree selection logic from triggering a click on
+     * overlays that aren't visible in the Content Frame.
      *
      * @param {jQuery.Event} event The panel navigation event Object
      */
