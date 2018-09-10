@@ -20,6 +20,7 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 * Page authoring components:
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Carousel](content/src/content/jcr_root/apps/core/wcm/sandbox/components/carousel/v1/carousel)
   * [Content Fragment](extension/contentfragment/content/src/content/jcr_root/apps/core/wcm/extension/components/contentfragment/v1/contentfragment)\*
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
