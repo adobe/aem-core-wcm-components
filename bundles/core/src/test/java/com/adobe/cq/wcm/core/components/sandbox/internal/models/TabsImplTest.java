@@ -27,6 +27,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Tabs;
@@ -67,7 +68,7 @@ public class TabsImplTest {
             {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", "Teaser 2", "Teaser 2 description"},
         };
         verifyTabItems(expectedItems, tabs.getItems());
-        //Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs1"));
+        Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs1"));
     }
 
     private Tabs getTabsUnderTest(String resourcePath) {
