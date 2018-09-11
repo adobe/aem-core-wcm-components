@@ -13,15 +13,5 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.sandbox.models;
 
-import org.osgi.annotation.versioning.ConsumerType;
-
-/**
- * Defines the {@code Carousel} Sling Model used for the {@code /apps/core/wcm/sandbox/components/carousel} component.
- *
- * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
- */
-@ConsumerType
-public interface Carousel extends Container {
-}
+window.CQ.CoreComponentsIT.Tabs = window.CQ.CoreComponentsIT.Tabs || {};

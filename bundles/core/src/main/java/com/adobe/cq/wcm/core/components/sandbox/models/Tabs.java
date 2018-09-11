@@ -18,10 +18,10 @@ package com.adobe.cq.wcm.core.components.sandbox.models;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Defines the {@code Carousel} Sling Model used for the {@code /apps/core/wcm/sandbox/components/carousel} component.
+ * Defines the {@code Tabs} Sling Model used for the {@code /apps/core/wcm/sandbox/components/tabs} component.
  *
  * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
  */
 @ConsumerType
-public interface Carousel extends Container {
+public interface Tabs extends Container {
 }

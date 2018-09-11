@@ -13,15 +13,18 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.sandbox.models;
+(function(channel) {
+    "use strict";
 
-import org.osgi.annotation.versioning.ConsumerType;
+    channel.on("cq-editor-loaded", function(event) {
+        if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.panelcontainer && window.CQ.CoreComponents.panelcontainer.registry) {
+            window.CQ.CoreComponents.panelcontainer.registry.register({
+                name: "cmp-tabs",
+                selector: ".cmp-tabs",
+                itemSelector: "[data-cmp-hook-tabs='tabpanel']",
+                itemActiveSelector: ".cmp-tabs__tabpanel--active"
+            });
+        }
+    });
 
-/**
- * Defines the {@code Carousel} Sling Model used for the {@code /apps/core/wcm/sandbox/components/carousel} component.
- *
- * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
- */
-@ConsumerType
-public interface Carousel extends Container {
-}
+})(jQuery(document));

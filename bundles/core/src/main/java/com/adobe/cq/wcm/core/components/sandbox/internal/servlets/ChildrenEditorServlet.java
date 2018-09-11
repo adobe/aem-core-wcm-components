@@ -33,14 +33,18 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.sandbox.internal.models.CarouselImpl;
+import com.adobe.cq.wcm.core.components.sandbox.internal.models.TabsImpl;
+
 /**
- * Servlet that deletes or reorders the child items of a Carousel component.
+ * Servlet that deletes or reorders the child items of a Carousel or a Tabs component.
  */
 @Component(
     service = Servlet.class,
     property = {
         "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-        "sling.servlet.resourceTypes=" + ChildrenEditorServlet.RT_CAROUSEL,
+        "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
         "sling.servlet.selectors=" + ChildrenEditorServlet.SELECTOR,
         "sling.servlet.extensions=" + ChildrenEditorServlet.EXTENSION
     }
@@ -49,7 +53,6 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorServlet.class);
 
-    protected static final String RT_CAROUSEL = "core/wcm/sandbox/components/carousel/v1/carousel";
     protected static final String SELECTOR = "childreneditor";
     protected static final String EXTENSION = "html";
 
