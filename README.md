@@ -63,7 +63,7 @@ Core Components | Extension | AEM                      | Java
 
 To install everything, except the extensions, the [released aggregate package `core.wcm.components.all`](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
 
-For more information about the Package Manager please have a look at [How to Work With Packages](https://docs.adobe.com/docs/en/aem/6-2/administer/content/package-manager.html) documentation page.
+For more information about the Package Manager please have a look at [How to Work With Packages](https://helpx.adobe.com/experience-manager/6-4/sites/administering/using/package-manager.html) documentation page.
 
 ## Build
 
@@ -83,8 +83,7 @@ For ease of build and installation the following profiles are provided:
 This project relies on the unobfuscated AEM 6.3 cq-quickstart. This is publicly available on https://repo.adobe.com
 
 For more details about the UberJar please head over to the
-[How to Build AEM Projects using Apache Maven](https://docs.adobe.com/docs/en/aem/6-2/develop/dev-tools/ht-projects-maven.html#What%20is%20the%20UberJar?)
-documentation page.
+[How to Build AEM Projects using Apache Maven](https://helpx.adobe.com/experience-manager/6-4/sites/developing/using/ht-projects-maven.html) documentation page.
 
 ### Install everything
 
