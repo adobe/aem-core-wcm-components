@@ -203,7 +203,6 @@
             if (srcAttribute && srcAttribute.indexOf(TEMP_DESIGN_PATH) == -1) {
                 imageElement.removeAttribute("src");
             }
-            imageElement.removeAttribute("src");
             that._elements.container.insertBefore(imageElement, that._elements.noscript);
 
             var mapElement = temporaryDocument.querySelector(selectors.map);
