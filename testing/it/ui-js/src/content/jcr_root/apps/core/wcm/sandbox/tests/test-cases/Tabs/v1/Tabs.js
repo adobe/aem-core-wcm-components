@@ -374,21 +374,24 @@
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_RIGHT })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item1')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 2;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 2;
             })
 
             // simulate a down arrow keydown event and verify right navigation
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_DOWN })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item2')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 3;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 3;
             })
 
             // simulate a right arrow keydown event and verify no further navigation
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_RIGHT })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item2')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 3;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 3;
             });
     };
 
@@ -411,21 +414,24 @@
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_LEFT })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item1')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 2;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 2;
             })
 
             // simulate an up arrow keydown event and verify left navigation
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_UP })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item0')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 1;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 1;
             })
 
             // simulate a left arrow keydown event and verify no further navigation
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.ARROW_LEFT })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item0')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 1;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 1;
             });
     };
 
@@ -448,14 +454,16 @@
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.END })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item2')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 3;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 3;
             })
 
             // simulate a home arrow keydown event and verify start navigation
             .simulate(selectors.tabs.tab + ":focus", "keydown", { keyCode: keyCodes.HOME })
             .asserts.isTrue(function() {
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item0')");
-                return $tabActive.size() === 1 && h.find(selectors.tabs.tabpanelActive).index() === 1;
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 1;
             });
     };
 
