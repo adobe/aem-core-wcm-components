@@ -45,10 +45,12 @@ public abstract class AbstractContainerImpl implements Container {
         List<ListItem> items = new ArrayList<>();
         if (resource != null) {
             ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
-            for (Resource res : resource.getChildren()) {
-                Component component = componentManager.getComponentOfResource(res);
-                if (component != null) {
-                    items.add(new ResourceListItemImpl(request, res));
+            if (componentManager != null) {
+                for (Resource res : resource.getChildren()) {
+                    Component component = componentManager.getComponentOfResource(res);
+                    if (component != null) {
+                        items.add(new ResourceListItemImpl(request, res));
+                    }
                 }
             }
         }
