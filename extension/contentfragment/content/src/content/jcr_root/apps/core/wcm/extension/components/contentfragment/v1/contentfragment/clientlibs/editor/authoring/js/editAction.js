@@ -38,8 +38,8 @@
             var fragmentPath = $(editable.dom).find("." + CLASS_CONTENTFRAGMENT).attr(ATTRIBUTE_PATH);
             if (fragmentPath) {
                 var fragmentEditUrl = EDITOR_URL + fragmentPath;
-                var fragment = Granite.author.CFM.Fragments.adaptToFragment(editable.dom);
-                if (fragment && typeof fragment.variation !== 'undefined') {
+                var fragment = ns.CFM.Fragments.adaptToFragment(editable.dom);
+                if (fragment && typeof fragment.variation !== 'undefined' && fragment.variation !== 'master') {
                     fragmentEditUrl = fragmentEditUrl + "?variation=" + fragment.variation;
                 }
                 // open the editor in a new window
