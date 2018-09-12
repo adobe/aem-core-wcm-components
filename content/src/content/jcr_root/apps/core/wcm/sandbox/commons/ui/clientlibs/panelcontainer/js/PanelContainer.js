@@ -78,7 +78,7 @@
                     index: index
                 };
 
-                Granite.author.ContentFrame.postMessage(MESSAGE_ID, data);
+                ns.ContentFrame.postMessage(MESSAGE_ID, data);
 
                 setTimeout(function() {
                     channel.trigger({
