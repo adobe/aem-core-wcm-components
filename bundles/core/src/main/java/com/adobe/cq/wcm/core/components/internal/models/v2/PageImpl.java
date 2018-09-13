@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -46,6 +48,7 @@ import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
@@ -56,6 +59,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
 
     private Boolean hasCloudconfigSupport;
+    protected String[] headClientLibCategories = new String[0];
+    protected static final String PN_HEAD_CLIENTLIBS = "headClientlibs";
 
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
@@ -88,6 +93,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 appResourcesPath = getProxyPath(clientLibraryList.get(0));
             }
         }
+        populateHeadClientlibCategories();
         setRedirect();
     }
 
@@ -116,9 +122,23 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return path;
     }
 
+
+    protected void populateHeadClientlibCategories() {
+        if (currentStyle != null) {
+            headClientLibCategories = currentStyle.get(PN_HEAD_CLIENTLIBS, ArrayUtils.EMPTY_STRING_ARRAY);
+        }
+    }
+
     @Override
     protected void loadFavicons(String designPath) {
     }
+
+    @Override
+    @JsonIgnore
+    public String[] getHeadClientLibCategories() {
+        return Arrays.copyOf(headClientLibCategories, headClientLibCategories.length);
+    }
+
 
     @Override
     public Map<String, String> getFavicons() {

@@ -227,14 +227,27 @@ public interface Page extends ContainerExporter {
     }
 
     /**
-     * If this page is associated with a Template, then this method will return the Template's client libraries categories.
+     * If this page is associated with a Template, then this method will return the Template's client library categories to be included before the page body end tag.
      *
-     * @return an array of client libraries categories; the array can be empty if the page doesn't have an associated template or if the
-     * template has no client libraries
+     * @return an array of client library categories included in the page body; the array can be empty if the page doesn't have an associated template or if the
+     * template has no client libraries defined to be included in the page body
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     @JsonIgnore
     default String[] getClientLibCategories() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * If this page is associated with a Template, then this method will return the client library categories to be included
+     * in the head section as defined by the user in the policy.
+     *
+     * @return an array of client library categories to be included in the page head; the array can be empty if the page doesn't have an associated template or if the
+     * template has no client libraries defined to be included in the page head.
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0;
+     */
+    @JsonIgnore
+    default String[] getHeadClientLibCategories() {
         throw new UnsupportedOperationException();
     }
 
