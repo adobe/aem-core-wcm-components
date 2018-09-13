@@ -43,6 +43,8 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
   * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 
+Visit the [roadmap wiki page](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
+
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
 \* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
