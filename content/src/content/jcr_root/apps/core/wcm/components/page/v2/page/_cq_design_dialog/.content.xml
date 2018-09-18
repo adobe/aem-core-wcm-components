@@ -60,7 +60,7 @@
                             <headClientlibs
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
-                                fieldDescription="Load JavaScript for the selected Client-Side Library categories in the page head. JavaScript and CSS are loaded in the page head. If a category is also defined in the Client Libraries field, JavaScript will be loaded in the page head rather than at body end."
+                                fieldDescription="Load both JavaScript and CSS for the selected Client-Side Library categories in the page head. If a category is duplicated in the Client Libraries field, JavaScript will be loaded in the page head rather than at body end."
                                 fieldLabel="Page head Client Libraries"
                                 mode="contains"
                                 multiple="{Boolean}true"
