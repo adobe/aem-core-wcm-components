@@ -16,7 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -46,6 +49,7 @@ import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
@@ -53,6 +57,7 @@ import com.google.common.collect.Lists;
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
+    protected static final String PN_HEAD_CLIENTLIBS = "headClientlibs";
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
 
     private Boolean hasCloudconfigSupport;
@@ -76,6 +81,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String appResourcesPath;
     private NavigationItem redirectTarget;
 
+    protected String[] headClientLibCategories = new String[0];
+
     @PostConstruct
     protected void initModel() {
         super.initModel();
@@ -88,6 +95,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 appResourcesPath = getProxyPath(clientLibraryList.get(0));
             }
         }
+        populateHeadClientlibCategories();
+        filterClientlibCategories();
         setRedirect();
     }
 
@@ -116,8 +125,20 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return path;
     }
 
+    protected void populateHeadClientlibCategories() {
+        if (currentStyle != null) {
+            headClientLibCategories = currentStyle.get(PN_HEAD_CLIENTLIBS, ArrayUtils.EMPTY_STRING_ARRAY);
+        }
+    }
+
     @Override
     protected void loadFavicons(String designPath) {
+    }
+
+    @Override
+    @JsonIgnore
+    public String[] getHeadClientLibCategories() {
+        return Arrays.copyOf(headClientLibCategories, headClientLibCategories.length);
     }
 
     @Override
@@ -165,5 +186,19 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             }
         }
         return hasCloudconfigSupport;
+    }
+
+    protected void filterClientlibCategories() {
+        ArrayList<String> categories = new ArrayList<String>();
+        for (String category : Arrays.asList(clientLibCategories)) {
+            Set<String> headClientLibCategorySet = new HashSet<>();
+            for (String headCategory : Arrays.asList(headClientLibCategories)) {
+                headClientLibCategorySet.add(headCategory);
+            }
+            if (!headClientLibCategorySet.contains(category)) {
+                categories.add(category);
+            }
+        }
+        clientLibCategories = categories.toArray(new String[0]);
     }
 }

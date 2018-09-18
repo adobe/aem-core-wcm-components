@@ -227,14 +227,29 @@ public interface Page extends ContainerExporter {
     }
 
     /**
-     * If this page is associated with a Template, then this method will return the Template's client libraries categories.
+     * If this page is associated with a Template, then this method will return the Template's client library categories
+     * to be included in the page as defined by the user in the policy.
+     * JavaScript is expected to be included before the body end tag, CSS in the page head.
      *
-     * @return an array of client libraries categories; the array can be empty if the page doesn't have an associated template or if the
-     * template has no client libraries
+     * @return an array of client library categories to be included; the array can be empty if the page doesn't have an
+     * associated template or if the template has no client libraries defined.
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     @JsonIgnore
     default String[] getClientLibCategories() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * If this page is associated with a Template, then this method will return the client library categories
+     * for which JavaScript is expected to be included up front in the page head as defined by the user in the policy.
+     *
+     * @return an array of client library categories for which JavaScript is to be included in the page head; the array can be empty
+     * if the page doesn't have an associated template or if the template has no head client libraries defined.
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0;
+     */
+    @JsonIgnore
+    default String[] getHeadClientLibCategories() {
         throw new UnsupportedOperationException();
     }
 
