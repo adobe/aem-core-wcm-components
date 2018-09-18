@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.headlibs="${@ designPath, staticDesignPath, clientLibCategories, headClientLibJsCategories, hasCloudconfigSupport}"
+<template data-sly-template.headlibs="${@ designPath, staticDesignPath, clientLibCategories, headClientLibCategories, hasCloudconfigSupport}"
           data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
     <sly data-sly-test="${!wcmmode.disabled}" data-sly-call="${clientlib.all @ categories = [
         'cq.pagetypes.html5page',
