@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -189,14 +189,10 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     protected void filterClientlibCategories() {
-        ArrayList<String> categories = new ArrayList<String>();
-        for (String category : Arrays.asList(clientLibCategories)) {
-            Set<String> headClientLibCategorySet = new HashSet<>();
-            for (String headCategory : Arrays.asList(headClientLibCategories)) {
-                headClientLibCategorySet.add(headCategory);
-            }
-            if (!headClientLibCategorySet.contains(category)) {
-                categories.add(category);
+        LinkedHashSet<String> categories = new LinkedHashSet<>(Arrays.asList(clientLibCategories));
+        for (String headCategory : headClientLibCategories) {
+            if (categories.contains(headCategory)) {
+                categories.remove(headCategory);
             }
         }
         clientLibCategories = categories.toArray(new String[0]);
