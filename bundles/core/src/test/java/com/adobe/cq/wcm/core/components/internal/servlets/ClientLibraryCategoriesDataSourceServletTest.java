@@ -48,7 +48,7 @@ import static org.mockito.Mockito.when;
 public class ClientLibraryCategoriesDataSourceServletTest {
 
     @Rule
-    public AemContext context = CoreComponentTestContext.createContext("/page/v2/datasource/clientlibrarycategories",
+    public AemContext context = CoreComponentTestContext.createContext("/commons/datasources/clientlibrarycategories/v1",
         "/apps");
 
     private static final String CLIENTLIB_A_PATH = "/apps/clientlibs/a-jsonly";
