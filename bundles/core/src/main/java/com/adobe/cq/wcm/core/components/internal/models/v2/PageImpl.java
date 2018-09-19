@@ -190,11 +190,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     protected void filterClientlibCategories() {
         LinkedHashSet<String> categories = new LinkedHashSet<>(Arrays.asList(clientLibCategories));
-        for (String headCategory : headClientLibCategories) {
-            if (categories.contains(headCategory)) {
-                categories.remove(headCategory);
-            }
-        }
+        categories.removeAll(Arrays.asList(headClientLibCategories));
         clientLibCategories = categories.toArray(new String[0]);
     }
 }
