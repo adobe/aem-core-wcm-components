@@ -54,7 +54,7 @@ import com.adobe.granite.ui.components.ds.SimpleDataSource;
 )
 public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsServlet {
 
-    public final static String RESOURCE_TYPE = "core/wcm/components/page/v2/datasource/clientlibrarycategories";
+    public final static String RESOURCE_TYPE = "core/wcm/components/commons/datasources/clientlibrarycategories/v1";
     public final static String PN_LIBRARY_TYPE = "type";
 
     @Reference
@@ -81,24 +81,24 @@ public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsSe
 
     private List<Resource> getCategoryResourceList(@Nonnull SlingHttpServletRequest request, LibraryType libraryType) {
         List<Resource> categoryResourceList = new ArrayList<>();
-        HashSet<String> clientLibraryCategoryHashSet = new HashSet<String>();
+        HashSet<String> clientLibraryCategories = new HashSet<String>();
         for (ClientLibrary library: htmlLibraryManager.getLibraries().values()) {
             for (String category: library.getCategories()) {
-                clientLibraryCategoryHashSet.add(category);
+                clientLibraryCategories.add(category);
             }
         }
         if (libraryType != null) {
             Collection<ClientLibrary> clientLibraries = htmlLibraryManager
-                .getLibraries(clientLibraryCategoryHashSet.toArray(new String[clientLibraryCategoryHashSet.size()]),
+                .getLibraries(clientLibraryCategories.toArray(new String[clientLibraryCategories.size()]),
                 libraryType, true, true);
-            clientLibraryCategoryHashSet.clear();
+            clientLibraryCategories.clear();
             for (ClientLibrary library: clientLibraries) {
                 for (String category: library.getCategories()) {
-                    clientLibraryCategoryHashSet.add(category);
+                    clientLibraryCategories.add(category);
                 }
             }
         }
-        for (String category: clientLibraryCategoryHashSet) {
+        for (String category: clientLibraryCategories) {
             categoryResourceList.add(new CategoryResource(category, request.getResourceResolver()));
         }
         return categoryResourceList;
