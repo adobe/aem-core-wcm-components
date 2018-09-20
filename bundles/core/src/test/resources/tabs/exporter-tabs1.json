@@ -14,5 +14,6 @@
             "lastModified": null,
             "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2"
         }
-    ]
+    ],
+    ":type":"core/wcm/sandbox/components/tabs/v1/tabs"
 }
