@@ -15,19 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.factory.ModelFactory;
 
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import org.apache.sling.api.resource.Resource;
-import com.adobe.cq.export.json.SlingModelFilter;
 
 public class Utils {
 

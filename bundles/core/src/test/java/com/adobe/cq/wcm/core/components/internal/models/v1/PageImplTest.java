@@ -23,8 +23,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
@@ -46,8 +44,8 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
+import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
-import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.designer.Design;
@@ -56,7 +54,6 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
-import com.day.cq.wcm.msm.api.MSMNameConstants;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -116,27 +113,7 @@ public class PageImplTest {
         aemContext.addModelsForClasses(MockResponsiveGrid.class);
         aemContext.load().json(testBase + "/test-conf.json", "/conf/coretest/settings");
         aemContext.load().json(testBase + "/default-tags.json", "/etc/tags/default");
-        aemContext.registerService(SlingModelFilter.class, new SlingModelFilter() {
-
-            private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
-                add(NameConstants.NN_RESPONSIVE_CONFIG);
-                add(MSMNameConstants.NT_LIVE_SYNC_CONFIG);
-                add("cq:annotations");
-            }};
-
-            @Override
-            public Map<String, Object> filterProperties(Map<String, Object> map) {
-                return map;
-            }
-
-            @Override
-            public Iterable<Resource> filterChildResources(Iterable<Resource> childResources) {
-                return StreamSupport
-                        .stream(childResources.spliterator(), false)
-                        .filter(r -> !IGNORED_NODE_NAMES.contains(r.getName()))
-                        .collect(Collectors.toList());
-            }
-        });
+        aemContext.registerService(SlingModelFilter.class, new MockSlingModelFilter());
     }
 
     @Test

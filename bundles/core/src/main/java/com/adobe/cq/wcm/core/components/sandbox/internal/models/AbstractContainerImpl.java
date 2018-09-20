@@ -19,20 +19,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.SlingModelFilter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Container;

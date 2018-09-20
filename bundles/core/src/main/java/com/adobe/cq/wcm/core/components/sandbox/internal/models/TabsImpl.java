@@ -15,31 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.sandbox.internal.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Tabs;
-import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.components.ComponentManager;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ContainerExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TabsImpl extends AbstractContainerImpl implements Tabs, ContainerExporter {
+public class TabsImpl extends AbstractContainerImpl implements Tabs {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TabsImpl.class);
 

@@ -1,19 +1,29 @@
 {
-    "items": [
+    "items"      : [
         {
-            "url": null,
-            "title": "Teaser 1",
-            "description": "Teaser 1 description",
+            "url"         : null,
+            "title"       : "Teaser 1",
+            "description" : "Teaser 1 description",
             "lastModified": null,
-            "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1"
+            "path"        : "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1"
         },
         {
-            "url": null,
-            "title": "Teaser 2",
-            "description": "Teaser 2 description",
+            "url"         : null,
+            "title"       : "Teaser 2",
+            "description" : "Teaser 2 description",
             "lastModified": null,
-            "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2"
+            "path"        : "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2"
         }
     ],
-    ":type":"core/wcm/sandbox/components/tabs/v1/tabs"
+    ":itemsOrder": [
+        "item_1",
+        "item_2",
+        "item_3"
+    ],
+    ":items"     : {
+        "item_1": null,
+        "item_2": null,
+        "item_3": null
+    },
+    ":type"      : "core/wcm/sandbox/components/tabs/v1/tabs"
 }
