@@ -22,14 +22,17 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.extension.contentfragment.internal.ContentFragmentMockAdapter;
 import com.adobe.cq.wcm.core.components.extension.contentfragment.internal.MockElement;
 import com.adobe.cq.wcm.core.components.extension.contentfragment.internal.MockVariation;
+import com.day.cq.search.QueryBuilder;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
@@ -92,6 +95,8 @@ public abstract class AbstractContentFragmentTest<T> {
 
     protected static FragmentRenderService fragmentRenderService;
 
+    protected QueryBuilder queryBuilderMock;
+
     @ClassRule
     public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext("/contentfragment", "/content");
 
@@ -127,6 +132,11 @@ public abstract class AbstractContentFragmentTest<T> {
         AEM_CONTEXT.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
     }
 
+    @Before
+    public void setUpQueryBuilder() throws Exception {
+        queryBuilderMock = Mockito.mock(QueryBuilder.class);
+    }
+
     protected void setFakeLoggerOnClass(Class<?> clazz, Logger logger) throws NoSuchFieldException, IllegalAccessException {
         Field field = clazz.getDeclaredField("LOG");
         Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -143,7 +153,10 @@ public abstract class AbstractContentFragmentTest<T> {
      */
     protected T getModelInstanceUnderTest(String resourceName) {
         String path = getTestResourcesParentPath() + "/" + resourceName;
-        ResourceResolver resourceResolver = AEM_CONTEXT.resourceResolver();
+        ResourceResolver originalResourceResolver = AEM_CONTEXT.resourceResolver();
+        // Replace resource resolver with stubbed version of itself so we can verify query builder interaction
+        ResourceResolver resourceResolver = Mockito.spy(originalResourceResolver);
+        Mockito.doReturn(queryBuilderMock).when(resourceResolver).adaptTo(Mockito.eq(QueryBuilder.class));
         Resource resource = resourceResolver.getResource(path);
         MockSlingHttpServletRequest httpServletRequest = new MockSlingHttpServletRequest(resourceResolver, AEM_CONTEXT.bundleContext());
         httpServletRequest.setResource(resource);
