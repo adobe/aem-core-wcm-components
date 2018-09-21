@@ -229,7 +229,6 @@ public interface Page extends ContainerExporter {
     /**
      * If this page is associated with a Template, then this method will return the Template's client library categories
      * to be included in the page as defined by the user in the policy.
-     * JavaScript is expected to be included before the body end tag, CSS in the page head.
      *
      * @return an array of client library categories to be included; the array can be empty if the page doesn't have an
      * associated template or if the template has no client libraries defined.
@@ -241,15 +240,28 @@ public interface Page extends ContainerExporter {
     }
 
     /**
-     * If this page is associated with a Template, then this method will return the client library categories
-     * for which JavaScript is expected to be included up front in the page head as defined by the user in the policy.
+     * If this page is associated with a Template, then this method will return the JavaScript client library categories
+     * which are expected to be included at the page body end, as defined by the user in the policy.
      *
-     * @return an array of client library categories for which JavaScript is to be included in the page head; the array can be empty
+     * @return an array of JavaScript client library categories which are expected to be included at the page body end;
+     * the array can be empty if the page doesn't have an associated template or if the template has no body client libraries defined.
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0;
+     */
+    @JsonIgnore
+    default String[] getClientLibCategoriesJsBody() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * If this page is associated with a Template, then this method will return the JavaScript client library categories
+     * which are expected to be included up front in the page head, as defined by the user in the policy.
+     *
+     * @return an array of JavaScript client library categories which are expected to be included in the page head; the array can be empty
      * if the page doesn't have an associated template or if the template has no head client libraries defined.
      * @since com.adobe.cq.wcm.core.components.models 12.5.0;
      */
     @JsonIgnore
-    default String[] getHeadClientLibCategories() {
+    default String[] getClientLibCategoriesJsHead() {
         throw new UnsupportedOperationException();
     }
 

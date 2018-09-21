@@ -41,7 +41,7 @@
                             <clientlibs
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
-                                fieldDescription="The Client-Side Library categories to load. JavaScript is added at the body end, CSS in the page head."
+                                fieldDescription="The client library categories to load. JavaScript is added at the body end, CSS in the page head."
                                 fieldLabel="Client Libraries"
                                 mode="contains"
                                 multiple="{Boolean}true"
@@ -57,14 +57,14 @@
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
                             </clientlibs>
-                            <headClientlibs
+                            <clientlibsJsHead
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
-                                fieldDescription="Load both JavaScript and CSS for the selected Client-Side Library categories in the page head. If a category is duplicated in the Client Libraries field, JavaScript will be loaded in the page head rather than at body end."
-                                fieldLabel="Page head Client Libraries"
+                                fieldDescription="Load JavaScript for the selected client library categories in the page head. If a category is duplicated in the Client Libraries field, JavaScript will be loaded in the page head rather than at body end."
+                                fieldLabel="Client Libraries JavaScript Page Head"
                                 mode="contains"
                                 multiple="{Boolean}true"
-                                name="./headClientlibs"
+                                name="./clientlibsJsHead"
                                 required="{Boolean}false">
                                 <datasource
                                     jcr:primaryType="nt:unstructured"
@@ -75,12 +75,12 @@
                                 <options
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
-                            </headClientlibs>
+                            </clientlibsJsHead>
                             <appResourcesClientlib
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
                                 emptyText="org.example.myapp.resources"
-                                fieldDescription="The Client-Side Library category that is used to serve web resources such as favicons."
+                                fieldDescription="The client library category that is used to serve web resources such as favicons."
                                 fieldLabel="Web Resources Client Library"
                                 mode="contains"
                                 multiple="{Boolean}false"
