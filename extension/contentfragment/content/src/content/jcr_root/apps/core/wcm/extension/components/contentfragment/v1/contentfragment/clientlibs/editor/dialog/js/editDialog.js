@@ -144,7 +144,7 @@
         if (this.variationName) {
             this.variationName.value = "";
         }
-    }
+    };
 
     /**
      * Creates an http request object for retrieving fragment's element names or variation names and returns it.
@@ -257,7 +257,7 @@
         }
 
         return true;
-    }
+    };
 
     /**
      * Replace the current state with the values present in fetchedState and discard the fetchedState thereafter.
