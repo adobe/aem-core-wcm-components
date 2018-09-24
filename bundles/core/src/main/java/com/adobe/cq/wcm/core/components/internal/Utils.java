@@ -71,6 +71,8 @@ public class Utils {
     /**
      * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
      *
+     * @param slingModelFilter used by ComponentExporters in order to filter Resources and properties that are exported.
+     * @param modelFactory  The OSGi service model.
      * @param slingRequest The current request.
      * @param modelClass  The Sling Model class to be adapted to.
      * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
