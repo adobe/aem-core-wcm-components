@@ -68,7 +68,8 @@
                                 required="{Boolean}false">
                                 <datasource
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"/>
+                                    sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"
+                                    type="js"/>
                                 <values
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/tags"/>
