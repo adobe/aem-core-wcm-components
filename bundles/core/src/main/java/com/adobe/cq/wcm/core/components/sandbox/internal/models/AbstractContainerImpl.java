@@ -57,7 +57,7 @@ public abstract class AbstractContainerImpl implements Container {
     private SlingModelFilter slingModelFilter;
 
     private List<ListItem> items;
-    private Map<String, ? extends ComponentExporter> childrenModels;
+    private Map<String, ? extends ComponentExporter> childModels;
     private String[] exportedItemsOrder;
 
     private List<ListItem> readItems() {
@@ -93,10 +93,10 @@ public abstract class AbstractContainerImpl implements Container {
     @Nonnull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
-        if (childrenModels == null) {
-            childrenModels = Utils.getChildModels(slingModelFilter, modelFactory, request, ComponentExporter.class);
+        if (childModels == null) {
+            childModels = Utils.getChildModels(slingModelFilter, modelFactory, request, ComponentExporter.class);
         }
-        return childrenModels;
+        return childModels  ;
     }
 
     @Nonnull

@@ -139,10 +139,10 @@
     };
 
     /**
-     * Create tab items
+     * Create a new tab and name it
      */
-    tabs.tcAddTabs = function(selectors, component, parentPath, cmpPath, tabName) {
-        return new h.TestCase("Create child items")
+    tabs.tcAddTab = function(selectors, component, parentPath, cmpPath, tabName) {
+        return new h.TestCase("Create a new tab")
             .execFct(function(opts, done) {
                 c.addComponent(h.param(component)(opts), h.param(parentPath)(opts) + "/", cmpPath, done);
             })
@@ -490,9 +490,9 @@
             execAfter: tcExecuteAfterTest
         })
             // create nested tabs
-            .execTestCase(tabs.tcAddTabs(selectors, "proxyPath", "cmpPath", "tab1Path", "Tab 1"))
-            .execTestCase(tabs.tcAddTabs(selectors, "proxyPath", "cmpPath", "tab2Path", "Tab 2"))
-            .execTestCase(tabs.tcAddTabs(selectors, "proxyPath", "tab2Path", "tab21Path", "Tab 2.1"))
+            .execTestCase(tabs.tcAddTab(selectors, "proxyPath", "cmpPath", "tab1Path", "Tab 1"))
+            .execTestCase(tabs.tcAddTab(selectors, "proxyPath", "cmpPath", "tab2Path", "Tab 2"))
+            .execTestCase(tabs.tcAddTab(selectors, "proxyPath", "tab2Path", "tab21Path", "Tab 2.1"))
 
             // create new items on tab 2.1
             .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "tab21Path"))
@@ -525,5 +525,4 @@
                 return $tabActive1.size() === 0 && $tabActive2.size() === 1 && $tabpanelActive.size() === 3;
             });
     };
-
 }(hobs, jQuery));

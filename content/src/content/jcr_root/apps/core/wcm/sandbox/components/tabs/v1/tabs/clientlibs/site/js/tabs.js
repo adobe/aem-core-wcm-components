@@ -101,11 +101,11 @@
                 var hook = hooks[i];
                 if (hook.closest("." + NS + "-" + IS) === that._elements.self) { // only process own tab elements
                     var capitalized = IS;
-                    capitalized     = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-                    var key         = hook.dataset[NS + "Hook" + capitalized];
+                    capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+                    var key = hook.dataset[NS + "Hook" + capitalized];
                     if (that._elements[key]) {
                         if (!Array.isArray(that._elements[key])) {
-                            var tmp             = that._elements[key];
+                            var tmp = that._elements[key];
                             that._elements[key] = [tmp];
                         }
                         that._elements[key].push(hook);
@@ -265,8 +265,8 @@
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-        var body             = document.querySelector("body");
-        var observer         = new MutationObserver(function(mutations) {
+        var body = document.querySelector("body");
+        var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
