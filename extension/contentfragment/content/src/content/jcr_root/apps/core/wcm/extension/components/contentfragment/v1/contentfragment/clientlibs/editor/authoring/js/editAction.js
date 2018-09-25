@@ -37,8 +37,13 @@
             // get the path of the content fragment
             var fragmentPath = $(editable.dom).find("." + CLASS_CONTENTFRAGMENT).attr(ATTRIBUTE_PATH);
             if (fragmentPath) {
+                var fragmentEditUrl = EDITOR_URL + fragmentPath;
+                var fragment = ns.CFM.Fragments.adaptToFragment(editable.dom);
+                if (fragment && typeof fragment.variation !== 'undefined' && fragment.variation !== 'master') {
+                    fragmentEditUrl = fragmentEditUrl + "?variation=" + fragment.variation;
+                }
                 // open the editor in a new window
-                window.open(Granite.HTTP.externalize(EDITOR_URL + fragmentPath));
+                window.open(Granite.HTTP.externalize(fragmentEditUrl));
             }
         }
 
