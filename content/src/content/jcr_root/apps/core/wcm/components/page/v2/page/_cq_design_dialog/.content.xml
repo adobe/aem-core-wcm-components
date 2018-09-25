@@ -53,7 +53,6 @@
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
                                             emptyText="Client library category"
-                                            mode="contains"
                                             multiple="{Boolean}false"
                                             name="./clientlibs"
                                             required="{Boolean}false">
@@ -62,7 +61,7 @@
                                                 sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"/>
                                             <options
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/foundation/form/autocomplete/list"/>
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
                                         </category>
                                     </items>
                                 </field>
@@ -82,7 +81,6 @@
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
                                             emptyText="Client library category"
-                                            mode="contains"
                                             multiple="{Boolean}false"
                                             name="./clientlibsJsHead"
                                             required="{Boolean}false">
@@ -92,7 +90,7 @@
                                                 type="js"/>
                                             <options
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/foundation/form/autocomplete/list"/>
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
                                         </category>
                                     </items>
                                 </field>
