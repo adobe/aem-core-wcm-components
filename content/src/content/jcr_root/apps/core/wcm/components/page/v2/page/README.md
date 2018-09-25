@@ -32,12 +32,14 @@ Extensible page component written in HTL.
 The page component automatically loads certain client libraries in the head section and at the end of the body section
 
 Client Library Category or Path | Condition | Type | Head or Body
---- | --- | --- | --- 
+--- | --- | --- | ---
 `cq.pagetypes.html5page`,`cq.authoring.page`,`cq.wcm.foundation-main`,`cq.shared` | only for `WCMMode`!=`Disabled` | JS and CSS | Head
 libsScript from all referenced [cloud service configurations](https://docs.adobe.com/docs/en/aem/6-3/develop/extending/cloud-service-configurations.html), by default `headlibs.jsp` | only in case there is a lib script found for the referenced cloud service config | anything | Head
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set | CSS | Head
+`<headClientlibs>` being set in component policy | only if `<headClientlibs>` is set | CSS | Head
 `<designpath>.css` | only if design is set for current page | CSS | Head
-`<clientlibs>` being set in component policy | only if `<clientlibs>` is set | JS | Body
+`<clientlibs>` being set in component policy | only if `<clientlibs>` is set. Categories duplicated in `<headClientlibs>` are loaded in the page head. | JS | Body
+`<headClientlibs>` being set in component policy | only if `<headClientlibs>` is set | JS | Head
 
 ## Use Object
 The Page component uses the following use objects:
@@ -48,8 +50,9 @@ The Page component uses the following use objects:
 ## Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./clientlibs` - allows to define a list of client libraries to be loaded by the pages associated to this configuration policy
-2. `./appResourcesClientlib` - allows to define the client library that is used to serve web resources like favicons
+1. `./clientlibs` - allows definition of a list of client libraries to be loaded by the pages associated with this policy configuration
+2. `./headClientlibs` - allows definition of client libraries for which JavaScript is loaded in the document head of pages associated with this policy configuration
+3. `./appResourcesClientlib` - allows definition of the client library that is used to serve web resources such as favicons
 
 ## Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:

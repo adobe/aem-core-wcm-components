@@ -35,36 +35,65 @@
                         jcr:title="Properties"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <heading
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:hideChildren="[heading,well]">
+                            <clientlibs
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/heading"
-                                level="{Long}4"
-                                text="Client-Side Libraries"/>
-                            <well
+                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
+                                fieldDescription="The client library categories to load. JavaScript is added at the body end, CSS in the page head."
+                                fieldLabel="Client Libraries"
+                                mode="contains"
+                                multiple="{Boolean}true"
+                                name="./clientlibs"
+                                required="{Boolean}false">
+                                <datasource
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"/>
+                                <values
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/tags"/>
+                                <options
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
+                            </clientlibs>
+                            <clientlibsJsHead
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/well">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <clientlibs
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                        class="foundation-layout-util-maximized-alt">
-                                        <field
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                            name="./clientlibs"
-                                            required="{Boolean}true"/>
-                                    </clientlibs>
-                                </items>
-                            </well>
+                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
+                                fieldDescription="Load JavaScript for the selected client library categories in the page head. If a category is duplicated in the Client Libraries field, JavaScript will be loaded in the page head rather than at body end."
+                                fieldLabel="Client Libraries JavaScript Page Head"
+                                mode="contains"
+                                multiple="{Boolean}true"
+                                name="./clientlibsJsHead"
+                                required="{Boolean}false">
+                                <datasource
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"
+                                    type="js"/>
+                                <values
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/tags"/>
+                                <options
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
+                            </clientlibsJsHead>
                             <appResourcesClientlib
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                name="./appResourcesClientlib"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
                                 emptyText="org.example.myapp.resources"
+                                fieldDescription="The client library category that is used to serve web resources such as favicons."
                                 fieldLabel="Web Resources Client Library"
-                                fieldDescription="The client library that is used to serve web resources like favicons."
-                                required="{Boolean}false"/>
+                                mode="contains"
+                                multiple="{Boolean}false"
+                                name="./appResourcesClientlib"
+                                required="{Boolean}false">
+                                <datasource
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"/>
+                                <options
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/autocomplete/list"/>
+                            </appResourcesClientlib>
                         </items>
                     </properties>
                     <styletab
