@@ -88,7 +88,7 @@
                     var newMultifieldItem = new Coral.Multifield.Item();
                     actionsMultifield.items.add(newMultifieldItem);
                     Coral.commons.ready(newMultifieldItem, function(element) {
-                        var linkField = $(element).find('foundation-autocomplete[name="link"]');
+                        var linkField = $(element).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']");
                         if (linkField) {
                             linkField.val(linkURL);
                             linkField.trigger("change");
@@ -107,8 +107,8 @@
 
     function toggleActionItems(actionsMultifield, disabled) {
         actionsMultifield.find("coral-multifield-item").each(function(ix, item) {
-            var linkField = $(item).find("foundation-autocomplete[name='link']").adaptTo("foundation-field");
-            var textField = $(item).find("input[name='text']").adaptTo("foundation-field");
+            var linkField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']").adaptTo("foundation-field");
+            var textField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']").adaptTo("foundation-field");
             if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
                 actionsMultifield[0].items.remove(item);
             }
@@ -120,7 +120,7 @@
     function retrievePageInfo(dialogContent) {
         var url;
         if (actionsEnabled) {
-            url = dialogContent.find('.cmp-teaser__editor-multifield_actions [name="link"]').val();
+            url = dialogContent.find('.cmp-teaser__editor-multifield_actions [data-cmp-teaser-v1-dialog-edit-hook="actionLink"]').val();
         } else {
             url = linkURL;
         }
@@ -144,7 +144,7 @@
     function updateText(target) {
         var url = target.val();
         if (url && url.startsWith("/")) {
-            var textField = target.parents("coral-multifield-item").find('[name="text"]');
+            var textField = target.parents("coral-multifield-item").find('[data-cmp-teaser-v1-dialog-edit-hook="actionTitle"]');
             if (textField && !textField.val()) {
                 $.ajax({
                     url: url + "/_jcr_content.json"

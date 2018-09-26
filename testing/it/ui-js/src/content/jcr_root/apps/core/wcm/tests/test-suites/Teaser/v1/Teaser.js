@@ -39,8 +39,8 @@
             descriptionFromPage: 'input[name="./descriptionFromPage"]',
             description: 'input[name="./jcr:description"]',
             actionsEnabled: 'coral-checkbox[name="./actionsEnabled"]',
-            actionLinkURL: 'foundation-autocomplete[name="link"]',
-            actionText: 'input[name="text"]'
+            actionLinkURL: '[data-cmp-teaser-v1-dialog-edit-hook="actionLink"]',
+            actionText: '[data-cmp-teaser-v1-dialog-edit-hook="actionTitle"]'
         }
     };
 
