@@ -16,28 +16,17 @@
 package com.adobe.cq.wcm.core.components.sandbox.internal.models;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.inject.Inject;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.factory.ModelFactory;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Container;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
-
 
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
@@ -50,15 +39,7 @@ public abstract class AbstractContainerImpl implements Container {
     @Self
     private SlingHttpServletRequest request;
 
-    @Inject
-    private ModelFactory modelFactory;
-
-    @Inject
-    private SlingModelFilter slingModelFilter;
-
     private List<ListItem> items;
-    private Map<String, ? extends ComponentExporter> childModels;
-    private String[] exportedItemsOrder;
 
     private List<ListItem> readItems() {
         List<ListItem> items = new ArrayList<>();
@@ -82,34 +63,5 @@ public abstract class AbstractContainerImpl implements Container {
             items = readItems();
         }
         return items;
-    }
-
-    @Nonnull
-    @Override
-    public String getExportedType() {
-        return request.getResource().getResourceType();
-    }
-
-    @Nonnull
-    @Override
-    public Map<String, ? extends ComponentExporter> getExportedItems() {
-        if (childModels == null) {
-            childModels = Utils.getChildModels(slingModelFilter, modelFactory, request, ComponentExporter.class);
-        }
-        return childModels  ;
-    }
-
-    @Nonnull
-    @Override
-    public String[] getExportedItemsOrder() {
-        if (exportedItemsOrder == null) {
-            Map<String, ? extends ComponentExporter> models = getExportedItems();
-            if (!models.isEmpty()) {
-                exportedItemsOrder = models.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
-            } else {
-                exportedItemsOrder = ArrayUtils.EMPTY_STRING_ARRAY;
-            }
-        }
-        return Arrays.copyOf(exportedItemsOrder,exportedItemsOrder.length);
     }
 }

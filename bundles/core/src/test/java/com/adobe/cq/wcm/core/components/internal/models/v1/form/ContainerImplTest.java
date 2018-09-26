@@ -16,6 +16,11 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.servlet.RequestDispatcher;
 
@@ -36,15 +41,17 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.form.Container;
-import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
+import com.day.cq.wcm.msm.api.MSMNameConstants;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -78,7 +85,27 @@ public class ContainerImplTest {
                 return formStructureHelper;
             }
         });
-        CONTEXT.registerService(SlingModelFilter.class, new MockSlingModelFilter());
+        CONTEXT.registerService(SlingModelFilter.class, new SlingModelFilter() {
+
+            private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
+                add(NameConstants.NN_RESPONSIVE_CONFIG);
+                add(MSMNameConstants.NT_LIVE_SYNC_CONFIG);
+                add("cq:annotations");
+            }};
+
+            @Override
+            public Map<String, Object> filterProperties(Map<String, Object> map) {
+                return map;
+            }
+
+            @Override
+            public Iterable<Resource> filterChildResources(Iterable<Resource> childResources) {
+                return StreamSupport
+                        .stream(childResources.spliterator(), false)
+                        .filter(r -> !IGNORED_NODE_NAMES.contains(r.getName()))
+                        .collect(Collectors.toList());
+            }
+        });
         FormsHelperStubber.createStub();
     }
 

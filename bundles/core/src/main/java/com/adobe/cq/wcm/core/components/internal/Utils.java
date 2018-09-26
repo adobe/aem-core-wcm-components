@@ -15,17 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.factory.ModelFactory;
 
-import com.adobe.cq.export.json.SlingModelFilter;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
@@ -66,27 +60,6 @@ public class Utils {
     public static String getURL(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
         String vanityURL = page.getVanityUrl();
         return StringUtils.isEmpty(vanityURL) ? request.getContextPath() + page.getPath() + ".html" : request.getContextPath() + vanityURL;
-    }
-
-    /**
-     * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
-     *
-     * @param slingModelFilter used by ComponentExporters in order to filter Resources and properties that are exported.
-     * @param modelFactory  The OSGi service model.
-     * @param slingRequest The current request.
-     * @param modelClass  The Sling Model class to be adapted to.
-     * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
-     */
-    @Nonnull
-    public static <T> Map<String, T> getChildModels(@Nonnull SlingModelFilter slingModelFilter, @Nonnull ModelFactory modelFactory, @Nonnull SlingHttpServletRequest slingRequest,
-                                              @Nonnull Class<T> modelClass) {
-        Map<String, T> itemWrappers = new LinkedHashMap<>();
-
-        for (final Resource child : slingModelFilter.filterChildResources(slingRequest.getResource().getChildren())) {
-            itemWrappers.put(child.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass));
-        }
-
-        return  itemWrappers;
     }
 
     public enum Heading {
