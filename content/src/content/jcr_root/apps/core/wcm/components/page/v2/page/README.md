@@ -35,10 +35,10 @@ Client Library Category or Path | Condition | Type | Head or Body
 --- | --- | --- | ---
 `cq.pagetypes.html5page`,`cq.authoring.page`,`cq.wcm.foundation-main`,`cq.shared` | only for `WCMMode`!=`Disabled` | JS and CSS | Head
 libsScript from all referenced [cloud service configurations](https://docs.adobe.com/docs/en/aem/6-3/develop/extending/cloud-service-configurations.html), by default `headlibs.jsp` | only in case there is a lib script found for the referenced cloud service config | anything | Head
+`<clientlibsJsHead>` being set in component policy | only if `<clientlibsJsHead>` is set | JS | Head
 `<clientlibs>` being set in component policy | only if `<clientlibs>` is set | CSS | Head
 `<designpath>.css` | only if design is set for current page | CSS | Head
-`<clientlibs>` being set in component policy | only if `<clientlibs>` is set. Categories duplicated in `<clientlibsJsHead>` are loaded in the page head. | JS | Body
-`<clientlibsJsHead>` being set in component policy | only if `<clientlibsJsHead>` is set | JS | Head
+`<clientlibs>` being set in component policy | only if `<clientlibs>` is set. Categories duplicated in `<clientlibsJsHead>` are only loaded in the page head. | JS | Body
 
 ## Use Object
 The Page component uses the following use objects:
