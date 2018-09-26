@@ -241,9 +241,9 @@ public interface Page extends ContainerExporter {
 
     /**
      * If this page is associated with a Template, then this method will return the JavaScript client library categories
-     * which are expected to be included at the page body end, as defined by the user in the policy.
+     * which are intended specifically to be loaded at the page body end (JavaScript only), as defined by the user in the policy.
      *
-     * @return an array of JavaScript client library categories which are expected to be included at the page body end;
+     * @return an array of JavaScript client library categories which are expected to be loaded at the page body end;
      * the array can be empty if the page doesn't have an associated template or if the template has no body client libraries defined.
      * @since com.adobe.cq.wcm.core.components.models 12.5.0;
      */
@@ -254,9 +254,9 @@ public interface Page extends ContainerExporter {
 
     /**
      * If this page is associated with a Template, then this method will return the JavaScript client library categories
-     * which are expected to be included up front in the page head, as defined by the user in the policy.
+     * which are intended specifically to be loaded up front in the page head (JavaScript only), as defined by the user in the policy.
      *
-     * @return an array of JavaScript client library categories which are expected to be included in the page head; the array can be empty
+     * @return an array of JavaScript client library categories which are expected to be loaded in the page head; the array can be empty
      * if the page doesn't have an associated template or if the template has no head client libraries defined.
      * @since com.adobe.cq.wcm.core.components.models 12.5.0;
      */
