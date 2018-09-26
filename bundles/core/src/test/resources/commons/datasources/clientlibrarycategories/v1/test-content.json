@@ -1,0 +1,26 @@
+{
+    "jcr:primaryType": "nt:unstructured",
+    "clientlibrarycategoriesinput": {
+        "jcr:primaryType": "nt:unstructured",
+        "datasource": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "core/wcm/components/page/v2/datasource/clientlibrarycategories"
+        }
+    },
+    "clientlibrarycategoriesinputjs": {
+        "jcr:primaryType": "nt:unstructured",
+        "datasource": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "core/wcm/components/page/v2/datasource/clientlibrarycategories",
+            "type": "JS"
+        }
+    },
+    "clientlibrarycategoriesinputcss": {
+        "jcr:primaryType": "nt:unstructured",
+        "datasource": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "core/wcm/components/page/v2/datasource/clientlibrarycategories",
+            "type": "CSS"
+        }
+    }
+}
