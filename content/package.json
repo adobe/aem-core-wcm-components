@@ -10,6 +10,7 @@
         "url": "https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components"
     },
     "scripts": {
+        "aemfed": "aemfed -t \"http://admin:admin@localhost:4502\" -e \"**/*___jb_(old|tmp)___\" -w \"src/content/jcr_root/\"",
         "eslint": "eslint .",
         "eslint:fix": "eslint . --fix",
         "lint": "npm-run-all --parallel eslint stylelint",
@@ -17,6 +18,7 @@
         "stylelint:fix": "stylelint '**/*.css' '**/*.less' --fix"
     },
     "devDependencies": {
+        "aemfed": "^0.0.5",
         "eslint": "^4.19.1",
         "npm-run-all": "^4.1.2",
         "stylelint": "^9.2.0",
