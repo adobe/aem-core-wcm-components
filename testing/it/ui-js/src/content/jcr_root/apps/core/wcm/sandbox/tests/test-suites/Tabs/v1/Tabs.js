@@ -37,7 +37,8 @@
         insertComponentDialog: {
             self: ".InsertComponentDialog",
             components: {
-                responsiveGrid: "coral-selectlist-item[value='/libs/wcm/foundation/components/responsivegrid']"
+                responsiveGrid: "coral-selectlist-item[value='/libs/wcm/foundation/components/responsivegrid']",
+                tab: "coral-selectlist-item[value='/apps/core-component/components/sandbox/tabs']"
             }
         },
         editableToolbar: {
@@ -79,6 +80,7 @@
         .addTestCase(tabs.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcPanelSelect(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(tabs.tcNestedTabs(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/tabs", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox, "core/wcm/tests/components/test-page-v2", c.rtTabs_v1))
         .addTestCase(tabs.tcAccessibilityNavigateRight(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))

@@ -114,26 +114,40 @@
     /**
      * Create child items
      */
-    tabs.tcCreateItems = function(selectors) {
+    tabs.tcCreateItems = function(selectors, component, cmpPath) {
         return new h.TestCase("Create child items")
             // open the edit dialog
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .execTestCase(c.tcOpenConfigureDialog(cmpPath))
             .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.insertComponentDialog.components.responsiveGrid)
+            .click(component)
             .wait(200)
             .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item0")
             .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.insertComponentDialog.components.responsiveGrid)
+            .click(component)
             .wait(200)
             .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item1")
             .click(selectors.editDialog.childrenEditor.addButton)
             .wait(200)
-            .click(selectors.insertComponentDialog.components.responsiveGrid)
+            .click(component)
             .wait(200)
             .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, "item2")
             // save the edit dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200);
+    };
+
+    /**
+     * Create a new tab and name it
+     */
+    tabs.tcAddTab = function(selectors, component, parentPath, cmpPath, tabName) {
+        return new h.TestCase("Create a new tab")
+            .execFct(function(opts, done) {
+                c.addComponent(h.param(component)(opts), h.param(parentPath)(opts) + "/", cmpPath, done);
+            })
+            .execTestCase(c.tcOpenConfigureDialog(parentPath))
+            .fillInput(selectors.editDialog.childrenEditor.item.last + " " + selectors.editDialog.childrenEditor.item.input, tabName)
             .execTestCase(c.tcSaveConfigureDialog)
             .wait(200);
     };
@@ -147,7 +161,7 @@
             execAfter: tcExecuteAfterTest
         })
             // create new items with titles
-            .execTestCase(tabs.tcCreateItems(selectors))
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
             // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // verify that 3 items have been created
@@ -171,7 +185,7 @@
             execAfter: tcExecuteAfterTest
         })
             // create new items with titles
-            .execTestCase(tabs.tcCreateItems(selectors))
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
             // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // remove the first item
@@ -200,7 +214,7 @@
             execAfter: tcExecuteAfterTest
         })
             // create new items with titles
-            .execTestCase(tabs.tcCreateItems(selectors))
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
             // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // move last item before the first one
@@ -242,7 +256,7 @@
             .asserts.visible(selectors.editableToolbar.actions.panelSelect, false)
 
             // create new items with titles
-            .execTestCase(tabs.tcCreateItems(selectors))
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
 
             // open the toolbar
             .click(selectors.overlay.self + "[data-path='%cmpPath%']")
@@ -364,7 +378,7 @@
             execAfter: tcExecuteAfterTest
         })
             // create new items with titles
-            .execTestCase(tabs.tcCreateItems(selectors))
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
 
             // switch to the content frame and focus the first tab
             .config.changeContext(c.getContentFrame)
@@ -404,7 +418,7 @@
             execAfter: tcExecuteAfterTest
         })
             // create new items with titles
-            .execTestCase(tabs.tcCreateItems(selectors))
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
 
             // switch to the content frame and focus the last tab
             .config.changeContext(c.getContentFrame)
@@ -444,7 +458,7 @@
             execAfter: tcExecuteAfterTest
         })
             // create new items with titles
-            .execTestCase(tabs.tcCreateItems(selectors))
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
 
             // switch to the content frame and focus the last tab
             .config.changeContext(c.getContentFrame)
@@ -467,4 +481,48 @@
             });
     };
 
+    /**
+     * Test: Nested tabs
+     */
+    tabs.tcNestedTabs = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Test nested tabs", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create nested tabs
+            .execTestCase(tabs.tcAddTab(selectors, "proxyPath", "cmpPath", "tab1Path", "Tab 1"))
+            .execTestCase(tabs.tcAddTab(selectors, "proxyPath", "cmpPath", "tab2Path", "Tab 2"))
+            .execTestCase(tabs.tcAddTab(selectors, "proxyPath", "tab2Path", "tab21Path", "Tab 2.1"))
+
+            // create new items on tab 2.1
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "tab21Path"))
+            // create new items on tab 2
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "tab2Path"))
+
+            .config.changeContext(c.getContentFrame)
+            // check tab2's items
+            .click(selectors.tabs.tab + ":contains('Tab 2'):first")
+            .asserts.isTrue(function() {
+                var $tabActive1 = h.find(selectors.tabs.tabActive + ":contains('Tab 2.1')");
+                var $tabActive2 = h.find(selectors.tabs.tabActive + ":contains('item0')");
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive1.size() === 1 && $tabActive2.size() === 1 && $tabpanelActive.size() === 3;
+            })
+            // check tab2.1's items
+            .click(selectors.tabs.tab + ":contains('item1'):eq(1)")
+            .asserts.isTrue(function() {
+                var $tabActive1 = h.find(selectors.tabs.tabActive + ":contains('Tab 2.1')");
+                var $tabActive2 = h.find(selectors.tabs.tabActive + ":contains('item1')");
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive1.size() === 1 && $tabActive2.size() === 1 && $tabpanelActive.size() === 3;
+            })
+            // check that tab2.1's items are not visible anymore
+            .click(selectors.tabs.tab + ":contains('item0'):first")
+            .asserts.isTrue(function() {
+                var $tabActive1 = h.find(selectors.tabs.tabActive + ":contains('Tab 2.1')");
+                var $tabActive2 = h.find(selectors.tabs.tabActive + ":contains('item0')");
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive1.size() === 0 && $tabActive2.size() === 1 && $tabpanelActive.size() === 3;
+            });
+    };
 }(hobs, jQuery));
