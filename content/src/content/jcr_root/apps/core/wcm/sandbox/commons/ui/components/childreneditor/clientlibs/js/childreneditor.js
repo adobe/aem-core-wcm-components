@@ -161,7 +161,7 @@
                             // next frame to ensure we remove the default event handler
                             Coral.commons.nextFrame(function() {
                                 selectList.off("coral-selectlist:change");
-                                selectList.on("coral-selectlist:change" + NS, function() {
+                                selectList.on("coral-selectlist:change" + NS, function(event) {
                                     var resourceType = "";
                                     var componentTitle = "";
 
