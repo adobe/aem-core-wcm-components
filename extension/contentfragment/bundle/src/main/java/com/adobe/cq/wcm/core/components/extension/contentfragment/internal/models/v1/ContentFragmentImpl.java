@@ -15,20 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.adobe.cq.dam.cfm.ContentElement;
+import com.adobe.cq.dam.cfm.ContentFragmentException;
+import com.adobe.cq.dam.cfm.ContentVariation;
+import com.adobe.cq.dam.cfm.FragmentData;
+import com.adobe.cq.dam.cfm.FragmentTemplate;
+import com.adobe.cq.dam.cfm.content.FragmentRenderService;
+import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.day.text.Text;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,21 +44,20 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.dam.cfm.ContentElement;
-import com.adobe.cq.dam.cfm.ContentFragmentException;
-import com.adobe.cq.dam.cfm.ContentVariation;
-import com.adobe.cq.dam.cfm.FragmentData;
-import com.adobe.cq.dam.cfm.FragmentTemplate;
-import com.adobe.cq.dam.cfm.content.FragmentRenderService;
-import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
-import com.day.text.Text;
-
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1.ContentFragmentImpl.RESOURCE_TYPE;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;

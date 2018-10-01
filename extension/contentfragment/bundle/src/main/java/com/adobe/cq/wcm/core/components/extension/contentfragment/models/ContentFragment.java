@@ -15,19 +15,18 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.extension.contentfragment.models;
 
-import java.util.Map;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.apache.sling.api.resource.Resource;
-import org.osgi.annotation.versioning.ConsumerType;
-
 import com.adobe.cq.dam.cfm.ContentElement;
 import com.adobe.cq.dam.cfm.FragmentData;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.sling.api.resource.Resource;
+import org.osgi.annotation.versioning.ConsumerType;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Defines the Sling Model for the {@code /apps/core/wcm/components/contentfragment} component. The model
@@ -114,6 +113,7 @@ public interface ContentFragment extends ContainerExporter {
          * For the possible values see {@link com.adobe.cq.dam.cfm.BasicDataType}. Note that this doesn't
          * contain information about the multivalued characteristic of element. Eg. even if the actual value is of type
          * String [], the data type returned would be String.
+         *
          * @return the data type string
          * @see FragmentData#getDataType()
          * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
@@ -298,6 +298,7 @@ public interface ContentFragment extends ContainerExporter {
 
     /**
      * Returns a JSON format string containing information about this fragment.
+     *
      * @return JSON string
      */
     @Nonnull
@@ -308,10 +309,13 @@ public interface ContentFragment extends ContainerExporter {
 
     /**
      * Returns resource type that is used for the internal responsive grid.
+     *
      * @return resource type
      */
     @Nonnull
     @JsonIgnore
-    default String getGridResourceType() {throw new UnsupportedOperationException();}
+    default String getGridResourceType() {
+        throw new UnsupportedOperationException();
+    }
 
 }
