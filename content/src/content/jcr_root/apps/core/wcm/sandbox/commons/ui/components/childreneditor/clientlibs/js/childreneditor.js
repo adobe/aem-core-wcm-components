@@ -266,7 +266,7 @@
                     }
                 };
             } else {
-                return {}
+                return {};
             }
         }
     });

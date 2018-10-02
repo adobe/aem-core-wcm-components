@@ -241,10 +241,10 @@
     };
 
     /**
-     * Test: Panel Select
+     * Test: Panel Select: Check items
      */
-    tabs.tcPanelSelect = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
-        return new h.TestCase("Panel Select", {
+    tabs.tcPanelSelectItems = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Panel Select: Check items", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest
         })
@@ -281,7 +281,36 @@
             // verify initial Tabs DOM item order is as expected
             .config.changeContext(c.getContentFrame)
             .assert.exist(selectors.tabs.tab + ":contains('item0'):first-child", true)
+            .assert.exist(selectors.tabs.tab + ":contains('item1'):nth-child(2)", true)
+            .assert.exist(selectors.tabs.tab + ":contains('item2'):last-child", true)
             .config.resetContext()
+
+            // click elsewhere and verify an out of area click closes the panel selector
+            .click(selectors.overlay.responsiveGrid.placeholder)
+            .asserts.visible(selectors.panelSelector.self, false);
+    };
+
+    /**
+     * Test: Panel Select: Reordering items
+     */
+    tabs.tcPanelSelectReorder = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Panel Select: Re-order items", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest,
+            metadata: {
+                ignoreOn63: true
+            }
+        })
+            // create new items with titles
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
+
+            // open the toolbar
+            .click(selectors.overlay.self + "[data-path='%cmpPath%']")
+            .asserts.visible(selectors.editableToolbar.self)
+
+            // open the panel selector and verify it's open
+            .click(selectors.editableToolbar.actions.panelSelect)
+            .asserts.visible(selectors.panelSelector.self)
 
             // drag to reorder
             .cui.dragdrop(selectors.panelSelector.item  + ":contains(item0)" + " [coral-table-roworder='true']", selectors.panelSelector.item  + ":contains(item2)")
@@ -289,11 +318,7 @@
             // verify new Tabs DOM item order is as expected
             .config.changeContext(c.getContentFrame)
             .assert.exist(selectors.tabs.tab + ":contains('item0'):last-child", true)
-            .config.resetContext()
-
-            // click elsewhere and verify an out of area click closes the panel selector
-            .click(selectors.overlay.responsiveGrid.placeholder)
-            .asserts.visible(selectors.panelSelector.self, false);
+            .config.resetContext();
     };
 
     /**

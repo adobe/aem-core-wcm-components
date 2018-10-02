@@ -79,7 +79,8 @@
         .addTestCase(tabs.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(tabs.tcPanelSelect(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(tabs.tcPanelSelectItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(tabs.tcPanelSelectReorder(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcNestedTabs(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/tabs", "core-component/components/sandbox",
             c.policyPath_sandbox, c.policyAssignmentPath_sandbox, "core/wcm/tests/components/test-page-v2", c.rtTabs_v1))
