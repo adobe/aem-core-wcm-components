@@ -63,124 +63,124 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
 
     @Test
     public void testTextOnlyNoPath() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_NO_PATH);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NO_PATH);
         verify(cfmLogger).warn("Please provide a path for the content fragment component.");
         assertNotNull("Model shouldn't be null when no path is set", fragment);
     }
 
     @Test
     public void testTextOnlyNonExistingPath() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_NON_EXISTING_PATH);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NON_EXISTING_PATH);
         verify(cfmLogger).error("Content Fragment can not be initialized because the '{}' does not exist.", "/content/dam/contentfragments/non-existing");
         assertNotNull("Model shouldn't be null when the path does not exist", fragment);
     }
 
     @Test
     public void testTextOnlyInvalidPath() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_INVALID_PATH);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_INVALID_PATH);
         verify(cfmLogger).error("Content Fragment can not be initialized because '{}' is not a content fragment.", "/content/dam/contentfragments");
         assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
     }
 
     @Test
     public void testTextOnly() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlyVariation() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_VARIATION);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlyNonExistingVariation() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_NON_EXISTING_VARIATION);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NON_EXISTING_VARIATION);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlySingleElement() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_SINGLE_ELEMENT);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_SINGLE_ELEMENT);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY);
     }
 
     @Test
     public void testTextOnlyMultipleElements() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY, MAIN);
     }
 
     @Test
     public void testStructuredNoPath() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NO_PATH);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NO_PATH);
         assertNotNull("Model shouldn't be null when no path is set", fragment);
     }
 
     @Test
     public void testStructuredNonExistingPath() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NON_EXISTING_PATH);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_PATH);
         assertNotNull("Model shouldn't be null when the path does not exist", fragment);
     }
 
     @Test
     public void testStructuredOnlyInvalidPath() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_INVALID_PATH);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_INVALID_PATH);
         assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
     }
 
     @Test
     public void testStructured() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredVariation() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_VARIATION);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredNonExistingVariation() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NON_EXISTING_VARIATION);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_VARIATION);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredNestedModel() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NESTED_MODEL);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NESTED_MODEL);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE_NESTED, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredSingleElement() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_SINGLE_ELEMENT);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredMultipleElements() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_MULTIPLE_ELEMENTS);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_MULTIPLE_ELEMENTS);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED,
             MAIN);
     }
 
     @Test
     public void testGetExportedType() {
-        ContentFragmentImpl fragment = (ContentFragmentImpl) getTestContentFragment(CF_TEXT_ONLY);
+        ContentFragmentImpl fragment = (ContentFragmentImpl) getModelInstanceUnderTest(CF_TEXT_ONLY);
         assertEquals(ContentFragmentImpl.RESOURCE_TYPE, fragment.getExportedType());
     }
 
     @Test
     public void testGetElements() {
-        ContentFragmentImpl fragment = (ContentFragmentImpl) getTestContentFragment(CF_TEXT_ONLY);
+        ContentFragmentImpl fragment = (ContentFragmentImpl) getModelInstanceUnderTest(CF_TEXT_ONLY);
         final Map<String, ContentFragment.Element> elements = fragment.getExportedElements();
         assertNotNull(elements);
         assertEquals(2, elements.size());
@@ -190,7 +190,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
 
     @Test
     public void testGetElementsType() {
-        ContentFragmentImpl fragment = (ContentFragmentImpl) getTestContentFragment(CF_TEXT_ONLY);
+        ContentFragmentImpl fragment = (ContentFragmentImpl) getModelInstanceUnderTest(CF_TEXT_ONLY);
         final Map<String, ? extends ComponentExporter> elements = fragment.getExportedElements();
         assertNotNull(elements);
         final ComponentExporter mainElement = elements.get("main");
@@ -199,7 +199,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
 
     @Test
     public void testJSONExport() throws IOException {
-        ContentFragmentImpl fragment = (ContentFragmentImpl) getTestContentFragment(CF_TEXT_ONLY);
+        ContentFragmentImpl fragment = (ContentFragmentImpl) getModelInstanceUnderTest(CF_TEXT_ONLY);
         Writer writer = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writerWithView(ContentFragmentImpl.class).writeValue(writer, fragment);
@@ -211,7 +211,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
 
     @Test
     public void testStructuredGetEditorJSON() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_MULTIPLE_ELEMENTS);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_MULTIPLE_ELEMENTS);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
             "\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
             ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
@@ -220,7 +220,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
 
     @Test
     public void testStructuredWithVariationGetEditorJSON() {
-        ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_VARIATION);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_VARIATION);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
             "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
             ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
@@ -229,7 +229,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
 
     @Test
     public void testTextOnlyGetEditorJSON() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"" +
             ",\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
             ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
@@ -238,7 +238,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
 
     @Test
     public void testTextOnlyWithVariationGetEditorJSON() {
-        ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_VARIATION);
+        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_VARIATION);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"," +
             "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
             ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";

@@ -141,7 +141,7 @@ public abstract class AbstractContentFragmentTest<T> {
     /**
      * Adapts the specified (content fragment) component to the Sling Model and returns it.
      */
-    protected T getTestContentFragment(String resourceName) {
+    protected T getModelInstanceUnderTest(String resourceName) {
         String path = getTestResourcesParentPath() + "/" + resourceName;
         ResourceResolver resourceResolver = AEM_CONTEXT.resourceResolver();
         Resource resource = resourceResolver.getResource(path);
