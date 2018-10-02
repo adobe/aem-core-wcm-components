@@ -265,6 +265,8 @@
                         return childrenEditor.update();
                     }
                 };
+            } else {
+                return {}
             }
         }
     });
