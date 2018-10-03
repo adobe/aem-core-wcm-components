@@ -25,11 +25,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -38,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class ChildrenEditorServletTest {
+public class ContainerServletTest {
     // root folder in resources
     private static final String TEST_BASE = "/carousel";
     // root of content
@@ -48,11 +45,11 @@ public class ChildrenEditorServletTest {
         "/content/carousel/jcr:content/root/responsivegrid/carousel-1";
 
     // request parameter for deleting one or multiple children
-    private static final String PARAM_DELETED_CHILDREN = "deletedChildren";
+    private static final String PARAM_DELETED_CHILDREN = "delete";
     // request parameter for ordering children
-    private static final String PARAM_ORDERED_CHILDREN = "orderedChildren";
+    private static final String PARAM_ORDERED_CHILDREN = "order";
     // servlet under test
-    private ChildrenEditorServlet servlet = new ChildrenEditorServlet();
+    private ContainerServlet servlet = new ContainerServlet();
 
     // mock request object
     private MockSlingHttpServletRequest request;
@@ -135,7 +132,7 @@ public class ChildrenEditorServletTest {
      * @throws IOException
      */
     @Test
-    public void testReorderChildren() throws ServletException, IOException {
+    public void testOrderChildren() throws ServletException, IOException {
         // define the new order
         String[] reorderedChildren = new String[]{"item_3","item_2","item_1"};
         // set the param

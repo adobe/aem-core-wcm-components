@@ -18,7 +18,7 @@
     "use strict";
 
     var GET_DATA_SUFFIX = ".model.json";
-    var POST_SUFFIX = ".childreneditor.html";
+    var POST_SUFFIX = ".container.html";
     var MESSAGE_ID = "cmp.panelcontainer";
     var NAVIGATE_DELAY = 200;
 
@@ -171,8 +171,8 @@
                 type: "POST",
                 url: url,
                 data: {
-                    "deletedChildren": deleted,
-                    "orderedChildren": ordered
+                    "delete": deleted,
+                    "order": ordered
                 }
             });
         }

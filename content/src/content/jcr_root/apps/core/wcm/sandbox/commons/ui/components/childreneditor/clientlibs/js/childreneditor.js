@@ -20,7 +20,7 @@
     var NN_PREFIX = "item_";
     var PN_TITLE = "jcr:title";
     var PN_RESOURCE_TYPE = "sling:resourceType";
-    var POST_SUFFIX = ".childreneditor.html";
+    var POST_SUFFIX = ".container.html";
 
     var selectors = {
         self: "[data-cmp-is='childreneditor']",
@@ -78,8 +78,8 @@
                     type: "POST",
                     url: url,
                     data: {
-                        "deletedChildren": this._deletedChildren,
-                        "orderedChildren": this._orderedChildren
+                        "delete": this._deletedChildren,
+                        "order": this._orderedChildren
                     }
                 });
             },

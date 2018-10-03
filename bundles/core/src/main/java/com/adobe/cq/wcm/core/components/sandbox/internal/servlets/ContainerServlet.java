@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.HttpConstants;
@@ -37,7 +38,7 @@ import com.adobe.cq.wcm.core.components.sandbox.internal.models.CarouselImpl;
 import com.adobe.cq.wcm.core.components.sandbox.internal.models.TabsImpl;
 
 /**
- * Servlet that deletes or reorders the child items of a Carousel or a Tabs component.
+ * Servlet that deletes/reorders the child nodes of a Carousel/Tabs container.
  */
 @Component(
     service = Servlet.class,
@@ -45,19 +46,19 @@ import com.adobe.cq.wcm.core.components.sandbox.internal.models.TabsImpl;
         "sling.servlet.methods=" + HttpConstants.METHOD_POST,
         "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
         "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
-        "sling.servlet.selectors=" + ChildrenEditorServlet.SELECTOR,
-        "sling.servlet.extensions=" + ChildrenEditorServlet.EXTENSION
+        "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
+        "sling.servlet.extensions=" + ContainerServlet.EXTENSION
     }
 )
-public class ChildrenEditorServlet extends SlingAllMethodsServlet {
+public class ContainerServlet extends SlingAllMethodsServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChildrenEditorServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContainerServlet.class);
 
-    protected static final String SELECTOR = "childreneditor";
+    protected static final String SELECTOR = "container";
     protected static final String EXTENSION = "html";
 
-    private static final String PARAM_DELETED_CHILDREN = "deletedChildren";
-    private static final String PARAM_ORDERED_CHILDREN = "orderedChildren";
+    private static final String PARAM_DELETED_CHILDREN = "delete";
+    private static final String PARAM_ORDERED_CHILDREN = "order";
 
     @Override
     protected void doPost(SlingHttpServletRequest request,
@@ -68,18 +69,23 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
         Resource container = request.getResource();
 
         // Delete the child items
-        String[] deletedChildrenNames = request.getParameterValues(PARAM_DELETED_CHILDREN);
-        if (deletedChildrenNames != null && deletedChildrenNames.length > 0) {
-            for (String childName: deletedChildrenNames) {
-                Resource child = container.getChild(childName);
-                if (child != null) {
-                    resolver.delete(child);
-                    resolver.commit();
+        try {
+            String[] deletedChildrenNames = request.getParameterValues(PARAM_DELETED_CHILDREN);
+            if (deletedChildrenNames != null && deletedChildrenNames.length > 0) {
+                for (String childName: deletedChildrenNames) {
+                    Resource child = container.getChild(childName);
+                    if (child != null) {
+                        resolver.delete(child);
+                    }
                 }
             }
+            resolver.commit();
+        } catch (PersistenceException e) {
+            LOGGER.error("Could not delete items of the container at {}: {}", container.getPath(), e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        // Re-order the child items
+        // Order the child items
         try {
             String[] orderedChildrenNames = request.getParameterValues(PARAM_ORDERED_CHILDREN);
             if (orderedChildrenNames != null && orderedChildrenNames.length > 0) {
@@ -93,7 +99,7 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
                         }
                     }
 
-                    // Re-order the items
+                    // Order the items
                     for (int i = orderedChildrenNames.length - 1; i >= 0; i--) {
                         // Put the last item at the end
                         if (i == orderedChildrenNames.length - 1) {
@@ -107,8 +113,8 @@ public class ChildrenEditorServlet extends SlingAllMethodsServlet {
                     resolver.commit();
                 }
             }
-        } catch (RepositoryException e) {
-            LOGGER.error("Could not reorder the items of the container at {}: {}", container.getPath(), e);
+        } catch (RepositoryException | PersistenceException e) {
+            LOGGER.error("Could not order items of the container at {}: {}", container.getPath(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
