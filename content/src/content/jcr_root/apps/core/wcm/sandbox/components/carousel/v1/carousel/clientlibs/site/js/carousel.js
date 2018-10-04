@@ -20,6 +20,15 @@
     var NS = "cmp";
     var IS = "carousel";
 
+    var keyCodes = {
+        END: 35,
+        HOME: 36,
+        ARROW_LEFT: 37,
+        ARROW_UP: 38,
+        ARROW_RIGHT: 39,
+        ARROW_DOWN: 40
+    };
+
     var selectors = {
         self: "[data-" +  NS + '-is="' + IS + '"]'
     };
@@ -142,8 +151,49 @@
                         indicators[i].addEventListener("click", function(event) {
                             navigate(index);
                         });
+                        indicators[i].addEventListener("keydown", function(event) {
+                            onKeyDown(event);
+                        });
                     })(i);
                 }
+            }
+        }
+
+        /**
+         * Handles carousel keydown events
+         *
+         * @private
+         * @param {Object} event The keydown event
+         */
+        function onKeyDown(event) {
+            var index = that._active;
+            var lastIndex = that._elements["indicator"].length - 1;
+
+            switch (event.keyCode) {
+                case keyCodes.ARROW_LEFT:
+                case keyCodes.ARROW_UP:
+                    event.preventDefault();
+                    if (index > 0) {
+                        navigate(index - 1);
+                    }
+                    break;
+                case keyCodes.ARROW_RIGHT:
+                case keyCodes.ARROW_DOWN:
+                    event.preventDefault();
+                    if (index < lastIndex) {
+                        navigate(index + 1);
+                    }
+                    break;
+                case keyCodes.HOME:
+                    event.preventDefault();
+                    navigate(0);
+                    break;
+                case keyCodes.END:
+                    event.preventDefault();
+                    navigate(lastIndex);
+                    break;
+                default:
+                    return;
             }
         }
 
@@ -164,11 +214,14 @@
                             items[i].removeAttribute("aria-hidden");
                             indicators[i].classList.add("cmp-carousel__indicator--active");
                             indicators[i].setAttribute("aria-selected", true);
+                            indicators[i].setAttribute("tabindex", "0");
+                            indicators[i].focus();
                         } else {
                             items[i].classList.remove("cmp-carousel__item--active");
                             items[i].setAttribute("aria-hidden", true);
                             indicators[i].classList.remove("cmp-carousel__indicator--active");
                             indicators[i].setAttribute("aria-selected", false);
+                            indicators[i].setAttribute("tabindex", "-1");
                         }
                     }
                 } else {
