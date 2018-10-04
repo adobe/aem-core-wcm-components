@@ -78,6 +78,12 @@ public class VariationsDataSourceServlet extends AbstractContentFragmentDataSour
     @Reference
     private ExpressionResolver expressionResolver;
 
+    /**
+     * Returns an expression resolver to be used to resolve expressions in the configuration properties (see
+     * {@link #PN_FRAGMENT_PATH} and {@link #PN_COMPONENT_PATH}).
+     *
+     * @return an expression resolver
+     */
     @Nonnull
     @Override
     protected ExpressionResolver getExpressionResolver() {
