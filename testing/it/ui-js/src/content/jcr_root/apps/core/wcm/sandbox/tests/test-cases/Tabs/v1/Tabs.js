@@ -485,7 +485,7 @@
             // create new items with titles
             .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
 
-            // switch to the content frame and focus the last tab
+            // switch to the content frame and focus the first tab
             .config.changeContext(c.getContentFrame)
             .click(selectors.tabs.tab + ":first-child")
 

@@ -26,6 +26,15 @@
 
     var PANEL_SELECTOR_ITEM_HEIGHT = 60;
 
+    var keyCodes = {
+        END: 35,
+        HOME: 36,
+        ARROW_LEFT: 37,
+        ARROW_UP: 38,
+        ARROW_RIGHT: 39,
+        ARROW_DOWN: 40
+    };
+
     carousel.tcExecuteBeforeTest = function(tcExecuteBeforeTest, carouselRT, pageRT, clientlibs) {
         return new h.TestCase("Create sample content", {
             execBefore: tcExecuteBeforeTest
@@ -348,6 +357,110 @@
             })
             .execFct(function(opts, done) {
                 c.deletePolicyAssignment("/carousel", done, policyAssignmentPath);
+            });
+    };
+
+    /**
+     * Test: Accessibility : Navigate Right
+     */
+    carousel.tcAccessibilityNavigateRight = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Accessibility : Navigate Right", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(carousel.tcCreateItems(selectors))
+
+            // switch to the content frame and focus the first slide
+            .config.changeContext(c.getContentFrame)
+            .click(selectors.carousel.indicator + ":first-child")
+
+            // simulate a right arrow keydown event and verify right navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.ARROW_RIGHT })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 1;
+            })
+
+            // simulate a down arrow keydown event and verify right navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.ARROW_DOWN })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 2;
+            })
+
+            // simulate a right arrow keydown event and verify no further navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.ARROW_RIGHT })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 2;
+            });
+    };
+
+    /**
+     * Test: Accessibility : Navigate Left
+     */
+    carousel.tcAccessibilityNavigateLeft = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Accessibility : Navigate Left", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(carousel.tcCreateItems(selectors))
+
+            // switch to the content frame and focus the last slide
+            .config.changeContext(c.getContentFrame)
+            .click(selectors.carousel.indicator + ":last-child")
+
+            // simulate a left arrow keydown event and verify left navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.ARROW_LEFT })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 1;
+            })
+
+            // simulate an up arrow keydown event and verify left navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.ARROW_UP })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 0;
+            })
+
+            // simulate a left arrow keydown event and verify no further navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.ARROW_LEFT })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 0;
+            });
+    };
+
+    /**
+     * Test: Keys : Navigate end / start
+     */
+    carousel.tcAccessibilityNavigateEndStart = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Accessibility : Navigate End / Start", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(carousel.tcCreateItems(selectors))
+
+            // switch to the content frame and focus the first slide
+            .config.changeContext(c.getContentFrame)
+            .click(selectors.carousel.indicator + ":first-child")
+
+            // simulate an end arrow keydown event and verify end navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.END })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 2;
+            })
+
+            // simulate a home arrow keydown event and verify start navigation
+            .simulate(selectors.carousel.indicator + ":focus", "keydown", { keyCode: keyCodes.HOME })
+            .asserts.isTrue(function() {
+                var $indicatorActive = h.find(selectors.carousel.indicatorActive);
+                return $indicatorActive.size() === 1 && $indicatorActive.index() === 0;
             });
     };
 
