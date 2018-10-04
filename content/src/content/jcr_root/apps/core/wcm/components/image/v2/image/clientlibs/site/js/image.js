@@ -156,7 +156,12 @@
         }
 
         function getOptimalWidth() {
-            var containerWidth = that._elements.self.clientWidth;
+            var container = that._elements.self;
+            var containerWidth = container.clientWidth;
+            while (containerWidth === 0 && container.parentNode) {
+                container = container.parentNode;
+                containerWidth = container.clientWidth;
+            }
             var optimalWidth = containerWidth * devicePixelRatio;
             var len = that._properties.widths.length;
             var key = 0;
