@@ -193,7 +193,7 @@
                             tabs[i].classList.add("cmp-tabs__tab--active");
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
-                            tabs[i].focus();
+                            stableFocus(tabs[i]);
                         } else {
                             tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
                             tabpanels[i].setAttribute("aria-hidden", true);
@@ -208,6 +208,17 @@
                     tabs.classList.add("cmp-tabs__tab--active");
                 }
             }
+        }
+
+        /**
+         * Focuses the element and prevents scrolling the element into view
+         * @param el
+         */
+        function stableFocus(el) {
+            var x = window.scrollX;
+            var y = window.scrollY;
+            el.focus();
+            window.scrollTo(x, y);
         }
 
         /**
