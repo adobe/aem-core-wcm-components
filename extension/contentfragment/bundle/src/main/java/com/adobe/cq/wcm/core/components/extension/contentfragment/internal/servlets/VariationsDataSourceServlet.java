@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Datasource that returns the variations of a content fragment.
  *
- * @see AbstractContentFragmentDataSource
+ * @see AbstractContentFragmentDataSourceServlet
  */
 @Component(
     service = {Servlet.class},
@@ -42,7 +42,7 @@ import java.util.List;
         "sling.servlet.extensions=html"
     }
 )
-public class VariationsDataSourceServlet extends AbstractContentFragmentDataSource<VariationsDataSourceServlet.Variation> {
+public class VariationsDataSourceServlet extends AbstractContentFragmentDataSourceServlet<VariationsDataSourceServlet.Variation> {
 
     /**
      * Represents a variation definition in the context of this datasource.

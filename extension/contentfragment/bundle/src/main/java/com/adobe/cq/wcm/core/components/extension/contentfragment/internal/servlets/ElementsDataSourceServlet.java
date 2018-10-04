@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Datasource that returns the elements of a content fragment.
  *
- * @see AbstractContentFragmentDataSource
+ * @see AbstractContentFragmentDataSourceServlet
  */
 @Component(
     service = {Servlet.class},
@@ -44,7 +44,7 @@ import java.util.List;
         "sling.servlet.extensions=html"
     }
 )
-public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource<ContentElement> {
+public class ElementsDataSourceServlet extends AbstractContentFragmentDataSourceServlet<ContentElement> {
 
     /**
      * Defines the resource type for this datasource.

@@ -51,7 +51,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public abstract class AbstractDataSourceServletTest {
+public abstract class AbstractContentFragmentDataSourceServletTest {
 
     private static final String DATASOURCES_PATH = "/content/datasources";
     private static final String CONTENT_FRAGMENTS_PATH = "/content/dam/contentfragments";
@@ -96,7 +96,7 @@ public abstract class AbstractDataSourceServletTest {
     /**
      * Calls the servlet with the specified datasource resource and returns the resulting datasource.
      */
-    protected DataSource getDataSource(AbstractContentFragmentDataSource servlet, String name)
+    protected DataSource getDataSource(AbstractContentFragmentDataSourceServlet servlet, String name)
             throws ServletException, IOException {
         // get datasource resource
         ResourceResolver resolver = CONTEXT.resourceResolver();

@@ -54,7 +54,7 @@ import static org.apache.sling.api.resource.Resource.RESOURCE_TYPE_NON_EXISTING;
  * {@link #getItems(ContentFragment, SlingHttpServletRequest)} and, for each item, specify their title and value (in
  * {@link #getTitle(Object)} and {@link #getValue(Object)}, respectively).</p>
  */
-public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMethodsServlet {
+public abstract class AbstractContentFragmentDataSourceServlet<T> extends SlingSafeMethodsServlet {
 
     /**
      * Name of the datasource property containing the path to a content fragment to use. If set, the value of
