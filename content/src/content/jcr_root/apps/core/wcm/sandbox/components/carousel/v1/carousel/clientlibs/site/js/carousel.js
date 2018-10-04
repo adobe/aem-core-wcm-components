@@ -215,7 +215,7 @@
                             indicators[i].classList.add("cmp-carousel__indicator--active");
                             indicators[i].setAttribute("aria-selected", true);
                             indicators[i].setAttribute("tabindex", "0");
-                            stableFocus(indicators[i]);
+                            focusWithoutScroll(indicators[i]);
                         } else {
                             items[i].classList.remove("cmp-carousel__item--active");
                             items[i].setAttribute("aria-hidden", true);
@@ -234,12 +234,13 @@
 
         /**
          * Focuses the element and prevents scrolling the element into view
-         * @param el
+         *
+         * @param {HTMLElement} element Element to focus
          */
-        function stableFocus(el) {
+        function focusWithoutScroll(element) {
             var x = window.scrollX;
             var y = window.scrollY;
-            el.focus();
+            element.focus();
             window.scrollTo(x, y);
         }
 

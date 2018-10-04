@@ -193,7 +193,7 @@
                             tabs[i].classList.add("cmp-tabs__tab--active");
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
-                            stableFocus(tabs[i]);
+                            focusWithoutScroll(tabs[i]);
                         } else {
                             tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
                             tabpanels[i].setAttribute("aria-hidden", true);
@@ -212,12 +212,13 @@
 
         /**
          * Focuses the element and prevents scrolling the element into view
-         * @param el
+         *
+         * @param {HTMLElement} element Element to focus
          */
-        function stableFocus(el) {
+        function focusWithoutScroll(element) {
             var x = window.scrollX;
             var y = window.scrollY;
-            el.focus();
+            element.focus();
             window.scrollTo(x, y);
         }
 
