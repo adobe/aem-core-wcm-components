@@ -193,7 +193,6 @@
                             tabs[i].classList.add("cmp-tabs__tab--active");
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
-                            focusWithoutScroll(tabs[i]);
                         } else {
                             tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
                             tabpanels[i].setAttribute("aria-hidden", true);
@@ -231,6 +230,7 @@
         function navigate(index) {
             that._active = index;
             refreshActive();
+            focusWithoutScroll(that._elements["tab"][index]);
         }
     }
 

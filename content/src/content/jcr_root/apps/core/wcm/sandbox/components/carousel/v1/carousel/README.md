@@ -43,7 +43,7 @@ BLOCK cmp-carousel
     ELEMENT cmp-carousel__content
     ELEMENT cmp-carousel__item
     ELEMENT cmp-carousel__action
-        MOD cmp-carousel__action--prev
+        MOD cmp-carousel__action--previous
         MOD cmp-carousel__action--next
     ELEMENT cmp-carousel__action-icon
     ELEMENT cmp-carousel__action-text
@@ -58,8 +58,9 @@ A hook attribute from the following should be added to the corresponding element
 
 ```
 data-cmp-hook-carousel="item"
-data-cmp-hook-carousel="prev"
+data-cmp-hook-carousel="previous"
 data-cmp-hook-carousel="next"
+data-cmp-hook-carousel="indicators"
 data-cmp-hook-carousel="indicator"
 ```
 

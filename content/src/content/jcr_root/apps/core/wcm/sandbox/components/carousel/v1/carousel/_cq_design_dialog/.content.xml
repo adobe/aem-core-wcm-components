@@ -31,6 +31,32 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <auto
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="If checked, automatically transition between carousel slides."
+                                name="./auto"
+                                text="Automatically transition slides"
+                                uncheckedValue="false"
+                                value="{Boolean}true"/>
+                            <delay
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldDescription="The delay (in seconds) before automatically transitioning to the next slide."
+                                fieldLabel="Transition Delay (seconds)"
+                                min="0"
+                                max="600"
+                                name="./delay"
+                                step="0.1"
+                                value="5"/>
+                        </items>
+                    </properties>
                     <allowedcomponents
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Allowed Components"

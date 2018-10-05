@@ -24,4 +24,39 @@ import org.osgi.annotation.versioning.ConsumerType;
  */
 @ConsumerType
 public interface Carousel extends Container {
+
+    /**
+     * Name of the resource property that indicates whether to automatically transition between slides, or not.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    String PN_AUTO = "auto";
+
+    /**
+     * Name of the resource property that indicates the delay (in seconds) when automatically transitioning between slides.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    String PN_DELAY = "delay";
+
+    /**
+     * Indicates whether the carousel should automatically transition between slides or not.
+     *
+     * @return {@code true} if the carousel should automatically transition slides; {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    default boolean getAuto() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the delay (in milliseconds) when automatically transitioning between slides.
+     *
+     * @return the delay (in milliseconds) when automatically transitioning between slides
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    default Long getDelay() {
+        throw new UnsupportedOperationException();
+    }
+
 }

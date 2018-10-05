@@ -32,6 +32,46 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <auto
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="${not empty cqDesign.auto ? cqDesign.auto : false}"
+                                                fieldDescription="If checked, automatically transition between slides."
+                                                name="./auto"
+                                                text="Automatically transition slides"
+                                                uncheckedValue="false"
+                                                value="{Boolean}true"/>
+                                            <delay
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                fieldDescription="The delay (in seconds) before automatically transitioning to the next slide."
+                                                fieldLabel="Transition Delay (seconds)"
+                                                min="0"
+                                                max="600"
+                                                name="./delay"
+                                                step="0.1"
+                                                value="${not empty cqDesign.delay ? cqDesign.delay : 5}"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </properties>
                     <slides
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Slides"
