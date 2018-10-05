@@ -16,6 +16,5 @@
 
 #base=js
 
-polyfills.js
 namespace.js
 panelselect.js

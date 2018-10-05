@@ -16,7 +16,6 @@
 
 #base=js
 
-polyfills.js
 namespace.js
 PanelContainer.js
 panelContainerRegistry.js

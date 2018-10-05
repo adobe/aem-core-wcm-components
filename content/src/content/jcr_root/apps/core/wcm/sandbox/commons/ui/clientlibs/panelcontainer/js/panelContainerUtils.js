@@ -58,13 +58,13 @@
             var element;
 
             if (container) {
-                if (editable.dom[0].matches(container.selector)) {
+                if ($(editable.dom[0]).is(container.selector)) {
                     element = editable.dom[0];
                 } else {
                     var children = editable.dom[0].children;
                     for (var i = 0; i < children.length; i++) {
                         var child = children[0];
-                        if (child.matches(container.selector)) {
+                        if ($(child).is(container.selector)) {
                             element = child;
                             break;
                         }
@@ -106,14 +106,14 @@
         if (editable && editable.dom) {
             for (var i = 0; i < panelContainerTypes.length; i++) {
                 var container = panelContainerTypes[i];
-                var match = editable.dom[0].matches(container.selector);
+                var match = $(editable.dom[0]).is(container.selector);
 
                 // look for a match at the editable DOM wrapper, if none is found, try its children.
                 if (!match) {
                     var children = editable.dom[0].children;
                     for (var j = 0; j < children.length; j++) {
                         var child = children[0];
-                        match = child.matches(container.selector);
+                        match = $(child).is(container.selector);
                         if (match) {
                             break;
                         }
