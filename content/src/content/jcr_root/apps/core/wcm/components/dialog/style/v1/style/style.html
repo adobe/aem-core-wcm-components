@@ -1,0 +1,38 @@
+<div data-sly-use.styles="${'com.adobe.cq.editor.model.StyleSelector' @ path=request.requestPathInfo.suffix}"
+     data-editor-styleselector-item-id="${styles.path}" class="dialog-style-system">
+    <div data-sly-list.group="${styles.styleGroups}">
+        <section class="coral-Form-fieldset">
+            <div class="coral-Form-fieldwrapper">
+                <label class="coral-Form-fieldlabel" id="${groupList.index}-group">
+                    ${group.label}
+                </label>
+                <div class="coral-Form-field coral-CheckboxGroup coral-CheckboxGroup--vertical" data-sly-test.multiple="${group.multiple}" data-sly-list.style="${group.styles}">
+                    <coral-checkbox class="coral-Form-field dialog-style-system__item" id="${style.id}" checked="${style.selected}" labelledby="${groupList.index}-group">
+                        ${style.label}
+                    </coral-checkbox>
+                </div>
+                <sly data-sly-test="${!multiple}">
+                    <div class="coral-Form-field coral-RadioGroup coral-RadioGroup--vertical">
+                        <coral-radio class="coral-Form-field" name="${groupList.index}-group-radio" id="${groupList.index}-group-none" labelledby="${groupList.index}-group">
+                            None
+                        </coral-radio>
+                        <sly data-sly-list.style="${group.styles}">
+                            <coral-radio class="coral-Form-field dialog-style-system__item" name="${groupList.index}-group-radio" id="${style.id}" checked="${style.selected}" labelledby="${groupList.index}-group">
+                                ${style.label}
+                            </coral-radio>
+                        </sly>
+                    </div>
+                </sly>
+            </div>
+        </section>
+    </div>
+
+    <div display="none" class="dialog-style-system__hidden">
+        <input data-sly-repeat.style="${styles.appliedStyles}" type="hidden" name="./cq:styleIds" value="${style.id}" data-editor-styleselector-id-input="true"/>
+    </div>
+
+    <input type="hidden" name="./cq:styleIds@Delete"/>
+    <input type="hidden" name="./cq:styleIds@TypeHint" value="String[]"/>
+    <input type="hidden" name="./jcr:lastModified"/>
+    <input type="hidden" name="./jcr:lastModifiedBy"/>
+</div>

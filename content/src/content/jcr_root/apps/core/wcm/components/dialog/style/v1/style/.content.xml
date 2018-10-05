@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="brush"
+    jcr:primaryType="cq:Component"
+    jcr:title="Dialog Style Selector (v1)"
+    jcr:description="Makes style system options for a component available in the component dialog"
+    componentGroup=".core-wcm-dialog"/>
