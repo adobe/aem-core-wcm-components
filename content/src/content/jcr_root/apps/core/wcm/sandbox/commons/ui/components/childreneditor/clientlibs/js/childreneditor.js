@@ -145,62 +145,64 @@
                 var that = this;
 
                 if (ns) {
-                    that._elements.add.on("click", function() {
-                        var editable = ns.editables.find(that._path)[0];
-                        var children = editable.getChildren();
+                    Coral.commons.ready(that._elements.add, function() {
+                        that._elements.add.on("click", function() {
+                            var editable = ns.editables.find(that._path)[0];
+                            var children = editable.getChildren();
 
-                        // create the insert component dialog relative to a child item
-                        // - against which allowed components are calculated.
-                        if (children.length > 0) {
-                            // display the insert component dialog
-                            ns.edit.ToolbarActions.INSERT.execute(children[0]);
+                            // create the insert component dialog relative to a child item
+                            // - against which allowed components are calculated.
+                            if (children.length > 0) {
+                                // display the insert component dialog
+                                ns.edit.ToolbarActions.INSERT.execute(children[0]);
 
-                            var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
-                            var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
+                                var insertComponentDialog = $(document).find(selectors.insertComponentDialog.self)[0];
+                                var selectList = insertComponentDialog.querySelectorAll(selectors.insertComponentDialog.selectList)[0];
 
-                            // next frame to ensure we remove the default event handler
-                            Coral.commons.nextFrame(function() {
-                                selectList.off("coral-selectlist:change");
-                                selectList.on("coral-selectlist:change" + NS, function(event) {
-                                    var resourceType = "";
-                                    var componentTitle = "";
+                                // next frame to ensure we remove the default event handler
+                                Coral.commons.nextFrame(function() {
+                                    selectList.off("coral-selectlist:change");
+                                    selectList.on("coral-selectlist:change" + NS, function(event) {
+                                        var resourceType = "";
+                                        var componentTitle = "";
 
-                                    insertComponentDialog.hide();
+                                        insertComponentDialog.hide();
 
-                                    var components = ns.components.find(event.detail.selection.value);
-                                    if (components.length > 0) {
-                                        resourceType = components[0].getResourceType();
-                                        componentTitle = components[0].getTitle();
+                                        var components = ns.components.find(event.detail.selection.value);
+                                        if (components.length > 0) {
+                                            resourceType = components[0].getResourceType();
+                                            componentTitle = components[0].getTitle();
 
-                                        var item = that._elements.self.items.add(new Coral.Multifield.Item());
-                                        that._elements.self.trigger("change");
+                                            var item = that._elements.self.items.add(new Coral.Multifield.Item());
+                                            that._elements.self.trigger("change");
 
-                                        // next frame to ensure the item template is rendered in the DOM
-                                        Coral.commons.nextFrame(function() {
-                                            var name = NN_PREFIX + Date.now();
-                                            item.dataset["name"] = name;
+                                            // next frame to ensure the item template is rendered in the DOM
+                                            Coral.commons.nextFrame(function() {
+                                                var name = NN_PREFIX + Date.now();
+                                                item.dataset["name"] = name;
 
-                                            var input = item.querySelectorAll(selectors.item.input)[0];
-                                            input.name = "./" + name + "/" + PN_TITLE;
-                                            input.placeholder = Granite.I18n.get(componentTitle);
+                                                var input = item.querySelectorAll(selectors.item.input)[0];
+                                                input.name = "./" + name + "/" + PN_TITLE;
+                                                input.placeholder = Granite.I18n.get(componentTitle);
 
-                                            var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
-                                            hiddenInput.value = resourceType;
-                                            hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
+                                                var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
+                                                hiddenInput.value = resourceType;
+                                                hiddenInput.name = "./" + name + "/" + PN_RESOURCE_TYPE;
 
-                                            var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
-                                            var icon = that._renderIcon(components[0]);
-                                            itemIcon.appendChild(icon);
-                                        });
-                                    }
+                                                var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
+                                                var icon = that._renderIcon(components[0]);
+                                                itemIcon.appendChild(icon);
+                                            });
+                                        }
+                                    });
                                 });
-                            });
 
-                            // unbind events on dialog close
-                            channel.one("dialog-closed", function() {
-                                selectList.off("coral-selectlist:change" + NS);
-                            });
-                        }
+                                // unbind events on dialog close
+                                channel.one("dialog-closed", function() {
+                                    selectList.off("coral-selectlist:change" + NS);
+                                });
+                            }
+                        });
                     });
                 } else {
                     // editor layer unavailable, remove the insert component action
