@@ -23,19 +23,55 @@ Component for TouchUI authoring dialogs written in HTL that adds the style syste
 * Radio buttons for single-selection styles
 
 ### Use Object
-The Image component uses the `com.adobe.cq.wcm.core.components.models.Image` Sling Model as its Use-object.
+The Dialog Style Selector component uses the `com.adobe.cq.editor.model.StyleSelector` Sling Model as its Use-object.
+
+## Dialog Usage
+The component can be included in in a dialog by referencing its resource type. An example dialog:
+```
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" 
+          xmlns:jcr="http://www.jcp.org/jcr/1.0" 
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Some Component"
+          sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                <items jcr:primaryType="nt:unstructured">
+                    <styles
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Styles"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <style
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/dialog/style/v1/style"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </styles>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
+```
 
 ## Client Libraries
-The component provides a `core.wcm.components.image.v1` client library category that contains a recommended base
-CSS styling. It should be added to a relevant site client library using the `embed` property.
-
-It also provides a `core.wcm.components.image.v1.editor` editor client library category that includes
-JavaScript handling for dialog interaction. It is already included by its edit dialog.
-
-## Information
-* **Vendor**: Adobe
-* **Version**: v1
-* **Compatibility**: AEM 6.3
-* **Status**: production-ready
-* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v1](https://www.adobe.com/go/aem_cmp_image_v1)
-
+The component extends the `cq.authoring.dialog` client library category. 
