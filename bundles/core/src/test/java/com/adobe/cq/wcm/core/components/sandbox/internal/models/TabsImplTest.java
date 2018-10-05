@@ -68,6 +68,7 @@ public class TabsImplTest {
             {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", "Teaser 2", "Teaser 2 description"},
         };
         verifyTabItems(expectedItems, tabs.getItems());
+        assertEquals("/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", tabs.getActiveItem());
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs1"));
     }
 

@@ -24,4 +24,14 @@ import org.osgi.annotation.versioning.ConsumerType;
  */
 @ConsumerType
 public interface Tabs extends Container {
+
+    /**
+     * Returns the default active item
+     *
+     * @return The default active item
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
+     */
+    default String getActiveItem() {
+        throw new UnsupportedOperationException();
+    }
 }

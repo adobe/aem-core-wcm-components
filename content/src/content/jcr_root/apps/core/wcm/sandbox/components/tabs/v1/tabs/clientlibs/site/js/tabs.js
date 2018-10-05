@@ -62,7 +62,7 @@
             config.element.removeAttribute("data-" + NS + "-is");
 
             cacheElements(config.element);
-            that._active = 0;
+            that._active = getActiveIndex(that._elements["tab"]);
 
             if (that._elements.tabpanel) {
                 refreshActive();
@@ -84,6 +84,15 @@
                     }
                 });
             }
+        }
+
+        function getActiveIndex(tabs) {
+            for (var i = 0; i < tabs.length; i++) {
+                if (tabs[i].classList.contains("cmp-tabs__tab--active")) {
+                    return i;
+                }
+            }
+            return 0;
         }
 
         /**

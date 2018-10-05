@@ -79,6 +79,7 @@
         .addTestCase(tabs.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(tabs.tcSetActiveItem(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcPanelSelectItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcPanelSelectReorder(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcNestedTabs(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))

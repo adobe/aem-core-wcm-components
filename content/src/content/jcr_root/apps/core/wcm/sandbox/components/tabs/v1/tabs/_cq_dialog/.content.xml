@@ -20,9 +20,10 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Tabs"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.commons.ui.childreneditor]"
+    extraClientlibs="[core.wcm.commons.ui.childreneditor,core.wcm.components.tabs.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_tab_v1">
     <content
+        granite:class="cmp-tabs__editor"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
@@ -55,6 +56,38 @@
                             </columns>
                         </items>
                     </tabitems>
+                    <options
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Options"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <activeItem
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/hidden"
+                                                name="./activeItem"/>
+                                            <activeSelect
+                                                granite:class="activeSelect"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
+                                                emptyText="Select"
+                                                fieldDescription="The tab that is active by default."
+                                                fieldLabel="Active Tab"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </options>
                 </items>
             </tabs>
         </items>

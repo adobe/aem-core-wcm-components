@@ -241,6 +241,45 @@
     };
 
     /**
+     * Test: Edit Dialog : Re-order children
+     */
+    tabs.tcSetActiveItem = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Edit Dialog : Set active item", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(tabs.tcCreateItems(selectors, selectors.insertComponentDialog.components.responsiveGrid, "cmpPath"))
+            // open the edit dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // verify that 3 items have been created
+            .asserts.isTrue(function() {
+                var children = h.find(selectors.editDialog.childrenEditor.item.input);
+                return children.size() === 3 &&
+                    $(children[0]).val() === "item0" &&
+                    $(children[1]).val() === "item1" &&
+                    $(children[2]).val() === "item2";
+            })
+            // switch to options tab
+            .click("coral-tab-label:contains('Options')")
+            // select second item as active
+            .click("coral-select.activeSelect button")
+            .wait(200)
+            .click("coral-select.activeSelect coral-selectlist-item:nth-child(2)")
+            .wait(200)
+            // save the edit dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200)
+            .config.changeContext(c.getContentFrame)
+            // check the second tab is active
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item1')");
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 2;
+            });
+    };
+
+    /**
      * Test: Panel Select: Check items
      */
     tabs.tcPanelSelectItems = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {

@@ -77,6 +77,7 @@
                 return $.ajax({
                     type: "POST",
                     url: url,
+                    async: false,
                     data: {
                         "delete": this._deletedChildren,
                         "order": this._orderedChildren
