@@ -193,7 +193,7 @@
                             tabs[i].classList.add("cmp-tabs__tab--active");
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
-                            focusWithoutScroll(that._elements["tab"][index]);
+                            focusWithoutScroll(tabs[i]);
                         } else {
                             tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
                             tabpanels[i].setAttribute("aria-hidden", true);
