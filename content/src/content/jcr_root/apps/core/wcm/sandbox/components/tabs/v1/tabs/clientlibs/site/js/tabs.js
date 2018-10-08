@@ -202,7 +202,7 @@
                             tabs[i].classList.add("cmp-tabs__tab--active");
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
-                            tabs[i].focus();
+                            focusWithoutScroll(tabs[i]);
                         } else {
                             tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
                             tabpanels[i].setAttribute("aria-hidden", true);
@@ -217,6 +217,18 @@
                     tabs.classList.add("cmp-tabs__tab--active");
                 }
             }
+        }
+
+        /**
+         * Focuses the element and prevents scrolling the element into view
+         *
+         * @param {HTMLElement} element Element to focus
+         */
+        function focusWithoutScroll(element) {
+            var x = window.scrollX;
+            var y = window.scrollY;
+            element.focus();
+            window.scrollTo(x, y);
         }
 
         /**

@@ -29,7 +29,7 @@
     var secondPageName                   = "teaser-second-page";
     var secondPageVar                    = "teaser_second_page";
     var pageDescription                  = "teaser page description";
-    //var actionText1                         = "Action Text 1";
+    // var actionText1                         = "Action Text 1";
     var actionText2                         = "Action Text 2";
     var actionExternalLink                  = "http://www.adobe.com";
     var actionExternalText                  = "Adobe";
@@ -317,15 +317,15 @@
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .click(selectors.editDialog.actionsEnabled)
-            //.fillInput(selectors.editDialog.actionLinkURL, "%" + pageVar + "%")
+            // .fillInput(selectors.editDialog.actionLinkURL, "%" + pageVar + "%")
             .simulate(selectors.editDialog.actionLinkURL + " input[type!='hidden']", "key-sequence",
                 { sequence: "%" + pageVar + "%{enter}" })
-            //.fillInput(selectors.editDialog.actionText, actionText1)
+            // .fillInput(selectors.editDialog.actionText, actionText1)
             .click("button:contains('Add')")
-            //.fillInput(selectors.editDialog.actionLinkURL + ":eq(1)", "%" + secondPageVar + "%")
+            // .fillInput(selectors.editDialog.actionLinkURL + ":eq(1)", "%" + secondPageVar + "%")
             .simulate(selectors.editDialog.actionLinkURL + ":eq(1) input[type!='hidden']", "key-sequence",
                 { sequence: "%" + secondPageVar + "%{enter}" })
-            //.fillInput(selectors.editDialog.actionText + ":eq(1)", actionText2)
+            // .fillInput(selectors.editDialog.actionText + ":eq(1)", actionText2)
 
             .execTestCase(c.tcSaveConfigureDialog)
 
