@@ -30,7 +30,7 @@ public interface Carousel extends Container {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
-    String PN_AUTO = "auto";
+    String PN_AUTOPLAY = "autoplay";
 
     /**
      * Name of the resource property that indicates the delay (in seconds) when automatically transitioning between slides.
@@ -45,7 +45,7 @@ public interface Carousel extends Container {
      * @return {@code true} if the carousel should automatically transition slides; {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
-    default boolean getAuto() {
+    default boolean getAutoplay() {
         throw new UnsupportedOperationException();
     }
 

@@ -51,18 +51,18 @@ public class CarouselImpl extends AbstractContainerImpl implements Carousel {
     @ScriptVariable
     protected ValueMap properties;
 
-    protected boolean auto;
+    protected boolean autoplay;
     protected Long delay;
 
     @PostConstruct
     protected void initModel() {
-        auto = properties.get(PN_AUTO, currentStyle.get(PN_AUTO, false));
+        autoplay = properties.get(PN_AUTOPLAY, currentStyle.get(PN_AUTOPLAY, false));
         delay = (long)1000 * properties.get(PN_DELAY, currentStyle.get(PN_DELAY, DEFAULT_DELAY));
     }
 
     @Override
-    public boolean getAuto() {
-        return auto;
+    public boolean getAutoplay() {
+        return autoplay;
     }
 
     @Override

@@ -41,7 +41,7 @@
          * @type {Boolean}
          * @default false
          */
-        "auto": {
+        "autoplay": {
             "default": false,
             "transform": function(value) {
                 return !(value === null || typeof value === "undefined");
@@ -52,7 +52,7 @@
          *
          * @memberof Carousel
          * @type {Number}
-         * @default 3000
+         * @default 5000
          */
         "delay": {
             "default": 5000,
@@ -102,7 +102,7 @@
             if (that._elements.item) {
                 refreshActive();
                 bindEvents();
-                resetAutoInterval();
+                resetAutoplayInterval();
             }
 
             if (Granite && Granite.author && Granite.author.MessageChannel) {
@@ -216,11 +216,11 @@
             }
 
             that._elements.self.addEventListener("mouseenter", function() {
-                clearAutoInterval();
+                clearAutoplayInterval();
             });
 
             that._elements.self.addEventListener("mouseleave", function() {
-                resetAutoInterval();
+                resetAutoplayInterval();
             });
         }
 
@@ -340,9 +340,9 @@
             that._active = index;
             refreshActive();
 
-            // reset the auto transition interval following navigation, if not already hovering the carousel
+            // reset the autoplay transition interval following navigation, if not already hovering the carousel
             if (that._elements.self.parentElement.querySelector(":hover") !== that._elements.self) {
-                resetAutoInterval();
+                resetAutoplayInterval();
             }
         }
 
@@ -362,12 +362,12 @@
          *
          * @private
          */
-        function resetAutoInterval() {
-            if (!that._properties.auto) {
+        function resetAutoplayInterval() {
+            if (!that._properties.autoplay) {
                 return;
             }
-            clearAutoInterval();
-            that._autoInterval = window.setInterval(function() {
+            clearAutoplayInterval();
+            that._autoplayIntervalId = window.setInterval(function() {
                 var indicators = that._elements["indicators"];
                 if (indicators !== document.activeElement && indicators.contains(document.activeElement)) {
                     // if an indicator has focus, ensure we switch focus following navigation
@@ -383,9 +383,9 @@
          *
          * @private
          */
-        function clearAutoInterval() {
-            window.clearInterval(that._autoInterval);
-            that._autoInterval = null;
+        function clearAutoplayInterval() {
+            window.clearInterval(that._autoplayIntervalId);
+            that._autoplayIntervalId = null;
         }
     }
 

@@ -47,15 +47,15 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <auto
+                                            <autoplay
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="${not empty cqDesign.auto ? cqDesign.auto : false}"
+                                                checked="${not empty cqDesign.autoplay ? cqDesign.autoplay : false}"
                                                 fieldDescription="If checked, automatically transition between slides."
-                                                name="./auto"
+                                                name="./autoplay"
                                                 text="Automatically transition slides"
                                                 uncheckedValue="false"
-                                                value="{Boolean}true"/>
+                                                value="true"/>
                                             <delay
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
