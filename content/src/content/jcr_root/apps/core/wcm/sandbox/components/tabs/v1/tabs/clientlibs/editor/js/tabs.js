@@ -13,14 +13,12 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* global jQuery */
-(function($) {
+/* global jQuery, Coral */
+(function($, Coral) {
     "use strict";
 
     var dialogContentSelector = ".cmp-tabs__editor";
-    var childreneditorSelector = ".cmp-childreneditor";
-    var childreneditorIconTitleSelector = ".cmp-childreneditor__item-icon [title]";
-    var childreneditorItemSelector = ".cmp-childreneditor__item-title";
+    var childreneditorSelector = "[data-cmp-is='childreneditor']";
     var activeItemSelector = "[data-cmp-tabs-v1-dialog-edit-hook='activeItem']";
     var activeSelectSelector = "[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']";
 
@@ -34,10 +32,13 @@
             var activeSelect = dialogContent.querySelector(activeSelectSelector);
             var activeItem = dialogContent.querySelector(activeItemSelector);
 
+            Coral.commons.ready(childrenEditor, function() {
+                updateTabs(childrenEditor, activeSelect, activeItem);
+            });
+
             childrenEditor.on("change", function() {
                 updateTabs(childrenEditor, activeSelect, activeItem);
             });
-            updateTabs(childrenEditor, activeSelect, activeItem);
 
             activeSelect.on("change", function() {
                 activeItem.value = activeSelect.value;
@@ -55,19 +56,17 @@
     function updateTabs(childrenEditor, activeSelect, activeItem) {
         var selectedValue = activeSelect.value || activeItem.value;
         activeSelect.items.clear();
-        childrenEditor.items.getAll().forEach(function(item) {
-            var $item = $(item);
-            var component = $item.find(childreneditorIconTitleSelector).attr("title");
-            var title = $item.find(childreneditorItemSelector)[0];
-            var value = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
-            var text = component + ((title && title.value) ? ": " + title.value : "");
-            activeSelect.items.add({
-                selected: value === selectedValue,
-                value: value,
-                content: {
-                    textContent: text
-                }
+        var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
+        if (cmpChildrenEditor) {
+            cmpChildrenEditor.items().forEach(function(item) {
+                activeSelect.items.add({
+                    selected: item.name === selectedValue,
+                    value: item.name,
+                    content: {
+                        textContent: item.description
+                    }
+                });
             });
-        });
+        }
     }
-})(jQuery);
+})(jQuery, Coral);
