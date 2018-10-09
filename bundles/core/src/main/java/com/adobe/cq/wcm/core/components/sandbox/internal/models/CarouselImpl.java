@@ -43,7 +43,7 @@ public class CarouselImpl extends AbstractContainerImpl implements Carousel {
     private static final Logger LOGGER = LoggerFactory.getLogger(CarouselImpl.class);
 
     public static final String RESOURCE_TYPE = "core/wcm/sandbox/components/carousel/v1/carousel";
-    protected static final int DEFAULT_DELAY = 5; // seconds
+    protected static final Long DEFAULT_DELAY = 5000L; // milliseconds
 
     @ScriptVariable
     protected Style currentStyle;
@@ -57,7 +57,7 @@ public class CarouselImpl extends AbstractContainerImpl implements Carousel {
     @PostConstruct
     protected void initModel() {
         autoplay = properties.get(PN_AUTOPLAY, currentStyle.get(PN_AUTOPLAY, false));
-        delay = (long)1000 * properties.get(PN_DELAY, currentStyle.get(PN_DELAY, DEFAULT_DELAY));
+        delay = properties.get(PN_DELAY, currentStyle.get(PN_DELAY, DEFAULT_DELAY));
     }
 
     @Override

@@ -32,6 +32,30 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
+                    <items
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Items"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <slides
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/sandbox/commons/ui/components/childreneditor"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </items>
                     <properties
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Properties"
@@ -59,43 +83,19 @@
                                             <delay
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                                fieldDescription="The delay (in seconds) before automatically transitioning to the next slide."
-                                                fieldLabel="Transition Delay (seconds)"
+                                                fieldDescription="The delay (in milliseconds) before automatically transitioning to the next slide."
+                                                fieldLabel="Transition Delay (milliseconds)"
                                                 min="0"
-                                                max="600"
+                                                max="600000"
                                                 name="./delay"
-                                                step="0.1"
-                                                value="${not empty cqDesign.delay ? cqDesign.delay : 5}"/>
+                                                step="200"
+                                                value="${not empty cqDesign.delay ? cqDesign.delay : 5000}"/>
                                         </items>
                                     </column>
                                 </items>
                             </columns>
                         </items>
                     </properties>
-                    <slides
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Slides"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <columns
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                                margin="{Boolean}true">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <column
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/container">
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <slides
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="core/wcm/sandbox/commons/ui/components/childreneditor"/>
-                                        </items>
-                                    </column>
-                                </items>
-                            </columns>
-                        </items>
-                    </slides>
                 </items>
             </tabs>
         </items>

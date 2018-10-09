@@ -33,7 +33,7 @@ public interface Carousel extends Container {
     String PN_AUTOPLAY = "autoplay";
 
     /**
-     * Name of the resource property that indicates the delay (in seconds) when automatically transitioning between slides.
+     * Name of the resource property that indicates the delay (in milliseconds) when automatically transitioning between slides.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
