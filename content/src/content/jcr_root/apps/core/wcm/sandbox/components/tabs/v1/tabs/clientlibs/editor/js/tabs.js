@@ -59,8 +59,8 @@
             var $item = $(item);
             var component = $item.find(childreneditorIconTitleSelector).attr("title");
             var title = $item.find(childreneditorItemSelector)[0];
-            var value = title.name.match(".?/?(.+)/.*")[1];
-            var text = component + (title.value ? ": " + title.value : "");
+            var value = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
+            var text = component + ((title && title.value) ? ": " + title.value : "");
             activeSelect.items.add({
                 selected: value === selectedValue,
                 value: value,
