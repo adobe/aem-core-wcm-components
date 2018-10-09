@@ -30,7 +30,11 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]'
+        self: "[data-" +  NS + '-is="' + IS + '"]',
+        active: {
+            tab: "cmp-tabs__tab--active",
+            tabpanel: "cmp-tabs__tabpanel--active"
+        }
     };
 
     /**
@@ -87,9 +91,11 @@
         }
 
         function getActiveIndex(tabs) {
-            for (var i = 0; i < tabs.length; i++) {
-                if (tabs[i].classList.contains("cmp-tabs__tab--active")) {
-                    return i;
+            if (tabs) {
+                for (var i = 0; i < tabs.length; i++) {
+                    if (tabs[i].classList.contains(selectors.active.tab)) {
+                        return i;
+                    }
                 }
             }
             return 0;
@@ -197,24 +203,24 @@
                 if (Array.isArray(tabpanels)) {
                     for (var i = 0; i < tabpanels.length; i++) {
                         if (i === parseInt(that._active)) {
-                            tabpanels[i].classList.add("cmp-tabs__tabpanel--active");
+                            tabpanels[i].classList.add(selectors.active.tabpanel);
                             tabpanels[i].removeAttribute("aria-hidden");
-                            tabs[i].classList.add("cmp-tabs__tab--active");
+                            tabs[i].classList.add(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
                             focusWithoutScroll(tabs[i]);
                         } else {
-                            tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
+                            tabpanels[i].classList.remove(selectors.active.tabpanel);
                             tabpanels[i].setAttribute("aria-hidden", true);
-                            tabs[i].classList.remove("cmp-tabs__tab--active");
+                            tabs[i].classList.remove(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", false);
                             tabs[i].setAttribute("tabindex", "-1");
                         }
                     }
                 } else {
                     // only one tab
-                    tabpanels.classList.add("cmp-tabs__tabpanel--active");
-                    tabs.classList.add("cmp-tabs__tab--active");
+                    tabpanels.classList.add(selectors.active.tabpanel);
+                    tabs.classList.add(selectors.active.tab);
                 }
             }
         }
