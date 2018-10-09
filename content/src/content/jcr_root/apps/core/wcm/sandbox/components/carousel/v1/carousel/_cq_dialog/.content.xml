@@ -88,7 +88,7 @@
                                                 min="0"
                                                 max="600000"
                                                 name="./delay"
-                                                step="200"
+                                                step="100"
                                                 value="${not empty cqDesign.delay ? cqDesign.delay : 5000}"/>
                                         </items>
                                     </column>
