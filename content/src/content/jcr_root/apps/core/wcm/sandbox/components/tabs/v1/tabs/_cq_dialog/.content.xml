@@ -34,7 +34,7 @@
                 <items jcr:primaryType="nt:unstructured">
                     <tabitems
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Tabs"
+                        jcr:title="Items"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -60,7 +60,7 @@
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Properties"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
+                        maximized="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
                             <columns
                                 jcr:primaryType="nt:unstructured"
