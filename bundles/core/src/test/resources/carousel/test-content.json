@@ -16,6 +16,8 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:title"         : "Carousel 1",
                         "sling:resourceType": "core/wcm/sandbox/components/carousel/v1/carousel",
+                        "autoplay"          : "true",
+                        "delay"             : "7",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Teaser 1",

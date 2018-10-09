@@ -21,7 +21,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -30,9 +29,14 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.sandbox.models.Carousel;
+import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CarouselImplTest {
 
@@ -56,7 +60,7 @@ public class CarouselImplTest {
     public void testEmptyCarousel() {
         Carousel carousel = new CarouselImpl();
         List<ListItem> items = carousel.getItems();
-        Assert.assertTrue("", items == null || items.size() == 0);
+        assertTrue("", items == null || items.size() == 0);
     }
 
     @Test
@@ -68,6 +72,13 @@ public class CarouselImplTest {
         };
         verifyCarouselItems(expectedItems, carousel.getItems());
         //Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
+    }
+
+    @Test
+    public void testCarouselProperties() {
+        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
+        assertTrue(carousel.getAutoplay());
+        assertEquals(new Long(7000), carousel.getDelay());
     }
 
     private Carousel getCarouselUnderTest(String resourcePath) {
@@ -83,6 +94,11 @@ public class CarouselImplTest {
         slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
+        Style style = mock(Style.class);
+        when(style.get(any(), any(Object.class))).thenAnswer(
+            invocation -> invocation.getArguments()[1]
+        );
+        slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Carousel.class);
     }
