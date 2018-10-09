@@ -56,9 +56,9 @@
                             </columns>
                         </items>
                     </tabitems>
-                    <options
+                    <properties
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Options"
+                        jcr:title="Properties"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -74,20 +74,27 @@
                                             <activeItem
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="/libs/granite/ui/components/coral/foundation/form/hidden"
-                                                name="./activeItem"/>
+                                                name="./activeItem">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-tabs-v1-dialog-edit-hook="activeItem"/>
+                                            </activeItem>
                                             <activeSelect
-                                                granite:class="activeSelect"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
                                                 emptyText="Select"
                                                 fieldDescription="The tab that is active by default."
-                                                fieldLabel="Active Tab"/>
+                                                fieldLabel="Active Tab">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-tabs-v1-dialog-edit-hook="activeSelect"/>
+                                            </activeSelect>
                                         </items>
                                     </column>
                                 </items>
                             </columns>
                         </items>
-                    </options>
+                    </properties>
                 </items>
             </tabs>
         </items>

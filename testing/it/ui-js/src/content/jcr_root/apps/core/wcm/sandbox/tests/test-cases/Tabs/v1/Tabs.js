@@ -260,12 +260,12 @@
                     $(children[1]).val() === "item1" &&
                     $(children[2]).val() === "item2";
             })
-            // switch to options tab
-            .click("coral-tab-label:contains('Options')")
+            // switch to properties tab
+            .click("coral-tab-label:contains('Properties')")
             // select second item as active
-            .click("coral-select.activeSelect button")
+            .click(selectors.editDialog.properties.activeSelect + " button")
             .wait(200)
-            .click("coral-select.activeSelect coral-selectlist-item:nth-child(2)")
+            .click(selectors.editDialog.properties.activeSelect + " coral-selectlist-item:nth-child(2)")
             .wait(200)
             // save the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)

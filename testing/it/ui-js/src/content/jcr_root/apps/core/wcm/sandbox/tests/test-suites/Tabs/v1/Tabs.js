@@ -32,6 +32,9 @@
                     input: "[data-cmp-hook-childreneditor='itemTitle']",
                     hiddenInput: "[data-cmp-hook-childreneditor='itemResourceType']"
                 }
+            },
+            properties: {
+                activeSelect: "[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']"
             }
         },
         insertComponentDialog: {

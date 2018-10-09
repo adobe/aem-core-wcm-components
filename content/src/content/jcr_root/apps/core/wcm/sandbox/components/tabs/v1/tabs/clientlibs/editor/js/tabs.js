@@ -21,8 +21,8 @@
     var childreneditorSelector = ".cmp-childreneditor";
     var childreneditorIconTitleSelector = ".cmp-childreneditor__item-icon [title]";
     var childreneditorItemSelector = ".cmp-childreneditor__item-title";
-    var activeItemSelector = "input[name='./activeItem']";
-    var activeSelectSelector = "coral-select.activeSelect";
+    var activeItemSelector = "[data-cmp-tabs-v1-dialog-edit-hook='activeItem']";
+    var activeSelectSelector = "[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']";
 
     $(document).on("dialog-loaded", function(e) {
         var $dialog = e.dialog;
@@ -30,17 +30,17 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-            var $childrenEditor = $dialogContent.find(childreneditorSelector);
-            var $activeSelect = $dialogContent.find(activeSelectSelector);
-            var $activeItem = $dialogContent.find(activeItemSelector);
+            var childrenEditor = dialogContent.querySelector(childreneditorSelector);
+            var activeSelect = dialogContent.querySelector(activeSelectSelector);
+            var activeItem = dialogContent.querySelector(activeItemSelector);
 
-            $childrenEditor.on("change", function() {
-                updateTabs($childrenEditor[0], $activeSelect[0], $activeItem[0]);
+            childrenEditor.on("change", function() {
+                updateTabs(childrenEditor, activeSelect, activeItem);
             });
-            updateTabs($childrenEditor[0], $activeSelect[0], $activeItem[0]);
+            updateTabs(childrenEditor, activeSelect, activeItem);
 
-            $activeSelect.on("change", function() {
-                $activeItem[0].value = $activeSelect[0].value;
+            activeSelect.on("change", function() {
+                activeItem.value = activeSelect.value;
             });
         }
     });
