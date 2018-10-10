@@ -32,8 +32,12 @@ import java.util.Map;
  * Defines the Sling Model for the {@code /apps/core/wcm/components/contentfragment} component. The model
  * provides information about the referenced content fragment and access to representations of its elements.
  *
+ * @see com.adobe.cq.wcm.core.components.extension.contentfragment.models.v2.ContentFragment
  * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+ * @deprecated since 1.0.7 - use {@link com.adobe.cq.wcm.core.components.extension.contentfragment.models.v2.ContentFragment}
+ * instead.
  */
+@Deprecated
 @ConsumerType
 public interface ContentFragment extends ContainerExporter {
 
@@ -78,8 +82,12 @@ public interface ContentFragment extends ContainerExporter {
     /**
      * Represents a content element of a content fragment.
      *
+     * @see com.adobe.cq.wcm.core.components.extension.contentfragment.models.v2.ContentFragment.ContentElement
      * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @deprecated since 1.0.7 - use {@link com.adobe.cq.wcm.core.components.extension.contentfragment.models.v2.ContentFragment.ContentElement}
+     * instead.
      */
+    @Deprecated
     @ConsumerType
     interface Element extends ComponentExporter {
 
