@@ -23,7 +23,7 @@
     var POST_SUFFIX = ".container.html";
 
     var selectors = {
-        self: "[data-cmp-is='childreneditor']",
+        self: "[data-cmp-is='childrenEditor']",
         add: "[data-cmp-hook-childreneditor='add']",
         insertComponentDialog: {
             self: "coral-dialog.InsertComponentDialog",
@@ -56,6 +56,30 @@
         this._orderedChildren = [];
         this._deletedChildren = [];
         this._init();
+
+        var that = this;
+        $(window).adaptTo("foundation-registry").register("foundation.adapters", {
+            type: "cmp-childreneditor",
+            selector: selectors.self,
+            adapter: function() {
+                return {
+                    items: function() {
+                        var items = [];
+                        that._elements.self.items.getAll().forEach(function(item) {
+                            var component = item.querySelector(selectors.item.icon + " [title]").getAttribute("title");
+                            var title = item.querySelector(selectors.item.input);
+                            var name = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
+                            var description = component + ((title && title.value) ? ": " + title.value : "");
+                            items.push({
+                                name: name,
+                                description: description
+                            });
+                        });
+                        return items;
+                    }
+                };
+            }
+        });
     };
 
     ChildrenEditor.prototype = (function() {
@@ -77,6 +101,7 @@
                 return $.ajax({
                     type: "POST",
                     url: url,
+                    async: false,
                     data: {
                         "delete": this._deletedChildren,
                         "order": this._orderedChildren
@@ -174,7 +199,6 @@
                                             componentTitle = components[0].getTitle();
 
                                             var item = that._elements.self.items.add(new Coral.Multifield.Item());
-                                            that._elements.self.trigger("change");
 
                                             // next frame to ensure the item template is rendered in the DOM
                                             Coral.commons.nextFrame(function() {
@@ -192,6 +216,8 @@
                                                 var itemIcon = item.querySelectorAll(selectors.item.icon)[0];
                                                 var icon = that._renderIcon(components[0]);
                                                 itemIcon.appendChild(icon);
+
+                                                that._elements.self.trigger("change");
                                             });
                                         }
                                     });

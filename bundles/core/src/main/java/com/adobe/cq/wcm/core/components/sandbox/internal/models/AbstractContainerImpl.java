@@ -34,7 +34,7 @@ import com.day.cq.wcm.api.components.ComponentManager;
 public abstract class AbstractContainerImpl implements Container {
 
     @SlingObject
-    private Resource resource;
+    protected Resource resource;
 
     @Self
     private SlingHttpServletRequest request;

@@ -20,9 +20,10 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Tabs"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.commons.ui.childreneditor]"
+    extraClientlibs="[core.wcm.commons.ui.childreneditor,core.wcm.components.tabs.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_tab_v1">
     <content
+        granite:class="cmp-tabs__editor"
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
@@ -33,7 +34,7 @@
                 <items jcr:primaryType="nt:unstructured">
                     <tabitems
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Tabs"
+                        jcr:title="Items"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -55,6 +56,50 @@
                             </columns>
                         </items>
                     </tabitems>
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        maximized="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <activeItem
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/hidden"
+                                                name="./activeItem">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-tabs-v1-dialog-edit-hook="activeItem"/>
+                                            </activeItem>
+                                            <activeSelect
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The tab that is active by default."
+                                                fieldLabel="Active Tab">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-tabs-v1-dialog-edit-hook="activeSelect"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <default
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Default"
+                                                        value=""/>
+                                                </items>
+                                            </activeSelect>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </properties>
                 </items>
             </tabs>
         </items>

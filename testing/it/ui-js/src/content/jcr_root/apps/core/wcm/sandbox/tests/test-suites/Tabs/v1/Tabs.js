@@ -32,6 +32,9 @@
                     input: "[data-cmp-hook-childreneditor='itemTitle']",
                     hiddenInput: "[data-cmp-hook-childreneditor='itemResourceType']"
                 }
+            },
+            properties: {
+                activeSelect: "[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']"
             }
         },
         insertComponentDialog: {
@@ -79,6 +82,7 @@
         .addTestCase(tabs.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(tabs.tcSetActiveItem(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcPanelSelectItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcPanelSelectReorder(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(tabs.tcNestedTabs(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))

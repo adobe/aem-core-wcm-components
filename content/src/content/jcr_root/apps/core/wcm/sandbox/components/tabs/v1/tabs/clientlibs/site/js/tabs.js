@@ -30,7 +30,11 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]'
+        self: "[data-" +  NS + '-is="' + IS + '"]',
+        active: {
+            tab: "cmp-tabs__tab--active",
+            tabpanel: "cmp-tabs__tabpanel--active"
+        }
     };
 
     /**
@@ -62,7 +66,7 @@
             config.element.removeAttribute("data-" + NS + "-is");
 
             cacheElements(config.element);
-            that._active = 0;
+            that._active = getActiveIndex(that._elements["tab"]);
 
             if (that._elements.tabpanel) {
                 refreshActive();
@@ -84,6 +88,23 @@
                     }
                 });
             }
+        }
+
+        /**
+         * Returns the index of the active tab, if no tab is active returns 0
+         *
+         * @param tabs {Array} Tab elements
+         * @returns {number} Index of the active tab, 0 if none is active
+         */
+        function getActiveIndex(tabs) {
+            if (tabs) {
+                for (var i = 0; i < tabs.length; i++) {
+                    if (tabs[i].classList.contains(selectors.active.tab)) {
+                        return i;
+                    }
+                }
+            }
+            return 0;
         }
 
         /**
@@ -188,24 +209,24 @@
                 if (Array.isArray(tabpanels)) {
                     for (var i = 0; i < tabpanels.length; i++) {
                         if (i === parseInt(that._active)) {
-                            tabpanels[i].classList.add("cmp-tabs__tabpanel--active");
+                            tabpanels[i].classList.add(selectors.active.tabpanel);
                             tabpanels[i].removeAttribute("aria-hidden");
-                            tabs[i].classList.add("cmp-tabs__tab--active");
+                            tabs[i].classList.add(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
                             focusWithoutScroll(tabs[i]);
                         } else {
-                            tabpanels[i].classList.remove("cmp-tabs__tabpanel--active");
+                            tabpanels[i].classList.remove(selectors.active.tabpanel);
                             tabpanels[i].setAttribute("aria-hidden", true);
-                            tabs[i].classList.remove("cmp-tabs__tab--active");
+                            tabs[i].classList.remove(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", false);
                             tabs[i].setAttribute("tabindex", "-1");
                         }
                     }
                 } else {
                     // only one tab
-                    tabpanels.classList.add("cmp-tabs__tabpanel--active");
-                    tabs.classList.add("cmp-tabs__tab--active");
+                    tabpanels.classList.add(selectors.active.tabpanel);
+                    tabs.classList.add(selectors.active.tab);
                 }
             }
         }
