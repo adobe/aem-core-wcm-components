@@ -20,6 +20,7 @@
     var IS = "image";
 
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    var LAZY_LOAD_DISABLED_ATTR = "disablelazyload";
     var LAZY_THRESHOLD = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
 
@@ -142,8 +143,8 @@
             var hasWidths = that._properties.widths && that._properties.widths.length > 0;
             var replacement = hasWidths ? "." + getOptimalWidth() : "";
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
-
-            if (that._elements.image.getAttribute("src") !== url) {
+            let disableLazyLoad = that._elements.image.getAttribute(LAZY_LOAD_DISABLED_ATTR);
+            if (disableLazyLoad !== "true" && that._elements.image.getAttribute("src") !== url) {
                 that._elements.image.setAttribute("src", url);
                 if (!hasWidths) {
                     window.removeEventListener("scroll", that.update);
@@ -196,7 +197,10 @@
             // temporary document avoids requesting the image before removing its src
             var temporaryDocument = parser.parseFromString(markup, "text/html");
             var imageElement = temporaryDocument.querySelector(selectors.image);
-            imageElement.removeAttribute("src");
+            let disableLazyLoad = imageElement.getAttribute(LAZY_LOAD_DISABLED_ATTR);
+            if (disableLazyLoad !== "true") {
+                imageElement.removeAttribute("src");
+            }
             that._elements.container.insertBefore(imageElement, that._elements.noscript);
 
             var mapElement = temporaryDocument.querySelector(selectors.map);
