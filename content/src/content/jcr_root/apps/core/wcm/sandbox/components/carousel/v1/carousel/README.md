@@ -43,7 +43,7 @@ BLOCK cmp-carousel
     ELEMENT cmp-carousel__content
     ELEMENT cmp-carousel__item
     ELEMENT cmp-carousel__action
-        MOD cmp-carousel__action--prev
+        MOD cmp-carousel__action--previous
         MOD cmp-carousel__action--next
     ELEMENT cmp-carousel__action-icon
     ELEMENT cmp-carousel__action-text
@@ -54,12 +54,18 @@ BLOCK cmp-carousel
 ## JavaScript Data Attribute Bindings
 Apply a `data-cmp-is="carousel"` attribute to the wrapper block to enable initialization of the JavaScript component.
 
+The following attributes can be added to the same element to provide options:
+
+1. `data-cmp-autoplay` - if the attribute is present, indicates that the carousel should automatically transition between slides.
+2. `data-cmp-delay` - the delay (in milliseconds) when automatically transitioning between slides.
+
 A hook attribute from the following should be added to the corresponding element so that the JavaScript is able to target it:
 
 ```
 data-cmp-hook-carousel="item"
-data-cmp-hook-carousel="prev"
+data-cmp-hook-carousel="previous"
 data-cmp-hook-carousel="next"
+data-cmp-hook-carousel="indicators"
 data-cmp-hook-carousel="indicator"
 ```
 

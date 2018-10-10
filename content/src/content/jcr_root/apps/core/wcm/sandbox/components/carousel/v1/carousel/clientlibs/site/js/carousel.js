@@ -33,13 +33,47 @@
         self: "[data-" +  NS + '-is="' + IS + '"]'
     };
 
+    var properties = {
+        /**
+         * Determines whether the Carousel will automatically transition between slides
+         *
+         * @memberof Carousel
+         * @type {Boolean}
+         * @default false
+         */
+        "autoplay": {
+            "default": false,
+            "transform": function(value) {
+                return !(value === null || typeof value === "undefined");
+            }
+        },
+        /**
+         * Duration (in milliseconds) before automatically transitioning to the next slide
+         *
+         * @memberof Carousel
+         * @type {Number}
+         * @default 5000
+         */
+        "delay": {
+            "default": 5000,
+            "transform": function(value) {
+                value = parseFloat(value);
+                return !isNaN(value) ? value : null;
+            }
+        }
+    };
+
     /**
+     * Carousel Configuration
+     *
      * @typedef {Object} CarouselConfig Represents a Carousel configuration
      * @property {HTMLElement} element The HTMLElement representing the Carousel
      * @property {Object} options The Carousel options
      */
 
     /**
+     * Carousel
+     *
      * @class Carousel
      * @classdesc An interactive Carousel component for navigating a list of generic items
      * @param {CarouselConfig} config The Carousel configuration
@@ -61,12 +95,14 @@
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
+            setupProperties(config.options);
             cacheElements(config.element);
             that._active = 0;
 
             if (that._elements.item) {
                 refreshActive();
                 bindEvents();
+                resetAutoplayInterval();
             }
 
             if (Granite && Granite.author && Granite.author.MessageChannel) {
@@ -115,32 +151,53 @@
         }
 
         /**
+         * Sets up properties for the Carousel based on the passed options.
+         *
+         * @private
+         * @param {Object} options The Carousel options
+         */
+        function setupProperties(options) {
+            that._properties = {};
+
+            for (var key in properties) {
+                if (properties.hasOwnProperty(key)) {
+                    var property = properties[key];
+                    var value = null;
+
+                    if (options && options[key] != null) {
+                        value = options[key];
+
+                        // transform the provided option
+                        if (property && typeof property.transform === "function") {
+                            value = property.transform(value);
+                        }
+                    }
+
+                    if (value === null) {
+                        // value still null, take the property default
+                        value = properties[key]["default"];
+                    }
+
+                    that._properties[key] = value;
+                }
+            }
+        }
+
+        /**
          * Binds Carousel event handling
          *
          * @private
          */
         function bindEvents() {
-            var prev = that._elements["prev"];
-            if (prev) {
-                prev.addEventListener("click", function() {
-                    if (that._active > 0) {
-                        that._active = that._active - 1;
-                    } else {
-                        that._active = that._elements["item"].length - 1;
-                    }
-                    refreshActive();
+            if (that._elements["previous"]) {
+                that._elements["previous"].addEventListener("click", function() {
+                    navigate(getPreviousIndex());
                 });
             }
 
-            var next = that._elements["next"];
-            if (next) {
-                next.addEventListener("click", function() {
-                    if (that._active < that._elements["item"].length - 1) {
-                        that._active = that._active + 1;
-                    } else {
-                        that._active = 0;
-                    }
-                    refreshActive();
+            if (that._elements["next"]) {
+                that._elements["next"].addEventListener("click", function() {
+                    navigate(getNextIndex());
                 });
             }
 
@@ -149,7 +206,7 @@
                 for (var i = 0; i < indicators.length; i++) {
                     (function(index) {
                         indicators[i].addEventListener("click", function(event) {
-                            navigate(index);
+                            navigateAndFocusIndicator(index);
                         });
                         indicators[i].addEventListener("keydown", function(event) {
                             onKeyDown(event);
@@ -157,6 +214,14 @@
                     })(i);
                 }
             }
+
+            that._elements.self.addEventListener("mouseenter", function() {
+                clearAutoplayInterval();
+            });
+
+            that._elements.self.addEventListener("mouseleave", function() {
+                resetAutoplayInterval();
+            });
         }
 
         /**
@@ -174,23 +239,23 @@
                 case keyCodes.ARROW_UP:
                     event.preventDefault();
                     if (index > 0) {
-                        navigate(index - 1);
+                        navigateAndFocusIndicator(index - 1);
                     }
                     break;
                 case keyCodes.ARROW_RIGHT:
                 case keyCodes.ARROW_DOWN:
                     event.preventDefault();
                     if (index < lastIndex) {
-                        navigate(index + 1);
+                        navigateAndFocusIndicator(index + 1);
                     }
                     break;
                 case keyCodes.HOME:
                     event.preventDefault();
-                    navigate(0);
+                    navigateAndFocusIndicator(0);
                     break;
                 case keyCodes.END:
                     event.preventDefault();
-                    navigate(lastIndex);
+                    navigateAndFocusIndicator(lastIndex);
                     break;
                 default:
                     return;
@@ -215,7 +280,6 @@
                             indicators[i].classList.add("cmp-carousel__indicator--active");
                             indicators[i].setAttribute("aria-selected", true);
                             indicators[i].setAttribute("tabindex", "0");
-                            focusWithoutScroll(indicators[i]);
                         } else {
                             items[i].classList.remove("cmp-carousel__item--active");
                             items[i].setAttribute("aria-hidden", true);
@@ -245,14 +309,83 @@
         }
 
         /**
+         * Retrieves the next active index, with looping
+         *
+         * @private
+         */
+        function getNextIndex() {
+            return that._active === (that._elements["item"].length - 1) ? 0 : that._active + 1;
+        }
+
+        /**
+         * Retrieves the previous active index, with looping
+         *
+         * @private
+         */
+        function getPreviousIndex() {
+            return that._active === 0 ? (that._elements["item"].length - 1) : that._active - 1;
+        }
+
+        /**
          * Navigates to the item at the provided index
          *
          * @private
          * @param {Number} index The index of the item to navigate to
          */
         function navigate(index) {
+            if (index < 0 || index > (that._elements["item"].length - 1)) {
+                return;
+            }
+
             that._active = index;
             refreshActive();
+
+            // reset the autoplay transition interval following navigation, if not already hovering the carousel
+            if (that._elements.self.parentElement.querySelector(":hover") !== that._elements.self) {
+                resetAutoplayInterval();
+            }
+        }
+
+        /**
+         * Navigates to the item at the provided index and ensures the active indicator gains focus
+         *
+         * @private
+         * @param {Number} index The index of the item to navigate to
+         */
+        function navigateAndFocusIndicator(index) {
+            navigate(index);
+            focusWithoutScroll(that._elements["indicator"][index]);
+        }
+
+        /**
+         * Starts/resets automatic slide transition interval
+         *
+         * @private
+         */
+        function resetAutoplayInterval() {
+            if (!that._properties.autoplay) {
+                return;
+            }
+            clearAutoplayInterval();
+            that._autoplayIntervalId = window.setInterval(function() {
+                var indicators = that._elements["indicators"];
+                if (indicators !== document.activeElement && indicators.contains(document.activeElement)) {
+                    // if an indicator has focus, ensure we switch focus following navigation
+                    navigateAndFocusIndicator(getNextIndex());
+                } else {
+                    navigate(getNextIndex());
+                }
+            }, that._properties.delay);
+        }
+
+        /**
+         * Clears/pauses automatic slide transition interval
+         *
+         * @private
+         */
+        function clearAutoplayInterval() {
+            window.clearInterval(that._autoplayIntervalId);
+            that._autoplayIntervalId = null;
         }
     }
 
@@ -261,6 +394,7 @@
      *
      * @private
      * @param {HTMLElement} element The Carousel element to read options data from
+     * @returns {Object} The options read from the component data attributes
      */
     function readData(element) {
         var data = element.dataset;
