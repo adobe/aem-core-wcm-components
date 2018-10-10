@@ -33,11 +33,11 @@
             var activeItem = dialogContent.querySelector(activeItemSelector);
 
             Coral.commons.ready(childrenEditor, function() {
-                updateTabs(childrenEditor, activeSelect, activeItem);
+                updateActiveSelect(childrenEditor, activeSelect, activeItem);
             });
 
             childrenEditor.on("change", function() {
-                updateTabs(childrenEditor, activeSelect, activeItem);
+                updateActiveSelect(childrenEditor, activeSelect, activeItem);
             });
 
             activeSelect.on("change", function() {
@@ -53,7 +53,7 @@
      * @param {HTMLElement} activeSelect Active tab select field
      * @param {HTMLElement} activeItem Active tab hidden input
      */
-    function updateTabs(childrenEditor, activeSelect, activeItem) {
+    function updateActiveSelect(childrenEditor, activeSelect, activeItem) {
         var selectedValue = activeSelect.value || activeItem.value;
         activeSelect.items.clear();
         var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
