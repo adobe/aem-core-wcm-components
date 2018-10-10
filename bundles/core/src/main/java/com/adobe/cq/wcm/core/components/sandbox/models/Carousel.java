@@ -28,14 +28,14 @@ public interface Carousel extends Container {
     /**
      * Name of the resource property that indicates whether to automatically transition between slides, or not.
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_AUTOPLAY = "autoplay";
 
     /**
      * Name of the resource property that indicates the delay (in milliseconds) when automatically transitioning between slides.
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     String PN_DELAY = "delay";
 
@@ -43,7 +43,7 @@ public interface Carousel extends Container {
      * Indicates whether the carousel should automatically transition between slides or not.
      *
      * @return {@code true} if the carousel should automatically transition slides; {@code false} otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     default boolean getAutoplay() {
         throw new UnsupportedOperationException();
@@ -53,7 +53,7 @@ public interface Carousel extends Container {
      * Returns the delay (in milliseconds) when automatically transitioning between slides.
      *
      * @return the delay (in milliseconds) when automatically transitioning between slides
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.sandbox.models 1.0.0
      */
     default Long getDelay() {
         throw new UnsupportedOperationException();
