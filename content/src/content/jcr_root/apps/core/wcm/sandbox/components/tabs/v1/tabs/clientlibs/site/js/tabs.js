@@ -90,6 +90,12 @@
             }
         }
 
+        /**
+         * Returns the index of the active tab, if no tab is active returns 0
+         *
+         * @param tabs {Array} Tab elements
+         * @returns {number} Index of the active tab, 0 if none is active
+         */
         function getActiveIndex(tabs) {
             if (tabs) {
                 for (var i = 0; i < tabs.length; i++) {

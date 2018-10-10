@@ -265,7 +265,7 @@
             // select second item as active
             .click(selectors.editDialog.properties.activeSelect + " button")
             .wait(200)
-            .click(selectors.editDialog.properties.activeSelect + " coral-selectlist-item:nth-child(2)")
+            .click(selectors.editDialog.properties.activeSelect + " coral-selectlist-item:contains('item1')")
             .wait(200)
             // save the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
@@ -276,7 +276,28 @@
                 var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item1')");
                 var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
                 return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 2;
-            });
+            })
+            .config.resetContext()
+            // open the edit dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // switch to properties tab
+            .click("coral-tab-label:contains('Properties')")
+            // select default as active
+            .click(selectors.editDialog.properties.activeSelect + " button")
+            .wait(200)
+            .click(selectors.editDialog.properties.activeSelect + " coral-selectlist-item:contains('Default')")
+            .wait(200)
+            // save the edit dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200)
+            .config.changeContext(c.getContentFrame)
+            // check the first tab is active
+            .asserts.isTrue(function() {
+                var $tabActive = h.find(selectors.tabs.tabActive + ":contains('item0')");
+                var $tabpanelActive = h.find(selectors.tabs.tabpanelActive);
+                return $tabActive.size() === 1 && $tabpanelActive.size() === 1 && $tabpanelActive.index() === 1;
+            })
+            .config.resetContext();
     };
 
     /**

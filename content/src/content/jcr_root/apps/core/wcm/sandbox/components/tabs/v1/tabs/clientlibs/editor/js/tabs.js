@@ -25,12 +25,12 @@
     $(document).on("dialog-loaded", function(e) {
         var $dialog = e.dialog;
         var $dialogContent = $dialog.find(dialogContentSelector);
-        var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
+        var tabsEditor = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
-        if (dialogContent) {
-            var childrenEditor = dialogContent.querySelector(childreneditorSelector);
-            var activeSelect = dialogContent.querySelector(activeSelectSelector);
-            var activeItem = dialogContent.querySelector(activeItemSelector);
+        if (tabsEditor) {
+            var childrenEditor = tabsEditor.querySelector(childreneditorSelector);
+            var activeSelect = tabsEditor.querySelector(activeSelectSelector);
+            var activeItem = tabsEditor.querySelector(activeItemSelector);
 
             Coral.commons.ready(childrenEditor, function() {
                 updateActiveSelect(childrenEditor, activeSelect, activeItem);
@@ -55,7 +55,11 @@
      */
     function updateActiveSelect(childrenEditor, activeSelect, activeItem) {
         var selectedValue = activeSelect.value || activeItem.value;
-        activeSelect.items.clear();
+        activeSelect.items.getAll().forEach(function(item) {
+            if (item.value !== "") {
+                activeSelect.items.remove(item);
+            }
+        });
         var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
         if (cmpChildrenEditor) {
             cmpChildrenEditor.items().forEach(function(item) {

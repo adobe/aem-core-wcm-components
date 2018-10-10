@@ -82,12 +82,17 @@
                                             <activeSelect
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
-                                                emptyText="Select"
                                                 fieldDescription="The tab that is active by default."
                                                 fieldLabel="Active Tab">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
                                                     cmp-tabs-v1-dialog-edit-hook="activeSelect"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <default
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Default"
+                                                        value=""/>
+                                                </items>
                                             </activeSelect>
                                         </items>
                                     </column>
