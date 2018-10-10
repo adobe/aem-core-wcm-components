@@ -23,7 +23,7 @@
     var POST_SUFFIX = ".container.html";
 
     var selectors = {
-        self: "[data-cmp-is='childreneditor']",
+        self: "[data-cmp-is='childrenEditor']",
         add: "[data-cmp-hook-childreneditor='add']",
         insertComponentDialog: {
             self: "coral-dialog.InsertComponentDialog",

@@ -18,7 +18,7 @@
     "use strict";
 
     var dialogContentSelector = ".cmp-tabs__editor";
-    var childreneditorSelector = "[data-cmp-is='childreneditor']";
+    var childreneditorSelector = "[data-cmp-is='childrenEditor']";
     var activeItemSelector = "[data-cmp-tabs-v1-dialog-edit-hook='activeItem']";
     var activeSelectSelector = "[data-cmp-tabs-v1-dialog-edit-hook='activeSelect']";
 
