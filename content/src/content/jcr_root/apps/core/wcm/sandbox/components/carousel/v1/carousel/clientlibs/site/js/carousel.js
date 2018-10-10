@@ -208,12 +208,13 @@
                         indicators[i].addEventListener("click", function(event) {
                             navigateAndFocusIndicator(index);
                         });
-                        indicators[i].addEventListener("keydown", function(event) {
-                            onKeyDown(event);
-                        });
                     })(i);
                 }
             }
+
+            that._elements.self.addEventListener("keydown", function(event) {
+                onKeyDown(event);
+            });
 
             that._elements.self.addEventListener("mouseenter", function() {
                 clearAutoplayInterval();
