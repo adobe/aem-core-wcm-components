@@ -65,7 +65,7 @@
                 return {
                     items: function() {
                         var items = [];
-                        that._elements.self.items.getAll().forEach(function (item) {
+                        that._elements.self.items.getAll().forEach(function(item) {
                             var component = item.querySelector(selectors.item.icon + " [title]").getAttribute("title");
                             var title = item.querySelector(selectors.item.input);
                             var name = (title && title.name) ? title.name.match(".?/?(.+)/.*")[1] : "";
@@ -73,11 +73,11 @@
                             items.push({
                                 name: name,
                                 description: description
-                            })
+                            });
                         });
                         return items;
                     }
-                }
+                };
             }
         });
     };
