@@ -23,7 +23,7 @@
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.path @ decorationTagName='div'}"
              role="tabpanel"
-             class="cmp-carousel__item"
+             class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              data-cmp-hook-carousel="item"></div>
         <button role="button" class="cmp-carousel__action cmp-carousel__action--previous" data-cmp-hook-carousel="previous">
             <span class="cmp-carousel__action-icon"></span>
@@ -36,7 +36,7 @@
         <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
                 role="tab"
-                class="cmp-carousel__indicator"
+                class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
                 data-cmp-hook-carousel="indicator">${item.title}</li>
         </ol>
     </div>
