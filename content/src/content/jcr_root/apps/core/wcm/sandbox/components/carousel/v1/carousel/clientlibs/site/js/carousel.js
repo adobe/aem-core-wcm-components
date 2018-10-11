@@ -212,17 +212,9 @@
                 }
             }
 
-            that._elements.self.addEventListener("keydown", function(event) {
-                onKeyDown(event);
-            });
-
-            that._elements.self.addEventListener("mouseenter", function() {
-                clearAutoplayInterval();
-            });
-
-            that._elements.self.addEventListener("mouseleave", function() {
-                resetAutoplayInterval();
-            });
+            that._elements.self.addEventListener("keydown", onKeyDown);
+            that._elements.self.addEventListener("mouseenter", onMouseEnter);
+            that._elements.self.addEventListener("mouseleave", onMouseLeave);
         }
 
         /**
@@ -261,6 +253,26 @@
                 default:
                     return;
             }
+        }
+
+        /**
+         * Handles carousel mouseenter events
+         *
+         * @private
+         * @param {Object} event The mouseenter event
+         */
+        function onMouseEnter(event) {
+            clearAutoplayInterval();
+        }
+
+        /**
+         * Handles carousel mouseleave events
+         *
+         * @private
+         * @param {Object} event The mouseleave event
+         */
+        function onMouseLeave(event) {
+            resetAutoplayInterval();
         }
 
         /**
