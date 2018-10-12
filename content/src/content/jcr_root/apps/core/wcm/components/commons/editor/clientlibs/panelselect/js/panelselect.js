@@ -100,7 +100,7 @@
             this._createPopover();
             this._createTable();
 
-            this._elements.popover.appendChild(this._elements.table);
+            this._elements.popover.content.appendChild(this._elements.table);
             ns.ContentFrame.scrollView[0].appendChild(this._elements.popover);
 
             return this._renderItems();
