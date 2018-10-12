@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,18 +13,12 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components;
+(function() {
+    "use strict";
 
-import org.junit.Test;
+    window.CQ = window.CQ || {};
+    window.CQ.CoreComponents = window.CQ.CoreComponents || {};
+    window.CQ.CoreComponents.panelcontainer = window.CQ.CoreComponents.panelcontainer || {};
+    window.CQ.CoreComponents.panelcontainer.v1 = {};
 
-import com.adobe.cq.wcm.core.components.testing.AbstractModelTest;
-
-public class ModelsCommonsTest extends AbstractModelTest {
-
-    @Test
-    public void testDefaultBehaviour() throws Exception {
-        testDefaultBehaviour(new String[] {
-                "com.adobe.cq.wcm.core.components.models"
-        });
-    }
-}
+})();

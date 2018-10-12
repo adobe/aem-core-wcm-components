@@ -20,7 +20,7 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 * Page authoring components:
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
-  * [Carousel](content/src/content/jcr_root/apps/core/wcm/sandbox/components/carousel/v1/carousel)
+  * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
   * [Content Fragment](extension/contentfragment/content/src/content/jcr_root/apps/core/wcm/extension/components/contentfragment/v1/contentfragment)\*
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
@@ -29,7 +29,7 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
   * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
   * [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
-  * [Tabs](content/src/content/jcr_root/apps/core/wcm/sandbox/components/tabs/v1/tabs)
+  * [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
   * [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
   * [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
   * [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)

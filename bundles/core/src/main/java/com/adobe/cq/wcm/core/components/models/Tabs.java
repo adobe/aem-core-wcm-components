@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,18 +13,25 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components;
+package com.adobe.cq.wcm.core.components.models;
 
-import org.junit.Test;
+import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.wcm.core.components.testing.AbstractModelTest;
+/**
+ * Defines the {@code Tabs} Sling Model used for the {@code /apps/core/wcm/components/tabs} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 12.5.0
+ */
+@ConsumerType
+public interface Tabs extends Container {
 
-public class ModelsCommonsTest extends AbstractModelTest {
-
-    @Test
-    public void testDefaultBehaviour() throws Exception {
-        testDefaultBehaviour(new String[] {
-                "com.adobe.cq.wcm.core.components.models"
-        });
+    /**
+     * Returns the default active item
+     *
+     * @return The default active item
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    default String getActiveItem() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,5 +1,5 @@
 {
-    "carousel": {
+    "childreneditor": {
         "jcr:primaryType": "cq:Page",
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
@@ -16,21 +16,32 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:title"         : "Carousel 1",
                         "sling:resourceType": "core/wcm/components/carousel/v1/carousel",
-                        "autoplay"          : "true",
-                        "delay"             : "7000",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Teaser 1",
-                            "jcr:description"   : "Teaser 1 description",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
                         "item_2": {
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Teaser 2",
-                            "jcr:description"   : "Teaser 2 description",
-                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            "sling:resourceType": "core/wcm/components/teaserIconAbbreviation"
                         },
-                        "item_3": {}
+                        "item_3": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 3",
+                            "sling:resourceType": "core/wcm/components/teaserIconAutoAbbreviation"
+                        },
+                        "item_4": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 4",
+                            "sling:resourceType": "core/wcm/components/teaserIconSVG"
+                        },
+                        "item_5": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 5",
+                            "sling:resourceType": "core/wcm/components/teaserIconPNG"
+                        },
+                        "item_6": {}
                     }
                 }
             }

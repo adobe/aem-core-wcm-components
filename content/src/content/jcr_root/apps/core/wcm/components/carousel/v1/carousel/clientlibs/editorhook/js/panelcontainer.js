@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,18 +13,19 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components;
+(function(channel) {
+    "use strict";
 
-import org.junit.Test;
+    channel.on("cq-editor-loaded", function(event) {
+        if (window.CQ && window.CQ.CoreComponents && window.CQ.CoreComponents.panelcontainer &&
+            window.CQ.CoreComponents.panelcontainer.v1 && window.CQ.CoreComponents.panelcontainer.v1.registry) {
+            window.CQ.CoreComponents.panelcontainer.v1.registry.register({
+                name: "cmp-carousel",
+                selector: ".cmp-carousel",
+                itemSelector: "[data-cmp-hook-carousel='item']",
+                itemActiveSelector: ".cmp-carousel__item--active"
+            });
+        }
+    });
 
-import com.adobe.cq.wcm.core.components.testing.AbstractModelTest;
-
-public class ModelsCommonsTest extends AbstractModelTest {
-
-    @Test
-    public void testDefaultBehaviour() throws Exception {
-        testDefaultBehaviour(new String[] {
-                "com.adobe.cq.wcm.core.components.models"
-        });
-    }
-}
+})(jQuery(document));
