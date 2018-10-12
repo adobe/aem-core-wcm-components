@@ -33,7 +33,7 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
 /**
- * Defines an {@code Editor} Sling Model used by the {@code /apps/core/wcm/components/commons/editor/components/childreneditor/v1/childreneditor} UI component.
+ * Defines an {@code Editor} Sling Model used by the {@code /apps/core/wcm/components/commons/editor/dialog/childreneditor/v1/childreneditor} dialog component.
  */
 @Model(adaptables = {SlingHttpServletRequest.class})
 public class Editor {
