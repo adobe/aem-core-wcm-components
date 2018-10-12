@@ -27,6 +27,8 @@ import com.day.text.Text;
 
 /**
  * Defines an {@code Item} class, used by the children editor {@code Editor} Sling Model.
+ *
+ * @since com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor 1.0.0
  */
 public class Item {
 

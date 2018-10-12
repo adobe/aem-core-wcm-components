@@ -34,6 +34,8 @@ import com.day.cq.wcm.api.components.ComponentManager;
 
 /**
  * Defines an {@code Editor} Sling Model used by the {@code /apps/core/wcm/components/commons/editor/dialog/childreneditor/v1/childreneditor} dialog component.
+ *
+ * @since com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor 1.0.0
  */
 @Model(adaptables = {SlingHttpServletRequest.class})
 public class Editor {
