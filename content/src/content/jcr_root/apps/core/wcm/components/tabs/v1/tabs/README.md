@@ -31,7 +31,11 @@ The Tabs component uses the `com.adobe.cq.wcm.core.components.models.Tabs` Sling
 The component policy dialog allows definition of allowed components for the Tabs.
 
 ### Edit Dialog Properties
-The edit dialog allows editing of Tabs (adding, removing, naming, re-ordering).
+The following properties are written to JCR for this Tabs component and are expected to be available as `Resource` properties:
+
+1. `./activeItem` - defines the item that is active by default.
+
+The edit dialog also allows editing of Tabs items (adding, removing, naming, re-ordering).
 
 ## Client Libraries
 The component provides a `core.wcm.components.tabs.v1` client library category that contains a recommended base
