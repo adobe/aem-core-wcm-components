@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Carousel"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.carousel.v1.editor,core.wcm.commons.ui.childreneditor]"
+    extraClientlibs="[core.wcm.components.carousel.v1.editor,core.wcm.components.commons.editor.childreneditor.v1]"
     helpPath="https://www.adobe.com/go/aem_cmp_carousel_v1">
     <content
         jcr:primaryType="nt:unstructured"
