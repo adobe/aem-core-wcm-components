@@ -53,6 +53,9 @@
         <vault.package.version>${project.version}</vault.package.version>
         <vault.package.group>day/cq63/testing</vault.package.group>
         <vault.package.company>Adobe Systems</vault.package.company>
+        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <node.version>v8.10.0</node.version>
+        <npm.version>5.6.0</npm.version>
     </properties>
 
     <!-- ====================================================================== -->
@@ -155,6 +158,22 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes combine.children="append">
+                        <!-- Ignore lint-files -->
+                        <exclude>**/*.eslintrc</exclude>
+                        <exclude>**/*.editorconfig</exclude>
+                        <exclude>**/*.stylelintrc.yaml</exclude>
+                        <exclude>**/*.eslintignore</exclude>
+                        <!-- Ignore Node and npm -->
+                        <exclude>**/node/**</exclude>
+                        <exclude>**/node_modules/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

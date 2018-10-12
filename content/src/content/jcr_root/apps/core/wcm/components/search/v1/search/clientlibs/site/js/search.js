@@ -43,22 +43,28 @@
     var properties = {
         /**
          * The minimum required length of the search term before results are fetched.
+         *
+         * @memberof Search
+         * @type {Number}
+         * @default 3
          */
         minLength: {
             "default": 3,
             transform: function(value) {
-                // number
                 value = parseFloat(value);
                 return isNaN(value) ? null : value;
             }
         },
         /**
          * The maximal number of results fetched by a search request.
+         *
+         * @memberof Search
+         * @type {Number}
+         * @default 10
          */
         resultsSize: {
             "default": 10,
             transform: function(value) {
-                // number
                 value = parseFloat(value);
                 return isNaN(value) ? null : value;
             }

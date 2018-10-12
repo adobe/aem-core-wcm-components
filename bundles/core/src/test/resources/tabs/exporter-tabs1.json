@@ -1,0 +1,19 @@
+{
+    "items": [
+        {
+            "url": null,
+            "title": "Teaser 1",
+            "description": "Teaser 1 description",
+            "lastModified": null,
+            "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1"
+        },
+        {
+            "url": null,
+            "title": "Teaser 2",
+            "description": "Teaser 2 description",
+            "lastModified": null,
+            "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2"
+        }
+    ],
+    "activeItem":"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2"
+}

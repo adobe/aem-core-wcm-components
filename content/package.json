@@ -22,5 +22,8 @@
         "stylelint": "^9.6.0",
         "stylelint-config-recommended": "^2.1.0",
         "stylelint-selector-bem-pattern": "^2.0.0"
+    },
+    "dependencies": {
+        "npm": "^6.4.1"
     }
 }

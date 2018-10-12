@@ -57,6 +57,10 @@
     c.rtSearch_v1 = "core/wcm/components/search/v1/search";
     // teaser component
     c.rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
+    // carousel component
+    c.rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
+    // tabs component
+    c.rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
     // form container
     c.rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
     c.rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
