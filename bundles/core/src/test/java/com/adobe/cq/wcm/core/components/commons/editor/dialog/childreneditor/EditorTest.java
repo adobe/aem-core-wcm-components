@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.ui.childreneditor;
+package com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -43,7 +43,7 @@ import static org.junit.Assert.assertNull;
 public class EditorTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(EditorTest.class);
     // root folder in resources
-    private static final String TEST_BASE = "/ui/childreneditor";
+    private static final String TEST_BASE = "/commons/editor/dialog/childreneditor";
     // apps root folder
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
     // root of content

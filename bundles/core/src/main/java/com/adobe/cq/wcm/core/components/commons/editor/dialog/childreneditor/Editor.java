@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.ui.childreneditor;
+package com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor;
 
 import java.util.ArrayList;
 import java.util.List;
