@@ -55,7 +55,7 @@ Core Components | Extension | AEM 6.3 | AEM 6.4 | Java
 [2.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.0)           | sandbox/preview | GA + SP1 + FP20593 | GA | 1.8
 [2.0.4](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.4)           | 1.0.0 | GA + SP1 + CFP2 + FP20593 + FP20696 | GA | 1.8
 [2.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.6), [2.0.8](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.8)           | 1.0.2, 1.0.4 | GA + SP2 | GA | 1.8
-[2.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.1.0)           | 1.0.6 | GA + SP2 + CFP2 + FP24268, GA + SP1 + FP24267 | 1.8
+[2.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.1.0)           | 1.0.6 | GA + SP2 + CFP2 + FP24268 | GA + SP1 + FP24267 | 1.8
 
 ## Installation
 
