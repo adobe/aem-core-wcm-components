@@ -38,12 +38,16 @@
     };
 
     /**
+     * Tabs Configuration
+     *
      * @typedef {Object} TabsConfig Represents a Tabs configuration
      * @property {HTMLElement} element The HTMLElement representing the Tabs
      * @property {Object} options The Tabs options
      */
 
     /**
+     * Tabs
+     *
      * @class Tabs
      * @classdesc An interactive Tabs component for navigating a list of tabs
      * @param {TabsConfig} config The Tabs configuration
@@ -93,8 +97,8 @@
         /**
          * Returns the index of the active tab, if no tab is active returns 0
          *
-         * @param tabs {Array} Tab elements
-         * @returns {number} Index of the active tab, 0 if none is active
+         * @param {Array} tabs Tab elements
+         * @returns {Number} Index of the active tab, 0 if none is active
          */
         function getActiveIndex(tabs) {
             if (tabs) {
@@ -260,6 +264,7 @@
      *
      * @private
      * @param {HTMLElement} element The Tabs element to read options data from
+     * @returns {Object} The options read from the component data attributes
      */
     function readData(element) {
         var data = element.dataset;

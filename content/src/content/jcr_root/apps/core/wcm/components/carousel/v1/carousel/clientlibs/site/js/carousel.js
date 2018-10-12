@@ -325,6 +325,7 @@
          * Retrieves the next active index, with looping
          *
          * @private
+         * @returns {Number} Index of the next carousel item
          */
         function getNextIndex() {
             return that._active === (that._elements["item"].length - 1) ? 0 : that._active + 1;
@@ -334,6 +335,7 @@
          * Retrieves the previous active index, with looping
          *
          * @private
+         * @returns {Number} Index of the previous carousel item
          */
         function getPreviousIndex() {
             return that._active === 0 ? (that._elements["item"].length - 1) : that._active - 1;

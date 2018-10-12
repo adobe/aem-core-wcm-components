@@ -22,6 +22,7 @@ if (!Element.prototype.matches) {
     Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
 }
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Element.closest()
  * https://developer.mozilla.org/enUS/docs/Web/API/Element/closest#Polyfill
