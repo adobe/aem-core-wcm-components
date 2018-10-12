@@ -46,7 +46,7 @@
         _config: {},
 
         /**
-         * The [CQ.CoreComponents.PanelContainer]{@link CQ.CoreComponents.PanelContainer} Object that is related to this Panel Selector
+         * The [CQ.CoreComponents.panelcontainer.v1.PanelContainer]{@link CQ.CoreComponents.panelcontainer.v1.PanelContainer} Object that is related to this Panel Selector
          *
          * @member {Object} CQ.CoreComponents.PanelSelector#_panelContainer
          */
@@ -63,11 +63,11 @@
             var that = this;
             that._config = config;
 
-            var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(that._config.editable);
+            var panelContainerType = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerType(that._config.editable);
 
             if (panelContainerType) {
-                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(that._config.editable);
-                that._panelContainer = new CQ.CoreComponents.PanelContainer({
+                var element = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(that._config.editable);
+                that._panelContainer = new CQ.CoreComponents.panelcontainer.v1.PanelContainer({
                     path: that._config.editable.path,
                     panelContainerType: panelContainerType,
                     el: element
@@ -159,7 +159,7 @@
         },
 
         /**
-         * Fetches items for the related [Panel Container]{@link CQ.CoreComponents.PanelContainer} and renders them
+         * Fetches items for the related [Panel Container]{@link CQ.CoreComponents.panelcontainer.v1.PanelContainer} and renders them
          * to the [Coral.Table]{@link Coral.Table}
          *
          * @private
@@ -169,7 +169,7 @@
             var deferred = $.Deferred();
             var that = this;
 
-            var children = CQ.CoreComponents.panelcontainer.utils.getPanelContainerItems(that._config.editable);
+            var children = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(that._config.editable);
             that._panelContainer.getItems().done(function(panelContainerItems) {
                 var items = [];
 
@@ -283,7 +283,7 @@
                                 that._config.editable.overlay.setSelected(true);
 
                                 // update the Panel Container element following refresh
-                                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(that._config.editable);
+                                var element = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(that._config.editable);
                                 that._panelContainer.setElement(element);
 
                                 that._navigate();
@@ -338,7 +338,7 @@
 
         /**
          * Reads the selected item from the [Coral.Table]{Coral.Table} and
-         * calls the [Panel Container]{@link CQ.CoreComponents.PanelContainer} to handle the navigation
+         * calls the [Panel Container]{@link CQ.CoreComponents.panelcontainer.v1.PanelContainer} to handle the navigation
          *
          * @private
          */
@@ -403,11 +403,13 @@
         },
         condition: function(editable) {
             var isPanelContainer = false;
-            if (CQ && CQ.CoreComponents && CQ.CoreComponents.panelcontainer && CQ.CoreComponents.panelcontainer.utils) {
-                isPanelContainer = CQ.CoreComponents.panelcontainer.utils.isPanelContainer(editable);
-            }
+            var children = [];
 
-            var children = CQ.CoreComponents.panelcontainer.utils.getPanelContainerItems(editable);
+            if (CQ && CQ.CoreComponents && CQ.CoreComponents.panelcontainer &&
+                CQ.CoreComponents.panelcontainer.v1 && CQ.CoreComponents.panelcontainer.v1.utils) {
+                isPanelContainer = CQ.CoreComponents.panelcontainer.v1.utils.isPanelContainer(editable);
+                children = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(editable);
+            }
 
             return (children.length > 1 && isPanelContainer);
         },

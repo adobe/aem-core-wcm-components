@@ -21,10 +21,10 @@
      * Panel Container Utilities
      *
      * @namespace
-     * @alias CQ.CoreComponents.panelcontainer.utils
+     * @alias CQ.CoreComponents.panelcontainer.v1.utils
      * @type {{}}
      */
-    CQ.CoreComponents.panelcontainer.utils = {
+    CQ.CoreComponents.panelcontainer.v1.utils = {
 
         /**
          * Checks whether an [Editable]{@link Granite.author.Editable} is a Panel Container
@@ -101,7 +101,7 @@
      */
     function getPanelContainerType(editable) {
         var panelContainerType;
-        var panelContainerTypes = CQ.CoreComponents.panelcontainer.registry.getAll();
+        var panelContainerTypes = CQ.CoreComponents.panelcontainer.v1.registry.getAll();
 
         if (editable && editable.dom) {
             for (var i = 0; i < panelContainerTypes.length; i++) {

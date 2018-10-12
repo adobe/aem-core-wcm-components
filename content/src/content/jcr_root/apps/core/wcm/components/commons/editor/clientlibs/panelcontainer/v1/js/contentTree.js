@@ -53,7 +53,7 @@
         for (var i = 0; i < editables.length; i++) {
             var editable = editables[i];
 
-            if (CQ.CoreComponents.panelcontainer.utils.isPanelContainer(editable)) {
+            if (CQ.CoreComponents.panelcontainer.v1.utils.isPanelContainer(editable)) {
                 updatePanelContainerOverlayState(editable);
             }
         }
@@ -79,12 +79,12 @@
                         var editable = ns.editables.find(selectedItem.value)[0];
                         var editableParent = editable.getParent();
                         var panelContainer;
-                        var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(editableParent);
+                        var panelContainerType = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerType(editableParent);
                         if (panelContainerType) {
-                            panelContainer = new CQ.CoreComponents.PanelContainer({
+                            panelContainer = new CQ.CoreComponents.panelcontainer.v1.PanelContainer({
                                 path: editableParent.path,
                                 panelContainerType: panelContainerType,
-                                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editableParent)
+                                el: CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editableParent)
                             });
 
                             var index = Array.prototype.indexOf.call(selectedItem.parentElement.children, selectedItem);
@@ -120,19 +120,19 @@
      * @param {Granite.author.Editable} editable The Panel Container {@link Granite.author.Editable}
      */
     function updatePanelContainerOverlayState(editable) {
-        var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(editable);
+        var panelContainerType = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerType(editable);
         var panelContainer;
 
         if (panelContainerType) {
-            panelContainer = new CQ.CoreComponents.PanelContainer({
+            panelContainer = new CQ.CoreComponents.panelcontainer.v1.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
+                el: CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
         var activeIndex = panelContainer.getActiveIndex();
-        var items = CQ.CoreComponents.panelcontainer.utils.getPanelContainerItems(editable);
+        var items = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(editable);
 
         for (var i = 0; i < items.length; i++) {
             items[i].overlay.setDisabled((activeIndex !== i));

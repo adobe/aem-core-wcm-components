@@ -23,18 +23,18 @@
      *
      * @param {Granite.author.Editable} childEditable The inserted child [Editable]{@link Granite.author.Editable}
      */
-    CQ.CoreComponents.panelcontainer.AFTER_CHILD_INSERT = function(childEditable) {
+    CQ.CoreComponents.panelcontainer.v1.AFTER_CHILD_INSERT = function(childEditable) {
         var editable = ns.editables.getParent(childEditable);
         var path = childEditable.path;
         var panelContainer;
         var isSelected = editable.overlay.isSelected();
 
-        var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(editable);
+        var panelContainerType = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerType(editable);
         if (panelContainerType) {
-            panelContainer = new CQ.CoreComponents.PanelContainer({
+            panelContainer = new CQ.CoreComponents.panelcontainer.v1.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
+                el: CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -45,7 +45,7 @@
                 editable.overlay.setSelected(true);
             }
 
-            var children = CQ.CoreComponents.panelcontainer.utils.getPanelContainerItems(editable);
+            var children = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(editable);
 
             for (var i = 0; i < children.length; i++) {
                 if (children[i].path === path) {
@@ -55,7 +55,7 @@
             }
 
             // update the Panel Container element following refresh
-            var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+            var element = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editable);
             panelContainer.setElement(element);
 
             panelContainer.navigate(index);
@@ -68,16 +68,16 @@
      *
      * @param {Granite.author.Editable} childEditable The deleted child [Editable]{@link Granite.author.Editable}
      */
-    CQ.CoreComponents.panelcontainer.AFTER_CHILD_DELETE = function(childEditable) {
+    CQ.CoreComponents.panelcontainer.v1.AFTER_CHILD_DELETE = function(childEditable) {
         var editable = ns.editables.getParent(childEditable);
         var panelContainer;
 
-        var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(editable);
+        var panelContainerType = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerType(editable);
         if (panelContainerType) {
-            panelContainer = new CQ.CoreComponents.PanelContainer({
+            panelContainer = new CQ.CoreComponents.panelcontainer.v1.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
+                el: CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -86,7 +86,7 @@
         ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
             if (!(index < 0)) {
                 // update the Panel Container element following refresh
-                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+                var element = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editable);
                 panelContainer.setElement(element);
 
                 panelContainer.navigate(index);
@@ -98,16 +98,16 @@
      * Handles an afterChildMove listener for a Panel Container component.
      * Refreshes the component and navigates to the correct active item.
      */
-    CQ.CoreComponents.panelcontainer.AFTER_CHILD_MOVE = function() {
+    CQ.CoreComponents.panelcontainer.v1.AFTER_CHILD_MOVE = function() {
         var editable = this;
         var panelContainer;
 
-        var panelContainerType = CQ.CoreComponents.panelcontainer.utils.getPanelContainerType(editable);
+        var panelContainerType = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerType(editable);
         if (panelContainerType) {
-            panelContainer = new CQ.CoreComponents.PanelContainer({
+            panelContainer = new CQ.CoreComponents.panelcontainer.v1.PanelContainer({
                 path: editable.path,
                 panelContainerType: panelContainerType,
-                el: CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable)
+                el: CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editable)
             });
         }
 
@@ -116,7 +116,7 @@
         ns.edit.EditableActions.REFRESH.execute(editable).done(function() {
             if (!(index < 0)) {
                 // update the Panel Container element following refresh
-                var element = CQ.CoreComponents.panelcontainer.utils.getPanelContainerHTMLElement(editable);
+                var element = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerHTMLElement(editable);
                 panelContainer.setElement(element);
 
                 panelContainer.navigate(index);

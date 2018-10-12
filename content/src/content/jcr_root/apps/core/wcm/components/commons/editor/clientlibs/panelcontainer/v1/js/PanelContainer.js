@@ -30,18 +30,18 @@
      */
 
     /**
-     * @class CQ.CoreComponents.PanelContainer
+     * @class CQ.CoreComponents.panelcontainer.v1.PanelContainer
      * @classdesc A Panel Container relates to a component concept whereby child items (panels) are hidden/shown. This Class provides
      * operations that allow editing functionality, including the ability to navigate to panels for editing,
      * fetching panel items, determining the active panel and persisting updates (deletion and reordering) to the server.
      * @param {PanelContainerConfig} config The Panel Container configuration object
      */
-    CQ.CoreComponents.PanelContainer = ns.util.createClass({
+    CQ.CoreComponents.panelcontainer.v1.PanelContainer = ns.util.createClass({
 
         /**
          * The Panel Container Configuration Object
          *
-         * @member {PanelContainerConfig} CQ.CoreComponents.PanelContainer#_config
+         * @member {PanelContainerConfig} CQ.CoreComponents.panelcontainer.v1.PanelContainer#_config
          */
         _config: {},
 
@@ -49,7 +49,7 @@
          * The data Object retrieved from an endpoint for this Panel Container that represents its properties
          * and child items
          *
-         * @member {Object} CQ.CoreComponents.PanelContainer#_data
+         * @member {Object} CQ.CoreComponents.panelcontainer.v1.PanelContainer#_data
          */
         _data: {},
 
@@ -63,7 +63,7 @@
          * [Content Frame]{@link Granite.author.ContentFrame} and lets the related UI widget handle the operation.
          *
          * @param {Number} index Index of the panel to navigate to
-         * @fires CQ.CoreComponents.PanelContainer#cmp-panelcontainer-navigated
+         * @fires CQ.CoreComponents.panelcontainer.v1.PanelContainer#cmp-panelcontainer-navigated
          */
         navigate: function(index) {
             if (this._config.panelContainerType) {
@@ -180,7 +180,7 @@
         /**
          * Triggered when the Panel Container has navigated.
          *
-         * @event CQ.CoreComponents.PanelContainer#cmp-panelcontainer-navigated
+         * @event CQ.CoreComponents.panelcontainer.v1.PanelContainer#cmp-panelcontainer-navigated
          * @param {Object} event Event object.
          * @param {String} event.id The Panel Container ID (path)
          * @param {Number} event.index Index of the Panel Container item that is navigated to

@@ -18,6 +18,7 @@
 
     window.CQ = window.CQ || {};
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
-    window.CQ.CoreComponents.panelcontainer = {};
+    window.CQ.CoreComponents.panelcontainer = window.CQ.CoreComponents.panelcontainer || {};
+    window.CQ.CoreComponents.panelcontainer.v1 = {};
 
 })();

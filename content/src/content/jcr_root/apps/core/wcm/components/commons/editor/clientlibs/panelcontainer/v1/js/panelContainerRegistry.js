@@ -31,10 +31,10 @@
      * Panel Container Registry
      *
      * @namespace
-     * @alias CQ.CoreComponents.panelcontainer.registry
+     * @alias CQ.CoreComponents.panelcontainer.v1.registry
      * @type {{}}
      */
-    CQ.CoreComponents.panelcontainer.registry = {
+    CQ.CoreComponents.panelcontainer.v1.registry = {
 
         /**
          * Registers a Panel Container Type definition by name to the registry
