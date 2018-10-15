@@ -235,18 +235,20 @@
                     that._elements.add.parentNode.removeChild(that._elements.add);
                 }
 
-                that._elements.self.on("coral-collection:remove", function(event) {
-                    var name = event.detail.item.dataset["name"];
-                    that._deletedChildren.push(name);
-                });
+                Coral.commons.ready(that._elements.self, function() {
+                    that._elements.self.on("coral-collection:remove", function(event) {
+                        var name = event.detail.item.dataset["name"];
+                        that._deletedChildren.push(name);
+                    });
 
-                that._elements.self.on("coral-collection:add", function(event) {
-                    var name = event.detail.item.dataset["name"];
-                    var index = that._deletedChildren.indexOf(name);
+                    that._elements.self.on("coral-collection:add", function(event) {
+                        var name = event.detail.item.dataset["name"];
+                        var index = that._deletedChildren.indexOf(name);
 
-                    if (index > -1) {
-                        that._deletedChildren.splice(index, 1);
-                    }
+                        if (index > -1) {
+                            that._deletedChildren.splice(index, 1);
+                        }
+                    });
                 });
             },
 
