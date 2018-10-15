@@ -54,7 +54,7 @@ Core Components | Extension | AEM 6.3 | AEM 6.4 | Java
 [2.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.1.0) | 1.0.6 | 6.3.3.0 | 6.4.2.0 | 1.8
 
 
-For a list of requirements for previous versions, see [Historical System Requirements](HISTORIAL_SYSTEM_REQUIREMENTS.md).
+For a list of requirements for previous versions, see [Historical System Requirements](HISTORICAL_SYSTEM_REQUIREMENTS.md).
 
 
 ## Installation
