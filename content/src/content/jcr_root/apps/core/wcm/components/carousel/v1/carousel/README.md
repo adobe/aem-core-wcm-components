@@ -19,19 +19,30 @@ Carousel component written in HTL.
 
 ## Features
 
-* Allows addition of slide components of varying resource type.
+* Allows addition of Carousel item components of varying resource type.
 * Allowed components can be configured through policy configuration.
 * Carousel navigation via next/previous and position indicators.
-* Editing features for slides (adding, removing, editing, re-ordering).
+* Carousel autoplay with configurable delay.
+* Editing features for items (adding, removing, editing, re-ordering).
 
 ### Use Object
 The Carousel component uses the `com.adobe.cq.wcm.core.components.models.Carousel` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
-The component policy dialog allows definition of allowed components for the Carousel.
+The following configuration properties are used:
+
+1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
+2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
+
+It is also possible to define the allowed components for the Carousel.
 
 ### Edit Dialog Properties
-The edit dialog allows editing of Carousel slides (adding, removing, naming, re-ordering).
+The following properties are written to JCR for this Carousel component and are expected to be available as `Resource` properties:
+
+1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
+2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
+
+The edit dialog also allows editing of Carousel items (adding, removing, naming, re-ordering).
 
 ## Client Libraries
 The component provides a `core.wcm.components.carousel.v1` client library category that contains a recommended base
