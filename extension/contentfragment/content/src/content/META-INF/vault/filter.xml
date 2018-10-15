@@ -17,5 +17,7 @@
 <workspaceFilter version="1.0">
     <filter root="/apps/core/wcm/extension/components/contentfragment"/>
     <filter root="/apps/core/wcm/extension/components/contentfragmentlist"/>
+    <filter root="/apps/weretail/components/content/contentfragment"/>
+    <filter root="/apps/weretail/components/content/contentfragmentlist"/>
     <filter root="/apps/core/wcm/config/com.adobe.cq.dam.cfm.impl.component.ComponentConfigImpl-core-comp-v1.config"/>
 </workspaceFilter>
