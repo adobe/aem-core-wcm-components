@@ -87,5 +87,5 @@ that the UI component is updated when the active item is switched in the editor 
 * **Vendor**: Adobe
 * **Version**: v1
 * **Compatibility**: AEM 6.3
-* **Status**: preview
-
+* **Status**: production-ready
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_tabs\_v1](https://www.adobe.com/go/aem_cmp_tabs_v1)
