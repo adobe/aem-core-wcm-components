@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2018 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.adobe.cq</groupId>
+    <artifactId>core.wcm.components.smoke.released-artifacts</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <properties>
+        <core.components.version>2.2.0</core.components.version>
+        <core.components.version.it-tests>6.3.50</core.components.version.it-tests>
+        <core.components.version.extension>1.0.8</core.components.version.extension>
+    </properties>
+
+    <dependencies>
+
+        <!-- Reactor pom -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.reactor</artifactId>
+            <version>${core.components.version}</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- Parent pom -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.parent</artifactId>
+            <version>${core.components.version}</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- Core bundle -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.core</artifactId>
+            <version>${core.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.core</artifactId>
+            <version>${core.components.version}</version>
+            <classifier>javadoc</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.core</artifactId>
+            <version>${core.components.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+
+        <!-- JUnit bundle -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.junit.core</artifactId>
+            <version>${core.components.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.junit.core</artifactId>
+            <version>${core.components.version}</version>
+            <classifier>javadoc</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.junit.core</artifactId>
+            <version>${core.components.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+
+        <!-- Content package -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.content</artifactId>
+            <version>${core.components.version}</version>
+            <type>zip</type>
+        </dependency>
+
+        <!-- Config package -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.config</artifactId>
+            <version>${core.components.version}</version>
+            <type>zip</type>
+        </dependency>
+
+        <!-- UI tests package -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.it.ui-js</artifactId>
+            <version>${core.components.version.it-tests}</version>
+            <type>zip</type>
+        </dependency>
+
+        <!-- Aggregated (all) package -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.all</artifactId>
+            <version>${core.components.version}</version>
+            <type>zip</type>
+        </dependency>
+
+
+        <!-- Extension aggregated package -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.extension</artifactId>
+            <version>${core.components.version.extension}</version>
+            <type>zip</type>
+        </dependency>
+
+        <!-- Extension CF bundle -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
+            <version>${core.components.version.extension}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
+            <version>${core.components.version.extension}</version>
+            <classifier>javadoc</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
+            <version>${core.components.version.extension}</version>
+            <classifier>sources</classifier>
+        </dependency>
+
+        <!-- Extension CF content package -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.extension.contentfragment.content</artifactId>
+            <version>${core.components.version.extension}</version>
+            <type>zip</type>
+        </dependency>
+    </dependencies>
+
+</project>
