@@ -26,6 +26,7 @@ Text form field component written in HTL.
   * telephone
   * date
   * number
+  * password
 * Custom constraint messages for the above types
 
 ### Use Object
