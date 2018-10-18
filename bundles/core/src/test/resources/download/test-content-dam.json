@@ -1,0 +1,99 @@
+{
+    "jcr:primaryType": "dam:Asset",
+    "jcr:mixinTypes": ["mix:referenceable"],
+    "jcr:createdBy": "admin",
+    "jcr:created": "Thu Oct 18 2018 12:00:37 GMT-0700",
+    "jcr:uuid": "8d7e96d4-501a-4ade-93d5-a5956b13a5df",
+    "jcr:content": {
+        "jcr:primaryType": "dam:AssetContent",
+        "jcr:lastModifiedBy": "admin",
+        "dam:assetState": "processed",
+        "jcr:lastModified": "Thu Oct 18 2018 12:00:38 GMT-0700",
+        "dam:relativePath": "core/documents/Download_Test_PDF.pdf",
+        "renditions": {
+            "jcr:primaryType": "nt:folder",
+            "jcr:createdBy": "admin",
+            "jcr:created": "Thu Oct 18 2018 12:00:37 GMT-0700",
+            "cq5dam.thumbnail.48.48.png": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "workflow-process-service",
+                "jcr:created": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                "jcr:content": {
+                    "jcr:primaryType": "oak:Resource",
+                    "jcr:lastModifiedBy": "workflow-process-service",
+                    "jcr:mimeType": "image/png",
+                    "jcr:lastModified": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                    ":jcr:data": 1434
+                }
+            },
+            "cq5dam.thumbnail.140.100.png": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "workflow-process-service",
+                "jcr:created": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                "jcr:content": {
+                    "jcr:primaryType": "oak:Resource",
+                    "jcr:lastModifiedBy": "workflow-process-service",
+                    "jcr:mimeType": "image/png",
+                    "jcr:lastModified": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                    ":jcr:data": 4436
+                }
+            },
+            "cq5dam.web.1280.1280.jpeg": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "workflow-process-service",
+                "jcr:created": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                "jcr:content": {
+                    "jcr:primaryType": "oak:Resource",
+                    "jcr:lastModifiedBy": "workflow-process-service",
+                    "jcr:mimeType": "image/jpeg",
+                    "jcr:lastModified": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                    ":jcr:data": 82835
+                }
+            },
+            "original": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "admin",
+                "jcr:created": "Thu Oct 18 2018 12:00:37 GMT-0700",
+                "jcr:content": {
+                    "jcr:primaryType": "oak:Resource",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:mimeType": "application/pdf",
+                    "jcr:lastModified": "Thu Oct 18 2018 12:00:37 GMT-0700",
+                    ":jcr:data": 150654
+                }
+            },
+            "cq5dam.thumbnail.319.319.png": {
+                "jcr:primaryType": "nt:file",
+                "jcr:createdBy": "workflow-process-service",
+                "jcr:created": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                "jcr:content": {
+                    "jcr:primaryType": "oak:Resource",
+                    "jcr:lastModifiedBy": "workflow-process-service",
+                    "jcr:mimeType": "image/png",
+                    "jcr:lastModified": "Thu Oct 18 2018 12:00:38 GMT-0700",
+                    ":jcr:data": 31265
+                }
+            }
+        },
+        "related": {
+            "jcr:primaryType": "nt:unstructured"
+        },
+        "metadata": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:mixinTypes": ["cq:Taggable"],
+            "dam:Physicalheightininches": "11.0",
+            "dam:Physicalwidthininches": "8.5",
+            "dam:numPages": 3,
+            "xmp:CreatorTool": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
+            "dam:extracted": "Thu Oct 18 2018 12:00:37 GMT-0700",
+            "dc:format": "application/pdf",
+            "dam:Producer": "Skia/PDF m69",
+            "xmp:MetadataDate": "Thu Oct 18 2018 18:56:02 GMT+0000",
+            "pdf:Producer": "Skia/PDF m69",
+            "xmp:ModifyDate": "Thu Oct 18 2018 11:56:02 GMT-0700",
+            "xmp:CreateDate": "Thu Oct 18 2018 11:56:02 GMT-0700",
+            "dam:sha1": "95bd3ea7ae532e04b886416a0e4bab3cb6d3c42e",
+            "dam:size": 150654
+        }
+    }
+}
