@@ -278,8 +278,11 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
             // open the config dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // enter the link
-            .simulate("foundation-autocomplete[name='./linkURL'] input[is='coral-textfield']", "key-sequence",
-                { sequence: c.rootPage + "{enter}" })
+            //.simulate("foundation-autocomplete[name='./linkURL'] input[is='coral-textfield']", "key-sequence",
+            //    { sequence: c.rootPage + "{enter}" })
+            .fillInput("foundation-autocomplete[name='./linkURL'] input[is='coral-textfield']", c.rootPage)
+            .simulate("foundation-autocomplete[name='./linkURL'] input[is='coral-textfield']", "keydown", 13, { delay: 1000, delayAfter: 1000 }) // Enter key
+
             // save the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 

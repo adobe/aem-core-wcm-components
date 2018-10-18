@@ -235,9 +235,10 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             // set the thank you page
             // NOTE: We need to simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
             // and take focus away, so we cant use fillInput
-            .simulate("foundation-autocomplete[name='./redirect'] input[type!='hidden']",  "key-sequence",
-                { sequence: "/content/core-components/core-components-page{enter}" })
-
+            //.simulate("foundation-autocomplete[name='./redirect'] input[type!='hidden']",  "key-sequence",
+            //    { sequence: "/content/core-components/core-components-page{enter}" })
+            .fillInput("foundation-autocomplete[name='./redirect'] input[type!='hidden']", c.rootPage)
+            .simulate("foundation-autocomplete[name='./redirect'] input[type!='hidden']", "keydown", 13, { delay: 1000, delayAfter: 1000 }) // Enter key
             // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
