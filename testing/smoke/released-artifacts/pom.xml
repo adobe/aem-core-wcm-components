@@ -25,8 +25,8 @@
 
     <properties>
         <core.components.version>2.2.0</core.components.version>
-        <core.components.version.it-tests>6.3.50</core.components.version.it-tests>
-        <core.components.version.extension>1.0.8</core.components.version.extension>
+        <core.components.it-tests.version>6.3.50</core.components.it-tests.version>
+        <core.components.extension.version>1.0.8</core.components.extension.version>
     </properties>
 
     <dependencies>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.it.ui-js</artifactId>
-            <version>${core.components.version.it-tests}</version>
+            <version>${core.components.it-tests.version}</version>
             <type>zip</type>
         </dependency>
 
@@ -122,7 +122,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.extension</artifactId>
-            <version>${core.components.version.extension}</version>
+            <version>${core.components.extension.version}</version>
             <type>zip</type>
         </dependency>
 
@@ -130,18 +130,18 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
-            <version>${core.components.version.extension}</version>
+            <version>${core.components.extension.version}</version>
         </dependency>
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
-            <version>${core.components.version.extension}</version>
+            <version>${core.components.extension.version}</version>
             <classifier>javadoc</classifier>
         </dependency>
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.extension.contentfragment.bundle</artifactId>
-            <version>${core.components.version.extension}</version>
+            <version>${core.components.extension.version}</version>
             <classifier>sources</classifier>
         </dependency>
 
@@ -149,7 +149,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.extension.contentfragment.content</artifactId>
-            <version>${core.components.version.extension}</version>
+            <version>${core.components.extension.version}</version>
             <type>zip</type>
         </dependency>
     </dependencies>
