@@ -20,7 +20,7 @@
     <div class="cmp-download__image" data-sly-test.imagePath="${download.imagePath}">
         <img src="${imagePath}"/>
     </div>
-    <h2 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${teaser.titleType}">
+    <h2 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${download.titleType}">
         ${title}
     </h2>
     <div class="cmp-download__description" data-sly-test.description="${download.description}">
@@ -28,4 +28,4 @@
     </div>
     <a class="cmp-download__cta" href="${download.downloadUrl}">${download.ctaText}</a>
 </div>
-<sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-teaser'}"></sly>
+<sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-download cq-dd-file'}"></sly>

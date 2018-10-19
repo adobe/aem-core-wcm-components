@@ -18,6 +18,15 @@
                         "jcr:title"         : "Download",
                         "jcr:description"   : "Description",
                         "sling:resourceType": "core/wcm/components/download/v1/download"
+                    },
+                    "download-2"          : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "fileReference": "/content/dam/core/documents/Download_Test_PDF.pdf",
+                        "sling:resourceType": "core/wcm/components/download/v1/download",
+                        "jcr:title"         : "Download",
+                        "jcr:description"   : "Description",
+                        "titleFromAsset": "true",
+                        "descriptionFromAsset": "true"
                     }
                 }
             }

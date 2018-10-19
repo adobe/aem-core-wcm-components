@@ -21,6 +21,9 @@ package com.adobe.cq.wcm.core.components.models;
  */
 public interface Download {
 
+    String PN_TITLE_FROM_ASSET = "titleFromAsset";
+    String PN_DESCRIPTION_FROM_ASSET = "descriptionFromAsset";
+
     /**
      * Returns either the title configured in the dialog or the title of the DAM asset,
      * depending on the state of the titleFromAsset checkbox.

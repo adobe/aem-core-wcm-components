@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.wcm.core.components.models.Download;
+import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.designer.Style;
 import com.day.crx.JcrConstants;
@@ -60,16 +61,11 @@ public class DownloadImpl  implements Download {
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    @ValueMapValue
-    private String fileReference;
-
     private String downloadUrl;
 
-    @ValueMapValue
-    private boolean titleFromAsset;
+    private boolean titleFromAsset = false;
 
-    @ValueMapValue
-    private boolean descriptionFromAsset;
+    private boolean descriptionFromAsset = false;
 
     @ValueMapValue(name = "jcr:title")
     private String title;
@@ -89,6 +85,9 @@ public class DownloadImpl  implements Download {
     @PostConstruct
     protected void initModel()
     {
+        String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
+        titleFromAsset = properties.get(PN_TITLE_FROM_ASSET, titleFromAsset);
+        descriptionFromAsset = properties.get(PN_DESCRIPTION_FROM_ASSET, descriptionFromAsset);
         if(currentStyle != null)
         {
             if(StringUtils.isBlank(ctaText))

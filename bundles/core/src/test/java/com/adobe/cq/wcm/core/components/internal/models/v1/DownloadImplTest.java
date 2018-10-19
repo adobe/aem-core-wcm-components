@@ -45,12 +45,16 @@ public class DownloadImplTest {
     private static final String CONTENT_ROOT = "/content";
     private static final String PDF_BINARY_NAME = "Download_Test_PDF.pdf";
     private static final String PDF_ASSET_PATH = "/content/dam/core/documents/" + PDF_BINARY_NAME;
+    private static final String TEST_CONTENT_DAM_JSON = "/test-content-dam.json";
     private static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT_PAGE = "/content/downloads";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String TITLE = "Download";
     private static final String DESCRIPTION = "Description";
+    private static final String DAM_TITLE = "This is the title from the PDF.";
+    private static final String DAM_DESCRIPTION = "This is the description from the PDF.";
     private static final String DOWNLOAD_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-1";
+    private static final String DOWNLOAD_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-2";
     private Logger downloadLogger;
 
     @ClassRule
@@ -58,7 +62,7 @@ public class DownloadImplTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content/dam/core/documents");
+        AEM_CONTEXT.load().json(TEST_BASE + TEST_CONTENT_DAM_JSON, "/content/dam/core/documents");
         AEM_CONTEXT.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_PATH + "/jcr:content/renditions/original");
     }
 
@@ -80,6 +84,15 @@ public class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_1);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
+        assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
+    }
+
+    @Test
+    public void testDownloadWithDamProperties() {
+        Download download = getDownloadUnderTest(DOWNLOAD_2);
+        assertEquals(DAM_TITLE, download.getTitle());
+        assertEquals(DAM_DESCRIPTION, download.getDescription());
+        assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
     }
 
     private Download getDownloadUnderTest(String resourcePath) {
