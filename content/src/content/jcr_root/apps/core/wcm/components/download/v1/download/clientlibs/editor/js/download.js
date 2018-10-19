@@ -73,24 +73,24 @@
     });
 
     function retrieveDAMInfo(fileReference) {
-            return $.ajax({
-                url: fileReference + "/_jcr_content/metadata.json"
-            }).done(function(data) {
-                if (data) {
-                    if (descriptionTuple) {
-                        var description = data["dc:description"];
-                        if (description === undefined || description.trim() === "") {
-                            description = data["dc:title"];
-                        }
-                        descriptionTuple.seedTextValue(description);
-                        descriptionTuple.update();
+        return $.ajax({
+            url: fileReference + "/_jcr_content/metadata.json"
+        }).done(function(data) {
+            if (data) {
+                if (descriptionTuple) {
+                    var description = data["dc:description"];
+                    if (description === undefined || description.trim() === "") {
+                        description = data["dc:title"];
                     }
-                    if (titleTuple) {
-                        var title = data["dc:title"];
-                        titleTuple.seedTextValue(title);
-                        titleTuple.update();
-                    }
+                    descriptionTuple.seedTextValue(description);
+                    descriptionTuple.update();
                 }
-            });
-        }
+                if (titleTuple) {
+                    var title = data["dc:title"];
+                    titleTuple.seedTextValue(title);
+                    titleTuple.update();
+                }
+            }
+        });
+    }
 })(jQuery);
