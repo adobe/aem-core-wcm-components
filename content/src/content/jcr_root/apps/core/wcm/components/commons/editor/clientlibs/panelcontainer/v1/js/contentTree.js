@@ -135,7 +135,9 @@
         var items = CQ.CoreComponents.panelcontainer.v1.utils.getPanelContainerItems(editable);
 
         for (var i = 0; i < items.length; i++) {
-            items[i].overlay.setDisabled((activeIndex !== i));
+            if (items[i].overlay) {
+                items[i].overlay.setDisabled((activeIndex !== i));
+            }
         }
     }
 
