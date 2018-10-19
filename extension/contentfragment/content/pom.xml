@@ -80,6 +80,7 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <generateJavaClasses>true</generateJavaClasses>
+                            <generatedJavaClassesPrefix>org.apache.sling.scripting.sightly</generatedJavaClassesPrefix>
                         </configuration>
                     </execution>
                 </executions>

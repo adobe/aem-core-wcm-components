@@ -15,7 +15,8 @@
                     "tabs-1"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:title"         : "Tabs 1",
-                        "sling:resourceType": "core/wcm/sandbox/components/tabs/v1/tabs",
+                        "sling:resourceType": "core/wcm/components/tabs/v1/tabs",
+                        "activeItem"        : "item_2",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Teaser 1",

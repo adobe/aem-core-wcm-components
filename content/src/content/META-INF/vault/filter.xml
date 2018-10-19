@@ -16,6 +16,4 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
     <filter root="/apps/core/wcm/components"/>
-    <filter root="/apps/core/wcm/sandbox/commons"/>
-    <filter root="/apps/core/wcm/sandbox/components"/>
 </workspaceFilter>

@@ -21,8 +21,11 @@
         "aemfed": "^0.0.5",
         "eslint": "^4.19.1",
         "npm-run-all": "^4.1.2",
-        "stylelint": "^9.2.0",
+        "stylelint": "^9.6.0",
         "stylelint-config-recommended": "^2.1.0",
         "stylelint-selector-bem-pattern": "^2.0.0"
+    },
+    "dependencies": {
+        "npm": "^6.4.1"
     }
 }

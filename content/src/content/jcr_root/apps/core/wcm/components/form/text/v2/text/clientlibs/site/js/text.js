@@ -27,11 +27,15 @@
     var properties = {
         /**
          * A validation message to display if there is a type mismatch between the user input and expected input.
+         *
+         * @type {String}
          */
         constraintMessage: {
         },
         /**
          * A validation message to display if no input is supplied, but input is expected for the field.
+         *
+         * @type {String}
          */
         requiredMessage: {
         }
