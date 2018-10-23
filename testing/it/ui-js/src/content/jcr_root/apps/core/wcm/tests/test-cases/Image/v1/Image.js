@@ -158,11 +158,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             // set image and alt text
             .execTestCase(image.tcSetMinimalProps(tcExecuteBeforeTest, tcExecuteAfterTest))
             // enter the link
-            //.simulate(".cmp-image--editor-link input[type!='hidden']", "key-sequence",
-            //    { sequence: c.rootPage + "{enter}" })
-            .fillInput("foundation-autocomplete[name='./linkURL'] input[type!='hidden']", c.rootPage)
-            .simulate("foundation-autocomplete[name='./linkURL'] input[type!='hidden']", "keydown", 13, { delay: 1000, delayAfter: 1000 }) // Enter key
-
+            .execTestCase(c.tcSelectInAutocomplete("[name='./linkURL']", c.rootPage))
             // save the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 
