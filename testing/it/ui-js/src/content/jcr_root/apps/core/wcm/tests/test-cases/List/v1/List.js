@@ -212,8 +212,7 @@ window.CQ.CoreComponentsIT.List.v1 = window.CQ.CoreComponentsIT.List.v1 || {}
     list.tcCreateListChildren = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("List of Children", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
             // open the configuration dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
@@ -357,9 +356,8 @@ window.CQ.CoreComponentsIT.List.v1 = window.CQ.CoreComponentsIT.List.v1 || {}
      */
     list.tcCreateListAnyTagsMatching = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("List with any Tags matching", {
-            execBefore: tcExecuteBeforeTest//,
-            //execAfter: tcExecuteAfterTest
-        })
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
 
             // open the configuration dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))

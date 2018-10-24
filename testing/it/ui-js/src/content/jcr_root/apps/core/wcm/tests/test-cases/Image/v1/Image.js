@@ -150,8 +150,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
     image.tcSetLink = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Link", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        })
+            execAfter: tcExecuteAfterTest })
 
             // open the config dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))

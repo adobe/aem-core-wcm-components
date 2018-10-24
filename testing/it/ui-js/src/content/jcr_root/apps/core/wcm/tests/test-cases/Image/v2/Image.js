@@ -106,9 +106,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
     image.tcSetImageAsDecorative = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Image as decorative", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
-        }
-        )
+            execAfter: tcExecuteAfterTest })
             .execTestCase(image.tcDragImage())
             .click('coral-tab-label:contains("Metadata")')
             .wait(500)
