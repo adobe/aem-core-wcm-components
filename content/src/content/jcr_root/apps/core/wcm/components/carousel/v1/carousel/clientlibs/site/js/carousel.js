@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/* global Granite */
 (function() {
     "use strict";
 
@@ -105,14 +104,14 @@
                 resetAutoplayInterval();
             }
 
-            if (Granite && Granite.author && Granite.author.MessageChannel) {
+            if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
                 /*
                  * Editor message handling:
                  * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
                  * - check that the message data panel container type is correct and that the id (path) matches this specific Carousel component
                  * - if so, route the "navigate" operation to enact a navigation of the Carousel based on index data
                  */
-                new Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
                     if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                         if (message.data.operation === "navigate") {
                             navigate(message.data.index);
