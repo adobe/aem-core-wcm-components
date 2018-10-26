@@ -39,4 +39,3 @@ jobs:
 
     # run tests!
     - run: mvn integration-test
-
