@@ -22,8 +22,7 @@ version: 2
 jobs:
   build:
     docker:
-    # specify the version you desire here
-    - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:8-jdk
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -37,7 +36,15 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
 
     steps:
-    - checkout
+      - checkout
 
-    # run tests!
-    - run: mvn verify -B -U
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
+
+      # run tests!
+      - run: mvn verify -B -U
+
+      - save_cache: # saves the project dependencies
+          paths:
+            - ~/.m2
+          key: aem-core-wcm-components
