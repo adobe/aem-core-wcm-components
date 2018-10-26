@@ -48,3 +48,6 @@ jobs:
           paths:
             - ~/.m2
           key: aem-core-wcm-components
+
+      # run codecoverage check
+      - run: bash <(curl -s https://codecov.io/bash)
