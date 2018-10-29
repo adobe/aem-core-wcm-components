@@ -18,4 +18,4 @@ core.components.extension.version
 
 Run:
 
-`mvn clean install -U`
+`mvn clean verify -U`
