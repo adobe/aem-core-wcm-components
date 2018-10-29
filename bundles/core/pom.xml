@@ -473,6 +473,12 @@
             <artifactId>jsp-api</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Remove after the backport of the latest version of the API and its inclusion in the 6.3 Uber-Jar  -->
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>com.adobe.cq.export.json</artifactId>
+            <version>0.1.10</version>
+        </dependency>
         <dependency>
             <groupId>com.adobe.aem</groupId>
             <artifactId>uber-jar</artifactId>

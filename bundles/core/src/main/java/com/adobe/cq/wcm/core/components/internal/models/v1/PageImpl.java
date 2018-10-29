@@ -241,7 +241,13 @@ public class PageImpl implements Page {
                                               @Nonnull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
-        for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {
+        Iterable<Resource> iterable = slingModelFilter.filterChildResources(request.getResource().getChildren());
+
+        if (iterable == null) {
+            return itemWrappers;
+        }
+
+        for (final Resource child : iterable) {
             itemWrappers.put(child.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass));
         }
 
