@@ -1,6 +1,6 @@
 {
     "name": "com.adobe.cq.core.wcm.components.content",
-    "version": "2.2.0",
+    "version": "2.2.1-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components Content Package",
     "license": "Apache-2.0",
     "private": false,
@@ -10,6 +10,7 @@
         "url": "https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components"
     },
     "scripts": {
+        "aemfed": "aemfed -e \"**/*___jb_+(old|tmp)___\" -w \"src/content/jcr_root/\"",
         "eslint": "eslint .",
         "eslint:fix": "eslint . --fix",
         "lint": "npm-run-all --parallel eslint stylelint",
@@ -17,13 +18,11 @@
         "stylelint:fix": "stylelint '**/*.css' '**/*.less' --fix"
     },
     "devDependencies": {
+        "aemfed": "^0.0.7",
         "eslint": "^4.19.1",
         "npm-run-all": "^4.1.2",
         "stylelint": "^9.6.0",
         "stylelint-config-recommended": "^2.1.0",
         "stylelint-selector-bem-pattern": "^2.0.0"
-    },
-    "dependencies": {
-        "npm": "^6.4.1"
     }
 }
