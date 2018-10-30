@@ -25,13 +25,31 @@
              role="tabpanel"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              data-cmp-hook-carousel="item"></div>
-        <button role="button" class="cmp-carousel__action cmp-carousel__action--previous" data-cmp-hook-carousel="previous">
+        <button role="button"
+                class="cmp-carousel__action cmp-carousel__action--previous"
+                data-cmp-hook-carousel="previous">
             <span class="cmp-carousel__action-icon"></span>
             <span class="cmp-carousel__action-text">${'Previous' @ i18n}</span>
         </button>
-        <button role="button" class="cmp-carousel__action cmp-carousel__action--next" data-cmp-hook-carousel="next">
+        <button role="button"
+                class="cmp-carousel__action cmp-carousel__action--next"
+                data-cmp-hook-carousel="next">
             <span class="cmp-carousel__action-icon"></span>
             <span class="cmp-carousel__action-text">${'Next' @ i18n}</span>
+        </button>
+        <button data-sly-test="carousel.autoplay"
+                role="button"
+                class="cmp-carousel__action cmp-carousel__action--pause"
+                data-cmp-hook-carousel="pause">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${'Pause' @ i18n}</span>
+        </button>
+        <button data-sly-test="carousel.autoplay"
+                role="button"
+                class="cmp-carousel__action cmp-carousel__action--play"
+                data-cmp-hook-carousel="play">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
         </button>
         <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
