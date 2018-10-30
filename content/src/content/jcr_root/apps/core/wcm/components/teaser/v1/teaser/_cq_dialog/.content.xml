@@ -85,9 +85,9 @@
                                                         fieldDescription="When checked, populate the title with the linked page's title."
                                                         text="Get title from linked page"
                                                         name="./titleFromPage"
-                                                        value="{Boolean}false"
+                                                        value="{Boolean}true"
                                                         uncheckedValue="{Boolean}false"
-                                                        checked="{Boolean}true"/>
+                                                        checked="{Boolean}false"/>
                                                 </items>
                                             </titleGroup>
                                             <descriptionGroup
