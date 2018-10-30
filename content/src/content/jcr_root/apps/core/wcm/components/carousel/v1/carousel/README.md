@@ -54,6 +54,7 @@ BLOCK cmp-carousel
     ELEMENT cmp-carousel__content
     ELEMENT cmp-carousel__item
     ELEMENT cmp-carousel__action
+        MOD cmp-carousel__action--disabled
         MOD cmp-carousel__action--previous
         MOD cmp-carousel__action--next
         MOD cmp-carousel__action--pause
