@@ -33,13 +33,6 @@
 
     <name>Adobe Experience Manager Core WCM Components Extension - Structured Content Fragment Bundle</name>
 
-    <scm>
-        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/extension/contenfragment/bundle</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <properties>
         <jacoco.data.file>${project.build.directory}/jacoco.exec</jacoco.data.file>
     </properties>

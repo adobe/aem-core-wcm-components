@@ -23,13 +23,6 @@
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
 
-    <scm>
-        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/parent</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <aem.host>localhost</aem.host>
@@ -414,12 +407,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
 
-            <properties>
-                <releaseRepository-Id>adobe-public-releases</releaseRepository-Id>
-                <releaseRepository-Name>Adobe Public Releases</releaseRepository-Name>
-                <releaseRepository-URL>https://repo.adobe.com/nexus/content/repositories/releases</releaseRepository-URL>
-            </properties>
-
             <repositories>
                 <repository>
                     <id>adobe-public-releases</id>
@@ -468,6 +455,26 @@
                                 <goals>
                                     <goal>jar-no-fork</goal>
                                 </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -697,12 +704,10 @@
     <distributionManagement>
         <repository>
             <id>${releaseRepository-Id}</id>
-            <name>${releaseRepository-Name}</name>
             <url>${releaseRepository-URL}</url>
         </repository>
         <snapshotRepository>
             <id>${snapshotRepository-Id}</id>
-            <name>${snapshotRepository-Name}</name>
             <url>${snapshotRepository-URL}</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>

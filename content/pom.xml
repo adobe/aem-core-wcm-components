@@ -35,13 +35,6 @@
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components Content Package</name>
 
-    <scm>
-        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/content</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <properties>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <node.version>v8.12.0</node.version>
