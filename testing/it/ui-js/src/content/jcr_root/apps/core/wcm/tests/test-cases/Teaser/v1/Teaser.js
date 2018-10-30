@@ -134,6 +134,8 @@
             execAfter: tcExecuteAfterTest
         })
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .click(selectors.editDialog.titleFromPage)
+            .click(selectors.editDialog.descriptionFromPage)
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
@@ -306,6 +308,8 @@
         })
             // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .click(selectors.editDialog.titleFromPage)
+            .click(selectors.editDialog.descriptionFromPage)
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
