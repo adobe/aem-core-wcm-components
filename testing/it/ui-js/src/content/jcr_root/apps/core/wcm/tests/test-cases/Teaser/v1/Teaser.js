@@ -110,9 +110,7 @@
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
-            .click(selectors.editDialog.titleFromPage)
             .fillInput(selectors.editDialog.title, title)
-            .click(selectors.editDialog.descriptionFromPage)
             .fillInput(selectors.editDialog.description, description)
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function() {
@@ -168,9 +166,7 @@
                 c.openSidePanel(done);
             })
 
-            .click(selectors.editDialog.titleFromPage)
             .fillInput(selectors.editDialog.title, title)
-            .click(selectors.editDialog.descriptionFromPage)
             .fillInput(selectors.editDialog.description, description)
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function() {
