@@ -22,7 +22,7 @@ Carousel component written in HTL.
 * Allows addition of Carousel item components of varying resource type.
 * Allowed components can be configured through policy configuration.
 * Carousel navigation via next/previous and position indicators.
-* Carousel autoplay with configurable delay.
+* Carousel autoplay with configurable delay and pause/play buttons.
 * Editing features for items (adding, removing, editing, re-ordering).
 
 ### Use Object
