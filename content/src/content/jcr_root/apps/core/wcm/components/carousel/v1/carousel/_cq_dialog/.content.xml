@@ -90,6 +90,15 @@
                                                 name="./delay"
                                                 step="100"
                                                 value="${not empty cqDesign.delay ? cqDesign.delay : 5000}"/>
+                                            <autopauseDisabled
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="${not empty cqDesign.autopauseDisabled ? cqDesign.autopauseDisabled : false}"
+                                                fieldDescription="If checked, automatic pause on hovering the carousel is disabled."
+                                                name="./autopauseDisabled"
+                                                text="Disable automatic pause on hover"
+                                                uncheckedValue="false"
+                                                value="true"/>
                                         </items>
                                     </column>
                                 </items>

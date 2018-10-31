@@ -40,6 +40,7 @@
                             <autoplay
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                checked="false"
                                 fieldDescription="If checked, automatically transition between carousel slides."
                                 name="./autoplay"
                                 text="Automatically transition slides"
@@ -55,6 +56,15 @@
                                 name="./delay"
                                 step="100"
                                 value="5000"/>
+                            <autopauseDisabled
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                checked="false"
+                                fieldDescription="If checked, automatic pause on hovering the carousel is disabled."
+                                name="./autopauseDisabled"
+                                text="Disable automatic pause on hover"
+                                uncheckedValue="false"
+                                value="true"/>
                         </items>
                     </properties>
                     <allowedcomponents

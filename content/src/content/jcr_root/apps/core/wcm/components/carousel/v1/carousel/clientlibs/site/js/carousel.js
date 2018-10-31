@@ -59,6 +59,19 @@
                 value = parseFloat(value);
                 return !isNaN(value) ? value : null;
             }
+        },
+        /**
+         * Determines whether automatic pause on hovering the carousel is disabled
+         *
+         * @memberof Carousel
+         * @type {Boolean}
+         * @default false
+         */
+        "autopauseDisabled": {
+            "default": false,
+            "transform": function(value) {
+                return !(value === null || typeof value === "undefined");
+            }
         }
     };
 
@@ -229,8 +242,11 @@
             }
 
             that._elements.self.addEventListener("keydown", onKeyDown);
-            that._elements.self.addEventListener("mouseenter", onMouseEnter);
-            that._elements.self.addEventListener("mouseleave", onMouseLeave);
+
+            if (!that._properties.autopauseDisabled) {
+                that._elements.self.addEventListener("mouseenter", onMouseEnter);
+                that._elements.self.addEventListener("mouseleave", onMouseLeave);
+            }
         }
 
         /**
@@ -340,7 +356,12 @@
          */
         function play() {
             that._paused = false;
-            resetAutoplayInterval();
+
+            // If the Carousel is hovered, don't begin auto transitioning until the next mouse leave event
+            var hovered = that._elements.self.parentElement.querySelector(":hover") === that._elements.self;
+            if (that._properties.autopauseDisabled || !hovered) {
+                resetAutoplayInterval();
+            }
 
             var pause = that._elements["pause"];
             if (pause) {

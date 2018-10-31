@@ -79,6 +79,7 @@ public class CarouselImplTest {
         Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
         assertTrue(carousel.getAutoplay());
         assertEquals(new Long(7000), carousel.getDelay());
+        assertTrue(carousel.getAutopauseDisabled());
     }
 
     private Carousel getCarouselUnderTest(String resourcePath) {
