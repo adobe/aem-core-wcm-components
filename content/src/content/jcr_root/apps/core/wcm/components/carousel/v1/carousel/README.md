@@ -22,7 +22,11 @@ Carousel component written in HTL.
 * Allows addition of Carousel item components of varying resource type.
 * Allowed components can be configured through policy configuration.
 * Carousel navigation via next/previous and position indicators.
-* Carousel autoplay with configurable delay and pause/play buttons.
+* Carousel autoplay with: 
+  * Configurable delay.
+  * Ability to disable automatic pause on hover.
+  * Pause/play buttons.
+  * Automatic pausing when the document is hidden, making use of the [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API).
 * Editing features for items (adding, removing, editing, re-ordering).
 
 ### Use Object
