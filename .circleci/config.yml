@@ -22,7 +22,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:8-jdk
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -33,8 +33,7 @@ jobs:
 
     environment:
       # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx512m
-      _JAVA_OPTIONS: "-Xms256m -Xmx512m"
+      MAVEN_OPTS: -Xmx1024m -XX:MaxPermSize=512m
 
     steps:
       - checkout
