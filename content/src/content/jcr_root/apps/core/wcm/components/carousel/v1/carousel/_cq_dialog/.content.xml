@@ -79,26 +79,47 @@
                                                 name="./autoplay"
                                                 text="Automatically transition slides"
                                                 uncheckedValue="false"
-                                                value="true"/>
-                                            <delay
+                                                value="true">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-carousel-v1-dialog-hook="autoplay"/>
+                                            </autoplay>
+                                            <autoplayGroup
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                                fieldDescription="The delay (in milliseconds) before automatically transitioning to the next slide."
-                                                fieldLabel="Transition Delay (milliseconds)"
-                                                min="0"
-                                                max="600000"
-                                                name="./delay"
-                                                step="100"
-                                                value="${not empty cqDesign.delay ? cqDesign.delay : 5000}"/>
-                                            <autopauseDisabled
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                checked="${not empty cqDesign.autopauseDisabled ? cqDesign.autopauseDisabled : false}"
-                                                fieldDescription="If checked, automatic pause on hovering the carousel is disabled."
-                                                name="./autopauseDisabled"
-                                                text="Disable automatic pause on hover"
-                                                uncheckedValue="false"
-                                                value="true"/>
+                                                sling:resourceType="granite/ui/components/coral/foundation/well">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <delay
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                        fieldDescription="The delay (in milliseconds) before automatically transitioning to the next slide."
+                                                        fieldLabel="Transition Delay (milliseconds)"
+                                                        min="0"
+                                                        max="600000"
+                                                        name="./delay"
+                                                        step="100"
+                                                        value="${not empty cqDesign.delay ? cqDesign.delay : 5000}">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cmp-carousel-v1-dialog-hook="delay"/>
+                                                    </delay>
+                                                    <autopauseDisabled
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="${not empty cqDesign.autopauseDisabled ? cqDesign.autopauseDisabled : false}"
+                                                        fieldDescription="If checked, automatic pause when hovering the carousel is disabled."
+                                                        name="./autopauseDisabled"
+                                                        text="Disable automatic pause on hover"
+                                                        uncheckedValue="false"
+                                                        value="true">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cmp-carousel-v1-dialog-hook="autopauseDisabled"/>
+                                                    </autopauseDisabled>
+                                                </items>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-carousel-v1-dialog-hook="autoplayGroup"/>
+                                            </autoplayGroup>
                                         </items>
                                     </column>
                                 </items>
