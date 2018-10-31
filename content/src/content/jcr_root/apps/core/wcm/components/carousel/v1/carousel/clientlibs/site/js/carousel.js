@@ -482,6 +482,9 @@
             }
             clearAutoplayInterval();
             that._autoplayIntervalId = window.setInterval(function() {
+                if (document.visibilityState && document.hidden) {
+                    return;
+                }
                 var indicators = that._elements["indicators"];
                 if (indicators !== document.activeElement && indicators.contains(document.activeElement)) {
                     // if an indicator has focus, ensure we switch focus following navigation
