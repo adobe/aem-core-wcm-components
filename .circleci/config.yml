@@ -42,7 +42,7 @@ jobs:
           key: aem-core-wcm-components
 
       # run tests!
-      - run: mvn verify -B -U
+      - run: mvn clean verify -B -U
 
       - save_cache: # saves the project dependencies
           paths:
