@@ -110,12 +110,15 @@
 
             setupProperties(config.options);
             cacheElements(config.element);
+
             that._active = 0;
+            that._paused = false;
 
             if (that._elements.item) {
                 refreshActive();
                 bindEvents();
                 resetAutoplayInterval();
+                refreshPlayPauseActions();
             }
 
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
@@ -228,13 +231,10 @@
             if (that._elements["pause"]) {
                 if (that._properties.autoplay) {
                     that._elements["pause"].addEventListener("click", onPauseClick);
-                } else {
-                    setActionDisabled(that._elements["pause"]);
                 }
             }
 
             if (that._elements["play"]) {
-                setActionDisabled(that._elements["play"]);
                 if (that._properties.autoplay) {
                     that._elements["play"].addEventListener("click", onPlayClick);
                 }
