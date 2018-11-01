@@ -67,6 +67,8 @@ public class CarouselImpl extends AbstractContainerImpl implements Carousel {
     }
 
     @Override
-    public boolean getAutopauseDisabled() { return autopauseDisabled; }
+    public boolean getAutopauseDisabled() {
+        return autopauseDisabled;
+    }
 
 }
