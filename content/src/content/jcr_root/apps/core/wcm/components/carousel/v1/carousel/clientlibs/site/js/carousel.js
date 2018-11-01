@@ -20,6 +20,7 @@
     var IS = "carousel";
 
     var keyCodes = {
+        SPACE: 32,
         END: 35,
         HOME: 36,
         ARROW_LEFT: 37,
@@ -281,6 +282,14 @@
                 case keyCodes.END:
                     event.preventDefault();
                     navigateAndFocusIndicator(lastIndex);
+                    break;
+                case keyCodes.SPACE:
+                    event.preventDefault();
+                    if (!that._paused) {
+                        pause();
+                    } else {
+                        play();
+                    }
                     break;
                 default:
                     return;
