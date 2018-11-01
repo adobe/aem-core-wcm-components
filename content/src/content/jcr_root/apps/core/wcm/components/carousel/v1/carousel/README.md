@@ -76,7 +76,7 @@ The following attributes can be added to the same element to provide options:
 
 1. `data-cmp-autoplay` - if the attribute is present, indicates that the carousel should automatically transition between slides.
 2. `data-cmp-delay` - the delay (in milliseconds) when automatically transitioning between slides.
-3. `data-cmp-autopause-disabled` - whether or not to disable automatically pausing the carousel on hover, when autoplay is enabled. 
+3. `data-cmp-autopause-disabled` - if the attribute is present, indicates that automatically pausing the carousel on hover, is disabled. 
 
 A hook attribute from the following should be added to the corresponding element so that the JavaScript is able to target it:
 

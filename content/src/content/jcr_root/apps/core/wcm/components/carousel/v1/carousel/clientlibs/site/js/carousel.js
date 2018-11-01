@@ -225,20 +225,18 @@
                 }
             }
 
-            var pause = that._elements["pause"];
-            if (pause) {
+            if (that._elements["pause"]) {
                 if (that._properties.autoplay) {
-                    pause.addEventListener("click", onPauseClick);
+                    that._elements["pause"].addEventListener("click", onPauseClick);
                 } else {
-                    setActionDisabled(pause);
+                    setActionDisabled(that._elements["pause"]);
                 }
             }
 
-            var play = that._elements["play"];
-            if (play) {
-                setActionDisabled(play);
+            if (that._elements["play"]) {
+                setActionDisabled(that._elements["play"]);
                 if (that._properties.autoplay) {
-                    play.addEventListener("click", onPlayClick);
+                    that._elements["play"].addEventListener("click", onPlayClick);
                 }
             }
 
@@ -345,16 +343,7 @@
         function pause() {
             that._paused = true;
             clearAutoplayInterval();
-
-            var pause = that._elements["pause"];
-            if (pause) {
-                setActionDisabled(pause);
-            }
-
-            var play = that._elements["play"];
-            if (play) {
-                setActionDisabled(play, false);
-            }
+            refreshPlayPauseActions();
         }
 
         /**
@@ -372,15 +361,17 @@
                 resetAutoplayInterval();
             }
 
-            var pause = that._elements["pause"];
-            if (pause) {
-                setActionDisabled(pause, false);
-            }
+            refreshPlayPauseActions();
+        }
 
-            var play = that._elements["play"];
-            if (play) {
-                setActionDisabled(play);
-            }
+        /**
+         * Refreshes the play/pause action markup based on the {@code Carousel#_paused} state
+         *
+         * @private
+         */
+        function refreshPlayPauseActions() {
+            setActionDisabled(that._elements["pause"], that._paused);
+            setActionDisabled(that._elements["play"], !that._paused);
         }
 
         /**
@@ -515,13 +506,16 @@
         }
 
         /**
-         * Sets the disabled state for an action
+         * Sets the disabled state for an action and toggles the appropriate CSS classes
          *
          * @private
          * @param {HTMLElement} action Action to disable
-         * @param {Boolean} [disable] false to enable
+         * @param {Boolean} [disable] {@code true} to disable, {@code false} to enable
          */
         function setActionDisabled(action, disable) {
+            if (!action) {
+                return;
+            }
             if (disable !== false) {
                 action.disabled = true;
                 action.classList.add("cmp-carousel__action--disabled");
