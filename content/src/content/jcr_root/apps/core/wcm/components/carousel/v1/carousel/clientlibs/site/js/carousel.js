@@ -282,11 +282,13 @@
                     navigateAndFocusIndicator(lastIndex);
                     break;
                 case keyCodes.SPACE:
-                    event.preventDefault();
-                    if (!that._paused) {
-                        pause();
-                    } else {
-                        play();
+                    if (that._properties.autoplay) {
+                        event.preventDefault();
+                        if (!that._paused) {
+                            pause();
+                        } else {
+                            play();
+                        }
                     }
                     break;
                 default:
