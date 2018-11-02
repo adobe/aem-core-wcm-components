@@ -284,17 +284,20 @@
                 case keyCodes.SPACE:
                     if (that._properties.autoplay && (event.target !== that._elements["previous"] && event.target !== that._elements["next"])) {
                         event.preventDefault();
+
+                        if (event.target === that._elements["pause"]) {
+                            that._elements["play"].focus();
+                        }
+
+                        if (event.target === that._elements["play"]) {
+                            that._elements["pause"].focus();
+                        }
+
                         if (!that._paused) {
                             pause();
                         } else {
                             play();
                         }
-                    }
-                    if (event.target === that._elements["pause"]) {
-                        that._elements["play"].focus();
-                    }
-                    if (event.target === that._elements["play"]) {
-                        that._elements["pause"].focus();
                     }
                     break;
                 default:
