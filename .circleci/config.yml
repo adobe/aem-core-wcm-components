@@ -51,3 +51,24 @@ jobs:
 
       # run codecoverage check
       - run: bash <(curl -s https://codecov.io/bash)
+
+  deploy_snapshot:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    steps:
+      - run: echo $GPG_PRIVATE_KEY | base64 --decode | gpg --batch --import
+      - run: mvn deploy -B -s ci/settings.xml -Prelease
+      - run: rm -rf /home/circleci/.gnupg
+
+workflows:
+  version: 2
+  build-and-release:
+    jobs:
+      - build:
+      - deploy_snapshot:
+          requires:
+            - build
+          filters:
+            branches:
+              only: issue/356
