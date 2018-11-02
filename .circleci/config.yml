@@ -55,7 +55,7 @@ jobs:
   deploy_snapshot:
     docker:
       - image: circleci/openjdk:8-jdk
-      working_directory: ~/repo
+    working_directory: ~/repo
 
     steps:
       - checkout
