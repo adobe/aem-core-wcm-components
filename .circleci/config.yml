@@ -62,8 +62,8 @@ jobs:
       - restore_cache: # restore the saved cache
           key: aem-core-wcm-components
       - run:
-        name: Deploy Snapshots
-        command: node ci/deploy_snapshots.js
+          name: Deploy Snapshots
+          command: node ci/deploy_snapshots.js
 
 workflows:
   version: 2
