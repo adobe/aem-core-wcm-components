@@ -55,10 +55,14 @@ jobs:
   deploy_snapshot:
     docker:
       - image: circleci/openjdk:8-jdk
+      working_directory: ~/repo
 
     steps:
+      - checkout
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
       - run: echo $GPG_PRIVATE_KEY | base64 --decode | gpg --batch --import
-      - run: mvn deploy -B -s repo/ci/settings.xml -Prelease
+      - run: mvn deploy -B -s ci/settings.xml -Prelease
       - run: rm -rf /home/circleci/.gnupg
 
 workflows:
