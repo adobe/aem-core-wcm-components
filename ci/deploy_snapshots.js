@@ -28,7 +28,7 @@ function sh(command) {
 
 try {
     sh("echo $GPG_PRIVATE_KEY | base64 --decode | gpg --batch --import");
-    sh("mvn deploy -B -s ci/settings.xml -Prelease");
+    sh("mvn deploy -B -s ci/settings.xml -Prelease -Padobe-public");
 } finally {
     sh("rm -rf /home/circleci/.gnupg");
 }
