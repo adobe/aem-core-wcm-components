@@ -58,7 +58,7 @@ jobs:
 
     steps:
       - run: echo $GPG_PRIVATE_KEY | base64 --decode | gpg --batch --import
-      - run: mvn deploy -B -s ci/settings.xml -Prelease
+      - run: mvn deploy -B -s repo/ci/settings.xml -Prelease
       - run: rm -rf /home/circleci/.gnupg
 
 workflows:
