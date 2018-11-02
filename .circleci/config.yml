@@ -61,9 +61,9 @@ jobs:
       - checkout
       - restore_cache: # restore the saved cache
           key: aem-core-wcm-components
-      - run: echo $GPG_PRIVATE_KEY | base64 --decode | gpg --batch --import
-      - run: mvn deploy -B -s ci/settings.xml -Prelease
-      - run: rm -rf /home/circleci/.gnupg
+      - run:
+        name: Deploy Snapshots
+        command: node ci/deploy_snapshots.js
 
 workflows:
   version: 2
