@@ -110,9 +110,7 @@
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
-            .click(selectors.editDialog.titleFromPage)
             .fillInput(selectors.editDialog.title, title)
-            .click(selectors.editDialog.descriptionFromPage)
             .fillInput(selectors.editDialog.description, description)
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function() {
@@ -136,6 +134,8 @@
             execAfter: tcExecuteAfterTest
         })
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .click(selectors.editDialog.titleFromPage)
+            .click(selectors.editDialog.descriptionFromPage)
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
@@ -168,9 +168,7 @@
                 c.openSidePanel(done);
             })
 
-            .click(selectors.editDialog.titleFromPage)
             .fillInput(selectors.editDialog.title, title)
-            .click(selectors.editDialog.descriptionFromPage)
             .fillInput(selectors.editDialog.description, description)
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function() {
@@ -310,6 +308,8 @@
         })
             // open the dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .click(selectors.editDialog.titleFromPage)
+            .click(selectors.editDialog.descriptionFromPage)
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
