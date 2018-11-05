@@ -83,6 +83,9 @@ workflows:
   build-and-release:
     jobs:
       - build
+        filters:
+          tags:
+            only: /.*/
 
       - deploy_snapshot:
           requires:
