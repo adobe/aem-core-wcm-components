@@ -75,4 +75,14 @@ workflows:
             - build
           filters:
             branches:
-              only: issue/356
+              ignore: /.*/
+              tags:
+                only: /^@deploy-snapshot$/
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^@release-\d+\.\d+\.\d+$/
