@@ -13,5 +13,20 @@
                 "componentGroup"         : ".core-wcm"
             }
         }
+    },
+    "carousel": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "carousel"         : {
+                "cq:isContainer"         : "true",
+                "cq:icon"                : "imageCarousel",
+                "jcr:description"        : "Cycles through a list of generic content items",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Carousel (v1)",
+                "sling:resourceSuperType": "core/wcm/components/carousel",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
     }
 }

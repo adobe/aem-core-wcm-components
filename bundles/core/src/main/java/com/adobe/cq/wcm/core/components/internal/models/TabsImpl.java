@@ -20,8 +20,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -30,8 +28,6 @@ import com.adobe.cq.wcm.core.components.models.Tabs;
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TabsImpl extends AbstractContainerImpl implements Tabs {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TabsImpl.class);
 
     public final static String RESOURCE_TYPE = "core/wcm/components/tabs/v1/tabs";
 

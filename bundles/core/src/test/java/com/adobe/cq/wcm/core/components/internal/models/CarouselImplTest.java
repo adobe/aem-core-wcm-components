@@ -18,25 +18,20 @@ package com.adobe.cq.wcm.core.components.internal.models;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.models.Carousel;
-import com.day.cq.wcm.api.designer.Style;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
+import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class CarouselImplTest {
 
@@ -48,12 +43,13 @@ public class CarouselImplTest {
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    @Rule
+    public final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
 
-    @BeforeClass
-    public static void init() {
+    @Before
+    public void init() {
         AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+        AEM_CONTEXT.registerService(SlingModelFilter.class, new MockSlingModelFilter());
     }
 
     @Test
@@ -69,9 +65,10 @@ public class CarouselImplTest {
         Object[][] expectedItems = {
             {"item_1", "Teaser 1"},
             {"item_2", "Teaser 2"},
+            {"item_3", "Carousel Panel 3"},
         };
         verifyCarouselItems(expectedItems, carousel.getItems());
-        //Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
+        Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
 
     @Test
@@ -87,21 +84,9 @@ public class CarouselImplTest {
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        final MockSlingHttpServletRequest request =
-                new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        SlingBindings slingBindings = new SlingBindings();
-        slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
-        Style style = mock(Style.class);
-        when(style.get(any(), any(Object.class))).thenAnswer(
-            invocation -> invocation.getArguments()[1]
-        );
-        slingBindings.put(WCMBindings.CURRENT_STYLE, style);
-        request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(Carousel.class);
+        AEM_CONTEXT.currentResource(resource);
+        AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
+        return AEM_CONTEXT.request().adaptTo(Carousel.class);
     }
 
     private void verifyCarouselItems(Object[][] expectedItems, List<ContainerItem> items) {
