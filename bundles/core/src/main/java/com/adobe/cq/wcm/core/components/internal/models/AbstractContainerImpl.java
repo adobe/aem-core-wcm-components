@@ -15,16 +15,25 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import javax.annotation.Nonnull;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.factory.ModelFactory;
 
-import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.models.Container;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
@@ -39,7 +48,18 @@ public abstract class AbstractContainerImpl implements Container {
     @Self
     private SlingHttpServletRequest request;
 
+    @ScriptVariable
+    protected ResourceResolver resolver;
+
+    @OSGiService
+    private SlingModelFilter slingModelFilter;
+
+    @OSGiService
+    private ModelFactory modelFactory;
+
     private List<ListItem> items;
+    private Map<String, ? extends ComponentExporter> itemModels;
+    private String[] exportedItemsOrder;
 
     private List<ListItem> readItems() {
         List<ListItem> items = new ArrayList<>();
@@ -64,4 +84,56 @@ public abstract class AbstractContainerImpl implements Container {
         }
         return items;
     }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return resource.getResourceType();
+    }
+
+    @Nonnull
+    @Override
+    public Map<String, ? extends ComponentExporter> getExportedItems() {
+        if (itemModels == null) {
+            itemModels = getItemModels(request, ComponentExporter.class);
+        }
+        return itemModels;
+    }
+
+    @Nonnull
+    @Override
+    public String[] getExportedItemsOrder() {
+        if (exportedItemsOrder == null) {
+            Map<String, ? extends ComponentExporter> models = getExportedItems();
+            if (!models.isEmpty()) {
+                exportedItemsOrder = models.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
+            } else {
+                exportedItemsOrder = ArrayUtils.EMPTY_STRING_ARRAY;
+            }
+        }
+        return Arrays.copyOf(exportedItemsOrder,exportedItemsOrder.length);
+    }
+
+    private <T> Map<String, T> getItemModels(@Nonnull SlingHttpServletRequest request,
+                                              @Nonnull Class<T> modelClass) {
+        Map<String, T> models = new LinkedHashMap<>();
+        List<ListItem> items = getItems();
+        List<Resource> itemResources = new ArrayList<>();
+        for (ListItem item : items) {
+            if (item != null && StringUtils.isNotEmpty(item.getPath())) {
+                Resource itemRes = resolver.getResource(item.getPath());
+                if (itemRes != null) {
+                    itemResources.add(itemRes);
+                }
+            }
+        }
+        for (Resource child : slingModelFilter.filterChildResources(itemResources)) {
+            T model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
+            if (model != null) {
+                models.put(child.getName(), model);
+            }
+        }
+        return models;
+    }
+
 }

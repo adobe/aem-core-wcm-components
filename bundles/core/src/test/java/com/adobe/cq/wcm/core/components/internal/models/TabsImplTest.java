@@ -26,14 +26,18 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
+import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class TabsImplTest {
 
@@ -43,7 +47,10 @@ public class TabsImplTest {
     private static final String TEST_ROOT_PAGE = "/content/tabs";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String TABS_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-1";
+    private static final String TABS_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-2";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
+
+    private static final ContentPolicyManager POLICY_MANAGER = mock(ContentPolicyManager.class);
 
     @ClassRule
     public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
@@ -51,6 +58,7 @@ public class TabsImplTest {
     @BeforeClass
     public static void init() {
         AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+        AEM_CONTEXT.registerService(SlingModelFilter.class, new MockSlingModelFilter());
     }
 
     @Test
@@ -64,12 +72,18 @@ public class TabsImplTest {
     public void testTabsWithItems() {
         Tabs tabs = getTabsUnderTest(TABS_1);
         Object[][] expectedItems = {
-            {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1", "Teaser 1", "Teaser 1 description"},
-            {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", "Teaser 2", "Teaser 2 description"},
+            {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1", "Tabs 1", "Tabs 1 description"},
+            {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", "Tabs 2", "Tabs 2 description"},
         };
         verifyTabItems(expectedItems, tabs.getItems());
         assertEquals("/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", tabs.getActiveItem());
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs1"));
+    }
+
+    @Test
+    public void testTabsWithNestedTabs() {
+        Tabs tabs = getTabsUnderTest(TABS_2);
+        Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs2"));
     }
 
     private Tabs getTabsUnderTest(String resourcePath) {
@@ -82,6 +96,7 @@ public class TabsImplTest {
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
         SlingBindings slingBindings = new SlingBindings();
+        slingBindings.put(SlingBindings.RESOLVER, AEM_CONTEXT.resourceResolver());
         slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());

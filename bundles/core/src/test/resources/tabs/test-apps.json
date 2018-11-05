@@ -13,5 +13,42 @@
                 "componentGroup"         : ".core-wcm"
             }
         }
+    },
+    "tabs": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "tabs"         : {
+                "cq:isContainer"         : "true",
+                "jcr:description"        : "Displays content as a list of tabs",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Tabs (v1)",
+                "sling:resourceSuperType": "core/wcm/components/tabs",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    },
+    "carousel": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "carousel"         : {
+                "cq:isContainer"         : "true",
+                "cq:icon"                : "imageCarousel",
+                "jcr:description"        : "Cycles through a list of generic content items",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Carousel (v1)",
+                "sling:resourceSuperType": "core/wcm/components/carousel",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    },
+    "responsivegrid": {
+        "cq:isContainer"         : "true",
+        "jcr:description"        : "Proxy component for the AEM responsive grid component",
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "Proxy responsive grid component",
+        "sling:resourceSuperType": "wcm/foundation/components/responsivegrid",
+        "componentGroup"         : ".core-wcm"
     }
 }

@@ -30,7 +30,12 @@
                             "jcr:description"   : "Teaser 2 description",
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
-                        "item_3": {}
+                        "item_3": {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Teaser 3",
+                            "jcr:description"   : "Teaser 3 description",
+                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                        }
                     }
                 }
             }

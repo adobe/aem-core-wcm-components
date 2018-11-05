@@ -25,10 +25,13 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Carousel;
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -54,6 +57,7 @@ public class CarouselImplTest {
     @BeforeClass
     public static void init() {
         AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+        AEM_CONTEXT.registerService(SlingModelFilter.class, new MockSlingModelFilter());
     }
 
     @Test
@@ -69,9 +73,10 @@ public class CarouselImplTest {
         Object[][] expectedItems = {
             {"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1", "Teaser 1", "Teaser 1 description"},
             {"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2", "Teaser 2", "Teaser 2 description"},
+            {"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3", "Teaser 3", "Teaser 3 description"},
         };
         verifyCarouselItems(expectedItems, carousel.getItems());
-        //Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
+        Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
 
     @Test
@@ -91,6 +96,7 @@ public class CarouselImplTest {
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
         SlingBindings slingBindings = new SlingBindings();
+        slingBindings.put(SlingBindings.RESOLVER, AEM_CONTEXT.resourceResolver());
         slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
