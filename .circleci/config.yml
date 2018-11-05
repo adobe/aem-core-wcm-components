@@ -76,8 +76,8 @@ workflows:
           filters:
             branches:
               ignore: /.*/
-              tags:
-                only: /^@deploy-snapshot$/
+            tags:
+              only: /^@deploy-snapshot$/
       - release:
           requires:
             - build
