@@ -183,7 +183,7 @@ public class ImageImpl implements Image {
                     lastModifiedDate = assetLastModifiedDate;
                 }
             }
-            if (extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
+            if (extension == null || extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
                 extension = DEFAULT_EXTENSION;
             }
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
