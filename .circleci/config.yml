@@ -70,6 +70,7 @@ workflows:
   build-and-release:
     jobs:
       - build
+
       - deploy_snapshot:
           requires:
             - build
@@ -78,6 +79,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^@deploy-snapshot$/
+
       - release:
           requires:
             - build
