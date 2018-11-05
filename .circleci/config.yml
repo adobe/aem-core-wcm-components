@@ -100,4 +100,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^@release-\d+\.\d+\.\d+$/
+              only: /^release-\d+\.\d+\.\d+$/
