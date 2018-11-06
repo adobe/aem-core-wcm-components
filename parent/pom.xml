@@ -661,7 +661,7 @@
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
-                <version>2.3.3-SNAPSHOT</version>
+                <version>2.3.2</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>

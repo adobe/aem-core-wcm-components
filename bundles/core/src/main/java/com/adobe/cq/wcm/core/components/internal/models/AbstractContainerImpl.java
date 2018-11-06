@@ -48,9 +48,6 @@ public abstract class AbstractContainerImpl implements Container {
     @Self
     private SlingHttpServletRequest request;
 
-    @ScriptVariable
-    protected ResourceResolver resolver;
-
     @OSGiService
     private SlingModelFilter slingModelFilter;
 
@@ -111,7 +108,7 @@ public abstract class AbstractContainerImpl implements Container {
                 exportedItemsOrder = ArrayUtils.EMPTY_STRING_ARRAY;
             }
         }
-        return Arrays.copyOf(exportedItemsOrder,exportedItemsOrder.length);
+        return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
     }
 
     private <T> Map<String, T> getItemModels(@Nonnull SlingHttpServletRequest request,
@@ -121,7 +118,7 @@ public abstract class AbstractContainerImpl implements Container {
         List<Resource> itemResources = new ArrayList<>();
         for (ListItem item : items) {
             if (item != null && StringUtils.isNotEmpty(item.getPath())) {
-                Resource itemRes = resolver.getResource(item.getPath());
+                Resource itemRes = request.getResourceResolver().getResource(item.getPath());
                 if (itemRes != null) {
                     itemResources.add(itemRes);
                 }

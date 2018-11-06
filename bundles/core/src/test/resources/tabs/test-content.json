@@ -14,13 +14,12 @@
                     "sling:resourceType": "wcm/foundation/components/responsivegrid",
                     "tabs-1"          : {
                         "jcr:primaryType"   : "nt:unstructured",
-                        "jcr:title"         : "Tabs 1",
                         "sling:resourceType": "core/wcm/components/tabs/v1/tabs",
                         "activeItem"        : "item_2",
                         "item_1"          : {
                             "jcr:primaryType"   : "nt:unstructured",
-                            "jcr:title"         : "Tabs 1",
-                            "jcr:description"   : "Tabs 1 description",
+                            "jcr:title"         : "Tab 1",
+                            "jcr:description"   : "Tab 1 description",
                             "sling:resourceType": "core/wcm/components/responsivegrid",
                             "item_1": {
                                 "jcr:primaryType"   : "nt:unstructured",
@@ -37,8 +36,8 @@
                         },
                         "item_2"          : {
                             "jcr:primaryType"   : "nt:unstructured",
-                            "jcr:title"         : "Tabs 2",
-                            "jcr:description"   : "Tabs 2 description",
+                            "jcr:title"         : "Tab 2",
+                            "jcr:description"   : "Tab 2 description",
                             "sling:resourceType": "core/wcm/components/responsivegrid",
                             "item_1": {
                                 "jcr:primaryType"   : "nt:unstructured",
@@ -57,12 +56,11 @@
                     },
                     "tabs-2"          : {
                         "jcr:primaryType"   : "nt:unstructured",
-                        "jcr:title"         : "Nested Tabs",
                         "sling:resourceType": "core/wcm/components/tabs/v1/tabs",
                         "activeItem"        : "item_2",
                         "item_1"          : {
                             "jcr:primaryType"   : "nt:unstructured",
-                            "jcr:title"         : "Tabs 1",
+                            "jcr:title"         : "Tab 1",
                             "sling:resourceType": "core/wcm/components/responsivegrid",
                             "activeItem"        : "item_2",
                             "item_1": {
@@ -75,12 +73,11 @@
                                 "jcr:primaryType"   : "nt:unstructured",
                                 "jcr:title"         : "Nested Tabs",
                                 "sling:resourceType": "core/wcm/components/tabs/v1/tabs",
-                                "activeItem"        : "item_2",
-                                "item_1"          : {
+                                "activeItem"        : "item_1_2",
+                                "item_1_1"          : {
                                     "jcr:primaryType"   : "nt:unstructured",
-                                    "jcr:title"         : "Tabs 1",
+                                    "jcr:title"         : "Tab 1.1",
                                     "sling:resourceType": "core/wcm/components/responsivegrid",
-                                    "activeItem"        : "item_2",
                                     "item_1": {
                                         "jcr:primaryType"   : "nt:unstructured",
                                         "jcr:title"         : "Teaser 1",
@@ -94,11 +91,10 @@
                                         "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                                     }
                                 },
-                                "item_2"          : {
+                                "item_1_2"          : {
                                     "jcr:primaryType"   : "nt:unstructured",
-                                    "jcr:title"         : "Tabs 1",
+                                    "jcr:title"         : "Tab 1.2",
                                     "sling:resourceType": "core/wcm/components/responsivegrid",
-                                    "activeItem"        : "item_2",
                                     "item_1": {
                                         "jcr:primaryType"   : "nt:unstructured",
                                         "jcr:title"         : "Teaser 1",
@@ -135,9 +131,8 @@
                         },
                         "item_2"          : {
                             "jcr:primaryType"   : "nt:unstructured",
-                            "jcr:title"         : "Tabs 1",
+                            "jcr:title"         : "Tab 2",
                             "sling:resourceType": "core/wcm/components/responsivegrid",
-                            "activeItem"        : "item_2",
                             "item_1": {
                                 "jcr:primaryType"   : "nt:unstructured",
                                 "jcr:title"         : "Teaser 1",

@@ -2,15 +2,15 @@
     "items": [
         {
             "url": null,
-            "title": "Tabs 1",
-            "description": "Tabs 1 description",
+            "title": "Tab 1",
+            "description": "Tab 1 description",
             "lastModified": null,
             "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1"
         },
         {
             "url": null,
-            "title": "Tabs 2",
-            "description": "Tabs 2 description",
+            "title": "Tab 2",
+            "description": "Tab 2 description",
             "lastModified": null,
             "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2"
         }

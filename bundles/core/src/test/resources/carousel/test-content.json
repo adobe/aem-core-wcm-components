@@ -14,7 +14,6 @@
                     "sling:resourceType": "wcm/foundation/components/responsivegrid",
                     "carousel-1"          : {
                         "jcr:primaryType"   : "nt:unstructured",
-                        "jcr:title"         : "Carousel 1",
                         "sling:resourceType": "core/wcm/components/carousel/v1/carousel",
                         "autoplay"          : "true",
                         "delay"             : "7000",
