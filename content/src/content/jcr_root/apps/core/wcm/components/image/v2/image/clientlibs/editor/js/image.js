@@ -19,6 +19,7 @@
 
     var dialogContentSelector = ".cmp-image__editor";
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1;
+    var isDecorative;
     var altTuple;
     var captionTuple;
     var $altGroup;
@@ -33,7 +34,7 @@
         var $dialogContent = $dialog.find(dialogContentSelector);
         var dialogContent  = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
         if (dialogContent) {
-            var isDecorative   = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
+            isDecorative      = dialogContent.querySelector('coral-checkbox[name="./isDecorative"]');
             altTuple          =
                 new CheckboxTextfieldTuple(dialogContent, 'coral-checkbox[name="./altValueFromDAM"]', 'input[name="./alt"]');
             $altGroup         = $dialogContent.find(".cmp-image__editor-alt");
@@ -54,6 +55,7 @@
                             captionTuple.hideCheckbox(false);
                             altTuple.reinitCheckbox();
                             captionTuple.reinitCheckbox();
+                            toggleAlternativeFieldsAndLink(isDecorative);
                         }
                     );
                 });
@@ -83,7 +85,7 @@
                     captionTuple.hideCheckbox(true);
                 }
             }
-            toggleAlternativeFieldsAndLink(dialogContent.querySelector('coral-checkbox[name="./isDecorative"]'));
+            toggleAlternativeFieldsAndLink(isDecorative);
         }
     });
 
@@ -130,6 +132,7 @@
                     }
                     altTuple.seedTextValue(description);
                     altTuple.update();
+                    toggleAlternativeFieldsAndLink(isDecorative);
                 }
                 if (captionTuple) {
                     var title = data["dc:title"];
