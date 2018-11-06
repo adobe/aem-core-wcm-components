@@ -23,7 +23,7 @@ let gitTag = process.env.CIRCLE_TAG;
 if (!gitTag) {
     throw "Cannot release without a valid git tag";
 }
-let targetVersion = gitTag.match(/^release\-(\d+\.\d+.\d+)$/);
+let targetVersion = gitTag.match(/^@release\-(\d+\.\d+.\d+)$/);
 if (!targetVersion) {
     throw "Cannot release without a valid release version";
 }
@@ -33,7 +33,7 @@ targetVersion = targetVersion[1];
 try {
     tools.stage("RELEASE");
     tools.prepareGPGKey();
-    tools.sh("echo mvn -B -s ci/settings.xml -Prelease -Padobe-public clean release:prepare release:perform -DreleaseVersion=" + targetVersion);
+    tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public clean release:prepare release:perform -DdryRun=true -DreleaseVersion=" + targetVersion);
     tools.stage("RELEASE DONE");
 } finally {
     tools.removeGitTag(gitTag);
