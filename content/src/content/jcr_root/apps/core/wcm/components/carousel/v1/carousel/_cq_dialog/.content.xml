@@ -92,7 +92,7 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/alert"
                                                         size="S"
-                                                        text="Automatic transitioning can be previewed via the 'View as published' page action."
+                                                        text="Automatic transitions are previewed with the 'View as published' page action."
                                                         variant="info">
                                                     </alert>
                                                     <delay
