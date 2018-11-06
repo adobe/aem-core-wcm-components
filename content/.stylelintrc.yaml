@@ -38,7 +38,6 @@ rules:
 
     # property
     property-blacklist: null
-    property-no-vendor-prefix: true
     property-whitelist: null
 
     # declaration

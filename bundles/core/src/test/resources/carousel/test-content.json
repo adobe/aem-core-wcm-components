@@ -18,6 +18,7 @@
                         "sling:resourceType": "core/wcm/components/carousel/v1/carousel",
                         "autoplay"          : "true",
                         "delay"             : "7000",
+                        "autopauseDisabled" : "true",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Teaser 1",

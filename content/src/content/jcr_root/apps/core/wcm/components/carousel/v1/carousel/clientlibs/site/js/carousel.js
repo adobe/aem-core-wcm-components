@@ -20,6 +20,7 @@
     var IS = "carousel";
 
     var keyCodes = {
+        SPACE: 32,
         END: 35,
         HOME: 36,
         ARROW_LEFT: 37,
@@ -59,6 +60,19 @@
                 value = parseFloat(value);
                 return !isNaN(value) ? value : null;
             }
+        },
+        /**
+         * Determines whether automatic pause on hovering the carousel is disabled
+         *
+         * @memberof Carousel
+         * @type {Boolean}
+         * @default false
+         */
+        "autopauseDisabled": {
+            "default": false,
+            "transform": function(value) {
+                return !(value === null || typeof value === "undefined");
+            }
         }
     };
 
@@ -96,12 +110,15 @@
 
             setupProperties(config.options);
             cacheElements(config.element);
+
             that._active = 0;
+            that._paused = false;
 
             if (that._elements.item) {
                 refreshActive();
                 bindEvents();
                 resetAutoplayInterval();
+                refreshPlayPauseActions();
             }
 
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
@@ -211,9 +228,24 @@
                 }
             }
 
+            if (that._elements["pause"]) {
+                if (that._properties.autoplay) {
+                    that._elements["pause"].addEventListener("click", onPauseClick);
+                }
+            }
+
+            if (that._elements["play"]) {
+                if (that._properties.autoplay) {
+                    that._elements["play"].addEventListener("click", onPlayClick);
+                }
+            }
+
             that._elements.self.addEventListener("keydown", onKeyDown);
-            that._elements.self.addEventListener("mouseenter", onMouseEnter);
-            that._elements.self.addEventListener("mouseleave", onMouseLeave);
+
+            if (!that._properties.autopauseDisabled) {
+                that._elements.self.addEventListener("mouseenter", onMouseEnter);
+                that._elements.self.addEventListener("mouseleave", onMouseLeave);
+            }
         }
 
         /**
@@ -249,6 +281,22 @@
                     event.preventDefault();
                     navigateAndFocusIndicator(lastIndex);
                     break;
+                case keyCodes.SPACE:
+                    if (that._properties.autoplay && (event.target !== that._elements["previous"] && event.target !== that._elements["next"])) {
+                        event.preventDefault();
+                        if (!that._paused) {
+                            pause();
+                        } else {
+                            play();
+                        }
+                    }
+                    if (event.target === that._elements["pause"]) {
+                        that._elements["play"].focus();
+                    }
+                    if (event.target === that._elements["play"]) {
+                        that._elements["pause"].focus();
+                    }
+                    break;
                 default:
                     return;
             }
@@ -272,6 +320,68 @@
          */
         function onMouseLeave(event) {
             resetAutoplayInterval();
+        }
+
+        /**
+         * Handles pause element click events
+         *
+         * @private
+         * @param {Object} event The click event
+         */
+        function onPauseClick(event) {
+            pause();
+            that._elements["play"].focus();
+        }
+
+        /**
+         * Handles play element click events
+         *
+         * @private
+         * @param {Object} event The click event
+         */
+        function onPlayClick() {
+            play();
+            that._elements["pause"].focus();
+        }
+
+        /**
+         * Pauses the playing of the Carousel. Sets {@code Carousel#_paused} marker.
+         * Only relevant when autoplay is enabled
+         *
+         * @private
+         */
+        function pause() {
+            that._paused = true;
+            clearAutoplayInterval();
+            refreshPlayPauseActions();
+        }
+
+        /**
+         * Enables the playing of the Carousel. Sets {@code Carousel#_paused} marker.
+         * Only relevant when autoplay is enabled
+         *
+         * @private
+         */
+        function play() {
+            that._paused = false;
+
+            // If the Carousel is hovered, don't begin auto transitioning until the next mouse leave event
+            var hovered = that._elements.self.parentElement.querySelector(":hover") === that._elements.self;
+            if (that._properties.autopauseDisabled || !hovered) {
+                resetAutoplayInterval();
+            }
+
+            refreshPlayPauseActions();
+        }
+
+        /**
+         * Refreshes the play/pause action markup based on the {@code Carousel#_paused} state
+         *
+         * @private
+         */
+        function refreshPlayPauseActions() {
+            setActionDisabled(that._elements["pause"], that._paused);
+            setActionDisabled(that._elements["play"], !that._paused);
         }
 
         /**
@@ -377,11 +487,14 @@
          * @private
          */
         function resetAutoplayInterval() {
-            if (!that._properties.autoplay) {
+            if (that._paused || !that._properties.autoplay) {
                 return;
             }
             clearAutoplayInterval();
             that._autoplayIntervalId = window.setInterval(function() {
+                if (document.visibilityState && document.hidden) {
+                    return;
+                }
                 var indicators = that._elements["indicators"];
                 if (indicators !== document.activeElement && indicators.contains(document.activeElement)) {
                     // if an indicator has focus, ensure we switch focus following navigation
@@ -400,6 +513,26 @@
         function clearAutoplayInterval() {
             window.clearInterval(that._autoplayIntervalId);
             that._autoplayIntervalId = null;
+        }
+
+        /**
+         * Sets the disabled state for an action and toggles the appropriate CSS classes
+         *
+         * @private
+         * @param {HTMLElement} action Action to disable
+         * @param {Boolean} [disable] {@code true} to disable, {@code false} to enable
+         */
+        function setActionDisabled(action, disable) {
+            if (!action) {
+                return;
+            }
+            if (disable !== false) {
+                action.disabled = true;
+                action.classList.add("cmp-carousel__action--disabled");
+            } else {
+                action.disabled = false;
+                action.classList.remove("cmp-carousel__action--disabled");
+            }
         }
     }
 
