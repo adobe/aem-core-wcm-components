@@ -20,7 +20,7 @@ const Tools = require("./tools.js");
 const tools = new Tools();
 
 let gitTag = process.env.CIRCLE_TAG;
-if (gitTag != "deploy-snapshot") {
+if (gitTag != "@deploy-snapshot") {
     throw "Cannot release without a valid git tag";
 }
 
