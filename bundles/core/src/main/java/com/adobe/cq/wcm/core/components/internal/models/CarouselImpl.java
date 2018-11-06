@@ -47,11 +47,13 @@ public class CarouselImpl extends AbstractContainerImpl implements Carousel {
 
     protected boolean autoplay;
     protected Long delay;
+    protected boolean autopauseDisabled;
 
     @PostConstruct
     protected void initModel() {
         autoplay = properties.get(PN_AUTOPLAY, currentStyle.get(PN_AUTOPLAY, false));
         delay = properties.get(PN_DELAY, currentStyle.get(PN_DELAY, DEFAULT_DELAY));
+        autopauseDisabled = properties.get(PN_AUTOPAUSE_DISABLED, currentStyle.get(PN_AUTOPAUSE_DISABLED, false));
     }
 
     @Override
@@ -62,6 +64,11 @@ public class CarouselImpl extends AbstractContainerImpl implements Carousel {
     @Override
     public Long getDelay() {
         return delay;
+    }
+
+    @Override
+    public boolean getAutopauseDisabled() {
+        return autopauseDisabled;
     }
 
 }

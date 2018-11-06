@@ -32,7 +32,15 @@
                     input: "[data-cmp-hook-childreneditor='itemTitle']",
                     hiddenInput: "[data-cmp-hook-childreneditor='itemResourceType']"
                 }
-            }
+            },
+            tabs: {
+                items: ".cmp-carousel__editor coral-tab:eq(0)",
+                properties: ".cmp-carousel__editor coral-tab:eq(1)"
+            },
+            autoplay: "[data-cmp-carousel-v1-dialog-hook='autoplay']",
+            autoplayGroup: "[data-cmp-carousel-v1-dialog-hook='autoplayGroup']",
+            delay: "[data-cmp-carousel-v1-dialog-hook='delay']",
+            autopauseDisabled: "[data-cmp-carousel-v1-dialog-hook='autopauseDisabled']"
         },
         insertComponentDialog: {
             self: ".InsertComponentDialog",
@@ -78,6 +86,7 @@
         .addTestCase(carousel.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carousel.tcAutoplayGroup(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcPanelSelect(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(carousel.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/carousel", "core-component/components",
             c.policyPath, c.policyAssignmentPath, "core/wcm/tests/components/test-page-v2", c.rtCarousel_v1))
