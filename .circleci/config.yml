@@ -61,6 +61,9 @@ jobs:
       - checkout
       - restore_cache: # restore the saved cache
           key: aem-core-wcm-components
+      - add_ssh_keys:
+          fingerprints:
+            - "14:ab:8b:b6:ae:5b:96:38:c4:1d:7f:e6:5a:38:68:8c"
       - run:
           name: Deploy Snapshots
           command: node ci/deploy_snapshots.js
@@ -76,7 +79,7 @@ jobs:
           key: aem-core-wcm-components
       - add_ssh_keys:
           fingerprints:
-          - "14:ab:8b:b6:ae:5b:96:38:c4:1d:7f:e6:5a:38:68:8c"
+            - "14:ab:8b:b6:ae:5b:96:38:c4:1d:7f:e6:5a:38:68:8c"
       - run:
           name: Release
           command: node ci/release.js
