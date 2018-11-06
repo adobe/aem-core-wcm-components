@@ -32,6 +32,9 @@ targetVersion = targetVersion[1];
 
 try {
     tools.stage("RELEASE");
+    // We cannot find out what git branch has the tag, so we assume/enforce that releases are done on master
+    console.log("Checking out the master branch so we can commit and push");
+    tools.sh("git checkout master");
     tools.prepareGPGKey();
     tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public clean release:prepare release:perform -DdryRun=true -DreleaseVersion=" + targetVersion);
     tools.stage("RELEASE DONE");
