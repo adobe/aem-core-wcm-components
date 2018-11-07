@@ -168,6 +168,10 @@ public class ImageImpl implements Image {
                 hasContent = false;
                 return;
             }
+            // The jcr:mimeType property may contain a charset prefix (image/jpeg;charset=UTF-8).
+            // For example if a binary was written with jcrUtils#putFile and an optional charset was provided.
+            // Check for the prefix and remove as necessary.
+            mimeType = mimeType.split(";")[0];
             extension = mimeTypeService.getExtension(mimeType);
             ValueMap properties = resource.getValueMap();
             Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
