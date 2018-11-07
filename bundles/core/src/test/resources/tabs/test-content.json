@@ -71,7 +71,6 @@
                             },
                             "item_2": {
                                 "jcr:primaryType"   : "nt:unstructured",
-                                "jcr:title"         : "Nested Tabs",
                                 "sling:resourceType": "core/wcm/components/tabs/v1/tabs",
                                 "activeItem"        : "item_1_2",
                                 "item_1_1"          : {
