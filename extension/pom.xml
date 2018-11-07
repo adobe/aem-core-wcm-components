@@ -36,13 +36,6 @@
 
     <name>Adobe Experience Manager Core WCM Components Extension Package</name>
 
-    <scm>
-        <connection>scm:git:https://git.corp.adobe.com/CQ/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@git.corp.adobe.com:CQ/aem-core-wcm-components.git</developerConnection>
-        <url>https://git.corp.adobe.com/CQ/aem-core-wcm-components/tree/PRIVATE_master/extension</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <build>
         <plugins>
             <plugin>

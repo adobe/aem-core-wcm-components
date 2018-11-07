@@ -31,13 +31,6 @@
     <version>2.2.1-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components JUnit Testing</name>
 
-    <scm>
-        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development/testing/junit/core</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <description>Useful tools for testing HTL-based AEM components</description>
 
     <build>
