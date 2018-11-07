@@ -29,7 +29,7 @@ import com.day.cq.wcm.api.designer.Cell;
 /**
  * Wrapper class that allows to modify the static reference to the content current containing page within the ComponentContext
  */
-public class HierarchyComponentContextWrapper implements ComponentContext {
+class HierarchyComponentContextWrapper implements ComponentContext {
 
     private ComponentContext wrappedComponentContext;
     private Page hierarchyPage;

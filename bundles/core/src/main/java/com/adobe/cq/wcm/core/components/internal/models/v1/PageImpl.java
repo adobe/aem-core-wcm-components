@@ -241,13 +241,13 @@ public class PageImpl implements Page {
                                               @Nonnull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
-        Iterable<Resource> iterable = slingModelFilter.filterChildResources(request.getResource().getChildren());
+        Iterable<Resource> requestResourceChildren = slingModelFilter.filterChildResources(slingRequest.getResource().getChildren());
 
-        if (iterable == null) {
+        if (requestResourceChildren == null) {
             return itemWrappers;
         }
 
-        for (final Resource child : iterable) {
+        for (final Resource child : requestResourceChildren) {
             itemWrappers.put(child.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass));
         }
 

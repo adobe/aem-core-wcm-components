@@ -39,6 +39,36 @@
                     "textIsRich"        : "true"
                 }
             }
+        },
+
+        "child": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "sling:resourceType": "core/wcm/components/page/v2/page"
+            },
+            "nested1": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "sling:resourceType": "unittest/components/page",
+                    "root": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                    }
+                }
+            },
+            "nested2": {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "sling:resourceType": "unittest/components/page",
+                    "root": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "wcm/foundation/components/responsivegrid"
+                    }
+                }
+            }
         }
     },
     "redirect-page": {

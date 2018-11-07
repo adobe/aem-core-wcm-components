@@ -38,6 +38,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
@@ -224,6 +225,15 @@ public class PageImplTest {
             when(style.get(anyString(), Matchers.anyObject())).thenAnswer(
                     invocationOnMock -> invocationOnMock.getArguments()[1]
             );
+        }
+        if (null != page.getParent()) {
+            com.day.cq.wcm.api.Page parentPage = spy(CONTEXT.pageManager().getPage(page.getParent().getPath()));
+            when(parentPage.getTemplate()).thenReturn(template);
+
+            when(contentPolicyManager.getPolicy(parentPage.getContentResource())).thenReturn(contentPolicy);
+            style.remove("isRoot");
+
+            when(page.getParent()).thenReturn(parentPage);
         }
         ComponentContext componentContext = mock(ComponentContext.class);
         Set<String> cssClassNames = new LinkedHashSet<>(Arrays.asList("class1", "class2"));

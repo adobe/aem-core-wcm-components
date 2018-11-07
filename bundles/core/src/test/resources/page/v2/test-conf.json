@@ -46,7 +46,10 @@
                                 "jcr:lastModifiedBy": "admin",
                                 "jcr:primaryType": "nt:unstructured",
                                 "jcr:title": "CoreTest Product Page",
-                                "sling:resourceType": "wcm/core/components/policy/policy"
+                                "sling:resourceType": "wcm/core/components/policy/policy",
+                                "isRoot": true,
+                                "structureDepth": 3,
+                                "structurePatterns": ["(templated-page/)(?:(?!child/nested1)(/)?)"]
                             }
                         },
                         "sling:resourceType": "nt:unstructured"

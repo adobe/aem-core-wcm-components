@@ -25,6 +25,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
+import com.adobe.cq.export.json.hierarchy.HierarchyNodeExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -33,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Page extends ContainerExporter {
+public interface Page extends ContainerExporter, HierarchyNodeExporter {
 
     /**
      * Key used for the regular favicon file.
@@ -318,6 +319,30 @@ public interface Page extends ContainerExporter {
     }
 
     /**
+     * URL to the root model of the App
+     *
+     * @return {@link String}
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    @Nullable
+    @JsonIgnore
+    default String getRootUrl() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Root page model of the current hierarchy of pages
+     *
+     * @return {@link Page}
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    @Nullable
+    @JsonIgnore
+    default Page getRootModel() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ContainerExporter#getExportedItemsOrder()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
@@ -344,6 +369,33 @@ public interface Page extends ContainerExporter {
     @Nonnull
     @Override
     default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see HierarchyNodeExporter#getExportedHierarchyType
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    @Override
+    default String getExportedHierarchyType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see HierarchyNodeExporter#getExportedPath
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    @Override
+    default String getExportedPath() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see HierarchyNodeExporter#getExportedChildren
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    @Override
+    default Map<String, ? extends HierarchyNodeExporter> getExportedChildren() {
         throw new UnsupportedOperationException();
     }
 
