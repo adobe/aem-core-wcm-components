@@ -113,7 +113,6 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
     @Test
     public void testGetRootUrl() {
-
         // no parent
         Page rootPage = getPageUnderTest(PAGE);
         Assert.assertEquals(CONTEXT_PATH + PAGE + ".model.json", rootPage.getRootUrl());

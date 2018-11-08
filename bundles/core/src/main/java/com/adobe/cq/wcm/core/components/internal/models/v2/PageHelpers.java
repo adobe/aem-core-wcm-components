@@ -120,14 +120,14 @@ final class PageHelpers {
     /**
      * Get request's entry point attribute value
      */
-    static Page requestGetEntryPoint(@Nonnull SlingHttpServletRequest request) {
+    static Page requestGetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request) {
         return (Page) request.getAttribute(HIERARCHY_ENTRY_POINT_PAGE_ATTR);
     }
 
     /**
      * Set request's entry point attribute value
      */
-    static void requestSetEntryPoint(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
+    static void requestSetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
         request.setAttribute(HIERARCHY_ENTRY_POINT_PAGE_ATTR, page);
     }
 

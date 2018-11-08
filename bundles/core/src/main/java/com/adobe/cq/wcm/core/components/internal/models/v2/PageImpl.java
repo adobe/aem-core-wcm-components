@@ -285,7 +285,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             return null;
         }
 
-        PageHelpers.requestSetEntryPoint(request, currentPage);
+        PageHelpers.requestSetHierarchyEntryPoint(request, currentPage);
 
         return modelFactory.getModelFromWrappedRequest(PageHelpers.getHierarchyServletRequest(request, rootPage), rootPage.getContentResource(), this.getClass());
     }
@@ -371,7 +371,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
 
         // Eventually add a child page that is not part page root children of the but is the entry point of the request
-        com.day.cq.wcm.api.Page entryPointPage = PageHelpers.requestGetEntryPoint(slingRequest);
+        com.day.cq.wcm.api.Page entryPointPage = PageHelpers.requestGetHierarchyEntryPoint(slingRequest);
 
         if (entryPointPage == null) {
             return;
