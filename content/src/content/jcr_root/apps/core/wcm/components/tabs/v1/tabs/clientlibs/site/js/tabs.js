@@ -151,7 +151,7 @@
                 for (var i = 0; i < tabs.length; i++) {
                     (function(index) {
                         tabs[i].addEventListener("click", function(event) {
-                            navigate(index);
+                            navigateAndFocusTab(index);
                         });
                         tabs[i].addEventListener("keydown", function(event) {
                             onKeyDown(event);
@@ -176,23 +176,23 @@
                 case keyCodes.ARROW_UP:
                     event.preventDefault();
                     if (index > 0) {
-                        navigate(index - 1);
+                        navigateAndFocusTab(index - 1);
                     }
                     break;
                 case keyCodes.ARROW_RIGHT:
                 case keyCodes.ARROW_DOWN:
                     event.preventDefault();
                     if (index < lastIndex) {
-                        navigate(index + 1);
+                        navigateAndFocusTab(index + 1);
                     }
                     break;
                 case keyCodes.HOME:
                     event.preventDefault();
-                    navigate(0);
+                    navigateAndFocusTab(0);
                     break;
                 case keyCodes.END:
                     event.preventDefault();
-                    navigate(lastIndex);
+                    navigateAndFocusTab(lastIndex);
                     break;
                 default:
                     return;
@@ -217,7 +217,6 @@
                             tabs[i].classList.add(selectors.active.tab);
                             tabs[i].setAttribute("aria-selected", true);
                             tabs[i].setAttribute("tabindex", "0");
-                            focusWithoutScroll(tabs[i]);
                         } else {
                             tabpanels[i].classList.remove(selectors.active.tabpanel);
                             tabpanels[i].setAttribute("aria-hidden", true);
@@ -255,6 +254,17 @@
         function navigate(index) {
             that._active = index;
             refreshActive();
+        }
+
+        /**
+         * Navigates to the item at the provided index and ensures the active tab gains focus
+         *
+         * @private
+         * @param {Number} index The index of the item to navigate to
+         */
+        function navigateAndFocusTab(index) {
+            navigate(index);
+            focusWithoutScroll(that._elements["tab"][index]);
         }
     }
 
