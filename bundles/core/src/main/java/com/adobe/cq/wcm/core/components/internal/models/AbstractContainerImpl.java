@@ -23,6 +23,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -34,6 +35,9 @@ import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
@@ -73,6 +77,7 @@ public abstract class AbstractContainerImpl implements Container {
     }
 
     @Override
+    @JsonIgnore
     public List<ListItem> getItems() {
         if (items == null) {
             items = readItems();
@@ -125,10 +130,53 @@ public abstract class AbstractContainerImpl implements Container {
         for (Resource child : slingModelFilter.filterChildResources(itemResources)) {
             T model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
             if (model != null) {
-                models.put(child.getName(), model);
+                JsonWrapper<T> wrappedModel = new JsonWrapper<T>(model, child);
+                models.put(child.getName(), (T) wrappedModel);
             }
         }
         return models;
+    }
+
+    /**
+     * Wrapper class used to add specific properties of the container items to the JSON serialization of the underlying container item model
+     *
+     * @param <T> the model class of the underlying container item model
+     */
+    static class JsonWrapper<T> {
+        private T inner;
+        private String title;
+        private String path;
+
+        JsonWrapper(T inner, Resource item) {
+            this.inner = inner;
+            ValueMap props = item.getValueMap();
+            this.title = props.get("jcr:title", String.class);
+            this.path = item.getPath();
+        }
+
+        /**
+         * @return the underlying container item model
+         */
+        @JsonUnwrapped
+        public T getInner() {
+            return inner;
+        }
+
+        /**
+         * @return the container item title
+         */
+        @JsonProperty("itemTitle")
+        public String getTitle() {
+            return title;
+        }
+
+        /**
+         * @return the container item path
+         */
+        @JsonProperty("itemPath")
+        public String getPath() {
+            return path;
+        }
     }
 
 }
