@@ -81,7 +81,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * Flags the child pages. Optionally available as a request attribute
      */
-    private static final String IS_CHILD_PAGE_ATTR = "com.adobe.cq.wcm.core.components.internal.models.HierarchyPage.isChildPage";
+    private static final String ATTR_IS_CHILD_PAGE = "com.adobe.cq.wcm.core.components.internal.models.HierarchyPage.isChildPage";
 
     /**
      * Is the current model to be considered as a model root
@@ -319,7 +319,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         // If the value is set as a positive number it is going to be exposed until the counter is brought down to 0
         // If the value is set to a negative value all the child pages will be exposed (full traversal tree - aka infinity)
         // Child pages do not expose their respective child pages
-        if (page == null || depth == 0 || Boolean.TRUE.equals(slingRequest.getAttribute(IS_CHILD_PAGE_ATTR))) {
+        if (page == null || depth == 0 || Boolean.TRUE.equals(slingRequest.getAttribute(ATTR_IS_CHILD_PAGE))) {
             return Collections.emptyList();
         }
 
@@ -366,7 +366,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     private void addAsynchronousChildPage(@Nonnull SlingHttpServletRequest slingRequest, @Nonnull List<com.day.cq.wcm.api.Page> childPages) {
         // Child pages are only added to the root page
-        if (Boolean.TRUE.equals(slingRequest.getAttribute(IS_CHILD_PAGE_ATTR))) {
+        if (Boolean.TRUE.equals(slingRequest.getAttribute(ATTR_IS_CHILD_PAGE))) {
             return;
         }
 
@@ -408,7 +408,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         addAsynchronousChildPage(slingRequest, childPages);
 
         // Add a flag to inform the model of the child pages that they are not the root of the tree
-        slingRequestWrapper.setAttribute(IS_CHILD_PAGE_ATTR, true);
+        slingRequestWrapper.setAttribute(ATTR_IS_CHILD_PAGE, true);
 
         for (com.day.cq.wcm.api.Page childPage: childPages) {
             Resource childPageContentResource = childPage.getContentResource();
@@ -430,7 +430,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return itemWrappers;
     }
 
-
+    /**
+     * Returns a model URL for the given page URL
+     *
+     * @param slingRequest the current servlet request
+     * @param page page for which to get the model URL
+     * @return {@link String} model URL
+     */
     private String getModelUrl(@Nonnull SlingHttpServletRequest slingRequest, @Nonnull com.day.cq.wcm.api.Page page) {
         return PageHelpers.getModelUrl(Utils.getURL(slingRequest, page));
     }

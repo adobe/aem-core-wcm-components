@@ -41,7 +41,7 @@ final class PageHelpers {
     /**
      * Request attribute key of the request page entry point
      */
-    private static final String HIERARCHY_ENTRY_POINT_PAGE_ATTR = "com.adobe.cq.wcm.core.components.internal.models.HierarchyPage.entryPointPage";
+    private static final String ATTR_HIERARCHY_ENTRY_POINT_PAGE = "com.adobe.cq.wcm.core.components.internal.models.HierarchyPage.entryPointPage";
 
     private PageHelpers() {
     }
@@ -76,18 +76,18 @@ final class PageHelpers {
     @Nonnull
     static SlingHttpServletRequest getHierarchyServletRequest(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
         // Request attribute key of the component context
-        final String COMPONENT_CONTEXT_ATTR = "com.day.cq.wcm.componentcontext";
+        final String ATTR_COMPONENT_CONTEXT = "com.day.cq.wcm.componentcontext";
 
         // Request attribute key of the current page
-        final String CURRENT_PAGE_ATTR = "currentPage";
+        final String ATTR_CURRENT_PAGE = "currentPage";
 
         SlingHttpServletRequest wrapper = new SlingHttpServletRequestWrapper(request);
 
-        ComponentContext componentContext = (ComponentContext) request.getAttribute(COMPONENT_CONTEXT_ATTR);
+        ComponentContext componentContext = (ComponentContext) request.getAttribute(ATTR_COMPONENT_CONTEXT);
 
         // When traversing child pages the currentPage must be updated
-        wrapper.setAttribute(COMPONENT_CONTEXT_ATTR, new HierarchyComponentContextWrapper(componentContext, page));
-        wrapper.setAttribute(CURRENT_PAGE_ATTR, page);
+        wrapper.setAttribute(ATTR_COMPONENT_CONTEXT, new HierarchyComponentContextWrapper(componentContext, page));
+        wrapper.setAttribute(ATTR_CURRENT_PAGE, page);
 
         return wrapper;
     }
@@ -102,12 +102,12 @@ final class PageHelpers {
      */
     static int getPageTreeTraversalDepth(Style style) {
         // Depth of the tree of pages
-        final String STRUCTURE_DEPTH_PN = "structureDepth";
+        final String PN_STRUCTURE_DEPTH = "structureDepth";
 
         Integer pageTreeTraversalDepth = null;
 
         if (style != null) {
-            pageTreeTraversalDepth = style.get(STRUCTURE_DEPTH_PN, Integer.class);
+            pageTreeTraversalDepth = style.get(PN_STRUCTURE_DEPTH, Integer.class);
         }
 
         if (pageTreeTraversalDepth == null) {
@@ -121,14 +121,14 @@ final class PageHelpers {
      * Get request's entry point attribute value
      */
     static Page requestGetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request) {
-        return (Page) request.getAttribute(HIERARCHY_ENTRY_POINT_PAGE_ATTR);
+        return (Page) request.getAttribute(ATTR_HIERARCHY_ENTRY_POINT_PAGE);
     }
 
     /**
      * Set request's entry point attribute value
      */
     static void requestSetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
-        request.setAttribute(HIERARCHY_ENTRY_POINT_PAGE_ATTR, page);
+        request.setAttribute(ATTR_HIERARCHY_ENTRY_POINT_PAGE, page);
     }
 
     /**
@@ -141,9 +141,9 @@ final class PageHelpers {
     @Nonnull
     static List<Pattern> getStructurePatterns(@Nonnull SlingHttpServletRequest request, Style currentStyle) {
         // List of Regexp patterns to filter the exported tree of pages
-        final String STRUCTURE_PATTERNS_PN = "structurePatterns";
+        final String PN_STRUCTURE_PATTERNS = "structurePatterns";
 
-        RequestParameter pageFilterParameter = request.getRequestParameter(STRUCTURE_PATTERNS_PN.toLowerCase());
+        RequestParameter pageFilterParameter = request.getRequestParameter(PN_STRUCTURE_PATTERNS.toLowerCase());
 
         String rawPageFilters = null;
 
@@ -152,7 +152,7 @@ final class PageHelpers {
         }
 
         if (currentStyle != null && StringUtils.isBlank(rawPageFilters)) {
-            rawPageFilters = currentStyle.get(STRUCTURE_PATTERNS_PN, String.class);
+            rawPageFilters = currentStyle.get(PN_STRUCTURE_PATTERNS, String.class);
         }
 
         if (StringUtils.isBlank(rawPageFilters)) {

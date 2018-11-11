@@ -80,11 +80,11 @@ public class PageHelperTest {
 
     @Test
     public void testGetStructurePatterns() {
-        final String STRUCTURE_PATTERNS_PN = "structurePatterns";
+        final String PN_STRUCTURE_PATTERNS = "structurePatterns";
 
         SlingHttpServletRequest mockedRequest = mock(SlingHttpServletRequest.class);
         RequestParameter mockedRequestParameter = mock(RequestParameter.class);
-        when(mockedRequest.getRequestParameter(eq(STRUCTURE_PATTERNS_PN.toLowerCase()))).thenReturn(mockedRequestParameter);
+        when(mockedRequest.getRequestParameter(eq(PN_STRUCTURE_PATTERNS.toLowerCase()))).thenReturn(mockedRequestParameter);
 
         // expect two elements
         when(mockedRequestParameter.getString()).thenReturn("first,second");

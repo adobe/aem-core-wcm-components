@@ -114,48 +114,6 @@
                             </column>
                         </items>
                     </socialmedia>
-                    <singlepageapps
-                        cq:showOnCreate="{Boolean}true"
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Single Page Apps"
-                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
-                        sling:orderBefore="cloudservices">
-                        <items jcr:primaryType="nt:unstructured">
-                            <column
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <isroot
-                                        cq:showOnCreate="{Boolean}true"
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        name="./isroot"
-                                        renderReadOnly="{Boolean}true"
-                                        text="Is Root"
-                                        value="isroot" />
-                                    <structureDepth
-                                        cq:showOnCreate="{Boolean}true"
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                        defaultValue="3"
-                                        fieldLabel="Structure Depth"
-                                        min="{Double}0"
-                                        max="{Double}20"
-                                        name="./structureDepth"
-                                        value="3" />
-                                    <structurePatterns
-                                        cq:showOnCreate="{Boolean}true"
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                        fieldLabel="Structure Patterns"
-                                        defaultValue=""
-                                        name="./structurePatterns"
-                                        renderReadOnly="{Boolean}true"
-                                        value="" />
-                                </items>
-                            </column>
-                        </items>
-                    </singlepageapps>
                 </items>
             </tabs>
         </items>
