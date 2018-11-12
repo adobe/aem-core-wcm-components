@@ -290,20 +290,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return modelFactory.getModelFromWrappedRequest(PageHelpers.getHierarchyServletRequest(request, rootPage), rootPage.getContentResource(), this.getClass());
     }
 
-    @Nullable
-    @Override
-    public String getTitle() {
-        if (!StringUtils.isBlank(currentPage.getNavigationTitle())) {
-            return currentPage.getNavigationTitle();
-        }
-
-        if (!StringUtils.isBlank(currentPage.getTitle())) {
-            return currentPage.getTitle();
-        }
-
-        return currentPage.getPageTitle();
-    }
-
     /**
      * Returns a flat list of all the child pages of a given page
      *
