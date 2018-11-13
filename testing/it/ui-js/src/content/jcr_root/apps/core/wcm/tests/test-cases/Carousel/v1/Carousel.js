@@ -261,7 +261,7 @@
             .click(selectors.editDialog.autoplay)
 
             // verify the autoplay group is hidden again
-            .asserts.visible(selectors.editDialog.autoplayGroup, false)
+            .asserts.visible(selectors.editDialog.autoplayGroup, false);
     };
 
     /**
