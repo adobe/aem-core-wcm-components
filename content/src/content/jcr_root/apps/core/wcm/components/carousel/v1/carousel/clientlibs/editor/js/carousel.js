@@ -20,15 +20,11 @@
     var selectors = {
         dialogContent: ".cmp-carousel__editor",
         autoplay: "[data-cmp-carousel-v1-dialog-hook='autoplay']",
-        autoplayGroup: "[data-cmp-carousel-v1-dialog-hook='autoplayGroup']",
-        delay: "[data-cmp-carousel-v1-dialog-hook='delay']",
-        autopauseDisabled: "[data-cmp-carousel-v1-dialog-hook='autopauseDisabled']"
+        autoplayGroup: "[data-cmp-carousel-v1-dialog-hook='autoplayGroup']"
     };
 
     var autoplay;
     var autoplayGroup;
-    var delay;
-    var autopauseDisabled;
 
     $(document).on("dialog-loaded", function(event) {
         var $dialog = event.dialog;
@@ -39,8 +35,6 @@
             if (dialogContent) {
                 autoplay = dialogContent.querySelector(selectors.autoplay);
                 autoplayGroup = dialogContent.querySelector(selectors.autoplayGroup);
-                delay = dialogContent.querySelector(selectors.delay);
-                autopauseDisabled = dialogContent.querySelector(selectors.autopauseDisabled);
 
                 if (autoplay) {
                     Coral.commons.ready(autoplay, function() {
@@ -60,17 +54,10 @@
      * @private
      */
     function onAutoplayChange() {
-        if (autoplay && autoplayGroup && delay && autopauseDisabled) {
-            var delayField = $(delay).adaptTo("foundation-field");
-            var autopauseDisabledField = $(autopauseDisabled).adaptTo("foundation-field");
-
+        if (autoplay && autoplayGroup) {
             if (!autoplay.checked) {
                 autoplayGroup.setAttribute("hidden", true);
-                delayField.setDisabled(true);
-                autopauseDisabledField.setDisabled(true);
             } else {
-                delayField.setDisabled(false);
-                autopauseDisabledField.setDisabled(false);
                 autoplayGroup.removeAttribute("hidden");
             }
         }
