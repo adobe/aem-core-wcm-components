@@ -254,18 +254,14 @@
             // check the autoplay checkbox
             .click(selectors.editDialog.autoplay)
 
-            // verify the autoplay group is now visible and its related fields are not disabled
+            // verify the autoplay group is now visible
             .asserts.visible(selectors.editDialog.autoplayGroup, true)
-            .assert.exists(selectors.editDialog.delay + "[disabled]", false)
-            .assert.exists(selectors.editDialog.autopauseDisabled + "[disabled]", false)
 
             // uncheck the autoplay checkbox
             .click(selectors.editDialog.autoplay)
 
-            // verify the autoplay group is hidden again and its related fields are disabled
+            // verify the autoplay group is hidden again
             .asserts.visible(selectors.editDialog.autoplayGroup, false)
-            .assert.exists(selectors.editDialog.delay + "[disabled]", true)
-            .assert.exists(selectors.editDialog.autopauseDisabled + "[disabled]", true);
     };
 
     /**
