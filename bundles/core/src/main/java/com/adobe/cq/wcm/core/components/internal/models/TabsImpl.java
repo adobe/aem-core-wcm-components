@@ -38,16 +38,16 @@ public class TabsImpl extends AbstractContainerImpl implements Tabs {
     @ValueMapValue(optional = true)
     private String activeItem;
 
-    private String activeName;
+    private String activeItemName;
 
     @Override
     public String getActiveItem() {
-        if (activeName == null) {
+        if (activeItemName == null) {
             Resource active = resource.getChild(activeItem);
             if (active != null) {
-                activeName = activeItem;
+                activeItemName = activeItem;
             }
         }
-        return activeName;
+        return activeItemName;
     }
 }
