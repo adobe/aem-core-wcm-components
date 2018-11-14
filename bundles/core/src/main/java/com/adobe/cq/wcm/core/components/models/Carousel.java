@@ -42,7 +42,7 @@ public interface Carousel extends Container {
     /**
      * Name of the resource property that indicates whether automatic pause on hovering the carousel is disabled, or not.
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     * @since com.adobe.cq.wcm.core.components.models 13.0.0
      */
     String PN_AUTOPAUSE_DISABLED = "autopauseDisabled";
 
@@ -70,7 +70,7 @@ public interface Carousel extends Container {
      * Indicates whether automatic pause on hovering the carousel is disabled, or not.
      *
      * @return {@code true} if automatic pause on hovering the carousel should be disabled; {@code false} otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     * @since com.adobe.cq.wcm.core.components.models 13.0.0
      */
     default boolean getAutopauseDisabled() {
         throw new UnsupportedOperationException();

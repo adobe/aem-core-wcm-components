@@ -29,7 +29,7 @@ import org.junit.Test;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -56,7 +56,7 @@ public class TabsImplTest {
     @Test
     public void testEmptyTabs() {
         Tabs tabs = new TabsImpl();
-        List<ListItem> items = tabs.getItems();
+        List<ContainerItem> items = tabs.getItems();
         Assert.assertTrue("", items == null || items.size() == 0);
     }
 
@@ -64,11 +64,11 @@ public class TabsImplTest {
     public void testTabsWithItems() {
         Tabs tabs = getTabsUnderTest(TABS_1);
         Object[][] expectedItems = {
-            {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_1", "Teaser 1", "Teaser 1 description"},
-            {"/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", "Teaser 2", "Teaser 2 description"},
+            {"item_1", "Teaser 1"},
+            {"item_2", "Teaser 2"},
         };
         verifyTabItems(expectedItems, tabs.getItems());
-        assertEquals("/content/tabs/jcr:content/root/responsivegrid/tabs-1/item_2", tabs.getActiveItem());
+        assertEquals("item_2", tabs.getActiveItem());
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs1"));
     }
 
@@ -89,16 +89,14 @@ public class TabsImplTest {
         return request.adaptTo(Tabs.class);
     }
 
-    private void verifyTabItems(Object[][] expectedItems, List<ListItem> items) {
+    private void verifyTabItems(Object[][] expectedItems, List<ContainerItem> items) {
         assertEquals("The tabs contains a different number of items than expected.", expectedItems.length, items.size());
         int index = 0;
-        for (ListItem item : items) {
-            assertEquals("The tabs item's path is not what was expected.",
-                expectedItems[index][0], item.getPath());
+        for (ContainerItem item : items) {
+            assertEquals("The tabs item's name is not what was expected.",
+                expectedItems[index][0], item.getName());
             assertEquals("The tabs item's title is not what was expected: " + item.getTitle(),
                 expectedItems[index][1], item.getTitle());
-            assertEquals("The tabs item's description is not what was expected: " + item.getDescription(),
-                expectedItems[index][2], item.getDescription());
             index++;
         }
     }

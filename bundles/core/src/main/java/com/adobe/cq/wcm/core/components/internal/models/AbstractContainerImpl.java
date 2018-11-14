@@ -23,8 +23,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
-import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Container;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
@@ -39,17 +39,17 @@ public abstract class AbstractContainerImpl implements Container {
     @Self
     private SlingHttpServletRequest request;
 
-    private List<ListItem> items;
+    private List<ContainerItem> items;
 
-    private List<ListItem> readItems() {
-        List<ListItem> items = new ArrayList<>();
+    private List<ContainerItem> readItems() {
+        List<ContainerItem> items = new ArrayList<>();
         if (resource != null) {
             ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
             if (componentManager != null) {
                 for (Resource res : resource.getChildren()) {
                     Component component = componentManager.getComponentOfResource(res);
                     if (component != null) {
-                        items.add(new ResourceListItemImpl(request, res));
+                        items.add(new ContainerItemImpl(request, res));
                     }
                 }
             }
@@ -58,7 +58,7 @@ public abstract class AbstractContainerImpl implements Container {
     }
 
     @Override
-    public List<ListItem> getItems() {
+    public List<ContainerItem> getItems() {
         if (items == null) {
             items = readItems();
         }

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models;
 
-import java.util.Calendar;
-
 import javax.annotation.Nonnull;
 
 import org.apache.sling.api.resource.Resource;
@@ -25,33 +23,24 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
-public class ResourceListItemImpl implements ListItem {
+public class ContainerItemImpl implements ContainerItem {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceListItemImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContainerItemImpl.class);
 
-    protected String url;
+    protected SlingHttpServletRequest request;
     protected String title;
-    protected String description;
-    protected Calendar lastModified;
-    protected String path;
+    protected String name;
 
-    public ResourceListItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
+    public ContainerItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
-            title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            description = valueMap.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+            String jcrTitle = valueMap.get(JcrConstants.JCR_TITLE, String.class);
+            title = valueMap.get(ContainerItem.PN_PANEL_TITLE, jcrTitle);
         }
-        path = resource.getPath();
-        url = null;
-    }
-
-    @Override
-    public String getURL() {
-        return url;
+        name = resource.getName();
     }
 
     @Override
@@ -60,18 +49,8 @@ public class ResourceListItemImpl implements ListItem {
     }
 
     @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public Calendar getLastModified() {
-        return lastModified;
-    }
-
-    @Override
-    public String getPath() {
-        return path;
+    public String getName() {
+        return name;
     }
 
 }

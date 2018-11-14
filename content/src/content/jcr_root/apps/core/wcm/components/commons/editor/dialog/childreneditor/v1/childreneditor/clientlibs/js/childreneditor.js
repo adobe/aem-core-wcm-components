@@ -18,7 +18,7 @@
 
     var NS = ".cmp-childreneditor";
     var NN_PREFIX = "item_";
-    var PN_TITLE = "jcr:title";
+    var PN_PANEL_TITLE = "cq:panelTitle";
     var PN_RESOURCE_TYPE = "sling:resourceType";
     var POST_SUFFIX = ".container.html";
 
@@ -206,7 +206,7 @@
                                                 item.dataset["name"] = name;
 
                                                 var input = item.querySelectorAll(selectors.item.input)[0];
-                                                input.name = "./" + name + "/" + PN_TITLE;
+                                                input.name = "./" + name + "/" + PN_PANEL_TITLE;
                                                 input.placeholder = Granite.I18n.get(componentTitle);
 
                                                 var hiddenInput = item.querySelectorAll(selectors.item.hiddenInput)[0];
