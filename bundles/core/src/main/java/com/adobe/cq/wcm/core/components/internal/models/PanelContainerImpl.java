@@ -28,9 +28,6 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
-/**
- * Abstract class which can be used as base class for {@link Container} implementations.
- */
 public class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
     private List<ListItem> readItems() {
