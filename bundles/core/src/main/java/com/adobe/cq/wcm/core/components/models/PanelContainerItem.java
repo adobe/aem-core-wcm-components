@@ -20,39 +20,18 @@ import javax.annotation.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Interface for a generic container item, used by the {@link Tabs} and {@link Carousel} models.
+ * Interface for a generic panel container item, used by the {@link Tabs} and {@link Carousel} models.
  *
- * @since com.adobe.cq.wcm.core.components.models 13.0.0
+ * @since com.adobe.cq.wcm.core.components.models 12.6.0
  */
 @ConsumerType
-public interface ContainerItem {
+public interface PanelContainerItem extends ListItem {
 
     /**
      * Name of the resource property that defines the container item title
      *
-     * @since com.adobe.cq.wcm.core.components.models 13.0.0
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
      */
     String PN_PANEL_TITLE = "cq:panelTitle";
 
-    /**
-     * Returns the title of this {@code ContainerItem}.
-     *
-     * @return the title of this container item or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 13.0.0
-     */
-    @Nullable
-    default String getTitle() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the name of this {@code ContainerItem}.
-     *
-     * @return the container item name or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 13.0.0
-     */
-    @Nullable
-    default String getName() {
-        throw new UnsupportedOperationException();
-    }
 }

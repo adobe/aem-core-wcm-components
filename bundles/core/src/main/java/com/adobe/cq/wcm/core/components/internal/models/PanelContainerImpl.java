@@ -31,15 +31,7 @@ import com.day.cq.wcm.api.components.ComponentManager;
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
  */
-public abstract class AbstractContainerImpl implements Container {
-
-    @SlingObject
-    protected Resource resource;
-
-    @Self
-    protected SlingHttpServletRequest request;
-
-    protected List<ListItem> items;
+public class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
     private List<ListItem> readItems() {
         List<ListItem> items = new ArrayList<>();
@@ -49,7 +41,7 @@ public abstract class AbstractContainerImpl implements Container {
                 for (Resource res : resource.getChildren()) {
                     Component component = componentManager.getComponentOfResource(res);
                     if (component != null) {
-                        items.add(new ResourceListItemImpl(request, res));
+                        items.add(new PanelContainerItemImpl(request, res));
                     }
                 }
             }
@@ -60,6 +52,7 @@ public abstract class AbstractContainerImpl implements Container {
     @Override
     public List<ListItem> getItems() {
         if (items == null) {
+            super.getItems();
             items = readItems();
         }
         return items;

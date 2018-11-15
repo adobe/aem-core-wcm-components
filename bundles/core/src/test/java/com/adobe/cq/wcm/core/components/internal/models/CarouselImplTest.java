@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.ContainerItem;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -59,7 +59,7 @@ public class CarouselImplTest {
     @Test
     public void testEmptyCarousel() {
         Carousel carousel = new CarouselImpl();
-        List<ContainerItem> items = carousel.getItems();
+        List<ListItem> items = carousel.getItems();
         assertTrue("", items == null || items.size() == 0);
     }
 
@@ -104,10 +104,10 @@ public class CarouselImplTest {
         return request.adaptTo(Carousel.class);
     }
 
-    private void verifyCarouselItems(Object[][] expectedItems, List<ContainerItem> items) {
+    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items) {
         assertEquals("The carousel contains a different number of items than expected.", expectedItems.length, items.size());
         int index = 0;
-        for (ContainerItem item : items) {
+        for (ListItem item : items) {
             assertEquals("The carousel item's name is not what was expected.",
                 expectedItems[index][0], item.getName());
             assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),

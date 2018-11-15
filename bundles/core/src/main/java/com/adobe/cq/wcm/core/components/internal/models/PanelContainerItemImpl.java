@@ -20,37 +20,18 @@ import javax.annotation.Nonnull;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.models.ContainerItem;
+import com.adobe.cq.wcm.core.components.models.PanelContainerItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
-public class ContainerItemImpl implements ContainerItem {
+public class PanelContainerItemImpl extends ResourceListItemImpl implements PanelContainerItem {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContainerItemImpl.class);
-
-    protected SlingHttpServletRequest request;
-    protected String title;
-    protected String name;
-
-    public ContainerItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
+    public PanelContainerItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
+        super(request, resource);
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             String jcrTitle = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            title = valueMap.get(ContainerItem.PN_PANEL_TITLE, jcrTitle);
+            title = valueMap.get(PanelContainerItem.PN_PANEL_TITLE, jcrTitle);
         }
-        name = resource.getName();
     }
-
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
 }

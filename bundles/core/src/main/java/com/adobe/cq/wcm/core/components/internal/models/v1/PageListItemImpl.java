@@ -31,6 +31,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl implements ListItem {
 
@@ -83,6 +84,9 @@ public class PageListItemImpl implements ListItem {
         return page.getPath();
     }
 
+    @Override
+    @JsonIgnore
+    public String getName() { return page.getName(); }
 
     private Page getRedirectTarget(@Nonnull Page page) {
         Page result = page;
