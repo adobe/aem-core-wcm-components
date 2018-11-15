@@ -84,23 +84,11 @@ public class AbstractContainerImplTest {
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        final MockSlingHttpServletRequest request =
-            new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        SlingBindings slingBindings = new SlingBindings();
-        slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
-        Style style = mock(Style.class);
-        when(style.get(any(), any(Object.class))).thenAnswer(
-            invocation -> invocation.getArguments()[1]
-        );
-        slingBindings.put(WCMBindings.CURRENT_STYLE, style);
-        request.setAttribute(SlingBindings.class.getName(), slingBindings);
+        AEM_CONTEXT.currentResource(resource);
+        AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
         Container container = new ContainerImpl();
         Whitebox.setInternalState(container, "resource", resource);
-        Whitebox.setInternalState(container, "request", request);
+        Whitebox.setInternalState(container, "request", AEM_CONTEXT.request());
         return container;
     }
 
