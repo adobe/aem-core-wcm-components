@@ -15,7 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -36,8 +40,6 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
@@ -51,13 +53,13 @@ public abstract class AbstractContainerImpl implements Container {
     protected SlingHttpServletRequest request;
 
     @OSGiService
-    private SlingModelFilter slingModelFilter;
+    protected SlingModelFilter slingModelFilter;
 
     @OSGiService
-    private ModelFactory modelFactory;
+    protected ModelFactory modelFactory;
 
     protected List<ListItem> items;
-    private Map<String, ? extends ComponentExporter> itemModels;
+    protected Map<String, ? extends ComponentExporter> itemModels;
     private String[] exportedItemsOrder;
 
     private List<ListItem> readItems() {
@@ -130,46 +132,9 @@ public abstract class AbstractContainerImpl implements Container {
         for (Resource child : slingModelFilter.filterChildResources(itemResources)) {
             T model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
             if (model != null) {
-                for (ListItem item : items) {
-                    if (item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), child.getName())) {
-                        JsonWrapper<T> wrappedModel = new JsonWrapper<T>(model, item);
-                        models.put(child.getName(), (T) wrappedModel);
-                    }
-                }
+                models.put(child.getName(), (T) model);
             }
         }
         return models;
     }
-
-    /**
-     * Wrapper class used to add specific properties of the container items to the JSON serialization of the underlying container item model
-     *
-     * @param <T> the model class of the underlying container item model
-     */
-    static class JsonWrapper<T> {
-        private T inner;
-        private String panelTitle;
-
-        JsonWrapper(T inner, ListItem item) {
-            this.inner = inner;
-            this.panelTitle = item.getTitle();
-        }
-
-        /**
-         * @return the underlying container item model
-         */
-        @JsonUnwrapped
-        public T getInner() {
-            return inner;
-        }
-
-        /**
-         * @return the container item title
-         */
-        @JsonProperty(ListItem.PN_PANEL_TITLE)
-        public String getPanelTitle() {
-            return panelTitle;
-        }
-    }
-
 }
