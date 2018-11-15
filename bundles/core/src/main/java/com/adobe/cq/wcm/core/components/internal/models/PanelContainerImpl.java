@@ -58,7 +58,6 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
     @Override
     public List<ListItem> getItems() {
         if (items == null) {
-            super.getItems();
             items = readItems();
         }
         return items;
