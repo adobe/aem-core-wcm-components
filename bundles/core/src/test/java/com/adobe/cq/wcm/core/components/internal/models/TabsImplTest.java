@@ -26,8 +26,8 @@ import org.junit.Test;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
-import com.adobe.cq.wcm.core.components.models.ContainerItem;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -56,7 +56,7 @@ public class TabsImplTest {
     @Test
     public void testEmptyTabs() {
         Tabs tabs = new TabsImpl();
-        List<ContainerItem> items = tabs.getItems();
+        List<ListItem> items = tabs.getItems();
         Assert.assertTrue("", items == null || items.size() == 0);
     }
 
@@ -88,10 +88,10 @@ public class TabsImplTest {
         return AEM_CONTEXT.request().adaptTo(Tabs.class);
     }
 
-    private void verifyTabItems(Object[][] expectedItems, List<ContainerItem> items) {
+    private void verifyTabItems(Object[][] expectedItems, List<ListItem> items) {
         assertEquals("The tabs contains a different number of items than expected.", expectedItems.length, items.size());
         int index = 0;
-        for (ContainerItem item : items) {
+        for (ListItem item : items) {
             assertEquals("The tabs item's name is not what was expected.",
                 expectedItems[index][0], item.getName());
             assertEquals("The tabs item's title is not what was expected: " + item.getTitle(),

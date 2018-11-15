@@ -32,7 +32,7 @@ import org.apache.sling.models.factory.ModelFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.models.Container;
-import com.adobe.cq.wcm.core.components.models.ContainerItem;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,7 +48,7 @@ public abstract class AbstractContainerImpl implements Container {
     protected Resource resource;
 
     @Self
-    private SlingHttpServletRequest request;
+    protected SlingHttpServletRequest request;
 
     @OSGiService
     private SlingModelFilter slingModelFilter;
@@ -56,19 +56,19 @@ public abstract class AbstractContainerImpl implements Container {
     @OSGiService
     private ModelFactory modelFactory;
 
-    private List<ContainerItem> items;
+    protected List<ListItem> items;
     private Map<String, ? extends ComponentExporter> itemModels;
     private String[] exportedItemsOrder;
 
-    private List<ContainerItem> readItems() {
-        List<ContainerItem> items = new ArrayList<>();
+    private List<ListItem> readItems() {
+        List<ListItem> items = new ArrayList<>();
         if (resource != null) {
             ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
             if (componentManager != null) {
                 for (Resource res : resource.getChildren()) {
                     Component component = componentManager.getComponentOfResource(res);
                     if (component != null) {
-                        items.add(new ContainerItemImpl(request, res));
+                        items.add(new ResourceListItemImpl(request, res));
                     }
                 }
             }
@@ -78,7 +78,7 @@ public abstract class AbstractContainerImpl implements Container {
 
     @Override
     @JsonIgnore
-    public List<ContainerItem> getItems() {
+    public List<ListItem> getItems() {
         if (items == null) {
             items = readItems();
         }
@@ -117,9 +117,9 @@ public abstract class AbstractContainerImpl implements Container {
     private <T> Map<String, T> getItemModels(@Nonnull SlingHttpServletRequest request,
                                               @Nonnull Class<T> modelClass) {
         Map<String, T> models = new LinkedHashMap<>();
-        List<ContainerItem> items = getItems();
+        List<ListItem> items = getItems();
         List<Resource> itemResources = new ArrayList<>();
-        for (ContainerItem item : items) {
+        for (ListItem item : items) {
             if (item != null && StringUtils.isNotEmpty(item.getName())) {
                 Resource itemResource = request.getResourceResolver().getResource(resource, item.getName());
                 if (itemResource != null) {
@@ -130,7 +130,7 @@ public abstract class AbstractContainerImpl implements Container {
         for (Resource child : slingModelFilter.filterChildResources(itemResources)) {
             T model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
             if (model != null) {
-                for (ContainerItem item : items) {
+                for (ListItem item : items) {
                     if (item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), child.getName())) {
                         JsonWrapper<T> wrappedModel = new JsonWrapper<T>(model, item);
                         models.put(child.getName(), (T) wrappedModel);
@@ -150,7 +150,7 @@ public abstract class AbstractContainerImpl implements Container {
         private T inner;
         private String panelTitle;
 
-        JsonWrapper(T inner, ContainerItem item) {
+        JsonWrapper(T inner, ListItem item) {
             this.inner = inner;
             this.panelTitle = item.getTitle();
         }
@@ -166,7 +166,7 @@ public abstract class AbstractContainerImpl implements Container {
         /**
          * @return the container item title
          */
-        @JsonProperty(ContainerItem.PN_PANEL_TITLE)
+        @JsonProperty(ListItem.PN_PANEL_TITLE)
         public String getPanelTitle() {
             return panelTitle;
         }

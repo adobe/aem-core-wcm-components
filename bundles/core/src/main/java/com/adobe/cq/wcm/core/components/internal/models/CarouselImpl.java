@@ -30,7 +30,7 @@ import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class CarouselImpl extends AbstractContainerImpl implements Carousel {
+public class CarouselImpl extends PanelContainerImpl implements Carousel {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/carousel/v1/carousel";
     protected static final Long DEFAULT_DELAY = 5000L; // milliseconds
