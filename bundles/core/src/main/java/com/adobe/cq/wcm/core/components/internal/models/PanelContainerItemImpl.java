@@ -21,17 +21,18 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
 
-import com.adobe.cq.wcm.core.components.models.PanelContainerItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
-public class PanelContainerItemImpl extends ResourceListItemImpl implements PanelContainerItem {
+public class PanelContainerItemImpl extends ResourceListItemImpl {
+
+    public static final String PN_PANEL_TITLE = "cq:panelTitle";
 
     public PanelContainerItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
         super(request, resource);
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             String jcrTitle = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            title = valueMap.get(PanelContainerItem.PN_PANEL_TITLE, jcrTitle);
+            title = valueMap.get(PN_PANEL_TITLE, jcrTitle);
         }
     }
 }
