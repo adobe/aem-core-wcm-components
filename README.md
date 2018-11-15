@@ -114,7 +114,7 @@ core components package into your own project maven build you can add the depend
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.1.0</version>
+     <version>2.2.0</version>
  </dependency>
  ```
 
