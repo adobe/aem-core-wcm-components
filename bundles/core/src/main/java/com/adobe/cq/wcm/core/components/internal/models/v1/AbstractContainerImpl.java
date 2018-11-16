@@ -38,7 +38,6 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.Lists;
 
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
@@ -59,40 +58,39 @@ public abstract class AbstractContainerImpl implements Container {
 
     protected List<ListItem> items;
     protected List<Resource> childComponents;
+    protected List<Resource> filteredChildComponents;
 
     protected Map<String, ? extends ComponentExporter> itemModels;
     private String[] exportedItemsOrder;
 
     /**
-     * Read the list of children resources that are components, filtered by the Sling Model Filter
+     * Read the list of children resources that are components
      *
      * @return
      */
+    @Nonnull
     private List<Resource> readChildren() {
         List<Resource> children = new LinkedList<>();
         if (resource != null) {
             ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
             if (componentManager != null) {
-                for (Resource res : resource.getChildren()) {
+                resource.getChildren().forEach(res -> {
                     Component component = componentManager.getComponentOfResource(res);
                     if (component != null) {
                         children.add(res);
                     }
-                }
+                });
             }
         }
-        if (slingModelFilter != null) {
-            return Lists.newLinkedList(slingModelFilter.filterChildResources(children));
-        } else {
-            return children;
-        }
+        return children;
     }
 
     /**
-     * Return (and cache) the list of children resources that are components, filtered by the Sling Model Filter
+     * Return (and cache) the list of children resources that are components
      *
      * @return
      */
+    @Nonnull
     protected List<Resource> getChildren() {
         if (childComponents == null) {
             childComponents = readChildren();
@@ -101,15 +99,32 @@ public abstract class AbstractContainerImpl implements Container {
     }
 
     /**
+     * Return (and cache) the list of children resources that are components, filtered by the Sling Model Filter. This
+     * should only be used for JSON export, for other usages refer to {@link AbstractContainerImpl#getChildren}.
+     *
+     * @return
+     */
+    @Nonnull
+    protected List<Resource> getFilteredChildren() {
+        if (filteredChildComponents == null) {
+            filteredChildComponents = new LinkedList<>();
+            slingModelFilter.filterChildResources(getChildren())
+                    .forEach(filteredChildComponents::add);
+        }
+        return filteredChildComponents;
+    }
+
+    /**
      * Read the list of items in the container
      *
      * @return
      */
+    @Nonnull
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
-        for (Resource res : getChildren()) {
+        getChildren().forEach(res -> {
             items.add(new ResourceListItemImpl(request, res));
-        }
+        });
         return items;
     }
 
@@ -154,12 +169,12 @@ public abstract class AbstractContainerImpl implements Container {
     protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
                                                @Nonnull Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = new LinkedHashMap<>();
-        for (Resource child : getChildren()) {
+        getFilteredChildren().forEach(child -> {
             ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
             if (model != null) {
                 models.put(child.getName(), model);
             }
-        }
+        });
         return models;
     }
 }

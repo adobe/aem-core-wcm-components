@@ -37,9 +37,9 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
     @Override
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
-        for (Resource res : getChildren()) {
+        getChildren().forEach(res -> {
             items.add(new PanelContainerItemImpl(request, res));
-        }
+        });
         return items;
     }
 
@@ -47,14 +47,14 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
     protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
                                                            @Nonnull Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = super.getItemModels(request, modelClass);
-        for (Map.Entry<String, ComponentExporter> entry : models.entrySet()) {
-            for (ListItem item : getItems()) {
-                if (item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey())) {
-                    entry.setValue(new JsonWrapper(entry.getValue(), item));
-                }
+        models.entrySet().forEach(entry -> {
+            ListItem match = getItems().stream()
+                    .filter(item -> item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey()))
+                    .findFirst().get();
+            if (match != null) {
+                entry.setValue(new JsonWrapper(entry.getValue(), match));
             }
-        }
-
+        });
         return models;
     }
 
@@ -62,12 +62,11 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
      * Wrapper class used to add specific properties of the container items to the JSON serialization of the underlying container item model
      *
      */
-    @JsonInclude(JsonInclude.Include.ALWAYS)
     static class JsonWrapper implements ComponentExporter {
         private ComponentExporter inner;
         private String panelTitle;
 
-        JsonWrapper(ComponentExporter inner, ListItem item) {
+        JsonWrapper(@Nonnull ComponentExporter inner, ListItem item) {
             this.inner = inner;
             this.panelTitle = item.getTitle();
         }
@@ -84,6 +83,7 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
          * @return the container item title
          */
         @JsonProperty(PanelContainerItemImpl.PN_PANEL_TITLE)
+        @JsonInclude(JsonInclude.Include.ALWAYS)
         public String getPanelTitle() {
             return panelTitle;
         }
