@@ -18,7 +18,7 @@
         "jcr:primaryType": "sling:Folder",
         "v1"             : {
             "jcr:primaryType": "nt:unstructured",
-            "carousel"         : {
+            "carousel"       : {
                 "cq:isContainer"         : "true",
                 "cq:icon"                : "imageCarousel",
                 "jcr:description"        : "Cycles through a list of generic content items",
