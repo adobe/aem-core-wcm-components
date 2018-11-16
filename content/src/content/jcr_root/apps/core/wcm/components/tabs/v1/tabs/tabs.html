@@ -23,13 +23,13 @@
         aria-multiselectable="false">
         <li data-sly-repeat.item="${tabs.items}"
             role="tab"
-            class="cmp-tabs__tab${item.path == tabs.activeItem ? ' cmp-tabs__tab--active' : ''}"
+            class="cmp-tabs__tab${item.name == tabs.activeItem ? ' cmp-tabs__tab--active' : ''}"
             data-cmp-hook-tabs="tab">${item.title}</li>
     </ol>
     <div data-sly-repeat.item="${tabs.items}"
-         data-sly-resource="${item.path @ decorationTagName='div'}"
+         data-sly-resource="${item.name @ decorationTagName='div'}"
          role="tabpanel"
-         class="cmp-tabs__tabpanel${item.path == tabs.activeItem ? ' cmp-tabs__tabpanel--active' : ''}"
+         class="cmp-tabs__tabpanel${item.name == tabs.activeItem ? ' cmp-tabs__tabpanel--active' : ''}"
          data-cmp-hook-tabs="tabpanel"></div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
          data-sly-test="${(wcmmode.edit || wcmmode.preview) && tabs.items.size < 1}"></sly>

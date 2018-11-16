@@ -40,6 +40,11 @@ public class Item {
     protected String iconAbbreviation;
 
     /**
+     * Name of the resource property that defines a panel title
+     */
+    String PN_PANEL_TITLE = "cq:panelTitle";
+
+    /**
      * Name of the resource property that defines a component icon
      */
     String PN_ICON = "cq:icon";
@@ -72,7 +77,8 @@ public class Item {
             name = resource.getName();
             ValueMap vm = resource.adaptTo(ValueMap.class);
             if (vm != null) {
-                value = vm.get(JcrConstants.JCR_TITLE, String.class);
+                String jcrTitle = vm.get(JcrConstants.JCR_TITLE, String.class);
+                value = vm.get(PN_PANEL_TITLE, jcrTitle);
             }
         }
         ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);

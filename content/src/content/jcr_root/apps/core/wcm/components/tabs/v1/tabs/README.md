@@ -33,7 +33,7 @@ The component policy dialog allows definition of allowed components for the Tabs
 ### Edit Dialog Properties
 The following properties are written to JCR for this Tabs component and are expected to be available as `Resource` properties:
 
-1. `./activeItem` - defines the item that is active by default.
+1. `./activeItem` - defines the name of the item that is active by default.
 
 The edit dialog also allows editing of Tabs items (adding, removing, naming, re-ordering).
 
