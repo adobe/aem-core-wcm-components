@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
@@ -27,19 +29,21 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
+import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import java.util.Calendar;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-        adapters = Download.class,
-        defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
-        resourceType = DownloadImpl.RESOURCE_TYPE)
-public class DownloadImpl  implements Download {
+       adapters = {Download.class, ComponentExporter.class},
+       resourceType = DownloadImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class DownloadImpl implements Download {
 
     private static final Logger LOG = LoggerFactory.getLogger(DownloadImpl.class);
 
@@ -67,13 +71,13 @@ public class DownloadImpl  implements Download {
 
     private boolean descriptionFromAsset = false;
 
-    @ValueMapValue(name = "jcr:title")
+    @ValueMapValue(optional = true, name = "jcr:title")
     private String title;
 
-    @ValueMapValue(name = "jcr:description")
+    @ValueMapValue(optional = true, name = "jcr:description")
     private String description;
 
-    @ValueMapValue
+    @ValueMapValue(optional = true)
     private String ctaText;
 
     private String imagePath;
@@ -83,35 +87,27 @@ public class DownloadImpl  implements Download {
     private long lastModified = 0;
 
     @PostConstruct
-    protected void initModel()
-    {
+    protected void initModel() {
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         titleFromAsset = properties.get(PN_TITLE_FROM_ASSET, titleFromAsset);
         descriptionFromAsset = properties.get(PN_DESCRIPTION_FROM_ASSET, descriptionFromAsset);
-        if(currentStyle != null)
-        {
-            if(StringUtils.isBlank(ctaText))
-            {
+        if (currentStyle != null) {
+            if (StringUtils.isBlank(ctaText)) {
                 ctaText = currentStyle.get("ctaText", String.class);
             }
             titleType = currentStyle.get("titleType", String.class);
         }
-        if(StringUtils.isNotBlank(fileReference))
-        {
+        if (StringUtils.isNotBlank(fileReference)) {
             Resource downloadResource = resourceResolver.getResource(fileReference);
-            if(downloadResource != null)
-            {
+            if (downloadResource != null) {
                 Asset downloadAsset = downloadResource.adaptTo(Asset.class);
-                if(downloadAsset != null)
-                {
+                if (downloadAsset != null) {
                     Calendar resourceLastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
-                    if(resourceLastModified != null)
-                    {
+                    if (resourceLastModified != null) {
                         lastModified = resourceLastModified.getTimeInMillis();
                     }
                     long assetLastModified = downloadAsset.getLastModified();
-                    if(assetLastModified > lastModified)
-                    {
+                    if (assetLastModified > lastModified) {
                         lastModified = assetLastModified;
                     }
 
@@ -122,32 +118,33 @@ public class DownloadImpl  implements Download {
                     String resourcePath = resourceResolver.map(request, resource.getPath());
 
                     imagePathBuilder.append(resourcePath).append(".coreimg.jpeg");
-                    if(lastModified > 0)
-                    {
+                    if (lastModified > 0) {
                         imagePathBuilder.append("/").append(lastModified).append(".jpeg");
                     }
 
                     imagePath = imagePathBuilder.toString();
 
-                    if(titleFromAsset)
-                    {
+                    if (titleFromAsset) {
                         String assetTitle = downloadAsset.getMetadataValue("dc:title");
-                        if(StringUtils.isNotBlank(assetTitle))
-                        {
+                        if (StringUtils.isNotBlank(assetTitle)) {
                             title = assetTitle;
                         }
                     }
-                    if(descriptionFromAsset)
-                    {
+                    if (descriptionFromAsset) {
                         String assetDescription = downloadAsset.getMetadataValue("dc:description");
-                        if(StringUtils.isNotBlank(assetDescription))
-                        {
+                        if (StringUtils.isNotBlank(assetDescription)) {
                             description = assetDescription;
                         }
                     }
                 }
             }
         }
+    }
+
+    @Nonnull
+    @Override
+    public String getExportedType() {
+        return request.getResource().getResourceType();
     }
 
     @Override

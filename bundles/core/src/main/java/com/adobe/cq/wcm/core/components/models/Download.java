@@ -16,13 +16,18 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
+import com.adobe.cq.export.json.ComponentExporter;
+
+import javax.annotation.Nonnull;
+
 /**
  * Sling model for the Download component.
  */
-public interface Download {
+public interface Download extends ComponentExporter {
 
     String PN_TITLE_FROM_ASSET = "titleFromAsset";
     String PN_DESCRIPTION_FROM_ASSET = "descriptionFromAsset";
+
 
     /**
      * Returns either the title configured in the dialog or the title of the DAM asset,
@@ -85,4 +90,13 @@ public interface Download {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @see ComponentExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @Nonnull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
 }
