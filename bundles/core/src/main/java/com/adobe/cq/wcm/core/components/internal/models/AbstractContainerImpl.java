@@ -61,6 +61,7 @@ public abstract class AbstractContainerImpl implements Container {
     protected List<ListItem> items;
     protected Map<String, ? extends ComponentExporter> itemModels;
     private String[] exportedItemsOrder;
+    protected List<ListItem> items;
 
     private List<ListItem> readItems() {
         List<ListItem> items = new ArrayList<>();

@@ -29,7 +29,6 @@ import org.apache.sling.api.resource.Resource;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.PanelContainerItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -122,7 +121,7 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
         /**
          * @return the container item title
          */
-        @JsonProperty(PanelContainerItem.PN_PANEL_TITLE)
+        @JsonProperty(PanelContainerItemImpl.PN_PANEL_TITLE)
         public String getPanelTitle() {
             return panelTitle;
         }
