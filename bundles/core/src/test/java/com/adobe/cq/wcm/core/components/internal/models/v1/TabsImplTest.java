@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 
@@ -28,6 +28,7 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
+import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -49,6 +50,7 @@ public class TabsImplTest {
 
     @Before
     public void init() {
+        AEM_CONTEXT.addModelsForClasses(MockResponsiveGrid.class);
         AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
         AEM_CONTEXT.registerService(SlingModelFilter.class, new MockSlingModelFilter());
     }

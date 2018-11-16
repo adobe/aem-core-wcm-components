@@ -7,7 +7,6 @@
     ":type": "core/wcm/components/tabs/v1/tabs",
     ":items": {
         "item_1": {
-            "activeItem": "item_1_2",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -19,8 +18,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    ":type": "core/wcm/components/teaser/v1/teaser",
-                    "cq:panelTitle": "Teaser 1"
+                    ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
                     "activeItem": "item_1_2_2",
@@ -42,16 +40,14 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
-                                    ":type": "core/wcm/components/teaser/v1/teaser",
-                                    "cq:panelTitle": "Teaser 1"
+                                    ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_1_2": {
                                     "actionsEnabled": false,
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
-                                    ":type": "core/wcm/components/teaser/v1/teaser",
-                                    "cq:panelTitle": "Teaser 2"
+                                    ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
                             "cq:panelTitle": "Tab 1.1"
@@ -68,10 +64,12 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
-                                    ":type": "core/wcm/components/teaser/v1/teaser",
-                                    "cq:panelTitle": "Teaser 1"
+                                    ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
+                                    "autopauseDisabled": false,
+                                    "autoplay": false,
+                                    "delay": 5000,
                                     ":itemsOrder": [
                                         "item_1_2_2_2_1",
                                         "item_1_2_2_2_2",
@@ -103,14 +101,12 @@
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 3"
                                         }
-                                    },
-                                    "cq:panelTitle": "Carousel 1"
+                                    }
                                 }
                             },
                             "cq:panelTitle": "Tab 1.2"
                         }
-                    },
-                    "cq:panelTitle": null
+                    }
                 }
             },
             "cq:panelTitle": "Tab 1"
@@ -127,16 +123,14 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    ":type": "core/wcm/components/teaser/v1/teaser",
-                    "cq:panelTitle": "Teaser 1"
+                    ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_2_2": {
                     "actionsEnabled": false,
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    ":type": "core/wcm/components/teaser/v1/teaser",
-                    "cq:panelTitle": "Teaser 2"
+                    ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
             "cq:panelTitle": "Tab 2"

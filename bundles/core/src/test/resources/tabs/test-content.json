@@ -63,7 +63,6 @@
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Tab 1",
                             "sling:resourceType": "core/wcm/components/responsivegrid",
-                            "activeItem"        : "item_1_2",
                             "item_1_1": {
                                 "jcr:primaryType"   : "nt:unstructured",
                                 "jcr:title"         : "Teaser 1",

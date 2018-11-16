@@ -18,16 +18,14 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    ":type": "core/wcm/components/teaser/v1/teaser",
-                    "cq:panelTitle": "Teaser 1"
+                    ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
                     "actionsEnabled": false,
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    ":type": "core/wcm/components/teaser/v1/teaser",
-                    "cq:panelTitle": "Teaser 2"
+                    ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
             "cq:panelTitle": "Tab 1"
@@ -44,16 +42,14 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    ":type": "core/wcm/components/teaser/v1/teaser",
-                    "cq:panelTitle": "Teaser 1"
+                    ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_2_2": {
                     "actionsEnabled": false,
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    ":type": "core/wcm/components/teaser/v1/teaser",
-                    "cq:panelTitle": "Teaser 2"
+                    ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
             "cq:panelTitle": "Tab Panel 2"
