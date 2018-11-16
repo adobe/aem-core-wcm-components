@@ -29,7 +29,7 @@ import com.adobe.cq.wcm.core.components.models.Tabs;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TabsImpl extends AbstractContainerImpl implements Tabs {
+public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TabsImpl.class);
 
@@ -38,16 +38,16 @@ public class TabsImpl extends AbstractContainerImpl implements Tabs {
     @ValueMapValue(optional = true)
     private String activeItem;
 
-    private String activeItemPath;
+    private String activeItemName;
 
     @Override
     public String getActiveItem() {
-        if (activeItemPath == null) {
+        if (activeItemName == null) {
             Resource active = resource.getChild(activeItem);
             if (active != null) {
-                activeItemPath = active.getPath();
+                activeItemName = activeItem;
             }
         }
-        return activeItemPath;
+        return activeItemName;
     }
 }

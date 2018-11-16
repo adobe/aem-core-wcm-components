@@ -22,7 +22,7 @@
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}">
     <div class="cmp-carousel__content" data-sly-test="${carousel.items && carousel.items.size > 0}" >
         <div data-sly-repeat.item="${carousel.items}"
-             data-sly-resource="${item.path @ decorationTagName='div'}"
+             data-sly-resource="${item.name @ decorationTagName='div'}"
              role="tabpanel"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              data-cmp-hook-carousel="item"></div>
