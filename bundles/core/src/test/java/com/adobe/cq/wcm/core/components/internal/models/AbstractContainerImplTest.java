@@ -51,7 +51,7 @@ public class AbstractContainerImplTest {
     private static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT_PAGE = "/content/container";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
-    private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
+    private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     @ClassRule
@@ -71,7 +71,7 @@ public class AbstractContainerImplTest {
 
     @Test
     public void testContainerWithItems() {
-        Container container = getContainerUnderTest(CAROUSEL_1);
+        Container container = getContainerUnderTest(CONTAINER_1);
         Object[][] expectedItems = {
             {"Teaser 1 description", "item_1", "/content/container/jcr:content/root/responsivegrid/container-1/item_1", "Teaser 1"},
             {"Teaser 2 description", "item_2", "/content/container/jcr:content/root/responsivegrid/container-1/item_2", "Teaser 2"},

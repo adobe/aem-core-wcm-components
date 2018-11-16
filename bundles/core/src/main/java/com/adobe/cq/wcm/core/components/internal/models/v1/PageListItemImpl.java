@@ -86,7 +86,9 @@ public class PageListItemImpl implements ListItem {
 
     @Override
     @JsonIgnore
-    public String getName() { return page.getName(); }
+    public String getName() {
+        return page.getName();
+    }
 
     private Page getRedirectTarget(@Nonnull Page page) {
         Page result = page;
