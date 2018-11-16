@@ -21,9 +21,10 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.SlingHttpServletRequest;
 
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
-public class PanelContainerItemImpl extends ResourceListItemImpl {
+public class PanelContainerItemImpl extends ResourceListItemImpl implements ListItem {
 
     public static final String PN_PANEL_TITLE = "cq:panelTitle";
 
