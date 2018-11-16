@@ -16,18 +16,16 @@
 package com.adobe.cq.wcm.core.components.internal.models;
 
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -40,6 +38,7 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
 
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
@@ -59,21 +58,57 @@ public abstract class AbstractContainerImpl implements Container {
     protected ModelFactory modelFactory;
 
     protected List<ListItem> items;
+    protected List<Resource> childComponents;
+
     protected Map<String, ? extends ComponentExporter> itemModels;
     private String[] exportedItemsOrder;
 
-    private List<ListItem> readItems() {
-        List<ListItem> items = new ArrayList<>();
+    /**
+     * Read the list of children resources that are components, filtered by the Sling Model Filter
+     *
+     * @return
+     */
+    private List<Resource> readChildren() {
+        List<Resource> children = new LinkedList<>();
         if (resource != null) {
             ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
             if (componentManager != null) {
                 for (Resource res : resource.getChildren()) {
                     Component component = componentManager.getComponentOfResource(res);
                     if (component != null) {
-                        items.add(new ResourceListItemImpl(request, res));
+                        children.add(res);
                     }
                 }
             }
+        }
+        if (slingModelFilter != null) {
+            return Lists.newLinkedList(slingModelFilter.filterChildResources(children));
+        } else {
+            return children;
+        }
+    }
+
+    /**
+     * Return (and cache) the list of children resources that are components, filtered by the Sling Model Filter
+     *
+     * @return
+     */
+    protected List<Resource> getChildren() {
+        if (childComponents == null) {
+            childComponents = readChildren();
+        }
+        return childComponents;
+    }
+
+    /**
+     * Read the list of items in the container
+     *
+     * @return
+     */
+    protected List<ListItem> readItems() {
+        List<ListItem> items = new LinkedList<>();
+        for (Resource res : getChildren()) {
+            items.add(new ResourceListItemImpl(request, res));
         }
         return items;
     }
@@ -116,23 +151,13 @@ public abstract class AbstractContainerImpl implements Container {
         return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
     }
 
-    private <T> Map<String, T> getItemModels(@Nonnull SlingHttpServletRequest request,
-                                              @Nonnull Class<T> modelClass) {
-        Map<String, T> models = new LinkedHashMap<>();
-        List<ListItem> items = getItems();
-        List<Resource> itemResources = new ArrayList<>();
-        for (ListItem item : items) {
-            if (item != null && StringUtils.isNotEmpty(item.getName())) {
-                Resource itemResource = request.getResourceResolver().getResource(resource, item.getName());
-                if (itemResource != null) {
-                    itemResources.add(itemResource);
-                }
-            }
-        }
-        for (Resource child : slingModelFilter.filterChildResources(itemResources)) {
-            T model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
+    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
+                                               @Nonnull Class<ComponentExporter> modelClass) {
+        Map<String, ComponentExporter> models = new LinkedHashMap<>();
+        for (Resource child : getChildren()) {
+            ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
             if (model != null) {
-                models.put(child.getName(), (T) model);
+                models.put(child.getName(), model);
             }
         }
         return models;

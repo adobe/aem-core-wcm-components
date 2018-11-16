@@ -15,8 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,83 +28,46 @@ import org.apache.sling.api.resource.Resource;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.components.ComponentManager;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 public class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
-    private List<ListItem> readItems() {
-        List<ListItem> items = new ArrayList<>();
-        if (resource != null) {
-            ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
-            if (componentManager != null) {
-                for (Resource res : resource.getChildren()) {
-                    Component component = componentManager.getComponentOfResource(res);
-                    if (component != null) {
-                        items.add(new PanelContainerItemImpl(request, res));
-                    }
-                }
-            }
+    @Override
+    protected List<ListItem> readItems() {
+        List<ListItem> items = new LinkedList<>();
+        for (Resource res : getChildren()) {
+            items.add(new PanelContainerItemImpl(request, res));
         }
         return items;
     }
 
     @Override
-    public List<ListItem> getItems() {
-        if (items == null) {
-            items = readItems();
-        }
-        return items;
-    }
-
-    @Nonnull
-    @Override
-    public Map<String, ? extends ComponentExporter> getExportedItems() {
-        if (itemModels == null) {
-            itemModels = getItemModels(request, ComponentExporter.class);
-        }
-        return itemModels;
-    }
-
-    private <T> Map<String, T> getItemModels(@Nonnull SlingHttpServletRequest request,
-                                             @Nonnull Class<T> modelClass) {
-        Map<String, T> models = new LinkedHashMap<>();
-        List<ListItem> items = getItems();
-        List<Resource> itemResources = new ArrayList<>();
-        for (ListItem item : items) {
-            if (item != null && StringUtils.isNotEmpty(item.getName())) {
-                Resource itemResource = request.getResourceResolver().getResource(resource, item.getName());
-                if (itemResource != null) {
-                    itemResources.add(itemResource);
+    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
+                                                           @Nonnull Class<ComponentExporter> modelClass) {
+        Map<String, ComponentExporter> models = super.getItemModels(request, modelClass);
+        for (Map.Entry<String, ComponentExporter> entry : models.entrySet()) {
+            for (ListItem item : getItems()) {
+                if (item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey())) {
+                    entry.setValue(new JsonWrapper(entry.getValue(), item));
                 }
             }
         }
-        for (Resource child : slingModelFilter.filterChildResources(itemResources)) {
-            T model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
-            if (model != null) {
-                for (ListItem item : items) {
-                    if (item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), child.getName())) {
-                        JsonWrapper<T> wrappedModel = new JsonWrapper<T>(model, item);
-                        models.put(child.getName(), (T) wrappedModel);
-                    }
-                }
-            }
-        }
+
         return models;
     }
 
     /**
      * Wrapper class used to add specific properties of the container items to the JSON serialization of the underlying container item model
      *
-     * @param <T> the model class of the underlying container item model
      */
-    static class JsonWrapper<T> {
-        private T inner;
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    static class JsonWrapper implements ComponentExporter {
+        private ComponentExporter inner;
         private String panelTitle;
 
-        JsonWrapper(T inner, ListItem item) {
+        JsonWrapper(ComponentExporter inner, ListItem item) {
             this.inner = inner;
             this.panelTitle = item.getTitle();
         }
@@ -114,7 +76,7 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
          * @return the underlying container item model
          */
         @JsonUnwrapped
-        public T getInner() {
+        public ComponentExporter getInner() {
             return inner;
         }
 
@@ -124,6 +86,16 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
         @JsonProperty(PanelContainerItemImpl.PN_PANEL_TITLE)
         public String getPanelTitle() {
             return panelTitle;
+        }
+
+        @Nonnull
+        @Override
+        public String getExportedType() {
+            if (inner != null) {
+                return inner.getExportedType();
+            } else {
+                return "";
+            }
         }
     }
 }
