@@ -39,6 +39,7 @@ public interface Container extends ContainerExporter {
      * @return List of container items
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
+    @Nonnull
     default List<ListItem> getItems() {
         throw new UnsupportedOperationException();
     }

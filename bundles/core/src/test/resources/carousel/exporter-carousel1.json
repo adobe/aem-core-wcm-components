@@ -1,0 +1,37 @@
+{
+    "autoplay": true,
+    "delay": 7000,
+    "autopauseDisabled": true,
+    ":itemsOrder": [
+        "item_1",
+        "item_2",
+        "item_3"
+    ],
+    ":type": "core/wcm/components/carousel/v1/carousel",
+    ":items": {
+        "item_1": {
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "cq:panelTitle": "Teaser 1"
+        },
+        "item_2": {
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "cq:panelTitle": "Teaser 2"
+        },
+        "item_3": {
+            "actionsEnabled": false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions": [],
+            ":type": "core/wcm/components/teaser/v1/teaser",
+            "cq:panelTitle": "Carousel Panel 3"
+        }
+    }
+}
