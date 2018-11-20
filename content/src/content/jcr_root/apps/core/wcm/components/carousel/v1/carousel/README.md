@@ -37,6 +37,7 @@ The following configuration properties are used:
 
 1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
 2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
+3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
 
 It is also possible to define the allowed components for the Carousel.
 
@@ -45,6 +46,7 @@ The following properties are written to JCR for this Carousel component and are 
 
 1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
 2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
+3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
 
 The edit dialog also allows editing of Carousel items (adding, removing, naming, re-ordering).
 
