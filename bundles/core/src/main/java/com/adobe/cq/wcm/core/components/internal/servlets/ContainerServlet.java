@@ -34,8 +34,8 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.models.CarouselImpl;
-import com.adobe.cq.wcm.core.components.internal.models.TabsImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.CarouselImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.TabsImpl;
 
 /**
  * Servlet that deletes/reorders the child nodes of a Carousel/Tabs container.

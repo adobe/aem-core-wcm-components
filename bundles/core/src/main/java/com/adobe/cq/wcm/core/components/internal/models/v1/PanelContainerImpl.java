@@ -13,33 +13,19 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
-/**
- * Abstract class which can be used as base class for {@link Container} implementations.
- */
-public abstract class AbstractContainerImpl implements Container {
-
-    @SlingObject
-    protected Resource resource;
-
-    @Self
-    protected SlingHttpServletRequest request;
-
-    protected List<ListItem> items;
+public class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
     private List<ListItem> readItems() {
         List<ListItem> items = new ArrayList<>();
@@ -49,7 +35,7 @@ public abstract class AbstractContainerImpl implements Container {
                 for (Resource res : resource.getChildren()) {
                     Component component = componentManager.getComponentOfResource(res);
                     if (component != null) {
-                        items.add(new ResourceListItemImpl(request, res));
+                        items.add(new PanelContainerItemImpl(request, res));
                     }
                 }
             }

@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 
@@ -21,31 +21,28 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.adobe.cq.sightly.WCMBindings;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.Carousel;
-import com.day.cq.wcm.api.designer.Style;
+import com.adobe.cq.wcm.core.components.models.Tabs;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class CarouselImplTest {
+public class TabsImplTest {
 
-    private static final String TEST_BASE = "/carousel";
+    private static final String TEST_BASE = "/tabs";
     private static final String CONTENT_ROOT = "/content";
     private static final String CONTEXT_PATH = "/core";
-    private static final String TEST_ROOT_PAGE = "/content/carousel";
+    private static final String TEST_ROOT_PAGE = "/content/tabs";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
-    private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
+    private static final String TABS_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-1";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     @ClassRule
@@ -57,32 +54,25 @@ public class CarouselImplTest {
     }
 
     @Test
-    public void testEmptyCarousel() {
-        Carousel carousel = new CarouselImpl();
-        List<ListItem> items = carousel.getItems();
-        assertTrue("", items == null || items.size() == 0);
+    public void testEmptyTabs() {
+        Tabs tabs = new TabsImpl();
+        List<ListItem> items = tabs.getItems();
+        Assert.assertTrue("", items == null || items.size() == 0);
     }
 
     @Test
-    public void testCarouselWithItems() {
-        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
+    public void testTabsWithItems() {
+        Tabs tabs = getTabsUnderTest(TABS_1);
         Object[][] expectedItems = {
             {"item_1", "Teaser 1"},
             {"item_2", "Teaser 2"},
         };
-        verifyCarouselItems(expectedItems, carousel.getItems());
-        //Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
+        verifyTabItems(expectedItems, tabs.getItems());
+        assertEquals("item_2", tabs.getActiveItem());
+        Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs1"));
     }
 
-    @Test
-    public void testCarouselProperties() {
-        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
-        assertTrue(carousel.getAutoplay());
-        assertEquals(new Long(7000), carousel.getDelay());
-        assertTrue(carousel.getAutopauseDisabled());
-    }
-
-    private Carousel getCarouselUnderTest(String resourcePath) {
+    private Tabs getTabsUnderTest(String resourcePath) {
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
@@ -95,22 +85,17 @@ public class CarouselImplTest {
         slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
-        Style style = mock(Style.class);
-        when(style.get(any(), any(Object.class))).thenAnswer(
-            invocation -> invocation.getArguments()[1]
-        );
-        slingBindings.put(WCMBindings.CURRENT_STYLE, style);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(Carousel.class);
+        return request.adaptTo(Tabs.class);
     }
 
-    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals("The carousel contains a different number of items than expected.", expectedItems.length, items.size());
+    private void verifyTabItems(Object[][] expectedItems, List<ListItem> items) {
+        assertEquals("The tabs contains a different number of items than expected.", expectedItems.length, items.size());
         int index = 0;
         for (ListItem item : items) {
-            assertEquals("The carousel item's name is not what was expected.",
+            assertEquals("The tabs item's name is not what was expected.",
                 expectedItems[index][0], item.getName());
-            assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
+            assertEquals("The tabs item's title is not what was expected: " + item.getTitle(),
                 expectedItems[index][1], item.getTitle());
             index++;
         }
