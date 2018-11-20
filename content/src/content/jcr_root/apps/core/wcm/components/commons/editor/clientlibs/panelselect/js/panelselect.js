@@ -19,6 +19,7 @@
 
     var panelSelector;
     var NS_PANELSELECTOR = ".cmp-panelselector";
+    var PN_PANEL_TITLE = "cq:panelTitle";
 
     var selectors = {
         indexMarker: ".cmp-panelselector__indexMarker"
@@ -177,7 +178,7 @@
                     items.push({
                         id: child.path,
                         name: child.name,
-                        title: getTitle(child, panelContainerItems[index], index + 1)
+                        title: getTitle(child, panelContainerItems[child.name], index + 1)
                     });
                 });
 
@@ -434,11 +435,17 @@
      */
     function getTitle(editable, item, index) {
         var title = "<span class='foundation-layout-util-subtletext cmp-panelselector__indexMarker'>" + index + "</span>&nbsp;&nbsp;";
+        var subTitle = "";
 
         title = title + " " + Granite.I18n.getVar(ns.editableHelper.getEditableDisplayableName(editable));
 
-        if (item && item.title) {
-            title = title + ": <span class='foundation-layout-util-subtletext'>" + item.title + "</span>";
+        if (item) {
+            if (item[PN_PANEL_TITLE]) {
+                subTitle = item[PN_PANEL_TITLE];
+            } else if (item.title) {
+                subTitle = item.title;
+            }
+            title = title + ": <span class='foundation-layout-util-subtletext'>" + subTitle + "</span>";
         }
 
         return title;
