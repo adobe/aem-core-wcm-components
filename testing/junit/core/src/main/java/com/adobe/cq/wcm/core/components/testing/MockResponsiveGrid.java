@@ -15,10 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.testing;
 
-import javax.annotation.Nonnull;
-import javax.inject.Inject;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -32,6 +33,9 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.day.cq.wcm.api.NameConstants;
+import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.components.ComponentManager;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {ContainerExporter.class, ComponentExporter.class}, resourceType = MockResponsiveGrid.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -49,19 +53,24 @@ public class MockResponsiveGrid implements ContainerExporter {
     ModelFactory modelFactory;
 
     /**
-     * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
+     * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link ComponentExporter}.
      *
      * @param slingRequest The current request.
-     * @param modelClass  The Sling Model class to be adapted to.
-     * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
+     * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link ComponentExporter}.
      */
     @Nonnull
-    private <T> Map<String, T> getChildModels(@Nonnull SlingHttpServletRequest slingRequest,
-                                              @Nonnull Class<T> modelClass) {
-        Map<String, T> itemWrappers = new LinkedHashMap<>();
+    private Map<String, ComponentExporter> getChildModels(@Nonnull SlingHttpServletRequest slingRequest) {
+        Map<String, ComponentExporter> itemWrappers = new LinkedHashMap<>();
+        ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
 
         for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {
-            itemWrappers.put(child.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass));
+            Component component = componentManager.getComponentOfResource(child);
+            Class<? extends ComponentExporter>  modelClass = ComponentExporter.class;
+            if (component != null && component.getProperties().get(NameConstants.PN_IS_CONTAINER, false)) {
+                modelClass = ContainerExporter.class;
+            }
+            ComponentExporter model = modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass);
+            itemWrappers.put(child.getName(), model);
         }
 
         return  itemWrappers;
@@ -70,7 +79,7 @@ public class MockResponsiveGrid implements ContainerExporter {
     @Nonnull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
-        return getChildModels(request, ComponentExporter.class);
+        return getChildModels(request);
     }
 
     @Nonnull

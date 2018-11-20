@@ -44,9 +44,8 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
     }
 
     @Override
-    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
-                                                           @Nonnull Class<ComponentExporter> modelClass) {
-        Map<String, ComponentExporter> models = super.getItemModels(request, modelClass);
+    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request) {
+        Map<String, ComponentExporter> models = super.getItemModels(request);
         models.entrySet().forEach(entry -> {
             ListItem match = getItems().stream()
                 .filter(item -> item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey()))

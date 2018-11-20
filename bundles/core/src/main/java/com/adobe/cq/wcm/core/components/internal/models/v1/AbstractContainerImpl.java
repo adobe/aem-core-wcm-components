@@ -32,9 +32,11 @@ import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -147,7 +149,7 @@ public abstract class AbstractContainerImpl implements Container {
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         if (itemModels == null) {
-            itemModels = getItemModels(request, ComponentExporter.class);
+            itemModels = getItemModels(request);
         }
         return itemModels;
     }
@@ -166,10 +168,15 @@ public abstract class AbstractContainerImpl implements Container {
         return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
     }
 
-    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
-                                                           @Nonnull Class<ComponentExporter> modelClass) {
+    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request) {
         Map<String, ComponentExporter> models = new LinkedHashMap<>();
+        ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
         getFilteredChildren().forEach(child -> {
+            Component component = componentManager.getComponentOfResource(child);
+            Class<? extends ComponentExporter> modelClass = ComponentExporter.class;
+            if (component != null && component.getProperties().get(NameConstants.PN_IS_CONTAINER, false)) {
+                modelClass = ContainerExporter.class;
+            }
             ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
             if (model != null) {
                 models.put(child.getName(), model);
