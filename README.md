@@ -1,6 +1,6 @@
 # AEM Sites Core Components Sandbox
 [![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development)
-[![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
+[![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 
 **The Sandbox represents a space where work-in-progress versions of the Core Components are developed. They provide _beta features_ and *should not be used in production*. When the components become stable, they will be promoted to new production-ready releases and moved out of sandbox.**
 
@@ -41,7 +41,9 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
   * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 
-The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
+Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
+
+The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
 \* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
 
@@ -51,7 +53,7 @@ The latest version of the Core Components, require the below minimum system requ
 
 Core Components | Extension | AEM 6.4 | AEM 6.3 | Java
 ----------------|-----------|---------|---------|------
-[2.2.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.2.0) | 1.0.8 | 6.4.2.0 | 6.3.3.0 | 1.8
+[2.2.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.2.0) | 1.0.8 | 6.4.2.0 | 6.3.3.0 | 1.8
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
