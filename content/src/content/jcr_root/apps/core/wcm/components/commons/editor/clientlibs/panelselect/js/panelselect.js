@@ -445,6 +445,9 @@
             } else if (item.title) {
                 subTitle = item.title;
             }
+        }
+
+        if (subTitle) {
             title = title + ": <span class='foundation-layout-util-subtletext'>" + subTitle + "</span>";
         }
 
