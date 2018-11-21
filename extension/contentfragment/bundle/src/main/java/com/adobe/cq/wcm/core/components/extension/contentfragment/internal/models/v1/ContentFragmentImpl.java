@@ -453,7 +453,7 @@ public class ContentFragmentImpl implements ContentFragment {
             String [] values = getData().getValue(String[].class);
             String value = null;
             if (values != null) {
-                value = org.apache.commons.lang.StringUtils.join(values, ", ");
+                value = StringUtils.join(values, ", ");
             }
             if ("text/html".equals(contentType)) {
                 // return HTML as is
