@@ -22,6 +22,21 @@
     <version>2.2.1-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
+    <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
+    <url>https://github.com/adobe/aem-core-wcm-components</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Adobe Reference Squad</name>
+            <email>ref-squad@adobe.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.previousRelease>2.2.0</project.previousRelease>
