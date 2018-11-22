@@ -424,8 +424,8 @@
          * @param {HTMLElement} element Element to focus
          */
         function focusWithoutScroll(element) {
-            var x = window.scrollX;
-            var y = window.scrollY;
+            var x = window.scrollX || window.pageXOffset;
+            var y = window.scrollY || window.pageYOffset;
             element.focus();
             window.scrollTo(x, y);
         }
