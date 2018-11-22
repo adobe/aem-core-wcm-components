@@ -169,7 +169,7 @@ public class ImageImpl implements Image {
                 return;
             }
             // The jcr:mimeType property may contain a charset suffix (image/jpeg;charset=UTF-8).
-            // For example if a file was written with jcrUtils#putFile and an optional charset was provided.
+            // For example if a file was written with JcrUtils#putFile and an optional charset was provided.
             // Check for the suffix and remove as necessary.
             mimeType = mimeType.split(";")[0];
             extension = mimeTypeService.getExtension(mimeType);
