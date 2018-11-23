@@ -24,11 +24,5 @@
             ":type"      : "wcm/foundation/components/responsivegrid"
         }
     },
-    ":hierarchyType"  : "page",
-    ":path"           : "/content/page/templated-page",
-    ":children"        : {
-        "/content/page/templated-page/child"        : null,
-        "/content/page/templated-page/child/nested2": null
-    },
     ":type"           : "core/wcm/components/page/v2/page"
 }

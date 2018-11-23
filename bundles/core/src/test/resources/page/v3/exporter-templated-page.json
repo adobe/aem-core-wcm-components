@@ -1,0 +1,34 @@
+{
+    "designPath"      : "/etc/designs/mysite",
+    "title"           : "Templated Page",
+    "lastModifiedDate": 1453282416000,
+    "templateName"    : "product-page",
+    "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
+    "language"        : "en-GB",
+    "cssClassNames"   : "class1 class2",
+    ":hierarchyType"  : "page",
+    ":path"           : "/content/page/templated-page",
+    ":children"        : {
+        "/content/page/templated-page/child"        : {"designPath":"/etc/designs/mysite","title":"child","appResourcesPath":"/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources","language":"en-GB","cssClassNames":"class1 class2",":hierarchyType":"page",":path":"/content/page/templated-page/child",":children":{"/content/page/templated-page/child/nested2":null},":type":"core/wcm/components/page/v3/page",":items":{},":itemsOrder":[]},
+        "/content/page/templated-page/child/nested2": {"designPath":"/etc/designs/mysite","title":"child","appResourcesPath":"/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources","language":"en-GB","cssClassNames":"class1 class2",":hierarchyType":"page",":path":"/content/page/templated-page/child",":children":{"/content/page/templated-page/child/nested2":null},":type":"core/wcm/components/page/v3/page",":items":{},":itemsOrder":[]}
+    },
+    ":itemsOrder"     : [
+        "root"
+    ],
+    ":items"          : {
+        "root": {
+            ":itemsOrder": [
+                "text"
+            ],
+            ":items"     : {
+                "text": {
+                    "text"    : "<p>This is a test</p>",
+                    "richText": true,
+                    ":type"   : "core/wcm/components/text/v2/text"
+                }
+            },
+            ":type"      : "wcm/foundation/components/responsivegrid"
+        }
+    },
+    ":type"           : "core/wcm/components/page/v3/page"
+}

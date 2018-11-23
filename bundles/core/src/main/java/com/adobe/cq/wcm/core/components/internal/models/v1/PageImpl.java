@@ -80,7 +80,7 @@ public class PageImpl implements Page {
     protected ResourceResolver resolver;
 
     @Inject
-    private ModelFactory modelFactory;
+    protected ModelFactory modelFactory;
 
     @Inject
     private SlingModelFilter slingModelFilter;

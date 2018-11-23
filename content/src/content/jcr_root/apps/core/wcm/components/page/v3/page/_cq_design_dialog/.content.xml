@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Page"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="https://www.adobe.com/go/aem_cmp_page_v2">
+    helpPath="https://www.adobe.com/go/aem_cmp_page_v3">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
@@ -118,6 +118,42 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
                         path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                    <hierarchy
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Hierarchical Structure"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <isroot
+                                cq:showOnCreate="{Boolean}true"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="The current page is the root of a hierarchy"
+                                name="./isRoot"
+                                text="Is Root"
+                                value="true" />
+                            <structureDepth
+                                cq:showOnCreate="{Boolean}true"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                defaultValue="3"
+                                fieldDescription="Depth of the hierarchy of pages. By default, the page doesn't expose child pages"
+                                fieldLabel="Structure Depth"
+                                min="{Double}0"
+                                max="{Double}20"
+                                name="./structureDepth"
+                                value="3" />
+                            <structurePatterns
+                                cq:showOnCreate="{Boolean}true"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="Comma separated list of regular expressions to filter out child pages from the initial model export"
+                                fieldLabel="Structure Patterns"
+                                defaultValue=""
+                                name="./structurePatterns"
+                                value="" />
+                        </items>
+                    </hierarchy>
                 </items>
             </tabs>
         </items>

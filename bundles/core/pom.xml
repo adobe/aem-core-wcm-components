@@ -150,7 +150,6 @@
                                         <!-- private enum; cannot test valueOf / values -->
                                         <exclude>**/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
                                         <exclude>**/AdaptiveImageServlet$Source.class</exclude>
-                                        <exclude>**/HierarchyComponentContextWrapper.class</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
