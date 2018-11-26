@@ -63,7 +63,7 @@
                 } else {
                     var children = editable.dom[0].children;
                     for (var i = 0; i < children.length; i++) {
-                        var child = children[0];
+                        var child = children[i];
                         if ($(child).is(container.selector)) {
                             element = child;
                             break;
@@ -112,7 +112,7 @@
                 if (!match) {
                     var children = editable.dom[0].children;
                     for (var j = 0; j < children.length; j++) {
-                        var child = children[0];
+                        var child = children[j];
                         match = $(child).is(container.selector);
                         if (match) {
                             break;

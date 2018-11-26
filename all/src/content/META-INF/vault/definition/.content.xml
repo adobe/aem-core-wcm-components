@@ -16,7 +16,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0"
           jcr:primaryType="vlt:PackageDefinition"
-          providerLink="https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases"
+          providerLink="https://github.com/adobe/aem-core-wcm-components/releases"
           providerName="Adobe Systems Inc."
           providerUrl="https://www.adobe.com"
           testedWith="AEM 6.3">

@@ -87,7 +87,7 @@
                                                         name="./titleFromPage"
                                                         value="{Boolean}true"
                                                         uncheckedValue="{Boolean}false"
-                                                        checked="{Boolean}true"/>
+                                                        checked="{Boolean}false"/>
                                                 </items>
                                             </titleGroup>
                                             <descriptionGroup
@@ -236,7 +236,7 @@
                                                         name="./descriptionFromPage"
                                                         value="{Boolean}true"
                                                         uncheckedValue="{Boolean}false"
-                                                        checked="{Boolean}true"/>
+                                                        checked="{Boolean}false"/>
                                                 </items>
                                             </descriptionGroup>
                                         </items>

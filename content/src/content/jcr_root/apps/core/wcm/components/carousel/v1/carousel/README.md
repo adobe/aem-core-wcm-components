@@ -22,7 +22,11 @@ Carousel component written in HTL.
 * Allows addition of Carousel item components of varying resource type.
 * Allowed components can be configured through policy configuration.
 * Carousel navigation via next/previous and position indicators.
-* Carousel autoplay with configurable delay.
+* Carousel autoplay with: 
+  * Configurable delay.
+  * Ability to disable automatic pause on hover.
+  * Pause/play buttons.
+  * Automatic pausing when the document is hidden, making use of the [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API).
 * Editing features for items (adding, removing, editing, re-ordering).
 
 ### Use Object
@@ -33,6 +37,7 @@ The following configuration properties are used:
 
 1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
 2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
+3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
 
 It is also possible to define the allowed components for the Carousel.
 
@@ -41,6 +46,7 @@ The following properties are written to JCR for this Carousel component and are 
 
 1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
 2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
+3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
 
 The edit dialog also allows editing of Carousel items (adding, removing, naming, re-ordering).
 
@@ -54,8 +60,11 @@ BLOCK cmp-carousel
     ELEMENT cmp-carousel__content
     ELEMENT cmp-carousel__item
     ELEMENT cmp-carousel__action
+        MOD cmp-carousel__action--disabled
         MOD cmp-carousel__action--previous
         MOD cmp-carousel__action--next
+        MOD cmp-carousel__action--pause
+        MOD cmp-carousel__action--play
     ELEMENT cmp-carousel__action-icon
     ELEMENT cmp-carousel__action-text
     ELEMENT cmp-carousel__indicators
@@ -69,6 +78,7 @@ The following attributes can be added to the same element to provide options:
 
 1. `data-cmp-autoplay` - if the attribute is present, indicates that the carousel should automatically transition between slides.
 2. `data-cmp-delay` - the delay (in milliseconds) when automatically transitioning between slides.
+3. `data-cmp-autopause-disabled` - if the attribute is present, indicates that automatically pausing the carousel on hover, is disabled. 
 
 A hook attribute from the following should be added to the corresponding element so that the JavaScript is able to target it:
 
@@ -76,6 +86,8 @@ A hook attribute from the following should be added to the corresponding element
 data-cmp-hook-carousel="item"
 data-cmp-hook-carousel="previous"
 data-cmp-hook-carousel="next"
+data-cmp-hook-carousel="pause"
+data-cmp-hook-carousel="play"
 data-cmp-hook-carousel="indicators"
 data-cmp-hook-carousel="indicator"
 ```

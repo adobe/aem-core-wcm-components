@@ -1,13 +1,13 @@
 {
     "name": "com.adobe.cq.core.wcm.components.it.ui-js",
-    "version": "6.3.49-SNAPSHOT",
+    "version": "6.3.51-SNAPSHOT",
     "description": "Adobe Experience Manager Core WCM Components UI End-to-End Tests",
     "license": "Apache-2.0",
     "private": false,
-    "homepage": "https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components",
+    "homepage": "https://github.com/adobe/aem-core-wcm-components",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components"
+        "url": "https://github.com/adobe/aem-core-wcm-components"
     },
     "scripts": {
         "eslint": "eslint .",

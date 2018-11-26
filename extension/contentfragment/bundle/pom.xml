@@ -33,13 +33,6 @@
 
     <name>Adobe Experience Manager Core WCM Components Extension - Structured Content Fragment Bundle</name>
 
-    <scm>
-        <connection>scm:git:https://git.corp.adobe.com/CQ/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@git.corp.adobe.com:CQ/aem-core-wcm-components.git</developerConnection>
-        <url>https://git.corp.adobe.com/CQ/aem-core-wcm-components/tree/PRIVATE_master/extension/contenfragment/bundle</url>
-        <tag>HEAD</tag>
-    </scm>
-
     <properties>
         <jacoco.data.file>${project.build.directory}/jacoco.exec</jacoco.data.file>
     </properties>
@@ -246,7 +239,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.junit.core</artifactId>
             <scope>test</scope>
-            <version>2.0.0</version>
+            <version>2.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>

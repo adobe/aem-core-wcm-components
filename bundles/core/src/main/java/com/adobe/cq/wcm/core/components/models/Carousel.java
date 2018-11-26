@@ -40,6 +40,13 @@ public interface Carousel extends Container {
     String PN_DELAY = "delay";
 
     /**
+     * Name of the resource property that indicates whether automatic pause on hovering the carousel is disabled, or not.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    String PN_AUTOPAUSE_DISABLED = "autopauseDisabled";
+
+    /**
      * Indicates whether the carousel should automatically transition between slides or not.
      *
      * @return {@code true} if the carousel should automatically transition slides; {@code false} otherwise
@@ -56,6 +63,16 @@ public interface Carousel extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
     default Long getDelay() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Indicates whether automatic pause on hovering the carousel is disabled, or not.
+     *
+     * @return {@code true} if automatic pause on hovering the carousel should be disabled; {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    default boolean getAutopauseDisabled() {
         throw new UnsupportedOperationException();
     }
 

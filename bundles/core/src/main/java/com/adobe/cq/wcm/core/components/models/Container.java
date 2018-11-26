@@ -34,11 +34,12 @@ import com.adobe.cq.export.json.ContainerExporter;
 public interface Container extends ContainerExporter {
 
     /**
-     * Returns a list of component items
+     * Returns a list of container items
      *
-     * @return List of component items
+     * @return List of container items
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
+    @Nonnull
     default List<ListItem> getItems() {
         throw new UnsupportedOperationException();
     }

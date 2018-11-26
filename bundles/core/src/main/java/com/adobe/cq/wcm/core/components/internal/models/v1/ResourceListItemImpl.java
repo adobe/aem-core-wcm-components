@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 
@@ -37,6 +37,7 @@ public class ResourceListItemImpl implements ListItem {
     protected String description;
     protected Calendar lastModified;
     protected String path;
+    protected String name;
 
     public ResourceListItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
@@ -46,6 +47,7 @@ public class ResourceListItemImpl implements ListItem {
             lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         }
         path = resource.getPath();
+        name = resource.getName();
         url = null;
     }
 
@@ -74,4 +76,8 @@ public class ResourceListItemImpl implements ListItem {
         return path;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
 }

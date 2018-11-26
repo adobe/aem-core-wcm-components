@@ -103,14 +103,14 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> exected = ImmutableList.of(
+        List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
                         "url", "null/content/en/search/page.html",
                         "title", "Page"
                 )
         );
 
-        validateResponse(context.response(), exected);
+        validateResponse(context.response(), expected);
     }
 
     @Test
@@ -122,17 +122,17 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> exected = ImmutableList.of(
+        List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
                         "url", "null/content/en/search/page-template.html",
                         "title", "Page"
                 )
         );
 
-        validateResponse(context.response(), exected);
+        validateResponse(context.response(), expected);
     }
 
-    private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> exected) throws IOException {
+    private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SimpleAbstractTypeResolver resolver = new SimpleAbstractTypeResolver();
         resolver.addMapping(ListItem.class, Item.class);
@@ -140,10 +140,10 @@ public class SearchResultServletTest {
         module.setAbstractTypes(resolver);
         mapper.registerModule(module);
         ListItem[] listItems = mapper.readValue(response.getOutputAsString(), ListItem[].class);
-        assertEquals(exected.size(), listItems.length);
+        assertEquals(expected.size(), listItems.length);
 
-        for (int i = 0; i < exected.size(); i++) {
-            Map<String, String> expectedMap = exected.get(i);
+        for (int i = 0; i < expected.size(); i++) {
+            Map<String, String> expectedMap = expected.get(i);
             ListItem listItem = listItems[i];
             assertEquals(expectedMap.get("url"), listItem.getURL());
             assertEquals(expectedMap.get("title"), listItem.getTitle());
@@ -157,6 +157,7 @@ public class SearchResultServletTest {
         private String path;
         private String description;
         private String lastModified;
+        private String name;
 
         public Item() {
         }
