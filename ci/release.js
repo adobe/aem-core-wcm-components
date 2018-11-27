@@ -23,12 +23,16 @@ let gitTag = process.env.CIRCLE_TAG;
 if (!gitTag) {
     throw "Cannot release without a valid git tag";
 }
-let targetVersion = gitTag.match(/^@release\-(\d+\.\d+.\d+)$/);
+let targetVersion = gitTag.match(/^@release\-?(\d+\.\d+.\d+)?$/);
 if (!targetVersion) {
     throw "Cannot release without a valid release version";
 }
 
 targetVersion = targetVersion[1];
+let releaseVersion = "";
+if (targetVersion !== undefined) {
+    releaseVersion = " -DreleaseVersion=" + targetVersion;
+}
 
 try {
     tools.stage("RELEASE");
@@ -36,7 +40,7 @@ try {
     console.log("Checking out the master branch so we can commit and push");
     tools.sh("git checkout master");
     tools.prepareGPGKey();
-    tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public clean release:prepare release:perform -DreleaseVersion=" + targetVersion);
+    tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public clean release:prepare release:perform" + releaseVersion);
     tools.stage("RELEASE DONE");
 } finally {
     tools.removeGitTag(gitTag);
