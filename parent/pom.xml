@@ -24,6 +24,12 @@
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
     <url>https://github.com/adobe/aem-core-wcm-components</url>
+    <scm>
+        <connection>scm:git:https://github.com/adobe/aem-core-wcm-components.git</connection>
+        <developerConnection>scm:git:git@github.com:adobe/aem-core-wcm-components.git</developerConnection>
+        <url>https://github.com/adobe/aem-core-wcm-components</url>
+        <tag>HEAD</tag>
+    </scm>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
