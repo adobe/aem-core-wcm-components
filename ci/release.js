@@ -34,7 +34,7 @@ if (targetVersion !== undefined) {
     releaseVersion = " -DreleaseVersion=" + targetVersion;
 }
 
-ci.gitImpersonate('CircleCi', 'noreply@circleci.com', () => {
+tools.gitImpersonate('CircleCi', 'noreply@circleci.com', () => {
     try {
         tools.stage("RELEASE");
         // We cannot find out what git branch has the tag, so we assume/enforce that releases are done on master
