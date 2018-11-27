@@ -34,15 +34,17 @@ if (targetVersion !== undefined) {
     releaseVersion = " -DreleaseVersion=" + targetVersion;
 }
 
-try {
-    tools.stage("RELEASE");
-    // We cannot find out what git branch has the tag, so we assume/enforce that releases are done on master
-    console.log("Checking out the master branch so we can commit and push");
-    tools.sh("git checkout master");
-    tools.prepareGPGKey();
-    tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public clean release:prepare release:perform" + releaseVersion);
-    tools.stage("RELEASE DONE");
-} finally {
-    tools.removeGitTag(gitTag);
-    tools.removeGPGKey()
-}
+ci.gitImpersonate('CircleCi', 'noreply@circleci.com', () => {
+    try {
+        tools.stage("RELEASE");
+        // We cannot find out what git branch has the tag, so we assume/enforce that releases are done on master
+        console.log("Checking out the master branch so we can commit and push");
+        tools.sh("git checkout master");
+        tools.prepareGPGKey();
+        tools.sh("mvn -B -s ci/settings.xml -Prelease,adobe-public clean release:prepare release:perform" + releaseVersion);
+        tools.stage("RELEASE DONE");
+    } finally {
+        tools.removeGitTag(gitTag);
+        tools.removeGPGKey()
+    }
+});
