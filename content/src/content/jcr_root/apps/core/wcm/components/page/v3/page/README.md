@@ -53,6 +53,9 @@ The following configuration properties are used:
 2. `./clientlibsJsHead` - allows definition of client libraries for which JavaScript is specifically intended to be loaded
 in the document head (JavaScript only) of pages associated with this policy configuration
 3. `./appResourcesClientlib` - allows definition of the client library that is used to serve web resources such as favicons
+4. `./isRoot` - allows to define if the page is the root of the hierarchy
+5. `./structureDepth` - allows definition of the depth of the hierarchy of pages
+6. `./structurePatterns` - allows definition of the comma separated list of regular expressions to filter out child pages from the initial model export
 
 ## Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:
