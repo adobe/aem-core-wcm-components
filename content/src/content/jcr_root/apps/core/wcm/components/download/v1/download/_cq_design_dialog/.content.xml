@@ -71,6 +71,50 @@
                             </type>
                         </items>
                     </main>
+                    <features
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Features"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <content
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container"
+                                margin="{Boolean}false">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <accordion
+                                        granite:class="js-cq-IPEPlugin-container"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/accordion"
+                                        variant="quiet">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <source
+                                                jcr:primaryType="nt:unstructured"
+                                                jcr:title="Source"
+                                                sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                maximized="{Boolean}true">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <allowupload
+                                                        granite:class="js-cq-ImageEditor-allowUpload"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
+                                                        deleteHint="{Boolean}false"
+                                                        name="./allowUpload"
+                                                        text="Allow asset upload from file system"
+                                                        uncheckedValue="{Boolean}false"
+                                                        value="{Boolean}true"/>
+                                                </items>
+                                                <parentConfig
+                                                    jcr:primaryType="nt:unstructured"
+                                                    active="{Boolean}true"/>
+                                            </source>
+                                        </items>
+                                    </accordion>
+                                </items>
+                            </content>
+                        </items>
+                    </features>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"

@@ -17,7 +17,7 @@
                 <items jcr:primaryType="nt:unstructured">
                     <file
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="File"
+                        jcr:title="Asset"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
@@ -33,13 +33,11 @@
                                             <file
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="{Boolean}false"
                                                 autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldLabel="Download Asset"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
-                                                mimeTypes="[image/*,video/*,application/*]"
                                                 multiple="{Boolean}false"
                                                 name="./file"
                                                 title="Upload Asset"
