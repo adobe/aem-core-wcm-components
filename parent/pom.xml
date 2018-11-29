@@ -19,16 +19,30 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.2.1-SNAPSHOT</version>
+    <version>2.2.3-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
-
+    <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
+    <url>https://github.com/adobe/aem-core-wcm-components</url>
     <scm>
-        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development/parent</url>
+        <connection>scm:git:https://github.com/adobe/aem-core-wcm-components.git</connection>
+        <developerConnection>scm:git:git@github.com:adobe/aem-core-wcm-components.git</developerConnection>
+        <url>https://github.com/adobe/aem-core-wcm-components</url>
         <tag>HEAD</tag>
     </scm>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Adobe Reference Squad</name>
+            <email>ref-squad@adobe.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.previousRelease>2.2.0</project.previousRelease>
@@ -46,8 +60,10 @@
         <aem.java.version>8</aem.java.version>
         <jacoco.version>0.7.9</jacoco.version>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-        <node.version>v8.10.0</node.version>
-        <npm.version>5.6.0</npm.version>
+        <node.version>v10.13.0</node.version>
+        <npm.version>6.4.1</npm.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <!-- ======================================================================= -->
@@ -136,6 +152,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.18.1</version>
+                    <configuration>
+                        <useSystemClassLoader>false</useSystemClassLoader>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -415,12 +434,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
 
-            <properties>
-                <releaseRepository-Id>adobe-public-releases</releaseRepository-Id>
-                <releaseRepository-Name>Adobe Public Releases</releaseRepository-Name>
-                <releaseRepository-URL>https://repo.adobe.com/nexus/content/groups/public</releaseRepository-URL>
-            </properties>
-
             <repositories>
                 <repository>
                     <id>adobe-public-releases</id>
@@ -471,6 +484,37 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -658,7 +702,7 @@
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
-                <version>2.3.0</version>
+                <version>2.3.2</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -670,7 +714,7 @@
             <dependency>
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
-                <version>2.3.2</version>
+                <version>2.3.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -698,12 +742,10 @@
     <distributionManagement>
         <repository>
             <id>${releaseRepository-Id}</id>
-            <name>${releaseRepository-Name}</name>
             <url>${releaseRepository-URL}</url>
         </repository>
         <snapshotRepository>
             <id>${snapshotRepository-Id}</id>
-            <name>${snapshotRepository-Name}</name>
             <url>${snapshotRepository-URL}</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>

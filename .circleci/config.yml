@@ -22,7 +22,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:8-jdk-node
 
     # Specify service dependencies here if necessary
     # CircleCI maintains a library of pre-built images
@@ -33,7 +33,7 @@ jobs:
 
     environment:
       # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx3200m
+      MAVEN_OPTS: -Xmx1024m -XX:MaxPermSize=512m
 
     steps:
       - checkout
@@ -42,7 +42,7 @@ jobs:
           key: aem-core-wcm-components
 
       # run tests!
-      - run: mvn verify -B -U
+      - run: mvn clean verify -B -U
 
       - save_cache: # saves the project dependencies
           paths:
@@ -51,3 +51,62 @@ jobs:
 
       # run codecoverage check
       - run: bash <(curl -s https://codecov.io/bash)
+
+  deploy_snapshot:
+    docker:
+      - image: circleci/openjdk:8-jdk-node
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
+      - add_ssh_keys:
+          fingerprints:
+            - "14:ab:8b:b6:ae:5b:96:38:c4:1d:7f:e6:5a:38:68:8c"
+      - run:
+          name: Deploy Snapshots
+          command: node ci/deploy_snapshots.js
+
+  release:
+    docker:
+      - image: circleci/openjdk:8-jdk-node
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
+      - add_ssh_keys:
+          fingerprints:
+            - "14:ab:8b:b6:ae:5b:96:38:c4:1d:7f:e6:5a:38:68:8c"
+      - run:
+          name: Release
+          command: node ci/release.js
+
+workflows:
+  version: 2
+  build-and-release:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+
+      - deploy_snapshot:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^@deploy-snapshot$/
+
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^@release-?(\d+\.\d+\.\d+)?$/

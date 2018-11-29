@@ -18,6 +18,7 @@
     "use strict";
 
     var GET_DATA_SUFFIX = ".model.json";
+    var DATA_ITEMS_KEY = ":items";
     var POST_SUFFIX = ".container.html";
     var MESSAGE_ID = "cmp.panelcontainer";
     var NAVIGATE_DELAY = 200;
@@ -119,9 +120,9 @@
             var that = this;
             var deferred = $.Deferred();
 
-            if (that._data.items) {
+            if (that._data[DATA_ITEMS_KEY]) {
                 // data is already cached, don't re-fetch
-                deferred.resolve(that._data.items);
+                deferred.resolve(that._data[DATA_ITEMS_KEY]);
             }
 
             $.ajax({
@@ -130,7 +131,8 @@
                 if (data) {
                     that._data = data;
                 }
-                deferred.resolve(that._data.items);
+                var items = (that._data[DATA_ITEMS_KEY]) ? that._data[DATA_ITEMS_KEY] : {};
+                deferred.resolve(items);
             }).fail(function() {
                 deferred.resolve([]);
             });

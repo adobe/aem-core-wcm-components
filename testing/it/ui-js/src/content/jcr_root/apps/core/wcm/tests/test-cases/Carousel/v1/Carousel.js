@@ -229,6 +229,42 @@
     };
 
     /**
+     * Test: Autoplay group toggle
+     */
+    carousel.tcAutoplayGroup = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Edit Dialog : Autoplay group", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // create new items with titles
+            .execTestCase(carousel.tcCreateItems(selectors))
+
+            // open the edit dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // switch to the properties tab
+            .click(selectors.editDialog.tabs.properties)
+
+            // verify autoplay isn't initially enabled
+            .assert.exist(selectors.editDialog.autoplay + ":checked", false)
+
+            // verify the autoplay group isn't show initially
+            .asserts.visible(selectors.editDialog.autoplayGroup, false)
+
+            // check the autoplay checkbox
+            .click(selectors.editDialog.autoplay)
+
+            // verify the autoplay group is now visible
+            .asserts.visible(selectors.editDialog.autoplayGroup, true)
+
+            // uncheck the autoplay checkbox
+            .click(selectors.editDialog.autoplay)
+
+            // verify the autoplay group is hidden again
+            .asserts.visible(selectors.editDialog.autoplayGroup, false);
+    };
+
+    /**
      * Test: Panel Select
      */
     carousel.tcPanelSelect = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
