@@ -10,7 +10,7 @@
 * AEM product documentation of Core Components
   * [Author documentation](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
   * [Developer documentation](https://docs.adobe.com/docs/en/aem/6-3/develop/components/core-components.html)
-* [Recording of the AEM GEMS Webinar, Dec 2018](http://bit.ly/AEMGEMS120518)
+* [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
 ## Contributing
 
