@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="eaad1fe1-7d0a-4548-a447-be50b070078a">
+    <jcr:content
+        cq:name="article_01_picture_01.png"
+        cq:parentPath="/content/dam/wknd/en/los-angeles"
+        dam:assetState="processed"
+        dam:relativePath="wknd/en/los-angeles/article_01_picture_01.png"
+        jcr:lastModified="{Date}2018-11-01T21:13:54.937-04:00"
+        jcr:lastModifiedBy="admin"
+        jcr:mixinTypes="[cq:ReplicationStatus]"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Bitsperpixel="{Long}32"
+            dam:Comments="XML:com.adobe.xmp: &lt;?xpacket begin=&quot;﻿&quot; id=&quot;W5M0MpCehiHzreSzNTczkc9d&quot;?> &lt;x:xmpmeta xmlns:x=&quot;adobe:ns:meta/&quot; x:xmptk=&quot;Adobe XMP Core 5.6-c137 1.000000, 0000/00/00-00:00:00        &quot;>  &lt;rdf:RDF xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;>   &lt;rdf:Description rdf:about=&quot;&quot;     xmlns:ns1=&quot;http://www.day.com/dam/1.0&quot;     xmlns:tiff=&quot;http://ns.adobe.com/tiff/1.0/&quot;     xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot;     xmlns:Iptc4xmpCore=&quot;http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/&quot;    ns1:Physicalheightininches=&quot;7.432248592376709&quot;    ns1:Physicalwidthininches=&quot;10.627420425415039&quot;    ns1:Fileformat=&quot;PNG&quot;    ns1:Progressive=&quot;no&quot;    ns1:extracted=&quot;2017-12-18T17:17:51.666-05:00&quot;    ns1:Bitsperpixel=&quot;32&quot;    ns1:MIMEtype=&quot;image/png&quot;    ns1:Comments=&quot;XML:com.adobe.xmp: &amp;lt;?xpacket begin=&amp;quot;﻿&amp;quot; id=&amp;quot;W5M0MpCehiHzreSzNTczkc9d&amp;quot;?&amp;gt;&amp;#xA;&amp;lt;x:xmpmeta xmlns:x=&amp;quot;adobe:ns:meta/&amp;quot; x:xmptk=&amp;quot;Adobe XMP Core 5.6-c137 1.000000, 0000/00/00-00:00:00        &amp;quot;&amp;gt;&amp;#xA; &amp;lt;rdf:RDF xmlns:rdf=&amp;quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&amp;quot;&amp;gt;&amp;#xA;  &amp;lt;rdf:Description rdf:about=&amp;quot;&amp;quot;&amp;#xA;    xmlns:ns1=&amp;quot;http://www.day.com/dam/1.0&amp;quot;&amp;#xA;    xmlns:tiff=&amp;quot;http://ns.adobe.com/tiff/1.0/&amp;quot;&amp;#xA;    xmlns:dc=&amp;quot;http://purl.org/dc/elements/1.1/&amp;quot;&amp;#xA;    xmlns:Iptc4xmpCore=&amp;quot;http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/&amp;quot;&amp;#xA;   ns1:Physicalheightininches=&amp;quot;7.432248592376709&amp;quot;&amp;#xA;   ns1:Physicalwidthininches=&amp;quot;10.627420425415039&amp;quot;&amp;#xA;   ns1:Fileformat=&amp;quot;PNG&amp;quot;&amp;#xA;   ns1:Progressive=&amp;quot;no&amp;quot;&amp;#xA;   ns1:extracted=&amp;quot;2017-05-30T12:19:09.490-04:00&amp;quot;&amp;#xA;   ns1:Bitsperpixel=&amp;quot;32&amp;quot;&amp;#xA;   ns1:MIMEtype=&amp;quot;image/png&amp;quot;&amp;#xA;   ns1:Physicalwidthindpi=&amp;quot;72&amp;quot;&amp;#xA;   ns1:Physicalheightindpi=&amp;quot;72&amp;quot;&amp;#xA;   ns1:Numberofimages=&amp;quot;1&amp;quot;&amp;#xA;   ns1:Numberoftextualcomments=&amp;quot;0&amp;quot;&amp;#xA;   ns1:sha1=&amp;quot;c83281375c13504839d94873761afa7c0ccddca1&amp;quot;&amp;#xA;   ns1:size=&amp;quot;645189&amp;quot;&amp;#xA;   tiff:ImageLength=&amp;quot;535&amp;quot;&amp;#xA;   tiff:ImageWidth=&amp;quot;765&amp;quot;&amp;#xA;   dc:format=&amp;quot;image/png&amp;quot;&amp;#xA;   dc:modified=&amp;quot;2017-05-30T12:19:27.334-04:00&amp;quot;&amp;gt;&amp;#xA;   &amp;lt;dc:description&amp;gt;&amp;#xA;    &amp;lt;rdf:Alt&amp;gt;&amp;#xA;     &amp;lt;rdf:li xml:lang=&amp;quot;x-default&amp;quot;&amp;gt;skate park bowl&amp;lt;/rdf:li&amp;gt;&amp;#xA;    &amp;lt;/rdf:Alt&amp;gt;&amp;#xA;   &amp;lt;/dc:description&amp;gt;&amp;#xA;   &amp;lt;dc:title&amp;gt;&amp;#xA;    &amp;lt;rdf:Alt&amp;gt;&amp;#xA;     &amp;lt;rdf:li xml:lang=&amp;quot;x-default&amp;quot;&amp;gt;skate park bowl&amp;lt;/rdf:li&amp;gt;&amp;#xA;    &amp;lt;/rdf:Alt&amp;gt;&amp;#xA;   &amp;lt;/dc:title&amp;gt;&amp;#xA;   &amp;lt;Iptc4xmpCore:CreatorContactInfo rdf:parseType=&amp;quot;Resource&amp;quot;/&amp;gt;&amp;#xA;  &amp;lt;/rdf:Description&amp;gt;&amp;#xA; &amp;lt;/rdf:RDF&amp;gt;&amp;#xA;&amp;lt;/x:xmpmeta&amp;gt;&amp;#xA;&amp;lt;?xpacket end=&amp;quot;r&amp;quot;?&amp;gt;&amp;#xA;&quot;    ns1:Physicalwidthindpi=&quot;72&quot;    ns1:Physicalheightindpi=&quot;72&quot;    ns1:Numberofimages=&quot;1&quot;    ns1:Numberoftextualcomments=&quot;1&quot;    ns1:sha1=&quot;e9fcd8e7a93629649622d62941ba8f7536a771bb&quot;    ns1:size=&quot;646640&quot;    tiff:ImageLength=&quot;535&quot;    tiff:ImageWidth=&quot;765&quot;    dc:format=&quot;image/png&quot;    dc:modified=&quot;2017-05-30T12:19:27.334-04:00&quot;>    &lt;dc:description>     &lt;rdf:Alt>      &lt;rdf:li xml:lang=&quot;x-default&quot;>skate park bowl&lt;/rdf:li>     &lt;/rdf:Alt>    &lt;/dc:description>    &lt;dc:title>     &lt;rdf:Alt>      &lt;rdf:li xml:lang=&quot;x-default&quot;>skate park bowl&lt;/rdf:li>     &lt;/rdf:Alt>    &lt;/dc:title>    &lt;Iptc4xmpCore:CreatorContactInfo rdf:parseType=&quot;Resource&quot;/>   &lt;/rdf:Description>  &lt;/rdf:RDF> &lt;/x:xmpmeta> &lt;?xpacket end=&quot;r&quot;?> "
+            dam:extracted="{Date}2018-04-06T09:12:35.410-04:00"
+            dam:Fileformat="PNG"
+            dam:MIMEtype="image/png"
+            dam:Numberofimages="{Long}1"
+            dam:Numberoftextualcomments="{Long}0"
+            dam:Physicalheightindpi="{Long}72"
+            dam:Physicalheightininches="{Decimal}7.432248592376709"
+            dam:Physicalwidthindpi="{Long}72"
+            dam:Physicalwidthininches="{Decimal}10.627420425415039"
+            dam:Progressive="no"
+            dam:sha1="1b1beb437f5dbaf7fcdfe000f02705382eb0b21d"
+            dam:size="{Long}651334"
+            dc:description="skate park bowl"
+            dc:format="image/png"
+            dc:modified="{Date}2017-05-30T12:19:27.334-04:00"
+            dc:title="skate park bowl"
+            jcr:lastModified="{Date}2018-11-01T21:13:52.184-04:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            tiff:ImageLength="{Long}535"
+            tiff:ImageWidth="{Long}765">
+            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
+        </metadata>
+        <related jcr:primaryType="nt:unstructured"/>
+        <usages
+            dam:score="{Long}6"
+            jcr:primaryType="nt:unstructured"
+            usedBy="[aem]">
+            <aem
+                jcr:primaryType="nt:unstructured"
+                count="{Long}6"
+                lastUsed="{Date}2017-06-12T15:59:15.868-04:00"/>
+        </usages>
+    </jcr:content>
+</jcr:root>

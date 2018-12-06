@@ -198,6 +198,7 @@
                             <exclude>**/.editorconfig</exclude>
                             <exclude>**/.stylelintrc.yaml</exclude>
                             <exclude>**/.eslintignore</exclude>
+                            <exclude>**/.stylelintignore</exclude>
                             <exclude>**/.settings</exclude>
                             <exclude>**/.DS_Store</exclude>
                             <exclude>**/target/**</exclude>

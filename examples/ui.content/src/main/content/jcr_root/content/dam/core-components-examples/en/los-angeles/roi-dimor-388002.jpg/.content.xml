@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:exif="http://ns.adobe.com/exif/1.0/" xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#" xmlns:stRef="http://ns.adobe.com/xap/1.0/sType/ResourceRef#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="917dddfb-84b4-4753-a77d-3862b81fe8ee">
+    <jcr:content
+        cq:name="roi-dimor-388002.jpg"
+        cq:parentPath="/content/dam/wknd/en/los-angeles"
+        dam:assetState="processed"
+        dam:relativePath="wknd/en/los-angeles/roi-dimor-388002.jpg"
+        jcr:lastModified="{Date}2018-11-07T08:06:08.266-07:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Bitsperpixel="{Long}24"
+            dam:extracted="{Date}2018-04-09T15:03:48.879-04:00"
+            dam:Fileformat="JPEG"
+            dam:MIMEtype="image/jpeg"
+            dam:Numberofimages="{Long}1"
+            dam:Numberoftextualcomments="{Long}0"
+            dam:Physicalheightindpi="{Long}72"
+            dam:Physicalheightininches="{Decimal}9.375"
+            dam:Physicalwidthindpi="{Long}72"
+            dam:Physicalwidthininches="{Decimal}16.66666603088379"
+            dam:Progressive="no"
+            dam:sha1="92700747366e3d2ceac69d8750f65990239c9de5"
+            dam:size="{Long}190033"
+            dc:format="image/jpeg"
+            dc:modified="{Date}2018-02-27T13:11:24.968-05:00"
+            exif:ColorSpace="{Long}65535"
+            exif:PixelXDimension="{Long}1200"
+            exif:PixelYDimension="{Long}675"
+            jcr:lastModified="{Date}2018-11-07T08:06:05.287-07:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            photoshop:ColorMode="{Long}3"
+            photoshop:DocumentAncestors="[065DFA7DF2F981183177E3EA922547C0,187B7828AC04482B7B56423F68564702,6223A5E7B9014F1C81246B902EB3DFAA,8C591E88311265E0553D1F4F31B1F9EA,A04D3F70D7DD3C5919A7D70E9E868D0C,ABA4F8737D8FF1E859AEBF01476EEB5C,C2FDB224662B570C2DA1E25E3C02B64B,adobe:docid:photoshop:99467724-321c-117b-ad20-8c9a04d34073]"
+            photoshop:DocumentAncestors_xmpArrayType="rdf:Bag"
+            tiff:ImageLength="{Long}675"
+            tiff:ImageWidth="{Long}1200"
+            tiff:Orientation="{Long}1"
+            tiff:ResolutionUnit="{Long}2"
+            tiff:XResolution="720000/10000"
+            tiff:YResolution="720000/10000"
+            xmp:CreateDate="{Date}2018-02-18T20:33:37.000-05:00"
+            xmp:CreatorTool="Adobe Photoshop CC 2017 (Macintosh)"
+            xmp:MetadataDate="{Date}2018-02-18T20:44:43.000-05:00"
+            xmp:ModifyDate="{Date}2018-02-18T20:44:43.000-05:00"
+            xmpMM:DocumentID="adobe:docid:photoshop:d6a2f6dc-55a4-117b-97cb-d7d72cc5f4f4"
+            xmpMM:InstanceID="xmp.iid:df41f512-f744-4bfb-b380-fef4799bf88d"
+            xmpMM:OriginalDocumentID="xmp.did:8e2a79ed-c175-49e1-ba34-8ace02a4feb9">
+            <xmpMM:DerivedFrom
+                jcr:primaryType="nt:unstructured"
+                stRef:documentID="xmp.did:8e2a79ed-c175-49e1-ba34-8ace02a4feb9"
+                stRef:instanceID="xmp.iid:54ddd65a-94b1-4b3e-a739-bcf032885b8a"
+                stRef:originalDocumentID="xmp.did:8e2a79ed-c175-49e1-ba34-8ace02a4feb9"
+                xmpNodeType="xmpStruct"/>
+            <xmpMM:History
+                jcr:primaryType="nt:unstructured"
+                xmpArraySize="{Long}6"
+                xmpArrayType="rdf:Seq"
+                xmpNodeType="xmpArray">
+                <_x0031_
+                    jcr:primaryType="nt:unstructured"
+                    stEvt:action="created"
+                    stEvt:instanceID="xmp.iid:8e2a79ed-c175-49e1-ba34-8ace02a4feb9"
+                    stEvt:softwareAgent="Adobe Photoshop CC 2017 (Macintosh)"
+                    stEvt:when="{Date}2018-02-18T20:33:37.000-05:00"
+                    xmpNodeType="xmpStruct"/>
+                <_x0032_
+                    jcr:primaryType="nt:unstructured"
+                    stEvt:action="saved"
+                    stEvt:changed="/"
+                    stEvt:instanceID="xmp.iid:9744eaec-6978-4838-8c12-1f7317fa9602"
+                    stEvt:softwareAgent="Adobe Photoshop CC 2017 (Macintosh)"
+                    stEvt:when="{Date}2018-02-18T20:38:46.000-05:00"
+                    xmpNodeType="xmpStruct"/>
+                <_x0033_
+                    jcr:primaryType="nt:unstructured"
+                    stEvt:action="saved"
+                    stEvt:changed="/"
+                    stEvt:instanceID="xmp.iid:54ddd65a-94b1-4b3e-a739-bcf032885b8a"
+                    stEvt:softwareAgent="Adobe Photoshop CC 2017 (Macintosh)"
+                    stEvt:when="{Date}2018-02-18T20:44:43.000-05:00"
+                    xmpNodeType="xmpStruct"/>
+                <_x0034_
+                    jcr:primaryType="nt:unstructured"
+                    stEvt:action="converted"
+                    stEvt:parameters="from application/vnd.adobe.photoshop to image/jpeg"
+                    xmpNodeType="xmpStruct"/>
+                <_x0035_
+                    jcr:primaryType="nt:unstructured"
+                    stEvt:action="derived"
+                    stEvt:parameters="converted from application/vnd.adobe.photoshop to image/jpeg"
+                    xmpNodeType="xmpStruct"/>
+                <_x0036_
+                    jcr:primaryType="nt:unstructured"
+                    stEvt:action="saved"
+                    stEvt:changed="/"
+                    stEvt:instanceID="xmp.iid:df41f512-f744-4bfb-b380-fef4799bf88d"
+                    stEvt:softwareAgent="Adobe Photoshop CC 2017 (Macintosh)"
+                    stEvt:when="{Date}2018-02-18T20:44:43.000-05:00"
+                    xmpNodeType="xmpStruct"/>
+            </xmpMM:History>
+        </metadata>
+        <related jcr:primaryType="nt:unstructured"/>
+        <usages
+            dam:score="{Long}2"
+            jcr:primaryType="nt:unstructured"
+            usedBy="[aem]">
+            <aem
+                jcr:primaryType="nt:unstructured"
+                count="{Long}2"
+                lastUsed="{Date}2018-11-13T11:37:28.411-05:00"/>
+        </usages>
+    </jcr:content>
+</jcr:root>
