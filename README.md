@@ -10,7 +10,7 @@
 * AEM product documentation of Core Components
   * [Author documentation](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
   * [Developer documentation](https://docs.adobe.com/docs/en/aem/6-3/develop/components/core-components.html)
-* [adaptTo() 2017 presentation](https://adapt.to/2017/en/schedule/extensible-components-with-sling-models-and-htl.html)
+* [Recording of the AEM GEMS Webinar, Dec 2018](http://bit.ly/AEMGEMS120518)
 
 ## Contributing
 
