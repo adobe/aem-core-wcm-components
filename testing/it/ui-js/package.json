@@ -15,6 +15,6 @@
         "lint": "npm run eslint"
     },
     "devDependencies": {
-        "eslint": "^4.19.1"
+        "eslint": "^5.9.0"
     }
 }
