@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "content/package.json",
+        "testing/it/ui-js/package.json"
+      ]
+    }
+  }
+}
