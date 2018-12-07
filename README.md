@@ -1,6 +1,6 @@
 # AEM Sites Core Components
 [![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components)
-[![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
+[![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components) [![Greenkeeper badge](https://badges.greenkeeper.io/adobe/aem-core-wcm-components.svg)](https://greenkeeper.io/)
 
 A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.
 
