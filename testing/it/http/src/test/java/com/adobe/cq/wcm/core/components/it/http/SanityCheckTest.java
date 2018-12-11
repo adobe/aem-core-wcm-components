@@ -36,6 +36,7 @@ import static org.junit.Assert.*;
 public class SanityCheckTest {
 
     private static final String URL_HC_INACTIVE_BUNDLES = "/system/sling/monitoring/mbeans/org/apache/sling/healthcheck/HealthCheck/inactiveBundles";
+    private static final String URL_PACKAGE_LIST = "/crx/packmgr/list.jsp";
 
     @ClassRule
     public static CQAuthorPublishClassRule cqBaseClassRule = new CQAuthorPublishClassRule();
@@ -80,7 +81,7 @@ public class SanityCheckTest {
     }
 
     private void testPackagesInternal(CQClient adminClient) throws ClientException {
-        JsonNode packages = JsonUtils.getJsonNodeFromString(adminClient.doGet("/crx/packmgr/list.jsp", HTTP_OK).getContent());
+        JsonNode packages = JsonUtils.getJsonNodeFromString(adminClient.doGet(URL_PACKAGE_LIST, HTTP_OK).getContent());
         List<String> unresolvedPackages = new LinkedList<>();
         packages.get("results").getElements().forEachRemaining(res -> {
             if (!res.get("resolved").getBooleanValue()) {
