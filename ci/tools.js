@@ -54,6 +54,18 @@ module.exports = class Tools {
     };
 
     /**
+     * Configure a git impersonation for the scope of the given function.
+     */
+    gitImpersonate(user, mail, func) {
+        try {
+            this.sh('git config --local user.name ' + user + ' && git config --local user.email ' + mail)
+            func()
+        } finally {
+            this.sh('git config --local --unset user.name && git config --local --unset user.email')
+        }
+    };
+
+    /**
      * Remove git tag.
      */
     removeGitTag(gitTag) {
