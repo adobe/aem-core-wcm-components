@@ -11,12 +11,10 @@
                         mergeList="{Boolean}true"/>
                     <default
                         jcr:description="Policy of the default page"
-                        jcr:lastModified="{Date}2018-11-23T14:18:24.100+02:00"
-                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Default Page"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        clientlibs="[wcm.foundation.components.page.responsive,core.wcm.components.tabs.v1,core.wcm.components.showcase.code]">
+                        clientlibs="[wcm.foundation.components.page.responsive]">
                         <jcr:content
                             jcr:primaryType="nt:unstructured"
                             mergeList="{Boolean}true"/>
@@ -77,12 +75,12 @@
                             mergeList="{Boolean}true"/>
                     </default>
                     <policy_1475234603206
-                        jcr:lastModified="{Date}2018-11-23T11:09:25.327+02:00"
+                        jcr:lastModified="{Date}2016-11-03T18:06:15.936+02:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Policy"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        components="[/libs/wcm/foundation/components/responsivegrid,group:.core-wcm]">
+                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core,group:Core Form,group:core-wcm-form]">
                         <jcr:content
                             jcr:primaryType="nt:unstructured"
                             mergeList="{Boolean}true"/>
