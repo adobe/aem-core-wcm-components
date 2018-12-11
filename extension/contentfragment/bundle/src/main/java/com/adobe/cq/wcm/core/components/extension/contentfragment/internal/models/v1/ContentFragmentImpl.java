@@ -15,13 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -42,6 +36,11 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -486,8 +485,45 @@ public class ContentFragmentImpl implements ContentFragment {
                 return null;
             }
             // split into paragraphs
-            return content.split("(?=(<p>|<h1>|<h2>|<h3>|<h4>|<h5>|<h6>))");
+            return splitContentIntoParagraphs(content);
         }
+
+        private static String[] splitContentIntoParagraphs(@Nonnull String content) {
+            ArrayList<String> paragraphs = new ArrayList<>();
+
+            // wrap the content snippet into html (Jsoup)
+            Document contentDocument = Jsoup.parseBodyFragment(content);
+            Elements bodies = contentDocument.getElementsByTag("body");
+            // make sure it contains one only since it get wrapped normally
+            if (bodies.size() == 1) {
+                Node bodyNode = bodies.get(0); // access body element
+
+                // loop the root element under body and filter to only accept expected ones
+                for (Node childNode : bodyNode.childNodes()) {
+                    String nodeName = childNode.nodeName().toLowerCase();
+                    if (childNode instanceof org.jsoup.nodes.Element &&  StringUtils.containsAny(nodeName, "p", "h1", "h2", "h3", "h4", "h5")) {
+                        paragraphs.add(childNode.outerHtml());
+                    } else if (childNode instanceof TextNode) {
+                        TextNode txtNode = (TextNode) childNode;
+                        String text = txtNode.text();
+                        // filter whitespaces or carriage returns like characters found
+                        // in between the html elements
+                        if (!StringUtils.containsOnly(text,
+                                ' ',
+                                '\u00A0' /* nbsp */,
+                                '\t',
+                                '\n',
+                                '\r'
+                        )) {
+                            paragraphs.add(text);
+                        }
+                    }
+                }
+            }
+            return paragraphs.toArray(new String[0]);
+        }
+
     }
+
 
 }
