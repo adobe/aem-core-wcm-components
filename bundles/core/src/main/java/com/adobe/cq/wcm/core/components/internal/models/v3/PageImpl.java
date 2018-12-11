@@ -135,9 +135,10 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             return null;
         }
 
-        PageImpl.requestSetHierarchyEntryPoint(request, currentPage);
-
-        return modelFactory.getModelFromWrappedRequest(PageImpl.getHierarchyServletRequest(request, rootPage), rootPage.getContentResource(), this.getClass());
+        return modelFactory.getModelFromWrappedRequest(
+            PageImpl.getHierarchyServletRequest(request, rootPage, currentPage),
+            rootPage.getContentResource(),
+            this.getClass());
     }
 
     /**
@@ -167,8 +168,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      * @param page page to be referenced as statically containing the current page content
      * @return {@link SlingHttpServletRequest} a {@link SlingHttpServletRequestWrapper} containing given page and request
      */
-    @Nonnull
-    protected static SlingHttpServletRequest getHierarchyServletRequest(@Nonnull SlingHttpServletRequest request, @Nonnull com.day.cq.wcm.api.Page page) {
+    protected static SlingHttpServletRequest getHierarchyServletRequest(@Nonnull SlingHttpServletRequest request,
+                                                                        @Nonnull com.day.cq.wcm.api.Page page,
+                                                                        @Nullable com.day.cq.wcm.api.Page entryPage) {
         // Request attribute key of the component context
         final String ATTR_COMPONENT_CONTEXT = "com.day.cq.wcm.componentcontext";
 
@@ -182,6 +184,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         // When traversing child pages the currentPage must be updated
         wrapper.setAttribute(ATTR_COMPONENT_CONTEXT, new HierarchyComponentContextWrapper(componentContext, page));
         wrapper.setAttribute(ATTR_CURRENT_PAGE, page);
+        wrapper.setAttribute(ATTR_HIERARCHY_ENTRY_POINT_PAGE, entryPage);
 
         return wrapper;
     }
@@ -216,13 +219,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     protected static com.day.cq.wcm.api.Page requestGetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request) {
         return (com.day.cq.wcm.api.Page) request.getAttribute(ATTR_HIERARCHY_ENTRY_POINT_PAGE);
-    }
-
-    /**
-     * Set request's entry point attribute value
-     */
-    protected static void requestSetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request, @Nonnull com.day.cq.wcm.api.Page page) {
-        request.setAttribute(ATTR_HIERARCHY_ENTRY_POINT_PAGE, page);
     }
 
     /**
@@ -318,7 +314,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     /**
-     * Optionally add a child page that is the entry point of a site model request when this child is not added by the root structure configuration
+     * Optionally add a child page that is the entry point of a site model request when this child is not added by
+     * the root structure configuration
      *
      * @param childPages    List of child pages
      */
@@ -381,7 +378,10 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 childPageContentResource = templatedResource;
             }
 
-            itemWrappers.put(childPage.getPath(), modelFactory.getModelFromWrappedRequest(PageImpl.getHierarchyServletRequest(slingRequestWrapper, childPage), childPageContentResource, Page.class));
+            itemWrappers.put(childPage.getPath(), modelFactory.getModelFromWrappedRequest(
+                PageImpl.getHierarchyServletRequest(slingRequestWrapper, childPage, null),
+                childPageContentResource,
+                Page.class));
         }
 
         return itemWrappers;

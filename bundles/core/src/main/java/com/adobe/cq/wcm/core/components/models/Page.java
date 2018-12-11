@@ -322,7 +322,7 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
      * URL to the root model of the App
      *
      * @return {@link String}
-     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     * @since com.adobe.cq.wcm.core.components.models 12.7.0
      */
     @Nullable
     @JsonIgnore
@@ -334,7 +334,7 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
      * Root page model of the current hierarchy of pages
      *
      * @return {@link Page}
-     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     * @since com.adobe.cq.wcm.core.components.models 12.7.0
      */
     @Nullable
     @JsonIgnore
@@ -374,7 +374,7 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
 
     /**
      * @see HierarchyNodeExporter#getExportedHierarchyType
-     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     * @since com.adobe.cq.wcm.core.components.models 12.7.0
      */
     @Override
     default String getExportedHierarchyType() {
@@ -383,7 +383,7 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
 
     /**
      * @see HierarchyNodeExporter#getExportedPath
-     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     * @since com.adobe.cq.wcm.core.components.models 12.7.0
      */
     @Override
     default String getExportedPath() {
@@ -392,7 +392,7 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
 
     /**
      * @see HierarchyNodeExporter#getExportedChildren
-     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     * @since com.adobe.cq.wcm.core.components.models 12.7.0
      */
     @Override
     default Map<String, ? extends HierarchyNodeExporter> getExportedChildren() {

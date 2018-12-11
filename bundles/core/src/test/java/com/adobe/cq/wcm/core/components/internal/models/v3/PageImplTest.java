@@ -100,10 +100,11 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         MockSlingHttpServletRequest mockedRequest = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
         com.day.cq.wcm.api.Page mockedPage = mock(com.day.cq.wcm.api.Page.class);
 
-        SlingHttpServletRequest hierarchyServletRequest = PageImpl.getHierarchyServletRequest(mockedRequest, mockedPage);
+        SlingHttpServletRequest hierarchyServletRequest = PageImpl.getHierarchyServletRequest(mockedRequest, mockedPage, mockedPage);
 
         assertEquals(mockedPage, hierarchyServletRequest.getAttribute("currentPage"));
         assertNotNull(hierarchyServletRequest.getAttribute("com.day.cq.wcm.componentcontext"));
+        assertEquals(mockedPage, hierarchyServletRequest.getAttribute("com.adobe.cq.wcm.core.components.internal.models.HierarchyPage.entryPointPage"));
     }
 
     @Test
