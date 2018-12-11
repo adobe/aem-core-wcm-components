@@ -12,7 +12,7 @@
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Default"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples]">
+                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples,group:.core-wcm]">
                         <cq:authoring jcr:primaryType="nt:unstructured">
                             <assetToComponentMapping jcr:primaryType="nt:unstructured">
                                 <mapping_1544531934044
@@ -41,7 +41,7 @@
                                 jcr:lastModified="{Date}2018-12-11T16:44:10.564+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                jcr:title="Page Policy"
+                                jcr:title="Core Components Examples - Page"
                                 sling:resourceType="wcm/core/components/policy/policy"
                                 clientlibs="cmp-examples.base">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
