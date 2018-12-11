@@ -79,6 +79,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     private Map<String, ? extends Page> childPages = null;
 
+    private com.day.cq.wcm.api.Page rootPage = null;
+
     @Nullable
     @Override
     public String getExportedHierarchyType() {
@@ -89,7 +91,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public Map<String, ? extends Page> getExportedChildren() {
         if (childPages == null) {
-            childPages = getChildPageModels(request);
+            childPages = getChildPageModels();
         }
 
         return childPages;
@@ -318,17 +320,16 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * Optionally add a child page that is the entry point of a site model request when this child is not added by the root structure configuration
      *
-     * @param slingRequest  The current servlet request
      * @param childPages    List of child pages
      */
-    private void addAsynchronousChildPage(@Nonnull SlingHttpServletRequest slingRequest, @Nonnull List<com.day.cq.wcm.api.Page> childPages) {
+    private void addAsynchronousChildPage(@Nonnull List<com.day.cq.wcm.api.Page> childPages) {
         // Child pages are only added to the root page
-        if (Boolean.TRUE.equals(slingRequest.getAttribute(ATTR_IS_CHILD_PAGE))) {
+        if (Boolean.TRUE.equals(request.getAttribute(ATTR_IS_CHILD_PAGE))) {
             return;
         }
 
         // Eventually add a child page that is not part page root children of the but is the entry point of the request
-        com.day.cq.wcm.api.Page entryPointPage = PageImpl.requestGetHierarchyEntryPoint(slingRequest);
+        com.day.cq.wcm.api.Page entryPointPage = PageImpl.requestGetHierarchyEntryPoint(request);
 
         if (entryPointPage == null) {
             return;
@@ -348,20 +349,20 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Nonnull
-    private Map<String, Page> getChildPageModels(@Nonnull SlingHttpServletRequest slingRequest) {
+    private Map<String, Page> getChildPageModels() {
 
-        int pageTreeTraversalDepth = getPageTreeTraversalDepth(currentStyle);
+        int pageTreeTraversalDepth = PageImpl.getPageTreeTraversalDepth(currentStyle);
 
-        List<Pattern> pageFilterPatterns = PageImpl.getStructurePatterns(slingRequest, currentStyle);
+        List<Pattern> pageFilterPatterns = PageImpl.getStructurePatterns(request, currentStyle);
 
         // Setting the child page to true to prevent child pages to expose their own child pages
-        SlingHttpServletRequest slingRequestWrapper = new SlingHttpServletRequestWrapper(slingRequest);
+        SlingHttpServletRequest slingRequestWrapper = new SlingHttpServletRequestWrapper(request);
 
         Map<String, Page> itemWrappers = new LinkedHashMap<>();
 
         List<com.day.cq.wcm.api.Page> children = getChildPageRecursive(currentPage, slingRequestWrapper, pageFilterPatterns, pageTreeTraversalDepth);
 
-        addAsynchronousChildPage(slingRequest, children);
+        addAsynchronousChildPage(children);
 
         // Add a flag to inform the model of the child pages that they are not the root of the tree
         slingRequestWrapper.setAttribute(ATTR_IS_CHILD_PAGE, true);
@@ -401,25 +402,29 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      * @return Returns the root (app) page the current page is part of
      */
     private com.day.cq.wcm.api.Page getRootPage() {
-        com.day.cq.wcm.api.Page page = currentPage;
+        if (rootPage != null) {
+            return rootPage;
+        }
+
+        rootPage = currentPage;
         boolean isRootModel = false;
 
         ContentPolicyManager contentPolicyManager = resource.getResourceResolver().adaptTo(ContentPolicyManager.class);
 
         do {
-            page = page.getParent();
+            rootPage = rootPage.getParent();
 
-            if (page == null) {
+            if (rootPage == null) {
                 continue;
             }
 
-            Template template = page.getTemplate();
+            Template template = rootPage.getTemplate();
 
             if (template == null || !template.hasStructureSupport()) {
                 continue;
             }
 
-            Resource pageContentResource = page.getContentResource();
+            Resource pageContentResource = rootPage.getContentResource();
 
             if (pageContentResource == null) {
                 continue;
@@ -439,8 +444,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
             isRootModel = properties.containsKey(PR_IS_ROOT);
 
-        } while(page != null && !isRootModel);
+        } while(rootPage != null && !isRootModel);
 
-        return page;
+        return rootPage;
     }
 }
