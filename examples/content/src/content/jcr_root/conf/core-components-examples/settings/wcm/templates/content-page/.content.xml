@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Template">
+    <jcr:content
+        cq:lastModified="{Date}2018-12-11T16:44:10.570+01:00"
+        cq:lastModifiedBy="admin"
+        cq:templateType="/conf/core-components-examples/settings/wcm/template-types/content-page"
+        jcr:description="Simple content page for Core Components Library"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Content Page"
+        status="enabled"/>
+</jcr:root>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    jcr:primaryType="cq:EditConfig">
-    <cq:listeners
-        jcr:primaryType="cq:EditListenersConfig"
-        afterchilddelete="CQ.CoreComponents.panelcontainer.v1.AFTER_CHILD_DELETE"
-        afterchildinsert="CQ.CoreComponents.panelcontainer.v1.AFTER_CHILD_INSERT"
-        afterchildmove="CQ.CoreComponents.panelcontainer.v1.AFTER_CHILD_MOVE"/>
-</jcr:root>

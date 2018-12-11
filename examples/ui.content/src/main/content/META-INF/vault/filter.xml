@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<workspaceFilter version="1.0">
-    <filter root="/conf/core-components-examples"/>
-    <filter root="/content/core-components-examples"/>
-    <filter root="/content/cq:tags/core-components-examples"/>
-    <filter root="/content/dam/core-components-examples"/>
-</workspaceFilter>

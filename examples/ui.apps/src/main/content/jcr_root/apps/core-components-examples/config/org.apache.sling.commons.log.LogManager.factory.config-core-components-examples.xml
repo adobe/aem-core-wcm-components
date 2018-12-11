@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
-    xmlns:jcr="http://www.jcp.org/jcr/1.0" jcr:primaryType="sling:OsgiConfig"
-    org.apache.sling.commons.log.file="logs/project-core-components-examples.log"
-    org.apache.sling.commons.log.level="info"
-    org.apache.sling.commons.log.names="[core.wcm.components.examples]"
-    org.apache.sling.commons.log.pattern="\{0,date,yyyy-MM-dd HH:mm:ss.SSS} {4} [{3}] {5}" />
