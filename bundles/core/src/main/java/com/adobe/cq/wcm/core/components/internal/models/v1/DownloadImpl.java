@@ -21,6 +21,7 @@ import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +49,9 @@ public class DownloadImpl implements Download {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/download/v1/download";
 
+    protected static final String JPEG_EXTENSION = ".jpeg";
+    protected static final String IMAGE_SERVLET_EXTENSION = ".coreimg" + JPEG_EXTENSION;
+
     @Self
     private SlingHttpServletRequest request;
 
@@ -70,10 +74,10 @@ public class DownloadImpl implements Download {
 
     private boolean descriptionFromAsset = false;
 
-    @ValueMapValue(optional = true, name = "jcr:title")
+    @ValueMapValue(optional = true, name = JcrConstants.JCR_TITLE)
     private String title;
 
-    @ValueMapValue(optional = true, name = "jcr:description")
+    @ValueMapValue(optional = true, name = JcrConstants.JCR_DESCRIPTION)
     private String description;
 
     @ValueMapValue(optional = true)
@@ -92,9 +96,9 @@ public class DownloadImpl implements Download {
         descriptionFromAsset = properties.get(PN_DESCRIPTION_FROM_ASSET, descriptionFromAsset);
         if (currentStyle != null) {
             if (StringUtils.isBlank(ctaText)) {
-                ctaText = currentStyle.get("ctaText", String.class);
+                ctaText = currentStyle.get(PN_CTA_TEXT, String.class);
             }
-            titleType = currentStyle.get("titleType", String.class);
+            titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
         }
         if (StringUtils.isNotBlank(fileReference)) {
             Resource downloadResource = resourceResolver.getResource(fileReference);
@@ -116,21 +120,21 @@ public class DownloadImpl implements Download {
 
                     String resourcePath = resourceResolver.map(request, resource.getPath());
 
-                    imagePathBuilder.append(resourcePath).append(".coreimg.jpeg");
+                    imagePathBuilder.append(resourcePath).append(IMAGE_SERVLET_EXTENSION);
                     if (lastModified > 0) {
-                        imagePathBuilder.append("/").append(lastModified).append(".jpeg");
+                        imagePathBuilder.append("/").append(lastModified).append(JPEG_EXTENSION);
                     }
 
                     imagePath = imagePathBuilder.toString();
 
                     if (titleFromAsset) {
-                        String assetTitle = downloadAsset.getMetadataValue("dc:title");
+                        String assetTitle = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
                         if (StringUtils.isNotBlank(assetTitle)) {
                             title = assetTitle;
                         }
                     }
                     if (descriptionFromAsset) {
-                        String assetDescription = downloadAsset.getMetadataValue("dc:description");
+                        String assetDescription = downloadAsset.getMetadataValue(DamConstants.DC_DESCRIPTION);
                         if (StringUtils.isNotBlank(assetDescription)) {
                             description = assetDescription;
                         }

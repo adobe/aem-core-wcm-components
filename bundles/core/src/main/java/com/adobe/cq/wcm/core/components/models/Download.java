@@ -27,6 +27,8 @@ public interface Download extends ComponentExporter {
 
     String PN_TITLE_FROM_ASSET = "titleFromAsset";
     String PN_DESCRIPTION_FROM_ASSET = "descriptionFromAsset";
+    String PN_CTA_TEXT = "ctaText";
+    String PN_TITLE_TYPE = "titleType";
 
 
     /**
