@@ -19,16 +19,15 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.designer.Style;
-import com.day.cq.commons.jcr.JcrConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.*;
@@ -47,7 +46,7 @@ public class DownloadImpl implements Download {
 
     private static final Logger LOG = LoggerFactory.getLogger(DownloadImpl.class);
 
-    public final static String RESOURCE_TYPE = "mnrdlm/brand/components/content/download";
+    public final static String RESOURCE_TYPE = "core/wcm/components/download/v1/download";
 
     @Self
     private SlingHttpServletRequest request;
