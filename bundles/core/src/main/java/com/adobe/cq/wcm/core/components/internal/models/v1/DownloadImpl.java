@@ -21,7 +21,7 @@ import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.wcm.api.designer.Style;
-import com.day.crx.JcrConstants;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
