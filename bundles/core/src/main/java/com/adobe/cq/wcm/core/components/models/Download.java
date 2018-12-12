@@ -21,13 +21,31 @@ import com.adobe.cq.export.json.ComponentExporter;
 import javax.annotation.Nonnull;
 
 /**
- * Sling model for the Download component.
+ * Defines the {@code Download} Sling Model for the {@code /apps/core/wcm/components/download} component.
  */
 public interface Download extends ComponentExporter {
 
+    /**
+     * Name of the resource property that defines whether or not the title value is taken from the configured asset.
+     */
     String PN_TITLE_FROM_ASSET = "titleFromAsset";
+
+    /**
+     * Name of the resource property that defines whether or not the description value is taken from the configured asset.
+     */
     String PN_DESCRIPTION_FROM_ASSET = "descriptionFromAsset";
+
+
+    /**
+     * Name of the policy property that defines the text to be displayed on the Call-to-Action.
+     */
     String PN_CTA_TEXT = "ctaText";
+
+    /**
+     * Name of the policy property that stores the value for this title's HTML element type.
+     *
+     * @see #getTitleType()
+     */
     String PN_TITLE_TYPE = "titleType";
 
 
@@ -42,10 +60,10 @@ public interface Download extends ComponentExporter {
     }
 
     /**
-     * Returns either the description configured in the dialog or the title of the DAM asset,
+     * Returns either the description configured in the dialog or the description of the DAM asset,
      * depending on the state of the descriptionFromAsset checkbox.
      *
-     * @return the download title
+     * @return the download description
      */
     default String getDescription(){
         throw new UnsupportedOperationException();
