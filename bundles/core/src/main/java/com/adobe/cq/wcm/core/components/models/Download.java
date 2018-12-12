@@ -101,7 +101,7 @@ public interface Download extends ComponentExporter {
     }
 
     /**
-     * Returns the element to be used for the title as defined in the component policy.
+     * Returns the HTML element to be used for the title as defined in the component policy.
      *
      * @return the title header element type
      */
