@@ -26,6 +26,6 @@
     <div class="cmp-download__description" data-sly-test.description="${download.description}">
         ${description @ context="html"}
     </div>
-    <a class="cmp-download__cta" href="${download.downloadUrl}">${download.ctaText}</a>
+    <a class="cmp-download__action" href="${download.downloadUrl}">${download.actionText}</a>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-download cq-dd-file'}"></sly>

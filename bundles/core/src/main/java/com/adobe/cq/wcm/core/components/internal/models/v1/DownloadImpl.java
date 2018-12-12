@@ -81,7 +81,7 @@ public class DownloadImpl implements Download {
     private String description;
 
     @ValueMapValue(optional = true)
-    private String ctaText;
+    private String actionText;
 
     private String imagePath;
 
@@ -95,8 +95,8 @@ public class DownloadImpl implements Download {
         titleFromAsset = properties.get(PN_TITLE_FROM_ASSET, titleFromAsset);
         descriptionFromAsset = properties.get(PN_DESCRIPTION_FROM_ASSET, descriptionFromAsset);
         if (currentStyle != null) {
-            if (StringUtils.isBlank(ctaText)) {
-                ctaText = currentStyle.get(PN_CTA_TEXT, String.class);
+            if (StringUtils.isBlank(actionText)) {
+                actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
             }
             titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
         }
@@ -166,8 +166,8 @@ public class DownloadImpl implements Download {
     }
 
     @Override
-    public String getCtaText() {
-        return ctaText;
+    public String getActionText() {
+        return actionText;
     }
 
     @Override

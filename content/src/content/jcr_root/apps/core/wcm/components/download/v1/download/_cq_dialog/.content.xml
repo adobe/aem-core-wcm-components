@@ -236,12 +236,12 @@
                                                         checked="{Boolean}true"/>
                                                 </items>
                                             </descriptionGroup>
-                                            <ctaText
+                                            <actionText
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="The text for the download button."
-                                                fieldLabel="CTA Text"
-                                                name="./ctaText"/>
+                                                fieldDescription="The text for the download call-to-action."
+                                                fieldLabel="Call-to-Action Text"
+                                                name="./actionText"/>
                                         </items>
                                     </column>
                                 </items>

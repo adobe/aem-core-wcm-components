@@ -39,7 +39,7 @@ public interface Download extends ComponentExporter {
     /**
      * Name of the policy property that defines the text to be displayed on the Call-to-Action.
      */
-    String PN_CTA_TEXT = "ctaText";
+    String PN_ACTION_TEXT = "actionText";
 
     /**
      * Name of the policy property that stores the value for this title's HTML element type.
@@ -84,7 +84,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the button text
      */
-    default String getCtaText()
+    default String getActionText()
     {
         throw new UnsupportedOperationException();
     }
