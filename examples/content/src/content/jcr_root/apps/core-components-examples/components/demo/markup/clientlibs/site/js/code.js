@@ -23,8 +23,9 @@
         p.appendChild(text);
         return p.innerHTML;
     }
-    $(document).ready(function() {
-        $("pre.cmp-code code").each(function(i, block) {
+
+    document.addEventListener("DOMContentLoaded", function() {
+        window.top.document.querySelectorAll("pre.cmp-demo__code code").forEach(function(block) {
             block.innerHTML = escapeHtml(html_beautify(block.innerHTML, { "preserve_newlines": false }));
         });
         PR.prettyPrint();
