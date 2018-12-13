@@ -12,8 +12,8 @@
             jcr:primaryType="nt:unstructured"
             sling:resourceType="core-components-examples/components/demo/properties"
             reference="../../component"/>
-        <html
-            cq:panelTitle="HTML"
+        <markup
+            cq:panelTitle="Markup"
             jcr:primaryType="nt:unstructured"
             sling:resourceType="core-components-examples/components/demo/code"
             reference="../../component"/>

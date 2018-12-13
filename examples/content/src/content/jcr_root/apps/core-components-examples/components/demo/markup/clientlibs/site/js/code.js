@@ -46,7 +46,7 @@
                 block.innerHTML = JSON.stringify(data);
             });
         });
-        window.top.document.querySelectorAll("pre.cmp-demo__code code").forEach(function(block) {
+        window.top.document.querySelectorAll("pre.cmp-demo__markup code").forEach(function(block) {
             block.innerHTML = escapeHtml(html_beautify(block.innerHTML, { "preserve_newlines": false }));
         });
         PR.prettyPrint();
