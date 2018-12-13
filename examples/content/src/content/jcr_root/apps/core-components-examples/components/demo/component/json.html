@@ -1,4 +1,5 @@
-<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!--/*
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ Copyright 2018 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +13,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<pre class="cmp-demo__json prettyprint linenums"
-     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-test="${properties.reference}"
-     data-sly-resource="${properties.reference @ selectors='json'}">
-</pre>
-<sly data-sly-call="${template.placeholder @ isEmpty=!(properties.reference), classAppend='cmp-demo__json'}"></sly>
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */-->
+<code class="language-json" data-sly-repeat="${resource.listChildren}" data-cmp-src="${item.path}"></code>

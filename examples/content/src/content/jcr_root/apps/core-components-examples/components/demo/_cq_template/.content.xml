@@ -20,7 +20,7 @@
         <json
             cq:panelTitle="JSON"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="core-components-examples/components/demo/code"
+            sling:resourceType="core-components-examples/components/demo/json"
             reference="../../component"/>
     </info>
 </jcr:root>
