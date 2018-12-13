@@ -171,7 +171,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core/wcm/components/image/v2/image"
-                                    fileReference="/content/dam/core-components-examples/en/los-angeles/min-car.jpg"/>
+                                    fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"/>
                             </item_1>
                             <item_2
                                 cq:panelTitle="Tab 2"
@@ -194,7 +194,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core/wcm/components/image/v2/image"
-                                    fileReference="/content/dam/core-components-examples/en/los-angeles/robson-hatsukami-morgan-280159.jpg"/>
+                                    fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"/>
                             </item_2>
                             <item_1544184727261
                                 cq:panelTitle="Tab 3"
@@ -217,7 +217,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core/wcm/components/image/v2/image"
-                                    fileReference="/content/dam/core-components-examples/en/los-angeles/skateboard-hero.jpg"/>
+                                    fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"/>
                             </item_1544184727261>
                         </tabs>
                     </component>
@@ -427,7 +427,7 @@
                                             jcr:lastModifiedBy="admin"
                                             jcr:primaryType="nt:unstructured"
                                             sling:resourceType="core/wcm/components/image/v2/image"
-                                            fileReference="/content/dam/core-components-examples/en/los-angeles/roi-dimor-388002.jpg"/>
+                                            fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"/>
                                     </item_1544185641044>
                                 </tabs>
                             </item_1>

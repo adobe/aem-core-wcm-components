@@ -271,7 +271,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="true"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/en/los-angeles/desk-hero2.jpg"
+                            fileReference="/content/dam/core-components-examples/en/roaster.jpg"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
@@ -341,7 +341,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="true"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/en/los-angeles/desk-hero2.jpg"
+                            fileReference="/content/dam/core-components-examples/en/mini.jpg"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">

@@ -81,7 +81,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/en/los-angeles/min-car.jpg"
+                            fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
@@ -142,7 +142,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="false"
-                            fileReference="/content/dam/core-components-examples/en/los-angeles/min-car.jpg"
+                            fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
@@ -203,7 +203,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/en/los-angeles/min-car.jpg"
+                            fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"
                             isDecorative="false"
                             linkURL="/content/core-components-examples/en/image"
                             titleValueFromDAM="true"/>
@@ -265,7 +265,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/en/los-angeles/min-car.jpg"
+                            fileReference="/content/dam/core-components-examples/en/skateboarder.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
