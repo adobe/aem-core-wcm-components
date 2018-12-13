@@ -41,12 +41,12 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        window.top.document.querySelectorAll("pre.cmp-demo__json code").forEach(function(block) {
+        document.querySelectorAll("pre.cmp-demo__json code").forEach(function(block) {
             getJSON(block.dataset.cmpSrc + ".model.json", function(data) {
                 block.innerHTML = JSON.stringify(data);
             });
         });
-        window.top.document.querySelectorAll("pre.cmp-demo__markup code").forEach(function(block) {
+        document.querySelectorAll("pre.cmp-demo__code code").forEach(function(block) {
             block.innerHTML = escapeHtml(html_beautify(block.innerHTML, { "preserve_newlines": false }));
         });
         PR.prettyPrint();
