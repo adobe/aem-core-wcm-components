@@ -6,9 +6,9 @@
     jcr:uuid="8d530f0c-0ca2-42e9-90d7-41bdfd96d0eb">
     <jcr:content
         cq:name="skateboarder.jpg"
-        cq:parentPath="/content/dam/core-components-examples/en"
+        cq:parentPath="/content/dam/core-components-examples/library"
         dam:assetState="processed"
-        dam:relativePath="core-components-examples/en/skateboarder.jpg"
+        dam:relativePath="core-components-examples/library/skateboarder.jpg"
         jcr:lastModified="{Date}2018-12-13T12:12:56.070+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">

@@ -86,7 +86,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/roaster.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/roaster.jpg"/>
                             <image_1622336496
                                 jcr:created="{Date}2018-12-06T19:32:31.054+01:00"
                                 jcr:createdBy="admin"
@@ -94,7 +94,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/circle.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/circle.jpg"/>
                             <image_1533234440
                                 jcr:created="{Date}2018-12-06T19:32:33.312+01:00"
                                 jcr:createdBy="admin"
@@ -102,7 +102,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/mini.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/mini.jpg"/>
                         </carousel>
                     </component>
                     <info
@@ -167,7 +167,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                                fileReference="/content/dam/core-components-examples/en/circle.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/circle.jpg"/>
                             <teaser_841933659
                                 jcr:created="{Date}2018-12-06T19:32:42.364+01:00"
                                 jcr:createdBy="admin"
@@ -175,7 +175,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                                fileReference="/content/dam/core-components-examples/en/roaster.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/roaster.jpg"/>
                             <teaser
                                 jcr:created="{Date}2018-12-06T19:32:40.024+01:00"
                                 jcr:createdBy="admin"
@@ -183,7 +183,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                                fileReference="/content/dam/core-components-examples/en/mini.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/mini.jpg"/>
                         </carousel_8337507762>
                     </component>
                     <info
@@ -248,7 +248,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/mini.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/mini.jpg"/>
                             <image_1072016967
                                 jcr:created="{Date}2018-12-06T19:32:52.544+01:00"
                                 jcr:createdBy="admin"
@@ -256,7 +256,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/roaster.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/roaster.jpg"/>
                             <image
                                 jcr:created="{Date}2018-12-06T19:32:50.631+01:00"
                                 jcr:createdBy="admin"
@@ -264,7 +264,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/circle.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/circle.jpg"/>
                         </carousel_7304850024>
                     </component>
                     <info
@@ -329,7 +329,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/roaster.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/roaster.jpg"/>
                             <image_1321018784
                                 jcr:created="{Date}2018-12-06T19:33:14.961+01:00"
                                 jcr:createdBy="admin"
@@ -337,7 +337,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/circle.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/circle.jpg"/>
                             <image
                                 jcr:created="{Date}2018-12-06T19:33:13.071+01:00"
                                 jcr:createdBy="admin"
@@ -345,7 +345,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="core/wcm/components/image/v2/image"
-                                fileReference="/content/dam/core-components-examples/en/mini.jpg"/>
+                                fileReference="/content/dam/core-components-examples/library/mini.jpg"/>
                         </carousel_1655133361>
                     </component>
                     <info

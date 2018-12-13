@@ -44,7 +44,7 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/navigation/v1/navigation"
                     collectAllPages="true"
-                    navigationRoot="/content/core-components-examples/en"
+                    navigationRoot="/content/core-components-examples/library"
                     skipNavigationRoot="true"/>
             </responsivegrid_316954685>
             <responsivegrid

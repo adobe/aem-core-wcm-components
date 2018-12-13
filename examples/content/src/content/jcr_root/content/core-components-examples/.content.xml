@@ -11,7 +11,7 @@
         sling:redirect="{Boolean}true"
         sling:redirectStatus="{Long}302"
         sling:resourceType="foundation/components/redirect"
-        redirectTarget="/content/core-components-examples/en">
+        redirectTarget="/content/core-components-examples/library">
         <image jcr:primaryType="nt:unstructured">
             <file/>
         </image>
