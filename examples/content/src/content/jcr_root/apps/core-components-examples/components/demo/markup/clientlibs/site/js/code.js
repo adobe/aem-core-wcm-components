@@ -43,7 +43,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelectorAll("pre.cmp-demo__json code").forEach(function(block) {
             getJSON(block.dataset.cmpSrc + ".model.json", function(data) {
-                block.innerHTML = JSON.stringify(data);
+                block.innerText = JSON.stringify(data);
             });
         });
         document.querySelectorAll("pre.cmp-demo__markup code").forEach(function(block) {
