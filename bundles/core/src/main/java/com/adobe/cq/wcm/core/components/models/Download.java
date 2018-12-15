@@ -48,6 +48,21 @@ public interface Download extends ComponentExporter {
      */
     String PN_TITLE_TYPE = "titleType";
 
+    /**
+     * Name of the policy property that defines whether the file's size will be displayed.
+     */
+    String PN_DISPLAY_SIZE = "displaySize";
+
+    /**
+     * Name of the policy property that defines whether the file's format will be displayed.
+     */
+    String PN_DISPLAY_FORMAT = "displayFormat";
+
+    /**
+     * Name of the policy property that defines whether the filename will be displayed.
+     */
+    String PN_DISPLAY_FILENAME = "displayFilename";
+
 
     /**
      * Returns either the title configured in the dialog or the title of the DAM asset,
@@ -106,6 +121,66 @@ public interface Download extends ComponentExporter {
      * @return the title header element type
      */
     default String getTitleType()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the size of the file to be downloaded.
+     *
+     * @return the size of download file
+     */
+    default String getSize()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if the file size should be displayed.
+     *
+     * @return {@code true} if the size should be displayed, {@code false} otherwise
+     */
+    default boolean displaySize()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the format of the file to be downloaded.
+     *
+     * @return the format of the download file
+     */
+    default String getFormat()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if the file format should be displayed.
+     *
+     * @return {@code true} if the format should be displayed, {@code false} otherwise
+     */
+    default boolean displayFormat()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the filename of the file to be downloaded.
+     *
+     * @return the filename of the download file
+     */
+    default String  getFilename()
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if the filename should be displayed.
+     *
+     * @return {@code true} if the filename should be displayed, {@code false} otherwise
+     */
+    default boolean displayFilename()
     {
         throw new UnsupportedOperationException();
     }

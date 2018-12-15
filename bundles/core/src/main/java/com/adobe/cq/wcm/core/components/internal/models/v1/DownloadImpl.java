@@ -24,6 +24,7 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -74,6 +75,12 @@ public class DownloadImpl implements Download {
 
     private boolean descriptionFromAsset = false;
 
+    private boolean displaySize;
+
+    private boolean displayFormat;
+
+    private boolean displayFilename;
+
     @ValueMapValue(optional = true, name = JcrConstants.JCR_TITLE)
     private String title;
 
@@ -87,6 +94,12 @@ public class DownloadImpl implements Download {
 
     private String titleType;
 
+    private String filename;
+
+    private String format;
+
+    private String size;
+
     private long lastModified = 0;
 
     @PostConstruct
@@ -99,6 +112,9 @@ public class DownloadImpl implements Download {
                 actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
             }
             titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
+            displaySize = currentStyle.get(PN_DISPLAY_SIZE, false);
+            displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, false);
+            displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, false);
         }
         if (StringUtils.isNotBlank(fileReference)) {
             Resource downloadResource = resourceResolver.getResource(fileReference);
@@ -139,6 +155,17 @@ public class DownloadImpl implements Download {
                             description = assetDescription;
                         }
                     }
+
+                    size = null;
+                    Object rawFileSizeObject = downloadAsset.getMetadata(DamConstants.DAM_SIZE);
+                    if(rawFileSizeObject != null){
+                        long rawFileSize = (Long)rawFileSizeObject;
+                        size = FileUtils.byteCountToDisplaySize(rawFileSize);
+                    }
+
+                    filename = downloadAsset.getName();
+
+                    format = downloadAsset.getMetadataValue(DamConstants.DC_FORMAT);
                 }
             }
         }
@@ -178,5 +205,35 @@ public class DownloadImpl implements Download {
     @Override
     public String getTitleType() {
         return titleType;
+    }
+
+    @Override
+    public String getFilename() {
+        return filename;
+    }
+
+    @Override
+    public String getFormat() {
+        return format;
+    }
+
+    @Override
+    public String getSize() {
+        return size;
+    }
+
+    @Override
+    public boolean displaySize() {
+        return displaySize;
+    }
+
+    @Override
+    public boolean displayFormat() {
+        return displayFormat;
+    }
+
+    @Override
+    public boolean displayFilename() {
+        return displayFilename;
     }
 }
