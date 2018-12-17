@@ -185,8 +185,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 lastModifiedEpoch = assetLastModifiedEpoch;
             }
         }
+        
+        //checks if the suffix has more than 2 occurrences of slash
+        boolean suffixwithMultipleSlash = validateSuffix(suffix);
         long requestLastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
-        if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
+        if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch 
+        		&& suffixwithMultipleSlash) {
             String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
             if (StringUtils.isNotEmpty(redirectLocation)) {
                 LOGGER.info("The last modified information present in the request ({}) is different than expected. Redirect request to " +
@@ -285,6 +289,22 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
 
 
+    }
+    
+    /**
+     * Verifies if the suffix can be used for SEO.
+     * In case of more than 2 occurrences of slash in the suffix, existing redirection logic is applied.
+     *
+     * @param suffix    the request's suffix
+     * @return true/false 
+     * 
+     */
+    private boolean validateSuffix(String suffix) {
+      int count = StringUtils.countMatches(suffix, "/");
+      if(Integer.valueOf(2) < count) {
+        return true;
+      }
+      return false;
     }
 
     @Nullable
