@@ -292,7 +292,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     /**
      * Returns true/false based on the redirection requirement. If there are more than
      * 2 occurrences of {@code /}, existing redirection logic will be applied from calling
-     * method. If the suffix string contains a valid timestamp, redirection is not needed.
+     * method. In case of exact 2 occurrences of {@code /}, checks if a valid timestamp is
+     * present.
      * 
      * @param suffix
      * @return true if number of slashes is more than 2 or if timestamp is not valid.
@@ -304,9 +305,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return true;
       }
       if(count == 2) {
+    	  //1. get parent string as timestamp
         String timeStampString = suffix.substring(1, suffix.lastIndexOf("/"));
         try {
-          //check if the parent string is a valid timestamp
+          //2. check if the parent string is a valid timestamp
           requestLastModified = Long.parseLong(ResourceUtil.getName(timeStampString));
       } catch (NumberFormatException e) {
           // do nothing
