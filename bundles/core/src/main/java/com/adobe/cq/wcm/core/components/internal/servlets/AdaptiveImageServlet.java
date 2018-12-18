@@ -186,11 +186,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         }
         
-        //checks if the suffix has more than 2 occurrences of slash
-        boolean suffixwithMultipleSlash = validateSuffix(suffix);
         long requestLastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
         if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch 
-        		&& suffixwithMultipleSlash) {
+        		&& isTimeStampMissing(suffix)) {
             String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
             if (StringUtils.isNotEmpty(redirectLocation)) {
                 LOGGER.info("The last modified information present in the request ({}) is different than expected. Redirect request to " +
@@ -292,21 +290,39 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
     
     /**
-     * Verifies if the suffix can be used for SEO.
-     * In case of more than 2 occurrences of slash in the suffix, existing redirection logic is applied.
-     *
-     * @param suffix    the request's suffix
-     * @return true/false 
+     * Checks if the suffix string contains a valid timestamp.
      * 
+     * @param suffix
+     * @return true if timestamp is not valid.
      */
-    private boolean validateSuffix(String suffix) {
-      int count = StringUtils.countMatches(suffix, "/");
-      if(Integer.valueOf(2) < count) {
-        return true;
+    private boolean isTimeStampMissing(String suffix) {
+      long requestLastModified = 0;
+      if(numberOfSlashesInSuffix(suffix) == 2) {
+        String timeStampString = suffix.substring(1, suffix.lastIndexOf("/"));
+        try {
+          requestLastModified = Long.parseLong(ResourceUtil.getName(timeStampString));
+      } catch (NumberFormatException e) {
+          // do nothing
       }
-      return false;
+    }
+      return requestLastModified != 0 ? false : true;
     }
 
+    /**
+     * Extracts the number of slash in the suffix string.
+     *
+     * @param suffix   the request's suffix
+     * @return numberOfSlashes  The number of slashes in the suffix string 
+     * 
+     */
+    private int numberOfSlashesInSuffix(String suffix) {
+      int numberOfSlashes = 0;
+      if (StringUtils.isNotEmpty(suffix) && suffix.contains("/")) {
+       numberOfSlashes=  StringUtils.countMatches(suffix, "/");
+      }
+      return numberOfSlashes;
+    }
+    
     @Nullable
     private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
@@ -732,11 +748,16 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {
-        long requestLastModified = 0;
+    	long requestLastModified = 0;
+        String lastSuffix = "";
         if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
-            String lastMod = suffix.substring(1, suffix.lastIndexOf("."));
+            if(numberOfSlashesInSuffix(suffix) > 2) {
+              return requestLastModified;
+            } else {
+              lastSuffix = suffix.substring(1, suffix.lastIndexOf("."));
+            } 
             try {
-                requestLastModified = Long.parseLong(ResourceUtil.getName(lastMod));
+                requestLastModified = Long.parseLong(ResourceUtil.getName(lastSuffix));
             } catch (NumberFormatException e) {
                 // do nothing
             }
