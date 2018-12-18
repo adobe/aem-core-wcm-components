@@ -188,7 +188,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         
         long requestLastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
         if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch 
-        		&& isTimeStampMissing(suffix)) {
+        		&& isRedirectNeeded(suffix)) {
             String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
             if (StringUtils.isNotEmpty(redirectLocation)) {
                 LOGGER.info("The last modified information present in the request ({}) is different than expected. Redirect request to " +
@@ -290,16 +290,23 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
     
     /**
-     * Checks if the suffix string contains a valid timestamp.
+     * Returns true/false based on the redirection requirement. If there are more than
+     * 2 occurrences of {@code /}, existing redirection logic will be applied from calling
+     * method. If the suffix string contains a valid timestamp, redirection is not needed.
      * 
      * @param suffix
-     * @return true if timestamp is not valid.
+     * @return true if number of slashes is more than 2 or if timestamp is not valid.
      */
-    private boolean isTimeStampMissing(String suffix) {
+    private boolean isRedirectNeeded(String suffix) {
       long requestLastModified = 0;
-      if(numberOfSlashesInSuffix(suffix) == 2) {
+      int count = numberOfSlashesInSuffix(suffix);
+      if(count > 2) {
+        return true;
+      }
+      if(count == 2) {
         String timeStampString = suffix.substring(1, suffix.lastIndexOf("/"));
         try {
+          //check if the parent string is a valid timestamp
           requestLastModified = Long.parseLong(ResourceUtil.getName(timeStampString));
       } catch (NumberFormatException e) {
           // do nothing
@@ -748,16 +755,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {
-    	long requestLastModified = 0;
-        String lastSuffix = "";
+        long requestLastModified = 0;
         if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
-            if(numberOfSlashesInSuffix(suffix) > 2) {
-              return requestLastModified;
-            } else {
-              lastSuffix = suffix.substring(1, suffix.lastIndexOf("."));
-            } 
+            String lastMod = suffix.substring(1, suffix.lastIndexOf("."));
             try {
-                requestLastModified = Long.parseLong(ResourceUtil.getName(lastSuffix));
+                requestLastModified = Long.parseLong(ResourceUtil.getName(lastMod));
             } catch (NumberFormatException e) {
                 // do nothing
             }
