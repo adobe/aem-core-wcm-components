@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:deviceGroups="[/etc/mobile/groups/responsive]"
+        cq:lastModified="{Date}2018-12-10T17:23:57.870+01:00"
+        cq:lastModifiedBy="admin"
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="core/wcm/components/page/v2/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid_1573204907
+                cq:styleIds="[1544293220185]"
+                jcr:created="{Date}2018-12-07T11:45:41.846+01:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2018-12-07T11:45:41.846+01:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+                <image
+                    jcr:created="{Date}2018-12-10T17:23:57.864+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-10T17:23:57.864+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/image/v2/image"/>
+            </responsivegrid_1573204907>
+            <responsivegrid_316954685
+                cq:styleIds="[1544293229768]"
+                jcr:created="{Date}2018-12-07T11:45:31.800+01:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2018-12-07T11:46:06.324+01:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <navigation
+                    jcr:created="{Date}2018-12-07T15:13:37.445+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2018-12-07T15:13:45.008+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/navigation/v1/navigation"
+                    collectAllPages="true"
+                    navigationRoot="/content/core-components-examples/library"
+                    skipNavigationRoot="true"/>
+            </responsivegrid_316954685>
+            <responsivegrid
+                cq:styleIds="[1544293237403]"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid"
+                editable="{Boolean}true">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+            </responsivegrid>
+            <responsivegrid_1100319142
+                cq:styleIds="[1544293242179]"
+                jcr:created="{Date}2018-12-07T11:45:36.591+01:00"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2018-12-07T11:45:36.591+01:00"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+            </responsivegrid_1100319142>
+        </root>
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Smaller Screen"
+                    width="{Long}650"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet"
+                    width="{Long}1200"/>
+            </breakpoints>
+        </cq:responsive>
+    </jcr:content>
+</jcr:root>
