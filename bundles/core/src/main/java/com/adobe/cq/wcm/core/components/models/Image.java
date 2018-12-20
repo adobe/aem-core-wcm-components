@@ -138,6 +138,12 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     String PN_MAP = "imageMap";
+    
+    /**
+     * Name of the resource property that defines current image name. This value overrides the image name coming from DAM
+     *
+     */
+    String IMAGE_NAME = "imageName";
 
     /**
      * Returns the value for the {@code src} attribute of the image.
@@ -270,6 +276,15 @@ public interface Image extends ComponentExporter {
     @Nonnull
     @Override
     default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the image name of the current image, if one exists.
+     *
+     * @return the image name of the current image, if one exists, {@code null} otherwise
+     */
+    default String getImageName() {
         throw new UnsupportedOperationException();
     }
 

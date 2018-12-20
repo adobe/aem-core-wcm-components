@@ -22,6 +22,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -96,13 +97,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
             String staticSelectors = selector;
+            final String assetName = getAssetName();
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
             } 
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                     SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate 
+                        +(StringUtils.isNotBlank(assetName)? "/" +assetName :"") + DOT + extension : "");
 
             // if content policy delegate path is provided pass it to the image Uri
             String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
@@ -116,6 +119,34 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
     }
 
+    private String getAssetName() {
+      if (StringUtils.isNotBlank(fileReference)) {
+          Resource damResource = request.getResourceResolver().getResource(fileReference);
+          if (damResource != null) {
+            Asset asset = damResource.adaptTo(Asset.class);
+            return asset != null ? getSeoFriendlyFileName(asset.getName()) : "";
+          }
+        }
+        return "";
+}
+  
+  /**
+   * Content editors can store DAM assets with whitespaces in the name, this method makes
+   * the asset name SEO friendly and also makes it usable by the {@code AdaptiveImageServlet}
+   * 
+   * @param assetName
+   * @return name of the asset without extension
+   */
+  private String getSeoFriendlyFileName(String assetName) {
+      //check if the image name is overridden at the dialog level
+    if(StringUtils.isBlank(imageName)) {
+      assetName = assetName.replaceAll(" ", "-").toLowerCase();
+    } else {
+      assetName = imageName.trim().replaceAll(" ", "-").toLowerCase();
+    }
+    return FilenameUtils.getBaseName(assetName);
+  }
+    
     @Nonnull
     @Override
     public int[] getWidths() {

@@ -26,6 +26,7 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -106,6 +107,9 @@ public class ImageImpl implements Image {
 
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
+    
+    @ValueMapValue(name = Image.IMAGE_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
+    protected String imageName;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -198,6 +202,7 @@ public class ImageImpl implements Image {
                 baseResourcePath = resource.getPath();
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
+            final String assetName = getAssetName();
             if (smartSizesSupported()) {
                 Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
                 smartImages = new String[supportedRenditionWidths.size()];
@@ -206,7 +211,8 @@ public class ImageImpl implements Image {
                     smartImages[index] = baseResourcePath + DOT +
                         selector + DOT + jpegQuality + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(assetName)? "/" +assetName :"") 
+                            + DOT + extension : "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -220,8 +226,8 @@ public class ImageImpl implements Image {
             } else {
                 src += extension;
             }
-            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT +
-                    extension : "");
+            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate 
+            		+ (StringUtils.isNotBlank(assetName)? "/" +assetName :"") + DOT + extension : "");
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
@@ -234,7 +240,36 @@ public class ImageImpl implements Image {
         }
     }
 
-    @Override
+    private String getAssetName() {
+        if (StringUtils.isNotBlank(fileReference)) {
+            Resource damResource = request.getResourceResolver().getResource(fileReference);
+            if (damResource != null) {
+              Asset asset = damResource.adaptTo(Asset.class);
+              return asset != null ? getSeoFriendlyFileName(asset.getName()) : "";
+            }
+          }
+          return "";
+	}
+    
+    /**
+     * Content editors can store DAM assets with whitespaces in the name, this method makes
+     * the asset name SEO friendly and also makes it usable by the {@code AdaptiveImageServlet}
+     * 
+     * @param assetName
+     * @return name of the asset without extension
+     */
+    private String getSeoFriendlyFileName(String assetName) {
+        //check if the image name is overridden at the dialog level
+    	if(StringUtils.isBlank(imageName)) {
+        assetName = assetName.replaceAll(" ", "-").toLowerCase();
+      } else {
+        assetName = imageName.trim().replaceAll(" ", "-").toLowerCase();
+      }
+      return FilenameUtils.getBaseName(assetName);
+    }
+
+
+  @Override
     public String getSrc() {
         return src;
     }
@@ -263,6 +298,11 @@ public class ImageImpl implements Image {
     @JsonIgnore
     public String getFileReference() {
         return fileReference;
+    }
+    
+    @Override
+    public String getImageName() {
+        return imageName;
     }
 
     @Override

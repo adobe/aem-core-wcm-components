@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -104,6 +106,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response) throws IOException {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
         String suffix = requestPathInfo.getSuffix();
+        String imageName = getImageName(suffix);
         String[] selectors = requestPathInfo.getSelectors();
         if (selectors.length < 1 || selectors.length > 3) {
             LOGGER.error("Expected 1, 2 or 3 selectors, instead got: {}.", Arrays.toString(selectors));
@@ -187,8 +190,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         }
         
         long requestLastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
-        if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch 
-        		&& isRedirectNeeded(suffix)) {
+        if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
             String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
             if (StringUtils.isNotEmpty(redirectLocation)) {
                 LOGGER.info("The last modified information present in the request ({}) is different than expected. Redirect request to " +
@@ -259,9 +261,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         if (isRequestedWidthAllowed) {
                             String imageType = getImageType(requestPathInfo.getExtension());
                             if (imageComponent.source == Source.FILE) {
-                                transformAndStreamFile(response, componentProperties, resizeWidth, quality, imageComponent.imageResource, imageType);
+                                transformAndStreamFile(response, componentProperties, resizeWidth, quality, imageComponent.imageResource, imageType, imageName);
                             } else if (imageComponent.source == Source.ASSET) {
-                                transformAndStreamAsset(response, componentProperties, resizeWidth, quality, asset, imageType);
+                                transformAndStreamAsset(response, componentProperties, resizeWidth, quality, asset, imageType, imageName);
                             }
                         } else {
                             LOGGER.error("The requested width ({}) is not allowed by the content policy.", width);
@@ -279,9 +281,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 LOGGER.debug("The image request contains no width information. Will resize the image to {}px.", defaultResizeWidth);
                 String imageType = getImageType(requestPathInfo.getExtension());
                 if (imageComponent.source == Source.FILE) {
-                    transformAndStreamFile(response, componentProperties, defaultResizeWidth, quality, imageComponent.imageResource, imageType);
+                    transformAndStreamFile(response, componentProperties, defaultResizeWidth, quality, imageComponent.imageResource, imageType, imageName);
                 } else if (imageComponent.source == Source.ASSET) {
-                    transformAndStreamAsset(response, componentProperties, defaultResizeWidth, quality, asset, imageType);
+                    transformAndStreamAsset(response, componentProperties, defaultResizeWidth, quality, asset, imageType, imageName);
                 }
             }
         }
@@ -290,47 +292,18 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
     
     /**
-     * Returns true/false based on the redirection requirement. If there are more than
-     * 2 occurrences of {@code /}, existing redirection logic will be applied from calling
-     * method. In case of exact 2 occurrences of {@code /}, checks if a valid timestamp is
-     * present.
+     * Extracts the image name from image request url suffix. 
      * 
      * @param suffix
-     * @return true if number of slashes is more than 2 or if timestamp is not valid.
+     * @return image base name without slashes and extension
      */
-    private boolean isRedirectNeeded(String suffix) {
-      long requestLastModified = 0;
-      int count = numberOfSlashesInSuffix(suffix);
-      if(count > 2) {
-        return true;
-      }
-      if(count == 2) {
-    	  //1. get parent string as timestamp
-        String timeStampString = suffix.substring(1, suffix.lastIndexOf("/"));
-        try {
-          //2. check if the parent string is a valid timestamp
-          requestLastModified = Long.parseLong(ResourceUtil.getName(timeStampString));
-      } catch (NumberFormatException e) {
-          // do nothing
-      }
+    private String getImageName(String suffix) {
+      if (StringUtils.isEmpty(suffix)) {
+        return "";
     }
-      return requestLastModified != 0 ? false : true;
+      return FilenameUtils.getBaseName(suffix);
     }
 
-    /**
-     * Extracts the number of slash in the suffix string.
-     *
-     * @param suffix   the request's suffix
-     * @return numberOfSlashes  The number of slashes in the suffix string 
-     * 
-     */
-    private int numberOfSlashesInSuffix(String suffix) {
-      int numberOfSlashes = 0;
-      if (StringUtils.isNotEmpty(suffix) && suffix.contains("/")) {
-       numberOfSlashes=  StringUtils.countMatches(suffix, "/");
-      }
-      return numberOfSlashes;
-    }
     
     @Nullable
     private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
@@ -354,11 +327,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality, Asset asset, String
-            imageType) throws IOException {
+            imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
         if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
             LOGGER.debug("GIF or SVG asset detected; will render the original rendition.");
-            stream(response, asset.getOriginal().getStream(), imageType);
+            stream(response, asset.getOriginal().getStream(), imageType, imageName);
             return;
         }
         int rotationAngle = getRotation(componentProperties);
@@ -434,7 +407,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (rendition != null) {
                     LOGGER.debug("Found rendition {} with a width equal to the resize width ({}px); rendering.", rendition.getPath(),
                             resizeWidth);
-                    stream(response, rendition.getStream(), imageType);
+                    stream(response, rendition.getStream(), imageType, imageName);
                 } else {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
                     if (resizeHeight > 0 && resizeHeight != originalHeight) {
@@ -446,7 +419,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     } else {
                         LOGGER.debug("Rendering the original asset {} since its width ({}px) is either smaller than the requested " +
                                 "width ({}px) or since no resize is needed.", asset.getPath(), originalWidth, resizeWidth);
-                        stream(response, asset.getOriginal().getStream(), imageType);
+                        stream(response, asset.getOriginal().getStream(), imageType, imageName);
                     }
                 }
             } else {
@@ -454,12 +427,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             }
         } else {
             LOGGER.debug("No need to perform any processing on asset {}; rendering.", asset.getPath());
-            stream(response, asset.getOriginal().getStream(), imageType);
+            stream(response, asset.getOriginal().getStream(), imageType, imageName);
         }
     }
 
     private void transformAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
-            resizeWidth, double quality, Resource imageFile, String imageType) throws
+            resizeWidth, double quality, Resource imageFile, String imageType, String imageName) throws
             IOException {
         InputStream is = null;
         try {
@@ -468,7 +441,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
                 LOGGER.debug("GIF or SVG file detected; will render the original file.");
                 if (is != null) {
-                    stream(response, is, imageType);
+                    stream(response, is, imageType,imageName);
                 }
                 return;
             }
@@ -496,7 +469,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     resizeAndStreamLayer(response, layer, imageType, resizeWidth, quality);
                 } else {
                     LOGGER.debug("No need to perform any processing on file {}; rendering.", imageFile.getPath());
-                    stream(response, is, imageType);
+                    stream(response, is, imageType, imageName);
                 }
             }
         } finally {
@@ -547,9 +520,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
-    private void stream(@Nonnull SlingHttpServletResponse response, @Nonnull InputStream inputStream, @Nonnull String contentType)
+    private void stream(@Nonnull SlingHttpServletResponse response, @Nonnull InputStream inputStream, @Nonnull String contentType, String imageName)
             throws IOException {
         response.setContentType(contentType);
+        response.setHeader( "Content-Disposition", "filename=\"" + imageName + "\"" );
         try {
             IOUtils.copy(inputStream, response.getOutputStream());
         } finally {
@@ -759,9 +733,15 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {
         long requestLastModified = 0;
         if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
-            String lastMod = suffix.substring(1, suffix.lastIndexOf("."));
+           
+            //check if the 13 digits UTC milliseconds timestamp is present in the suffix
+            Pattern p = Pattern.compile("\\(|\\)|\\d{13}");
+            Matcher m = p.matcher(suffix);
+            if(!m.find()) {
+              return requestLastModified;
+            }
             try {
-                requestLastModified = Long.parseLong(ResourceUtil.getName(lastMod));
+                requestLastModified = Long.parseLong(ResourceUtil.getName(m.group()));
             } catch (NumberFormatException e) {
                 // do nothing
             }

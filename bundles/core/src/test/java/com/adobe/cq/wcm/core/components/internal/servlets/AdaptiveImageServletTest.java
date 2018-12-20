@@ -543,7 +543,6 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         assertEquals("Expected image rendered at requested size.", expectedDimension, actualDimension);
         assertEquals("Expected a PNG image.", "image/png", response.getContentType());
-
     }
 
     @Test

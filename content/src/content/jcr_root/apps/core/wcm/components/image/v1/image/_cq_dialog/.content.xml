@@ -73,6 +73,12 @@
                                 text="Display caption as pop-up"
                                 uncheckedValue="false"
                                 value="{Boolean}true"/>
+                            <imageName 
+                                jcr:primaryType="nt:unstructured" 
+                                fieldDescription="Allows entering a custom filename which will override the original's filename when generating the URL." 
+                                fieldLabel="Image Name" 
+                                name="./imageName" 
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"/>
                         </items>
                     </column>
                 </items>
