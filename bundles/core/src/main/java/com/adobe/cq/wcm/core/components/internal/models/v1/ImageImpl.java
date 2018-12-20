@@ -256,7 +256,8 @@ public class ImageImpl implements Image {
 	}
     
     /**
-     * Content editors can store DAM assets with whitespaces in the name, this method makes
+     * Content editors can store DAM assets with whitespaces in the name, this method checks if the
+     * image name is overwritten at the image dialog level or extracts the name from DAM. Also makes
      * the asset name SEO friendly and also makes it usable by the {@code AdaptiveImageServlet}
      * 
      * @param assetName
