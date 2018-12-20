@@ -147,10 +147,10 @@ public interface Image extends ComponentExporter {
     String PN_MAP = "imageMap";
     
     /**
-     * Name of the resource property that defines current image name. This value overrides the image name coming from DAM
+     * Name of the resource property that defines current image name. This value overwrites the image name coming from DAM
      *
      */
-    String IMAGE_NAME = "imageName";
+    String PN_IMAGE_NAME = "imageName";
 
     /**
      * Returns the value for the {@code src} attribute of the image.
@@ -295,14 +295,4 @@ public interface Image extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
-
-    /**
-     * Returns the image name of the current image, if one exists.
-     *
-     * @return the image name of the current image, if one exists, {@code null} otherwise
-     */
-    default String getImageName() {
-        throw new UnsupportedOperationException();
-    }
-
 }

@@ -108,7 +108,7 @@ public class ImageImpl implements Image {
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
     
-    @ValueMapValue(name = Image.IMAGE_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = Image.PN_IMAGE_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
     protected String imageName;
 
     protected String src;
@@ -249,28 +249,24 @@ public class ImageImpl implements Image {
             Resource damResource = request.getResourceResolver().getResource(fileReference);
             if (damResource != null) {
               Asset asset = damResource.adaptTo(Asset.class);
-              return asset != null ? getSeoFriendlyFileName(asset.getName()) : "";
+              //check if the image name is overwritten at the dialog level, else set the DAM asset name
+              final String assetName = StringUtils.isNotBlank(imageName) ? imageName : (asset != null ? asset.getName() : "");
+              return getSeoFriendlyAssetName(assetName);
             }
           }
           return "";
 	}
     
     /**
-     * Content editors can store DAM assets with whitespaces in the name, this method checks if the
-     * image name is overwritten at the image dialog level or extracts the name from DAM. Also makes
+     * Content editors can store DAM assets with white spaces in the name, this method makes
      * the asset name SEO friendly and also makes it usable by the {@code AdaptiveImageServlet}
      * 
      * @param assetName
      * @return name of the asset without extension
      */
-    private String getSeoFriendlyFileName(String assetName) {
-        //check if the image name is overridden at the dialog level
-    	if(StringUtils.isBlank(imageName)) {
-        assetName = assetName.replaceAll(" ", "-").toLowerCase();
-      } else {
-        assetName = imageName.trim().replaceAll(" ", "-").toLowerCase();
-      }
-      return FilenameUtils.getBaseName(assetName);
+    private String getSeoFriendlyAssetName(String assetName) {
+        assetName = StringUtils.isNotBlank(assetName)? assetName.trim().replaceAll(" ", "-").toLowerCase() : null;
+        return FilenameUtils.getBaseName(assetName);
     }
 
 
@@ -305,7 +301,6 @@ public class ImageImpl implements Image {
         return fileReference;
     }
     
-    @Override
     public String getImageName() {
         return imageName;
     }
