@@ -133,34 +133,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
     }
 
-    private String getAssetName() {
-      if (StringUtils.isNotBlank(fileReference)) {
-          Resource damResource = request.getResourceResolver().getResource(fileReference);
-          if (damResource != null) {
-            Asset asset = damResource.adaptTo(Asset.class);
-            return asset != null ? getSeoFriendlyFileName(asset.getName()) : "";
-          }
-        }
-        return "";
-}
-  
-  /**
-   * Content editors can store DAM assets with whitespaces in the name, this method makes
-   * the asset name SEO friendly and also makes it usable by the {@code AdaptiveImageServlet}
-   * 
-   * @param assetName
-   * @return name of the asset without extension
-   */
-  private String getSeoFriendlyFileName(String assetName) {
-      //check if the image name is overridden at the dialog level
-    if(StringUtils.isBlank(imageName)) {
-      assetName = assetName.replaceAll(" ", "-").toLowerCase();
-    } else {
-      assetName = imageName.trim().replaceAll(" ", "-").toLowerCase();
-    }
-    return FilenameUtils.getBaseName(assetName);
-  }
-    
+       
     @Nonnull
     @Override
     public int[] getWidths() {

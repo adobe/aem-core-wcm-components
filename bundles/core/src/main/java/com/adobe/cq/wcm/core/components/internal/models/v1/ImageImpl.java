@@ -244,7 +244,7 @@ public class ImageImpl implements Image {
         }
     }
 
-    private String getAssetName() {
+    protected String getAssetName() {
         if (StringUtils.isNotBlank(fileReference)) {
             Resource damResource = request.getResourceResolver().getResource(fileReference);
             if (damResource != null) {
