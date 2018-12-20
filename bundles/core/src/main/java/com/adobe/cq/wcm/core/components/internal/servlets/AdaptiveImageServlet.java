@@ -670,7 +670,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             ComponentManager componentManager = resourceResolver.adaptTo(ComponentManager.class);
             if (componentManager != null) {
                 com.day.cq.wcm.api.components.Component component = componentManager.getComponentOfResource(imageResource);
-                if (component != null && component.isAccessible()) {
+                if (component != null && component.getProperties() != null) {
                     String delegatingResourceType =
                             component.getProperties().get(AbstractImageDelegatingModel.IMAGE_DELEGATE, String.class);
                     if (StringUtils.isNotEmpty(delegatingResourceType)) {

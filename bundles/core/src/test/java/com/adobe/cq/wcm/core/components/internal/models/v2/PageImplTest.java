@@ -35,6 +35,7 @@ import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -69,7 +70,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
-        assertEquals(page.getLastModifiedDate(), calendar);
+        assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
         assertEquals("Templated Page", page.getTitle());
         assertEquals(DESIGN_PATH, page.getDesignPath());
@@ -79,7 +80,9 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Set<String> keywords = new HashSet<>(keywordsArray.length);
         keywords.addAll(Arrays.asList(keywordsArray));
         assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
-        assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
+        assertArrayEquals(new String[] {"coretest.product-page", "coretest.product-page-js-head"}, page.getClientLibCategories());
+        assertArrayEquals(new String[] {"coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
+        assertArrayEquals(new String[] {"coretest.product-page"}, page.getClientLibCategoriesJsBody());
         assertEquals("product-page", page.getTemplateName());
         Utils.testJSONExport(page, Utils.getTestExporterJSONPath(TEST_BASE, PAGE));
     }

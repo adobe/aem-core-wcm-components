@@ -23,22 +23,15 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.2.3-SNAPSHOT</version>
         <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.core</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.2.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Adobe Experience Manager Core WCM Components Core Bundle</name>
-
-    <scm>
-        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development/bundles/core</url>
-        <tag>HEAD</tag>
-    </scm>
 
     <properties>
         <jacoco.data.file>${project.build.directory}/jacoco.exec</jacoco.data.file>
@@ -71,7 +64,6 @@
                         <!-- Enable processing of OSGI metatype annotations -->
                         <_metatypeannotations>*</_metatypeannotations>
                     </instructions>
-                    <comparisonVersion>(,${project.parent.version}]</comparisonVersion>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -81,7 +73,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
@@ -315,6 +306,10 @@
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
             <artifactId>osgi.cmpn</artifactId>
         </dependency>
         <dependency>
@@ -378,6 +373,12 @@
             <scope>test</scope>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.api</artifactId>
+            <version>2.11.0</version>
+            <scope>test</scope>
+        </dependency>
         <!-- for testing we need the new ResourceTypeBasedResourcePicker -->
         <dependency>
             <groupId>org.apache.sling</groupId>
@@ -387,7 +388,7 @@
         </dependency>
         <dependency>
             <groupId>io.wcm</groupId>
-            <artifactId>io.wcm.testing.aem-mock</artifactId>
+            <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.sling</groupId>
@@ -397,7 +398,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
-            <artifactId>org.apache.sling.testing.sling-mock</artifactId>
+            <artifactId>org.apache.sling.testing.sling-mock.junit4</artifactId>
             <exclusions>
                 <!-- Exclude the older version of the API and use the one from the uber-jar -->
                 <exclusion>

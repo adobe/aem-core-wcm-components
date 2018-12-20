@@ -1,6 +1,6 @@
-# AEM Core WCM Components Sandbox
-[![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=development)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
-[![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
+# AEM Sites Core Components Sandbox
+[![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development)
+[![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 
 **The Sandbox represents a space where work-in-progress versions of the Core Components are developed. They provide _beta features_ and *should not be used in production*. When the components become stable, they will be promoted to new production-ready releases and moved out of sandbox.**
 
@@ -10,7 +10,7 @@
 * AEM product documentation of Core Components
   * [Author documentation](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
   * [Developer documentation](https://docs.adobe.com/docs/en/aem/6-3/develop/components/core-components.html)
-* [adaptTo() 2017 presentation](https://adapt.to/2017/en/schedule/extensible-components-with-sling-models-and-htl.html)
+* [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
 ## Contributing
 
@@ -20,17 +20,20 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 * Page authoring components:
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
   * [Content Fragment](extension/contentfragment/content/src/content/jcr_root/apps/core/wcm/extension/components/contentfragment/v1/contentfragment)\*
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
   * [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
   * [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
-  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
+  * [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
   * [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+  * [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
   * [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
   * [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
   * [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
 * Form components:
   * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
@@ -39,20 +42,22 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
   * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 
-The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
+Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
+
+The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
 \* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
 
 ## System Requirements
 
-Core Components | AEM                       | Java
-----------------|---------------------------|-----
-[1.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.0), [1.0.2](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.all-1.0.2)    | AEM 6.3                   | 1.7
-[1.0.4](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.4), [1.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.6)    | AEM 6.3                   | 1.8
-[1.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.1.0)           | AEM 6.3 + FP19614 or SP 1 | 1.8
-[2.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.0)           | AEM 6.3 + SP1 + FP20593   | 1.8
-[2.0.4](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.4)           | AEM 6.3 + SP1 + CFP2 + FP20593 + FP20696 | 1.8
-[2.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.6)           | AEM 6.3 + SP2 | 1.8
+The latest version of the Core Components, require the below minimum system requirements:
+
+Core Components | Extension | AEM 6.4 | AEM 6.3 | Java
+----------------|-----------|---------|---------|------
+[2.2.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.2.2) | 1.1.0 | 6.4.2.0 | 6.3.3.0 | 1.8
+
+For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
+
 
 ## Installation
 
@@ -97,7 +102,7 @@ Please note that
 
  ### Running the UI tests
 
- The Sandbox components might use features not yet available on AEM 6.4. In order to correctly test the functionality that's still 
+ The Sandbox components might use features not yet available on AEM 6.4. In order to correctly test the functionality that's still
  supported for AEM 6.4, the Hobbes UI tests
  should be executed using the following request parameters:
 

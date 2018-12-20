@@ -1,17 +1,18 @@
 {
+    "alt"           : "Adobe Systems Logo and Wordmark in PNG format",
+    "title"         : "Adobe Systems Logo and Wordmark",
+    "src"           : "/core/content/test.coreimg.png/structure/jcr%3acontent/root/image_template/1490005239000/adobe_systems_logo_and_wordmark.png",
     "srcUriTemplate": "/core/content/test.coreimg.82{.width}.png/structure/jcr:content/root/image_template/1490005239000/adobe_systems_logo_and_wordmark.png",
-    "widths" : [
+    "areas"         : [],
+    "uuid"          : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+    "widths"        : [
         600,
         700,
         800,
         2000,
         2500
     ],
-    "areas": [],
     "lazyEnabled"   : false,
-    "title"         : "Adobe Systems Logo and Wordmark",
-    "alt"           : "Adobe Systems Logo and Wordmark in PNG format",
     "link"          : "/core/content/test-image.html",
-    "src"           : "/core/content/test.coreimg.png/structure/jcr%3acontent/root/image_template/1490005239000/adobe_systems_logo_and_wordmark.png",
     ":type"         : "core/wcm/components/image/v2/image"
 }

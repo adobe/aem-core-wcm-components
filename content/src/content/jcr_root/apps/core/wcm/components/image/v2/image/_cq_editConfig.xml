@@ -9,7 +9,6 @@
             propertyName="./fileReference">
             <parameters
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="core/wcm/components/image/v2/image"
                 imageCrop=""
                 imageMap=""
                 imageRotate=""/>
@@ -23,7 +22,7 @@
             <plugins jcr:primaryType="nt:unstructured">
                 <crop
                     jcr:primaryType="nt:unstructured"
-                    supportedMimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+                    supportedMimeTypes="[image/jpeg,image/png,image/webp,image/tiff]"
                     features="*">
                     <aspectRatios jcr:primaryType="nt:unstructured">
                         <wideLandscape
@@ -46,17 +45,19 @@
                 </crop>
                 <flip
                     jcr:primaryType="nt:unstructured"
-                    supportedMimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+                    supportedMimeTypes="[image/jpeg,image/png,image/webp,image/tiff]"
                     features="-"/>
                 <map
                     jcr:primaryType="nt:unstructured"
+                    supportedMimeTypes="[image/jpeg,image/png,image/webp,image/tiff,image/svg+xml]"
                     features="*"/>
                 <rotate
                     jcr:primaryType="nt:unstructured"
-                    supportedMimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+                    supportedMimeTypes="[image/jpeg,image/png,image/webp,image/tiff]"
                     features="*"/>
                 <zoom
                     jcr:primaryType="nt:unstructured"
+                    supportedMimeTypes="[image/jpeg,image/png,image/webp,image/tiff,image/svg+xml]"
                     features="*"/>
             </plugins>
             <ui jcr:primaryType="nt:unstructured">

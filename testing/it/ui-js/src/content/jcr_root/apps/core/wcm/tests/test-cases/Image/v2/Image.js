@@ -106,13 +106,11 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
     image.tcSetImageAsDecorative = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
         return new h.TestCase("Set Image as decorative", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest }
-        )
+            execAfter: tcExecuteAfterTest })
             .execTestCase(image.tcDragImage())
             .click('coral-tab-label:contains("Metadata")')
             .wait(500)
-            .simulate('foundation-autocomplete[name="./linkURL"] input[type!="hidden"]', "key-sequence", { sequence: c.rootPage + "{enter}" })
-            .wait(500)
+            .execTestCase(c.tcSelectInAutocomplete("[name='./linkURL']", c.rootPage))
             .click('input[name="./isDecorative"')
             .wait(500)
             .execTestCase(c.tcSaveConfigureDialog)
