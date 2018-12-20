@@ -298,10 +298,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @return image base name without slashes and extension
      */
     private String getImageName(String suffix) {
-      if (StringUtils.isEmpty(suffix)) {
-        return "";
-    }
-      return FilenameUtils.getBaseName(suffix);
+      return StringUtils.isNotEmpty(suffix) ? FilenameUtils.getBaseName(suffix) : "";
     }
 
     

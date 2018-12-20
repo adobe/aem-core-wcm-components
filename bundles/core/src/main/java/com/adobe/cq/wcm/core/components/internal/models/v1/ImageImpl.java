@@ -273,7 +273,7 @@ public class ImageImpl implements Image {
     }
 
 
-  @Override
+    @Override
     public String getSrc() {
         return src;
     }
