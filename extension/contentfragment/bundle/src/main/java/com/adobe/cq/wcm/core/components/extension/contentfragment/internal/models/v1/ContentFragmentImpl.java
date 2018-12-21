@@ -29,25 +29,26 @@ import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.text.Text;
 import org.apache.commons.collections.IteratorUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.commons.html.HtmlParser;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,6 +57,8 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -87,8 +90,17 @@ public class ContentFragmentImpl implements ContentFragment {
      */
     private static final String MASTER_VARIATION = "master";
 
+
+    /**
+     * Expected encoding for content (used by HtmlParser)
+     */
+    private static final String DEFAULT_CHARSET = "utf-8";
+
     @Self
     private SlingHttpServletRequest request;
+
+    @Inject
+    private HtmlParser htmlParserService;
 
     @Inject
     private FragmentRenderService renderService;
@@ -170,7 +182,7 @@ public class ContentFragmentImpl implements ContentFragment {
             }
             exportedElements.put(
                     element.getName(),
-                    new ElementImpl(renderService, converter, resource, element, variation));
+                    new ElementImpl(htmlParserService, renderService, converter, resource, element, variation));
         }
 
         elements = new ArrayList<>(exportedElements.values());
@@ -367,6 +379,7 @@ public class ContentFragmentImpl implements ContentFragment {
         private ContentElement element;
         private ContentVariation variation;
         private String htmlValue;
+        private HtmlParser htmlParser;
 
         /**
          *
@@ -376,7 +389,7 @@ public class ContentFragmentImpl implements ContentFragment {
          * @param element the original element
          * @param variation the configured variation of the element, or {@code null}
          */
-        ElementImpl(@Nonnull FragmentRenderService renderService, @Nonnull ContentTypeConverter converter,
+        ElementImpl(@Nonnull HtmlParser htmlParser, @Nonnull FragmentRenderService renderService, @Nonnull ContentTypeConverter converter,
                     @Nonnull Resource component, @Nonnull ContentElement element,
                     @Nullable ContentVariation variation) {
             this.renderService = renderService;
@@ -384,6 +397,7 @@ public class ContentFragmentImpl implements ContentFragment {
             this.component = component;
             this.element = element;
             this.variation = variation;
+            this.htmlParser = htmlParser;
         }
 
         @Nonnull
@@ -489,44 +503,165 @@ public class ContentFragmentImpl implements ContentFragment {
                 return null;
             }
             // split into paragraphs
-            return splitContentIntoParagraphs(content);
+            String[] listParagraphs = null;
+            try {
+                listParagraphs = splitContentIntoParagraphs(content);
+            } catch(SAXException ex) {
+                LOG.warn("getParagraphs(): Unexpected SaxException while parsing content = {}", content);
+            } catch(IOException ex) {
+                LOG.warn("getParagraphs(): Unexpected IOException while parsing content = {}", content);
+            }
+
+            return listParagraphs;
         }
 
-        private static String[] splitContentIntoParagraphs(@Nonnull String content) {
-            ArrayList<String> paragraphs = new ArrayList<>();
+        private String[] splitContentIntoParagraphs(@Nonnull String content) throws IOException, SAXException {
+            // wrap the content snippet into html (HtmlParser)
+            ParagraphsExtractorImpl paragraphsExtractor = new ContentFragmentImpl.ParagraphsExtractorImpl();
+            htmlParser.parse(new ByteArrayInputStream(content.getBytes(DEFAULT_CHARSET)), DEFAULT_CHARSET, paragraphsExtractor);
+            return paragraphsExtractor.getExtractedParagraphs();
+        }
 
-            // wrap the content snippet into html (Jsoup)
-            Document contentDocument = Jsoup.parseBodyFragment(content);
-            Elements bodies = contentDocument.getElementsByTag("body");
-            // make sure it contains one only since it get wrapped normally
-            if (bodies.size() == 1) {
-                Node bodyNode = bodies.get(0); // access body element
+    }
 
-                // loop the root element under body and filter to only accept expected ones
-                for (Node childNode : bodyNode.childNodes()) {
-                    String nodeName = childNode.nodeName().toLowerCase();
-                    if (childNode instanceof org.jsoup.nodes.Element &&  StringUtils.containsAny(nodeName, "p", "h1", "h2", "h3", "h4", "h5")) {
-                        paragraphs.add(childNode.outerHtml());
-                    } else if (childNode instanceof TextNode) {
-                        TextNode txtNode = (TextNode) childNode;
-                        String text = txtNode.text();
-                        // filter whitespaces or carriage returns like characters found
-                        // in between the html elements
-                        if (!StringUtils.containsOnly(text,
-                                ' ',
-                                '\u00A0' /* nbsp */,
-                                '\t',
-                                '\n',
-                                '\r'
-                        )) {
-                            paragraphs.add(text);
-                        }
+    static class ParagraphsExtractorImpl implements ContentHandler {
+
+        ArrayList<String> extractedParagraphs = new ArrayList<>();
+
+        int currentElementDepth = 0;
+        boolean append = false;
+
+        StringBuilder charBuffer = new StringBuilder();
+
+        @Override
+        public void setDocumentLocator(Locator locator) {
+
+        }
+
+        @Override
+        public void startDocument() throws SAXException {
+
+        }
+
+        @Override
+        public void endDocument() throws SAXException {
+
+        }
+
+        @Override
+        public void startPrefixMapping(String prefix, String uri) throws SAXException {
+
+        }
+
+        @Override
+        public void endPrefixMapping(String prefix) throws SAXException {
+
+        }
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+            if (!isIgnoredElement(localName)) {
+                if (isValidParagraphElement(localName)) {
+                    currentElementDepth++;
+                    append = true;
+                }
+                if (append) {
+                    charBuffer.append(toHTML(localName, atts));
+                }
+            }
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            if (!isIgnoredElement(localName)) {
+                if (append && !isIgnoredElementEnding(localName)) {
+                    charBuffer.append("</").append(localName).append(">");
+                }
+                if (isValidParagraphElement(localName)) {
+                    currentElementDepth--;
+                    if (currentElementDepth == 0) {
+                        // store paragraph and reset buffer
+                        extractedParagraphs.add(charBuffer.toString());
+                        charBuffer = new StringBuilder();
+                        append = false;
                     }
                 }
             }
-            return paragraphs.toArray(new String[0]);
         }
 
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            if (append) {
+                // Some characters like '&nbsp;' need to be escaped properly based on HTML encoding rules
+                String unescapedCharactersString = new String(ch, start, length);
+                String escapedCharactersString = StringEscapeUtils.escapeHtml(unescapedCharactersString);
+                charBuffer.append(escapedCharactersString);
+            }
+        }
+
+        @Override
+        public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+
+        }
+
+        @Override
+        public void processingInstruction(String target, String data) throws SAXException {
+
+        }
+
+        @Override
+        public void skippedEntity(String name) throws SAXException {
+
+        }
+
+        public String[] getExtractedParagraphs() {
+            return extractedParagraphs.toArray(new String[0]);
+        }
+
+        private boolean isValidParagraphElement(String localName) {
+            return StringUtils.containsAny(localName.toLowerCase(), "p", "h1", "h2", "h3", "h4", "h5");
+        }
+
+        private boolean isIgnoredElement(String localName) {
+            return StringUtils.containsAny(localName.toLowerCase(), "html", "body");
+        }
+
+        private boolean isIgnoredElementEnding(String localName) {
+            return StringUtils.containsAny(localName.toLowerCase(), "img");
+        }
+
+        private String toHTML(String localName, Attributes atts) {
+            StringBuilder buffer = new StringBuilder();
+            buffer.append("<");
+            buffer.append(localName);
+
+            // rebuild attributes as string
+            String attributesAsHtml = attributesToHTML(atts);
+            if (!attributesAsHtml.isEmpty()) {
+                buffer.append(" ");
+                buffer.append(attributesAsHtml);
+            }
+
+            buffer.append(">");
+            return buffer.toString();
+        }
+
+        private String attributesToHTML(Attributes atts) {
+            StringBuilder buffer = new StringBuilder();
+            for (int i = 0; i < atts.getLength(); i++) {
+                if (buffer.length() > 0) {
+                    buffer.append(" ");
+                }
+                buffer.append(atts.getLocalName(i));
+                String value = atts.getValue(i);
+                if (value != null) {
+                    buffer.append("=\"");
+                    buffer.append(value);
+                    buffer.append("\"");
+                }
+            }
+            return buffer.toString();
+        }
     }
 
 

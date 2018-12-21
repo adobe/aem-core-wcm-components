@@ -23,6 +23,7 @@ import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
 import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.commons.html.internal.TagsoupHtmlParser;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -51,7 +52,7 @@ public class ContentFragmentElementImplTest {
 
     @Test
     public void testElementGetParagraphsNotMultiValueWithContent() {
-        ContentFragment.Element element = getMockedElement( "simple text","text/plain", false);
+        ContentFragment.Element element = getMockedElement( "<p>simple text</p>","text/html", false);
         String[] paragraphs = element.getParagraphs();
         assertNotNull(paragraphs);
         assertEquals(1, paragraphs.length);
@@ -87,6 +88,7 @@ public class ContentFragmentElementImplTest {
         when(elem.getValue()).thenReturn(fragmentData);
         when(renderService.render(component)).thenReturn(content);
         return new ContentFragmentImpl.ElementImpl(
+                new TagsoupHtmlParser(),
                 renderService, converter,
                 component, elem,
                 null

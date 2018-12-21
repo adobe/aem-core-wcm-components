@@ -9,9 +9,9 @@
       ":type": "text/html"
     },
     "second": {
-      "value": "Second content",
+      "value": "<p>Second content</p>",
       "title": "Second",
-      ":type": "text/plain"
+      ":type": "text/html"
     }
   },
   "elementsOrder": [

@@ -39,6 +39,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.commons.html.HtmlParser;
+import org.apache.sling.commons.html.internal.TagsoupHtmlParser;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -116,16 +118,16 @@ public class ContentFragmentImplTest {
     private static final String[] ASSOCIATED_CONTENT = new String[]{ "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test" };
     private static final Element MAIN = new Element("main", "Main", "text/html",
             "<p>Main content</p>", true, "<p>Main content</p>", new String []{"<p>Main content</p>"});
-    private static final Element SECOND_TEXT_ONLY = new Element("second", "Second", "text/plain", "Second content",
-            true, null, new String[]{"Second content"});
+    private static final Element SECOND_TEXT_ONLY = new Element("second", "Second", "text/html", "<p>Second content</p>",
+            true, "<p>Second content</p>", new String[]{"<p>Second content</p>"});
     private static final Element SECOND_STRUCTURED = new Element("second", "Second", null, new String[]{"one", "two", "three"},
             false, null, null);
     private static final String VARIATION_NAME = "teaser";
     static {
         MAIN.addVariation(VARIATION_NAME, "Teaser", "text/html", "<p>Main content (teaser)</p>",
                 true, "<p>Main content (teaser)</p>", new String[] {"<p>Main content (teaser)</p>"});
-        SECOND_TEXT_ONLY.addVariation(VARIATION_NAME, "Teaser", "text/plain", "Second content (teaser)", true,
-                null, new String [] {"Second content (teaser)"});
+        SECOND_TEXT_ONLY.addVariation(VARIATION_NAME, "Teaser", "text/html", "<p>Second content (teaser)</p>", true,
+                "<p>Second content (teaser)</p>", new String [] {"<p>Second content (teaser)</p>"});
         SECOND_STRUCTURED.addVariation(VARIATION_NAME, "Teaser", null, new String[]{"one (teaser)", "two (teaser)", "three (teaser)"},
                 false, null, null);
     }
@@ -165,6 +167,7 @@ public class ContentFragmentImplTest {
 
         // register dummy services to be injected into the model
         fragmentRenderService = mock(FragmentRenderService.class);
+        AEM_CONTEXT.registerService(HtmlParser.class, new TagsoupHtmlParser());
         AEM_CONTEXT.registerService(FragmentRenderService.class, fragmentRenderService);
         AEM_CONTEXT.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
     }
@@ -452,7 +455,7 @@ public class ContentFragmentImplTest {
             }
             assertEquals("Element has wrong isMultiLine flag", isMultiLine, element.isMultiLine());
             assertEquals("Element has wrong html", htmlValue, element.getHtml());
-            assertArrayEquals("ELement has wrong paragraphs", paragraphs, element.getParagraphs());
+            assertArrayEquals("Element has wrong paragraphs", paragraphs, element.getParagraphs());
         }
     }
 

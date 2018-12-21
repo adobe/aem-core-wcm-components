@@ -307,10 +307,10 @@
             <classifier>apis</classifier>
         </dependency>
         <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.7.2</version>
-            <scope>compile</scope>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.commons.html</artifactId>
+            <version>1.0.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
