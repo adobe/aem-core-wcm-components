@@ -207,7 +207,7 @@ public class ImageImpl implements Image {
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
             //check if image name is overwritten at the dialog level
-            final String assetName = StringUtils.isNotBlank(imageName) ? getSeoFriendlyImage(imageName) : getImageNameFromDam();
+            final String assetName = StringUtils.isNotBlank(imageName) ? getSeoFriendlyName(imageName) : getImageNameFromDam();
             if (smartSizesSupported()) {
                 Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
                 smartImages = new String[supportedRenditionWidths.size()];
@@ -254,7 +254,7 @@ public class ImageImpl implements Image {
         Resource damResource = request.getResourceResolver().getResource(fileReference);
         if (damResource != null) {
           Asset asset = damResource.adaptTo(Asset.class);
-          return getSeoFriendlyImage(asset != null ? asset.getName() : "");
+          return getSeoFriendlyName(asset != null ? asset.getName() : "");
         }
           return "";
 	}
@@ -266,7 +266,7 @@ public class ImageImpl implements Image {
      * @param assetName
      * @return name of the asset without extension
      */
-    protected String getSeoFriendlyImage(String assetName) {
+    protected String getSeoFriendlyName(String assetName) {
         assetName = StringUtils.isNotBlank(assetName)? assetName.trim().replaceAll(" ", "-").toLowerCase() : null;
         return FilenameUtils.getBaseName(assetName);
     }
