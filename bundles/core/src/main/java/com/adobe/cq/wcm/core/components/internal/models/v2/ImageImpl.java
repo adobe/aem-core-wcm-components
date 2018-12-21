@@ -111,7 +111,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
             String staticSelectors = selector;
-            final String assetName = getAssetName();
+            final String assetName = StringUtils.isNotBlank(imageName) ? getSeoFriendlyImage(imageName) : getImageNameFromDam();
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
