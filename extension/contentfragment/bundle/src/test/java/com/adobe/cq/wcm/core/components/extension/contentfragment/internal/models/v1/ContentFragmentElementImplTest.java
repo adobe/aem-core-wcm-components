@@ -66,14 +66,6 @@ public class ContentFragmentElementImplTest {
     }
 
     @Test
-    public void testPlainParagraphs() throws IOException {
-        ContentFragment.Element element = getMockedElement( getContent("sample_plain.dat"),"text/plain", false);
-        String[] paragraphs = element.getParagraphs();
-        assertNotNull(paragraphs);
-        assertEquals(1, paragraphs.length);
-    }
-
-    @Test
     public void testElementGetParagraphsMultiValue() {
         ContentFragment.Element element = getMockedElement( null,"text/html", true);
         String[] paragraphs = element.getParagraphs();
