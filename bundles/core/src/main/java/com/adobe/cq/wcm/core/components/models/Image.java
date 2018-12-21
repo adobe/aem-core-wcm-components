@@ -149,6 +149,7 @@ public interface Image extends ComponentExporter {
     /**
      * Name of the resource property that defines current image name. This value overwrites the image name coming from DAM
      *
+     * @since com.adobe.cq.wcm.core.components.models 12.7.0
      */
     String PN_IMAGE_NAME = "imageName";
 
