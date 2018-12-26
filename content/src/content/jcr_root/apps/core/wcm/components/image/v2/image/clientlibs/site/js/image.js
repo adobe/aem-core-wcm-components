@@ -42,11 +42,14 @@
         /**
          * An array of alternative image widths (in pixels).
          * Used to replace a {.width} variable in the src property with an optimal width if a URI template is provided.
+         *
+         * @memberof Image
+         * @type {Number[]}
+         * @default []
          */
         "widths": {
             "default": [],
             "transform": function(value) {
-                // number[]
                 var widths = [];
                 value.split(",").forEach(function(item) {
                     item = parseFloat(item);
@@ -59,11 +62,14 @@
         },
         /**
          * Indicates whether the image should be rendered lazily.
+         *
+         * @memberof Image
+         * @type {Boolean}
+         * @default false
          */
         "lazy": {
             "default": false,
             "transform": function(value) {
-                // boolean
                 return !(value === null || typeof value === "undefined");
             }
         },
@@ -73,6 +79,9 @@
          * Can be a simple image source, or a URI template representation that
          * can be variable expanded - useful for building an image configuration with an alternative width.
          * e.g. '/path/image.coreimg{.width}.jpeg/1506620954214.jpeg'
+         *
+         * @memberof Image
+         * @type {String}
          */
         "src": {
         }
@@ -156,7 +165,12 @@
         }
 
         function getOptimalWidth() {
-            var containerWidth = that._elements.self.clientWidth;
+            var container = that._elements.self;
+            var containerWidth = container.clientWidth;
+            while (containerWidth === 0 && container.parentNode) {
+                container = container.parentNode;
+                containerWidth = container.clientWidth;
+            }
             var optimalWidth = containerWidth * devicePixelRatio;
             var len = that._properties.widths.length;
             var key = 0;

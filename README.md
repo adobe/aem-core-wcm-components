@@ -1,6 +1,6 @@
 # AEM Sites Core Components
-[![Build Status](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components.png?branch=master)](https://travis-ci.org/Adobe-Marketing-Cloud/aem-core-wcm-components)
-[![Code Coverage](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/Adobe-Marketing-Cloud/aem-core-wcm-components)
+[![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components)
+[![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 
 A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.
 
@@ -10,11 +10,11 @@ A set of standardized components for AEM 6.3+ that can be used to speed up devel
 * AEM product documentation of Core Components
   * [Author documentation](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
   * [Developer documentation](https://docs.adobe.com/docs/en/aem/6-3/develop/components/core-components.html)
-* [adaptTo() 2017 presentation](https://adapt.to/2017/en/schedule/extensible-components-with-sling-models-and-htl.html)
+* [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
 ## Development
 If you're curious about how the next generation of components looks like, a tech preview is made available in the
-[`development`](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/development) branch.
+[`development`](https://github.com/adobe/aem-core-wcm-components/tree/development) branch.
 
 ## Contributing
 
@@ -24,17 +24,20 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 * Page authoring components:
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
   * [Content Fragment](extension/contentfragment/content/src/content/jcr_root/apps/core/wcm/extension/components/contentfragment/v1/contentfragment)\*
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
   * [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
   * [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
-  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
+  * [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
   * [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+  * [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
   * [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
   * [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
   * [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
 * Form components:
   * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
@@ -43,27 +46,26 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
   * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
   * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
 
-Visit the [roadmap wiki page](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
+Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
 
-The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
+The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
 \* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
 
 ## System Requirements
 
-Core Components | Extension | AEM                      | Java
-----------------|-----------|--------------------------|-----
-[1.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.0), [1.0.2](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.all-1.0.2)    | - | AEM 6.3                   | 1.7
-[1.0.4](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.4), [1.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.0.6)    | - | AEM 6.3                   | 1.8
-[1.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-1.1.0)           | sandbox/preview | AEM 6.3 + FP19614 or SP 1 | 1.8
-[2.0.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.0)           | sandbox/preview | AEM 6.3 + SP1 + FP20593   | 1.8
-[2.0.4](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.4)           | 1.0.0 | AEM 6.3 + SP1 + CFP2 + FP20593 + FP20696 | 1.8
-[2.0.6](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.6), [2.0.8](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.0.8)           | 1.0.2, 1.0.4 | AEM 6.3 + SP2 | 1.8
-[2.1.0](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.1.0)           | 1.0.6 | AEM 6.3.2.2 + FP24268, AEM 6.4.1.0 + FP24267 | 1.8
+The latest version of the Core Components, require the below minimum system requirements:
+
+Core Components | Extension | AEM 6.4 | AEM 6.3 | Java
+----------------|-----------|---------|---------|------
+[2.2.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.2.2) | 1.1.0 | 6.4.2.0 | 6.3.3.0 | 1.8
+
+For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
+
 
 ## Installation
 
-To install everything, except the extensions, the [released aggregate package `core.wcm.components.all`](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
+To install everything, except the extensions, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
 
 For more information about the Package Manager please have a look at [How to Work With Packages](https://helpx.adobe.com/experience-manager/6-4/sites/administering/using/package-manager.html) documentation page.
 
@@ -113,18 +115,18 @@ core components package into your own project maven build you can add the depend
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.1.0</version>
+     <version>2.2.0</version>
  </dependency>
  ```
 
  and sub package section
- ```
+```
  <subPackage>
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <filter>true</filter>
  </subPackage>
- ```
+```
 
  to the `content-package-maven-plugin`.
 

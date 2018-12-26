@@ -233,14 +233,9 @@ window.CQ.CoreComponentsIT.FormContainer.v1 = window.CQ.CoreComponentsIT.FormCon
             // select action type
             .execTestCase(c.tcUseDialogSelect("./actionType", "foundation/components/form/actions/store"))
             // set the thank you page
-            // NOTE: We need to simulate an 'enter' at the end otherwise autocompletion will open a suggestion box
-            // and take focus away, so we cant use fillInput
-            .simulate("foundation-autocomplete[name='./redirect'] input[type!='hidden']",  "key-sequence",
-                { sequence: "/content/core-components/core-components-page{enter}" })
-
+            .execTestCase(c.tcSelectInAutocomplete("[name='./redirect']", c.rootPage))
             // close the dialog
             .execTestCase(c.tcSaveConfigureDialog)
-
             // switch to the content frame
             .config.changeContext(c.getContentFrame)
             // click on the submit button

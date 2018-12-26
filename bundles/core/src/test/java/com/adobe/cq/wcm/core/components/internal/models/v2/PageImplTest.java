@@ -35,6 +35,7 @@ import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -79,7 +80,9 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         Set<String> keywords = new HashSet<>(keywordsArray.length);
         keywords.addAll(Arrays.asList(keywordsArray));
         assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
-        assertEquals("coretest.product-page", page.getClientLibCategories()[0]);
+        assertArrayEquals(new String[] {"coretest.product-page", "coretest.product-page-js-head"}, page.getClientLibCategories());
+        assertArrayEquals(new String[] {"coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
+        assertArrayEquals(new String[] {"coretest.product-page"}, page.getClientLibCategoriesJsBody());
         assertEquals("product-page", page.getTemplateName());
         Utils.testJSONExport(page, Utils.getTestExporterJSONPath(TEST_BASE, PAGE));
     }

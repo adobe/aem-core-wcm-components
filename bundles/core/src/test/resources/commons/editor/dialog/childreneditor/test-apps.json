@@ -1,0 +1,55 @@
+{
+    "teaser": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "teaser"         : {
+                "cq:icon"                : "image",
+                "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Teaser (v1)",
+                "sling:resourceSuperType": "core/wcm/components/teaser",
+                "imageDelegate"          : "core/wcm/components/image/v2/image",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    },
+    "teaserIconAbbreviation": {
+        "abbreviation"           : "Aa",
+        "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "Teaser Icon Abbreviation",
+        "sling:resourceSuperType": "core/wcm/components/teaser",
+        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "componentGroup"         : ".core-wcm"
+    },
+    "teaserIconAutoAbbreviation": {
+        "abbreviation"           : "",
+        "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "Teaser Icon Auto Abbreviation",
+        "sling:resourceSuperType": "core/wcm/components/teaser",
+        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "componentGroup"         : ".core-wcm"
+    },
+    "teaserIconSVG": {
+        "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "Teaser Icon SVG",
+        "sling:resourceSuperType": "core/wcm/components/teaser",
+        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "componentGroup"         : ".core-wcm",
+        "cq:icon.svg": {
+        }
+    },
+    "teaserIconPNG": {
+        "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "Teaser Icon PNG",
+        "sling:resourceSuperType": "core/wcm/components/teaser",
+        "imageDelegate"          : "core/wcm/components/image/v2/image",
+        "componentGroup"         : ".core-wcm",
+        "cq:icon.png": {
+        }
+    }
+}

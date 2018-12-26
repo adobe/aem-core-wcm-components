@@ -39,6 +39,13 @@ public interface Title extends ComponentExporter {
     String PN_DESIGN_DEFAULT_TYPE = "type";
 
     /**
+     * Name of the policy property that defines whether or not the title link is disabled.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TITLE_LINK_DISABLED = "linkDisabled";
+
+    /**
      * Returns the text to be displayed as title.
      *
      * @return the title's text
@@ -55,6 +62,26 @@ public interface Title extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the Title's link URL, if one was set.
+     *
+     * @return the title's link URL, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default String getLinkURL() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if link is disabled on the title.
+     *
+     * @return {@code true} if link is disabled on the title, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default boolean isLinkDisabled() {
         throw new UnsupportedOperationException();
     }
 

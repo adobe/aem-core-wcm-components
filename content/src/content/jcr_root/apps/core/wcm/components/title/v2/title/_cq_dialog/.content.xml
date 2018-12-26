@@ -95,6 +95,18 @@
                                                         value="h6"/>
                                                 </items>
                                             </defaulttypes>
+                                            <linkURL
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="cq/gui/components/coral/common/form/pagefield"
+                                                fieldDescription="Links the title. Path to a content page, external URL or page anchor."
+                                                fieldLabel="Link"
+                                                name="./linkURL"
+                                                rootPath="/content">
+                                                <granite:rendercondition
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/foundation/renderconditions/simple"
+                                                    expression="${!cqDesign.linkDisabled}"/>
+                                            </linkURL>
                                         </items>
                                     </column>
                                 </items>
