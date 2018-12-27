@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Download;
+import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -25,6 +26,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.apache.sling.testing.resourceresolver.MockValueMap;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -53,8 +56,14 @@ public class DownloadImplTest {
     private static final String DESCRIPTION = "Description";
     private static final String DAM_TITLE = "This is the title from the PDF.";
     private static final String DAM_DESCRIPTION = "This is the description from the PDF.";
+    private static final String PDF_FILESIZE_STRING = "147 KB";
+    private static final String PDF_FILENAME = "Download_Test_PDF.pdf";
+    private static final String PDF_FORMAT_STRING = "application/pdf";
+    private static final String COMPONENT_ACTION_TEXT = "Click";
+    private static final String STYLE_ACTION_TEST = "Download";
     private static final String DOWNLOAD_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-1";
     private static final String DOWNLOAD_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-2";
+
     private Logger downloadLogger;
 
     @ClassRule
@@ -85,6 +94,10 @@ public class DownloadImplTest {
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
         assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
+        assertEquals(PDF_FILENAME, download.getFilename());
+        assertEquals(PDF_FILESIZE_STRING, download.getSize());
+        assertEquals(PDF_FORMAT_STRING, download.getFormat());
+        assertEquals(COMPONENT_ACTION_TEXT, download.getActionText());
     }
 
     @Test
@@ -93,7 +106,85 @@ public class DownloadImplTest {
         assertEquals(DAM_TITLE, download.getTitle());
         assertEquals(DAM_DESCRIPTION, download.getDescription());
         assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
+        assertEquals(PDF_FILENAME, download.getFilename());
+        assertEquals(PDF_FILESIZE_STRING, download.getSize());
+        assertEquals(PDF_FORMAT_STRING, download.getFormat());
     }
+
+    @Test
+    public void testDisplayAllFileMetadata() throws Exception
+    {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Download.PN_DISPLAY_FILENAME, "true");
+            put(Download.PN_DISPLAY_FORMAT, "true");
+            put(Download.PN_DISPLAY_SIZE, "true");
+        }}));
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertEquals("Display of filename is not enabled", true, download.displayFilename());
+        assertEquals("Display of file size is not enabled", true, download.displaySize());
+        assertEquals("Display of file format is not enabled", true, download.displayFormat());
+    }
+
+    @Test
+    public void testDownloadWithTitleType() throws Exception
+    {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Download.PN_TITLE_TYPE, "h5");
+        }}));
+
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertEquals("Expected title type is not correct", "h5", download.getTitleType());
+    }
+
+    @Test
+    public void testDownloadWithDefaultTitleType() throws Exception
+    {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource));
+
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertEquals("Expected title type is not correct", null, download.getTitleType());
+    }
+
+    @Test
+    public void testDownloadWithCustomActionText() throws Exception
+    {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
+        }}));
+
+        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertEquals("Expected action text is not correct", COMPONENT_ACTION_TEXT, download.getActionText());
+    }
+
+    @Test
+    public void testDownloadWithActionTextFromStyle() throws Exception
+    {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
+        }}));
+
+        Download download = getDownloadUnderTest(DOWNLOAD_2, mockStyle);
+        assertEquals("Expected action text is not correct", STYLE_ACTION_TEST, download.getActionText());
+    }
+
+    @Test
+    public void testDownloadsWithDefaultActionText() throws Exception
+    {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource));
+
+        Download downloadWithConfiguredActionText = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertEquals("Expected action text is not correct", COMPONENT_ACTION_TEXT, downloadWithConfiguredActionText.getActionText());
+
+        Download downloadWithoutConfiguredActionText = getDownloadUnderTest(DOWNLOAD_2, mockStyle);
+        assertEquals("Expected action text is not correct", null, downloadWithoutConfiguredActionText.getActionText());
+    }
+
 
     private Download getDownloadUnderTest(String resourcePath) {
         return getDownloadUnderTest(resourcePath, null);

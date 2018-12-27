@@ -17,6 +17,7 @@
                         "fileReference"     : "/content/dam/core/documents/Download_Test_PDF.pdf",
                         "jcr:title"         : "Download",
                         "jcr:description"   : "Description",
+                        "actionText"        : "Click",
                         "sling:resourceType": "core/wcm/components/download/v1/download"
                     },
                     "download-2"          : {
