@@ -49,6 +49,11 @@ public interface Download extends ComponentExporter {
     String PN_TITLE_TYPE = "titleType";
 
     /**
+     * Name of the policy property that defines whether an image representing the file will be displayed.
+     */
+    String PN_DISPLAY_THUMBNAIL = "displayImage";
+
+    /**
      * Name of the policy property that defines whether the file's size will be displayed.
      */
     String PN_DISPLAY_SIZE = "displaySize";
@@ -154,6 +159,12 @@ public interface Download extends ComponentExporter {
     {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Checks if an image should be displayed for the download file.
+     * @return @code true} if the image should be displayed, {@code false} otherwise
+     */
+    default boolean displayImage() { throw new UnsupportedOperationException(); }
 
     /**
      * Checks if the file format should be displayed.

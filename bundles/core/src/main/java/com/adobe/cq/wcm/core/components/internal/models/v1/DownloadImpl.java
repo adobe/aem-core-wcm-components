@@ -75,6 +75,8 @@ public class DownloadImpl implements Download {
 
     private boolean descriptionFromAsset = false;
 
+    private boolean displayImage;
+
     private boolean displaySize;
 
     private boolean displayFormat;
@@ -112,6 +114,7 @@ public class DownloadImpl implements Download {
                 actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
             }
             titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
+            displayImage = currentStyle.get(PN_DISPLAY_THUMBNAIL, false);
             displaySize = currentStyle.get(PN_DISPLAY_SIZE, false);
             displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, false);
             displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, false);
@@ -220,6 +223,11 @@ public class DownloadImpl implements Download {
     @Override
     public String getSize() {
         return size;
+    }
+
+    @Override
+    public boolean displayImage() {
+        return displayImage;
     }
 
     @Override
