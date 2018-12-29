@@ -38,6 +38,7 @@
                                                 fieldLabel="Download Asset"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
+                                                mimeTypes="[image/*,video/*,audio/*,.pdf,.doc,.zip,.txt]"
                                                 multiple="{Boolean}false"
                                                 name="./file"
                                                 title="Upload Asset"
