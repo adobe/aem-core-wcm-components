@@ -19,6 +19,19 @@
                             jcr:primaryType="nt:unstructured"
                             mergeList="{Boolean}true"/>
                     </default>
+                    <as-root
+                        jcr:description="Policy of a page that is marked as a root of the hierarchy"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Root Page"
+                        sling:resourceType="wcm/core/components/policy/policy"
+                        clientlibs="[wcm.foundation.components.page.responsive]"
+                        isRoot="{Boolean}true"
+                        structureDepth="3"
+                        structurePatterns=".*">
+                        <jcr:content
+                            jcr:primaryType="nt:unstructured"
+                            mergeList="{Boolean}true"/>
+                    </as-root>
                 </page>
                 <responsivegrid jcr:primaryType="nt:unstructured">
                     <jcr:content
