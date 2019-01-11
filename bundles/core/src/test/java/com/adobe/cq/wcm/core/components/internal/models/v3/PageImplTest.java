@@ -89,10 +89,10 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
-    public void testHelperGetModelUrl() {
-        assertNull(PageImpl.getModelUrl(""));
-        assertEquals("some/path.model.json", PageImpl.getModelUrl("some/path"));
-        assertEquals("path/with/some.model.json", PageImpl.getModelUrl("path/with/some.more.selectors.html"));
+    public void testHelperGetJsonExportURL() {
+        assertNull(PageImpl.getJsonExportURL(""));
+        assertEquals("some/path.model.json", PageImpl.getJsonExportURL("some/path"));
+        assertEquals("path/with/some.model.json", PageImpl.getJsonExportURL("path/with/some.more.selectors.html"));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         MockSlingHttpServletRequest mockedRequest = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
         com.day.cq.wcm.api.Page mockedPage = mock(com.day.cq.wcm.api.Page.class);
 
-        SlingHttpServletRequest hierarchyServletRequest = PageImpl.getHierarchyServletRequest(mockedRequest, mockedPage, mockedPage);
+        SlingHttpServletRequest hierarchyServletRequest = PageImpl.createHierarchyServletRequest(mockedRequest, mockedPage, mockedPage);
 
         assertEquals(mockedPage, hierarchyServletRequest.getAttribute("currentPage"));
         assertNotNull(hierarchyServletRequest.getAttribute("com.day.cq.wcm.componentcontext"));
@@ -110,14 +110,14 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     @Test
     public void testGetHelperPageTreeTraversalDepth() {
         // no style
-        assertEquals(0, PageImpl.getPageTreeTraversalDepth(null));
+        assertEquals(0, PageImpl.getPageTreeDepth(null));
 
         // structureDepth set to 42
         Style mockedStyle = mock(Style.class);
         int answer = 42;
         when(mockedStyle.get(eq("structureDepth"), any())).thenReturn(answer);
 
-        assertEquals(answer, PageImpl.getPageTreeTraversalDepth(mockedStyle));
+        assertEquals(answer, PageImpl.getPageTreeDepth(mockedStyle));
     }
 
     @Test

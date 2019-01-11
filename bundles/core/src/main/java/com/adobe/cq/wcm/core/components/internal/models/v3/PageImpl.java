@@ -55,7 +55,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v3/page";
 
     /**
-     * Flags the child pages. Optionally available as a request attribute
+     * Name of the request attribute which is used to flag the child pages. Optionally available as a request attribute.
      */
     private static final String ATTR_IS_CHILD_PAGE = "com.adobe.cq.wcm.core.components.internal.models.HierarchyPage.isChildPage";
 
@@ -67,17 +67,20 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * URL extension specific to the Sling Model exporter
      */
-    private static final String URL_MODEL_EXTENSION = ".model.json";
+    private static final String JSON_EXPORT_SUFFIX = ".model.json";
 
     /**
-     * Request attribute key of the request page entry point
+     * Name of the request attribute that defines whether the page is an entry point of the request.
      */
     private static final String ATTR_HIERARCHY_ENTRY_POINT_PAGE = "com.adobe.cq.wcm.core.components.internal.models.HierarchyPage.entryPointPage";
 
     @ScriptVariable
     private Resource resource;
 
-    private Map<String, ? extends Page> childPages = null;
+    /**
+     * {@link Map} containing the page models with their corresponding paths (as keys).
+     */
+    private Map<String, ? extends Page> childPageModels = null;
 
     private com.day.cq.wcm.api.Page rootPage = null;
 
@@ -90,11 +93,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nonnull
     @Override
     public Map<String, ? extends Page> getExportedChildren() {
-        if (childPages == null) {
-            childPages = getChildPageModels();
+        if (childPageModels == null) {
+            childPageModels = getChildPageModels();
         }
 
-        return childPages;
+        return childPageModels;
     }
 
     @Nonnull
@@ -107,20 +110,20 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     public String getRootUrl() {
         if (currentStyle != null && currentStyle.containsKey(PR_IS_ROOT)) {
-            return getModelUrl(request, currentPage);
+            return getPageJsonExportUrl(request, currentPage);
         }
 
         com.day.cq.wcm.api.Page page = getRootPage();
 
         if (page != null) {
-            return getModelUrl(request, page);
+            return getPageJsonExportUrl(request, page);
         }
 
         return null;
     }
 
     /**
-     * @return Returns the root model of the given page
+     * @return Returns the model of the root page which this page is part of.
      */
     @Nullable
     @Override
@@ -136,7 +139,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
 
         return modelFactory.getModelFromWrappedRequest(
-            PageImpl.getHierarchyServletRequest(request, rootPage, currentPage),
+            PageImpl.createHierarchyServletRequest(request, rootPage, currentPage),
             rootPage.getContentResource(),
             this.getClass());
     }
@@ -147,7 +150,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      * @param url page URL
      * @return {@link String} model URL
      */
-    protected static String getModelUrl(@Nonnull String url) {
+    protected static String getJsonExportURL(@Nonnull String url) {
         if (StringUtils.isBlank(url)) {
             return null;
         }
@@ -158,7 +161,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             dotIndex = url.length();
         }
 
-        return url.substring(0, dotIndex) + URL_MODEL_EXTENSION;
+        return url.substring(0, dotIndex) + JSON_EXPORT_SUFFIX;
     }
 
     /**
@@ -166,11 +169,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      *
      * @param request request to be wrapped
      * @param page page to be referenced as statically containing the current page content
+     * @param entryPage page that is the entry point of the request
      * @return {@link SlingHttpServletRequest} a {@link SlingHttpServletRequestWrapper} containing given page and request
      */
-    protected static SlingHttpServletRequest getHierarchyServletRequest(@Nonnull SlingHttpServletRequest request,
-                                                                        @Nonnull com.day.cq.wcm.api.Page page,
-                                                                        @Nullable com.day.cq.wcm.api.Page entryPage) {
+    protected static SlingHttpServletRequest createHierarchyServletRequest(@Nonnull SlingHttpServletRequest request,
+                                                                           @Nonnull com.day.cq.wcm.api.Page page,
+                                                                           @Nullable com.day.cq.wcm.api.Page entryPage) {
         // Request attribute key of the component context
         final String ATTR_COMPONENT_CONTEXT = "com.day.cq.wcm.componentcontext";
 
@@ -193,11 +197,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     // style helpers zone
 
     /**
-     * Returns the first numeric selector. The default value is 0
+     *  Returns the tree depth that can be configured in the policy. Defaults to 0.
      *
+     * @param style policy to search in
      * @return {@link int} the defined traversal depth or 0 if none defined
      */
-    protected static int getPageTreeTraversalDepth(Style style) {
+    protected static int getPageTreeDepth(Style style) {
         // Depth of the tree of pages
         final String PN_STRUCTURE_DEPTH = "structureDepth";
 
@@ -216,6 +221,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     /**
      * Get request's entry point attribute value
+     *
+     * @param request request to get the entry point attribute from
      */
     protected static com.day.cq.wcm.api.Page requestGetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request) {
         return (com.day.cq.wcm.api.Page) request.getAttribute(ATTR_HIERARCHY_ENTRY_POINT_PAGE);
@@ -260,7 +267,10 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     /**
-     * Returns a flat list of all the child pages of a given page
+     * Traverses the tree of children of the page. Children that:
+     * - are not deeper than defined depth
+     * - has path that matches one of defined stucturePattern
+     * would be returned in a flat list.
      *
      * @param page page from which to extract child pages
      * @param slingRequest request
@@ -348,7 +358,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nonnull
     private Map<String, Page> getChildPageModels() {
 
-        int pageTreeTraversalDepth = PageImpl.getPageTreeTraversalDepth(currentStyle);
+        int pageTreeTraversalDepth = PageImpl.getPageTreeDepth(currentStyle);
 
         List<Pattern> pageFilterPatterns = PageImpl.getStructurePatterns(request, currentStyle);
 
@@ -379,7 +389,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             }
 
             itemWrappers.put(childPage.getPath(), modelFactory.getModelFromWrappedRequest(
-                PageImpl.getHierarchyServletRequest(slingRequestWrapper, childPage, null),
+                PageImpl.createHierarchyServletRequest(slingRequestWrapper, childPage, null),
                 childPageContentResource,
                 Page.class));
         }
@@ -394,12 +404,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      * @param page page for which to get the model URL
      * @return {@link String} model URL
      */
-    private String getModelUrl(@Nonnull SlingHttpServletRequest slingRequest, @Nonnull com.day.cq.wcm.api.Page page) {
-        return PageImpl.getModelUrl(Utils.getURL(slingRequest, page));
+    private String getPageJsonExportUrl(@Nonnull SlingHttpServletRequest slingRequest, @Nonnull com.day.cq.wcm.api.Page page) {
+        return PageImpl.getJsonExportURL(Utils.getURL(slingRequest, page));
     }
 
     /**
-     * @return Returns the root (app) page the current page is part of
+     * @return Returns the root page which the current page is part of.
      */
     private com.day.cq.wcm.api.Page getRootPage() {
         if (rootPage != null) {
@@ -407,7 +417,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
 
         rootPage = currentPage;
-        boolean isRootModel = false;
+        boolean isRootPage = false;
 
         ContentPolicyManager contentPolicyManager = resource.getResourceResolver().adaptTo(ContentPolicyManager.class);
 
@@ -442,9 +452,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 continue;
             }
 
-            isRootModel = properties.containsKey(PR_IS_ROOT);
+            isRootPage = properties.containsKey(PR_IS_ROOT);
 
-        } while(rootPage != null && !isRootModel);
+        } while(rootPage != null && !isRootPage);
 
         return rootPage;
     }
