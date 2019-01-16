@@ -52,7 +52,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/carousel.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/carousel.png"
                     linkURL="/content/core-components-examples/library/carousel"
                     textIsRich="true"
                     titleFromPage="true">
@@ -78,7 +78,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/content-fragment.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/content-fragment.png"
                     linkURL="/content/core-components-examples/library/content-fragment"
                     textIsRich="true"
                     titleFromPage="true">
@@ -104,7 +104,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/image.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/image.png"
                     linkURL="/content/core-components-examples/library/image"
                     textIsRich="true"
                     titleFromPage="true">
@@ -130,7 +130,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/list.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/list.png"
                     linkURL="/content/core-components-examples/library/list"
                     textIsRich="true"
                     titleFromPage="true">
@@ -157,7 +157,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/separator.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/separator.png"
                     linkURL="/content/core-components-examples/library/separator"
                     textIsRich="true"
                     titleFromPage="true">
@@ -183,7 +183,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/social-sharing.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/social-sharing.png"
                     linkURL="/content/core-components-examples/library/social-sharing"
                     textIsRich="true"
                     titleFromPage="true">
@@ -209,7 +209,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/tabs.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/tabs.png"
                     linkURL="/content/core-components-examples/library/tabs"
                     textIsRich="true"
                     titleFromPage="true">
@@ -236,7 +236,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/teaser.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/teaser.png"
                     linkURL="/content/core-components-examples/library/teaser"
                     textIsRich="true"
                     titleFromPage="true">
@@ -262,7 +262,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/title.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/title.png"
                     linkURL="/content/core-components-examples/library/title"
                     textIsRich="true"
                     titleFromPage="true">
@@ -288,7 +288,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/text.png"
+                    fileReference="/content/dam/core-components-examples/library/sample-assets/components/text.png"
                     linkURL="/content/core-components-examples/library/text"
                     textIsRich="true"
                     titleFromPage="true">

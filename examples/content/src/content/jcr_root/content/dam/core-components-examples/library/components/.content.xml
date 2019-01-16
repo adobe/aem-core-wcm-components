@@ -6,7 +6,7 @@
     <jcr:content
         cq:conf=""
         jcr:primaryType="nt:unstructured"
-        jcr:title="Components Thumbnails">
+        jcr:title="Components">
         <folderThumbnail/>
     </jcr:content>
 </jcr:root>

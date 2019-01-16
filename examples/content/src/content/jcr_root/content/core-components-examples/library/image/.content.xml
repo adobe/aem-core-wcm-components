@@ -90,7 +90,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
@@ -152,7 +152,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="false"
-                            fileReference="/content/dam/core-components-examples/library/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
@@ -214,7 +214,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
                             isDecorative="false"
                             linkURL="/content/core-components-examples/library/image"
                             titleValueFromDAM="true"/>
@@ -277,7 +277,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
