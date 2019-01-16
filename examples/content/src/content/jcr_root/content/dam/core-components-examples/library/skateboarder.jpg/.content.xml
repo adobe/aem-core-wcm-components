@@ -3,13 +3,13 @@
     jcr:isCheckedOut="{Boolean}true"
     jcr:mixinTypes="[mix:referenceable,mix:versionable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="8d530f0c-0ca2-42e9-90d7-41bdfd96d0eb">
+    jcr:uuid="d375e4bf-3e9c-4aa5-b9db-dd4496e1cce6">
     <jcr:content
         cq:name="skateboarder.jpg"
         cq:parentPath="/content/dam/core-components-examples/library"
         dam:assetState="processed"
         dam:relativePath="core-components-examples/library/skateboarder.jpg"
-        jcr:lastModified="{Date}2018-12-13T12:12:56.070+01:00"
+        jcr:lastModified="{Date}2019-01-15T13:24:56.967+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
@@ -26,17 +26,17 @@
             dam:Progressive="no"
             dam:sha1="68b37cfefeedd1317c9100d36ab758cc64eaa16f"
             dam:size="{Long}819407"
-            dc:description="Aerial Skateboarder"
+            dc:description="Skateboarder"
             dc:format="image/jpeg"
             dc:modified="{Date}2018-12-13T10:17:54.152+01:00"
-            dc:title="Aerial Skateboarder"
+            dc:title="Skateboarder"
             exif:PixelXDimension="{Long}1366"
             exif:PixelYDimension="{Long}800"
-            jcr:lastModified="{Date}2018-12-13T12:12:06.191+01:00"
+            jcr:lastModified="{Date}2019-01-15T13:24:55.658+01:00"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
-            jcr:title="Aerial Skateboarder"
+            jcr:title="Skateboarder"
             tiff:ImageLength="{Long}800"
             tiff:ImageWidth="{Long}1366">
             <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>

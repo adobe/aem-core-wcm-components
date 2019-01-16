@@ -2,8 +2,7 @@
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" jcr:primaryType="nt:unstructured">
     <component
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="core-components-examples/components/demo/component">
-    </component>
+        sling:resourceType="core-components-examples/components/demo/component"/>
     <info
         jcr:primaryType="nt:unstructured"
         sling:resourceType="core/wcm/components/tabs/v1/tabs">
@@ -15,7 +14,7 @@
         <markup
             cq:panelTitle="Markup"
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="core-components-examples/components/demo/code"
+            sling:resourceType="core-components-examples/components/demo/markup"
             reference="../../component"/>
         <json
             cq:panelTitle="JSON"

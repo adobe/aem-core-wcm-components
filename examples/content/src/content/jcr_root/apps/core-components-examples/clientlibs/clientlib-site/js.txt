@@ -13,3 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ###############################################################################
+
+#base=scripts
+
+vendor/beautify.js
+vendor/prettify.js
+
+namespace.js
+notification.js
+aside.js
+demo.js

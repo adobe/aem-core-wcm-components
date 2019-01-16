@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:mixinTypes="[mix:referenceable]"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="4d0903f0-54b5-4bfc-aeec-2d1f2f3a6da3">
+    jcr:uuid="f7e56ad6-38dd-4685-8206-724f2be4f743">
     <jcr:content
+        cq:name="circle.jpg"
+        cq:parentPath="/content/dam/core-components-examples/library"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2018-12-13T12:25:17.899+01:00"
+        jcr:lastModified="{Date}2019-01-15T13:24:59.295+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
@@ -19,9 +22,16 @@
             dam:Physicalwidthindpi="{Long}72"
             dam:Physicalwidthininches="{Decimal}15.277777671813965"
             dam:Progressive="no"
+            dam:sha1="c90fe4cda32fb2ece3e814af7297a99dc9014be0"
+            dc:description="Hand holding an abstract white donut shape on a dark background"
             dc:format="image/jpeg"
+            dc:modified="{Date}2018-12-14T06:13:00.900+01:00"
+            dc:title="Circle"
+            jcr:lastModified="{Date}2019-01-15T13:24:57.792+01:00"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
+            jcr:title="Circle"
             tiff:ImageLength="{Long}660"
             tiff:ImageWidth="{Long}1100"
             tiff:ResolutionUnit="{Long}2"

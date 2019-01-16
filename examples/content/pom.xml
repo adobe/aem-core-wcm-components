@@ -85,7 +85,8 @@
                     <excludes combine.children="append">
                         <!-- Ignore files -->
                         <exclude>**/*.editorconfig</exclude>
-                        <exclude>**/*normalize.css</exclude>
+                        <exclude>**/vendor/**/*</exclude>
+                        <exclude>**/renditions/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>

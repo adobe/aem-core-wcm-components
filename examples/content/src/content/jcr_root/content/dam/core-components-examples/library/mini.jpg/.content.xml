@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:exif="http://ns.adobe.com/exif/1.0/" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:mixinTypes="[mix:referenceable]"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="ee5ac6dd-f032-47b0-8a86-3e9dfa76c3a4">
+    jcr:uuid="6d70d724-f0ae-42c3-ab2f-58ac283ab296">
     <jcr:content
+        cq:name="mini.jpg"
+        cq:parentPath="/content/dam/core-components-examples/library"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2018-12-13T12:25:18.151+01:00"
+        jcr:lastModified="{Date}2019-01-15T13:24:58.065+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
@@ -19,11 +22,18 @@
             dam:Physicalwidthindpi="{Long}72"
             dam:Physicalwidthininches="{Decimal}15.277777671813965"
             dam:Progressive="no"
+            dam:sha1="33fe3893443454421fb7c57c1b59ab53c2c6c0ba"
+            dc:description="A mini brand car close up in sepia"
             dc:format="image/jpeg"
+            dc:modified="{Date}2018-12-14T06:13:00.118+01:00"
+            dc:title="Mini"
             exif:PixelXDimension="{Long}1366"
             exif:PixelYDimension="{Long}768"
+            jcr:lastModified="{Date}2019-01-15T13:24:57.966+01:00"
+            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"
+            jcr:title="Mini"
             tiff:ImageLength="{Long}660"
             tiff:ImageWidth="{Long}1100"
             tiff:ResolutionUnit="{Long}1"

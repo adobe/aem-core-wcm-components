@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:exif="http://ns.adobe.com/exif/1.0/" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="9a0424ce-cde7-4439-a267-da89ac42fad9">
+    <jcr:content
+        cq:name="mini.jpg"
+        cq:parentPath="/content/dam/core-components-examples/library"
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2019-01-15T13:24:57.735+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:Bitsperpixel="{Long}24"
+            dam:Fileformat="JPEG"
+            dam:MIMEtype="image/jpeg"
+            dam:Numberofimages="{Long}1"
+            dam:Numberoftextualcomments="{Long}0"
+            dam:Physicalheightindpi="{Long}72"
+            dam:Physicalheightininches="{Decimal}9.166666984558105"
+            dam:Physicalwidthindpi="{Long}72"
+            dam:Physicalwidthininches="{Decimal}15.277777671813965"
+            dam:Progressive="no"
+            dam:sha1="f0c45489360ae1ed4f7f165f5809fac3adda83d8"
+            dc:description="A mini brand car close up in sepia"
+            dc:format="image/jpeg"
+            dc:modified="{Date}2018-12-14T06:13:00.118+01:00"
+            dc:title="Mini"
+            exif:PixelXDimension="{Long}1366"
+            exif:PixelYDimension="{Long}768"
+            jcr:lastModified="{Date}2019-01-14T21:14:58.165+01:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            jcr:title="Mini"
+            tiff:ImageLength="{Long}660"
+            tiff:ImageWidth="{Long}1100"
+            tiff:ResolutionUnit="{Long}1"
+            tiff:XResolution="72/1"
+            tiff:YResolution="72/1"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

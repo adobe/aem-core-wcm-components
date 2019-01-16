@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2018-12-10T18:52:18.412+01:00"
+        cq:lastModified="{Date}2019-01-14T15:02:56.885+01:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/atom]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Text allows the display of a rich text paragraph on the page. Various formatting options are available."
+        jcr:description="Display a rich text paragraph on a page"
         jcr:primaryType="cq:PageContent"
         jcr:title="Text"
-        jcr:uuid="3cfcd5d3-5d9f-4552-b5cf-6b047e42616c"
         sling:resourceType="core/wcm/components/page/v2/page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -19,7 +18,7 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <title
-                    cq:styleIds="[1544462227238]"
+                    cq:styleIds="[1544759629303]"
                     jcr:created="{Date}2018-12-06T19:11:07.719+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-06T19:21:37.259+01:00"
@@ -28,7 +27,7 @@
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h1"/>
                 <text
-                    cq:styleIds="[1544460192369]"
+                    cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-10T18:42:42.183+01:00"
@@ -37,9 +36,15 @@
                     sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>Text allows the display of a rich text paragraph on the page. Various formatting options are available.&lt;/p>&#xa;"
                     textIsRich="true">
+                    <cq:responsive jcr:primaryType="nt:unstructured">
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            offset="0"
+                            width="9"/>
+                    </cq:responsive>
                 </text>
                 <title_865328580
-                    cq:styleIds="[1544462230273]"
+                    cq:styleIds="[1544759664489]"
                     jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
@@ -49,6 +54,7 @@
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h2"/>
                 <title_290384408
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:44:19.686+01:00"
@@ -97,7 +103,7 @@
                         <markup
                             cq:panelTitle="Markup"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
+                            sling:resourceType="core-components-examples/components/demo/markup"
                             reference="../../component"/>
                         <json
                             cq:panelTitle="JSON"
@@ -107,6 +113,7 @@
                     </info>
                 </demo>
                 <title_290380111
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:44:35.069+01:00"
@@ -165,6 +172,7 @@
                     </info>
                 </demo_1089961282>
                 <title_290381234
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:44:48.612+01:00"
@@ -223,6 +231,7 @@
                     </info>
                 </demo_1695748698>
                 <title_290387891
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:45:07.863+01:00"
@@ -253,11 +262,11 @@
                         <text
                             jcr:created="{Date}2018-12-07T13:46:58.126+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T13:48:52.209+01:00"
+                            jcr:lastModified="{Date}2019-01-14T15:02:56.877+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/text/v2/text"
-                            text=""
+                            text="&lt;table cellpadding=&quot;5&quot; cellspacing=&quot;0&quot; border=&quot;1&quot;>&#xa;&lt;tbody>&lt;tr>&lt;td>Column 1&lt;/td>&#xa;&lt;td>Column 2&lt;/td>&#xa;&lt;td>Column 3&lt;/td>&#xa;&lt;td>Column 4&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;tr>&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;td>&amp;nbsp;&lt;/td>&#xa;&lt;/tr>&lt;/tbody>&lt;/table>&#xa;"
                             textIsRich="true"/>
                     </component>
                     <info

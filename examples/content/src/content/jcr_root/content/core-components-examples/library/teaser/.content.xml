@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2018-12-11T12:21:11.519+01:00"
+        cq:lastModified="{Date}2019-01-09T20:30:27.177+01:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/reference]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined."
+        jcr:description="Group an image, title, description and link them"
         jcr:primaryType="cq:PageContent"
         jcr:title="Teaser"
-        jcr:uuid="c00343c8-0064-46e7-97c5-c1ea60ba25ef"
         sling:resourceType="core/wcm/components/page/v2/page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -18,6 +17,7 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
                 <title
+                    cq:styleIds="[1544759629303]"
                     jcr:created="{Date}2018-12-06T19:11:07.719+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-06T19:21:37.259+01:00"
@@ -26,6 +26,7 @@
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h1"/>
                 <text
+                    cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:32:37.460+01:00"
@@ -34,8 +35,15 @@
                     sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined.&lt;/p>&#xa;"
                     textIsRich="true">
+                    <cq:responsive jcr:primaryType="nt:unstructured">
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            offset="0"
+                            width="9"/>
+                    </cq:responsive>
                 </text>
                 <title_865328580
+                    cq:styleIds="[1544759664489]"
                     jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
@@ -45,6 +53,7 @@
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h2"/>
                 <title_290384408
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:32:52.751+01:00"
@@ -107,6 +116,7 @@
                     </info>
                 </demo>
                 <title_290385000
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:33:08.554+01:00"
@@ -170,6 +180,7 @@
                     </info>
                 </demo_1160408466>
                 <title_290386000
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:33:24.237+01:00"
@@ -233,6 +244,7 @@
                     </info>
                 </demo_1789748122>
                 <title_290387000
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:33:42.882+01:00"
@@ -303,6 +315,7 @@
                     </info>
                 </demo_1878698139>
                 <title_290388000
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:34:56.398+01:00"
@@ -381,6 +394,7 @@
                     </info>
                 </demo_1581767054>
                 <title_290389000
+                    cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T13:35:26.346+01:00"

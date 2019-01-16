@@ -2,7 +2,7 @@
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     cq:icon="code"
     cq:isContainer="true"
-    jcr:description="Component wrapper"
+    jcr:description="Demo component wrapper"
     jcr:primaryType="cq:Component"
-    jcr:title="Component wrapper"
+    jcr:title="Demo - Component"
     componentGroup=".hidden"/>
