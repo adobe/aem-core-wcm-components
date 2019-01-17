@@ -27,7 +27,10 @@ import com.day.cq.wcm.api.components.EditContext;
 import com.day.cq.wcm.api.designer.Cell;
 
 /**
- * Wrapper class that allows to modify the static reference to the content current containing page within the ComponentContext
+ * Implementation of the {@link ComponentContext} that allows to pass {@link Page} and {@link ComponentContext}
+ * as constructor parameters.<br />
+ *
+ * Provides a solution to save a static reference to any {@link Page} i.e. in order to define the page for a request.
  */
 class HierarchyComponentContextWrapper implements ComponentContext {
 

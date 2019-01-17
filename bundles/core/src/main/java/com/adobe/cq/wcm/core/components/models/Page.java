@@ -326,7 +326,7 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
      */
     @Nullable
     @JsonIgnore
-    default String getRootUrl() {
+    default String getHierarchyRootJsonExportUrl() {
         throw new UnsupportedOperationException();
     }
 
@@ -338,7 +338,7 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
      */
     @Nullable
     @JsonIgnore
-    default Page getRootModel() {
+    default Page getHierarchyRootModel() {
         throw new UnsupportedOperationException();
     }
 

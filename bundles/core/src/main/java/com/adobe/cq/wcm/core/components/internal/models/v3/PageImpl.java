@@ -48,6 +48,21 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
+/*
+ * Page that allows the retrieval of the model in JSON format with hierarchical structures of more than one Page.
+ *
+ * The content of the JSON export of the model is limited by two parameters:
+ * - filterPatterns - paths from which Pages are to be included
+ * - traversalDepth - number of levels to be included
+ * however, if the JSON export of the model hierarchy is requested from a Page (entryPoint) that would be
+ * excluded based on the rules above the corresponding model would be added to the JSON.
+ *
+ * Among many others, the exported structure would contain:
+ * - a map of child page models identifiable by their paths (getExportedChildren()) -> :children
+ * - a map of the content (v1.getExportedItems()) -> :items,
+ *      together with the order (v1.getExportedItemsOrder()) -> :itemsOrder
+ *
+ */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl implements Page {
@@ -108,7 +123,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Nullable
     @Override
-    public String getRootUrl() {
+    public String getHierarchyRootJsonExportUrl() {
         if (currentStyle != null && currentStyle.containsKey(PR_IS_ROOT)) {
             return getPageJsonExportUrl(request, currentPage);
         }
@@ -127,7 +142,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     @Nullable
     @Override
-    public Page getRootModel() {
+    public Page getHierarchyRootModel() {
         if (currentStyle != null && currentStyle.containsKey(PR_IS_ROOT)) {
             return this;
         }
@@ -165,7 +180,19 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     /**
-     * Wrap the provided request to ensure the static references to the containing page of a component is accurate
+     * Creates a new request wrapping the {@code request} from the parameters.<br />
+     *
+     * The new request is created in order to set attributes: <ul>
+     * <li>
+     *     componentcontext - includes the {@link Page} from {@code page} parameter and the context from {@code request}
+     * </li>
+     * <li>
+     *     currentPage - {@link Page} from {@code page} parameter and the
+     * </li><li>
+     *     entryPointPage - {@link Page} from {@code entryPage} parameter
+     * </li></ul>
+     *
+     * to ensure that the references to the page are accurate for the hierarchical structure.
      *
      * @param request request to be wrapped
      * @param page page to be referenced as statically containing the current page content
@@ -233,6 +260,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      * The patterns can either be stored on the template policy of the page or provided as a request parameter
      *
      * @param request request
+     * @param currentStyle current style
      * @return {@link List} list of page structure patterns
      */
     @Nonnull
@@ -269,7 +297,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * Traverses the tree of children of the page. Children that:
      * - are not deeper than defined depth
-     * - has path that matches one of defined stucturePattern
+     * - has path that matches one of defined structurePattern
      * would be returned in a flat list.
      *
      * @param page page from which to extract child pages
@@ -329,7 +357,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      *
      * @param childPages    List of child pages
      */
-    private void addAsynchronousChildPage(@Nonnull List<com.day.cq.wcm.api.Page> childPages) {
+    private void addEntryPointPage(@Nonnull List<com.day.cq.wcm.api.Page> childPages) {
         // Child pages are only added to the root page
         if (Boolean.TRUE.equals(request.getAttribute(ATTR_IS_CHILD_PAGE))) {
             return;
@@ -355,6 +383,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         childPages.add(entryPointPage);
     }
 
+    /**
+     * Returns all child page models of the currentPage plus the entryPoint page (even if was excluded based on rules
+     * enforced by filterPatterns or traversalDepth).
+     *
+     * @return {@link Map} containing the page models with their corresponding paths (as keys).
+     */
     @Nonnull
     private Map<String, Page> getChildPageModels() {
 
@@ -369,7 +403,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
         List<com.day.cq.wcm.api.Page> children = getChildPageRecursive(currentPage, slingRequestWrapper, pageFilterPatterns, pageTreeTraversalDepth);
 
-        addAsynchronousChildPage(children);
+        addEntryPointPage(children);
 
         // Add a flag to inform the model of the child pages that they are not the root of the tree
         slingRequestWrapper.setAttribute(ATTR_IS_CHILD_PAGE, true);

@@ -71,21 +71,21 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
-    public void testGetRootUrl() {
+    public void testGetHierarchyRootJsonExportUrl() {
         // no parent
         Page rootPage = getPageWithChildren();
-        Assert.assertEquals(CONTEXT_PATH + PAGE + ".model.json", rootPage.getRootUrl());
+        Assert.assertEquals(CONTEXT_PATH + PAGE + ".model.json", rootPage.getHierarchyRootJsonExportUrl());
 
         // with parent
         Page childPage = getChildPage();
-        Assert.assertEquals(CONTEXT_PATH + PAGE + ".model.json", childPage.getRootUrl());
+        Assert.assertEquals(CONTEXT_PATH + PAGE + ".model.json", childPage.getHierarchyRootJsonExportUrl());
     }
 
     @Test
-    public void testGetRootModel() {
+    public void testGetHierarchyRootModel() {
         // no parent
         Page page = getPageWithChildren();
-        Assert.assertEquals(page, page.getRootModel());
+        Assert.assertEquals(page, page.getHierarchyRootModel());
     }
 
     @Test
