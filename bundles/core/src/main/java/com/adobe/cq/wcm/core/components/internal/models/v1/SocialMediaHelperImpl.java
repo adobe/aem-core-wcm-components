@@ -221,20 +221,24 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
      * Instantiates the suitable metadata provider based on the contents of the current page.
      */
     private WebsiteMetadata createMetadataProvider() {
-        Product product = CommerceHelper.findCurrentProduct(currentPage);
-        ExperienceFragmentSocialVariation smVariant = findExperienceFragmentSocialVariation();
-        if (product == null) {
-            if (smVariant == null) {
-                return new WebsiteMetadataProvider();
+        try {
+            Product product = CommerceHelper.findCurrentProduct(currentPage);
+            ExperienceFragmentSocialVariation smVariant = findExperienceFragmentSocialVariation();
+            if (product == null) {
+                if (smVariant == null) {
+                    return new WebsiteMetadataProvider();
+                } else {
+                    return new ExperienceFragmentWebsiteMetadataProvider(smVariant);
+                }
             } else {
-                return new ExperienceFragmentWebsiteMetadataProvider(smVariant);
+                if (smVariant == null) {
+                    return new ProductMetadataProvider(product);
+                } else {
+                    return new ExperienceFragmentProductMetadataProvider(product, smVariant);
+                }
             }
-        } else {
-            if (smVariant == null) {
-                return new ProductMetadataProvider(product);
-            } else {
-                return new ExperienceFragmentProductMetadataProvider(product, smVariant);
-            }
+        } catch (NoClassDefFoundError e) {
+            return new WebsiteMetadataProvider();
         }
     }
 
