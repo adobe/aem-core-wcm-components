@@ -15,6 +15,7 @@
  */
 
 @cmp-examples-notification-offset: @cmp-examples-spacing-s;
+@cmp-examples-notification-icon-width: 15*@px;
 
 .cmp-examples-notification {
     position: fixed;
@@ -23,25 +24,33 @@
     .transform(translate(-50%));
     z-index: @cmp-examples-z-index-notification;
 
+    max-width: 290*@px;
     border-radius: (2 * @cmp-examples-spacing-xs) + (@cmp-examples-line-height * @cmp-examples-font-size);
-    padding: @cmp-examples-spacing-xs @cmp-examples-spacing-m;
+    padding: @cmp-examples-spacing-xs @cmp-examples-spacing-m (@cmp-examples-spacing-xs + 1*@px);
     line-height: @cmp-examples-line-height;
 
     font-size: @cmp-examples-font-size;
     color: @cmp-examples-color-white;
     background-color: fade(@cmp-examples-color-notice, 90%);
+    white-space: nowrap;
 
     animation: ~'cmp-examples-notification-in linear @{cmp-examples-animation-duration-4}';
     animation-iteration-count: 1;
 }
 
 .cmp-examples-notification__icon {
-    display: inline;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .cmp-examples-notification__text {
-    display: inline;
+    display: inline-block;
+    vertical-align: middle;
+    width: ~'calc(100% - (@{cmp-examples-spacing-xs} + @{cmp-examples-notification-icon-width}))';
     margin-left: @cmp-examples-spacing-xs;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cmp-examples-notification--out {

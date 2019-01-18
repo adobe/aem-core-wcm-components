@@ -44,7 +44,7 @@
         var stateCssClass = 'cmp-examples-notification--' + state;
         notification.classList.add('cmp-examples-notification');
         notification.classList.add(stateCssClass);
-        notification.innerHTML = '<i class="fas fa-' + stateIconMap[state] + '"></i><span class="cmp-examples-notification__text">' + text + '</span>';
+        notification.innerHTML = '<i class="cmp-examples-notification__icon fas fa-' + stateIconMap[state] + '"></i><span class="cmp-examples-notification__text">' + text + '</span>';
         document.body.appendChild(notification);
 
         window.setTimeout(function() {
