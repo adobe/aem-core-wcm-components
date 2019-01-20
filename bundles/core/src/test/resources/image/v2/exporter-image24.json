@@ -1,8 +1,8 @@
 {
     "alt"                   : "Adobe Systems Logo and Wordmark in PNG format",
     "title"                 : "Adobe Systems Logo and Wordmark",
-    "src"                   : "/core/content/test/_jcr_content/root/image24.coreimg.png/1494867377756/adobe_systems_logo_and_wordmark.png",
-    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image24.coreimg{.width}.png/1494867377756/adobe_systems_logo_and_wordmark.png",
+    "src"                   : "/core/content/test/_jcr_content/root/image24.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
+    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image24.coreimg{.width}.png/1494867377756/adobe-systems-logo-and-wordmark.png",
     "areas": [
         {
             "shape": "circle",

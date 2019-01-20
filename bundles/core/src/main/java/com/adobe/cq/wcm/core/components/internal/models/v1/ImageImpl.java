@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Set;
 import java.util.TreeSet;
@@ -206,8 +208,8 @@ public class ImageImpl implements Image {
                 baseResourcePath = resource.getPath();
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
-            //check if image name is overwritten at the dialog level
-            final String assetName = StringUtils.isNotBlank(imageName) ? getSeoFriendlyName(imageName) : getImageNameFromDam();
+            //get asset title or name from dam
+            final String imageName = getImageNameFromDam();
             if (smartSizesSupported()) {
                 Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
                 smartImages = new String[supportedRenditionWidths.size()];
@@ -216,7 +218,7 @@ public class ImageImpl implements Image {
                     smartImages[index] = baseResourcePath + DOT +
                         selector + DOT + jpegQuality + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(assetName)? "/" +assetName :"") 
+                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(imageName)? "/" +imageName :"") 
                             + DOT + extension : "");
                     smartSizes[index] = width;
                     index++;
@@ -232,7 +234,7 @@ public class ImageImpl implements Image {
                 src += extension;
             }
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate 
-            		+ (StringUtils.isNotBlank(assetName)? "/" +assetName :"") + DOT + extension : "");
+            		+ (StringUtils.isNotBlank(imageName)? "/" +imageName :"") + DOT + extension : "");
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
@@ -251,24 +253,38 @@ public class ImageImpl implements Image {
      * @return image name from DAM
      */
     protected String getImageNameFromDam() {
+        String imageName = "";
         Resource damResource = request.getResourceResolver().getResource(fileReference);
         if (damResource != null) {
           Asset asset = damResource.adaptTo(Asset.class);
-          return getSeoFriendlyName(asset != null ? asset.getName() : "");
+          if(asset != null) {
+            imageName = StringUtils.trimToNull((String) asset.getMetadataValue("dc:title"));
+            if (imageName == null || imageName.trim().length() == 0) {
+              imageName = StringUtils.trimToNull(asset.getName());
+            }
+          }
         }
-          return "";
-	}
+        return getSeoFriendlyName(FilenameUtils.getBaseName(imageName));
+    }
     
     /**
      * Content editors can store DAM assets with white spaces in the name, this method makes
-     * the asset name SEO friendly and also makes it usable by the {@code AdaptiveImageServlet}
+     * the asset name SEO friendly, Translates the string into {@code application/x-www-form-urlencoded} 
+     * format using {@code utf-8} encoding scheme.
      * 
      * @param assetName
      * @return name of the asset without extension
      */
-    protected String getSeoFriendlyName(String assetName) {
-        assetName = StringUtils.isNotBlank(assetName)? assetName.trim().replaceAll(" ", "-").toLowerCase() : null;
-        return FilenameUtils.getBaseName(assetName);
+    protected String getSeoFriendlyName(String imageName) {
+      
+      //Google recommends to use hyphens (-) instead of underscores (_) for seo. See https://support.google.com/webmasters/answer/76329?hl=en 
+      String seoFriendlyName = imageName.replaceAll("[\\ _]", "-").toLowerCase();
+        try {
+          seoFriendlyName = URLEncoder.encode(seoFriendlyName,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+          LOGGER.error(String.format("The Character Encoding is not supported."));
+        }
+        return seoFriendlyName;
     }
 
 

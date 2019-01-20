@@ -55,7 +55,7 @@ public class ImageImplTest extends AbstractImageTest {
     protected static String IMAGE_TITLE_ALT = "Adobe Logo";
     protected static String IMAGE_FILE_REFERENCE = "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png";
     protected static String IMAGE_LINK = "https://www.adobe.com";
-    protected static String ASSET_NAME = "adobe_systems_logo_and_wordmark";
+    protected static String ASSET_NAME = "adobe-systems-logo-and-wordmark";
     protected static String FORWARD_SLASH = "/";
 
     protected String testBase = TEST_BASE;
@@ -111,7 +111,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertNull("Did not expect a title for this image.", image.getTitle());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertNull("Did not expect a link for this image, since it's marked as decorative.", image.getLink());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe_systems_logo_and_wordmark.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe-systems-logo-and-wordmark.png", image.getSrc());
         compareJSON(
                 "{\"" + Image.JSON_SMART_IMAGES + "\":[], \"" + Image.JSON_SMART_SIZES + "\":[], \"" + Image.JSON_LAZY_ENABLED +
                         "\":true}",
@@ -131,11 +131,11 @@ public class ImageImplTest extends AbstractImageTest {
     public void testImageCacheKiller() {
         String escapedResourcePath = IMAGE4_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE4_PATH);
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe_systems_logo_and_wordmark.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe-systems-logo-and-wordmark.png", image.getSrc());
 
         escapedResourcePath = IMAGE15_PATH.replace("jcr:content", "_jcr_content");
         image = getImageUnderTest(IMAGE15_PATH);
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe_systems_logo_and_wordmark.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe-systems-logo-and-wordmark.png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE15_PATH));
     }
 
