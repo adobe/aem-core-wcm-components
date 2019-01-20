@@ -110,9 +110,6 @@ public class ImageImpl implements Image {
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
     
-    @ValueMapValue(name = Image.PN_IMAGE_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
-    protected String imageName;
-
     protected String src;
     protected String[] smartImages = new String[]{};
     protected int[] smartSizes = new int[0];
@@ -319,10 +316,6 @@ public class ImageImpl implements Image {
         return fileReference;
     }
     
-    public String getImageName() {
-        return imageName;
-    }
-
     @Override
     @JsonIgnore
     public String getJson() {

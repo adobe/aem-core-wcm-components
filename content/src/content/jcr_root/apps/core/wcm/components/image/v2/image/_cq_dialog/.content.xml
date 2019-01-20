@@ -151,13 +151,6 @@
                                                 name="./linkURL"
                                                 rootPath="/content"
                                                 wrapperClass="cmp-image__editor-link"/>
-                                            <imageName 
-                                                jcr:primaryType="nt:unstructured" 
-                                                fieldDescription="Allows entering a custom filename which will override the original's filename when generating the URL." 
-                                                fieldLabel="Image Name" 
-                                                name="./imageName" 
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"/>
-                                        </items>
                                     </column>
                                 </items>
                             </columns>

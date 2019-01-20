@@ -111,7 +111,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
             String staticSelectors = selector;
-            final String assetName = StringUtils.isNotBlank(imageName) ? getSeoFriendlyName(imageName) : getImageNameFromDam();
+            final String imageName = getImageNameFromDam();
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
@@ -119,7 +119,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                     SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                     (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate 
-                        +(StringUtils.isNotBlank(assetName)? "/" +assetName :"") + DOT + extension : "");
+                        +(StringUtils.isNotBlank(imageName)? "/" +imageName :"") + DOT + extension : "");
 
             // if content policy delegate path is provided pass it to the image Uri
             String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
