@@ -151,6 +151,7 @@
                                                 name="./linkURL"
                                                 rootPath="/content"
                                                 wrapperClass="cmp-image__editor-link"/>
+                                            </items>
                                     </column>
                                 </items>
                             </columns>
