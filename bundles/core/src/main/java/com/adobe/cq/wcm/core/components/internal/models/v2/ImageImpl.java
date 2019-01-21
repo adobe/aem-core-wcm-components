@@ -133,7 +133,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
     }
 
-       
     @Nonnull
     @Override
     public int[] getWidths() {

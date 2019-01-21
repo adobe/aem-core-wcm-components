@@ -145,7 +145,7 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     String PN_MAP = "imageMap";
-    
+
     /**
      * Returns the value for the {@code src} attribute of the image.
      *
@@ -289,4 +289,5 @@ public interface Image extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
+
 }

@@ -188,7 +188,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 lastModifiedEpoch = assetLastModifiedEpoch;
             }
         }
-        
         long requestLastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
         if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
             String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
@@ -301,7 +300,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
       return StringUtils.isNotEmpty(suffix) ? FilenameUtils.getBaseName(suffix) : "";
     }
 
-    
     @Nullable
     private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();

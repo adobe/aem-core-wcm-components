@@ -109,7 +109,7 @@ public class ImageImpl implements Image {
 
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
-    
+
     protected String src;
     protected String[] smartImages = new String[]{};
     protected int[] smartSizes = new int[0];
@@ -215,8 +215,7 @@ public class ImageImpl implements Image {
                     smartImages[index] = baseResourcePath + DOT +
                         selector + DOT + jpegQuality + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(imageName)? "/" +imageName :"") 
-                            + DOT + extension : "");
+                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(imageName)? "/" +imageName :"") + DOT + extension : "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -230,8 +229,9 @@ public class ImageImpl implements Image {
             } else {
                 src += extension;
             }
-            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate 
-            		+ (StringUtils.isNotBlank(imageName)? "/" +imageName :"") + DOT + extension : "");
+            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
+                (StringUtils.isNotBlank(imageName)? "/" +imageName :"") + DOT +
+                    extension : "");
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
@@ -315,7 +315,7 @@ public class ImageImpl implements Image {
     public String getFileReference() {
         return fileReference;
     }
-    
+
     @Override
     @JsonIgnore
     public String getJson() {
