@@ -155,7 +155,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/contributors/stacey-roswells.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
                             textIsRich="true"
                             titleFromPage="false"/>
                     </component>
