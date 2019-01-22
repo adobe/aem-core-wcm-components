@@ -6,10 +6,10 @@
     jcr:uuid="634c7cb9-c237-427b-8816-e12d07f892d7">
     <jcr:content
         cq:name="skateboarder.jpg"
-        cq:parentPath="/content/dam/core-components-examples/library"
+        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
         dam:assetState="processed"
         dam:relativePath="core-components-examples/library/skateboarder.jpg"
-        jcr:lastModified="{Date}2019-01-15T13:24:57.791+01:00"
+        jcr:lastModified="{Date}2019-01-22T12:42:10.093+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
@@ -24,7 +24,7 @@
             dam:Physicalwidthindpi="{Long}-1"
             dam:Physicalwidthininches="{Decimal}-1.0"
             dam:Progressive="no"
-            dam:sha1="68b37cfefeedd1317c9100d36ab758cc64eaa16f"
+            dam:sha1="8b0573bcac4604ae78b44608e32916373d346274"
             dam:size="{Long}819407"
             dc:description="Skateboarder"
             dc:format="image/jpeg"
@@ -32,7 +32,7 @@
             dc:title="Skateboarder"
             exif:PixelXDimension="{Long}1366"
             exif:PixelYDimension="{Long}800"
-            jcr:lastModified="{Date}2019-01-09T18:08:01.484+01:00"
+            jcr:lastModified="{Date}2019-01-22T12:42:09.815+01:00"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"

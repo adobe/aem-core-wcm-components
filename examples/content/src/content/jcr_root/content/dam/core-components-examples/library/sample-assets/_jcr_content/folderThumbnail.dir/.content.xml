@@ -5,6 +5,6 @@
         dam:folderThumbnailPaths="[/content/dam/core-components-examples/library/sample-assets/circle.jpg,/content/dam/core-components-examples/library/sample-assets/roaster.jpg,/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg]"
         jcr:primaryType="nt:unstructured"
         bgcolor="{Long}-1"
-        height="{Long}200"
-        width="{Long}240"/>
+        height="{Long}240"
+        width="{Long}280"/>
 </jcr:root>

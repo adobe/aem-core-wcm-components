@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-01-14T15:02:56.885+01:00"
+        cq:lastModified="{Date}2019-01-22T13:17:02.163+01:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/atom]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
@@ -85,11 +85,11 @@
                         <text
                             jcr:created="{Date}2018-12-07T13:45:54.088+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T13:46:05.640+01:00"
+                            jcr:lastModified="{Date}2019-01-22T12:56:17.631+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/text/v2/text"
-                            text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p>&#xa;"
+                            text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xa;"
                             textIsRich="true"/>
                     </component>
                     <info
@@ -144,11 +144,11 @@
                         <text
                             jcr:created="{Date}2018-12-07T13:46:26.607+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T13:48:26.289+01:00"
+                            jcr:lastModified="{Date}2019-01-22T13:17:02.152+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/text/v2/text"
-                            text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et &lt;b>dolore magna aliqua&lt;/b>. Ut enim ad minim veniam, quis &lt;i>nostrud exercitation ullamco&lt;/i> laboris nisi ut aliquip ex ea commodo consequat.&lt;/p>&#xa;"
+                            text="&lt;p>&lt;b>Bold &lt;/b>can be used to emphasize a word or phrase, as can &lt;u>underline&lt;/u> and &lt;i>italics.&amp;nbsp;&lt;/i>&lt;sup>Superscript&lt;/sup> and &lt;sub>subscript&lt;/sub> are useful for mathematical (E = mc&lt;sup>2&lt;/sup>) or scientific (h&lt;sub>2&lt;/sub>O) expressions. Paragraph styles can provide alternative renderings, such as quote sections:&lt;/p>&#xa;&lt;blockquote>&amp;quot;&lt;i>Be yourself; everyone else is already taken&amp;quot;&lt;/i>&lt;/blockquote>&#xa;&lt;blockquote>- Oscar Wilde&lt;/blockquote>&#xa;"
                             textIsRich="true"/>
                     </component>
                     <info
