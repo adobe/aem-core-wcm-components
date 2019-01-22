@@ -8,7 +8,7 @@
         cq:name="mini.jpg"
         cq:parentPath="/content/dam/core-components-examples/library"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-01-22T12:42:09.005+01:00"
+        jcr:lastModified="{Date}2019-01-22T17:58:28.276+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
@@ -40,5 +40,14 @@
             tiff:XResolution="72/1"
             tiff:YResolution="72/1"/>
         <related jcr:primaryType="nt:unstructured"/>
+        <usages
+            dam:score="{Long}1"
+            jcr:primaryType="nt:unstructured"
+            usedBy="[aem]">
+            <aem
+                jcr:primaryType="nt:unstructured"
+                count="{Long}1"
+                lastUsed="{Date}2019-01-22T18:31:26.000+01:00"/>
+        </usages>
     </jcr:content>
 </jcr:root>

@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-01-14T14:40:03.149+01:00"
+        cq:lastModified="{Date}2019-01-22T18:31:25.870+01:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/atom]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
@@ -84,13 +84,13 @@
                         <image
                             jcr:created="{Date}2018-12-07T12:45:49.468+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T12:47:30.515+01:00"
+                            jcr:lastModified="{Date}2019-01-22T18:31:15.058+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/circle.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
@@ -208,13 +208,13 @@
                         <image
                             jcr:created="{Date}2018-12-07T12:45:39.973+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T12:49:23.676+01:00"
+                            jcr:lastModified="{Date}2019-01-22T18:31:25.860+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/mini.jpg"
                             isDecorative="false"
                             linkURL="/content/core-components-examples/library/image"
                             titleValueFromDAM="true"/>
@@ -271,13 +271,13 @@
                         <image
                             jcr:created="{Date}2018-12-07T12:45:34.975+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T12:49:38.511+01:00"
+                            jcr:lastModified="{Date}2019-01-22T18:30:58.321+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/bicycle.svg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
