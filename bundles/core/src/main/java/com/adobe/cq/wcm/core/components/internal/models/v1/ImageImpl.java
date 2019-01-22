@@ -254,12 +254,7 @@ public class ImageImpl implements Image {
         Resource damResource = request.getResourceResolver().getResource(fileReference);
         if (damResource != null) {
           Asset asset = damResource.adaptTo(Asset.class);
-          if(asset != null) {
-            imageName = StringUtils.trimToNull((String) asset.getMetadataValue("dc:title"));
-            if (imageName == null || imageName.trim().length() == 0) {
-              imageName = StringUtils.trimToNull(asset.getName());
-            }
-          }
+            imageName = asset != null ? StringUtils.trimToNull(asset.getName()) : "";
         }
         return getSeoFriendlyName(FilenameUtils.getBaseName(imageName));
     }
