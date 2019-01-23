@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018 Adobe Systems Incorporated
+ *  Copyright 2019 Adobe Systems Incorporated
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,6 +14,26 @@
  *  limitations under the License.
  */
 
-@import "appearance.less";
-@import "transform.less";
-@import "grid.less";
+/*
+  Vendor prefix for the display grid property value.
+ */
+.display-grid() {
+    display: -ms-grid;
+    display: grid;
+}
+
+/*
+  Vendor prefix for the grid template columns property.
+ */
+.grid-template-columns(@columns) {
+    -ms-grid-columns: @columns;
+    grid-template-columns: @columns;
+}
+
+/*
+  Vendor prefix for the grid template rows property.
+ */
+.grid-template-rows(@rows) {
+    -ms-grid-rows: @rows;
+    grid-template-rows: @rows;
+}

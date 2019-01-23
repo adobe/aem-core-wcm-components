@@ -22,13 +22,13 @@
 
 .cmp-examples-structure {
     > .aem-Grid {
-        display: grid;
+        .display-grid();
         width: 100%;
         max-width: 1280px;
         margin: 0 auto;
         grid-template-areas: 'header' 'main';
-        grid-template-columns: 1fr;
-        grid-template-rows: @cmp-examples-structure-header-height-s 1fr;
+        .grid-template-columns(1fr);
+        .grid-template-rows(@cmp-examples-structure-header-height-s 1fr);
     }
 }
 
@@ -36,6 +36,9 @@
     position: fixed;
     left: 0;
     top: 0;
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
     grid-area: header;
     z-index: @cmp-examples-z-index-fixed;
 
@@ -70,6 +73,9 @@
 }
 
 .cmp-examples-structure__main {
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
     grid-area: main;
 
     width: auto !important;
@@ -85,8 +91,8 @@
     .cmp-examples-structure {
         > .aem-Grid {
             grid-template-areas: 'header header' 'aside main';
-            grid-template-columns: @cmp-examples-structure-aside-width-s 1fr;
-            grid-template-rows: 1fr;
+            .grid-template-columns(@cmp-examples-structure-aside-width-s 1fr);
+            .grid-template-rows(1fr);
         }
     }
 
@@ -98,12 +104,19 @@
     }
 
     .cmp-examples-structure__main {
+        -ms-grid-row: 2;
+        -ms-grid-column: 2;
+        -ms-grid-column-span: 1;
+
         margin: 0 @cmp-examples-spacing-l @cmp-examples-spacing-xl 0 !important;
     }
 
     .cmp-examples-structure__aside,
     .cmp-examples-structure__aside--open {
         position: relative;
+        -ms-grid-row: 2;
+        -ms-grid-column: 1;
+        -ms-grid-column-span: 1;
         grid-area: aside;
 
         display: block;
