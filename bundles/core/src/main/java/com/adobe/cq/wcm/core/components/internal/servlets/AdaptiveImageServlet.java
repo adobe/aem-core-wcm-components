@@ -289,7 +289,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
 
     }
-    
+
     @Nullable
     private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
