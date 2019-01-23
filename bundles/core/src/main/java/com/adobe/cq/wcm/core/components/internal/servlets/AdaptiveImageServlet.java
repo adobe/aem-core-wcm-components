@@ -106,7 +106,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response) throws IOException {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
         String suffix = requestPathInfo.getSuffix();
-        String imageName = getImageName(suffix);
+        String imageName = StringUtils.isNotEmpty(suffix) ? FilenameUtils.getName(suffix) : "";
         String[] selectors = requestPathInfo.getSelectors();
         if (selectors.length < 1 || selectors.length > 3) {
             LOGGER.error("Expected 1, 2 or 3 selectors, instead got: {}.", Arrays.toString(selectors));
@@ -144,7 +144,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                                     // no timestamp info, but extension is valid; get resource name
                                     suffix.substring(0, suffix.lastIndexOf('.')) :
                                     // timestamp info, get parent path from suffix
-                                    suffix.substring(0, suffix.lastIndexOf("/"));
+                                    suffix.substring(0, suffix.lastIndexOf("/" + String.valueOf(lastModifiedSuffix)));
                             String imagePath = ResourceUtil.normalize(template.getPath() + relativeTemplatePath);
                             if (StringUtils.isNotEmpty(imagePath) && !template.getPath().equals(imagePath)) {
                                 componentCandidate = resourceResolver.getResource(imagePath);
@@ -290,16 +290,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     }
     
-    /**
-     * Extracts the image name from image request url suffix. 
-     * 
-     * @param suffix
-     * @return image base name without slashes and extension
-     */
-    private String getImageName(String suffix) {
-      return StringUtils.isNotEmpty(suffix) ? FilenameUtils.getBaseName(suffix) : "";
-    }
-
     @Nullable
     private String getRedirectLocation(SlingHttpServletRequest request, long lastModifiedEpoch) {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
@@ -436,7 +426,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     || "svg".equalsIgnoreCase(mimeTypeService.getExtension(imageType))) {
                 LOGGER.debug("GIF or SVG file detected; will render the original file.");
                 if (is != null) {
-                    stream(response, is, imageType,imageName);
+                    stream(response, is, imageType, imageName);
                 }
                 return;
             }
@@ -728,12 +718,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {
         long requestLastModified = 0;
         if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
-           
-            //check if the 13 digits UTC milliseconds timestamp is present in the suffix
+            // check if the 13 digits UTC milliseconds timestamp is present in the suffix
             Pattern p = Pattern.compile("\\(|\\)|\\d{13}");
             Matcher m = p.matcher(suffix);
-            if(!m.find()) {
-              return requestLastModified;
+            if (!m.find()) {
+                return requestLastModified;
             }
             try {
                 requestLastModified = Long.parseLong(ResourceUtil.getName(m.group()));

@@ -29,6 +29,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -205,7 +206,6 @@ public class ImageImpl implements Image {
                 baseResourcePath = resource.getPath();
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
-            //get asset title or name from dam
             final String imageName = getImageNameFromDam();
             if (smartSizesSupported()) {
                 Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
@@ -213,9 +213,9 @@ public class ImageImpl implements Image {
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = baseResourcePath + DOT +
-                        selector + DOT + jpegQuality + DOT + width + DOT + extension +
-                        (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(imageName)? "/" +imageName :"") + DOT + extension : "");
+                            selector + DOT + jpegQuality + DOT + width + DOT + extension +
+                            (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                            (lastModifiedDate > 0 ? "/" + lastModifiedDate + (StringUtils.isNotBlank(imageName) ? "/" + imageName :"") + DOT + extension : "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -230,8 +230,7 @@ public class ImageImpl implements Image {
                 src += extension;
             }
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
-                (StringUtils.isNotBlank(imageName)? "/" +imageName :"") + DOT +
-                    extension : "");
+                    (StringUtils.isNotBlank(imageName) ? "/" + imageName :"") + DOT + extension : "");
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
@@ -246,35 +245,37 @@ public class ImageImpl implements Image {
 
     /**
      * Extracts the asset name from DAM resource
-     * 
+     *
      * @return image name from DAM
      */
     protected String getImageNameFromDam() {
         String imageName = "";
         Resource damResource = request.getResourceResolver().getResource(fileReference);
         if (damResource != null) {
-          Asset asset = damResource.adaptTo(Asset.class);
+            Asset asset = damResource.adaptTo(Asset.class);
             imageName = asset != null ? StringUtils.trimToNull(asset.getName()) : "";
         }
         return getSeoFriendlyName(FilenameUtils.getBaseName(imageName));
     }
-    
+
     /**
-     * Content editors can store DAM assets with white spaces in the name, this method makes
-     * the asset name SEO friendly, Translates the string into {@code application/x-www-form-urlencoded} 
-     * format using {@code utf-8} encoding scheme.
-     * 
-     * @param assetName
+     * Content editors can store DAM assets with white spaces in the name, this
+     * method makes the asset name SEO friendly, Translates the string into
+     * {@code application/x-www-form-urlencoded} format using {@code utf-8} encoding
+     * scheme.
+     *
+     * @param imageName
      * @return name of the asset without extension
      */
     protected String getSeoFriendlyName(String imageName) {
-      
-      //Google recommends to use hyphens (-) instead of underscores (_) for seo. See https://support.google.com/webmasters/answer/76329?hl=en 
-      String seoFriendlyName = imageName.replaceAll("[\\ _]", "-").toLowerCase();
+
+        // Google recommends to use hyphens (-) instead of underscores (_) for seo. See
+        // https://support.google.com/webmasters/answer/76329?hl=en
+        String seoFriendlyName = imageName.replaceAll("[\\ _]", "-").toLowerCase();
         try {
-          seoFriendlyName = URLEncoder.encode(seoFriendlyName,"utf-8");
+            seoFriendlyName = URLEncoder.encode(seoFriendlyName, CharEncoding.UTF_8);
         } catch (UnsupportedEncodingException e) {
-          LOGGER.error(String.format("The Character Encoding is not supported."));
+            LOGGER.error(String.format("The Character Encoding is not supported."));
         }
         return seoFriendlyName;
     }
