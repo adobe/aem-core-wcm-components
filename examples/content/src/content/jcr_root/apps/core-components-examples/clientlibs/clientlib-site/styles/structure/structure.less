@@ -17,8 +17,7 @@
 @cmp-examples-structure-header-height-s: 64*@px;
 @cmp-examples-structure-header-height-m: 118*@px;
 
-@cmp-examples-structure-aside-width-s: 240*@px;
-@cmp-examples-structure-aside-width-m: 280*@px;
+@cmp-examples-structure-aside-width: 280*@px;
 
 .cmp-examples-structure {
     > .aem-Grid {
@@ -59,16 +58,21 @@
     z-index: @cmp-examples-z-index-aside;
 
     display: block;
-    width: @cmp-examples-structure-aside-width-m !important;
-    padding: @cmp-examples-spacing-xl @cmp-examples-spacing-l;
+    width: @cmp-examples-structure-aside-width !important;
+    padding: @cmp-examples-structure-header-height-m @cmp-examples-spacing-l 0;
 
     background-color: @cmp-examples-color-white;
 
-    .transform(translateX(-@cmp-examples-structure-aside-width-m));
+    .transform(translateX(-@cmp-examples-structure-aside-width));
     .transition-transform(~'@{cmp-examples-animation-duration-2} ease-in-out');
 
     &--open {
         .transform(translateX(0));
+    }
+
+    > .aem-Grid {
+        height: 100%;
+        overflow-y: auto;
     }
 }
 
@@ -91,16 +95,16 @@
     .cmp-examples-structure {
         > .aem-Grid {
             grid-template-areas: 'header header' 'aside main';
-            .grid-template-columns(@cmp-examples-structure-aside-width-s 1fr);
-            .grid-template-rows(1fr);
+            .grid-template-columns(@cmp-examples-structure-aside-width 1fr);
+            .grid-template-rows(@cmp-examples-structure-header-height-m 1fr);
         }
     }
 
     .cmp-examples-structure__header {
-        position: relative;
-
         height: @cmp-examples-structure-header-height-m;
         padding: @cmp-examples-spacing-xl @cmp-examples-spacing-l;
+
+        background: transparent;
     }
 
     .cmp-examples-structure__main {
@@ -113,21 +117,22 @@
 
     .cmp-examples-structure__aside,
     .cmp-examples-structure__aside--open {
-        position: relative;
+        top: @cmp-examples-structure-header-height-m;
+
         -ms-grid-row: 2;
         -ms-grid-column: 1;
         -ms-grid-column-span: 1;
         grid-area: aside;
 
         display: block;
-        width: @cmp-examples-structure-aside-width-s !important;
+        width: @cmp-examples-structure-aside-width !important;
         padding-top: 0;
 
         background-color: @cmp-examples-color-background;
 
         // prevents transition flash when resizing window across breakpoints
-        margin-left: @cmp-examples-structure-aside-width-s;
-        .transform(translateX(-@cmp-examples-structure-aside-width-s));
+        margin-left: @cmp-examples-structure-aside-width;
+        .transform(translateX(-@cmp-examples-structure-aside-width));
         transition: none;
     }
 }
