@@ -510,7 +510,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void stream(@Nonnull SlingHttpServletResponse response, @Nonnull InputStream inputStream, @Nonnull String contentType, String imageName)
             throws IOException {
         response.setContentType(contentType);
-        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
+        response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
         try {
             IOUtils.copy(inputStream, response.getOutputStream());
         } finally {
