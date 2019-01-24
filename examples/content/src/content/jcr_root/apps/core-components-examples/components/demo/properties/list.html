@@ -13,13 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<h3 data-sly-set.referenced="${resource.children[0]}">Path</h3>
-${referenced.path}
-<h3>Properties</h3>
-<ul>
-    <li data-sly-repeat.prop="${referenced.valueMap}">${prop} - ${referenced.valueMap[prop]}</li>
-</ul>
-<h3>Children</h3>
-<ul>
-    <li data-sly-repeat.child="${referenced.children}">${child.name} - ${child.resourceType}</li>
-</ul>
+<ol class="cmp-examples-demo__properties">
+    <li class="cmp-examples-demo__property" data-sly-set.referenced="${resource.children[0]}" data-sly-repeat.prop="${referenced.valueMap}">
+        <span class="cmp-examples-demo__property-title">${prop}<span class="cmp-examples-demo__property-separator">:</span></span>
+        <span class="cmp-examples-demo__property-value">${referenced.valueMap[prop]}</span>
+    </li>
+</ol>

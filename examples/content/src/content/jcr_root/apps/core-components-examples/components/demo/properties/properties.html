@@ -13,9 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div class="cmp-component__properties"
+<pre class="cmp-examples-demo__info-content cmp-examples-demo__info-content--properties"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${properties.reference}"
      data-sly-resource="${properties.reference @ resourceType='core-components-examples/components/demo/properties', selectors='list'}">
-</div>
-<sly data-sly-call="${template.placeholder @ isEmpty=!(properties.reference), classAppend='cmp-properties'}"></sly>
+</pre>
+<sly data-sly-call="${template.placeholder @ isEmpty=!(properties.reference), classAppend='cmp-examples-demo__info-content'}"></sly>

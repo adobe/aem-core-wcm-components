@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="665bdf97-8ede-40d9-b2b4-0b3fc9688f24">
+    <jcr:content
+        cq:name="structured-fragment"
+        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        jcr:description="Structured content fragment, with component data including title, description, latest version and type"
+        jcr:lastModified="{Date}2019-01-15T16:03:25.902+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Structured Fragment"
+        contentFragment="{Boolean}true"
+        lastFragmentSave="{Date}2019-01-15T16:03:25.902+01:00">
+        <data
+            cq:model="/conf/core-components-examples/settings/dam/cfm/models/core-component-model"
+            jcr:primaryType="nt:unstructured">
+            <master
+                cq:tags="[core-components-examples:component-type/atom]"
+                jcr:mixinTypes="[cq:Taggable]"
+                jcr:primaryType="nt:unstructured"
+                component-description="&lt;p>Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available.&lt;/p>&#xa;"
+                component-description_x0040_ContentType="text/html"
+                component-description_x0040_LastModified="{Date}2019-01-15T16:03:25.864+01:00"
+                component-latest-version="{Double}2.0"
+                component-latest-version_x0040_LastModified="{Date}2019-01-15T16:03:25.865+01:00"
+                component-title="Image"
+                component-title_x0040_LastModified="{Date}2019-01-15T16:03:25.863+01:00"
+                component-type="[core-components-examples:component-type/atom]"
+                component-type_x0040_LastModified="{Date}2019-01-15T16:03:25.865+01:00"
+                type="[core-components-examples:component-type/atom]"
+                type_x0040_LastModified="{Date}2019-01-15T15:49:53.387+01:00"/>
+        </data>
+        <metadata
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>
