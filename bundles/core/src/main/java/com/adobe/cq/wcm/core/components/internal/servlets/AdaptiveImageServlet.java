@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.util.Text;
@@ -508,7 +510,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private void stream(@Nonnull SlingHttpServletResponse response, @Nonnull InputStream inputStream, @Nonnull String contentType, String imageName)
             throws IOException {
         response.setContentType(contentType);
-        response.setHeader( "Content-Disposition", "filename=\"" + imageName + "\"" );
+        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
         try {
             IOUtils.copy(inputStream, response.getOutputStream());
         } finally {
