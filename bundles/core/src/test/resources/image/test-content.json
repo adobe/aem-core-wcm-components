@@ -324,6 +324,29 @@
                     "alt"               : "Adobe Logo",
                     "jcr:title"         : "Adobe Logo",
                     "linkURL"           : "/content/test"
+                },
+                "image26"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "2017-05-15T17:56:17.756+01:00",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                    "isDecorative"      : true,
+                    "linkURL"           : "https://www.adobe.com",
+                    "alt"               : "Adobe Logo",
+                    "cq:policy"        : "coretest/components/content/image/policy_1478854677326",
+                    "file"               : {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:createdBy"  : "admin",
+                        "jcr:content"    : {
+                            "jcr:primaryType"   : "nt:resource",
+                            "jcr:lastModifiedBy": "admin",
+                            "jcr:mimeType"      : "image/png",
+                            ":jcr:data"         : 95,
+                            "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1089",
+                            "jpegQuality"		: "82"
+                        }
+                    }
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"
