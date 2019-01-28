@@ -619,7 +619,7 @@ public class ContentFragmentImpl implements ContentFragment {
         }
 
         private boolean isValidParagraphElement(String localName) {
-            return StringUtils.containsAny(localName.toLowerCase(), "p", "h1", "h2", "h3", "h4", "h5");
+            return StringUtils.containsAny(localName.toLowerCase(), "p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol");
         }
 
         private boolean isIgnoredElement(String localName) {

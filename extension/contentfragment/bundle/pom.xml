@@ -54,7 +54,6 @@
                 </executions>
                 <configuration>
                     <instructions>
-                        <Embed-Dependency>jsoup</Embed-Dependency>
                         <Bundle-SymbolicName>com.adobe.cq.core.wcm.components.extension.contentfragment.bundle</Bundle-SymbolicName>
                         <!-- The Sling-Model-Packages instruction needs to point to the implementation package -->
                         <Sling-Model-Packages>com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models</Sling-Model-Packages>
