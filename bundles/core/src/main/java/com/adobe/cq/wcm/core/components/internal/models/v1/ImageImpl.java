@@ -248,7 +248,7 @@ public class ImageImpl implements Image {
     }
 
     /**
-     * Extracts the image name from a DAM resource
+     * Extracts the image name from the DAM resource
      *
      * @return image name from DAM
      */
