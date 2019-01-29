@@ -128,6 +128,7 @@ public class ImageImpl implements Image {
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
     protected int jpegQuality;
+    protected String imageName;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -151,6 +152,7 @@ public class ImageImpl implements Image {
                 asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
+                    imageName = getImageNameFromDam();
                     hasContent = true;
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
@@ -162,6 +164,8 @@ public class ImageImpl implements Image {
             Resource file = resource.getChild(DownloadResource.NN_FILE);
             if (file != null) {
                 mimeType = PropertiesUtil.toString(file.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), MIME_TYPE_IMAGE_JPEG);
+                String fileName = properties.get(ImageResource.PN_FILE_NAME, String.class);
+                imageName = StringUtils.isNotEmpty(fileName) ? getSeoFriendlyName(FilenameUtils.getBaseName(fileName)) : "";
                 hasContent = true;
             }
         }
@@ -206,18 +210,16 @@ public class ImageImpl implements Image {
                 baseResourcePath = resource.getPath();
             }
             baseResourcePath = resource.getResourceResolver().map(request, baseResourcePath);
-            final String imageName = getImageNameFromDam();
             if (smartSizesSupported()) {
                 Set<Integer> supportedRenditionWidths = getSupportedRenditionWidths();
                 smartImages = new String[supportedRenditionWidths.size()];
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = baseResourcePath + DOT +
-                            selector + DOT + jpegQuality + DOT + width + DOT + extension +
-                            (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                            (lastModifiedDate > 0 ? "/" + lastModifiedDate
-                                    + (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension
-                                    : "");
+                        selector + DOT + jpegQuality + DOT + width + DOT + extension +
+                        (inTemplate ? Text.escapePath(templateRelativePath) : "") +
+                        (lastModifiedDate > 0 ? "/" + lastModifiedDate +
+                        (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -232,7 +234,7 @@ public class ImageImpl implements Image {
                 src += extension;
             }
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
-                    (StringUtils.isNotBlank(imageName) ? "/" + imageName :"") + DOT + extension : "");
+                (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
@@ -246,7 +248,7 @@ public class ImageImpl implements Image {
     }
 
     /**
-     * Extracts the asset name from DAM resource
+     * Extracts the image name from a DAM resource
      *
      * @return image name from DAM
      */
