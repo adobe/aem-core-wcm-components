@@ -56,40 +56,46 @@
                 markup.innerHTML = escapeHtml(htmlBeautify(markup.innerHTML, { 'preserve_newlines': false, 'indent_size': 2 }));
             }
 
-            hideCode.addEventListener('click', function() {
-                info.classList.remove('cmp-examples-demo__info--open');
-                hideCode.disabled = true;
-                showCode.disabled = false;
-                copyCode.disabled = true;
-            });
+            if (hideCode) {
+                hideCode.addEventListener('click', function() {
+                    info.classList.remove('cmp-examples-demo__info--open');
+                    hideCode.disabled = true;
+                    showCode.disabled = false;
+                    copyCode.disabled = true;
+                });
+            }
 
-            showCode.addEventListener('click', function() {
-                info.classList.add('cmp-examples-demo__info--open');
-                hideCode.disabled = false;
-                showCode.disabled = true;
-                copyCode.disabled = false;
-            });
+            if (showCode) {
+                showCode.addEventListener('click', function() {
+                    info.classList.add('cmp-examples-demo__info--open');
+                    hideCode.disabled = false;
+                    showCode.disabled = true;
+                    copyCode.disabled = false;
+                });
+            }
 
-            copyCode.addEventListener('click', function(event) {
-                var activePre = demo.querySelector(selectors.activePre);
+            if (copyCode) {
+                copyCode.addEventListener('click', function(event) {
+                    var activePre = demo.querySelector(selectors.activePre);
 
-                if (activePre) {
-                    var tempTextarea = document.createElement('textarea');
-                    tempTextarea.value = activePre.innerText;
-                    document.body.appendChild(tempTextarea);
-                    tempTextarea.select();
+                    if (activePre) {
+                        var tempTextarea = document.createElement('textarea');
+                        tempTextarea.value = activePre.innerText;
+                        document.body.appendChild(tempTextarea);
+                        tempTextarea.select();
 
-                    window.CmpExamples.Notification.show('Copied to clipboard', window.CmpExamples.Notification.state.SUCCESS);
+                        window.CmpExamples.Notification.show('Copied to clipboard', window.CmpExamples.Notification.state.SUCCESS);
 
-                    try {
-                        document.execCommand('copy');
-                    } catch(error) {
-                        window.CmpExamples.Notification.show('Unable to copy to clipboard', window.CmpExamples.Notification.state.ERROR);
+                        try {
+                            document.execCommand('copy');
+                        } catch(error) {
+                            window.CmpExamples.Notification.show('Unable to copy to clipboard', window.CmpExamples.Notification.state.ERROR);
+                        }
+
+                        document.body.removeChild(tempTextarea);
                     }
-
-                    document.body.removeChild(tempTextarea);
-                }
-            });
+                });
+            }
         });
 
         // Prettify once all JSON requests have completed
