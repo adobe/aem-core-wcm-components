@@ -98,7 +98,7 @@ Author:
 /content/<project_path>/<page_path>/<component_path>/<component_name>.img.<quality>.<width>.<extension>/<timestamp>/<filename>.<extension>
 
 Publish:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<quality>.<width>.<extension>/<filename>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<quality>.<width>.<extension>/<timestamp>/<filename>.<extension>
 ```
 
 ## Client Libraries

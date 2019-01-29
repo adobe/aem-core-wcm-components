@@ -202,6 +202,18 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     @Test
+    public void testLocalFileWithoutFileNameParameter() {
+        String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
+        Image image = getImageUnderTest(IMAGE27_PATH);
+        assertNull("Did not expect a file reference.", image.getFileReference());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".82.600.png/1490005239000.png", image.getSrc());
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image27." + selector +  "." + jpegQuality +
+            ".600.png/1490005239000.png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
+        compareJSON(expectedJson, image.getJson());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE27_PATH));
+    }
+
+    @Test
     public void testSVGImage() {
         Image image = getImageUnderTest(IMAGE22_PATH);
         assertTrue(image.getWidths().length == 0);
