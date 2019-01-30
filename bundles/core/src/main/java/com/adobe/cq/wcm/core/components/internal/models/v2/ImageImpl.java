@@ -22,6 +22,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -115,8 +116,9 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 staticSelectors += DOT + jpegQuality;
             } 
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
-                    SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+                SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
+                (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
 
             // if content policy delegate path is provided pass it to the image Uri
             String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);

@@ -358,6 +358,34 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
     }
 
     @Test
+    public void testWithNoImageNameResourceTypeImage() throws Exception {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(
+                IMAGE26_PATH, "coreimg.800", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        ContentPolicyMapping mapping = request.getResource().adaptTo(ContentPolicyMapping.class);
+        ContentPolicy contentPolicy = mapping.getPolicy();
+        when(contentPolicyManager.getPolicy(request.getResource(), request)).thenReturn(contentPolicy);
+        requestPathInfo.setSuffix("/1494867377756.png");
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        servlet.doGet(request, response);
+        assertEquals("Expected a 200 response code.", 200, response.getStatus());
+    }
+
+    @Test
+    public void testWithNoImageNameFromTemplate() throws IOException {
+        Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair = prepareRequestResponsePair(
+                PAGE, "coreimg", "png");
+        MockSlingHttpServletRequest request = requestResponsePair.getLeft();
+        MockSlingHttpServletResponse response = requestResponsePair.getRight();
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+
+        requestPathInfo.setSuffix(TEMPLATE_IMAGE_PATH.replace(TEMPLATE_PATH, "") + "/1490005239000.png");
+        servlet.doGet(request, response);
+        assertEquals("Expected a 200 response code.", 200, response.getStatus());
+    }
+
+    @Test
     public void testImageFileWithNegativeRequestedWidth() throws Exception {
         testNegativeRequestedWidth(IMAGE7_PATH);
     }
