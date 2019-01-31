@@ -18,6 +18,7 @@
 
 vendor/beautify.js
 vendor/prettify.js
+vendor/promise-polyfill.js
 
 namespace.js
 notification.js
