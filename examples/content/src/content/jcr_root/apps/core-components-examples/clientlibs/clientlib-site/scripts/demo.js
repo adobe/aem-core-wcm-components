@@ -21,6 +21,7 @@
         self: '[data-cmp-examples-is="demo"]',
         info: '[data-cmp-examples-hook-demo="info"]',
         json: '[data-cmp-examples-hook-demo="json"]',
+        jsonLink: '[data-cmp-examples-hook-demo="jsonLink"]',
         markup: '[data-cmp-examples-hook-demo="markup"]',
         hideCode: '[data-cmp-examples-hook-demo="hideCode"]',
         showCode: '[data-cmp-examples-hook-demo="showCode"]',
@@ -44,10 +45,22 @@
             var copyCode = demo.querySelector(selectors.copyCode);
             var info = demo.querySelector(selectors.info);
             var json = demo.querySelector(selectors.json);
+            var jsonLink = demo.querySelector(selectors.jsonLink);
+            var jsonSrc = "";
             var markup = demo.querySelector(selectors.markup);
 
+            if (jsonLink) {
+                jsonSrc = jsonLink.href;
+
+                // a link to the model JSON is presented initially in the markup so that the content
+                // can be scraped when exporting a static version of the library
+                if (jsonLink.parentNode) {
+                    jsonLink.parentNode.removeChild(jsonLink);
+                }
+            }
+
             if (json) {
-                deferreds.push($.getJSON(json.dataset.cmpSrc + '.model.json', function(data) {
+                deferreds.push($.getJSON(jsonSrc, function(data) {
                     json.innerText = JSON.stringify(data, null, 2);
                 }));
             }

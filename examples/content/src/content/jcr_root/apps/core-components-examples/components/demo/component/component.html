@@ -19,7 +19,7 @@
      data-sly-unwrap="${!editMode || hasChildren}">
     <sly
         data-sly-test="${hasChildren}"
-        data-sly-resource="${resource.children[0] @ wcmmode=editMode?'edit':'disabled'}">
+        data-sly-resource="${resource.children[0] @ wcmmode=editMode ? 'edit': 'disabled'}">
     </sly>
     <sly
         data-sly-test="${editMode && !hasChildren}"

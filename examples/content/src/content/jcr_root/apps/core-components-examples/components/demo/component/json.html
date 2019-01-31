@@ -15,4 +15,6 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */-->
-<code data-cmp-examples-hook-demo="json" class="language-json" data-sly-repeat="${resource.listChildren}" data-cmp-src="${item.path}"></code>
+<code data-sly-repeat="${resource.listChildren}" data-cmp-examples-hook-demo="json">
+    <a data-cmp-examples-hook-demo="jsonLink" href="${item.path}.model.json">JSON</a>
+</code>
