@@ -77,7 +77,9 @@
     document.addEventListener('DOMContentLoaded', function() {
         var deferreds = [];
 
-        document.querySelectorAll(selectors.self).forEach(function(demo) {
+        var demos = document.querySelectorAll(selectors.self);
+        demos = [].slice.call(demos);
+        demos.forEach(function(demo) {
             var hideCode = demo.querySelector(selectors.hideCode);
             var showCode = demo.querySelector(selectors.showCode);
             var copyCode = demo.querySelector(selectors.copyCode);
