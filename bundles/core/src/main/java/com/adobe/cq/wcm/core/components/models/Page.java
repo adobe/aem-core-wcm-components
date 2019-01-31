@@ -93,6 +93,13 @@ public interface Page extends ContainerExporter, HierarchyNodeExporter {
     String PN_APP_RESOURCES_CLIENTLIB = "appResourcesClientlib";
 
     /**
+     * Key for the depth of the tree of pages that is to be exported
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.7.0
+     */
+    String PN_STRUCTURE_DEPTH = "structureDepth";
+
+    /**
      * Expected file name for the regular favicon file.
      *
      * @see #getFavicons()

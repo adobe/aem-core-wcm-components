@@ -48,20 +48,42 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
-/*
+/**
+ * <p>
  * Page that allows the retrieval of the model in JSON format with hierarchical structures of more than one Page.
+ *</p><p>
+ * The content of the JSON export of the page's model is limited by two parameters:
+ * <ul><li>
+ *     filterPatterns - paths from which Pages are to be included
+ * </li><li>
+ *     traversalDepth - number of levels to be included.
+ * </li></ul></p>
  *
- * The content of the JSON export of the model is limited by two parameters:
- * - filterPatterns - paths from which Pages are to be included
- * - traversalDepth - number of levels to be included
- * however, if the JSON export of the model hierarchy is requested from a Page (entryPoint) that would be
- * excluded based on the rules above the corresponding model would be added to the JSON.
+ * <p>
+ * However there is also possibility to use the Java API to get the model. If the {@link #getHierarchyRootModel()} is
+ * used the {@link PageImpl#createHierarchyServletRequest(SlingHttpServletRequest, com.day.cq.wcm.api.Page,
+ * com.day.cq.wcm.api.Page)} would wrap the request saving:
+ * <ul><li>
+ *     the original request
+ * </li><li>
+ *      the root page of the hierarchy
+ * </li><li>
+ *     the entry point page - so the page for which the actual request was made
+ * </li></ul>
+ * in order to provide the full hierarchy from the root, with all descendants' models of the root page (with respect
+ * to filterPatterns or traversalDepth) plus the entry point page (even if was excluded based on rules enforced by
+ * filterPatterns or traversalDepth).
+ * </p>
  *
+ * <p>
  * Among many others, the exported structure would contain:
- * - a map of child page models identifiable by their paths (getExportedChildren()) -> :children
- * - a map of the content (v1.getExportedItems()) -> :items,
+ * <ul><li>
+ *     a flat map of all descendants' models identifiable by their paths (getExportedChildren()) -> :children
+ * </li><li>
+ *      a map of the content of the page (v1.getExportedItems()) -> :items,
  *      together with the order (v1.getExportedItemsOrder()) -> :itemsOrder
- *
+ * </li></ul>
+ * </p>
  */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -77,7 +99,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * Is the current model to be considered as a model root
      */
-    private static final String PR_IS_ROOT = "isRoot";
+    private static final String PN_IS_ROOT = "isRoot";
 
     /**
      * URL extension specific to the Sling Model exporter
@@ -95,7 +117,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     /**
      * {@link Map} containing the page models with their corresponding paths (as keys).
      */
-    private Map<String, ? extends Page> childPageModels = null;
+    private Map<String, ? extends Page> descendedPageModels = null;
 
     private com.day.cq.wcm.api.Page rootPage = null;
 
@@ -108,11 +130,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nonnull
     @Override
     public Map<String, ? extends Page> getExportedChildren() {
-        if (childPageModels == null) {
-            childPageModels = getChildPageModels();
+        if (descendedPageModels == null) {
+            descendedPageModels = getDescendantsModels();
         }
 
-        return childPageModels;
+        return descendedPageModels;
     }
 
     @Nonnull
@@ -124,14 +146,14 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nullable
     @Override
     public String getHierarchyRootJsonExportUrl() {
-        if (currentStyle != null && currentStyle.containsKey(PR_IS_ROOT)) {
+        if (isRootPage()) {
             return getPageJsonExportUrl(request, currentPage);
         }
 
-        com.day.cq.wcm.api.Page page = getRootPage();
+        com.day.cq.wcm.api.Page hierarchyRootPage = getRootPage();
 
-        if (page != null) {
-            return getPageJsonExportUrl(request, page);
+        if (hierarchyRootPage != null) {
+            return getPageJsonExportUrl(request, hierarchyRootPage);
         }
 
         return null;
@@ -143,19 +165,19 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nullable
     @Override
     public Page getHierarchyRootModel() {
-        if (currentStyle != null && currentStyle.containsKey(PR_IS_ROOT)) {
+        if (isRootPage()) {
             return this;
         }
 
-        com.day.cq.wcm.api.Page rootPage = getRootPage();
+        com.day.cq.wcm.api.Page hierarchyRootPage = getRootPage();
 
-        if (rootPage == null) {
+        if (hierarchyRootPage == null) {
             return null;
         }
 
         return modelFactory.getModelFromWrappedRequest(
-            PageImpl.createHierarchyServletRequest(request, rootPage, currentPage),
-            rootPage.getContentResource(),
+            PageImpl.createHierarchyServletRequest(request, hierarchyRootPage, currentPage),
+            hierarchyRootPage.getContentResource(),
             this.getClass());
     }
 
@@ -231,13 +253,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      */
     protected static int getPageTreeDepth(Style style) {
         // Depth of the tree of pages
-        final String PN_STRUCTURE_DEPTH = "structureDepth";
 
-        Integer pageTreeTraversalDepth = null;
+        Integer pageTreeTraversalDepth = getStructureDepth(style);
 
-        if (style != null) {
-            pageTreeTraversalDepth = style.get(PN_STRUCTURE_DEPTH, Integer.class);
-        }
 
         if (pageTreeTraversalDepth == null) {
             return 0;
@@ -251,12 +269,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
      *
      * @param request request to get the entry point attribute from
      */
-    protected static com.day.cq.wcm.api.Page requestGetHierarchyEntryPoint(@Nonnull SlingHttpServletRequest request) {
+    protected static com.day.cq.wcm.api.Page getEntryPoint(@Nonnull SlingHttpServletRequest request) {
         return (com.day.cq.wcm.api.Page) request.getAttribute(ATTR_HIERARCHY_ENTRY_POINT_PAGE);
     }
 
     /**
-     * Returns the page structure patterns to filter the child pages to be exported.
+     * Returns the page structure patterns to filter the descendants to be exported.
      * The patterns can either be stored on the template policy of the page or provided as a request parameter
      *
      * @param request request
@@ -294,24 +312,42 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return pageFilterPatterns;
     }
 
+
+    private boolean isRootPage() {
+        return currentStyle != null && currentStyle.containsKey(PN_IS_ROOT);
+    }
+
     /**
-     * Traverses the tree of children of the page. Children that:
+     * Get style's structure depth attribute value
+     *
+     * @param style style to search in
+     */
+    private static Integer getStructureDepth(Style style) {
+        if (style != null) {
+            return style.get(PN_STRUCTURE_DEPTH, Integer.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Traverses the tree of descendants of the page. Descendants that:
      * - are not deeper than defined depth
      * - has path that matches one of defined structurePattern
      * would be returned in a flat list.
      *
-     * @param page page from which to extract child pages
+     * @param page page from which to extract descended pages
      * @param slingRequest request
-     * @param structurePatterns patterns to filter child pages
+     * @param structurePatterns patterns to filter descended pages
      * @param depth depth of the traversal
      * @return {@link List}
      */
     @Nonnull
-    private List<com.day.cq.wcm.api.Page> getChildPageRecursive(com.day.cq.wcm.api.Page page, SlingHttpServletRequest slingRequest, List<Pattern> structurePatterns, int depth) {
-        // By default the value is 0 meaning we do not expose child pages
+    private List<com.day.cq.wcm.api.Page> getDescendants(com.day.cq.wcm.api.Page page, SlingHttpServletRequest slingRequest, List<Pattern> structurePatterns, int depth) {
+        // By default the depth is 0 meaning we do not expose descendants
         // If the value is set as a positive number it is going to be exposed until the counter is brought down to 0
-        // If the value is set to a negative value all the child pages will be exposed (full traversal tree - aka infinity)
-        // Child pages do not expose their respective child pages
+        // If the value is set to a negative value all descendants will be exposed (full traversal tree - aka infinity)
+        // Descendants pages do not expose their child pages
         if (page == null || depth == 0 || Boolean.TRUE.equals(slingRequest.getAttribute(ATTR_IS_CHILD_PAGE))) {
             return Collections.emptyList();
         }
@@ -345,26 +381,25 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
             pages.add(childPage);
 
-            pages.addAll(getChildPageRecursive(childPage, slingRequest, structurePatterns, depth));
+            pages.addAll(getDescendants(childPage, slingRequest, structurePatterns, depth));
         }
 
         return pages;
     }
 
     /**
-     * Optionally add a child page that is the entry point of a site model request when this child is not added by
-     * the root structure configuration
+     * Optionally add a page that is the entry point of a site model request even when was not added because
+     * of the root structure configuration
      *
-     * @param childPages    List of child pages
+     * @param descendedPages    List of descendants
      */
-    private void addEntryPointPage(@Nonnull List<com.day.cq.wcm.api.Page> childPages) {
+    private void addEntryPointPage(@Nonnull List<com.day.cq.wcm.api.Page> descendedPages) {
         // Child pages are only added to the root page
         if (Boolean.TRUE.equals(request.getAttribute(ATTR_IS_CHILD_PAGE))) {
             return;
         }
 
-        // Eventually add a child page that is not part page root children of the but is the entry point of the request
-        com.day.cq.wcm.api.Page entryPointPage = PageImpl.requestGetHierarchyEntryPoint(request);
+        com.day.cq.wcm.api.Page entryPointPage = PageImpl.getEntryPoint(request);
 
         if (entryPointPage == null) {
             return;
@@ -376,21 +411,21 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
 
         // Filter duplicates
-        if (childPages.contains(entryPointPage)) {
+        if (descendedPages.contains(entryPointPage)) {
             return;
         }
 
-        childPages.add(entryPointPage);
+        descendedPages.add(entryPointPage);
     }
 
     /**
-     * Returns all child page models of the currentPage plus the entryPoint page (even if was excluded based on rules
-     * enforced by filterPatterns or traversalDepth).
+     * Returns all descended page models of the currentPage plus the entryPoint page (even if was excluded based on
+     * rules enforced by filterPatterns or traversalDepth).
      *
      * @return {@link Map} containing the page models with their corresponding paths (as keys).
      */
     @Nonnull
-    private Map<String, Page> getChildPageModels() {
+    private Map<String, Page> getDescendantsModels() {
 
         int pageTreeTraversalDepth = PageImpl.getPageTreeDepth(currentStyle);
 
@@ -401,14 +436,15 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
         Map<String, Page> itemWrappers = new LinkedHashMap<>();
 
-        List<com.day.cq.wcm.api.Page> children = getChildPageRecursive(currentPage, slingRequestWrapper, pageFilterPatterns, pageTreeTraversalDepth);
+        List<com.day.cq.wcm.api.Page> descendants = getDescendants(currentPage, slingRequestWrapper,
+            pageFilterPatterns, pageTreeTraversalDepth);
 
-        addEntryPointPage(children);
+        addEntryPointPage(descendants);
 
-        // Add a flag to inform the model of the child pages that they are not the root of the tree
+        // Add a flag to inform the model of the descendant page that it is not the root of the returned hierarchy
         slingRequestWrapper.setAttribute(ATTR_IS_CHILD_PAGE, true);
 
-        for (com.day.cq.wcm.api.Page childPage: children) {
+        for (com.day.cq.wcm.api.Page childPage: descendants) {
             Resource childPageContentResource = childPage.getContentResource();
 
             if (childPageContentResource == null) {
@@ -450,25 +486,25 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             return rootPage;
         }
 
-        rootPage = currentPage;
+        com.day.cq.wcm.api.Page tempRootPage = currentPage;
         boolean isRootPage = false;
 
         ContentPolicyManager contentPolicyManager = resource.getResourceResolver().adaptTo(ContentPolicyManager.class);
 
         do {
-            rootPage = rootPage.getParent();
+            tempRootPage = tempRootPage.getParent();
 
-            if (rootPage == null) {
+            if (tempRootPage == null) {
                 continue;
             }
 
-            Template template = rootPage.getTemplate();
+            Template template = tempRootPage.getTemplate();
 
             if (template == null || !template.hasStructureSupport()) {
                 continue;
             }
 
-            Resource pageContentResource = rootPage.getContentResource();
+            Resource pageContentResource = tempRootPage.getContentResource();
 
             if (pageContentResource == null) {
                 continue;
@@ -486,9 +522,11 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 continue;
             }
 
-            isRootPage = properties.containsKey(PR_IS_ROOT);
+            isRootPage = properties.containsKey(PN_IS_ROOT);
 
-        } while(rootPage != null && !isRootPage);
+        } while(tempRootPage != null && !isRootPage);
+
+        rootPage = tempRootPage;
 
         return rootPage;
     }
