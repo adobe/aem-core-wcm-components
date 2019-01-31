@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/*global jQuery, PR, html_beautify */
-(function($, Prettify, htmlBeautify) {
+/*global PR, html_beautify */
+(function(Promise, Prettify, htmlBeautify) {
     "use strict";
 
     var selectors = {
@@ -36,10 +36,51 @@
         return p.innerHTML;
     }
 
+    // From https://developers.google.com/web/fundamentals/primers/promises#promisifying_xmlhttprequest
+    // Code samples are licensed under the Apache 2.0 License
+    function get(url) {
+        // Return a new promise.
+        return new Promise(function(resolve, reject) {
+            // Do the usual XHR stuff
+            var req = new XMLHttpRequest();
+            req.open('GET', url);
+
+            req.onload = function() {
+                // This is called even on 404 etc
+                // so check the status
+                if (req.status == 200) {
+                    // Resolve the promise with the response text
+                    resolve(req.response);
+                }
+                else {
+                    // Otherwise reject with the status text
+                    // which will hopefully be a meaningful error
+                    reject(Error(req.statusText));
+                }
+            };
+
+            // Handle network errors
+            req.onerror = function() {
+                reject(Error("Network Error"));
+            };
+
+            // Make the request
+            req.send();
+        });
+    }
+
+    // From https://developers.google.com/web/fundamentals/primers/promises#promisifying_xmlhttprequest
+    // Code samples are licensed under the Apache 2.0 License
+    function getJSON(url) {
+        return get(url).then(JSON.parse);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         var deferreds = [];
 
-        document.querySelectorAll(selectors.self).forEach(function(demo) {
+        var demos = document.querySelectorAll(selectors.self);
+        demos = [].slice.call(demos);
+        demos.forEach(function(demo) {
             var hideCode = demo.querySelector(selectors.hideCode);
             var showCode = demo.querySelector(selectors.showCode);
             var copyCode = demo.querySelector(selectors.copyCode);
@@ -60,7 +101,7 @@
             }
 
             if (json) {
-                deferreds.push($.getJSON(jsonSrc, function(data) {
+                deferreds.push(getJSON(jsonSrc).then(function(data) {
                     json.innerText = JSON.stringify(data, null, 2);
                 }));
             }
@@ -112,8 +153,8 @@
         });
 
         // Prettify once all JSON requests have completed
-        $.when.apply($, deferreds).then(function() {
+        Promise.all(deferreds).then(function() {
             Prettify.prettyPrint();
         });
     });
-}(jQuery, PR, html_beautify));
+}(Promise, PR, html_beautify));

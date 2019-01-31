@@ -56,6 +56,11 @@
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <properties>
+                        <acHandling>merge_preserve</acHandling>
+                    </properties>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.day.jcr.vault</groupId>
