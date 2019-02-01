@@ -24,7 +24,7 @@ Separator component written in HTL.
 ## BEM Description
 ```
 BLOCK cmp-separator
-    ELEMENT cmp-separator__horizontalRule
+    ELEMENT cmp-separator__horizontal-rule
 ```
 
 ## Information
