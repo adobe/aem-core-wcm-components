@@ -18,7 +18,7 @@
         "stylelint:fix": "stylelint '**/*.css' '**/*.less' --fix"
     },
     "devDependencies": {
-        "aemfed": "^0.0.7",
+        "aemfed": "^0.1.0",
         "eslint": "^4.19.1",
         "npm-run-all": "^4.1.2",
         "stylelint": "^9.6.0",
