@@ -366,10 +366,6 @@
                                     jcr:primaryType="nt:unstructured"
                                     link="/content/core-components-examples/library/teaser"
                                     text="Call To Action"/>
-                                <item2
-                                    jcr:primaryType="nt:unstructured"
-                                    link="/content/core-components-examples/library/teaser"
-                                    text="Call To Action"/>
                             </actions>
                         </teaser_2781767054>
                     </component>
