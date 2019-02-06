@@ -73,6 +73,7 @@
     > .aem-Grid {
         height: 100%;
         overflow-y: auto;
+        width: ~"calc(100% + 32px)";
     }
 }
 
@@ -107,6 +108,8 @@
         padding: @cmp-examples-spacing-xl @cmp-examples-spacing-l;
 
         background: transparent;
+
+        pointer-events: none;
     }
 
     .cmp-examples-structure__main {
@@ -114,7 +117,7 @@
         -ms-grid-column: 2;
         -ms-grid-column-span: 1;
 
-        margin: 0 @cmp-examples-spacing-l @cmp-examples-spacing-xl 0 !important;
+        margin: 0 @cmp-examples-spacing-l @cmp-examples-spacing-xl @cmp-examples-spacing-s !important;
     }
 
     .cmp-examples-structure__aside,

@@ -14,7 +14,9 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div class="cmp-examples-demo" data-cmp-examples-is="demo" data-cmp-examples-label="${'Demo' @ i18n}">
-    <div class="cmp-examples-demo__component" data-sly-resource="${'component' @ decoration=true}"></div>
+    <div class="cmp-examples-demo__top t-cmp-clean t-cmp-clean--light" data-cmp-examples-hook-demo="top">
+        <div class="cmp-examples-demo__component cmp-examples-demo__component--width${resource.valueMap.fullWidth ? 'Full' : 'Auto'}" data-sly-resource="${'component' @ decoration=true}"></div>
+    </div>
     <div class="cmp-examples-demo__info cmp-examples-demo__info--open" data-cmp-examples-hook-demo="info">
         <div data-sly-resource="${'info' @ decoration=true, wcmmode='disabled'}"></div>
         <div class="cmp-examples-demo__info-actions">

@@ -40,15 +40,31 @@
     }
 }
 
-.cmp-examples-demo__component {
-    padding: @cmp-examples-spacing-m;
+.cmp-examples-demo__top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180*@px;
+    padding: @cmp-examples-spacing-xxl @cmp-examples-spacing-s @cmp-examples-spacing-s;
+
+    @media @cmp-examples-screen-s-min {
+        padding: @cmp-examples-spacing-xxl @cmp-examples-spacing-m @cmp-examples-spacing-m;
+    }
+
+    @media @cmp-examples-screen-m-min {
+        padding: @cmp-examples-spacing-xxl;
+    }
+}
+
+.cmp-examples-demo__component--widthFull {
+    width: 100%;
 }
 
 .cmp-examples-demo__info {
     position: relative;
 
     .cmp-tabs__tablist {
-        margin-bottom: 0;
+        margin: 0;
         border: @cmp-examples-demo-tab-border-width solid @cmp-examples-color-background;
         border-left: 0;
         border-right: 0;
@@ -90,7 +106,7 @@
 
     font-family: @cmp-examples-font-family-monospace;
     font-size: @cmp-examples-demo-info-content-font-size;
-    color: @cmp-examples-color-gray;
+    color: @cmp-examples-color-text-light;
 
     overflow: auto;
     white-space: nowrap;
@@ -119,11 +135,11 @@
         visibility: visible;
 
         &--active {
-            border-color: @cmp-examples-color-gray-dark;
+            border-color: @cmp-examples-color-gray-800;
         }
 
         &:hover:not(.cmp-tabs__tab--active) {
-            border-color: @cmp-examples-color-gray;
+            border-color: @cmp-examples-color-gray-400;
         }
     }
 }
