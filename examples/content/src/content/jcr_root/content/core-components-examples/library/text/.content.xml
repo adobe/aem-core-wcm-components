@@ -188,7 +188,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Bulleted and numbered lists can be added the page.&lt;p>&#xa;"
+                    text="&lt;p>Bulleted and numbered lists can be added to the page.&lt;p>&#xa;"
                     textIsRich="true"/>
                 <demo_1695748698
                     jcr:created="{Date}2018-12-07T13:46:36.069+01:00"
@@ -247,7 +247,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Table of organised content with six rows and four columns, created using the rich text editor.&lt;p>&#xa;"
+                    text="&lt;p>Table of organized content with six rows and four columns, created using the rich text editor.&lt;p>&#xa;"
                     textIsRich="true"/>
                 <demo_1673220848
                     jcr:created="{Date}2018-12-07T13:46:53.265+01:00"
