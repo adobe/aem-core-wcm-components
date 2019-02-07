@@ -162,10 +162,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
         if (hasImage) {
-            if (targetPage != null) {
-                linkURL = Utils.getURL(request, targetPage);
-            }
             setImageResource(component, request.getResource(), hiddenImageResourceProperties);
+        }
+        if (targetPage != null) {
+            linkURL = Utils.getURL(request, targetPage);
         }
     }
 
