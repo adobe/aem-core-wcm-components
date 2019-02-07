@@ -1,0 +1,10 @@
+{
+  "title": "Teaser",
+  "description": "Description",
+  "linkURL": "/core/content/teasers.html",
+  "actionsEnabled": false,
+  "imageLinkHidden": false,
+  "titleLinkHidden": false,
+  "actions": [],
+  ":type": "core/wcm/components/teaser/v1/teaser"
+}
