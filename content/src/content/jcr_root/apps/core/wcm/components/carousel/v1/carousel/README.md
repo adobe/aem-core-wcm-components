@@ -59,6 +59,7 @@ CSS styling and JavaScript component. It should be added to a relevant site clie
 BLOCK cmp-carousel
     ELEMENT cmp-carousel__content
     ELEMENT cmp-carousel__item
+    ELEMENT cmp-carousel__actions
     ELEMENT cmp-carousel__action
         MOD cmp-carousel__action--disabled
         MOD cmp-carousel__action--previous
