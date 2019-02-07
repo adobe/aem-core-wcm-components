@@ -252,32 +252,6 @@
                             width="12"/>
                     </cq:responsive>
                 </teaser_1609110728>
-                <teaser_1276818308
-                    cq:styleIds="[1547060090076]"
-                    jcr:created="{Date}2019-01-09T16:30:09.811+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-09T17:33:23.402+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                    actionsEnabled="false"
-                    descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/title.png"
-                    linkURL="/content/core-components-examples/library/title"
-                    textIsRich="true"
-                    titleFromPage="true">
-                    <cq:responsive jcr:primaryType="nt:unstructured">
-                        <default
-                            jcr:primaryType="nt:unstructured"
-                            width="4"/>
-                        <small
-                            jcr:primaryType="nt:unstructured"
-                            width="6"/>
-                        <extrasmall
-                            jcr:primaryType="nt:unstructured"
-                            width="12"/>
-                    </cq:responsive>
-                </teaser_1276818308>
                 <teaser_893705994
                     cq:styleIds="[1547060090076]"
                     jcr:created="{Date}2019-01-09T16:30:11.839+01:00"
@@ -295,7 +269,6 @@
                     <cq:responsive jcr:primaryType="nt:unstructured">
                         <default
                             jcr:primaryType="nt:unstructured"
-                            behavior="newline"
                             width="4"/>
                         <small
                             jcr:primaryType="nt:unstructured"
@@ -305,6 +278,33 @@
                             width="12"/>
                     </cq:responsive>
                 </teaser_893705994>
+                <teaser_1276818308
+                    cq:styleIds="[1547060090076]"
+                    jcr:created="{Date}2019-01-09T16:30:09.811+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-01-09T17:33:23.402+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="true"
+                    fileReference="/content/dam/core-components-examples/library/components/title.png"
+                    linkURL="/content/core-components-examples/library/title"
+                    textIsRich="true"
+                    titleFromPage="true">
+                    <cq:responsive jcr:primaryType="nt:unstructured">
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            behavior="newline"
+                            width="4"/>
+                        <small
+                            jcr:primaryType="nt:unstructured"
+                            width="6"/>
+                        <extrasmall
+                            jcr:primaryType="nt:unstructured"
+                            width="12"/>
+                    </cq:responsive>
+                </teaser_1276818308>
             </responsivegrid>
         </root>
     </jcr:content>

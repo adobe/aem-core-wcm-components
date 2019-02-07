@@ -250,7 +250,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:33:42.882+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Call-To-Action Button"
+                    jcr:title="Call To Action Button"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h3"/>
                 <text_1337507001
@@ -290,7 +290,7 @@
                                 <item0
                                     jcr:primaryType="nt:unstructured"
                                     link="/content/core-components-examples/library/teaser"
-                                    text="Call-To-Action"/>
+                                    text="Call To Action"/>
                             </actions>
                         </teaser>
                     </component>
@@ -321,7 +321,7 @@
                     jcr:lastModified="{Date}2018-12-07T13:34:56.398+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Multiple Call-To-Action Buttons"
+                    jcr:title="Multiple Call To Action Buttons"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h3"/>
                 <text_1337508001
@@ -361,15 +361,11 @@
                                 <item0
                                     jcr:primaryType="nt:unstructured"
                                     link="/content/core-components-examples/library/teaser"
-                                    text="Call-To-Action"/>
+                                    text="Call To Action"/>
                                 <item1
                                     jcr:primaryType="nt:unstructured"
                                     link="/content/core-components-examples/library/teaser"
-                                    text="Call-To-Action"/>
-                                <item2
-                                    jcr:primaryType="nt:unstructured"
-                                    link="/content/core-components-examples/library/teaser"
-                                    text="Call-To-Action"/>
+                                    text="Call To Action"/>
                             </actions>
                         </teaser_2781767054>
                     </component>
