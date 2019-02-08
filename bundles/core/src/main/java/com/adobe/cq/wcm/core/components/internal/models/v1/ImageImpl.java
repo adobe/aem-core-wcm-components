@@ -269,11 +269,11 @@ public class ImageImpl implements Image {
      * scheme.
      *
      * @param imageName
-     * @return name of the asset without extension
+     * @return the SEO friendly image name
      */
     protected String getSeoFriendlyName(String imageName) {
 
-        // Google recommends to use hyphens (-) instead of underscores (_) for seo. See
+        // Google recommends using hyphens (-) instead of underscores (_) for SEO. See
         // https://support.google.com/webmasters/answer/76329?hl=en
         String seoFriendlyName = imageName.replaceAll("[\\ _]", "-").toLowerCase();
         try {
