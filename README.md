@@ -65,7 +65,7 @@ For a list of requirements for previous versions, see [Historical System Require
 
 ## Installation
 
-To install everything, except the extensions, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
+To install everything, excluding extensions and examples, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
 
 For more information about the Package Manager please have a look at [How to Work With Packages](https://helpx.adobe.com/experience-manager/6-4/sites/administering/using/package-manager.html) documentation page.
 
