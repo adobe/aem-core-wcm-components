@@ -39,6 +39,13 @@ public interface Image extends ComponentExporter {
     String PN_DESIGN_ALLOWED_RENDITION_WIDTHS = "allowedRenditionWidths";
 
     /**
+     * Name of the configuration policy property that will store the image quality for an image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    String PN_DESIGN_JPEG_QUALITY = "jpegQuality";
+
+    /**
      * Name of the configuration policy property that will indicate if lazy loading should be disabled.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
@@ -51,6 +58,13 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_IS_DECORATIVE = "isDecorative";
+
+    /**
+     * Name of the policy property that defines whether or not the UUID is disabled.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_UUID_DISABLED = "uuidDisabled";
 
     /**
      * Name of the resource property that will indicate if the image's caption will be rendered as a popup.
@@ -159,6 +173,16 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the value for the image's uuid, if one was set.
+     *
+     * @return the value for the image's uuid, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0;
+     */
+    default String getUuid() {
         throw new UnsupportedOperationException();
     }
 

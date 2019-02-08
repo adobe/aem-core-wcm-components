@@ -87,7 +87,7 @@
                                                         name="./titleFromPage"
                                                         value="{Boolean}true"
                                                         uncheckedValue="{Boolean}false"
-                                                        checked="{Boolean}true"/>
+                                                        checked="{Boolean}false"/>
                                                 </items>
                                             </titleGroup>
                                             <descriptionGroup
@@ -236,7 +236,7 @@
                                                         name="./descriptionFromPage"
                                                         value="{Boolean}true"
                                                         uncheckedValue="{Boolean}false"
-                                                        checked="{Boolean}true"/>
+                                                        checked="{Boolean}false"/>
                                                 </items>
                                             </descriptionGroup>
                                         </items>
@@ -316,14 +316,22 @@
                                                             emptyText="Link"
                                                             name="link"
                                                             required="{Boolean}true"
-                                                            rootPath="/content"/>
+                                                            rootPath="/content">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cmp-teaser-v1-dialog-edit-hook="actionLink"/>
+                                                        </link>
                                                         <text
                                                             granite:class="cmp-teaser__editor-actionField"
                                                             jcr:primaryType="nt:unstructured"
                                                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                             emptyText="Text"
                                                             name="text"
-                                                            required="{Boolean}true"/>
+                                                            required="{Boolean}true">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cmp-teaser-v1-dialog-edit-hook="actionTitle"/>
+                                                        </text>
                                                     </items>
                                                 </field>
                                             </actions>

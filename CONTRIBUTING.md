@@ -28,8 +28,8 @@ Also make sure to check our [development guidelines](Guidelines.md) before submi
 
 ## Issues
 
-Filing [issues](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/issues) and joining in conversations is the recommended way to provide feedback.
+Filing [issues](https://github.com/adobe/aem-core-wcm-components/issues) and joining in conversations is the recommended way to provide feedback.
 
 ## Code Reviews
 
-Reviewing others' code contributions is another great way to contribute. To do that, see the [open pull requests](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/pulls). Committers will review all pull requests before accepting them as contributions.
+Reviewing others' code contributions is another great way to contribute. To do that, see the [open pull requests](https://github.com/adobe/aem-core-wcm-components/pulls). Committers will review all pull requests before accepting them as contributions.

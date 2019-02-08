@@ -23,20 +23,13 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.2.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.junit.core</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.2.3-SNAPSHOT</version>
     <name>Adobe Experience Manager Core WCM Components JUnit Testing</name>
-
-    <scm>
-        <connection>scm:git:https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components.git</connection>
-        <developerConnection>scm:git:git@github.com:Adobe-Marketing-Cloud/aem-core-wcm-components.git</developerConnection>
-        <url>https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components/tree/master/testing/junit/core</url>
-        <tag>HEAD</tag>
-    </scm>
 
     <description>Useful tools for testing HTL-based AEM components</description>
 
@@ -66,6 +59,22 @@
                 </executions>
                 <configuration>
                     <exportScr>true</exportScr>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <configuration>
+                    <excludes combine.children="append">
+                        <!-- Ignore lint-files -->
+                        <exclude>**/*.eslintrc</exclude>
+                        <exclude>**/*.editorconfig</exclude>
+                        <exclude>**/*.stylelintrc.yaml</exclude>
+                        <exclude>**/*.eslintignore</exclude>
+                        <!-- Ignore Node and npm -->
+                        <exclude>**/node/**</exclude>
+                        <exclude>**/node_modules/**</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
@@ -165,7 +174,7 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.testing.resourceresolver-mock</artifactId>
-            <version>1.1.20</version>
+            <version>1.1.22</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -70,6 +70,7 @@ imageDelegate="core/wcm/components/image/v2/image"
 ```
 BLOCK cmp-teaser
     ELEMENT cmp-teaser__image
+    ELEMENT cmp-teaser__content
     ELEMENT cmp-teaser__title
     ELEMENT cmp-teaser__title-link
     ELEMENT cmp-teaser__description
@@ -81,5 +82,5 @@ BLOCK cmp-teaser
 * **Vendor**: Adobe
 * **Version**: v1
 * **Compatibility**: AEM 6.3
-* **Status**: preview
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_teaser\_v1](https://www.adobe.com/go/aem_cmp_teaser_v1)

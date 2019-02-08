@@ -1,0 +1,112 @@
+#
+# Copyright 2018 Adobe Systems Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk-node
+
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx1024m -XX:MaxPermSize=512m
+
+    steps:
+      - checkout
+
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
+
+      # run tests!
+      - run: mvn clean verify -B -U
+
+      - save_cache: # saves the project dependencies
+          paths:
+            - ~/.m2
+          key: aem-core-wcm-components
+
+      # run codecoverage check
+      - run: bash <(curl -s https://codecov.io/bash)
+
+  deploy_snapshot:
+    docker:
+      - image: circleci/openjdk:8-jdk-node
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
+      - add_ssh_keys:
+          fingerprints:
+            - "14:ab:8b:b6:ae:5b:96:38:c4:1d:7f:e6:5a:38:68:8c"
+      - run:
+          name: Deploy Snapshots
+          command: node ci/deploy_snapshots.js
+
+  release:
+    docker:
+      - image: circleci/openjdk:8-jdk-node
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
+      - add_ssh_keys:
+          fingerprints:
+            - "14:ab:8b:b6:ae:5b:96:38:c4:1d:7f:e6:5a:38:68:8c"
+      - run:
+          name: Release
+          command: node ci/release.js
+
+workflows:
+  version: 2
+  build-and-release:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+
+      - deploy_snapshot:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^@deploy-snapshot$/
+
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^@release-?(\d+\.\d+\.\d+)?$/

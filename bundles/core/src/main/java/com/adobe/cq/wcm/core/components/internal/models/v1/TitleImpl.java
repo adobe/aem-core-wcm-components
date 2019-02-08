@@ -24,7 +24,9 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -33,7 +35,9 @@ import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Title.class, ComponentExporter.class},
@@ -44,13 +48,22 @@ public class TitleImpl implements Title {
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/title/v1/title";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/title/v2/title";
 
+    private boolean linkDisabled = false;
+
+    @Self
+    private SlingHttpServletRequest request;
+
     @ScriptVariable
     private Resource resource;
 
     @ScriptVariable
-    private Page currentPage;
+    private PageManager pageManager;
 
     @ScriptVariable
+    private Page currentPage;
+
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @JsonIgnore
     private Style currentStyle;
 
     @ValueMapValue(optional = true, name = JcrConstants.JCR_TITLE)
@@ -58,6 +71,9 @@ public class TitleImpl implements Title {
 
     @ValueMapValue(optional = true)
     private String type;
+
+    @ValueMapValue(optional = true)
+    private String linkURL;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
@@ -76,6 +92,16 @@ public class TitleImpl implements Title {
                 heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
             }
         }
+
+        if (StringUtils.isNotEmpty(linkURL)) {
+            linkURL = Utils.getURL(request, pageManager, linkURL);
+        } else {
+            linkURL = null;
+        }
+
+        if(currentStyle != null) {
+            linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);
+        }
     }
 
     @Override
@@ -89,6 +115,16 @@ public class TitleImpl implements Title {
             return heading.getElement();
         }
         return null;
+    }
+
+    @Override
+    public String getLinkURL() {
+        return linkURL;
+    }
+
+    @Override
+    public boolean isLinkDisabled() {
+        return linkDisabled;
     }
 
     @Nonnull

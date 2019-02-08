@@ -22,12 +22,17 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceMetadata;
+import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +43,7 @@ import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 
@@ -52,10 +58,13 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     private String srcUriTemplate;
     private List<ImageArea> areas;
+    private boolean uuidDisabled;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
     }
+
+    protected String uuid;
 
     @PostConstruct
     protected void initModel() {
@@ -63,12 +72,18 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         boolean altValueFromDAM = properties.get(PN_ALT_VALUE_FROM_DAM, currentStyle.get(PN_ALT_VALUE_FROM_DAM, true));
         boolean titleValueFromDAM = properties.get(PN_TITLE_VALUE_FROM_DAM, currentStyle.get(PN_TITLE_VALUE_FROM_DAM, true));
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, true));
+        uuidDisabled = currentStyle.get(PN_UUID_DISABLED, false);
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
             final Resource assetResource = request.getResourceResolver().getResource(fileReference);
             if (assetResource != null) {
                 Asset asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
+                    if (!uuidDisabled) {
+                        uuid = asset.getID();
+                    } else {
+                        uuid = null;
+                    }
                     if (!isDecorative && altValueFromDAM) {
                         String damDescription = asset.getMetadataValue(DamConstants.DC_DESCRIPTION);
                         if(StringUtils.isEmpty(damDescription)) {
@@ -95,9 +110,15 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
-            srcUriTemplate = baseResourcePath + DOT + selector +
-                    SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                    (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+            String staticSelectors = selector;
+            if (smartSizes.length > 0) {
+                // only include the quality selector in the URL, if there are sizes configured
+                staticSelectors += DOT + jpegQuality;
+            } 
+            srcUriTemplate = baseResourcePath + DOT + staticSelectors +
+                SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
+                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
+                (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
 
             // if content policy delegate path is provided pass it to the image Uri
             String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
@@ -129,6 +150,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 
     @Override
     public List<ImageArea> getAreas() { return areas; }
+
+    @Override
+    public String getUuid() {
+        return uuid;
+    }
 
     protected void buildAreas() {
         areas = new ArrayList<>();

@@ -157,8 +157,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             // set image and alt text
             .execTestCase(image.tcSetMinimalProps(tcExecuteBeforeTest, tcExecuteAfterTest))
             // enter the link
-            .simulate("foundation-autocomplete[name='./linkURL'] input[type!='hidden']", "key-sequence",
-                { sequence: c.rootPage + "{enter}" })
+            .execTestCase(c.tcSelectInAutocomplete("[name='./linkURL']", c.rootPage))
             // save the dialog
             .execTestCase(c.tcSaveConfigureDialog)
 

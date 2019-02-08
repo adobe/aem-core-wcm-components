@@ -47,6 +47,7 @@ public class AbstractImageTest {
     protected static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
     protected static final String PAGE = TEST_CONTENT_ROOT + "/test";
     protected static final String SELECTOR = AdaptiveImageServlet.DEFAULT_SELECTOR;
+    protected static final int JPEG_QUALITY = AdaptiveImageServlet.DEFAULT_JPEG_QUALITY;
     protected static final String IMAGE0_PATH = PAGE + "/jcr:content/root/image0";
     protected static final String IMAGE1_PATH = PAGE + "/jcr:content/root/image1";
     protected static final String IMAGE2_PATH = PAGE + "/jcr:content/root/image2";
@@ -71,6 +72,8 @@ public class AbstractImageTest {
     protected static final String IMAGE23_PATH = PAGE + "/jcr:content/root/image23";
     protected static final String IMAGE24_PATH = PAGE + "/jcr:content/root/image24";
     protected static final String IMAGE25_PATH = PAGE + "/jcr:content/root/image25";
+    protected static final String IMAGE26_PATH = PAGE + "/jcr:content/root/image26";
+    protected static final String IMAGE27_PATH = PAGE + "/jcr:content/root/image27";
     protected static final String TEMPLATE_PATH = "/conf/coretest/settings/wcm/templates/testtemplate";
     protected static final String TEMPLATE_STRUCTURE_PATH = TEMPLATE_PATH + "/structure";
     protected static final String TEMPLATE_IMAGE_PATH = TEMPLATE_STRUCTURE_PATH + "/jcr:content/root/image_template";
