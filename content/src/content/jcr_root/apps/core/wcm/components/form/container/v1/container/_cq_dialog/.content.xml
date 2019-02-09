@@ -82,6 +82,25 @@
                                 name="./redirect"
                                 rootPath="/content"
                                 wrapperClass="hide cmp-redirect-selection"/>
+                            <method
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                defaultValue="POST"
+                                fieldLabel="Form Method"
+                                name="./method"
+                                value="POST">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <post
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="true"
+                                        text="POST"
+                                        value="POST"/>
+                                    <get
+                                        jcr:primaryType="nt:unstructured"
+                                        text="GET"
+                                        value="GET"/>
+                                </items>
+                            </method>
                         </items>
                     </column>
                 </items>
