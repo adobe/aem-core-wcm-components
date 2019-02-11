@@ -70,9 +70,9 @@
         <module>config</module>
         <module>all</module>
         <module>examples</module>
-        <!--module>extension/contentfragment/bundle</module>
+        <module>extension/contentfragment/bundle</module>
         <module>extension/contentfragment/content</module>
-        <module>extension</module-->
+        <module>extension</module>
     </modules>
 
 </project>
