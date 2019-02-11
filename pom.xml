@@ -33,6 +33,16 @@
 
     <name>Adobe Experience Manager Core WCM Components Reactor</name>
 
+    <!-- ====================================================================== -->
+    <!-- S C M  D E F I N I T I O N                                             -->
+    <!-- ====================================================================== -->
+    <scm>
+        <connection>scm:git:https://github.com/adobe/aem-core-wcm-components.git</connection>
+        <developerConnection>scm:git:git@github.com:adobe/aem-core-wcm-components.git</developerConnection>
+        <url>https://github.com/adobe/aem-core-wcm-components.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <build>
         <plugins>
             <plugin>
