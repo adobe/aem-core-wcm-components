@@ -54,7 +54,7 @@ The latest version of the Core Components, require the below minimum system requ
 
 Core Components | Extension | Examples | AEM 6.4 | AEM 6.3 | Java
 ----------------|-----------|----------|---------|---------|------
-[2.3.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.0) | 1.0.12 | 1.0.0 | 6.4.2.0 | 6.3.3.0 | 1.8
+[2.3.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.0) | 1.0.10 | 1.0.0 | 6.4.2.0 | 6.3.3.0 | 1.8
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
