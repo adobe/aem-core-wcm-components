@@ -87,7 +87,8 @@
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Core Components Examples - Page"
                                 sling:resourceType="wcm/core/components/policy/policy"
-                                clientlibs="cmp-examples.base">
+                                clientlibs="cmp-examples.base"
+                                appResourcesClientlib="cmp-examples.site">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
                             </policy_1544542961302>
                         </page>
