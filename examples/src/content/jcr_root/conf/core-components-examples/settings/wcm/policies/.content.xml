@@ -78,22 +78,6 @@
     <core jcr:primaryType="nt:unstructured">
         <wcm jcr:primaryType="nt:unstructured">
             <components jcr:primaryType="nt:unstructured">
-                <page jcr:primaryType="nt:unstructured">
-                    <v2 jcr:primaryType="nt:unstructured">
-                        <page jcr:primaryType="nt:unstructured">
-                            <policy_1544542961302
-                                jcr:lastModified="{Date}2018-12-11T16:44:10.564+01:00"
-                                jcr:lastModifiedBy="admin"
-                                jcr:primaryType="nt:unstructured"
-                                jcr:title="Core Components Examples - Page"
-                                sling:resourceType="wcm/core/components/policy/policy"
-                                clientlibs="cmp-examples.base"
-                                appResourcesClientlib="cmp-examples.site">
-                                <jcr:content jcr:primaryType="nt:unstructured"/>
-                            </policy_1544542961302>
-                        </page>
-                    </v2>
-                </page>
                 <title jcr:primaryType="nt:unstructured">
                     <v2 jcr:primaryType="nt:unstructured">
                         <title jcr:primaryType="nt:unstructured">
@@ -316,4 +300,20 @@
             </extension>
         </wcm>
     </core>
+    <core-components-examples jcr:primaryType="nt:unstructured">
+        <components jcr:primaryType="nt:unstructured">
+            <page jcr:primaryType="nt:unstructured">
+                <policy_212634895490169
+                    jcr:lastModified="{Date}2019-02-14T14:27:11.516+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Core Components Examples - Page"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    appResourcesClientlib="cmp-examples.site"
+                    clientlibs="cmp-examples.base">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_212634895490169>
+            </page>
+        </components>
+    </core-components-examples>
 </jcr:root>
