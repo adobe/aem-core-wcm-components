@@ -3,5 +3,5 @@
     jcr:primaryType="cq:Page">
     <jcr:content
         jcr:primaryType="cq:PageContent"
-        sling:resourceType="core/wcm/components/page/v2/page"/>
+        sling:resourceType="core-components-examples/components/page"/>
 </jcr:root>
