@@ -19,7 +19,6 @@
 @cmp-examples-teaser-document-width: 260*@px;
 @cmp-examples-teaser-document-height: 64*@px;
 @cmp-examples-teaser-document-border-width: 1*@px;
-@cmp-examples-teaser-document-border-width-focus: 2*@px;
 @cmp-examples-teaser-document-square-width: @cmp-examples-teaser-document-height;
 @cmp-examples-teaser-document-image-size: 24*@px;
 
@@ -71,18 +70,9 @@
             border-color: rgb(149, 149, 149);
         }
 
-        &:focus-within {
-            &:before {
-                content: '';
-                position: absolute;
-                top: -@cmp-examples-teaser-document-border-width-focus;
-                left: -@cmp-examples-teaser-document-border-width-focus;
-                right: -@cmp-examples-teaser-document-border-width-focus;
-                bottom: -@cmp-examples-teaser-document-border-width-focus;
-
-                border: @cmp-examples-teaser-document-border-width-focus solid rgb(20, 115, 230);
-                border-radius: @cmp-examples-border-radius;
-            }
+        &:focus-within,
+        &:active {
+            border-color: rgb(116, 116, 116);
         }
     }
 
