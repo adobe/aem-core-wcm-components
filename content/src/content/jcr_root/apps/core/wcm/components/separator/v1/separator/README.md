@@ -33,3 +33,4 @@ BLOCK cmp-separator
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_separator\_v1](https://www.adobe.com/go/aem_cmp_separator_v1)
+* **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/separator.html](http://opensource.adobe.com/aem-core-wcm-components/library/separator.html)
