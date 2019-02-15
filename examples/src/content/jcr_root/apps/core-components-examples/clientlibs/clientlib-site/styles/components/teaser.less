@@ -16,7 +16,14 @@
 
 @cmp-examples-teaser-component-description-height: 3 * (@cmp-examples-font-size * @cmp-examples-line-height);
 
-// component variant, e.g. home page teasers
+@cmp-examples-teaser-document-width: 260*@px;
+@cmp-examples-teaser-document-height: 64*@px;
+@cmp-examples-teaser-document-border-width: 1*@px;
+@cmp-examples-teaser-document-border-width-focus: 2*@px;
+@cmp-examples-teaser-document-square-width: @cmp-examples-teaser-document-height;
+@cmp-examples-teaser-document-image-size: 24*@px;
+
+// component variant (home page teasers)
 .cmp-examples-teaser--component {
     .cmp-teaser {
         margin-bottom: @cmp-examples-spacing-xl;
@@ -40,5 +47,108 @@
         padding: 0 @cmp-examples-spacing-xxs;
 
         overflow: hidden;
+    }
+}
+
+// document variant (GitHub, helpX document teasers)
+.cmp-examples-teaser--document {
+    width: auto !important;
+
+    .cmp-teaser {
+        position: relative;
+
+        display: inline-block;
+        vertical-align: top;
+        width: @cmp-examples-teaser-document-width;
+        height: @cmp-examples-teaser-document-height;
+        margin-bottom: 20*@px;
+        border: @cmp-examples-teaser-document-border-width solid rgb(211, 211, 211);
+        border-radius: @cmp-examples-border-radius;
+
+        background-color: @cmp-examples-color-gray-100;
+
+        &:hover {
+            border-color: rgb(149, 149, 149);
+        }
+
+        &:focus-within {
+            &:before {
+                content: '';
+                position: absolute;
+                top: -@cmp-examples-teaser-document-border-width-focus;
+                left: -@cmp-examples-teaser-document-border-width-focus;
+                right: -@cmp-examples-teaser-document-border-width-focus;
+                bottom: -@cmp-examples-teaser-document-border-width-focus;
+
+                border: @cmp-examples-teaser-document-border-width-focus solid rgb(20, 115, 230);
+                border-radius: @cmp-examples-border-radius;
+            }
+        }
+    }
+
+    .cmp-teaser__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        margin-left: @cmp-examples-teaser-document-square-width;
+        padding-left: 12*@px;
+        border-top-right-radius: 4*@px;
+        border-bottom-right-radius: 4*@px;
+
+        background-color: @cmp-examples-color-white;
+    }
+
+    .cmp-teaser__image {
+        position: absolute;
+        top: -@cmp-examples-teaser-document-border-width;
+        left: -@cmp-examples-teaser-document-border-width;
+        bottom: -@cmp-examples-teaser-document-border-width;
+        right: -@cmp-examples-teaser-document-border-width;
+
+        .cmp-image {
+            width: 100%;
+            height: 100%;
+        }
+
+        .cmp-image__link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: (@cmp-examples-teaser-document-square-width - @cmp-examples-teaser-document-image-size) / 2;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .cmp-image__image {
+            width: @cmp-examples-teaser-document-image-size;
+            height: @cmp-examples-teaser-document-image-size;
+        }
+    }
+
+    .cmp-teaser__title {
+        margin: 0;
+        padding: 0;
+
+        font-size: 14*@px;
+        font-weight: @cmp-examples-font-weight-bold;
+    }
+
+    .cmp-teaser__title-link {
+        color: @cmp-examples-color-gray-900;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .cmp-teaser__description {
+        font-size: 12*@px;
+
+        p {
+            margin-bottom: 0;
+        }
     }
 }
