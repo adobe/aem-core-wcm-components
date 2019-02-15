@@ -250,7 +250,12 @@
                                         jcr:primaryType="nt:unstructured">
                                         <cq:styles jcr:primaryType="nt:unstructured">
                                             <item0
-                                                cq:styleClasses="cmp-examples-text__hero"
+                                                cq:styleClasses="cmp-examples-text--page-title"
+                                                cq:styleId="1644862132301"
+                                                cq:styleLabel="Page Title"
+                                                jcr:primaryType="nt:unstructured"/>
+                                            <item1
+                                                cq:styleClasses="cmp-examples-text--hero"
                                                 cq:styleId="1544762734201"
                                                 cq:styleLabel="Hero"
                                                 jcr:primaryType="nt:unstructured"/>

@@ -14,8 +14,32 @@
  *  limitations under the License.
  */
 
+.cmp-examples-text--page-title {
+    .cmp-text {
+        font-size: @cmp-examples-font-size-h1;
+        font-weight: @cmp-examples-font-weight-bold;
+        line-height: @cmp-examples-line-height-heading;
+        margin: 0 0 @cmp-examples-spacing-xl 0;
+
+        > * {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        sub {
+            bottom: 0;
+
+            margin-left: 5*@px;
+
+            font-size: @cmp-examples-font-size;
+            font-weight: @cmp-examples-font-weight-regular;
+            color: rgb(119, 119, 119);
+        }
+    }
+}
+
 // hero variant, e.g. content description, page top
-.cmp-examples-text__hero {
+.cmp-examples-text--hero {
     .cmp-text {
         font-size: 24*@px;
         line-height: @cmp-examples-line-height;
