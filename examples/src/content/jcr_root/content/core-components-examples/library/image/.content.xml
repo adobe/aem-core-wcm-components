@@ -24,7 +24,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Image &lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Image&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -35,8 +35,7 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available.&lt;/p>&#xd;&#xa;"
-                    textIsRich="true">
-                </text>
+                    textIsRich="true"/>
                 <title_865328580
                     cq:styleIds="[1544759664489]"
                     jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
