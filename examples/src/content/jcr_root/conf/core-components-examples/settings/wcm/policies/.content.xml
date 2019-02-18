@@ -286,6 +286,11 @@
                                                 cq:styleId="1547060090076"
                                                 cq:styleLabel="Component"
                                                 jcr:primaryType="nt:unstructured"/>
+                                            <item1
+                                                cq:styleClasses="cmp-examples-teaser--document"
+                                                cq:styleId="1550165685463"
+                                                cq:styleLabel="Document"
+                                                jcr:primaryType="nt:unstructured"/>
                                         </cq:styles>
                                     </item0>
                                 </cq:styleGroups>
