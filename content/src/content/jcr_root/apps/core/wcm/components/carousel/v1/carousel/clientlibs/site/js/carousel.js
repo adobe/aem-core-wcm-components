@@ -613,7 +613,7 @@
     if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady());
+        document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
 }());
