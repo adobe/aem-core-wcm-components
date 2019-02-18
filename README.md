@@ -18,7 +18,7 @@ The sites content is currently updated manually, as follows:
     ```
     wget --mirror --convert-links --adjust-extension --page-requisites "http://localhost:4503/content/core-components-examples/library.html"
     ```
-1. Rewrite the URLs in the fetched content to remove the `/content/core-components-examples/` path segment.
+1. Rewrite the paths and references in the fetched content to remove the `/content/core-components-examples/` path segment.
 1. Branch off the `gh-pages` branch of the repository.
 1. Add the updated example content to the newly created branch. 
 1. Make a pull request with the updated content.
