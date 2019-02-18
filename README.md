@@ -45,7 +45,7 @@ Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/w
 
 \* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
 
-## Versioning
+## Component Versioning
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
