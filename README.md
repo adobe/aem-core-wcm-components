@@ -6,10 +6,9 @@ A set of standardized components for AEM 6.3+ that can be used to speed up devel
 
 ## Documentation
 
-* [Tutorial to build a new site using the Core Components](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
-* AEM product documentation of Core Components
-  * [Author documentation](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
-  * [Developer documentation](https://docs.adobe.com/docs/en/aem/6-3/develop/components/core-components.html)
+* [Component Library](http://opensource.adobe.com/aem-core-wcm-components/library.html)
+* [Using Core Components](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
+* [Tutorial for building a new site using the Core Components](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
 * [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
 ## Development
@@ -48,9 +47,11 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
 
-The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
-
 \* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
+
+## Component Versioning
+
+The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
 ## System Requirements
 
@@ -61,7 +62,6 @@ Core Components | Extension | AEM 6.4 | AEM 6.3 | Java
 [2.3.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.0) | 1.0.10 | 6.4.2.0 | 6.3.3.0 | 1.8
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
-
 
 ## Installation
 
