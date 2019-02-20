@@ -17,8 +17,12 @@
 // we assume there is one navigation component in the aside
 .cmp-examples-structure__aside {
     .cmp-navigation {
-        margin-top: @cmp-examples-spacing-xs;
-        padding-right: @cmp-examples-spacing-l;
+        margin-top: @cmp-examples-spacing-1;
+        padding-right: @cmp-examples-spacing-5;
+
+        @media @cmp-examples-screen-s-min {
+            padding-right: @cmp-examples-spacing-8;
+        }
     }
 
     .cmp-navigation__group {
@@ -30,40 +34,29 @@
 
     .cmp-navigation__item-link {
         display: block;
-        margin-bottom: @cmp-examples-spacing-xs;
-        border-radius: (2 * @cmp-examples-spacing-xs) + @cmp-examples-font-size-s;
-        padding: @cmp-examples-spacing-xs @cmp-examples-spacing-s;
-        line-height: 1;
+        margin-bottom: @cmp-examples-spacing-1;
+        border-radius: @cmp-examples-border-radius;
+        padding: @cmp-examples-spacing-2 @cmp-examples-spacing-3;
 
         font-size: @cmp-examples-font-size-s;
-        color: @cmp-examples-color-text;
         text-decoration: none;
+        color: @cmp-examples-color-gray-800;
 
         &:hover {
-            background-color: @cmp-examples-color-background;
+            background-color: @cmp-examples-color-gray-200;
         }
 
-        transition: background-color @cmp-examples-animation-duration-4 ease-in;
+        &:active {
+            background-color: @cmp-examples-color-gray-200;
+            color: @cmp-examples-color-gray-900;
+        }
+
+        transition: background-color @cmp-examples-animation-duration-1 ease-in;
     }
 
     .cmp-navigation__item--active {
         .cmp-navigation__item-link {
-            background-color: @cmp-examples-color-background;
-        }
-    }
-
-    @media @cmp-examples-screen-m-min {
-        .cmp-navigation__item-link {
-            &:hover {
-                background-color: @cmp-examples-color-white;
-
-            }
-        }
-
-        .cmp-navigation__item--active {
-            .cmp-navigation__item-link {
-                background-color: @cmp-examples-color-white;
-            }
+            background-color: @cmp-examples-color-gray-200;
         }
     }
 }

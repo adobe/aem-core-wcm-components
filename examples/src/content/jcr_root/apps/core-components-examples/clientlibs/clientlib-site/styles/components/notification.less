@@ -14,40 +14,35 @@
  *  limitations under the License.
  */
 
-@cmp-examples-notification-offset: @cmp-examples-spacing-s;
-@cmp-examples-notification-icon-width: 15*@px;
+@cmp-examples-notification-right: @cmp-examples-spacing-8;
+@cmp-examples-notification-animation-offset: @cmp-examples-spacing-3;
+@cmp-examples-notification-bottom: @cmp-examples-notification-right - @cmp-examples-notification-animation-offset;
 
 .cmp-examples-notification {
     position: fixed;
-    top: @cmp-examples-notification-offset;
-    left: 50%;
-    .transform(translate(-50%));
+    bottom: @cmp-examples-notification-bottom;
+    right: @cmp-examples-notification-right;
     z-index: @cmp-examples-z-index-notification;
 
+    display: flex;
+    align-items: center;
     max-width: 290*@px;
-    border-radius: (2 * @cmp-examples-spacing-xs) + (@cmp-examples-line-height * @cmp-examples-font-size);
-    padding: @cmp-examples-spacing-xs @cmp-examples-spacing-m (@cmp-examples-spacing-xs + 1*@px);
+    border-radius: @cmp-examples-border-radius;
+    padding: @cmp-examples-spacing-3 @cmp-examples-spacing-5;
     line-height: @cmp-examples-line-height;
 
-    font-size: @cmp-examples-font-size;
+    font-size: @cmp-examples-font-size-s;
+    font-weight: @cmp-examples-font-weight-bold;
     color: @cmp-examples-color-white;
-    background-color: fade(@cmp-examples-color-notice, 90%);
+    background-color: @cmp-examples-color-notice;
     white-space: nowrap;
 
     animation: ~'cmp-examples-notification-in linear @{cmp-examples-animation-duration-4}';
     animation-iteration-count: 1;
 }
 
-.cmp-examples-notification__icon {
-    display: inline-block;
-    vertical-align: middle;
-}
-
 .cmp-examples-notification__text {
-    display: inline-block;
-    vertical-align: middle;
-    width: ~'calc(100% - (@{cmp-examples-spacing-xs} + @{cmp-examples-notification-icon-width}))';
-    margin-left: @cmp-examples-spacing-xs;
+    margin-left: @cmp-examples-spacing-4;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -59,35 +54,35 @@
 }
 
 .cmp-examples-notification--success {
-    background-color: fade(@cmp-examples-color-success, 90%);
+    background-color: @cmp-examples-color-success;
 }
 
 .cmp-examples-notification--error {
-    background-color: fade(@cmp-examples-color-error, 90%);
+    background-color: @cmp-examples-color-error;
 }
 
 .cmp-examples-notification--warning {
-    background-color: fade(@cmp-examples-color-warning, 90%);
+    background-color: @cmp-examples-color-warning;
 }
 
 @keyframes cmp-examples-notification-in {
     0% {
         opacity: 0;
-        .transform(~'translate(-50%,-@{cmp-examples-notification-offset})');
+        .transform(~'translate(0, @{cmp-examples-notification-animation-offset})');
     }
     100% {
-        opacity:1;
-        .transform(translate(-50%, 0));
+        opacity: 1;
+        .transform(translate(0, 0));
     }
 }
 
 @keyframes cmp-examples-notification-out {
     0% {
         opacity: 1;
-        .transform(translate(-50%, 0));
+        .transform(translate(0, 0));
     }
     100% {
         opacity: 0;
-        .transform(~'translate(-50%,-@{cmp-examples-notification-offset})');
+        .transform(~'translate(0, @{cmp-examples-notification-animation-offset})');
     }
 }

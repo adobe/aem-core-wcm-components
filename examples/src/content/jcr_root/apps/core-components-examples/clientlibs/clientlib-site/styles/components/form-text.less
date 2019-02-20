@@ -1,0 +1,66 @@
+/*
+ *  Copyright 2019 Adobe Systems Incorporated
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+// form text search variant (home page component search)
+.cmp-examples-form-text--search {
+
+    .cmp-form-text {
+        position: relative;
+
+        width: 100%;
+        margin-bottom: @cmp-examples-spacing-6;
+
+        // search icon via font awesome.
+        &:before {
+            content: "\f002";
+
+            position: absolute;
+            top: @cmp-examples-spacing-3;
+            left: @cmp-examples-spacing-4;
+
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: @cmp-examples-color-gray-700;
+        }
+    }
+
+    .cmp-form-text__text {
+        width: 100%;
+        height: 48*@px;
+        border: 1*@px solid @cmp-examples-color-gray-400;
+        border-radius: @cmp-examples-border-radius;
+        padding: 0 @cmp-examples-spacing-4 0 48*@px;
+
+        font-size: @cmp-examples-font-size-s;
+
+        &::placeholder {
+            font-style: italic;
+        }
+
+        &:hover {
+            border-color: @cmp-examples-color-gray-600;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: @cmp-examples-color-blue-600;
+        }
+
+        &::-ms-clear {
+            display: none;
+        }
+    }
+}

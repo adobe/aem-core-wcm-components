@@ -14,8 +14,6 @@
  *  limitations under the License.
  */
 
-@cmp-examples-tooltip-font-size: 12*@px;
-
 [data-cmp-examples-tooltip] {
     position: relative;
     overflow: visible;
@@ -25,23 +23,23 @@
         content: attr(data-cmp-examples-tooltip);
 
         position: absolute;
-        bottom: 100%;
+        bottom: 80%;
         left: 50%;
         z-index: @cmp-examples-z-index-tooltip;
 
         display: none;
-        border-radius: (2 * @cmp-examples-spacing-xxs) + (@cmp-examples-line-height * @cmp-examples-tooltip-font-size);
-        padding: @cmp-examples-spacing-xxs @cmp-examples-spacing-s;
-        line-height: @cmp-examples-line-height;
+        border-radius: @cmp-examples-border-radius;
+        padding: @cmp-examples-spacing-2 10*@px;
+        line-height: 1;
 
-        font-size: 12*@px;
+        font-size: @cmp-examples-font-size-xs;
         color: @cmp-examples-color-white;
-        background: fade(@cmp-examples-color-black, 70%);
+        background: @cmp-examples-color-gray-800;
 
         pointer-events: none;
         white-space: nowrap;
 
-        .transform(~'translate(-50%, -@{cmp-examples-spacing-xxs})');
+        .transform(~'translate(-50%, -@{cmp-examples-spacing-1})');
         .transform-origin(left, top);
     }
 
