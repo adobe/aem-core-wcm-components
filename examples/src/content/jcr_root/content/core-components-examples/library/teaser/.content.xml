@@ -181,7 +181,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                             textIsRich="true"
                             titleFromPage="false"/>
                     </component>
@@ -245,6 +245,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="false"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
                             linkURL="/content/core-components-examples/library/teaser"
                             textIsRich="true"
                             titleFromPage="false"/>
@@ -309,7 +310,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="true"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/roaster.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
@@ -380,7 +381,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="true"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/mini.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">

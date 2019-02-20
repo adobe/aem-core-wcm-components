@@ -191,7 +191,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core/wcm/components/image/v2/image"
-                                    fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"/>
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
                             </item_1>
                             <item_2
                                 cq:panelTitle="Tab 2"
@@ -214,7 +214,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core/wcm/components/image/v2/image"
-                                    fileReference="/content/dam/core-components-examples/library/sample-assets/roaster.jpg"/>
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             </item_2>
                             <item_1544184727261
                                 cq:panelTitle="Tab 3"
@@ -237,7 +237,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core/wcm/components/image/v2/image"
-                                    fileReference="/content/dam/core-components-examples/library/sample-assets/circle.jpg"/>
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"/>
                             </item_1544184727261>
                         </tabs>
                     </component>
