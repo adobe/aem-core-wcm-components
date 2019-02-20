@@ -290,8 +290,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:45:17.107+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo"
-                    fullWidth="{Boolean}true">
+                    sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
