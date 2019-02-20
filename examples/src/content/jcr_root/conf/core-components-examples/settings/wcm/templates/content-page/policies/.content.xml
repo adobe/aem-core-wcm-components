@@ -42,6 +42,16 @@
                                         sling:resourceType="wcm/core/components/policies/mapping"/>
                                 </v1>
                             </teaser>
+                            <form jcr:primaryType="nt:unstructured">
+                                <text jcr:primaryType="nt:unstructured">
+                                    <v2 jcr:primaryType="nt:unstructured">
+                                        <text
+                                            cq:policy="core/wcm/components/form/text/v2/text/policy_1550289110975"
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                                    </v2>
+                                </text>
+                            </form>
                         </components>
                     </wcm>
                 </core>
