@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/social]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Add social sharing links to a page"
+        jcr:description="Add social sharing links"
         jcr:primaryType="cq:PageContent"
         jcr:title="Social Sharing"
         sling:resourceType="core-components-examples/components/page"

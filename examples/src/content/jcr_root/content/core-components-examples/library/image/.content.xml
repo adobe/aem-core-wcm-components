@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/atom]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Display a single image asset"
+        jcr:description="Display an image asset"
         jcr:primaryType="cq:PageContent"
         jcr:title="Image"
         sling:resourceType="core-components-examples/components/page">

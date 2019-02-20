@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/atom]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Display a rich text paragraph on a page"
+        jcr:description="Display a rich text paragraph"
         jcr:primaryType="cq:PageContent"
         jcr:title="Text"
         sling:resourceType="core-components-examples/components/page">

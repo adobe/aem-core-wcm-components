@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/container]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Cycle through panels of related content"
+        jcr:description="Cycle through content panels"
         jcr:primaryType="cq:PageContent"
         jcr:title="Carousel"
         sling:resourceType="core-components-examples/components/page">

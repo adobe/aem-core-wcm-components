@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/container]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Organise content into switchable panels"
+        jcr:description="Switchable content panels"
         jcr:primaryType="cq:PageContent"
         jcr:title="Tabs"
         sling:resourceType="core-components-examples/components/page">
