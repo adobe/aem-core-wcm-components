@@ -16,7 +16,7 @@
 (function() {
     "use strict";
 
-    var animationDuration = 220;
+    var animationDuration = 200;
     var delay = 2000;
 
     var states = {
@@ -29,7 +29,7 @@
     // font awesome icon key to state map
     var stateIconMap = {
         'notice': 'info-circle',
-        'success': 'smile',
+        'success': 'check',
         'error': 'frown-open',
         'warning': 'exclamation-triangle'
     };
