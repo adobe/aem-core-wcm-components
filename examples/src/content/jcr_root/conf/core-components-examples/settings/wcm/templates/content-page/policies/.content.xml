@@ -52,6 +52,14 @@
                                     </v2>
                                 </text>
                             </form>
+                            <separator jcr:primaryType="nt:unstructured">
+                                <v1 jcr:primaryType="nt:unstructured">
+                                    <separator
+                                        cq:policy="core/wcm/components/separator/v1/separator/policy_1550355088949"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="wcm/core/components/policies/mapping"/>
+                                </v1>
+                            </separator>
                         </components>
                     </wcm>
                 </core>
