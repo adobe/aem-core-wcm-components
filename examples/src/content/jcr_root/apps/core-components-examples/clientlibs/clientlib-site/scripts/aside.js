@@ -47,7 +47,7 @@
                 });
             }
 
-            document.body.addEventListener('click', function (event) {
+            mask.addEventListener('click', function (event) {
                 aside.classList.remove(cssClasses.open);
                 mask.classList.remove(cssClasses.mask.open);
             }, false);
