@@ -36,16 +36,7 @@
                     jcr:lastModified="{Date}2018-12-20T16:16:40.169Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/show-menu">
-                    <cq:responsive jcr:primaryType="nt:unstructured">
-                        <default
-                            jcr:primaryType="nt:unstructured"
-                            behavior="hide"/>
-                        <small
-                            jcr:primaryType="nt:unstructured"
-                            behavior="none"/>
-                    </cq:responsive>
-                </showmenu>
+                    sling:resourceType="core-components-examples/components/show-menu"/>
                 <image_1442382866
                     jcr:created="{Date}2019-01-08T17:48:01.449+01:00"
                     jcr:createdBy="admin"
@@ -58,13 +49,7 @@
                     fileReference="/content/dam/core-components-examples/library/aem-corecomponents-logo.svg"
                     isDecorative="false"
                     linkURL="/content/core-components-examples/library"
-                    titleValueFromDAM="true">
-                    <cq:responsive jcr:primaryType="nt:unstructured">
-                        <small
-                            jcr:primaryType="nt:unstructured"
-                            behavior="hide"/>
-                    </cq:responsive>
-                </image_1442382866>
+                    titleValueFromDAM="true"/>
             </responsivegrid_1409995310>
             <responsivegrid_1755067073
                 cq:styleIds="[1545309119491]"
@@ -87,16 +72,7 @@
                     fileReference="/content/dam/core-components-examples/library/aem-corecomponents-logo.svg"
                     isDecorative="false"
                     linkURL="/content/core-components-examples/library"
-                    titleValueFromDAM="true">
-                    <cq:responsive jcr:primaryType="nt:unstructured">
-                        <default
-                            jcr:primaryType="nt:unstructured"
-                            behavior="hide"/>
-                        <small
-                            jcr:primaryType="nt:unstructured"
-                            behavior="none"/>
-                    </cq:responsive>
-                </image_1442382866_cop>
+                    titleValueFromDAM="true"/>
                 <navigation
                     jcr:created="{Date}2018-12-20T12:48:21.218Z"
                     jcr:createdBy="admin"
@@ -122,6 +98,10 @@
                 <medium
                     jcr:primaryType="nt:unstructured"
                     title="Medium"
+                    width="{Long}1024"/>
+                <large
+                    jcr:primaryType="nt:unstructured"
+                    title="Large"
                     width="{Long}1280"/>
             </breakpoints>
         </cq:responsive>
