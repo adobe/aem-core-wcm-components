@@ -304,7 +304,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/bicycle.svg"
+                            fileReference="/content/dam/core-components-examples/library/components/component.svg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
