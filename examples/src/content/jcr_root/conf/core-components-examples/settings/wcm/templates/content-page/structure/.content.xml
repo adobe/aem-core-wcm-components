@@ -38,12 +38,18 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/show-menu">
                     <cq:responsive jcr:primaryType="nt:unstructured">
-                        <default
+                        <extrasmall
                             jcr:primaryType="nt:unstructured"
-                            behavior="hide"/>
+                            behavior="none"/>
                         <small
                             jcr:primaryType="nt:unstructured"
                             behavior="none"/>
+                        <medium
+                            jcr:primaryType="nt:unstructured"
+                            behavior="none"/>
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            behavior="hide"/>
                     </cq:responsive>
                 </showmenu>
                 <image_1442382866
@@ -60,7 +66,13 @@
                     linkURL="/content/core-components-examples/library"
                     titleValueFromDAM="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
+                        <extrasmall
+                            jcr:primaryType="nt:unstructured"
+                            behavior="hide"/>
                         <small
+                            jcr:primaryType="nt:unstructured"
+                            behavior="hide"/>
+                        <medium
                             jcr:primaryType="nt:unstructured"
                             behavior="hide"/>
                     </cq:responsive>
@@ -89,12 +101,18 @@
                     linkURL="/content/core-components-examples/library"
                     titleValueFromDAM="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
-                        <default
+                        <extrasmall
                             jcr:primaryType="nt:unstructured"
-                            behavior="hide"/>
+                            behavior="none"/>
                         <small
                             jcr:primaryType="nt:unstructured"
                             behavior="none"/>
+                        <medium
+                            jcr:primaryType="nt:unstructured"
+                            behavior="none"/>
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            behavior="hide"/>
                     </cq:responsive>
                 </image_1442382866_cop>
                 <navigation
@@ -122,6 +140,10 @@
                 <medium
                     jcr:primaryType="nt:unstructured"
                     title="Medium"
+                    width="{Long}1024"/>
+                <large
+                    jcr:primaryType="nt:unstructured"
+                    title="Large"
                     width="{Long}1280"/>
             </breakpoints>
         </cq:responsive>

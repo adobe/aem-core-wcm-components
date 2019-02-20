@@ -22,23 +22,34 @@
     };
 
     var cssClasses = {
-        open: 'cmp-examples-structure__aside--open'
+        open: 'cmp-examples-structure__aside--open',
+        mask: {
+            self: 'cmp-examples-mask',
+            open: 'cmp-examples-mask--open'
+        }
     };
+
+    var mask;
 
     ready(function() {
         var showMenuActions = document.querySelectorAll(selectors.showMenu);
         var aside = document.querySelector(selectors.self);
+        mask = document.createElement('div');
+        mask.classList.add(cssClasses.mask.self);
+        document.body.appendChild(mask);
 
         if (aside) {
             for (var i = 0; i < showMenuActions.length; ++i) {
                 showMenuActions[i].addEventListener('click', function(event) {
                     event.stopPropagation();
                     aside.classList.add(cssClasses.open);
+                    mask.classList.add(cssClasses.mask.open);
                 });
             }
 
             document.body.addEventListener('click', function (event) {
                 aside.classList.remove(cssClasses.open);
+                mask.classList.remove(cssClasses.mask.open);
             }, false);
 
             aside.addEventListener('click', function (event) {
