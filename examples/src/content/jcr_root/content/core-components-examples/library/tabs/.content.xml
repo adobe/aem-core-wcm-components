@@ -191,7 +191,7 @@
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="core/wcm/components/image/v2/image"
-                                    fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
                             </item_1>
                             <item_2
                                 cq:panelTitle="Tab 2"
