@@ -366,7 +366,10 @@
             that._paused = false;
 
             // If the Carousel is hovered, don't begin auto transitioning until the next mouse leave event
-            var hovered = that._elements.self.parentElement.querySelector(":hover") === that._elements.self;
+            var hovered = false;
+            if (that._elements.self.parentElement) {
+                hovered = that._elements.self.parentElement.querySelector(":hover") === that._elements.self;
+            }
             if (that._properties.autopauseDisabled || !hovered) {
                 resetAutoplayInterval();
             }
@@ -465,8 +468,10 @@
             refreshActive();
 
             // reset the autoplay transition interval following navigation, if not already hovering the carousel
-            if (that._elements.self.parentElement.querySelector(":hover") !== that._elements.self) {
-                resetAutoplayInterval();
+            if (that._elements.self.parentElement) {
+                if (that._elements.self.parentElement.querySelector(":hover") !== that._elements.self) {
+                    resetAutoplayInterval();
+                }
             }
         }
 

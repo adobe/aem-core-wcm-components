@@ -101,6 +101,13 @@
                             }
 
                         }
+                    },
+                    "teaser-9"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "linkURL"           : "/content/teasers",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                     }
                 }
             }

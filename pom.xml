@@ -23,15 +23,25 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.2.3-SNAPSHOT</version>
+        <version>2.3.1-SNAPSHOT</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.reactor</artifactId>
     <packaging>pom</packaging>
-    <version>2.2.3-SNAPSHOT</version>
+    <version>2.3.1-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Reactor</name>
+
+    <!-- ====================================================================== -->
+    <!-- S C M  D E F I N I T I O N                                             -->
+    <!-- ====================================================================== -->
+    <scm>
+        <connection>scm:git:https://github.com/adobe/aem-core-wcm-components.git</connection>
+        <developerConnection>scm:git:git@github.com:adobe/aem-core-wcm-components.git</developerConnection>
+        <url>https://github.com/adobe/aem-core-wcm-components.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <build>
         <plugins>
@@ -59,6 +69,7 @@
         <module>content</module>
         <module>config</module>
         <module>all</module>
+        <module>examples</module>
         <module>extension/contentfragment/bundle</module>
         <module>extension/contentfragment/content</module>
         <module>extension</module>

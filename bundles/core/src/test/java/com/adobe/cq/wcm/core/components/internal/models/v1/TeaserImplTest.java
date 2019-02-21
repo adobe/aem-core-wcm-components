@@ -68,6 +68,7 @@ public class TeaserImplTest {
     private static final String TEASER_6 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-6";
     private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
     private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
+    private static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
     private Logger teaserLogger;
 
     @ClassRule
@@ -173,6 +174,15 @@ public class TeaserImplTest {
 
         Teaser teaser = getTeaserUnderTest(TEASER_5, mockStyle);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser8"));
+    }
+
+    @Test
+    public void testTeaserWithoutImage() throws Exception {
+        Resource mockResource = mock(Resource.class);
+        Style mockStyle = new MockStyle(mockResource);
+
+        Teaser teaser = getTeaserUnderTest(TEASER_9, mockStyle);
+        Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser12"));
     }
 
     @Test

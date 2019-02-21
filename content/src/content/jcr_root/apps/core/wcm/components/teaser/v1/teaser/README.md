@@ -70,6 +70,7 @@ imageDelegate="core/wcm/components/image/v2/image"
 ```
 BLOCK cmp-teaser
     ELEMENT cmp-teaser__image
+    ELEMENT cmp-teaser__content
     ELEMENT cmp-teaser__title
     ELEMENT cmp-teaser__title-link
     ELEMENT cmp-teaser__description

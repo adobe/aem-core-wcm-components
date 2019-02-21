@@ -24,12 +24,12 @@ Separator component written in HTL.
 ## BEM Description
 ```
 BLOCK cmp-separator
-    ELEMENT cmp-separator__horizontalRule
+    ELEMENT cmp-separator__horizontal-rule
 ```
 
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
 * **Compatibility**: AEM 6.3
-* **Status**: development
+* **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_separator\_v1](https://www.adobe.com/go/aem_cmp_separator_v1)
