@@ -13,5 +13,49 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@charset "UTF-8";
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700|Source+Code+Pro');
+
+/* source-code-pro-regular */
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Source Code Pro'), local('SourceCodePro-Regular'),
+    url('../resources/vendor/source-code-pro/source-code-pro-v8-latin-regular.woff2') format('woff2'),
+    url('../resources/vendor/source-code-pro/source-code-pro-v8-latin-regular.woff') format('woff'),
+    url('../resources/vendor/source-code-pro/source-code-pro-v8-latin-regular.ttf') format('truetype'),
+    url('../resources/vendor/source-code-pro/source-code-pro-v8-latin-regular.svg#SourceCodePro') format('svg');
+}
+
+/* source-sans-pro-regular */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Source Sans Pro Regular'), local('SourceSansPro-Regular'),
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-regular.woff2') format('woff2'),
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-regular.woff') format('woff'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-regular.ttf') format('truetype'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-regular.svg#SourceSansPro') format('svg'); 
+}
+/* source-sans-pro-italic */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Source Sans Pro Italic'), local('SourceSansPro-Italic'),
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-italic.woff2') format('woff2'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-italic.woff') format('woff'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-italic.ttf') format('truetype'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-italic.svg#SourceSansPro') format('svg'); 
+}
+/* source-sans-pro-700 */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Source Sans Pro Bold'), local('SourceSansPro-Bold'),
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-700.woff2') format('woff2'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-700.woff') format('woff'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-700.ttf') format('truetype'), 
+    url('../resources/vendor/source-sans-pro/source-sans-pro-v11-latin-700.svg#SourceSansPro') format('svg'); 
+}

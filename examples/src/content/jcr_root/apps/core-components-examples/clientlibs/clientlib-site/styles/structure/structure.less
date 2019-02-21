@@ -85,10 +85,16 @@
 
     width: auto !important;
     min-width: 0;
-    margin: @cmp-examples-spacing-xl @cmp-examples-spacing-s !important;
+    margin: @cmp-examples-spacing-xl @cmp-examples-spacing-xs !important;
 
     .aem-GridColumn {
         padding: 0 @cmp-examples-spacing-xs;
+    }
+}
+
+@media @cmp-examples-screen-s-min {
+    .cmp-examples-structure__main {
+        margin: @cmp-examples-spacing-xl @cmp-examples-spacing-s !important;
     }
 }
 

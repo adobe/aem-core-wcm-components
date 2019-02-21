@@ -9,7 +9,7 @@
         jcr:description="Add social sharing links to a page"
         jcr:primaryType="cq:PageContent"
         jcr:title="Social Sharing"
-        sling:resourceType="core/wcm/components/page/v2/page"
+        sling:resourceType="core-components-examples/components/page"
         socialMedia="[facebook,pinterest]">
         <root
             jcr:primaryType="nt:unstructured"

@@ -114,7 +114,7 @@
                 <extrasmall
                     jcr:primaryType="nt:unstructured"
                     title="Extra Small"
-                    width="{Long}304"/>
+                    width="{Long}480"/>
                 <small
                     jcr:primaryType="nt:unstructured"
                     title="Small"

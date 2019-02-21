@@ -62,6 +62,7 @@
 
 .cmp-examples-demo__info {
     position: relative;
+    display: none;
 
     .cmp-tabs__tablist {
         margin: 0;
@@ -81,6 +82,10 @@
         outline: none;
 
         transition: ~'border-color @{cmp-examples-animation-duration-4} ease-in';
+    }
+
+    @media @cmp-examples-screen-s-min {
+        display: block;
     }
 }
 

@@ -9,7 +9,7 @@
         jcr:description="Display a rich text paragraph on a page"
         jcr:primaryType="cq:PageContent"
         jcr:title="Text"
-        sling:resourceType="core/wcm/components/page/v2/page">
+        sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
