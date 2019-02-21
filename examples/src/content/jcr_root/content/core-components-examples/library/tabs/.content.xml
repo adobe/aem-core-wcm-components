@@ -9,7 +9,7 @@
         jcr:description="Organise content into switchable panels"
         jcr:primaryType="cq:PageContent"
         jcr:title="Tabs"
-        sling:resourceType="core/wcm/components/page/v2/page">
+        sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">

@@ -9,7 +9,7 @@
         jcr:description="Group an image, title, description and link them"
         jcr:primaryType="cq:PageContent"
         jcr:title="Teaser"
-        sling:resourceType="core/wcm/components/page/v2/page">
+        sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">

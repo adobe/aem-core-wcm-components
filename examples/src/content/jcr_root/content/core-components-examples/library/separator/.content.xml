@@ -10,7 +10,7 @@
         jcr:primaryType="cq:PageContent"
         jcr:title="Separator"
         jcr:uuid="f1a9194c-4180-44c9-8aa7-da074d19f587"
-        sling:resourceType="core/wcm/components/page/v2/page">
+        sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
