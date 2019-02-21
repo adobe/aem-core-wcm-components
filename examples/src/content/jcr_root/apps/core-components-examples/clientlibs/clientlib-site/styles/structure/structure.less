@@ -14,20 +14,26 @@
  *  limitations under the License.
  */
 
-@cmp-examples-structure-header-height-s: 64*@px;
-@cmp-examples-structure-header-height-m: 118*@px;
+@cmp-examples-structure-header-height: 48*@px;
+@cmp-examples-structure-header-height-l: 118*@px;
 
-@cmp-examples-structure-aside-width: 280*@px;
+@cmp-examples-structure-main-grid-gap-s: @cmp-examples-spacing-4;
+@cmp-examples-structure-main-grid-gap-m: @cmp-examples-spacing-6;
+@cmp-examples-structure-main-grid-gap-l: @cmp-examples-spacing-7;
+
+@cmp-examples-structure-aside-content-width: 200*@px;
+@cmp-examples-structure-aside-width: @cmp-examples-structure-aside-content-width + (2 * @cmp-examples-spacing-5);
+@cmp-examples-structure-aside-width-l: @cmp-examples-structure-aside-content-width + (2 * @cmp-examples-spacing-8);
 
 .cmp-examples-structure {
     > .aem-Grid {
         .display-grid();
         width: 100%;
-        max-width: 1280px;
+        max-width: @cmp-examples-breakpoint-l;
         margin: 0 auto;
         grid-template-areas: 'header' 'main';
         .grid-template-columns(1fr);
-        .grid-template-rows(@cmp-examples-structure-header-height-s 1fr);
+        .grid-template-rows(@cmp-examples-structure-header-height 1fr);
     }
 }
 
@@ -42,11 +48,12 @@
     z-index: @cmp-examples-z-index-fixed;
 
     width: 100vw;
-    height: @cmp-examples-structure-header-height-s;
+    height: @cmp-examples-structure-header-height;
     margin: 0;
-    padding: 10*@px @cmp-examples-spacing-s;
+    border-bottom: 1*@px solid @cmp-examples-color-gray-300;
+    padding: @cmp-examples-spacing-1 @cmp-examples-spacing-2;
 
-    background-color: rgba(245,245,245,.9);
+    background-color: @cmp-examples-color-background;
 }
 
 .cmp-examples-structure__aside {
@@ -59,7 +66,7 @@
 
     display: block;
     width: @cmp-examples-structure-aside-width !important;
-    padding: @cmp-examples-structure-header-height-m @cmp-examples-spacing-l 0;
+    padding: @cmp-examples-structure-header-height-l @cmp-examples-spacing-5 0;
 
     background-color: @cmp-examples-color-white;
 
@@ -73,7 +80,7 @@
     > .aem-Grid {
         height: 100%;
         overflow-y: auto;
-        width: ~"calc(100% + 32px)";
+        width: ~"calc(100% + @{cmp-examples-spacing-5})";
     }
 }
 
@@ -85,33 +92,55 @@
 
     width: auto !important;
     min-width: 0;
-    margin: @cmp-examples-spacing-xl @cmp-examples-spacing-xs !important;
+    margin: @cmp-examples-spacing-8 0 !important;
+    padding: 0 (@cmp-examples-structure-main-grid-gap-s / 2);
 
     .aem-GridColumn {
-        padding: 0 @cmp-examples-spacing-xs;
+        padding: 0 (@cmp-examples-structure-main-grid-gap-s / 2);
     }
 }
 
 @media @cmp-examples-screen-s-min {
-    .cmp-examples-structure__main {
-        margin: @cmp-examples-spacing-xl @cmp-examples-spacing-s !important;
+    .cmp-examples-structure__aside {
+        width: @cmp-examples-structure-aside-width-l !important;
+        padding: @cmp-examples-structure-header-height-l @cmp-examples-spacing-8 0;
+        .transform(translateX(-@cmp-examples-structure-aside-width-l));
+
+        &--open {
+            .transform(translateX(0));
+        }
+
+        > .aem-Grid {
+            width: ~"calc(100% + @{cmp-examples-spacing-8})";
+        }
     }
 }
 
 @media @cmp-examples-screen-m-min {
+    .cmp-examples-structure__main {
+        margin: @cmp-examples-spacing-8 (@cmp-examples-structure-main-grid-gap-m / 2) !important;
+
+        .aem-GridColumn {
+            padding: 0 (@cmp-examples-structure-main-grid-gap-m / 2);
+        }
+    }
+}
+
+@media @cmp-examples-screen-l-min {
     .cmp-examples-structure {
         > .aem-Grid {
             grid-template-areas: 'header header' 'aside main';
-            .grid-template-columns(@cmp-examples-structure-aside-width 1fr);
-            .grid-template-rows(@cmp-examples-structure-header-height-m 1fr);
+            .grid-template-columns(@cmp-examples-structure-aside-width-l 1fr);
+            .grid-template-rows(@cmp-examples-spacing-9 1fr);
         }
     }
 
     .cmp-examples-structure__header {
         left: auto;
 
-        height: @cmp-examples-structure-header-height-m;
-        padding: @cmp-examples-spacing-xl @cmp-examples-spacing-l;
+        height: @cmp-examples-structure-header-height-l;
+        border-bottom: 0;
+        padding: @cmp-examples-spacing-8;
 
         background: transparent;
 
@@ -123,12 +152,12 @@
         -ms-grid-column: 2;
         -ms-grid-column-span: 1;
 
-        margin: 0 @cmp-examples-spacing-l @cmp-examples-spacing-xl @cmp-examples-spacing-s !important;
+        margin: 0 @cmp-examples-spacing-7 @cmp-examples-spacing-8 @cmp-examples-spacing-4 !important;
     }
 
     .cmp-examples-structure__aside,
     .cmp-examples-structure__aside--open {
-        top: @cmp-examples-structure-header-height-m;
+        top: @cmp-examples-structure-header-height-l;
         left: auto;
 
         -ms-grid-row: 2;
@@ -137,14 +166,20 @@
         grid-area: aside;
 
         display: block;
-        width: @cmp-examples-structure-aside-width !important;
+        width: @cmp-examples-structure-aside-width-l !important;
         padding-top: 0;
 
-        background-color: @cmp-examples-color-background;
-
         // prevents transition flash when resizing window across breakpoints
-        margin-left: @cmp-examples-structure-aside-width;
-        .transform(translateX(-@cmp-examples-structure-aside-width));
+        margin-left: @cmp-examples-structure-aside-width-l;
+        .transform(translateX(-@cmp-examples-structure-aside-width-l));
         transition: none;
+    }
+}
+
+@media @cmp-examples-screen-xl-min {
+    .cmp-examples-structure__main {
+        .aem-GridColumn {
+            padding: 0 (@cmp-examples-structure-main-grid-gap-l / 2);
+        }
     }
 }

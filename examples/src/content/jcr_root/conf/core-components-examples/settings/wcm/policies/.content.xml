@@ -13,7 +13,7 @@
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Root"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples,group:.core-wcm]">
+                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples,group:.core-wcm,group:.core-wcm-form]">
                         <cq:authoring jcr:primaryType="nt:unstructured">
                             <assetToComponentMapping jcr:primaryType="nt:unstructured">
                                 <mapping_1544531934044
@@ -35,7 +35,7 @@
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Structure"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples,group:.core-wcm]">
+                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples,group:.core-wcm,group:.core-wcm-form]">
                         <jcr:content jcr:primaryType="nt:unstructured"/>
                         <cq:authoring jcr:primaryType="nt:unstructured">
                             <assetToComponentMapping jcr:primaryType="nt:unstructured">
@@ -259,6 +259,11 @@
                                                 cq:styleId="1544762734201"
                                                 cq:styleLabel="Hero"
                                                 jcr:primaryType="nt:unstructured"/>
+                                            <item3
+                                                cq:styleClasses="cmp-examples-text--no-results"
+                                                cq:styleId="1550360114923"
+                                                cq:styleLabel="No Results"
+                                                jcr:primaryType="nt:unstructured"/>
                                         </cq:styles>
                                     </item0>
                                 </cq:styleGroups>
@@ -298,6 +303,60 @@
                         </teaser>
                     </v1>
                 </teaser>
+                <form jcr:primaryType="nt:unstructured">
+                    <text jcr:primaryType="nt:unstructured">
+                        <v2 jcr:primaryType="nt:unstructured">
+                            <text jcr:primaryType="nt:unstructured">
+                                <policy_1550289110975
+                                    jcr:lastModified="{Date}2019-02-16T04:53:01.777+01:00"
+                                    jcr:lastModifiedBy="admin"
+                                    jcr:primaryType="nt:unstructured"
+                                    jcr:title="Core Components Examples - Form Text"
+                                    sling:resourceType="wcm/core/components/policy/policy">
+                                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                                        <item0 jcr:primaryType="nt:unstructured">
+                                            <cq:styles jcr:primaryType="nt:unstructured">
+                                                <item0
+                                                    cq:styleClasses="cmp-examples-form-text--search"
+                                                    cq:styleId="1550289148555"
+                                                    cq:styleLabel="Search"
+                                                    jcr:primaryType="nt:unstructured"/>
+                                            </cq:styles>
+                                        </item0>
+                                    </cq:styleGroups>
+                                </policy_1550289110975>
+                            </text>
+                        </v2>
+                    </text>
+                </form>
+                <separator jcr:primaryType="nt:unstructured">
+                    <v1 jcr:primaryType="nt:unstructured">
+                        <separator jcr:primaryType="nt:unstructured">
+                            <policy_1550355088949
+                                jcr:lastModified="{Date}2019-02-16T23:15:25.965+01:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Core Components Examples - Separator"
+                                sling:resourceType="wcm/core/components/policy/policy">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                                <cq:styleGroups jcr:primaryType="nt:unstructured">
+                                    <item0
+                                        cq:styleGroupLabel="Variant"
+                                        jcr:primaryType="nt:unstructured">
+                                        <cq:styles jcr:primaryType="nt:unstructured">
+                                            <item0
+                                                cq:styleClasses="cmp-examples-separator--thin"
+                                                cq:styleId="1550355113852"
+                                                cq:styleLabel="Thin"
+                                                jcr:primaryType="nt:unstructured"/>
+                                        </cq:styles>
+                                    </item0>
+                                </cq:styleGroups>
+                            </policy_1550355088949>
+                        </separator>
+                    </v1>
+                </separator>
             </components>
             <extension jcr:primaryType="nt:unstructured">
                 <components jcr:primaryType="nt:unstructured">

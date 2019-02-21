@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/atom]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Display a single image asset"
+        jcr:description="Display an image asset"
         jcr:primaryType="cq:PageContent"
         jcr:title="Image"
         sling:resourceType="core-components-examples/components/page">
@@ -116,9 +116,9 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/circle.jpg"
                             isDecorative="false"
-                            titleValueFromDAM="true"/>
+                            titleValueFromDAM="true"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -178,7 +178,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
@@ -240,7 +240,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/mini.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
                             isDecorative="false"
                             linkURL="/content/core-components-examples/library/image"
                             titleValueFromDAM="true"/>
@@ -290,8 +290,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:45:17.107+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo"
-                    fullWidth="{Boolean}true">
+                    sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
@@ -304,7 +303,7 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/bicycle.svg"
+                            fileReference="/content/dam/core-components-examples/library/components/component.svg"
                             isDecorative="false"
                             titleValueFromDAM="true"/>
                     </component>
@@ -328,6 +327,14 @@
                             reference="../../component"/>
                     </info>
                 </demo>
+                <separator
+                    cq:styleIds="[1550355113852]"
+                    jcr:created="{Date}2019-02-16T22:26:21.309+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-02-16T22:26:21.309+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/separator/v1/separator"/>
             </responsivegrid>
         </root>
     </jcr:content>
