@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:tiff="http://ns.adobe.com/tiff/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="45c6ee92-90e1-4af2-af69-b6dcbc7daeb7">
+    <jcr:content
+        cq:name="snowy-mountain-glacier.jpg"
+        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2019-02-20T15:21:37.135+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Snowy mountain glacier">
+        <metadata
+            dam:Bitsperpixel="{Long}24"
+            dam:extracted="{Date}2019-02-20T15:21:35.627+01:00"
+            dam:Fileformat="JPEG"
+            dam:MIMEtype="image/jpeg"
+            dam:Numberofimages="{Long}1"
+            dam:Numberoftextualcomments="{Long}0"
+            dam:Physicalheightindpi="{Long}72"
+            dam:Physicalheightininches="{Decimal}7.06944465637207"
+            dam:Physicalwidthindpi="{Long}72"
+            dam:Physicalwidthininches="{Decimal}11.80555534362793"
+            dam:Progressive="no"
+            dam:sha1="84a21f85881cade7ec94fb4573633f462f705f61"
+            dam:size="{Long}505749"
+            dc:description="Snowy mountain glacier"
+            dc:format="image/jpeg"
+            dc:modified="{Date}2019-02-19T22:05:28.978+01:00"
+            dc:title="Snowy mountain glacier"
+            jcr:lastModified="{Date}2019-02-20T15:21:36.865+01:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"
+            jcr:title="Snowy mountain glacier"
+            tiff:ImageLength="{Long}509"
+            tiff:ImageWidth="{Long}850"
+            tiff:ResolutionUnit="{Long}1"
+            tiff:XResolution="1/1"
+            tiff:YResolution="1/1">
+            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
+        </metadata>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -26,8 +26,8 @@
         font-size: @cmp-examples-font-size-h1;
         font-weight: @cmp-examples-font-weight-bold;
         line-height: @cmp-examples-line-height-heading;
-        margin: 0 0 @cmp-examples-spacing-xl 0;
-        padding-right: @cmp-examples-text-page-title-tag-width + 12*@px;
+        margin: 0 0 @cmp-examples-spacing-8 0;
+        padding-right: @cmp-examples-text-page-title-tag-width + @cmp-examples-spacing-3;
 
         > * {
             margin: 0;
@@ -46,7 +46,7 @@
         sub {
             bottom: 0;
 
-            margin-left: 16*@px;
+            margin-left: @cmp-examples-spacing-4;
 
             font-size: @cmp-examples-font-size;
             font-weight: @cmp-examples-font-weight-regular;
@@ -67,29 +67,30 @@
 
             width: @cmp-examples-text-page-title-tag-width;
             height: @cmp-examples-text-page-title-tag-height;
-            border: @cmp-examples-text-page-title-tag-border-width solid rgb(149, 149, 149);
+            border: @cmp-examples-text-page-title-tag-border-width solid @cmp-examples-color-gray-600;
             border-radius: @cmp-examples-border-radius;
             line-height: @cmp-examples-text-page-title-tag-line-height;
 
-            font-size: 12*@px;
+            font-size: @cmp-examples-font-size-xs;
             font-weight: @cmp-examples-font-weight-regular;
             text-align: center;
-            color: rgb(119, 119, 119);
+            color: @cmp-examples-color-gray-700;
 
             &:hover,
-            &:active {
-                border-color: rgb(119, 119, 119);
+            &:active,
+            &:focus {
+                border-color: @cmp-examples-color-gray-700;
                 text-decoration: none;
             }
         }
     }
 }
 
-// hero variant, e.g. content description, page top
+// hero variant (content description, page top)
 .cmp-examples-text--hero {
     .cmp-text {
-        font-size: 24*@px;
+        font-size: 18*@px;
         line-height: @cmp-examples-line-height;
-        margin-bottom: @cmp-examples-spacing-xxl;
+        margin-bottom: @cmp-examples-spacing-8;
     }
 }

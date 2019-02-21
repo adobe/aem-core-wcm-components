@@ -14,22 +14,42 @@
  *  limitations under the License.
  */
 
+@cmp-examples-title-heading2-border-height: 4*@px;
+
 .cmp-examples-title--heading1 {
     .cmp-title__text {
         font-size: @cmp-examples-font-size-h1;
         font-weight: @cmp-examples-font-weight-bold;
         line-height: @cmp-examples-line-height-heading;
-        margin: 0 0 @cmp-examples-spacing-xl 0;
+        margin: 0 0 @cmp-examples-spacing-8 0;
     }
 }
 
 .cmp-examples-title--heading2 {
+    .cmp-title {
+        position: relative;
+        margin: 60*@px 0 (@cmp-examples-spacing-8 + @cmp-examples-title-heading2-border-height) 0;
+        padding-bottom: @cmp-examples-spacing-3;
+
+        &:after {
+            content: " ";
+            position: absolute;
+            left: 0;
+
+            width: 100%;
+            height: @cmp-examples-title-heading2-border-height;
+            bottom: -@cmp-examples-title-heading2-border-height;
+            border-radius: @cmp-examples-title-heading2-border-height / 2;
+
+            background-color: @cmp-examples-color-gray-300;
+        }
+    }
+
     .cmp-title__text {
+        margin: 0;
         font-size: @cmp-examples-font-size-h2;
         font-weight: @cmp-examples-font-weight-bold;
-        line-height: @cmp-examples-line-height;
-        border-bottom: 2*@px solid @cmp-examples-color-text;
-        margin: 60*@px 0 @cmp-examples-spacing-xl 0;
+        line-height: @cmp-examples-line-height-heading;
     }
 }
 
@@ -38,6 +58,6 @@
         font-size: @cmp-examples-font-size-h3;
         font-weight: @cmp-examples-font-weight-bold;
         line-height: @cmp-examples-line-height-heading;
-        margin: 0 0 @cmp-examples-spacing-s 0;
+        margin: 0 0 @cmp-examples-spacing-4 0;
     }
 }

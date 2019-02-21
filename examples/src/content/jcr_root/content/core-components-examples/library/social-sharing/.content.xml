@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/social]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Add social sharing links to a page"
+        jcr:description="Add social sharing links"
         jcr:primaryType="cq:PageContent"
         jcr:title="Social Sharing"
         sling:resourceType="core-components-examples/components/page"
@@ -136,6 +136,14 @@
                             reference="../../component"/>
                     </info>
                 </demo>
+                <separator
+                    cq:styleIds="[1550355113852]"
+                    jcr:created="{Date}2019-02-16T22:26:21.309+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-02-16T22:26:21.309+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/separator/v1/separator"/>
             </responsivegrid>
         </root>
     </jcr:content>
