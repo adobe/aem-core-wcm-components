@@ -15,7 +15,6 @@
                     "separator-1"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/separator/v1/separator"
-
                     }
                 }
             }
