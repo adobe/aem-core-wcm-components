@@ -20,7 +20,8 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Breadcrumb"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="https://www.adobe.com/go/aem_cmp_breadcrumb_v2">
+    helpPath="https://www.adobe.com/go/aem_cmp_breadcrumb_v2"
+    trackingFeature="core-component:breadcrumb:v2">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">

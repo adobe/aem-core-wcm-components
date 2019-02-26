@@ -4,7 +4,8 @@
     jcr:title="Form Text field"
     sling:resourceType="cq/gui/components/authoring/dialog"
     helpPath="https://www.adobe.com/go/aem_cmp_form_text_v1"
-    extraClientlibs="[core.wcm.components.form.text.v1.editor]">
+    extraClientlibs="[core.wcm.components.form.text.v1.editor]"
+    trackingFeature="core-component:form:text:v1">
     <content
         granite:class="cmp-form-textfield-editDialog"
         jcr:primaryType="nt:unstructured"

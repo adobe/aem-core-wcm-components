@@ -3,7 +3,8 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Title"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="https://www.adobe.com/go/aem_cmp_title_v1">
+    helpPath="https://www.adobe.com/go/aem_cmp_title_v1"
+    trackingFeature="core-component:title:v1">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">

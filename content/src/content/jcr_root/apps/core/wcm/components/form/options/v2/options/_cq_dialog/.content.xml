@@ -21,7 +21,8 @@
     jcr:title="Form Options Field"
     sling:resourceType="cq/gui/components/authoring/dialog"
     extraClientlibs="[core.wcm.components.form.options.v2.editor]"
-    helpPath="https://www.adobe.com/go/aem_cmp_form_options_v2">
+    helpPath="https://www.adobe.com/go/aem_cmp_form_options_v2"
+    trackingFeature="core-component:form:options:v2">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
