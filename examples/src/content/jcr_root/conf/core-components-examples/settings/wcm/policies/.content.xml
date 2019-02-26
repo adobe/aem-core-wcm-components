@@ -362,7 +362,29 @@
                 <components jcr:primaryType="nt:unstructured">
                     <contentfragment jcr:primaryType="nt:unstructured">
                         <v1 jcr:primaryType="nt:unstructured">
-                            <contentfragment jcr:primaryType="nt:unstructured"/>
+                            <contentfragment jcr:primaryType="nt:unstructured">
+                                <policy_1551205618021
+                                    jcr:lastModified="{Date}2019-02-26T19:27:25.521+01:00"
+                                    jcr:lastModifiedBy="admin"
+                                    jcr:primaryType="nt:unstructured"
+                                    jcr:title="Core Components Examples - Content Fragment"
+                                    sling:resourceType="wcm/core/components/policy/policy">
+                                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                                        <item0
+                                            cq:styleGroupLabel="Variant"
+                                            jcr:primaryType="nt:unstructured">
+                                            <cq:styles jcr:primaryType="nt:unstructured">
+                                                <item0
+                                                    cq:styleClasses="cmp-examples-contentfragment--footer"
+                                                    cq:styleId="1551205633835"
+                                                    cq:styleLabel="Footer"
+                                                    jcr:primaryType="nt:unstructured"/>
+                                            </cq:styles>
+                                        </item0>
+                                    </cq:styleGroups>
+                                </policy_1551205618021>
+                            </contentfragment>
                         </v1>
                     </contentfragment>
                 </components>
