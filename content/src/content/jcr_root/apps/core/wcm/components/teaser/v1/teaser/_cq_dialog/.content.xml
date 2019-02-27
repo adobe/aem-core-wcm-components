@@ -5,7 +5,7 @@
     sling:resourceType="cq/gui/components/authoring/dialog"
     extraClientlibs="[core.wcm.components.teaser.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_teaser_v1"
-    trackingFeature="core-component:teaser:v1">
+    trackingFeature="core-components:teaser:v1">
     <content
         granite:class="cmp-teaser__editor"
         jcr:primaryType="nt:unstructured"

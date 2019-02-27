@@ -5,7 +5,7 @@
     sling:resourceType="cq/gui/components/authoring/dialog"
     extraClientlibs="[core.wcm.components.title.v2.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_title_v2"
-    trackingFeature="core-component:title:v2">
+    trackingFeature="core-components:title:v2">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">

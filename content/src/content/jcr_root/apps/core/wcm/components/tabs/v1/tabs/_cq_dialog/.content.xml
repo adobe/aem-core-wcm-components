@@ -22,7 +22,7 @@
     sling:resourceType="cq/gui/components/authoring/dialog"
     extraClientlibs="[core.wcm.components.commons.editor.dialog.childreneditor.v1,core.wcm.components.tabs.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_tab_v1"
-    trackingFeature="core-component:tabs:v1">
+    trackingFeature="core-components:tabs:v1">
     <content
         granite:class="cmp-tabs__editor"
         jcr:primaryType="nt:unstructured"

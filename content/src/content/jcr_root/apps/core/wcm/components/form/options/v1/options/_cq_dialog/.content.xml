@@ -5,7 +5,7 @@
     sling:resourceType="cq/gui/components/authoring/dialog"
     helpPath="https://www.adobe.com/go/aem_cmp_form_options_v1"
     extraClientlibs="[core.wcm.components.form.options.v1.editor]"
-    trackingFeature="core-component:form:options:v1">
+    trackingFeature="core-components:form-options:v1">
     <content
         granite:class="cmp-options--editor-v1"
         jcr:primaryType="nt:unstructured"

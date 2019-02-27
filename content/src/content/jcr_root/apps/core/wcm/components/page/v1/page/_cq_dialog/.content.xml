@@ -6,7 +6,7 @@
     helpPath="https://www.adobe.com/go/aem_cmp_page_v1"
     extraClientlibs="[cq.common.wcm,core.wcm.components.page.v1.editor,cq.wcm.msm.properties,granite.contexthub.configuration,cq.siteadmin.admin.properties]"
     mode="edit"
-    trackingFeature="core-component:page:v1">
+    trackingFeature="core-components:page:v1">
     <content
         granite:class="cq-dialog-content-page"
         jcr:primaryType="nt:unstructured"
