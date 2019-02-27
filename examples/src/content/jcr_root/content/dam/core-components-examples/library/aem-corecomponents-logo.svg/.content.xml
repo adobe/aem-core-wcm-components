@@ -13,6 +13,7 @@
             dam:sha1="7d16c64c03a8f051d238f2e4e26edef54fb4a636"
             dam:size="{Long}18575"
             dc:format="image/svg+xml"
+            dc:title="Component Library"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
