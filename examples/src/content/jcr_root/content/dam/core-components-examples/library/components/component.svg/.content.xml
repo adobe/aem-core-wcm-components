@@ -14,6 +14,7 @@
             dam:sha1="9522caa0b614de169475ad18bf2da6aa6041225e"
             dam:size="{Long}6391"
             dc:format="image/svg+xml"
+            dc:title="Component"
             dc:modified="{Date}2019-02-18T22:43:26.351+01:00"
             jcr:lastModified="{Date}2019-02-20T15:56:04.826+01:00"
             jcr:lastModifiedBy="admin"

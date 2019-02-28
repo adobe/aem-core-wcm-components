@@ -13,6 +13,7 @@
             dam:sha1="2b5873e2480fbbf46e712ee23e043546603d8238"
             dam:size="{Long}753"
             dc:format="image/svg+xml"
+            dc:title="GitHub"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
