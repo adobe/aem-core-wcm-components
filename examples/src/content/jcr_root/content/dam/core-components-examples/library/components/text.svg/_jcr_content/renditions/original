@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+    <g id="Group_8" transform="matrix(1,0,0,1,4,-1675)">
+        <g id="Rectangle_25" transform="matrix(1,0,0,1,-4,1675)">
+            <rect x="0" y="0" width="180" height="180" style="fill:none;"/>
+        </g>
+        <g id="Rectangle_36" transform="matrix(1,0,0,1,25,1716.5)">
+            <path d="M122,2C122,0.896 121.104,0 120,0L2,0C0.896,0 0,0.896 0,2L0,85C0,86.104 0.896,87 2,87L120,87C121.104,87 122,86.104 122,85L122,2Z" style="fill:none;stroke:rgb(179,179,179);stroke-width:3px;"/>
+        </g>
+        <g id="Line_24" transform="matrix(1,0,0,1,44.5,1763.66)">
+            <path d="M0,0L82,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+        <g id="Line_25" transform="matrix(1,0,0,1,44.5,1770.11)">
+            <path d="M0,0L75,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+        <g id="Line_26" transform="matrix(1,0,0,1,44.5,1783)">
+            <path d="M0,0L75,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+        <g id="Line_27" transform="matrix(1,0,0,1,44.5,1776.55)">
+            <path d="M0,0L82,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+        <g id="Line_28" transform="matrix(1,0,0,1,44.5,1737.66)">
+            <path d="M0,0L82,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+        <g id="Line_29" transform="matrix(1,0,0,1,44.5,1744.11)">
+            <path d="M0,0L75,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+        <g id="Line_30" transform="matrix(1,0,0,1,44.5,1757)">
+            <path d="M0,0L75,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+        <g id="Line_31" transform="matrix(1,0,0,1,44.5,1750.55)">
+            <path d="M0,0L82,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
+        </g>
+    </g>
+</svg>
