@@ -86,10 +86,6 @@
 
 .cmp-examples-structure__main,
 .cmp-examples-structure__footer {
-    -ms-grid-row: 2;
-    -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
-
     width: auto !important;
     min-width: 0;
     margin: @cmp-examples-spacing-8 0 !important;
@@ -101,10 +97,16 @@
 }
 
 .cmp-examples-structure__main {
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
     grid-area: main;
 }
 
 .cmp-examples-structure__footer {
+    -ms-grid-row: 3;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
     grid-area: footer;
 
     font-size: @cmp-examples-font-size-s;
@@ -180,17 +182,13 @@
     }
 
     .cmp-examples-structure__main {
-        -ms-grid-row: 2;
         -ms-grid-column: 2;
-        -ms-grid-column-span: 1;
 
         margin: 0 @cmp-examples-spacing-7 @cmp-examples-spacing-8 @cmp-examples-spacing-4 !important;
     }
 
     .cmp-examples-structure__footer {
-        -ms-grid-row: 2;
         -ms-grid-column: 2;
-        -ms-grid-column-span: 1;
 
         margin: 0 @cmp-examples-spacing-7 @cmp-examples-spacing-8 @cmp-examples-spacing-4 !important;
     }
