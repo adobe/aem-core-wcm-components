@@ -61,18 +61,6 @@
                                 </v1>
                             </separator>
                         </components>
-                        <extension jcr:primaryType="nt:unstructured">
-                            <components jcr:primaryType="nt:unstructured">
-                                <contentfragment jcr:primaryType="nt:unstructured">
-                                    <v1 jcr:primaryType="nt:unstructured">
-                                        <contentfragment
-                                            cq:policy="core/wcm/extension/components/contentfragment/v1/contentfragment/policy_1551205618021"
-                                            jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="wcm/core/components/policies/mapping"/>
-                                    </v1>
-                                </contentfragment>
-                            </components>
-                        </extension>
                     </wcm>
                 </core>
             </responsivegrid>
@@ -84,6 +72,15 @@
                 cq:policy="wcm/foundation/components/responsivegrid/policy_1545309074617"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/core/components/policies/mapping"/>
+            <responsivegrid_2176569853
+                cq:policy="wcm/foundation/components/responsivegrid/policy_1545309074617"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/core/components/policies/mapping">
+                <separator
+                    cq:policy="core/wcm/components/separator/v1/separator/policy_1550355088949"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="wcm/core/components/policies/mapping"/>
+            </responsivegrid_2176569853>
         </root>
     </jcr:content>
 </jcr:root>

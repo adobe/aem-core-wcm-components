@@ -311,30 +311,6 @@
                             reference="../../component"/>
                     </info>
                 </demo_1934630368>
-                <separator
-                    cq:styleIds="[1550355113852]"
-                    jcr:created="{Date}2019-02-16T22:26:21.309+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-16T22:26:21.309+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/separator/v1/separator"/>
-                <contentfragment
-                    cq:styleIds="[1551205633835]"
-                    jcr:created="{Date}2019-02-26T19:25:48.859+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-26T19:26:10.881+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/extension/components/contentfragment/v1/contentfragment"
-                    displayMode="singleText"
-                    elementNames="main"
-                    fragmentPath="/content/dam/core-components-examples/library/core-components-version"
-                    paragraphScope="all"
-                    variationName="master">
-                    <par1
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="wcm/foundation/components/responsivegrid"/>
                 </contentfragment>
             </responsivegrid>
         </root>
