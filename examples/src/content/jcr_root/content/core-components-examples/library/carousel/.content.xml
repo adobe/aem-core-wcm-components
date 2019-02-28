@@ -52,6 +52,22 @@
                     linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel"
                     textIsRich="true"
                     titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
+                    jcr:createdBy="admin"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_carousel_v1"
+                    textIsRich="true"
+                    titleFromPage="false"/>
                 <title_865328580
                     cq:styleIds="[1544759664489]"
                     jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
