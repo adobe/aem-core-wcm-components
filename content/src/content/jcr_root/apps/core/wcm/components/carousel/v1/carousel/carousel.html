@@ -29,27 +29,27 @@
         <div class="cmp-carousel__actions">
             <button role="button"
                     class="cmp-carousel__action cmp-carousel__action--previous"
-                    data-cmp-hook-carousel="previous">
+                    data-cmp-hook-carousel="previous" aria-label="${'Previous' @ i18n}">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Previous' @ i18n}</span>
             </button>
             <button role="button"
                     class="cmp-carousel__action cmp-carousel__action--next"
-                    data-cmp-hook-carousel="next">
+                    data-cmp-hook-carousel="next" aria-label="${'Next' @ i18n}">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Next' @ i18n}</span>
             </button>
             <button data-sly-test="${carousel.autoplay}"
                     role="button"
                     class="cmp-carousel__action cmp-carousel__action--pause"
-                    data-cmp-hook-carousel="pause">
+                    data-cmp-hook-carousel="pause" aria-label="${'Pause' @ i18n}">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Pause' @ i18n}</span>
             </button>
             <button data-sly-test="${carousel.autoplay}"
                     role="button"
                     class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
-                    data-cmp-hook-carousel="play">
+                    data-cmp-hook-carousel="play" aria-label="${'Play' @ i18n}">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
             </button>
