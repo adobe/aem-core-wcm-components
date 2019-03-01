@@ -88,6 +88,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     public static final int DEFAULT_JPEG_QUALITY = 82; // similar to what is the default in com.day.image.Layer#write(...)
+    public static final boolean DEFAULT_JPEG_FORCE_QUALITY = false;
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
     private static final String DEFAULT_MIME = "image/jpeg";
     private static final String MIME_TYPE_SVG = "image/svg+xml";
@@ -208,8 +209,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
             Double quality = null;
             Integer jpegQualityInPercentage = null;
+            Boolean forceQuality = false;
             if (selectors.length > 2) {
                 String qualitySelector = selectors[selectors.length - 2];
+                if (StringUtils.startsWith(qualitySelector, "f")) {
+                    forceQuality = true;
+                    qualitySelector = StringUtils.substring(qualitySelector, 1);
+                }
                 try {
                     jpegQualityInPercentage = Integer.parseInt(qualitySelector);
                 } catch (NumberFormatException nfe) {
@@ -262,9 +268,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                         if (isRequestedWidthAllowed) {
                             String imageType = getImageType(requestPathInfo.getExtension());
                             if (imageComponent.source == Source.FILE) {
-                                transformAndStreamFile(response, componentProperties, resizeWidth, quality, imageComponent.imageResource, imageType, imageName);
+                                transformAndStreamFile(response, componentProperties, resizeWidth, quality, forceQuality, imageComponent
+                                        .imageResource, imageType, imageName);
                             } else if (imageComponent.source == Source.ASSET) {
-                                transformAndStreamAsset(response, componentProperties, resizeWidth, quality, asset, imageType, imageName);
+                                transformAndStreamAsset(response, componentProperties, resizeWidth, quality, forceQuality, asset,
+                                        imageType,
+                                        imageName);
                             }
                         } else {
                             LOGGER.error("The requested width ({}) is not allowed by the content policy.", width);
@@ -282,9 +291,12 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 LOGGER.debug("The image request contains no width information. Will resize the image to {}px.", defaultResizeWidth);
                 String imageType = getImageType(requestPathInfo.getExtension());
                 if (imageComponent.source == Source.FILE) {
-                    transformAndStreamFile(response, componentProperties, defaultResizeWidth, quality, imageComponent.imageResource, imageType, imageName);
+                    transformAndStreamFile(response, componentProperties, defaultResizeWidth, quality, forceQuality, imageComponent
+                                    .imageResource,
+                            imageType, imageName);
                 } else if (imageComponent.source == Source.ASSET) {
-                    transformAndStreamAsset(response, componentProperties, defaultResizeWidth, quality, asset, imageType, imageName);
+                    transformAndStreamAsset(response, componentProperties, defaultResizeWidth, quality, forceQuality, asset, imageType,
+                            imageName);
                 }
             }
         }
@@ -313,7 +325,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
-    private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double quality, Asset asset, String
+    private void transformAndStreamAsset(SlingHttpServletResponse response, ValueMap componentProperties, int resizeWidth, double
+            quality, boolean forceQuality, Asset asset, String
             imageType, String imageName) throws IOException {
         String extension = mimeTypeService.getExtension(imageType);
         if ("gif".equalsIgnoreCase(extension) || "svg".equalsIgnoreCase(extension)) {
@@ -394,12 +407,21 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (rendition != null) {
                     LOGGER.debug("Found rendition {} with a width equal to the resize width ({}px); rendering.", rendition.getPath(),
                             resizeWidth);
-                    stream(response, rendition.getStream(), imageType, imageName);
+                    if (forceQuality) {
+                        layer = new Layer(assetHandler.getImage(rendition));
+                        response.setContentType(imageType);
+                        LOGGER.debug("Rendering rendition {} with forced quality {}; rendering.", rendition.getPath(), quality);
+                        layer.write(imageType, quality, response.getOutputStream());
+                    } else {
+                        stream(response, rendition.getStream(), imageType, imageName);
+                    }
                 } else {
                     int resizeHeight = calculateResizeHeight(originalWidth, originalHeight, resizeWidth);
-                    if (resizeHeight > 0 && resizeHeight != originalHeight) {
+                    if (forceQuality || (resizeHeight > 0 && resizeHeight != originalHeight)) {
                         layer = new Layer(assetHandler.getImage(asset.getOriginal()));
-                        layer.resize(resizeWidth, resizeHeight);
+                        if (!forceQuality) {
+                            layer.resize(resizeWidth, resizeHeight);
+                        }
                         response.setContentType(imageType);
                         LOGGER.debug("Resizing asset {} to requested width of {}px; rendering.", asset.getPath(), resizeWidth);
                         layer.write(imageType, quality, response.getOutputStream());
@@ -419,7 +441,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     private void transformAndStreamFile(SlingHttpServletResponse response, ValueMap componentProperties, int
-            resizeWidth, double quality, Resource imageFile, String imageType, String imageName) throws
+            resizeWidth, double quality, boolean forcedQuality, Resource imageFile, String imageType, String imageName) throws
             IOException {
         InputStream is = null;
         try {
@@ -437,7 +459,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             boolean flipHorizontally = componentProperties.get(Image.PN_FLIP_HORIZONTAL, Boolean.FALSE);
             boolean flipVertically = componentProperties.get(Image.PN_FLIP_VERTICAL, Boolean.FALSE);
             if (is != null) {
-                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically) {
+                if (rotationAngle != 0 || rectangle != null || resizeWidth > 0 || flipHorizontally || flipVertically || forcedQuality) {
                     Layer layer = new Layer(is);
                     if (rectangle != null) {
                         layer.crop(rectangle);

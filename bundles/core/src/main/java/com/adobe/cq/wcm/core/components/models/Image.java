@@ -46,6 +46,13 @@ public interface Image extends ComponentExporter {
     String PN_DESIGN_JPEG_QUALITY = "jpegQuality";
 
     /**
+     * Name of the configuration policy property that will enforce the image quality for an image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    String PN_DESIGN_JPEG_FORCE_QUALITY = "jpegForceQuality";
+
+    /**
      * Name of the configuration policy property that will indicate if lazy loading should be disabled.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0

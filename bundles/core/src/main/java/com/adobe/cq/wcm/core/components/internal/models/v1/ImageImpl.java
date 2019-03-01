@@ -128,6 +128,7 @@ public class ImageImpl implements Image {
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
     protected int jpegQuality;
+    protected boolean jpegForceQuality;
     protected String imageName;
 
     public ImageImpl() {
@@ -200,6 +201,7 @@ public class ImageImpl implements Image {
             }
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
             jpegQuality = currentStyle.get(PN_DESIGN_JPEG_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_QUALITY);
+            jpegForceQuality = currentStyle.get(PN_DESIGN_JPEG_FORCE_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_FORCE_QUALITY);
             int index = 0;
             Template template = currentPage.getTemplate();
             if (template != null && resource.getPath().startsWith(template.getPath())) {
@@ -216,7 +218,7 @@ public class ImageImpl implements Image {
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = baseResourcePath + DOT +
-                        selector + DOT + jpegQuality + DOT + width + DOT + extension +
+                        selector + DOT + (jpegForceQuality ? "f" : "") + jpegQuality + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                         (lastModifiedDate > 0 ? "/" + lastModifiedDate +
                         (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
@@ -229,7 +231,7 @@ public class ImageImpl implements Image {
             }
             src = baseResourcePath + DOT + selector + DOT;
             if (smartSizes.length == 1) {
-                src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
+                src += (jpegForceQuality ? "f" : "") + jpegQuality + DOT + smartSizes[0] + DOT + extension;
             } else {
                 src += extension;
             }
