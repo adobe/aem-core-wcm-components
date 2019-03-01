@@ -22,7 +22,8 @@
     sling:resourceType="cq/gui/components/authoring/dialog"
     extraClientlibs="[cq.common.wcm,core.wcm.components.page.v2.editor,cq.wcm.msm.properties,granite.contexthub.configuration,cq.siteadmin.admin.properties]"
     helpPath="https://www.adobe.com/go/aem_cmp_page_v2"
-    mode="edit">
+    mode="edit"
+    trackingFeature="core-components:page:v2">
     <content
         granite:class="cq-dialog-content-page"
         jcr:primaryType="nt:unstructured"

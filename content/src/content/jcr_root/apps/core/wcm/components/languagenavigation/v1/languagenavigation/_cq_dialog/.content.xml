@@ -20,7 +20,8 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Language Navigation"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    helpPath="https://www.adobe.com/go/aem_cmp_languagenavigation_v1">
+    helpPath="https://www.adobe.com/go/aem_cmp_languagenavigation_v1"
+    trackingFeature="core-components:languagenavigation:v1">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">

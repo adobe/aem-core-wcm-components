@@ -6,7 +6,8 @@
     jcr:title="List"
     sling:resourceType="cq/gui/components/authoring/dialog"
     helpPath="https://www.adobe.com/go/aem_cmp_list_v1"
-    extraClientlibs="[core.wcm.components.list.v1.editor]">
+    extraClientlibs="[core.wcm.components.list.v1.editor]"
+    trackingFeature="core-components:list:v1">
     <content
         granite:class="cmp-list--editor"
         jcr:primaryType="nt:unstructured"
