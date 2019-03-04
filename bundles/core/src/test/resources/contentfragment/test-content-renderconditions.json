@@ -1,0 +1,14 @@
+{
+    "display-mode-single-text"            : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/components/contentfragment/v1/renderconditions/elementnames",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/structured-display-mode-single",
+        "displayMode"       : "singleText"
+    },
+    "display-mode-multi"             : {
+        "jcr:primaryType"   : "nt:unstructured",
+        "sling:resourceType": "core/wcm/components/contentfragment/v1/renderconditions/elementnames",
+        "componentPath"     : "/content/contentfragments/jcr:content/root/responsivegrid/structured-display-mode-single",
+        "displayMode"       : "multi"
+    }
+}
