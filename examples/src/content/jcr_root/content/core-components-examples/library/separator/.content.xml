@@ -142,5 +142,8 @@
                     sling:resourceType="core/wcm/components/separator/v1/separator"/>
             </responsivegrid>
         </root>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
     </jcr:content>
 </jcr:root>
