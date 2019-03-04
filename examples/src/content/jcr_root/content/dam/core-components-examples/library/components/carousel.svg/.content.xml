@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="ed518378-9daf-4d1d-ab6a-99e19c13d493">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2019-02-28T15:51:39.661+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2019-02-28T15:51:39.519+01:00"
+            dam:sha1="645099baefe9104ea06fa0020ac6a744e16de0a4"
+            dam:size="{Long}3014"
+            dc:format="image/svg+xml"
+            dc:modified="{Date}2019-02-26T20:26:33.894+01:00"
+            dc:title="Carousel"
+            jcr:lastModified="{Date}2019-02-28T15:51:38.532+01:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>
