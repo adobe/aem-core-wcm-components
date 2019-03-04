@@ -130,6 +130,11 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core-components-examples/components/demo/markup"
                             reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
                     </info>
                 </demo>
                 <separator
