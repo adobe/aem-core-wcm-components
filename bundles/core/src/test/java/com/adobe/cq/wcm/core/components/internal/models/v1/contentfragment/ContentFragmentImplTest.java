@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1;
+package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -33,6 +33,8 @@ import javax.annotation.Nullable;
 import javax.json.Json;
 import javax.json.JsonReader;
 
+import com.adobe.cq.wcm.core.components.context.ContentFragmentCoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -57,8 +59,6 @@ import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.sightly.WCMBindings;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -135,7 +135,7 @@ public class ContentFragmentImplTest {
 
 
     @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext("/contentfragment", "/content");
+    public static final AemContext AEM_CONTEXT = ContentFragmentCoreComponentTestContext.createContext("/contentfragment", "/content");
 
     @BeforeClass
     public static void setUp() throws Exception {

@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -41,7 +41,7 @@ import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1.ContentFragmentImplTest.ADAPTER;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImplTest.ADAPTER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;

@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
 import java.util.Iterator;
 import java.util.LinkedList;

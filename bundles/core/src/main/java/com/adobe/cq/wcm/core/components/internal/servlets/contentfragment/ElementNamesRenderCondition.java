@@ -13,9 +13,8 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
-import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
 import com.adobe.granite.ui.components.Config;
 import com.adobe.granite.ui.components.ExpressionHelper;
 import com.adobe.granite.ui.components.ExpressionResolver;

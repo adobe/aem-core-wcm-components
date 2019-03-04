@@ -28,10 +28,9 @@ import io.wcm.testing.mock.aem.junit.AemContextCallback;
 /**
  * Provides a context for unit tests.
  */
-public final class CoreComponentTestContext {
+public final class ContentFragmentCoreComponentTestContext {
 
-
-    private CoreComponentTestContext() {
+    private ContentFragmentCoreComponentTestContext() {
         // only static methods
     }
 

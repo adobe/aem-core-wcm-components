@@ -13,10 +13,11 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.wcm.core.components.context.ContentFragmentCoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
@@ -38,7 +39,7 @@ import javax.servlet.ServletException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 
-import static com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1.ContentFragmentImplTest.ADAPTER;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImplTest.ADAPTER;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -59,7 +60,7 @@ public class ElementNamesRenderConditionTest {
     private static final String RC_MULTI = "display-mode-multi";
 
     @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext("/contentfragment", "/content");
+    public static final AemContext CONTEXT = ContentFragmentCoreComponentTestContext.createContext("/contentfragment", "/content");
 
     private ElementNamesRenderCondition servlet;
 

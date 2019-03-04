@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ import com.adobe.granite.ui.components.ds.EmptyDataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.adobe.granite.ui.components.ds.ValueMapResource;
 
-import static com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment.PN_PATH;
+import static com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment.PN_PATH;
 import static org.apache.sling.api.resource.Resource.RESOURCE_TYPE_NON_EXISTING;
 
 /**

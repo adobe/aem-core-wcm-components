@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1;
+package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import org.apache.commons.collections.IteratorUtils;
@@ -54,14 +55,13 @@ import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
 import com.day.text.Text;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
-import static com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1.ContentFragmentImpl.RESOURCE_TYPE;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImpl.RESOURCE_TYPE;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_TITLE;
 import static org.apache.sling.models.annotations.injectorspecific.InjectionStrategy.OPTIONAL;
@@ -113,7 +113,7 @@ public class ContentFragmentImpl implements ContentFragment {
 
     private com.adobe.cq.dam.cfm.ContentFragment fragment;
     private String type;
-    private List<Element> elements;
+    private List<ContentFragment.Element> elements;
     private Map<String, ContentFragment.Element> exportedElements;
     private List<Resource> associatedContentList;
     private boolean isInitialized;

@@ -14,6 +14,6 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 @Version("1.0.0")
-package com.adobe.cq.wcm.core.components.extension.contentfragment.models;
+package com.adobe.cq.wcm.core.components.models.contentfragment;
 
 import org.osgi.annotation.versioning.Version;
