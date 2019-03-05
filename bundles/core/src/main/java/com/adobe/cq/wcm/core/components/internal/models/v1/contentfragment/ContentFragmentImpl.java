@@ -75,7 +75,7 @@ public class ContentFragmentImpl implements ContentFragment {
     /**
      * The resource type of the component associated with this Sling model.
      */
-    public static final String RESOURCE_TYPE = "core/wcm/extension/components/contentfragment/v1/contentfragment";
+    public static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/contentfragment";
 
     private static final String DEFAULT_GRID_TYPE = "dam/cfm/components/grid";
 

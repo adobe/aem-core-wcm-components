@@ -18,7 +18,7 @@
     "main",
     "second"
   ],
-  ":type": "core/wcm/extension/components/contentfragment/v1/contentfragment",
+  ":type": "core/wcm/components/contentfragment/v1/contentfragment",
   ":items": {},
   ":itemsOrder": []
 }

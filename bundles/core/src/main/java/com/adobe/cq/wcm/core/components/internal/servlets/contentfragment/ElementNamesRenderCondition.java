@@ -52,7 +52,7 @@ import java.io.IOException;
 )
 public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
 
-    static final String RESOURCE_TYPE = "core/wcm/extension/components/contentfragment/v1/renderconditions/elementnames";
+    static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/renderconditions/elementnames";
 
     /**
      * Name of the resource property containing the path to a

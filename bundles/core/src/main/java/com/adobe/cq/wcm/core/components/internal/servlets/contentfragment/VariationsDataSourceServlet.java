@@ -74,7 +74,7 @@ public class VariationsDataSourceServlet extends AbstractContentFragmentDataSour
     /**
      * Defines the resource type for this datasource.
      */
-    public final static String RESOURCE_TYPE = "core/wcm/extension/components/contentfragment/v1/datasource/variations";
+    public final static String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/datasource/variations";
 
     @Reference
     private ExpressionResolver expressionResolver;

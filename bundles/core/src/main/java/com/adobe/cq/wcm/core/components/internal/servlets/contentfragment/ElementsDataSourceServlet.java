@@ -50,7 +50,7 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
     /**
      * Defines the resource type for this datasource.
      */
-    public final static String RESOURCE_TYPE = "core/wcm/extension/components/contentfragment/v1/datasource/elements";
+    public final static String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/datasource/elements";
 
     /**
      * Defines a parameter name and property name whose value would define whether to return all elements or just

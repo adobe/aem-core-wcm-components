@@ -3,7 +3,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Content Fragment"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.extension.components.contentfragment.v1.dialog]"
+    extraClientlibs="[core.wcm.components.contentfragment.v1.dialog]"
     helpPath="https://www.adobe.com/go/aem_cmp_contentfragment_v1"
     trackingFeature="core-components:contentfragment:v1">
     <content
@@ -73,12 +73,12 @@
                                                 required="{Boolean}true">
                                                 <datasource
                                                     jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="core/wcm/extension/components/contentfragment/v1/datasource/elements"
+                                                    sling:resourceType="core/wcm/components/contentfragment/v1/datasource/elements"
                                                     componentPath="${requestPathInfo.suffix}"
                                                     fragmentPath="${param.fragmentPath}"/>
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="core/wcm/extension/components/contentfragment/v1/renderconditions/elementnames"
+                                                    sling:resourceType="core/wcm/components/contentfragment/v1/renderconditions/elementnames"
                                                     componentPath="${empty requestPathInfo.suffix ? param.componentPath : requestPathInfo.suffix}"
                                                     displayMode="singleText"/>
                                                 <granite:data
@@ -98,7 +98,7 @@
                                                     name="./elementNames">
                                                     <datasource
                                                         jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="core/wcm/extension/components/contentfragment/v1/datasource/elements"
+                                                        sling:resourceType="core/wcm/components/contentfragment/v1/datasource/elements"
                                                         componentPath="${requestPathInfo.suffix}"
                                                         fragmentPath="${param.fragmentPath}"/>
                                                 </field>
@@ -107,7 +107,7 @@
                                                     field-path="${requestPathInfo.resourcePath}"/>
                                                 <granite:rendercondition
                                                     jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="core/wcm/extension/components/contentfragment/v1/renderconditions/elementnames"
+                                                    sling:resourceType="core/wcm/components/contentfragment/v1/renderconditions/elementnames"
                                                     componentPath="${empty requestPathInfo.suffix ? param.componentPath : requestPathInfo.suffix}"
                                                     displayMode="multi"/>
                                             </multi>
@@ -125,7 +125,7 @@
                                         fieldDescription="Specify which variation to display">
                                         <datasource
                                             jcr:primaryType="nt:unstructured"
-                                            sling:resourceType="core/wcm/extension/components/contentfragment/v1/datasource/variations"
+                                            sling:resourceType="core/wcm/components/contentfragment/v1/datasource/variations"
                                             componentPath="${requestPathInfo.suffix}"
                                             fragmentPath="${param.fragmentPath}"/>
                                         <granite:data
