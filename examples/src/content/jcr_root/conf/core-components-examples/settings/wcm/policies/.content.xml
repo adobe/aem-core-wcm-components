@@ -67,6 +67,11 @@
                                         cq:styleId="1545309119491"
                                         cq:styleLabel="Aside"
                                         jcr:primaryType="nt:unstructured"/>
+                                    <item3
+                                        cq:styleClasses="cmp-examples-structure__footer"
+                                        cq:styleId="1551382932159"
+                                        cq:styleLabel="Footer"
+                                        jcr:primaryType="nt:unstructured"/>
                                 </cq:styles>
                             </item0>
                         </cq:styleGroups>
@@ -358,15 +363,6 @@
                     </v1>
                 </separator>
             </components>
-            <extension jcr:primaryType="nt:unstructured">
-                <components jcr:primaryType="nt:unstructured">
-                    <contentfragment jcr:primaryType="nt:unstructured">
-                        <v1 jcr:primaryType="nt:unstructured">
-                            <contentfragment jcr:primaryType="nt:unstructured"/>
-                        </v1>
-                    </contentfragment>
-                </components>
-            </extension>
         </wcm>
     </core>
     <core-components-examples jcr:primaryType="nt:unstructured">
