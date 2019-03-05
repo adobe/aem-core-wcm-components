@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function (window, $, channel, Granite, Coral) {
+(function(window, $, channel, Granite, Coral) {
     "use strict";
 
     // class of the edit dialog content
@@ -27,7 +27,6 @@
     var SELECTOR_ELEMENT_NAMES_ADD = SELECTOR_ELEMENT_NAMES + " > [is=coral-button]";
     var SELECTOR_VARIATION_NAME = "[name='./variationName']";
     var SELECTOR_DISPLAY_MODE_RADIO_GROUP = "[data-display-mode-radio-group='true']";
-    var SELECTOR_DISPLAY_MODE = "[name='./displayMode']";
     var SELECTOR_DISPLAY_MODE_CHECKED = "[name='./displayMode']:checked";
     var SELECTOR_PARAGRAPH_CONTROLS = ".cmp-contentfragment__edit-dialog-paragraph-controls";
     var SELECTOR_PARAGRAPH_SCOPE = "[name='./paragraphScope']";
@@ -56,18 +55,8 @@
     // the tab containing paragraph control
     var paragraphControlsTab;
 
-    // the path of the component being edited
-    var componentPath;
-    // the resource path of the paragraph controls field set
-    var paragraphControlsPath;
-
     // keeps track of the current fragment path
     var currentFragmentPath;
-
-    // initial state of the paragraph controls (if set)
-    var initialParagraphScope;
-    var initialParagraphRange;
-    var initialParagraphHeadings;
 
     var editDialog;
 
@@ -76,7 +65,7 @@
     /**
      * A class which encapsulates the logic related to element selectors and variation name selector.
      */
-    var ElementsController = function () {
+    var ElementsController = function() {
         // container which contains either single elements select field or a multifield of element selectors
         this.elementNamesContainer = editDialog.querySelector(SELECTOR_ELEMENT_NAMES_CONTAINER);
         // element container resource path
@@ -144,14 +133,16 @@
         if (this.variationName) {
             this.variationName.value = "";
         }
-    }
+    };
 
     /**
      * Creates an http request object for retrieving fragment's element names or variation names and returns it.
+     *
      * @param {String} displayMode - displayMode parameter for element name request. Should be "singleText" or "multi"
      * @param {String} type - type of request. It can have the following values -
      * 1. "variation" for getting variation names
      * 2. "elements" for getting element names
+     * @returns {Object} the resulting request
      */
     ElementsController.prototype.prepareRequest = function(displayMode, type) {
         if (typeof displayMode === "undefined") {
@@ -176,15 +167,16 @@
 
     /**
      * Retrieves the html for element names and variation names and keeps the fetched values as "fetchedState" member.
-     * @displayMode {String} - display mode to use as parameter of element names request
-     * @callback {Function} - function to execute when response is received
+     *
+     * @param {String} displayMode - display mode to use as parameter of element names request
+     * @param {Function} callback - function to execute when response is received
      */
     ElementsController.prototype.testGetHTML = function(displayMode, callback) {
         var elementNamesRequest = this.prepareRequest(displayMode, "elements");
         var variationNameRequest = this.prepareRequest(displayMode, "variation");
         var self = this;
         // wait for requests to load
-        $.when(elementNamesRequest, variationNameRequest).then(function (result1, result2) {
+        $.when(elementNamesRequest, variationNameRequest).then(function(result1, result2) {
             var newElementNames = $(result1[0]).find(SELECTOR_ELEMENT_NAMES)[0];
             var newSingleTextSelector = $(result1[0]).find(SELECTOR_SINGLE_TEXT_ELEMENT)[0];
             var newVariationName = $(result2[0]).find(SELECTOR_VARIATION_NAME)[0];
@@ -204,7 +196,7 @@
                 });
             });
 
-        }, function () {
+        }, function() {
             // display error dialog if one of the requests failed
             ui.prompt(errorDialogTitle, errorDialogMessage, "error");
         });
@@ -214,7 +206,7 @@
      * Checks if the current states of element names, single text selector and variation names match with those
      * present in fetchedState.
      *
-     * @returns {boolean} true if the states match or if there was no current state, false otherwise
+     * @returns {Boolean} true if the states match or if there was no current state, false otherwise
      */
     ElementsController.prototype.testStateForUpdate = function() {
         // check if some element names are currently configured
@@ -237,14 +229,14 @@
                 return false;
             }
             // compare the items of the current and new element names fields
-            var currentItems = this.singleTextSelector.querySelectorAll("coral-select-item");
-            var newItems = this.fetchedState.singleTextSelector.querySelectorAll("coral-select-item");
-            if (!itemsAreEqual(currentItems, newItems)) {
+            var currentSingleTextItems = this.singleTextSelector.querySelectorAll("coral-select-item");
+            var newSingleTextItems = this.fetchedState.singleTextSelector.querySelectorAll("coral-select-item");
+            if (!itemsAreEqual(currentSingleTextItems, newSingleTextItems)) {
                 return false;
             }
         }
 
-        // check if a varation is currently configured
+        // check if a variation is currently configured
         if (this.variationName.value && this.variationName.value !== "master") {
             // if we're unsetting the current fragment we need to reset the config
             if (!this.fetchedState || !this.fetchedState.variationName) {
@@ -257,7 +249,7 @@
         }
 
         return true;
-    }
+    };
 
     /**
      * Replace the current state with the values present in fetchedState and discard the fetchedState thereafter.
@@ -292,14 +284,16 @@
 
     /**
      * Retrieve element names and update the current element names with the retrieved data.
+     *
+     * @param {String} displayMode - selected display mode of the component
      */
     ElementsController.prototype.fetchAndUpdateElementsHTML = function(displayMode) {
         var elementNamesRequest = this.prepareRequest(displayMode, "elements");
         var self = this;
         // wait for requests to load
-        $.when(elementNamesRequest).then(function (result) {
+        $.when(elementNamesRequest).then(function(result) {
             self._updateElementsHTML(result);
-        }, function () {
+        }, function() {
             // display error dialog if one of the requests failed
             ui.prompt(errorDialogTitle, errorDialogMessage, "error");
         });
@@ -307,6 +301,7 @@
 
     /**
      * Updates inner html of element container.
+     *
      * @param {String} html - outerHTML value for elementNamesContainer
      */
     ElementsController.prototype._updateElementsHTML = function(html) {
@@ -317,7 +312,8 @@
     /**
      * Updates dom of element container with the passed dom. If the passed dom is multifield, the current multifield
      * template would be replaced with the dom's template otherwise the dom would used as the new singleTextSelector
-     * memeber.
+     * member.
+     *
      * @param {HTMLElement} dom - new dom
      */
     ElementsController.prototype._updateElementsDOM = function(dom) {
@@ -335,6 +331,7 @@
 
     /**
      * Updates dom of variation name select dropdown.
+     *
      * @param {HTMLElement} dom - dom for variation name dropdown
      */
     ElementsController.prototype._updateVariationDOM = function(dom) {
@@ -348,25 +345,16 @@
 
     function initialize(dialog) {
         // get path of component being edited
-        var content = dialog.querySelector("." + CLASS_EDIT_DIALOG);
-        componentPath = content.dataset.componentPath;
         editDialog = dialog;
 
         // get the fields
         fragmentPath = dialog.querySelector(SELECTOR_FRAGMENT_PATH);
         paragraphControls = dialog.querySelector(SELECTOR_PARAGRAPH_CONTROLS);
-        paragraphControlsPath = paragraphControls.dataset.fieldPath;
         paragraphControlsTab = dialog.querySelector("coral-tabview").tabList.items.getAll()[1];
 
         // initialize state variables
         currentFragmentPath = fragmentPath.value;
         elementsController = new ElementsController();
-        var scope = paragraphControls.querySelector(SELECTOR_PARAGRAPH_SCOPE + "[checked]");
-        if (scope) {
-            initialParagraphScope = scope.value;
-            initialParagraphRange = paragraphControls.querySelector(SELECTOR_PARAGRAPH_RANGE).value;
-            initialParagraphHeadings = paragraphControls.querySelector(SELECTOR_PARAGRAPH_HEADINGS).value;
-        }
 
         // disable add button and variation name if no content fragment is currently set
         if (!currentFragmentPath) {
@@ -421,7 +409,7 @@
             }
             // else show a confirmation dialog
             confirmFragmentChange(elementsController.discardFetchedState, elementsController,
-                                  elementsController.saveFetchedState, elementsController);
+                elementsController.saveFetchedState, elementsController);
         });
 
     }
@@ -439,7 +427,7 @@
 
         ui.prompt(confirmationDialogTitle, confirmationDialogMessage, "warning", [{
             text: confirmationDialogCancel,
-            handler: function () {
+            handler: function() {
                 // reset the fragment path to its previous value
                 requestAnimationFrame(function() {
                     fragmentPath.value = currentFragmentPath;
@@ -451,7 +439,7 @@
         }, {
             text: confirmationDialogConfirm,
             primary: true,
-            handler: function () {
+            handler: function() {
                 // reset the current configuration
                 elementsController.resetFields();
                 // update the current fragment path
@@ -467,6 +455,10 @@
     /**
      * Compares two arrays containing select items, returning true if the arrays have the same size and all contained
      * items have the same value and label.
+     *
+     * @param {Array} a1 - first array to compare
+     * @param {Array} a2 - second array to compare
+     * @returns {Boolean} true if both arrays are equal, false otherwise
      */
     function itemsAreEqual(a1, a2) {
         // verify that the arrays have the same length
@@ -476,8 +468,8 @@
         for (var i = 0; i < a1.length; i++) {
             var item1 = a1[i];
             var item2 = a2[i];
-            if (item1.attributes.value.value !== item2.attributes.value.value
-                || item1.textContent !== item2.textContent) {
+            if (item1.attributes.value.value !== item2.attributes.value.value ||
+                item1.textContent !== item2.textContent) {
                 // the values or labels of the current items didn't match
                 return false;
             }
@@ -488,7 +480,7 @@
     /**
      * Enables or disables the paragraph range and headings field depending on the state of the paragraph scope field.
      */
-    function setParagraphControlsState () {
+    function setParagraphControlsState() {
         // get the selected scope radio button (might not be present at all)
         var scope = paragraphControls.querySelector(SELECTOR_PARAGRAPH_SCOPE + "[checked]");
         if (scope) {
@@ -505,7 +497,7 @@
         }
     }
 
-    // Toggles the display of paragraph control tab depening on display mode
+    // Toggles the display of paragraph control tab depending on display mode
     function updateParagraphControlTabState() {
         var displayMode = editDialog.querySelector(SELECTOR_DISPLAY_MODE_CHECKED).value;
         if (displayMode === SINGLE_TEXT_DISPLAY_MODE) {
@@ -518,9 +510,9 @@
     /**
      * Initializes the dialog after it has loaded.
      */
-    channel.on("foundation-contentloaded", function (e) {
+    channel.on("foundation-contentloaded", function(e) {
         if (e.target.getElementsByClassName(CLASS_EDIT_DIALOG).length > 0) {
-            Coral.commons.ready(e.target, function (dialog) {
+            Coral.commons.ready(e.target, function(dialog) {
                 initialize(dialog);
             });
         }
