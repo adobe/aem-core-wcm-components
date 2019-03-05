@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function ($, ns) {
+(function($, ns) {
     "use strict";
 
     // class of the content fragment
@@ -25,21 +25,21 @@
 
     var ContentFragmentEditor = ns.util.createClass({
 
-        constructor: function () {
+        constructor: function() {
         },
 
-        canEdit: function (editable) {
+        canEdit: function(editable) {
             // return true if the editable contains a content fragment having a path attribute
-            return $(editable.dom).find("."+CLASS_CONTENTFRAGMENT+"["+ATTRIBUTE_PATH+"]").length > 0;
+            return $(editable.dom).find("." + CLASS_CONTENTFRAGMENT + "[" + ATTRIBUTE_PATH + "]").length > 0;
         },
 
-        setUp: function (editable) {
+        setUp: function(editable) {
             // get the path of the content fragment
             var fragmentPath = $(editable.dom).find("." + CLASS_CONTENTFRAGMENT).attr(ATTRIBUTE_PATH);
             if (fragmentPath) {
                 var fragmentEditUrl = EDITOR_URL + fragmentPath;
                 var fragment = ns.CFM.Fragments.adaptToFragment(editable.dom);
-                if (fragment && typeof fragment.variation !== 'undefined' && fragment.variation !== 'master') {
+                if (fragment && typeof fragment.variation !== "undefined" && fragment.variation !== "master") {
                     fragmentEditUrl = fragmentEditUrl + "?variation=" + fragment.variation;
                 }
                 // open the editor in a new window
