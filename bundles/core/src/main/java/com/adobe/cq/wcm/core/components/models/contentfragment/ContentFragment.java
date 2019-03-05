@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Defines the Sling Model for the {@code /apps/core/wcm/components/contentfragment} component. The model
  * provides information about the referenced content fragment and access to representations of its elements.
  *
- * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+ * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
  */
 @ConsumerType
 public interface ContentFragment extends ContainerExporter {
@@ -41,21 +41,21 @@ public interface ContentFragment extends ContainerExporter {
     /**
      * Name of the mandatory resource property that stores the path to a content fragment.
      *
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     String PN_PATH = "fragmentPath";
 
     /**
      * Name of the optional resource property that stores the names of the elements to be used.
      *
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     String PN_ELEMENT_NAMES = "elementNames";
 
     /**
      * Name of the optional resource property that stores the name of the variation to be used.
      *
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     String PN_VARIATION_NAME = "variationName";
 
@@ -79,7 +79,7 @@ public interface ContentFragment extends ContainerExporter {
     /**
      * Represents a content element of a content fragment.
      *
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @ConsumerType
     interface Element extends ComponentExporter {
@@ -89,7 +89,7 @@ public interface ContentFragment extends ContainerExporter {
          *
          * @return the technical name of the element
          * @see ContentElement#getName()
-         * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
          */
         @Nonnull
         @JsonIgnore
@@ -102,7 +102,7 @@ public interface ContentFragment extends ContainerExporter {
          *
          * @return the title of the element
          * @see ContentElement#getTitle()
-         * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
          */
         @Nullable
         default String getTitle() {
@@ -116,7 +116,7 @@ public interface ContentFragment extends ContainerExporter {
          * String [], the data type returned would be String.
          * @return the data type string
          * @see FragmentData#getDataType()
-         * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
          */
         @Nonnull
         default String getDataType() {
@@ -129,7 +129,7 @@ public interface ContentFragment extends ContainerExporter {
          *
          * @return the value of the element
          * @see FragmentData#getValue()
-         * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
          */
         @Nullable
         default Object getValue() {
@@ -188,7 +188,7 @@ public interface ContentFragment extends ContainerExporter {
      *
      * @return the title of the content fragment
      * @see com.adobe.cq.dam.cfm.ContentFragment#getTitle()
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @Nullable
     default String getTitle() {
@@ -200,7 +200,7 @@ public interface ContentFragment extends ContainerExporter {
      *
      * @return the description of the content fragment
      * @see com.adobe.cq.dam.cfm.ContentFragment#getDescription()
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @Nullable
     default String getDescription() {
@@ -213,7 +213,7 @@ public interface ContentFragment extends ContainerExporter {
      * "/content/dam/my-cf/jcr:content/model" for a text-only content fragment).
      *
      * @return the type of the content fragment
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @Nullable
     @JsonProperty(JSON_PN_MODEL)
@@ -229,7 +229,7 @@ public interface ContentFragment extends ContainerExporter {
      *
      * @return a selection or all of the content fragment's elements
      * @see com.adobe.cq.dam.cfm.ContentFragment#getElements()
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @Nullable
     @JsonIgnore
@@ -244,7 +244,7 @@ public interface ContentFragment extends ContainerExporter {
      * if the property is not set.
      *
      * @return a map containing the elements that are subject to be exported
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @Nonnull
     @JsonProperty(JSON_PN_ELEMENTS)
@@ -257,7 +257,7 @@ public interface ContentFragment extends ContainerExporter {
      * returned by {@link ContentFragment#getExportedElements}.
      *
      * @return Array that determines the order of the elements
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @Nonnull
     @JsonProperty(JSON_PN_ELEMENTS_ORDER)
@@ -270,7 +270,7 @@ public interface ContentFragment extends ContainerExporter {
      *
      * @return a list of collection resources
      * @see ContentFragment#getAssociatedContent()
-     * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @Nullable
     @JsonIgnore
