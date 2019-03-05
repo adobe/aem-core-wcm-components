@@ -11,17 +11,6 @@
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
-            <responsivegrid
-                cq:styleIds="[1545309110033]"
-                jcr:created="{Date}2018-12-20T12:31:03.201Z"
-                jcr:createdBy="admin"
-                jcr:lastModified="{Date}2018-12-20T12:31:03.201Z"
-                jcr:lastModifiedBy="admin"
-                jcr:primaryType="nt:unstructured"
-                sling:resourceType="wcm/foundation/components/responsivegrid"
-                editable="{Boolean}true">
-                <cq:responsive jcr:primaryType="nt:unstructured"/>
-            </responsivegrid>
             <responsivegrid_1409995310
                 cq:styleIds="[1545309104202]"
                 jcr:created="{Date}2018-12-20T12:31:00.550Z"
@@ -84,6 +73,44 @@
                     navigationRoot="/content/core-components-examples/library"
                     skipNavigationRoot="true"/>
             </responsivegrid_1755067073>
+            <responsivegrid
+                cq:styleIds="[1545309110033]"
+                jcr:created="{Date}2018-12-20T12:31:03.201Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2018-12-20T12:31:03.201Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid"
+                editable="{Boolean}true">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+            </responsivegrid>
+            <responsivegrid_2176569853
+                cq:styleIds="[1551382932159]"
+                jcr:created="{Date}2018-12-20T12:31:03.201Z"
+                jcr:createdBy="admin"
+                jcr:lastModified="{Date}2018-12-20T12:31:03.201Z"
+                jcr:lastModifiedBy="admin"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <cq:responsive jcr:primaryType="nt:unstructured"/>
+                <separator
+                    cq:styleIds="[1550355113852]"
+                    jcr:created="{Date}2019-02-16T22:26:21.309+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-02-16T22:26:21.309+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/separator/v1/separator"/>
+                <text
+                    jcr:created="{Date}2019-02-28T21:40:52.076+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-02-28T21:41:47.838+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;p>Built with &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.0&quot;>Core Components 2.3.0&lt;/a>.&lt;/p>&#xa;"
+                    textIsRich="true"/>
+            </responsivegrid_2176569853>
         </root>
         <cq:responsive jcr:primaryType="nt:unstructured">
             <breakpoints jcr:primaryType="nt:unstructured">
