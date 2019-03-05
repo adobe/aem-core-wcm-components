@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Nonnull;
 
 import org.apache.sling.api.adapter.AdapterFactory;
 import org.apache.sling.api.resource.Resource;
@@ -25,16 +24,17 @@ import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.SocialMediaHelper;
 import com.adobe.cq.wcm.core.components.testing.MockCommerceFactory;
 import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.adobe.cq.wcm.core.components.testing.MockXFFactory;
-import com.adobe.cq.wcm.core.components.models.SocialMediaHelper;
 import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -69,7 +69,7 @@ public class SocialMediaHelperImplTest {
         CONTEXT.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
         CONTEXT.registerService(AdapterFactory.class, new AdapterFactory() {
                     @Override
-                    public <AdapterType> AdapterType getAdapter(@Nonnull Object o, @Nonnull Class<AdapterType> clazz) {
+                    public <AdapterType> AdapterType getAdapter(@NotNull Object o, @NotNull Class<AdapterType> clazz) {
                         Object result = null;
                         switch (clazz.getName()) {
                             case CLASS_PRODUCT:

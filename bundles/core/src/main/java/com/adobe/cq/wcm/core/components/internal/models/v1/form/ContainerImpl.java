@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 
@@ -39,6 +37,7 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -185,7 +184,7 @@ public class ContainerImpl implements Container {
         return redirect;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         if (childrenModels == null) {
@@ -194,7 +193,7 @@ public class ContainerImpl implements Container {
         return childrenModels;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         if (exportedItemsOrder == null) {
@@ -208,13 +207,13 @@ public class ContainerImpl implements Container {
         return Arrays.copyOf(exportedItemsOrder,exportedItemsOrder.length);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return resource.getResourceType();
     }
 
-    private <T> Map<String, T> getChildrenModels(@Nonnull SlingHttpServletRequest request, @Nonnull Class<T>
+    private <T> Map<String, T> getChildrenModels(@NotNull SlingHttpServletRequest request, @NotNull Class<T>
             modelClass) {
         Map<String, T> models = new LinkedHashMap<>();
         for (Resource child : slingModelFilter.filterChildResources(resource.getChildren())) {

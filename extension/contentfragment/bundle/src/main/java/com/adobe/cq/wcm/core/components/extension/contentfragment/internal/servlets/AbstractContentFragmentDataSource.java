@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.ServletException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +30,8 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.granite.ui.components.Config;
@@ -76,7 +76,7 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
      *
      * @return an expression resolver
      */
-    @Nonnull
+    @NotNull
     protected abstract ExpressionResolver getExpressionResolver();
 
     /**
@@ -86,8 +86,8 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
      * @param request the request object (can be used for i18n)
      * @return the list of items to include in the datasource
      */
-    @Nonnull
-    protected abstract List<T> getItems(@Nonnull ContentFragment fragment, @Nonnull SlingHttpServletRequest request);
+    @NotNull
+    protected abstract List<T> getItems(@NotNull ContentFragment fragment, @NotNull SlingHttpServletRequest request);
 
     /**
      * Returns the title for the given item.
@@ -95,8 +95,8 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
      * @param item an item previously returned by {@link #getItems(ContentFragment, SlingHttpServletRequest)}
      * @return the title of the item to use in the resulting datasource
      */
-    @Nonnull
-    protected abstract String getTitle(@Nonnull T item);
+    @NotNull
+    protected abstract String getTitle(@NotNull T item);
 
     /**
      * Returns the value for the given item.
@@ -104,8 +104,8 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
      * @param item an item previously returned by {@link #getItems(ContentFragment, SlingHttpServletRequest)}
      * @return the value of the item to use in the resulting datasource
      */
-    @Nonnull
-    protected abstract String getValue(@Nonnull T item);
+    @NotNull
+    protected abstract String getValue(@NotNull T item);
 
     /**
      * Returns datasource configuration.
@@ -145,7 +145,7 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
     }
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws ServletException, IOException {
         // return empty datasource by default
         DataSource elements = EmptyDataSource.instance();
@@ -173,7 +173,7 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
      * content fragment is correctly configured, then {@code null} is returned.
      */
     @Nullable
-    private ContentFragment getContentFragment(@Nonnull SlingHttpServletRequest request) {
+    private ContentFragment getContentFragment(@NotNull SlingHttpServletRequest request) {
 
         Config config = getConfig(request);
         ValueMap map = getComponentValueMap(config, request);
@@ -212,8 +212,8 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
      * {@link ExpressionResolver}. If the parameter is not found, {@code null} is returned.
      */
     @Nullable
-    private String getParameter(@Nonnull Config config, @Nonnull String name,
-                                @Nonnull SlingHttpServletRequest request) {
+    private String getParameter(@NotNull Config config, @NotNull String name,
+                                @NotNull SlingHttpServletRequest request) {
         // get value from configuration
         String value = config.get(name, String.class);
         if (value == null) {
@@ -228,8 +228,8 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
     /**
      * Creates a virtual resource to use in the resulting datasource.
      */
-    @Nonnull
-    private Resource createResource(@Nonnull ResourceResolver resolver, @Nonnull String title, @Nonnull String value) {
+    @NotNull
+    private Resource createResource(@NotNull ResourceResolver resolver, @NotNull String title, @NotNull String value) {
         ValueMap properties = new ValueMapDecorator(new HashMap<>());
         properties.put("text", title);
         properties.put("value", value);

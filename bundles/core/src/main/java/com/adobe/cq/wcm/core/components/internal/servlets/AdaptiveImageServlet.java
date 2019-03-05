@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
@@ -25,9 +25,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
@@ -46,6 +43,8 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.commons.mime.MimeTypeService;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +104,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response) throws IOException {
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
         String suffix = requestPathInfo.getSuffix();
         String imageName = StringUtils.isNotEmpty(suffix) ? FilenameUtils.getName(suffix) : "";
@@ -507,7 +506,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         return null;
     }
 
-    private void stream(@Nonnull SlingHttpServletResponse response, @Nonnull InputStream inputStream, @Nonnull String contentType, String imageName)
+    private void stream(@NotNull SlingHttpServletResponse response, @NotNull InputStream inputStream, @NotNull String contentType, String imageName)
             throws IOException {
         response.setContentType(contentType);
         response.setHeader("Content-Disposition", "inline; filename=" + URLEncoder.encode(imageName, CharEncoding.UTF_8));
@@ -524,7 +523,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param properties the image component's properties
      * @return the cropping rectangle, if one is found, {@code null} otherwise
      */
-    private Rectangle getCropRect(@Nonnull ValueMap properties) {
+    private Rectangle getCropRect(@NotNull ValueMap properties) {
         String csv = properties.get(ImageResource.PN_IMAGE_CROP, String.class);
         if (StringUtils.isNotEmpty(csv)) {
             try {
@@ -552,7 +551,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param properties the image component's properties
      * @return the rotation angle
      */
-    private int getRotation(@Nonnull ValueMap properties) {
+    private int getRotation(@NotNull ValueMap properties) {
         String rotationString = properties.get(ImageResource.PN_IMAGE_ROTATE, String.class);
         if (rotationString != null) {
             try {
@@ -619,7 +618,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @return {@code true} if the {@code response}'s status code was set (to {@link HttpServletResponse#SC_NOT_MODIFIED}, {@code false}
      * otherwise
      */
-    private boolean handleIfModifiedSinceHeader(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response,
+    private boolean handleIfModifiedSinceHeader(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response,
                                                 long lastModified) {
         if (lastModified > 0) {
             long ifModifiedSince = request.getDateHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE) / 1000;
@@ -651,7 +650,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param request          the request from which to read specific attributes and parameters. Allows to resolve delegated policy resources.
      * @return the content policy. May be {@code nulll} in case no content policy can be found.
      */
-    private ContentPolicy getContentPolicy(@Nonnull ResourceResolver resourceResolver, @Nonnull Resource imageResource, @Nonnull SlingHttpServletRequest request) {
+    private ContentPolicy getContentPolicy(@NotNull ResourceResolver resourceResolver, @NotNull Resource imageResource, @NotNull SlingHttpServletRequest request) {
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
             ComponentManager componentManager = resourceResolver.adaptTo(ComponentManager.class);
@@ -682,7 +681,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param request          the request from which to read specific attributes and parameters. Allows to resolve delegated policy resources.
      * @return the list of the allowed widths; the list will be <i>empty</i> if the component doesn't have a content policy
      */
-    private List<Integer> getAllowedRenditionWidths(@Nonnull ResourceResolver resourceResolver, Resource imageResource, @Nonnull SlingHttpServletRequest request) {
+    private List<Integer> getAllowedRenditionWidths(@NotNull ResourceResolver resourceResolver, Resource imageResource, @NotNull SlingHttpServletRequest request) {
         List<Integer> list = new ArrayList<>();
         ContentPolicy contentPolicy = getContentPolicy(resourceResolver, imageResource, request);
         if (contentPolicy != null) {
@@ -708,7 +707,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * @param request          the request from which to read specific attributes and parameters. Allows to resolve delegated policy resources.
      * @return the JPEG quality in the range 0..100 or {@link #DEFAULT_JPEG_QUALITY} if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    private Integer getAllowedJpegQuality(@Nonnull ResourceResolver resourceResolver, Resource imageResource, @Nonnull SlingHttpServletRequest request) {
+    private Integer getAllowedJpegQuality(@NotNull ResourceResolver resourceResolver, Resource imageResource, @NotNull SlingHttpServletRequest request) {
         Integer allowedJpegQuality = DEFAULT_JPEG_QUALITY;
         ContentPolicy contentPolicy = getContentPolicy(resourceResolver, imageResource, request);
         if (contentPolicy != null) {
@@ -745,7 +744,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         Source source = Source.NONEXISTING;
         Resource imageResource;
 
-        ImageComponent(@Nonnull Resource component) {
+        ImageComponent(@NotNull Resource component) {
             String fileReference = component.getValueMap().get(DownloadResource.PN_REFERENCE, String.class);
             if (StringUtils.isNotEmpty(fileReference)) {
                 imageResource = component.getResourceResolver().getResource(fileReference);

@@ -28,8 +28,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nullable;
 import javax.json.Json;
 import javax.json.JsonReader;
 
@@ -40,6 +38,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -63,21 +62,12 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
-import static com.day.cq.commons.jcr.JcrConstants.JCR_DATA;
-import static com.day.cq.commons.jcr.JcrConstants.JCR_DESCRIPTION;
-import static com.day.cq.commons.jcr.JcrConstants.JCR_MIMETYPE;
-import static com.day.cq.commons.jcr.JcrConstants.JCR_TITLE;
+import static com.day.cq.commons.jcr.JcrConstants.*;
 import static com.day.cq.dam.api.DamConstants.NT_DAM_ASSET;
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.*;
 
 public class ContentFragmentImplTest {
 
@@ -325,7 +315,7 @@ public class ContentFragmentImplTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writerWithView(ContentFragmentImpl.class).writeValue(writer, fragment);
         JsonReader jsonReaderOutput = Json.createReader(IOUtils.toInputStream(writer.toString()));
-        JsonReader jsonReaderExpected = Json.createReader(Thread.currentThread().getContextClassLoader().getClass()
+        JsonReader jsonReaderExpected = Json.createReader(ContentFragmentImplTest.class
                 .getResourceAsStream("/contentfragment/test-expected-content-export.json"));
         assertEquals(jsonReaderExpected.read(), jsonReaderOutput.read());
     }
@@ -534,16 +524,20 @@ public class ContentFragmentImplTest {
 
             /* create mock objects */
 
-            com.adobe.cq.dam.cfm.ContentFragment fragment = mock(com.adobe.cq.dam.cfm.ContentFragment.class);
+            com.adobe.cq.dam.cfm.ContentFragment fragment = mock(com.adobe.cq.dam.cfm.ContentFragment.class, withSettings().lenient());
             when(fragment.getTitle()).thenReturn(title);
             when(fragment.getDescription()).thenReturn(description);
             when(fragment.adaptTo(Resource.class)).thenReturn(resource);
-            when(fragment.getElement(any(String.class))).thenAnswer(invocation -> {
-                String name = invocation.getArgumentAt(0, String.class);
+            when(fragment.getElement(isNull())).thenAnswer(invocation -> {
+                String name = invocation.getArgument(0);
+                return getMockElement(resource, name, isStructured ? model : null);
+            });
+            when(fragment.getElement(anyString())).thenAnswer(invocation -> {
+                String name = invocation.getArgument(0);
                 return getMockElement(resource, name, isStructured ? model : null);
             });
             when(fragment.hasElement(any(String.class))).thenAnswer(invocation -> {
-                String name = invocation.getArgumentAt(0, String.class);
+                String name = invocation.getArgument(0);
                 return fragment.getElement(name) != null;
             });
             when(fragment.getElements()).thenReturn(elements.iterator());
@@ -572,7 +566,7 @@ public class ContentFragmentImplTest {
             }
             when(fragment.listAllVariations()).thenReturn(variations.iterator());
 
-            FragmentTemplate template = mock(FragmentTemplate.class);
+            FragmentTemplate template = mock(FragmentTemplate.class, withSettings().lenient());
             when(template.adaptTo(Resource.class)).thenReturn(modelAdaptee);
             when(fragment.getTemplate()).thenReturn(template);
 
@@ -601,11 +595,11 @@ public class ContentFragmentImplTest {
             /* create mock objects */
 
             // mock data type
-            DataType dataType = mock(DataType.class);
+            DataType dataType = mock(DataType.class, withSettings().lenient());
             when(dataType.isMultiValue()).thenReturn(element.isMultiValued);
 
             // mock fragment data
-            FragmentData data = mock(FragmentData.class);
+            FragmentData data = mock(FragmentData.class, withSettings().lenient());
             when(data.getValue()).thenReturn(element.isMultiValued ? element.values : element.values[0]);
             when(data.getValue(String.class)).thenReturn(element.values[0]);
             when(data.getValue(String[].class)).thenReturn(element.values);
@@ -613,7 +607,7 @@ public class ContentFragmentImplTest {
             when(data.getDataType()).thenReturn(dataType);
 
             // mock content element
-            ContentElement contentElement = mock(ContentElement.class);
+            ContentElement contentElement = mock(ContentElement.class, withSettings().lenient());
             when(contentElement.getName()).thenReturn(element.name);
             when(contentElement.getTitle()).thenReturn(element.title);
             when(contentElement.getContent()).thenReturn(element.values[0]);
@@ -623,14 +617,14 @@ public class ContentFragmentImplTest {
             // mock variations
             Map<String, ContentVariation> variations = new LinkedHashMap<>();
             for (Element.Variation variation : element.variations.values()) {
-                FragmentData variationData = mock(FragmentData.class);
+                FragmentData variationData = mock(FragmentData.class, withSettings().lenient());
                 when(variationData.getValue()).thenReturn(element.isMultiValued ? variation.values : variation.values[0]);
                 when(variationData.getValue(String.class)).thenReturn(variation.values[0]);
                 when(variationData.getValue(String[].class)).thenReturn(variation.values);
                 when(variationData.getContentType()).thenReturn(variation.contentType);
                 when(variationData.getDataType()).thenReturn(dataType);
 
-                ContentVariation contentVariation = mock(ContentVariation.class);
+                ContentVariation contentVariation = mock(ContentVariation.class, withSettings().lenient());
                 when(contentVariation.getName()).thenReturn(variation.name);
                 when(contentVariation.getTitle()).thenReturn(variation.title);
                 when(contentVariation.getContent()).thenReturn(variation.values[0]);
@@ -640,7 +634,7 @@ public class ContentFragmentImplTest {
             }
             when(contentElement.getVariations()).thenReturn(variations.values().iterator());
             when(contentElement.getVariation(any(String.class))).thenAnswer(invocation -> {
-                String variationName = invocation.getArgumentAt(0, String.class);
+                String variationName = invocation.getArgument(0);
                 return variations.get(variationName);
             });
 

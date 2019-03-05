@@ -18,18 +18,18 @@ package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.serv
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.servlet.Servlet;
 
-import com.adobe.granite.ui.components.Config;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.cq.dam.cfm.ContentElement;
 import com.adobe.cq.dam.cfm.ContentFragment;
+import com.adobe.granite.ui.components.Config;
 import com.adobe.granite.ui.components.ExpressionResolver;
 
 /**
@@ -68,15 +68,15 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
     @Reference
     private ExpressionResolver expressionResolver;
 
-    @Nonnull
+    @NotNull
     @Override
     protected ExpressionResolver getExpressionResolver() {
         return expressionResolver;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected List<ContentElement> getItems(@Nonnull ContentFragment fragment, @Nonnull SlingHttpServletRequest request) {
+    protected List<ContentElement> getItems(@NotNull ContentFragment fragment, @NotNull SlingHttpServletRequest request) {
         Config config = getConfig(request);
         ValueMap map = getComponentValueMap(config, request);
         String textOnlyParam = request.getParameter(PARAM_AND_PN_DISPLAY_MODE);
@@ -101,15 +101,15 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
         return IteratorUtils.toList(fragment.getElements());
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected String getTitle(@Nonnull ContentElement element) {
+    protected String getTitle(@NotNull ContentElement element) {
         return element.getTitle();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected String getValue(@Nonnull ContentElement element) {
+    protected String getValue(@NotNull ContentElement element) {
         return element.getName();
     }
 

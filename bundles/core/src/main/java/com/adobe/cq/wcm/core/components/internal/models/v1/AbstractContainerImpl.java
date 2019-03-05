@@ -21,8 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -30,6 +28,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
@@ -68,7 +67,7 @@ public abstract class AbstractContainerImpl implements Container {
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     private List<Resource> readChildren() {
         List<Resource> children = new LinkedList<>();
         if (resource != null) {
@@ -90,7 +89,7 @@ public abstract class AbstractContainerImpl implements Container {
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     protected List<Resource> getChildren() {
         if (childComponents == null) {
             childComponents = readChildren();
@@ -104,7 +103,7 @@ public abstract class AbstractContainerImpl implements Container {
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     protected List<Resource> getFilteredChildren() {
         if (filteredChildComponents == null) {
             filteredChildComponents = new LinkedList<>();
@@ -119,7 +118,7 @@ public abstract class AbstractContainerImpl implements Container {
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
         getChildren().forEach(res -> {
@@ -137,13 +136,13 @@ public abstract class AbstractContainerImpl implements Container {
         return items;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return resource.getResourceType();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         if (itemModels == null) {
@@ -152,7 +151,7 @@ public abstract class AbstractContainerImpl implements Container {
         return itemModels;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         if (exportedItemsOrder == null) {
@@ -166,8 +165,8 @@ public abstract class AbstractContainerImpl implements Container {
         return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
     }
 
-    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
-                                                           @Nonnull Class<ComponentExporter> modelClass) {
+    protected Map<String, ComponentExporter> getItemModels(@NotNull SlingHttpServletRequest request,
+                                                           @NotNull Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = new LinkedHashMap<>();
         getFilteredChildren().forEach(child -> {
             ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);

@@ -19,10 +19,9 @@ import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +39,7 @@ public class PageListItemImpl implements ListItem {
     protected SlingHttpServletRequest request;
     protected Page page;
 
-    public PageListItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
+    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
         this.request = request;
         this.page = page;
         Page redirectTarget = getRedirectTarget(page);
@@ -90,7 +89,7 @@ public class PageListItemImpl implements ListItem {
         return page.getName();
     }
 
-    private Page getRedirectTarget(@Nonnull Page page) {
+    private Page getRedirectTarget(@NotNull Page page) {
         Page result = page;
         String redirectTarget;
         PageManager pageManager = page.getPageManager();

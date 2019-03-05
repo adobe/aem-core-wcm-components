@@ -31,7 +31,7 @@ public class MockExternalizerFactory {
     public static Externalizer getExternalizerService() {
         Externalizer externalizer = mock(Externalizer.class);
         when(externalizer.publishLink(any(ResourceResolver.class), anyString())).then(
-                invocationOnMock -> ROOT + invocationOnMock.getArgumentAt(1, String.class));
+                invocationOnMock -> ROOT + invocationOnMock.getArgument(1));
         return externalizer;
     }
 

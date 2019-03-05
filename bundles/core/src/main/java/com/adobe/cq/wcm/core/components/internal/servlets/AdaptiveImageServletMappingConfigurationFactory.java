@@ -18,14 +18,12 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
-import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
@@ -105,7 +103,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      *
      * @return {@link List} of resource types
      */
-    @Nonnull
+    @NotNull
     public List<String> getResourceTypes() {
         return this.resourceTypes;
     }
@@ -115,7 +113,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      *
      * @return {@link List} of selectors
      */
-    @Nonnull
+    @NotNull
     public List<String> getSelectors() {
         return this.selectors;
     }
@@ -125,7 +123,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      *
      * @return {@link List} of extensions
      */
-    @Nonnull
+    @NotNull
     public List<String> getExtensions() {
         return this.extensions;
     }
@@ -146,8 +144,8 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      *
      * @return - {@link List} of strings with no empty values; might be empty.
      */
-    @Nonnull
-    private List<String> getValues(@Nonnull String[] config) {
+    @NotNull
+    private List<String> getValues(@NotNull String[] config) {
         List<String> values = new ArrayList<>(config.length);
         for (String conf : config) {
             if (StringUtils.isNotEmpty(conf)) {

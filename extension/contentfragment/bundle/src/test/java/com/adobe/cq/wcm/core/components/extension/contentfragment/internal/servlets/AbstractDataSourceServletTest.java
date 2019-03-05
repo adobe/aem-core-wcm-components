@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.serv
 import java.io.IOException;
 import java.util.Iterator;
 import javax.servlet.ServletException;
-import javax.servlet.jsp.PageContext;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -42,14 +41,11 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1.ContentFragmentImplTest.ADAPTER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 public abstract class AbstractDataSourceServletTest {
 
@@ -73,7 +69,7 @@ public abstract class AbstractDataSourceServletTest {
         CONTEXT.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, ADAPTER);
 
         // mock resource bundle provider to enable constructing i18n instances
-        ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
+        ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class, withSettings().lenient());
         CONTEXT.registerService(ResourceBundleProvider.class, resourceBundleProvider);
         CONTEXT.registerService(FragmentRenderService.class, mock(FragmentRenderService.class));
         CONTEXT.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
@@ -87,10 +83,8 @@ public abstract class AbstractDataSourceServletTest {
     public void beforeSuper() throws Exception {
         // mock the expression resolver
         expressionResolver = mock(ExpressionResolver.class);
-        when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<PageContext>anyObject())).then(returnsFirstArg());
-        when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<SlingHttpServletRequest>anyObject())).then(returnsFirstArg());
+        when(expressionResolver.resolve(anyString(), any(), any(),
+                org.mockito.ArgumentMatchers.<SlingHttpServletRequest>any())).then(returnsFirstArg());
     }
 
     /**
