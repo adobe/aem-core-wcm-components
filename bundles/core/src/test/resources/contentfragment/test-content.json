@@ -89,7 +89,8 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
-                        "variationName"     : "non-existing"
+                        "variationName"     : "non-existing",
+                        "displayMode"       : "singleText"
                     },
                     "structured-nested-model"              : {
                         "jcr:primaryType"   : "nt:unstructured",
@@ -106,7 +107,8 @@
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragment/v1/contentfragment",
                         "fragmentPath"      : "/content/dam/contentfragments/structured",
-                        "elementNames"      : ["main"]
+                        "elementNames"      : ["main"],
+                        "displayMode"       : "singleText"
                     },
                     "structured-multiple-elements"         : {
                         "jcr:primaryType"   : "nt:unstructured",

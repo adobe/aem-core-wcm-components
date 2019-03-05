@@ -19,7 +19,7 @@
     // class of the content fragment
     var CLASS_CONTENTFRAGMENT = "cmp-contentfragment";
     // name of the attribute on the content fragment storing its path
-    var ATTRIBUTE_PATH = "data-path";
+    var ATTRIBUTE_PATH = "data-cmp-contentfragment-path";
     // base URL of the editor
     var EDITOR_URL = "/editor.html";
 

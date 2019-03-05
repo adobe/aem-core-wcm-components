@@ -14,26 +14,39 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
-<template data-sly-template.paragraphs="${@ fragment='The content fragment', fragmentPath='fragment path', wcmmode = 'WCM mode'}">
-    <div data-path="${fragmentPath}"
-         data-json="${!wcmmode.disabled && fragment.editorJSON}"
-         class="cmp-contentfragment">
+<template data-sly-template.contentFragment="${@ fragment='The content fragment', fragmentPath='', wcmmode='WCM mode'}">
+    <article class="cmp-contentfragment"
+             data-cmp-contentfragment-model="${fragment.type}"
+             data-sly-attribute.data-cmp-contentfragment-path="${fragmentPath}"
+             data-json="${!wcmmode.disabled && fragment.editorJSON}">
+        <h3 class="cmp-contentfragment__title">${fragment.title}</h3>
+        <sly data-sly-test="${fragment.description}">
+            <p class="cmp-contentfragment__description">${fragment.description}</p>
+        </sly>
+
+        <sly data-sly-test.isParagraphMode="${fragment.elements.size == 1 && fragment.elements[0].isMultiLine && properties.displayMode == 'singleText'}">
+            <sly data-sly-call="${paragraphs @ fragment=fragment}"></sly>
+        </sly>
+        <sly data-sly-test="${!isParagraphMode}">
+            <sly data-sly-call="${elements @ fragment=fragment, wcmmode=wcmmode}"></sly>
+        </sly>
+    </article>
+</template>
+
+<template data-sly-template.paragraphs="${@ fragment='The content fragment'}">
+    <div class="cmp-contentfragment__elements">
         <div data-sly-resource="${'par0' @ resourceType=fragment.gridResourceType}"></div>
-        <div data-sly-list="${fragment.elements[0].paragraphs}">
+        <div data-sly-list="${fragment.paragraphs}">
             ${item @ context="html"}
             <div data-sly-resource="${'par{0}' @ format=itemList.count, resourceType=fragment.gridResourceType}"></div>
         </div>
     </div>
 </template>
 
-<template data-sly-template.elements="${@ fragment='The content fragment', fragmentPath='fragment path', wcmmode = 'WCM mode'}">
-    <dl data-path="${fragmentPath}"
-        data-type="${fragment.type}"
-        data-json="${!wcmmode.disabled && fragment.editorJSON}"
-        class="cmp-contentfragment${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}"
+<template data-sly-template.elements="${@ fragment='The content fragment', wcmmode='WCM mode'}">
+    <dl class="cmp-contentfragment__elements${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}"
         data-sly-list.element="${fragment.elements}"
         data-sly-use.elementTemplate="element.html">
         <sly data-sly-call="${elementTemplate.element @ element=element}"></sly>
     </dl>
 </template>
-

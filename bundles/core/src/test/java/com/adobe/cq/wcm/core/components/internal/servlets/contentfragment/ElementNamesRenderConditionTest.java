@@ -40,7 +40,7 @@ import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImplTest.ADAPTER;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.AbstractContentFragmentTest.ADAPTER;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
