@@ -246,7 +246,7 @@
                             childDepth="1"
                             linkItems="false"
                             listFrom="search"
-                            query="teaser"
+                            query="Carousel"
                             searchIn="/content/core-components-examples/library"
                             showDescription="false"
                             showModificationDate="false"
