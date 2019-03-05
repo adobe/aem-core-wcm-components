@@ -15,21 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.adobe.cq.dam.cfm.ContentElement;
+import com.adobe.cq.dam.cfm.ContentFragmentException;
+import com.adobe.cq.dam.cfm.ContentVariation;
+import com.adobe.cq.dam.cfm.FragmentData;
+import com.adobe.cq.dam.cfm.FragmentTemplate;
+import com.adobe.cq.dam.cfm.content.FragmentRenderService;
+import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
+import com.day.text.Text;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,20 +44,20 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.dam.cfm.ContentElement;
-import com.adobe.cq.dam.cfm.ContentFragmentException;
-import com.adobe.cq.dam.cfm.ContentVariation;
-import com.adobe.cq.dam.cfm.FragmentData;
-import com.adobe.cq.dam.cfm.FragmentTemplate;
-import com.adobe.cq.dam.cfm.content.FragmentRenderService;
-import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.day.text.Text;
-
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImpl.RESOURCE_TYPE;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
@@ -166,8 +164,8 @@ public class ContentFragmentImpl implements ContentFragment {
                 }
             }
             exportedElements.put(
-                    element.getName(),
-                    new ElementImpl(renderService, converter, resource, element, variation));
+                element.getName(),
+                new ElementImpl(renderService, converter, resource, element, variation));
         }
 
         elements = new ArrayList<>(exportedElements.values());
@@ -266,7 +264,7 @@ public class ContentFragmentImpl implements ContentFragment {
                 Resource resource = associatedContentIter.next();
                 ValueMap vm = resource.adaptTo(ValueMap.class);
                 JsonObjectBuilder contentObject = Json.createObjectBuilder();
-                if (vm!= null && vm.containsKey(JCR_TITLE)) {
+                if (vm != null && vm.containsKey(JCR_TITLE)) {
                     contentObject.add("title", vm.get(JCR_TITLE, String.class));
                 }
                 contentObject.add("path", resource.getPath());
@@ -301,7 +299,7 @@ public class ContentFragmentImpl implements ContentFragment {
     @Nullable
     @Override
     public List<Element> getElements() {
-        if (!isInitialized && fragment != null)  {
+        if (!isInitialized && fragment != null) {
             initializeElements();
         }
         return elements;
@@ -366,12 +364,11 @@ public class ContentFragmentImpl implements ContentFragment {
         private String htmlValue;
 
         /**
-         *
          * @param renderService the render service to use to render the HTML and paragraphs of text elements
-         * @param converter the converter to use to convert the value of text elements to HTML
-         * @param component the component resource
-         * @param element the original element
-         * @param variation the configured variation of the element, or {@code null}
+         * @param converter     the converter to use to convert the value of text elements to HTML
+         * @param component     the component resource
+         * @param element       the original element
+         * @param variation     the configured variation of the element, or {@code null}
          */
         ElementImpl(@Nonnull FragmentRenderService renderService, @Nonnull ContentTypeConverter converter,
                     @Nonnull Resource component, @Nonnull ContentElement element,
@@ -450,7 +447,7 @@ public class ContentFragmentImpl implements ContentFragment {
             }
 
             String contentType = getContentType();
-            String [] values = getData().getValue(String[].class);
+            String[] values = getData().getValue(String[].class);
             String value = null;
             if (values != null) {
                 value = StringUtils.join(values, ", ");

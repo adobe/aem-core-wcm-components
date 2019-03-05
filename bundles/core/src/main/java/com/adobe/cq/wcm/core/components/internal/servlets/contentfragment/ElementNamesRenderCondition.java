@@ -44,9 +44,9 @@ import java.io.IOException;
  * the render condition is true otherwise false.
  */
 @Component(
-    service = { Servlet.class },
+    service = {Servlet.class},
     property = {
-        "sling.servlet.resourceTypes="+ ElementNamesRenderCondition.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + ElementNamesRenderCondition.RESOURCE_TYPE,
         "sling.servlet.methods=GET"
     }
 )
@@ -72,7 +72,7 @@ public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
 
     @Override
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         // return false by default
         request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(false));
 
@@ -98,7 +98,7 @@ public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
             displayMode = displayModeParam;
         }
         boolean shouldShow = displayMode != null &&
-                displayMode.equals(getParameter(config, request,PARAM_AND_PN_DISPLAY_MODE, String.class));
+            displayMode.equals(getParameter(config, request, PARAM_AND_PN_DISPLAY_MODE, String.class));
         request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(shouldShow));
     }
 
@@ -109,7 +109,7 @@ public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
      */
     @Nullable
     private <T> T getParameter(@Nonnull Config config, @Nonnull SlingHttpServletRequest request, @Nonnull String name,
-                             Class<T> type) {
+                               Class<T> type) {
         // get value from configuration
         String value = config.get(name, String.class);
         if (value == null) {

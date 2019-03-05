@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.wcm.core.components.context.ContentFragmentCoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.rendercondition.RenderCondition;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -84,9 +83,9 @@ public class ElementNamesRenderConditionTest {
         // mock the expression resolver
         ExpressionResolver expressionResolver = mock(ExpressionResolver.class);
         when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<PageContext>anyObject())).then(returnsFirstArg());
+            org.mockito.Matchers.<PageContext>anyObject())).then(returnsFirstArg());
         when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<SlingHttpServletRequest>anyObject())).then(returnsFirstArg());
+            org.mockito.Matchers.<SlingHttpServletRequest>anyObject())).then(returnsFirstArg());
 
         // create the servlet to test
         servlet = new ElementNamesRenderCondition();
@@ -95,14 +94,14 @@ public class ElementNamesRenderConditionTest {
 
     @Test
     public void testSingleTextDisplayMode()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         RenderCondition renderCondition = getRenderCondition(RC_SINGLE_TEXT);
         assertTrue("Invalid value of render condition", renderCondition.check());
     }
 
     @Test
     public void testMultipleElementsDisplayMode()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         RenderCondition renderCondition = getRenderCondition(RC_MULTI);
         assertFalse("Invalid value of render condition", renderCondition.check());
     }
@@ -111,7 +110,7 @@ public class ElementNamesRenderConditionTest {
      * Calls the servlet with the specified render conditino resource and returns the resulting render condition.
      */
     private RenderCondition getRenderCondition(String name)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         // get render condition resource
         ResourceResolver resolver = CONTEXT.resourceResolver();
         Resource renderCondition = resolver.getResource(RENDERCONDITIONS_PATH + "/" + name);

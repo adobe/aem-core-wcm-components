@@ -15,14 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.servlet.ServletException;
-
+import com.adobe.cq.dam.cfm.ContentFragment;
+import com.adobe.granite.ui.components.Config;
+import com.adobe.granite.ui.components.ExpressionHelper;
+import com.adobe.granite.ui.components.ExpressionResolver;
+import com.adobe.granite.ui.components.ds.DataSource;
+import com.adobe.granite.ui.components.ds.EmptyDataSource;
+import com.adobe.granite.ui.components.ds.SimpleDataSource;
+import com.adobe.granite.ui.components.ds.ValueMapResource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -33,14 +33,13 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 
-import com.adobe.cq.dam.cfm.ContentFragment;
-import com.adobe.granite.ui.components.Config;
-import com.adobe.granite.ui.components.ExpressionHelper;
-import com.adobe.granite.ui.components.ExpressionResolver;
-import com.adobe.granite.ui.components.ds.DataSource;
-import com.adobe.granite.ui.components.ds.EmptyDataSource;
-import com.adobe.granite.ui.components.ds.SimpleDataSource;
-import com.adobe.granite.ui.components.ds.ValueMapResource;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment.PN_PATH;
 import static org.apache.sling.api.resource.Resource.RESOURCE_TYPE_NON_EXISTING;
@@ -83,7 +82,7 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
      * Returns, for the given content fragment, a list of items to include in the datasource.
      *
      * @param fragment a content fragment
-     * @param request the request object (can be used for i18n)
+     * @param request  the request object (can be used for i18n)
      * @return the list of items to include in the datasource
      */
     @Nonnull
@@ -109,6 +108,7 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
 
     /**
      * Returns datasource configuration.
+     *
      * @param request the request
      * @return datasource configuration.
      */
@@ -123,7 +123,8 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
 
     /**
      * Get value map corresponding to resource of the component.
-     * @param config datasource configuration
+     *
+     * @param config  datasource configuration
      * @param request the request
      * @return value map.
      */
@@ -146,7 +147,7 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
 
     @Override
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         // return empty datasource by default
         DataSource elements = EmptyDataSource.instance();
         // get content fragment

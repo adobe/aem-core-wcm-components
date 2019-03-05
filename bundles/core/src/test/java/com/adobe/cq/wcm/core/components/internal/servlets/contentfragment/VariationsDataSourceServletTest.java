@@ -15,33 +15,32 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-
+import com.adobe.granite.ui.components.ds.DataSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.adobe.granite.ui.components.ds.DataSource;
+import javax.servlet.ServletException;
+import java.io.IOException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VariationsDataSourceServletTest extends AbstractDataSourceServletTest {
 
     /* names of the datasource instances to test */
 
-    private static final String DS_NO_CONFIG                            = "variations-no-config";
-    private static final String DS_FRAGMENT_PATH_NON_EXISTING           = "variations-fragment-path-non-existing";
-    private static final String DS_COMPONENT_PATH__NON_EXISTING         = "variations-component-path-non-existing";
-    private static final String DS_FRAGMENT_PATH_INVALID                = "variations-fragment-path-invalid";
-    private static final String DS_COMPONENT_PATH_INVALID               = "variations-component-path-invalid";
+    private static final String DS_NO_CONFIG = "variations-no-config";
+    private static final String DS_FRAGMENT_PATH_NON_EXISTING = "variations-fragment-path-non-existing";
+    private static final String DS_COMPONENT_PATH__NON_EXISTING = "variations-component-path-non-existing";
+    private static final String DS_FRAGMENT_PATH_INVALID = "variations-fragment-path-invalid";
+    private static final String DS_COMPONENT_PATH_INVALID = "variations-component-path-invalid";
     private static final String DS_COMPONENT_PATH_INVALID_FRAGMENT_PATH = "variations-component-path-invalid-fragment-path";
-    private static final String DS_FRAGMENT_PATH_TEXT_ONLY              = "variations-fragment-path-text-only";
-    private static final String DS_COMPONENT_PATH_TEXT_ONLY             = "variations-component-path-text-only";
-    private static final String DS_FRAGMENT_PATH_STRUCTURED             = "variations-fragment-path-structured";
-    private static final String DS_COMPONENT_PATH_STRUCTURED            = "variations-component-path-structured";
-    private static final String DS_FRAGMENT_PATH_OVERRIDE               = "variations-fragment-path-override";
+    private static final String DS_FRAGMENT_PATH_TEXT_ONLY = "variations-fragment-path-text-only";
+    private static final String DS_COMPONENT_PATH_TEXT_ONLY = "variations-component-path-text-only";
+    private static final String DS_FRAGMENT_PATH_STRUCTURED = "variations-fragment-path-structured";
+    private static final String DS_COMPONENT_PATH_STRUCTURED = "variations-component-path-structured";
+    private static final String DS_FRAGMENT_PATH_OVERRIDE = "variations-fragment-path-override";
 
     /* names and titles of the elements of both the text-only and structured content fragment */
 
@@ -59,77 +58,77 @@ public class VariationsDataSourceServletTest extends AbstractDataSourceServletTe
 
     @Test
     public void testNoConfig()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_NO_CONFIG);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
     public void testFragmentPathNonExisting()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_NON_EXISTING);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
     public void testComponentPathNonExisting()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH__NON_EXISTING);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
     public void testFragmentPathInvalid()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_INVALID);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
     public void testComponentPathInvalid()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_INVALID);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
     public void testComponentPathInvalidFragmentPath()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_INVALID_FRAGMENT_PATH);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
     public void testFragmentPathTextOnly()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_TEXT_ONLY);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
     public void testComponentPathTextOnly()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_TEXT_ONLY);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
     public void testFragmentPathStructured()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_STRUCTURED);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
     public void testComponentPathStructured()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_STRUCTURED);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
     public void testFragmentPathOverride()
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_OVERRIDE);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }

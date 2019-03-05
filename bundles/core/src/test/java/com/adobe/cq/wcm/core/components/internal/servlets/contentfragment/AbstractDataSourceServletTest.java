@@ -15,11 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.servlet.ServletException;
-import javax.servlet.jsp.PageContext;
-
+import com.adobe.cq.dam.cfm.content.FragmentRenderService;
+import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.granite.ui.components.Config;
+import com.adobe.granite.ui.components.ExpressionResolver;
+import com.adobe.granite.ui.components.ds.DataSource;
+import io.wcm.testing.mock.aem.junit.AemContext;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -33,13 +35,10 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.mockito.Mockito;
 
-import com.adobe.cq.dam.cfm.content.FragmentRenderService;
-import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.granite.ui.components.Config;
-import com.adobe.granite.ui.components.ExpressionResolver;
-import com.adobe.granite.ui.components.ds.DataSource;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import javax.servlet.ServletException;
+import javax.servlet.jsp.PageContext;
+import java.io.IOException;
+import java.util.Iterator;
 
 import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImplTest.ADAPTER;
 import static org.junit.Assert.assertEquals;
@@ -88,16 +87,16 @@ public abstract class AbstractDataSourceServletTest {
         // mock the expression resolver
         expressionResolver = mock(ExpressionResolver.class);
         when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<PageContext>anyObject())).then(returnsFirstArg());
+            org.mockito.Matchers.<PageContext>anyObject())).then(returnsFirstArg());
         when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<SlingHttpServletRequest>anyObject())).then(returnsFirstArg());
+            org.mockito.Matchers.<SlingHttpServletRequest>anyObject())).then(returnsFirstArg());
     }
 
     /**
      * Calls the servlet with the specified datasource resource and returns the resulting datasource.
      */
     protected DataSource getDataSource(AbstractContentFragmentDataSource servlet, String name)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         // get datasource resource
         ResourceResolver resolver = CONTEXT.resourceResolver();
         Resource dataSource = resolver.getResource(DATASOURCES_PATH + "/" + name);

@@ -15,26 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-import javax.json.Json;
-import javax.json.JsonReader;
-
+import com.adobe.cq.dam.cfm.ContentElement;
+import com.adobe.cq.dam.cfm.ContentVariation;
+import com.adobe.cq.dam.cfm.DataType;
+import com.adobe.cq.dam.cfm.FragmentData;
+import com.adobe.cq.dam.cfm.FragmentTemplate;
+import com.adobe.cq.dam.cfm.VariationDef;
+import com.adobe.cq.dam.cfm.content.FragmentRenderService;
+import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.ContentFragmentCoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
+import com.day.cq.commons.jcr.JcrConstants;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.wcm.testing.mock.aem.junit.AemContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -49,19 +44,22 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.dam.cfm.ContentElement;
-import com.adobe.cq.dam.cfm.ContentVariation;
-import com.adobe.cq.dam.cfm.DataType;
-import com.adobe.cq.dam.cfm.FragmentData;
-import com.adobe.cq.dam.cfm.FragmentTemplate;
-import com.adobe.cq.dam.cfm.VariationDef;
-import com.adobe.cq.dam.cfm.content.FragmentRenderService;
-import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.sightly.WCMBindings;
-import com.day.cq.commons.jcr.JcrConstants;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import javax.annotation.Nullable;
+import javax.json.Json;
+import javax.json.JsonReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_DATA;
@@ -88,23 +86,23 @@ public class ContentFragmentImplTest {
 
     /* names of the content fragment component instances to test */
 
-    private static final String CF_TEXT_ONLY_NO_PATH                 = "text-only-no-path";
-    private static final String CF_TEXT_ONLY_NON_EXISTING_PATH       = "text-only-non-existing-path";
-    private static final String CF_TEXT_ONLY_INVALID_PATH            = "text-only-invalid-path";
-    private static final String CF_TEXT_ONLY                         = "text-only";
-    private static final String CF_TEXT_ONLY_VARIATION               = "text-only-variation";
-    private static final String CF_TEXT_ONLY_NON_EXISTING_VARIATION  = "text-only-non-existing-variation";
-    private static final String CF_TEXT_ONLY_SINGLE_ELEMENT          = "text-only-single-element";
-    private static final String CF_TEXT_ONLY_MULTIPLE_ELEMENTS       = "text-only-multiple-elements";
-    private static final String CF_STRUCTURED_NO_PATH                = "structured-no-path";
-    private static final String CF_STRUCTURED_NON_EXISTING_PATH      = "structured-non-existing-path";
-    private static final String CF_STRUCTURED_INVALID_PATH           = "structured-invalid-path";
-    private static final String CF_STRUCTURED                        = "structured";
-    private static final String CF_STRUCTURED_VARIATION              = "structured-variation";
+    private static final String CF_TEXT_ONLY_NO_PATH = "text-only-no-path";
+    private static final String CF_TEXT_ONLY_NON_EXISTING_PATH = "text-only-non-existing-path";
+    private static final String CF_TEXT_ONLY_INVALID_PATH = "text-only-invalid-path";
+    private static final String CF_TEXT_ONLY = "text-only";
+    private static final String CF_TEXT_ONLY_VARIATION = "text-only-variation";
+    private static final String CF_TEXT_ONLY_NON_EXISTING_VARIATION = "text-only-non-existing-variation";
+    private static final String CF_TEXT_ONLY_SINGLE_ELEMENT = "text-only-single-element";
+    private static final String CF_TEXT_ONLY_MULTIPLE_ELEMENTS = "text-only-multiple-elements";
+    private static final String CF_STRUCTURED_NO_PATH = "structured-no-path";
+    private static final String CF_STRUCTURED_NON_EXISTING_PATH = "structured-non-existing-path";
+    private static final String CF_STRUCTURED_INVALID_PATH = "structured-invalid-path";
+    private static final String CF_STRUCTURED = "structured";
+    private static final String CF_STRUCTURED_VARIATION = "structured-variation";
     private static final String CF_STRUCTURED_NON_EXISTING_VARIATION = "structured-non-existing-variation";
-    private static final String CF_STRUCTURED_NESTED_MODEL           = "structured-nested-model";
-    private static final String CF_STRUCTURED_SINGLE_ELEMENT         = "structured-single-element";
-    private static final String CF_STRUCTURED_MULTIPLE_ELEMENTS      = "structured-multiple-elements";
+    private static final String CF_STRUCTURED_NESTED_MODEL = "structured-nested-model";
+    private static final String CF_STRUCTURED_SINGLE_ELEMENT = "structured-single-element";
+    private static final String CF_STRUCTURED_MULTIPLE_ELEMENTS = "structured-multiple-elements";
 
     /* contents of the text-only and structured content fragments referenced by the above components */
 
@@ -113,21 +111,22 @@ public class ContentFragmentImplTest {
     private static final String TEXT_ONLY_TYPE = "/content/dam/contentfragments/text-only/jcr:content/model";
     private static final String STRUCTURED_TYPE = "global/models/test";
     private static final String STRUCTURED_TYPE_NESTED = "global/nested/models/test";
-    private static final String[] ASSOCIATED_CONTENT = new String[]{ "/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test" };
+    private static final String[] ASSOCIATED_CONTENT = new String[]{"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"};
     private static final Element MAIN = new Element("main", "Main", "text/html",
-            "<p>Main content</p>", true, "<p>Main content</p>", new String []{"<p>Main content</p>"});
+        "<p>Main content</p>", true, "<p>Main content</p>", new String[]{"<p>Main content</p>"});
     private static final Element SECOND_TEXT_ONLY = new Element("second", "Second", "text/plain", "Second content",
-            true, null, new String[]{"Second content"});
+        true, null, new String[]{"Second content"});
     private static final Element SECOND_STRUCTURED = new Element("second", "Second", null, new String[]{"one", "two", "three"},
-            false, null, null);
+        false, null, null);
     private static final String VARIATION_NAME = "teaser";
+
     static {
         MAIN.addVariation(VARIATION_NAME, "Teaser", "text/html", "<p>Main content (teaser)</p>",
-                true, "<p>Main content (teaser)</p>", new String[] {"<p>Main content (teaser)</p>"});
+            true, "<p>Main content (teaser)</p>", new String[]{"<p>Main content (teaser)</p>"});
         SECOND_TEXT_ONLY.addVariation(VARIATION_NAME, "Teaser", "text/plain", "Second content (teaser)", true,
-                null, new String [] {"Second content (teaser)"});
+            null, new String[]{"Second content (teaser)"});
         SECOND_STRUCTURED.addVariation(VARIATION_NAME, "Teaser", null, new String[]{"one (teaser)", "two (teaser)", "three (teaser)"},
-                false, null, null);
+            false, null, null);
     }
 
     private static FragmentRenderService fragmentRenderService;
@@ -152,13 +151,13 @@ public class ContentFragmentImplTest {
         Element.Variation mainVariation = MAIN.variations.get(VARIATION_NAME);
         Element.Variation secondVariation = SECOND_TEXT_ONLY.variations.get(VARIATION_NAME);
         AEM_CONTEXT.load().binaryFile(new ByteArrayInputStream(MAIN.values[0].getBytes(UTF_8)),
-                path + "jcr:content/renditions/original", MAIN.contentType);
+            path + "jcr:content/renditions/original", MAIN.contentType);
         AEM_CONTEXT.load().binaryFile(new ByteArrayInputStream(mainVariation.values[0].getBytes(UTF_8)),
-                path + "jcr:content/renditions/" + VARIATION_NAME, mainVariation.contentType);
+            path + "jcr:content/renditions/" + VARIATION_NAME, mainVariation.contentType);
         AEM_CONTEXT.load().binaryFile(new ByteArrayInputStream(SECOND_TEXT_ONLY.values[0].getBytes(UTF_8)),
-                path + "subassets/second/jcr:content/renditions/original", SECOND_TEXT_ONLY.contentType);
+            path + "subassets/second/jcr:content/renditions/original", SECOND_TEXT_ONLY.contentType);
         AEM_CONTEXT.load().binaryFile(new ByteArrayInputStream(secondVariation.values[0].getBytes(UTF_8)),
-                path + "subassets/second/jcr:content/renditions/" + VARIATION_NAME, secondVariation.contentType);
+            path + "subassets/second/jcr:content/renditions/" + VARIATION_NAME, secondVariation.contentType);
 
         // register an adapter that adapts resources to mocks of content fragments
         AEM_CONTEXT.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, ADAPTER);
@@ -213,7 +212,7 @@ public class ContentFragmentImplTest {
     public void testTextOnlyVariation() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN,
-                SECOND_TEXT_ONLY);
+            SECOND_TEXT_ONLY);
     }
 
     @Test
@@ -256,28 +255,28 @@ public class ContentFragmentImplTest {
     public void testStructured() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
-                SECOND_STRUCTURED);
+            SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredVariation() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
-                SECOND_STRUCTURED);
+            SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredNonExistingVariation() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NON_EXISTING_VARIATION);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
-                SECOND_STRUCTURED);
+            SECOND_STRUCTURED);
     }
 
     @Test
     public void testStructuredNestedModel() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_NESTED_MODEL);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE_NESTED, ASSOCIATED_CONTENT, MAIN,
-                SECOND_STRUCTURED);
+            SECOND_STRUCTURED);
     }
 
     @Test
@@ -290,7 +289,7 @@ public class ContentFragmentImplTest {
     public void testStructuredMultipleElements() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_MULTIPLE_ELEMENTS);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED,
-                MAIN);
+            MAIN);
     }
 
     @Test
@@ -317,7 +316,7 @@ public class ContentFragmentImplTest {
         final ComponentExporter mainElement = elements.get("main");
         assertEquals("text/html", mainElement.getExportedType());
     }
-    
+
     @Test
     public void testJSONExport() throws IOException {
         ContentFragmentImpl fragment = (ContentFragmentImpl) getTestContentFragment(CF_TEXT_ONLY);
@@ -326,7 +325,7 @@ public class ContentFragmentImplTest {
         mapper.writerWithView(ContentFragmentImpl.class).writeValue(writer, fragment);
         JsonReader jsonReaderOutput = Json.createReader(IOUtils.toInputStream(writer.toString()));
         JsonReader jsonReaderExpected = Json.createReader(Thread.currentThread().getContextClassLoader().getClass()
-                .getResourceAsStream("/contentfragment/test-expected-content-export.json"));
+            .getResourceAsStream("/contentfragment/test-expected-content-export.json"));
         assertEquals(jsonReaderExpected.read(), jsonReaderOutput.read());
     }
 
@@ -334,8 +333,8 @@ public class ContentFragmentImplTest {
     public void testStructuredGetEditorJSON() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_MULTIPLE_ELEMENTS);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
-                "\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
-                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+            "\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
+            ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
         assertEquals(fragment.getEditorJSON(), expectedJSON);
     }
 
@@ -343,8 +342,8 @@ public class ContentFragmentImplTest {
     public void testStructuredWithVariationGetEditorJSON() {
         ContentFragment fragment = getTestContentFragment(CF_STRUCTURED_VARIATION);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
-                "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
-                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+            "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
+            ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
         assertEquals(fragment.getEditorJSON(), expectedJSON);
     }
 
@@ -352,8 +351,8 @@ public class ContentFragmentImplTest {
     public void testTextOnlyGetEditorJSON() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"" +
-                ",\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
-                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+            ",\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
+            ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
         assertEquals(fragment.getEditorJSON(), expectedJSON);
     }
 
@@ -361,8 +360,8 @@ public class ContentFragmentImplTest {
     public void testTextOnlyWithVariationGetEditorJSON() {
         ContentFragment fragment = getTestContentFragment(CF_TEXT_ONLY_VARIATION);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"," +
-                "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
-                ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
+            "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
+            ",\"path\":\"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test\"}]}";
         assertEquals(fragment.getEditorJSON(), expectedJSON);
     }
 
@@ -393,7 +392,7 @@ public class ContentFragmentImplTest {
                                        String expectedType, String[] expectedAssociatedContent,
                                        Element... expectedElements) {
         assertContentFragment(fragment, null, expectedTitle, expectedDescription, expectedType,
-                expectedAssociatedContent, expectedElements);
+            expectedAssociatedContent, expectedElements);
     }
 
     /**
@@ -404,8 +403,8 @@ public class ContentFragmentImplTest {
                                        String expectedDescription, String expectedType,
                                        String[] expectedAssociatedContent, Element... expectedElements) {
         assertEquals("Content fragment has wrong title", expectedTitle, fragment.getTitle());
-        assertEquals("Content fragment has wrong description", expectedDescription  ,fragment.getDescription());
-        assertEquals("Content fragment has wrong type", expectedType ,fragment.getType());
+        assertEquals("Content fragment has wrong description", expectedDescription, fragment.getDescription());
+        assertEquals("Content fragment has wrong type", expectedType, fragment.getType());
         List<Resource> associatedContent = fragment.getAssociatedContent();
         assertEquals("Content fragment has wrong number of associated content", expectedAssociatedContent.length, associatedContent.size());
         for (int i = 0; i < expectedAssociatedContent.length; i++) {
@@ -425,7 +424,7 @@ public class ContentFragmentImplTest {
                 component = (Resource) componentField.get(element);
                 String value = element.getValue() != null ? element.getValue().toString() : null;
                 when(fragmentRenderService.render(component)).thenReturn(value);
-            } catch (NoSuchFieldException|IllegalAccessException e) {
+            } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
             Element expected = expectedElements[i];
@@ -434,8 +433,8 @@ public class ContentFragmentImplTest {
             String contentType = expected.contentType;
             boolean isMultiLine = expected.isMultiLine;
             String htmlValue = expected.htmlValue;
-            String [] paragraphs = expected.paragraphs;
-            String [] expectedValues = expected.values;
+            String[] paragraphs = expected.paragraphs;
+            String[] expectedValues = expected.values;
             if (StringUtils.isNotEmpty(variationName)) {
                 contentType = expected.variations.get(variationName).contentType;
                 expectedValues = expected.variations.get(variationName).values;
@@ -445,9 +444,9 @@ public class ContentFragmentImplTest {
             }
             Object elementValue = element.getValue();
             if (elementValue != null && elementValue.getClass().isArray()) {
-                assertArrayEquals("Element's values didn't match", expectedValues, (String[])elementValue);
+                assertArrayEquals("Element's values didn't match", expectedValues, (String[]) elementValue);
             } else {
-                assertEquals("Element is not single valued", expectedValues.length, 1);
+                assertEquals("Element is not single valued", 1, expectedValues.length);
                 assertEquals("Element's value didn't match", expectedValues[0], elementValue);
             }
             assertEquals("Element has wrong isMultiLine flag", isMultiLine, element.isMultiLine());
@@ -460,316 +459,316 @@ public class ContentFragmentImplTest {
      * Adapts resources to {@link com.adobe.cq.dam.cfm.ContentFragment} objects by mocking parts of their API.
      */
     public static final com.google.common.base.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment> ADAPTER =
-            new com.google.common.base.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment>() {
+        new com.google.common.base.Function<Resource, com.adobe.cq.dam.cfm.ContentFragment>() {
 
-        private final String PATH_DATA = JCR_CONTENT + "/data";
-        private final String PATH_MASTER = PATH_DATA + "/master";
-        private final String PATH_MODEL = JCR_CONTENT + "/model";
-        private final String PATH_MODEL_ELEMENTS = PATH_MODEL + "/elements";
-        private final String PATH_MODEL_VARIATIONS = PATH_MODEL + "/variations";
-        private final String PATH_MODEL_DIALOG_ITEMS = JCR_CONTENT + "/model/cq:dialog/content/items";
-        private final String PATH_ASSOCIATED_CONTENT = JCR_CONTENT + "/associated/sling:members";
-        private final String PN_CONTENT_FRAGMENT = "contentFragment";
-        private final String PN_MODEL = "cq:model";
-        private final String PN_ELEMENT_NAME = "name";
-        private final String PN_ELEMENT_TITLE = "fieldLabel";
-        private final String PN_VALUE_TYPE = "valueType";
-        private final String MAIN_ELEMENT = "main";
+            private final String PATH_DATA = JCR_CONTENT + "/data";
+            private final String PATH_MASTER = PATH_DATA + "/master";
+            private final String PATH_MODEL = JCR_CONTENT + "/model";
+            private final String PATH_MODEL_ELEMENTS = PATH_MODEL + "/elements";
+            private final String PATH_MODEL_VARIATIONS = PATH_MODEL + "/variations";
+            private final String PATH_MODEL_DIALOG_ITEMS = JCR_CONTENT + "/model/cq:dialog/content/items";
+            private final String PATH_ASSOCIATED_CONTENT = JCR_CONTENT + "/associated/sling:members";
+            private final String PN_CONTENT_FRAGMENT = "contentFragment";
+            private final String PN_MODEL = "cq:model";
+            private final String PN_ELEMENT_NAME = "name";
+            private final String PN_ELEMENT_TITLE = "fieldLabel";
+            private final String PN_VALUE_TYPE = "valueType";
+            private final String MAIN_ELEMENT = "main";
 
-        @Nullable
-        @Override
-        public com.adobe.cq.dam.cfm.ContentFragment apply(@Nullable Resource resource) {
-            // check if the resource is valid and an asset
-            if (resource == null || !resource.isResourceType(NT_DAM_ASSET)) {
-                return null;
-            }
-
-            // check if the resource is a content fragment
-            Resource content = resource.getChild(JCR_CONTENT);
-            ValueMap contentProperties = content.getValueMap();
-            if (!contentProperties.get(PN_CONTENT_FRAGMENT, Boolean.FALSE)) {
-                return null;
-            }
-
-            // check if the content fragment is text-only or structured
-            Resource data = resource.getChild(PATH_DATA);
-            boolean isStructured = data != null;
-
-            /* get content fragment properties, model and elements */
-
-            String title = contentProperties.get(JCR_TITLE, String.class);
-            String description = contentProperties.get(JCR_DESCRIPTION, String.class);
-            Resource model;
-            Resource modelAdaptee;
-            List<ContentElement> elements = new LinkedList<>();
-
-            if (isStructured) {
-                // get the model (referenced in the property)
-                model = resource.getResourceResolver().getResource(data.getValueMap().get(PN_MODEL, String.class));
-                // for the 'adaptTo' mock below we use the jcr:content child to mimick the real behavior
-                modelAdaptee = model.getChild(JCR_CONTENT);
-                // create an element mock for each property on the master node
-                Resource master = resource.getChild(PATH_MASTER);
-                for (String name : master.getValueMap().keySet()) {
-                    // skip the primary type and content type properties
-                    if (JcrConstants.JCR_PRIMARYTYPE.equals(name) || name.endsWith("@ContentType")) {
-                        continue;
-                    }
-                    elements.add(getMockElement(resource, name, model));
+            @Nullable
+            @Override
+            public com.adobe.cq.dam.cfm.ContentFragment apply(@Nullable Resource resource) {
+                // check if the resource is valid and an asset
+                if (resource == null || !resource.isResourceType(NT_DAM_ASSET)) {
+                    return null;
                 }
-            } else {
-                // get the model (stored in the fragment itself)
-                model = resource.getChild(PATH_MODEL);
-                modelAdaptee = model;
-                // add the "main" element to the list
-                elements.add(getMockElement(resource, null, null));
-                // create an element mock for each subasset
-                Resource subassets = resource.getChild("subassets");
-                if (subassets != null) {
-                    for (Resource subasset : subassets.getChildren()) {
-                        elements.add(getMockElement(resource, subasset.getName(), null));
-                    }
+
+                // check if the resource is a content fragment
+                Resource content = resource.getChild(JCR_CONTENT);
+                ValueMap contentProperties = content.getValueMap();
+                if (!contentProperties.get(PN_CONTENT_FRAGMENT, Boolean.FALSE)) {
+                    return null;
                 }
-            }
 
-            /* create mock objects */
+                // check if the content fragment is text-only or structured
+                Resource data = resource.getChild(PATH_DATA);
+                boolean isStructured = data != null;
 
-            com.adobe.cq.dam.cfm.ContentFragment fragment = mock(com.adobe.cq.dam.cfm.ContentFragment.class);
-            when(fragment.getTitle()).thenReturn(title);
-            when(fragment.getDescription()).thenReturn(description);
-            when(fragment.adaptTo(Resource.class)).thenReturn(resource);
-            when(fragment.getElement(any(String.class))).thenAnswer(invocation -> {
-                String name = invocation.getArgumentAt(0, String.class);
-                return getMockElement(resource, name, isStructured ? model : null);
-            });
-            when(fragment.hasElement(any(String.class))).thenAnswer(invocation -> {
-                String name = invocation.getArgumentAt(0, String.class);
-                return fragment.getElement(name) != null;
-            });
-            when(fragment.getElements()).thenReturn(elements.iterator());
+                /* get content fragment properties, model and elements */
 
-            List<VariationDef> variations = new LinkedList<>();
-            ContentElement main = fragment.getElement(null);
-            Iterator<ContentVariation> iterator = main.getVariations();
-            while (iterator.hasNext()) {
-                ContentVariation variation = iterator.next();
-                variations.add(new VariationDef() {
-                    @Override
-                    public String getName() {
-                        return variation.getName();
+                String title = contentProperties.get(JCR_TITLE, String.class);
+                String description = contentProperties.get(JCR_DESCRIPTION, String.class);
+                Resource model;
+                Resource modelAdaptee;
+                List<ContentElement> elements = new LinkedList<>();
+
+                if (isStructured) {
+                    // get the model (referenced in the property)
+                    model = resource.getResourceResolver().getResource(data.getValueMap().get(PN_MODEL, String.class));
+                    // for the 'adaptTo' mock below we use the jcr:content child to mimick the real behavior
+                    modelAdaptee = model.getChild(JCR_CONTENT);
+                    // create an element mock for each property on the master node
+                    Resource master = resource.getChild(PATH_MASTER);
+                    for (String name : master.getValueMap().keySet()) {
+                        // skip the primary type and content type properties
+                        if (JcrConstants.JCR_PRIMARYTYPE.equals(name) || name.endsWith("@ContentType")) {
+                            continue;
+                        }
+                        elements.add(getMockElement(resource, name, model));
                     }
-
-                    @Override
-                    public String getTitle() {
-                        return variation.getTitle();
-                    }
-
-                    @Override
-                    public String getDescription() {
-                        return variation.getDescription();
-                    }
-                });
-            }
-            when(fragment.listAllVariations()).thenReturn(variations.iterator());
-
-            FragmentTemplate template = mock(FragmentTemplate.class);
-            when(template.adaptTo(Resource.class)).thenReturn(modelAdaptee);
-            when(fragment.getTemplate()).thenReturn(template);
-
-            Iterator<Resource> associatedContent = getAssociatedContent(resource);
-            when(fragment.getAssociatedContent()).thenReturn(associatedContent);
-
-            return fragment;
-        }
-
-        /**
-         * Creates a mock of a content element for a text-only (if {@code model} is {@code null}) or structured
-         * (if {@code model} is not {@code null}) content fragment.
-         */
-        private ContentElement getMockElement(Resource resource, String name, Resource model) {
-            // get the respective element
-            Element element;
-            if (model == null) {
-                element = getTextOnlyElement(resource, name);
-            } else {
-                element = getStructuredElement(resource, model, name);
-            }
-            if (element == null) {
-                return null;
-            }
-
-            /* create mock objects */
-
-            // mock data type
-            DataType dataType = mock(DataType.class);
-            when(dataType.isMultiValue()).thenReturn(element.isMultiValued);
-
-            // mock fragment data
-            FragmentData data = mock(FragmentData.class);
-            when(data.getValue()).thenReturn(element.isMultiValued ? element.values : element.values[0]);
-            when(data.getValue(String.class)).thenReturn(element.values[0]);
-            when(data.getValue(String[].class)).thenReturn(element.values);
-            when(data.getContentType()).thenReturn(element.contentType);
-            when(data.getDataType()).thenReturn(dataType);
-
-            // mock content element
-            ContentElement contentElement = mock(ContentElement.class);
-            when(contentElement.getName()).thenReturn(element.name);
-            when(contentElement.getTitle()).thenReturn(element.title);
-            when(contentElement.getContent()).thenReturn(element.values[0]);
-            when(contentElement.getContentType()).thenReturn(element.contentType);
-            when(contentElement.getValue()).thenReturn(data);
-
-            // mock variations
-            Map<String, ContentVariation> variations = new LinkedHashMap<>();
-            for (Element.Variation variation : element.variations.values()) {
-                FragmentData variationData = mock(FragmentData.class);
-                when(variationData.getValue()).thenReturn(element.isMultiValued ? variation.values : variation.values[0]);
-                when(variationData.getValue(String.class)).thenReturn(variation.values[0]);
-                when(variationData.getValue(String[].class)).thenReturn(variation.values);
-                when(variationData.getContentType()).thenReturn(variation.contentType);
-                when(variationData.getDataType()).thenReturn(dataType);
-
-                ContentVariation contentVariation = mock(ContentVariation.class);
-                when(contentVariation.getName()).thenReturn(variation.name);
-                when(contentVariation.getTitle()).thenReturn(variation.title);
-                when(contentVariation.getContent()).thenReturn(variation.values[0]);
-                when(contentVariation.getContentType()).thenReturn(variation.contentType);
-                when(contentVariation.getValue()).thenReturn(variationData);
-                variations.put(variation.name, contentVariation);
-            }
-            when(contentElement.getVariations()).thenReturn(variations.values().iterator());
-            when(contentElement.getVariation(any(String.class))).thenAnswer(invocation -> {
-                String variationName = invocation.getArgumentAt(0, String.class);
-                return variations.get(variationName);
-            });
-
-            return contentElement;
-        }
-
-        /**
-         * Collects and returns the information of a content element for text-only content fragment.
-         */
-        private Element getTextOnlyElement(Resource resource, String name) {
-            Element element = new Element();
-            // text-only elements are never multi-valued
-            element.isMultiValued = false;
-            // if the name is null we use the main element
-            element.name = name == null ? MAIN_ELEMENT : name;
-
-            // loop through element definitions in the model and find the matching one
-            boolean found = false;
-            Resource elements = resource.getChild(PATH_MODEL_ELEMENTS);
-            for (Resource elementResource : elements.getChildren()) {
-                ValueMap properties = elementResource.getValueMap();
-                if (element.name.equals(properties.get(PN_ELEMENT_NAME))) {
-                    // set the element title
-                    element.title = properties.get(JCR_TITLE, String.class);
-                    found = true;
-                    break;
-                }
-            }
-            // return if we didn't find an element with the given name
-            if (!found) {
-                return null;
-            }
-
-            try {
-                // get path to the asset resource (main element or correct subasset)
-                String path = MAIN_ELEMENT.equals(element.name) ? "" : "subassets/" + element.name + "/";
-                Resource renditions = resource.getChild(path + JCR_CONTENT + "/renditions");
-                // loop over the renditions (i.e. variations)
-                for (Resource rendition : renditions.getChildren()) {
-                    // get content and content type
-                    ValueMap properties = rendition.getChild(JCR_CONTENT).getValueMap();
-                    String content = IOUtils.toString(properties.get(JCR_DATA, InputStream.class), UTF_8);
-                    String contentType = properties.get(JCR_MIMETYPE, String.class);
-
-                    // get variation definition from model
-                    Resource variation = resource.getChild(PATH_MODEL_VARIATIONS + "/" + rendition.getName());
-                    if (variation != null) {
-                        String title = variation.getValueMap().get(JCR_TITLE, String.class);
-                        element.addVariation(rendition.getName(), title, contentType, new String[]{ content },
-                                true, content, content.split(PARA_SPLIT_REGEX));
-                    } else {
-                        element.values = new String[]{ content };
-                        element.contentType = contentType;
-                    }
-                }
-            } catch (IOException e) {
-                return null;
-            }
-
-            return element;
-        }
-
-        /**
-         * Collects and returns the information of a content element for structured content fragment.
-         */
-        private Element getStructuredElement(Resource resource, Resource model, String name) {
-            Element element = new Element();
-            element.name = name;
-
-            // loop through element definitions in the model and find the matching one (or first one, if name is null)
-            boolean found = false;
-            Resource items = model.getChild(PATH_MODEL_DIALOG_ITEMS);
-            for (Resource item : items.getChildren()) {
-                ValueMap properties = item.getValueMap();
-                String elementName = properties.get(PN_ELEMENT_NAME, String.class);
-                if (element.name == null || element.name.equals(elementName)) {
-                    // set the element name (in case it was null)
-                    element.name = elementName;
-                    // set the element title
-                    element.title = properties.get(PN_ELEMENT_TITLE, String.class);
-                    // determine if the element is multi-valued (if the value type is e.g. "string[]")
-                    element.isMultiValued = properties.get(PN_VALUE_TYPE, "").endsWith("[]");
-                    found = true;
-                    break;
-                }
-            }
-            // return if we didn't find an element with the given name
-            if (!found) {
-                return null;
-            }
-
-            // loop over the data nodes
-            for (Resource data : resource.getChild(PATH_DATA).getChildren()) {
-                ValueMap properties = data.getValueMap();
-                String[] values = properties.get(element.name, String[].class);
-                String contentType = properties.get(element.name + "@ContentType", String.class);
-                if ("master".equals(data.getName())) {
-                    element.values = values;
-                    element.contentType = contentType;
                 } else {
-                    properties = resource.getChild(PATH_MODEL_VARIATIONS + "/" + data.getName()).getValueMap();
-                    String title = properties.get(JCR_TITLE, String.class);
-                    element.addVariation(data.getName(), title, contentType, values, true, values[0],
-                            values[0].split(PARA_SPLIT_REGEX));
-                }
-            }
-
-            return element;
-        }
-
-        /**
-         * Returns a list of resources representing the associated content for a content fragment.
-         */
-        private Iterator<Resource> getAssociatedContent(Resource resource) {
-            List<Resource> associatedContent = new LinkedList<>();
-            ResourceResolver resolver = resource.getResourceResolver();
-            Resource members = resource.getChild(PATH_ASSOCIATED_CONTENT);
-            if (resource != null) {
-                String[] paths = members.getValueMap().get("sling:resources", String[].class);
-                if (paths != null){
-                    for (String path : paths) {
-                        associatedContent.add(resolver.getResource(path));
+                    // get the model (stored in the fragment itself)
+                    model = resource.getChild(PATH_MODEL);
+                    modelAdaptee = model;
+                    // add the "main" element to the list
+                    elements.add(getMockElement(resource, null, null));
+                    // create an element mock for each subasset
+                    Resource subassets = resource.getChild("subassets");
+                    if (subassets != null) {
+                        for (Resource subasset : subassets.getChildren()) {
+                            elements.add(getMockElement(resource, subasset.getName(), null));
+                        }
                     }
                 }
-            }
-            return associatedContent.iterator();
-        }
 
-    };
+                /* create mock objects */
+
+                com.adobe.cq.dam.cfm.ContentFragment fragment = mock(com.adobe.cq.dam.cfm.ContentFragment.class);
+                when(fragment.getTitle()).thenReturn(title);
+                when(fragment.getDescription()).thenReturn(description);
+                when(fragment.adaptTo(Resource.class)).thenReturn(resource);
+                when(fragment.getElement(any(String.class))).thenAnswer(invocation -> {
+                    String name = invocation.getArgumentAt(0, String.class);
+                    return getMockElement(resource, name, isStructured ? model : null);
+                });
+                when(fragment.hasElement(any(String.class))).thenAnswer(invocation -> {
+                    String name = invocation.getArgumentAt(0, String.class);
+                    return fragment.getElement(name) != null;
+                });
+                when(fragment.getElements()).thenReturn(elements.iterator());
+
+                List<VariationDef> variations = new LinkedList<>();
+                ContentElement main = fragment.getElement(null);
+                Iterator<ContentVariation> iterator = main.getVariations();
+                while (iterator.hasNext()) {
+                    ContentVariation variation = iterator.next();
+                    variations.add(new VariationDef() {
+                        @Override
+                        public String getName() {
+                            return variation.getName();
+                        }
+
+                        @Override
+                        public String getTitle() {
+                            return variation.getTitle();
+                        }
+
+                        @Override
+                        public String getDescription() {
+                            return variation.getDescription();
+                        }
+                    });
+                }
+                when(fragment.listAllVariations()).thenReturn(variations.iterator());
+
+                FragmentTemplate template = mock(FragmentTemplate.class);
+                when(template.adaptTo(Resource.class)).thenReturn(modelAdaptee);
+                when(fragment.getTemplate()).thenReturn(template);
+
+                Iterator<Resource> associatedContent = getAssociatedContent(resource);
+                when(fragment.getAssociatedContent()).thenReturn(associatedContent);
+
+                return fragment;
+            }
+
+            /**
+             * Creates a mock of a content element for a text-only (if {@code model} is {@code null}) or structured
+             * (if {@code model} is not {@code null}) content fragment.
+             */
+            private ContentElement getMockElement(Resource resource, String name, Resource model) {
+                // get the respective element
+                Element element;
+                if (model == null) {
+                    element = getTextOnlyElement(resource, name);
+                } else {
+                    element = getStructuredElement(resource, model, name);
+                }
+                if (element == null) {
+                    return null;
+                }
+
+                /* create mock objects */
+
+                // mock data type
+                DataType dataType = mock(DataType.class);
+                when(dataType.isMultiValue()).thenReturn(element.isMultiValued);
+
+                // mock fragment data
+                FragmentData data = mock(FragmentData.class);
+                when(data.getValue()).thenReturn(element.isMultiValued ? element.values : element.values[0]);
+                when(data.getValue(String.class)).thenReturn(element.values[0]);
+                when(data.getValue(String[].class)).thenReturn(element.values);
+                when(data.getContentType()).thenReturn(element.contentType);
+                when(data.getDataType()).thenReturn(dataType);
+
+                // mock content element
+                ContentElement contentElement = mock(ContentElement.class);
+                when(contentElement.getName()).thenReturn(element.name);
+                when(contentElement.getTitle()).thenReturn(element.title);
+                when(contentElement.getContent()).thenReturn(element.values[0]);
+                when(contentElement.getContentType()).thenReturn(element.contentType);
+                when(contentElement.getValue()).thenReturn(data);
+
+                // mock variations
+                Map<String, ContentVariation> variations = new LinkedHashMap<>();
+                for (Element.Variation variation : element.variations.values()) {
+                    FragmentData variationData = mock(FragmentData.class);
+                    when(variationData.getValue()).thenReturn(element.isMultiValued ? variation.values : variation.values[0]);
+                    when(variationData.getValue(String.class)).thenReturn(variation.values[0]);
+                    when(variationData.getValue(String[].class)).thenReturn(variation.values);
+                    when(variationData.getContentType()).thenReturn(variation.contentType);
+                    when(variationData.getDataType()).thenReturn(dataType);
+
+                    ContentVariation contentVariation = mock(ContentVariation.class);
+                    when(contentVariation.getName()).thenReturn(variation.name);
+                    when(contentVariation.getTitle()).thenReturn(variation.title);
+                    when(contentVariation.getContent()).thenReturn(variation.values[0]);
+                    when(contentVariation.getContentType()).thenReturn(variation.contentType);
+                    when(contentVariation.getValue()).thenReturn(variationData);
+                    variations.put(variation.name, contentVariation);
+                }
+                when(contentElement.getVariations()).thenReturn(variations.values().iterator());
+                when(contentElement.getVariation(any(String.class))).thenAnswer(invocation -> {
+                    String variationName = invocation.getArgumentAt(0, String.class);
+                    return variations.get(variationName);
+                });
+
+                return contentElement;
+            }
+
+            /**
+             * Collects and returns the information of a content element for text-only content fragment.
+             */
+            private Element getTextOnlyElement(Resource resource, String name) {
+                Element element = new Element();
+                // text-only elements are never multi-valued
+                element.isMultiValued = false;
+                // if the name is null we use the main element
+                element.name = name == null ? MAIN_ELEMENT : name;
+
+                // loop through element definitions in the model and find the matching one
+                boolean found = false;
+                Resource elements = resource.getChild(PATH_MODEL_ELEMENTS);
+                for (Resource elementResource : elements.getChildren()) {
+                    ValueMap properties = elementResource.getValueMap();
+                    if (element.name.equals(properties.get(PN_ELEMENT_NAME))) {
+                        // set the element title
+                        element.title = properties.get(JCR_TITLE, String.class);
+                        found = true;
+                        break;
+                    }
+                }
+                // return if we didn't find an element with the given name
+                if (!found) {
+                    return null;
+                }
+
+                try {
+                    // get path to the asset resource (main element or correct subasset)
+                    String path = MAIN_ELEMENT.equals(element.name) ? "" : "subassets/" + element.name + "/";
+                    Resource renditions = resource.getChild(path + JCR_CONTENT + "/renditions");
+                    // loop over the renditions (i.e. variations)
+                    for (Resource rendition : renditions.getChildren()) {
+                        // get content and content type
+                        ValueMap properties = rendition.getChild(JCR_CONTENT).getValueMap();
+                        String content = IOUtils.toString(properties.get(JCR_DATA, InputStream.class), UTF_8);
+                        String contentType = properties.get(JCR_MIMETYPE, String.class);
+
+                        // get variation definition from model
+                        Resource variation = resource.getChild(PATH_MODEL_VARIATIONS + "/" + rendition.getName());
+                        if (variation != null) {
+                            String title = variation.getValueMap().get(JCR_TITLE, String.class);
+                            element.addVariation(rendition.getName(), title, contentType, new String[]{content},
+                                true, content, content.split(PARA_SPLIT_REGEX));
+                        } else {
+                            element.values = new String[]{content};
+                            element.contentType = contentType;
+                        }
+                    }
+                } catch (IOException e) {
+                    return null;
+                }
+
+                return element;
+            }
+
+            /**
+             * Collects and returns the information of a content element for structured content fragment.
+             */
+            private Element getStructuredElement(Resource resource, Resource model, String name) {
+                Element element = new Element();
+                element.name = name;
+
+                // loop through element definitions in the model and find the matching one (or first one, if name is null)
+                boolean found = false;
+                Resource items = model.getChild(PATH_MODEL_DIALOG_ITEMS);
+                for (Resource item : items.getChildren()) {
+                    ValueMap properties = item.getValueMap();
+                    String elementName = properties.get(PN_ELEMENT_NAME, String.class);
+                    if (element.name == null || element.name.equals(elementName)) {
+                        // set the element name (in case it was null)
+                        element.name = elementName;
+                        // set the element title
+                        element.title = properties.get(PN_ELEMENT_TITLE, String.class);
+                        // determine if the element is multi-valued (if the value type is e.g. "string[]")
+                        element.isMultiValued = properties.get(PN_VALUE_TYPE, "").endsWith("[]");
+                        found = true;
+                        break;
+                    }
+                }
+                // return if we didn't find an element with the given name
+                if (!found) {
+                    return null;
+                }
+
+                // loop over the data nodes
+                for (Resource data : resource.getChild(PATH_DATA).getChildren()) {
+                    ValueMap properties = data.getValueMap();
+                    String[] values = properties.get(element.name, String[].class);
+                    String contentType = properties.get(element.name + "@ContentType", String.class);
+                    if ("master".equals(data.getName())) {
+                        element.values = values;
+                        element.contentType = contentType;
+                    } else {
+                        properties = resource.getChild(PATH_MODEL_VARIATIONS + "/" + data.getName()).getValueMap();
+                        String title = properties.get(JCR_TITLE, String.class);
+                        element.addVariation(data.getName(), title, contentType, values, true, values[0],
+                            values[0].split(PARA_SPLIT_REGEX));
+                    }
+                }
+
+                return element;
+            }
+
+            /**
+             * Returns a list of resources representing the associated content for a content fragment.
+             */
+            private Iterator<Resource> getAssociatedContent(Resource resource) {
+                List<Resource> associatedContent = new LinkedList<>();
+                ResourceResolver resolver = resource.getResourceResolver();
+                Resource members = resource.getChild(PATH_ASSOCIATED_CONTENT);
+                if (resource != null) {
+                    String[] paths = members.getValueMap().get("sling:resources", String[].class);
+                    if (paths != null) {
+                        for (String path : paths) {
+                            associatedContent.add(resolver.getResource(path));
+                        }
+                    }
+                }
+                return associatedContent.iterator();
+            }
+
+        };
 
     /**
      * Helper class to represent an element and its variations, used to model expected values and to mock objects.
@@ -799,7 +798,7 @@ public class ContentFragmentImplTest {
 
             Variation(String name, String title, String contentType, String value, boolean isMultiLine,
                       String htmlValue, String[] paragraphs) {
-                this(name, title, contentType, new String[]{ value }, isMultiLine, htmlValue, paragraphs);
+                this(name, title, contentType, new String[]{value}, isMultiLine, htmlValue, paragraphs);
             }
 
         }
@@ -818,7 +817,7 @@ public class ContentFragmentImplTest {
         }
 
         Element(String name, String title, String contentType, String value, boolean isMultiLine,
-                        String htmlValue, String[] paragraphs) {
+                String htmlValue, String[] paragraphs) {
             this(name, title, contentType, new String[]{value}, isMultiLine, htmlValue, paragraphs);
             this.isMultiValued = false;
         }

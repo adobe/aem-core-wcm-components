@@ -15,20 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.servlet.Servlet;
-
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.cq.dam.cfm.VariationDef;
 import com.adobe.granite.ui.components.ExpressionResolver;
 import com.day.cq.i18n.I18n;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
+import javax.annotation.Nonnull;
+import javax.servlet.Servlet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Datasource that returns the variations of a content fragment.
@@ -36,9 +35,9 @@ import com.day.cq.i18n.I18n;
  * @see AbstractContentFragmentDataSource
  */
 @Component(
-    service = { Servlet.class },
+    service = {Servlet.class},
     property = {
-        "sling.servlet.resourceTypes="+ VariationsDataSourceServlet.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + VariationsDataSourceServlet.RESOURCE_TYPE,
         "sling.servlet.methods=GET",
         "sling.servlet.extensions=html"
     }

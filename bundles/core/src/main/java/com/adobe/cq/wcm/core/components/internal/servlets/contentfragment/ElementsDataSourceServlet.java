@@ -15,22 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.servlet.Servlet;
-
+import com.adobe.cq.dam.cfm.ContentElement;
+import com.adobe.cq.dam.cfm.ContentFragment;
 import com.adobe.granite.ui.components.Config;
+import com.adobe.granite.ui.components.ExpressionResolver;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.adobe.cq.dam.cfm.ContentElement;
-import com.adobe.cq.dam.cfm.ContentFragment;
-import com.adobe.granite.ui.components.ExpressionResolver;
+import javax.annotation.Nonnull;
+import javax.servlet.Servlet;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Datasource that returns the elements of a content fragment.
@@ -38,12 +37,12 @@ import com.adobe.granite.ui.components.ExpressionResolver;
  * @see AbstractContentFragmentDataSource
  */
 @Component(
-        service = { Servlet.class },
-        property = {
-                "sling.servlet.resourceTypes=" + ElementsDataSourceServlet.RESOURCE_TYPE,
-                "sling.servlet.methods=GET",
-                "sling.servlet.extensions=html"
-        }
+    service = {Servlet.class},
+    property = {
+        "sling.servlet.resourceTypes=" + ElementsDataSourceServlet.RESOURCE_TYPE,
+        "sling.servlet.methods=GET",
+        "sling.servlet.extensions=html"
+    }
 )
 public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource<ContentElement> {
 
@@ -81,7 +80,7 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
         ValueMap map = getComponentValueMap(config, request);
         String textOnlyParam = request.getParameter(PARAM_AND_PN_DISPLAY_MODE);
         boolean textOnly = map != null && map.containsKey(PARAM_AND_PN_DISPLAY_MODE)
-                && map.get(PARAM_AND_PN_DISPLAY_MODE, "multi").equals(SINGLE_TEXT);
+            && map.get(PARAM_AND_PN_DISPLAY_MODE, "multi").equals(SINGLE_TEXT);
         if (textOnlyParam != null) {
             textOnly = textOnlyParam.equals(SINGLE_TEXT);
         }
@@ -92,7 +91,7 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
                 ContentElement element = elementIterator.next();
                 String contentType = element.getValue().getContentType();
                 if (contentType != null && contentType.startsWith("text/") &&
-                        !element.getValue().getDataType().isMultiValue()) {
+                    !element.getValue().getDataType().isMultiValue()) {
                     elementList.add(element);
                 }
             }
