@@ -46,7 +46,7 @@
 <template data-sly-template.elements="${@ fragment='The content fragment', wcmmode='WCM mode'}">
     <dl class="cmp-contentfragment__elements${!wcmmode.disabled ? ' cq-dd-contentfragment' : ''}"
         data-sly-list.element="${fragment.elements}"
-        data-sly-use.elementTemplate="element.html">
+        data-sly-use.elementTemplate="core/wcm/components/contentfragment/v1/contentfragment/element.html">
         <sly data-sly-call="${elementTemplate.element @ element=element}"></sly>
     </dl>
 </template>

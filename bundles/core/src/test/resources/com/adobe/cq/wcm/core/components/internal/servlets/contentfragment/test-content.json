@@ -1,0 +1,122 @@
+{
+    "jcr:primaryType": "cq:Template",
+    "jcr:createdBy": "admin",
+    "allowedPaths": [
+        "/content/entities(/.*)?"
+    ],
+    "jcr:created": "Thu Oct 04 2018 09:15:22 GMT+0200",
+    "ranking": 100,
+    "jcr:content": {
+        "jcr:primaryType": "cq:PageContent",
+        "jcr:createdBy": "admin",
+        "jcr:title": "YetAnotherCFModel",
+        "jcr:created": "Thu Oct 04 2018 09:15:22 GMT+0200",
+        "cq:lastModified": "Thu Oct 04 2018 10:41:53 GMT+0200",
+        "sling:resourceSuperType": "dam/cfm/models/console/components/data/entity",
+        "cq:scaffolding": "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel/jcr:content/model",
+        "cq:templateType": "/libs/settings/dam/cfm/model-types/fragment",
+        "sling:resourceType": "dam/cfm/models/console/components/data/entity/default",
+        "cq:lastModifiedBy": "admin",
+        "model": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:createdBy": "admin",
+            "jcr:created": "Thu Oct 04 2018 09:15:22 GMT+0200",
+            "dataTypesConfig": "/mnt/overlay/settings/dam/cfm/models/formbuilderconfig/datatypes",
+            "sling:resourceType": "wcm/scaffolding/components/scaffolding",
+            "maxGeneratedOrder": "20",
+            "cq:targetPath": "/content/entities",
+            "cq:dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "cq/gui/components/authoring/dialog",
+                "content": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:lastModified": "Thu Oct 04 2018 10:41:53 GMT+0200",
+                    "sling:resourceType": "granite/ui/components/coral/foundation/fixedcolumns",
+                    "items": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "maxGeneratedOrder": "20",
+                        "1538637327452": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "1",
+                            "valueType": "string",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "text-single",
+                            "name": "textField",
+                            "maxlength": "255",
+                            "fieldLabel": "textFieldLabel",
+                            "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                            "renderReadOnly": "false"
+                        },
+                        "1538637345012": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "2",
+                            "valueType": "string",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "text-multi",
+                            "cfm-element": "multiTextFieldLabel",
+                            "name": "multiTextField",
+                            "sling:resourceType": "dam/cfm/admin/components/authoring/contenteditor/multieditor",
+                            "renderReadOnly": "false"
+                        },
+                        "1538637372610": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "3",
+                            "valueType": "double",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "number",
+                            "name": "numberField",
+                            "step": "any",
+                            "fieldLabel": "numberFieldLabel",
+                            "sling:resourceType": "granite/ui/components/coral/foundation/form/numberfield",
+                            "renderReadOnly": "false"
+                        },
+                        "1538637386403": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "listOrder": "4",
+                            "valueType": "boolean",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "boolean",
+                            "name": "booleanField",
+                            "text": "booleanFieldText",
+                            "sling:resourceType": "granite/ui/components/coral/foundation/form/checkbox",
+                            "renderReadOnly": "false"
+                        },
+                        "1538637399370": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "valueFormat": "YYYY-MM-DD[T]HH:mm:ss.000Z",
+                            "emptyText": "YYYY-MM-DD HH:mm",
+                            "listOrder": "5",
+                            "valueType": "calendar",
+                            "displayedFormat": "YYYY-MM-DD HH:mm",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "date",
+                            "name": "dateAndTimeField",
+                            "fieldLabel": "dateAndTimeFieldLabel",
+                            "sling:resourceType": "granite/ui/components/coral/foundation/form/datepicker",
+                            "renderReadOnly": "false"
+                        },
+                        "1538637484629": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "options": "one,two,three",
+                            "listOrder": "6",
+                            "valueType": "string",
+                            "showEmptyInReadOnly": "true",
+                            "metaType": "enumeration",
+                            "name": "enumerationField",
+                            "fieldLabel": "enumerationFieldLabel",
+                            "emptyOption": true,
+                            "sling:resourceType": "granite/ui/components/coral/foundation/form/select",
+                            "renderReadOnly": "false",
+                            "datasource": {
+                                "jcr:primaryType": "nt:unstructured",
+                                "variant": "default",
+                                "sling:resourceType": "dam/cfm/admin/components/datasources/optionrenderer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

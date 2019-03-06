@@ -28,7 +28,7 @@ import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.components.ds.DataSource;
 
 @RunWith(MockitoJUnitRunner.class)
-public class VariationsDataSourceServletTest extends AbstractDataSourceServletTest {
+public class VariationsDataSourceServletTest extends AbstractContentFragmentDataSourceServletTest {
 
     /* names of the datasource instances to test */
 

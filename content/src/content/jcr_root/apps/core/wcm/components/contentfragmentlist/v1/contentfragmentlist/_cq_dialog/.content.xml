@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Content Fragment List"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.contentfragmentlist.v1.dialog]"
+    helpPath="https://www.adobe.com/go/aem_cmp_contentfragment_v1">
+    <content
+        granite:class="cmp-contentfragmentlist__edit-dialog"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <granite:data
+            jcr:primaryType="nt:unstructured"
+            component-path="${requestPathInfo.suffix}"/>
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <modelPath
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        emptyText="Select"
+                                        fieldLabel="Model"
+                                        name="./modelPath">
+                                        <datasource
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/datasource/models"/>
+                                    </modelPath>
+                                    <parentPath
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                        fieldLabel="Parent Path"
+                                        name="./parentPath"
+                                        rootPath="/content/dam"/>
+                                    <tags
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="cq/gui/components/coral/common/form/tagfield"
+                                        fieldLabel="Tags"
+                                        multiple="{Boolean}true"
+                                        name="./tagNames"/>
+                                </items>
+                            </column>
+                        </items>
+                    </properties>
+                    <elements
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Elements"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <elementNames
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                        fieldDescription="Specify which elements to display or leave empty to display all elements."
+                                        fieldLabel="Elements">
+                                        <field
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                            emptyText="Select"
+                                            fieldLabel="Element"
+                                            name="./elementNames">
+                                            <datasource
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/contentfragmentlist/v1/datasource/elements"
+                                                componentPath="${requestPathInfo.suffix}"
+                                                modelPath="${param.modelPath}"/>
+                                        </field>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            field-path="${requestPathInfo.resourcePath}"/>
+                                    </elementNames>
+                                </items>
+                            </column>
+                        </items>
+                    </elements>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
