@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.3.3-SNAPSHOT</version>
+        <version>2.2.3-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
@@ -32,7 +32,7 @@
     <!-- P R O J E C T   D E S C R I P T I O N                                  -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.it.http</artifactId>
-    <version>2.3.3-SNAPSHOT</version>
+    <version>2.2.3-SNAPSHOT</version>
     <name>Core Components HTTP Integration Tests</name>
 
     <!-- ====================================================================== -->
