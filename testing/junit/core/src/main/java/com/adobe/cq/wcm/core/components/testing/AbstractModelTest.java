@@ -18,8 +18,10 @@ package com.adobe.cq.wcm.core.components.testing;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +46,23 @@ public class AbstractModelTest {
                         (Object proxy, Method method, Object[] arguments) -> {
                             if (method.isDefault()) {
                                 final Class<?> declaringClass = method.getDeclaringClass();
+
                                 MethodHandle mh;
                                 try {
                                     // should work for <= Java 8
-                                    mh = MethodHandles.lookup().unreflectSpecial(method, declaringClass);
+                                    // ensure allowed mode will not check visibility
+                                    MethodHandles.Lookup lookup = MethodHandles.lookup().in(declaringClass);
+                                    final Field f = MethodHandles.Lookup.class.getDeclaredField("allowedModes");
+                                    final int modifiers = f.getModifiers();
+                                    if (Modifier.isFinal(modifiers)) { // should be done a single time
+                                        final Field modifiersField = Field.class.getDeclaredField("modifiers");
+                                        modifiersField.setAccessible(true);
+                                        modifiersField.setInt(f, modifiers & ~Modifier.FINAL);
+                                        f.setAccessible(true);
+                                        f.set(lookup, MethodHandles.Lookup.PRIVATE);
+                                    }
+
+                                    mh = lookup.unreflectSpecial(method, declaringClass);
                                 } catch (Throwable t) {
                                     // should work for > Java 8
                                     mh = MethodHandles.lookup()
@@ -59,8 +74,7 @@ public class AbstractModelTest {
                                                             method.getParameterTypes()),
                                                     declaringClass);
                                 }
-                                return mh
-                                        .bindTo(proxy)
+                                return mh.bindTo(proxy)
                                         .invokeWithArguments(arguments);
                             }
 
