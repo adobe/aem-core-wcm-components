@@ -16,16 +16,15 @@
 
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import javax.annotation.Nullable;
-
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -34,9 +33,7 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)

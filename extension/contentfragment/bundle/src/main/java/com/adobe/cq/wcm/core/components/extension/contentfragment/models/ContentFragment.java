@@ -16,10 +16,10 @@
 package com.adobe.cq.wcm.core.components.extension.contentfragment.models;
 
 import java.util.Map;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.dam.cfm.ContentElement;
@@ -91,7 +91,7 @@ public interface ContentFragment extends ContainerExporter {
          * @see ContentElement#getName()
          * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
          */
-        @Nonnull
+        @NotNull
         @JsonIgnore
         default String getName() {
             throw new UnsupportedOperationException();
@@ -118,7 +118,7 @@ public interface ContentFragment extends ContainerExporter {
          * @see FragmentData#getDataType()
          * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
          */
-        @Nonnull
+        @NotNull
         default String getDataType() {
             throw new UnsupportedOperationException();
         }
@@ -136,7 +136,7 @@ public interface ContentFragment extends ContainerExporter {
             throw new UnsupportedOperationException();
         }
 
-        @Nonnull
+        @NotNull
         @Override
         default String getExportedType() {
             throw new UnsupportedOperationException();
@@ -246,7 +246,7 @@ public interface ContentFragment extends ContainerExporter {
      * @return a map containing the elements that are subject to be exported
      * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
      */
-    @Nonnull
+    @NotNull
     @JsonProperty(JSON_PN_ELEMENTS)
     default java.util.Map<String, Element> getExportedElements() {
         throw new UnsupportedOperationException();
@@ -259,7 +259,7 @@ public interface ContentFragment extends ContainerExporter {
      * @return Array that determines the order of the elements
      * @since com.adobe.cq.wcm.core.components.extension.contentfragment.models 1.0.0
      */
-    @Nonnull
+    @NotNull
     @JsonProperty(JSON_PN_ELEMENTS_ORDER)
     default String[] getExportedElementsOrder() {
         throw new UnsupportedOperationException();
@@ -278,19 +278,19 @@ public interface ContentFragment extends ContainerExporter {
         throw new UnsupportedOperationException();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     default Map<String, ComponentExporter> getExportedItems() {
         throw new UnsupportedOperationException();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     default String[] getExportedItemsOrder() {
         throw new UnsupportedOperationException();
@@ -300,7 +300,7 @@ public interface ContentFragment extends ContainerExporter {
      * Returns a JSON format string containing information about this fragment.
      * @return JSON string
      */
-    @Nonnull
+    @NotNull
     @JsonIgnore
     default String getEditorJSON() {
         throw new UnsupportedOperationException();
@@ -310,7 +310,7 @@ public interface ContentFragment extends ContainerExporter {
      * Returns resource type that is used for the internal responsive grid.
      * @return resource type
      */
-    @Nonnull
+    @NotNull
     @JsonIgnore
     default String getGridResourceType() {throw new UnsupportedOperationException();}
 

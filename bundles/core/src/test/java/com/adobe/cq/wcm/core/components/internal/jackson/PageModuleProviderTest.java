@@ -20,7 +20,6 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.adobe.cq.wcm.core.components.internal.jackson.PageModuleProvider;
 import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.Module;

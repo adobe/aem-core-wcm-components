@@ -16,9 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
@@ -29,6 +26,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.ServletResolverConstants;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
@@ -51,7 +50,7 @@ public class ImageDelegateRenderCondition extends SlingSafeMethodsServlet {
     public static final String RESOURCE_TYPE = "core/wcm/components/renderconditions/imagedelegate";
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws ServletException, IOException {
         boolean hasImageDelegation = false;
         ResourceResolver resourceResolver = request.getResourceResolver();
@@ -87,7 +86,7 @@ public class ImageDelegateRenderCondition extends SlingSafeMethodsServlet {
      * @return the policies root page as a {@link Resource} or {@code null}
      */
     @Nullable
-    private Resource getPoliciesRootPage(@Nonnull ResourceResolver resourceResolver, @Nonnull String path) {
+    private Resource getPoliciesRootPage(@NotNull ResourceResolver resourceResolver, @NotNull String path) {
         Resource resource = resourceResolver.getResource(path);
         if (resource != null && resource.getResourceType().equals(NameConstants.NT_PAGE)) {
             return resource;

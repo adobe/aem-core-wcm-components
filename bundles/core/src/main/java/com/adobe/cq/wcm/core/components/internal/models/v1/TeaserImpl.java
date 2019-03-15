@@ -17,9 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -32,6 +29,8 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -280,7 +279,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return null;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();

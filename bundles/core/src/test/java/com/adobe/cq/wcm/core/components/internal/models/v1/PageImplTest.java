@@ -26,14 +26,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.Nullable;
-
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.jetbrains.annotations.Nullable;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -60,13 +59,8 @@ import com.day.cq.wcm.msm.api.MSMNameConstants;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class PageImplTest {
 

@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,15 +50,8 @@ import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 import com.day.image.Layer;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class AdaptiveImageServletTest extends AbstractImageTest {
 
@@ -80,7 +72,7 @@ public class AdaptiveImageServletTest extends AbstractImageTest {
         AssetStore assetStore = mock(AssetStore.class);
         when(assetStore.getAssetHandler(anyString())).thenReturn(assetHandler);
         when(assetHandler.getImage(any(Rendition.class))).thenAnswer(invocation -> {
-            Rendition rendition = invocation.getArgumentAt(0, Rendition.class);
+            Rendition rendition = invocation.getArgument(0);
             return ImageIO.read(rendition.getStream());
         });
         servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);

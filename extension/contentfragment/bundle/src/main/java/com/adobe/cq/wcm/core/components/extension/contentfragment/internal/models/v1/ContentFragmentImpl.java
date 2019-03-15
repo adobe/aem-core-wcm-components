@@ -22,13 +22,12 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +41,8 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,11 +56,9 @@ import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
+import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.text.Text;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
 
 import static com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1.ContentFragmentImpl.RESOURCE_TYPE;
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
@@ -230,7 +229,7 @@ public class ContentFragmentImpl implements ContentFragment {
         return type;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getGridResourceType() {
         String gridResourceType = DEFAULT_GRID_TYPE;
@@ -243,7 +242,7 @@ public class ContentFragmentImpl implements ContentFragment {
         return gridResourceType;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getEditorJSON() {
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
@@ -277,7 +276,7 @@ public class ContentFragmentImpl implements ContentFragment {
         return jsonObjectBuilder.build().toString();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, Element> getExportedElements() {
         if (!isInitialized && fragment != null) {
@@ -286,7 +285,7 @@ public class ContentFragmentImpl implements ContentFragment {
         return (exportedElements != null ? exportedElements : Collections.emptyMap());
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedElementsOrder() {
         Map<String, ContentFragment.Element> elements = getExportedElements();
@@ -316,13 +315,13 @@ public class ContentFragmentImpl implements ContentFragment {
         return associatedContentList;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ComponentExporter> getExportedItems() {
         Map<String, ComponentExporter> map = new LinkedHashMap<>();
@@ -344,7 +343,7 @@ public class ContentFragmentImpl implements ContentFragment {
         return map;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         Map<String, ComponentExporter> models = getExportedItems();
@@ -373,8 +372,8 @@ public class ContentFragmentImpl implements ContentFragment {
          * @param element the original element
          * @param variation the configured variation of the element, or {@code null}
          */
-        ElementImpl(@Nonnull FragmentRenderService renderService, @Nonnull ContentTypeConverter converter,
-                    @Nonnull Resource component, @Nonnull ContentElement element,
+        ElementImpl(@NotNull FragmentRenderService renderService, @NotNull ContentTypeConverter converter,
+                    @NotNull Resource component, @NotNull ContentElement element,
                     @Nullable ContentVariation variation) {
             this.renderService = renderService;
             this.converter = converter;
@@ -383,7 +382,7 @@ public class ContentFragmentImpl implements ContentFragment {
             this.variation = variation;
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public String getName() {
             return element.getName();
@@ -402,7 +401,7 @@ public class ContentFragmentImpl implements ContentFragment {
             return element.getValue();
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public String getDataType() {
             return getData().getDataType().getTypeString();
@@ -414,7 +413,7 @@ public class ContentFragmentImpl implements ContentFragment {
             return getData().getValue();
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public String getExportedType() {
             final FragmentData value = getData();

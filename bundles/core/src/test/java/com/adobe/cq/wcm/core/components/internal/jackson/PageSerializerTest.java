@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.jackson;
 
 import org.junit.Test;
 
-import com.adobe.cq.wcm.core.components.internal.jackson.PageSerializer;
 import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
