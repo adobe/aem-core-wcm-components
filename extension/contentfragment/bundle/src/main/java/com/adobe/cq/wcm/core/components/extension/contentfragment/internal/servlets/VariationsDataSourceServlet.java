@@ -18,10 +18,10 @@ package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.serv
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.servlet.Servlet;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -54,17 +54,17 @@ public class VariationsDataSourceServlet extends AbstractContentFragmentDataSour
 
         private String title;
 
-        Variation(@Nonnull String name, @Nonnull String title) {
+        Variation(@NotNull String name, @NotNull String title) {
             this.name = name;
             this.title = title;
         }
 
-        @Nonnull
+        @NotNull
         private String getName() {
             return name;
         }
 
-        @Nonnull
+        @NotNull
         private String getTitle() {
             return title;
         }
@@ -79,15 +79,15 @@ public class VariationsDataSourceServlet extends AbstractContentFragmentDataSour
     @Reference
     private ExpressionResolver expressionResolver;
 
-    @Nonnull
+    @NotNull
     @Override
     protected ExpressionResolver getExpressionResolver() {
         return expressionResolver;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected List<Variation> getItems(@Nonnull ContentFragment fragment, @Nonnull SlingHttpServletRequest request) {
+    protected List<Variation> getItems(@NotNull ContentFragment fragment, @NotNull SlingHttpServletRequest request) {
         // add implicit master variation
         List<Variation> variations = new LinkedList<>();
         variations.add(new Variation("master", (new I18n(request)).get("Master")));
@@ -102,15 +102,15 @@ public class VariationsDataSourceServlet extends AbstractContentFragmentDataSour
         return variations;
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected String getTitle(@Nonnull Variation variation) {
+    protected String getTitle(@NotNull Variation variation) {
         return variation.getTitle();
     }
 
-    @Nonnull
+    @NotNull
     @Override
-    protected String getValue(@Nonnull Variation variation) {
+    protected String getValue(@NotNull Variation variation) {
         return variation.getName();
     }
 

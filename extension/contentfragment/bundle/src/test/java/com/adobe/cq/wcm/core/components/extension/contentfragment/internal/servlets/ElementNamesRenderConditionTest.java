@@ -15,12 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.servlets;
 
-import com.adobe.cq.dam.cfm.content.FragmentRenderService;
-import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
-import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.granite.ui.components.ExpressionResolver;
-import com.adobe.granite.ui.components.rendercondition.RenderCondition;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import java.io.IOException;
+import javax.servlet.ServletException;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -31,19 +28,21 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.internal.util.reflection.Whitebox;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.servlet.ServletException;
-import javax.servlet.jsp.PageContext;
-import java.io.IOException;
+import com.adobe.cq.dam.cfm.content.FragmentRenderService;
+import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.testing.Utils;
+import com.adobe.granite.ui.components.ExpressionResolver;
+import com.adobe.granite.ui.components.rendercondition.RenderCondition;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static com.adobe.cq.wcm.core.components.extension.contentfragment.internal.models.v1.ContentFragmentImplTest.ADAPTER;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -82,14 +81,12 @@ public class ElementNamesRenderConditionTest {
     public void before() throws Exception {
         // mock the expression resolver
         ExpressionResolver expressionResolver = mock(ExpressionResolver.class);
-        when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<PageContext>anyObject())).then(returnsFirstArg());
-        when(expressionResolver.resolve(anyString(), anyObject(), anyObject(),
-                org.mockito.Matchers.<SlingHttpServletRequest>anyObject())).then(returnsFirstArg());
+        when(expressionResolver.resolve(any(), any(), any(),
+                org.mockito.ArgumentMatchers.<SlingHttpServletRequest>any())).then(returnsFirstArg());
 
         // create the servlet to test
         servlet = new ElementNamesRenderCondition();
-        Whitebox.setInternalState(servlet, "expressionResolver", expressionResolver);
+        Utils.setInternalState(servlet, "expressionResolver", expressionResolver);
     }
 
     @Test

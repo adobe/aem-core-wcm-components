@@ -15,25 +15,25 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.extension.contentfragment.internal.servlets;
 
-import com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment;
-import com.adobe.granite.ui.components.Config;
-import com.adobe.granite.ui.components.ExpressionHelper;
-import com.adobe.granite.ui.components.ExpressionResolver;
-import com.adobe.granite.ui.components.rendercondition.RenderCondition;
-import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
+import java.io.IOException;
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-import java.io.IOException;
+import com.adobe.granite.ui.components.Config;
+import com.adobe.granite.ui.components.ExpressionHelper;
+import com.adobe.granite.ui.components.ExpressionResolver;
+import com.adobe.granite.ui.components.rendercondition.RenderCondition;
+import com.adobe.granite.ui.components.rendercondition.SimpleRenderCondition;
 
 
 /**
@@ -72,7 +72,7 @@ public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
 
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws ServletException, IOException {
         // return false by default
         request.setAttribute(RenderCondition.class.getName(), new SimpleRenderCondition(false));
@@ -109,7 +109,7 @@ public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
      * {@link ExpressionResolver}. If the parameter is not found, {@code null} is returned.
      */
     @Nullable
-    private <T> T getParameter(@Nonnull Config config, @Nonnull SlingHttpServletRequest request, @Nonnull String name,
+    private <T> T getParameter(@NotNull Config config, @NotNull SlingHttpServletRequest request, @NotNull String name,
                              Class<T> type) {
         // get value from configuration
         String value = config.get(name, String.class);

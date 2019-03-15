@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
-
 import javax.json.Json;
 import javax.json.JsonReader;
 
@@ -58,7 +57,7 @@ public class Utils {
             fail(String.format("Unable to generate JSON export for model %s: %s", model.getClass().getName(), e.getMessage()));
         }
         JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString()));
-        InputStream is = Thread.currentThread().getContextClassLoader().getClass().getResourceAsStream
+        InputStream is = Utils.class.getResourceAsStream
                 (expectedJsonResource);
         if (is != null) {
             JsonReader expectedReader = Json.createReader(is);

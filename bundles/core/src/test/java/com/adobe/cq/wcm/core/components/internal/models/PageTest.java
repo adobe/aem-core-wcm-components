@@ -18,13 +18,12 @@ package com.adobe.cq.wcm.core.components.internal.models;
 import java.util.Calendar;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
+import org.junit.Test;
+
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.wcm.core.components.models.Page;
-
-import org.junit.Test;
-
-import javax.annotation.Nonnull;
 
 public class PageTest {
 
@@ -86,19 +85,19 @@ public class PageTest {
             return null;
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public Map<String, ? extends ComponentExporter> getExportedItems() {
             return null;
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public String[] getExportedItemsOrder() {
             return new String[0];
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public String getExportedType() {
             return null;

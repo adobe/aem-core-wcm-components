@@ -26,21 +26,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.osgi.framework.Version;
-import org.powermock.reflect.Whitebox;
 
-import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
+import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
+import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
@@ -84,7 +80,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertArrayEquals(new String[] {"coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
         assertArrayEquals(new String[] {"coretest.product-page"}, page.getClientLibCategoriesJsBody());
         assertEquals("product-page", page.getTemplateName());
-        Utils.testJSONExport(page, Utils.getTestExporterJSONPath(TEST_BASE, PAGE));
+        testJSONExport(page, getTestExporterJSONPath(TEST_BASE, PAGE));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -127,7 +123,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertFalse("Expected no cloudconfig support if product version < 6.4.0", page.hasCloudconfigSupport());
 
         // reset cached value
-        Whitebox.setInternalState(page, "hasCloudconfigSupport", (Boolean)null);
+        Utils.setInternalState(page, "hasCloudconfigSupport", (Boolean)null);
         mockProductInfoProvider.setVersion(new Version("6.4.0"));
         assertTrue("Expected cloudconfig support if product version >= 6.4.0", page.hasCloudconfigSupport());
     }

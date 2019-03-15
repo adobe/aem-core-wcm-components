@@ -19,11 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.Container;
@@ -44,8 +42,8 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
     }
 
     @Override
-    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
-                                                           @Nonnull Class<ComponentExporter> modelClass) {
+    protected Map<String, ComponentExporter> getItemModels(@NotNull SlingHttpServletRequest request,
+                                                           @NotNull Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = super.getItemModels(request, modelClass);
         models.entrySet().forEach(entry -> {
             ListItem match = getItems().stream()
@@ -66,7 +64,7 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
         private ComponentExporter inner;
         private String panelTitle;
 
-        JsonWrapper(@Nonnull ComponentExporter inner, ListItem item) {
+        JsonWrapper(@NotNull ComponentExporter inner, ListItem item) {
             this.inner = inner;
             this.panelTitle = item.getTitle();
         }
@@ -88,7 +86,7 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
             return panelTitle;
         }
 
-        @Nonnull
+        @NotNull
         @Override
         public String getExportedType() {
             if (inner != null) {

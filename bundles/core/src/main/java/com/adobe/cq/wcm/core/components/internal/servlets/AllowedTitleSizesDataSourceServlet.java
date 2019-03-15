@@ -18,12 +18,9 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Nonnull;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-import org.osgi.service.component.annotations.Component;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -31,6 +28,8 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.jetbrains.annotations.NotNull;
+import org.osgi.service.component.annotations.Component;
 
 import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -51,13 +50,13 @@ public class AllowedTitleSizesDataSourceServlet extends SlingSafeMethodsServlet 
     public final static String RESOURCE_TYPE = "core/wcm/components/title/v1/datasource/allowedtypes";
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws ServletException, IOException {
         SimpleDataSource allowedTypesDataSource = new SimpleDataSource(getAllowedTypes(request).iterator());
         request.setAttribute(DataSource.class.getName(), allowedTypesDataSource);
     }
 
-    private List<Resource> getAllowedTypes(@Nonnull SlingHttpServletRequest request) {
+    private List<Resource> getAllowedTypes(@NotNull SlingHttpServletRequest request) {
         List<Resource> allowedTypes = new ArrayList<>();
         ResourceResolver resolver = request.getResourceResolver();
         Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));

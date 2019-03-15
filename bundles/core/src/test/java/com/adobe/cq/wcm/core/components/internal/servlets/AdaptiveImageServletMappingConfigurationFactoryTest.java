@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

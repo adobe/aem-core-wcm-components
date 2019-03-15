@@ -17,8 +17,7 @@ package com.adobe.cq.wcm.core.components.models.form;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -110,7 +109,7 @@ public interface Container extends ContainerExporter {
      * @see ContainerExporter#getExportedItemsOrder()
      * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String[] getExportedItemsOrder() {
         throw new UnsupportedOperationException();
@@ -120,7 +119,7 @@ public interface Container extends ContainerExporter {
      * @see ContainerExporter#getExportedItems()
      * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default Map<String, ? extends ComponentExporter> getExportedItems() {
         throw new UnsupportedOperationException();
@@ -130,7 +129,7 @@ public interface Container extends ContainerExporter {
      * @see ContainerExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();

@@ -19,23 +19,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-import com.adobe.granite.ui.components.ds.DataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.NonExistingResource;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.jetbrains.annotations.NotNull;
+import org.osgi.service.component.annotations.Component;
 
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
+import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.day.cq.wcm.foundation.forms.FormsManager;
-import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
-import org.osgi.service.component.annotations.Component;
 
 @Component(
         service = { Servlet.class },
@@ -52,7 +52,7 @@ public class FormActionTypeDataSourceServlet extends SlingSafeMethodsServlet {
     public final static String RESOURCE_TYPE = FormConstants.RT_CORE_FORM_CONTAINER_DATASOURCE_V1 + "/actiontype";
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws ServletException, IOException {
         SimpleDataSource actionTypeDataSource = new SimpleDataSource(getActionTypeResources(
                 request.getResourceResolver()).iterator());

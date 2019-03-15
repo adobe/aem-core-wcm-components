@@ -18,8 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -39,7 +38,7 @@ public interface Container extends ContainerExporter {
      * @return List of container items
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
-    @Nonnull
+    @NotNull
     default List<ListItem> getItems() {
         throw new UnsupportedOperationException();
     }
@@ -48,7 +47,7 @@ public interface Container extends ContainerExporter {
      * @see ContainerExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();
@@ -58,7 +57,7 @@ public interface Container extends ContainerExporter {
      * @see ContainerExporter#getExportedItems()
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default Map<String, ? extends ComponentExporter> getExportedItems() {
         throw new UnsupportedOperationException();
@@ -68,7 +67,7 @@ public interface Container extends ContainerExporter {
      * @see ContainerExporter#getExportedItemsOrder()
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String[] getExportedItemsOrder() {
         throw new UnsupportedOperationException();

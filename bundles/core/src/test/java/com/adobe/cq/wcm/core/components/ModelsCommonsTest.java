@@ -25,6 +25,6 @@ public class ModelsCommonsTest extends AbstractModelTest {
     public void testDefaultBehaviour() throws Exception {
         testDefaultBehaviour(new String[] {
                 "com.adobe.cq.wcm.core.components.models"
-        });
+       });
     }
 }
