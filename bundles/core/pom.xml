@@ -147,9 +147,6 @@
                                         <exclude>com/adobe/cq/wcm/core/components/internal/models/v1/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
                                         <exclude>com/adobe/cq/wcm/core/components/internal/servlets/AdaptiveImageServlet$Source.class
                                         </exclude>
-                                        <!-- model interfaces; cannot test default methods -->
-                                        <exclude>com/adobe/cq/wcm/core/components/models/**</exclude>
-                                        <exclude>com/adobe/cq/wcm/core/components/models/form/**</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>

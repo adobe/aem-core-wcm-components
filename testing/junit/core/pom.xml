@@ -161,6 +161,11 @@
             <version>20.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.9</version>
+        </dependency>
 
         <!-- Servlet -->
         <dependency>
