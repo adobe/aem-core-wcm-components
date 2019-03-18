@@ -66,6 +66,7 @@
                         <_metatypeannotations>*</_metatypeannotations>
                         <Import-Package>
                             com.adobe.cq.commerce.*;resolution:=optional,
+                            javax.annotation;version=0.0.0,
                             *
                         </Import-Package>
                     </instructions>
