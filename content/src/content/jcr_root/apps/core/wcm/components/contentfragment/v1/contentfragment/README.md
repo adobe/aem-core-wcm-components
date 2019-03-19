@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2019 Adobe Systems Incorporated
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-Content Fragment (v1 - extension)
+Content Fragment (v1)
 ====
 Content Fragment component written in HTL that displays the elements of a Content Fragment or a selection thereof.
 
@@ -24,7 +24,7 @@ Content Fragment component written in HTL that displays the elements of a Conten
 * Can be configured to render a subset of the elements in a specific order
 
 ### Use Object
-The Content Fragment component uses the `com.adobe.cq.wcm.core.components.extension.contentfragment.models.ContentFragment` Sling model as its Use-object.
+The Content Fragment component uses the `com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment` Sling model as its Use-object.
 
 ### Edit dialog properties
 The following JCR properties are used:
@@ -47,7 +47,7 @@ BLOCK cmp-contentfragment
 
 ## Information
 * **Vendor**: Adobe
-* **Version**: v1 - extension
+* **Version**: v1
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_contentfragment\_v1](https://www.adobe.com/go/aem_cmp_contentfragment_v1)

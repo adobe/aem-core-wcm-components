@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class ElementNamesRenderCondition extends SlingSafeMethodsServlet {
 
     /**
      * Name of the resource property containing the path to a
-     * {@code /apps/core/wcm/extension/components/contentfragment} component to use for this render condition.
+     * {@code /apps/core/wcm/components/contentfragment} component to use for this render condition.
      * The value may contain expressions.
      */
     private final static String PN_COMPONENT_PATH = "componentPath";
