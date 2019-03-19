@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ import static org.apache.sling.api.resource.Resource.RESOURCE_TYPE_NON_EXISTING;
 /**
  * <p>Abstract datasource providing access to a content fragment instance configured by datasource properties. The
  * content fragment to be returned by {@link #getContentFragment(SlingHttpServletRequest)} can be specified via a
- * {@code /apps/core/wcm/extension/components/contentfragment} component (see {@link #PN_COMPONENT_PATH}) or
+ * {@code /apps/core/wcm/components/contentfragment} component (see {@link #PN_COMPONENT_PATH}) or
  * directly by path (see {@link #PN_FRAGMENT_PATH}).</p>
  *
  * <p>Concrete implementations need only return a list of items in
@@ -66,7 +66,7 @@ public abstract class AbstractContentFragmentDataSource<T> extends SlingSafeMeth
 
     /**
      * Name of the resource property containing the path to a
-     * {@code /apps/core/wcm/extension/components/contentfragment} component. The servlet uses the content
+     * {@code /apps/core/wcm/components/contentfragment} component. The servlet uses the content
      * fragment referenced by the component. The value may contain expressions.
      */
     public final static String PN_COMPONENT_PATH = "componentPath";

@@ -30,7 +30,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 * Page authoring components:
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
   * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-  * [Content Fragment](extension/contentfragment/content/src/content/jcr_root/apps/core/wcm/extension/components/contentfragment/v1/contentfragment)\*
+  * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)\*
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
@@ -53,8 +53,6 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
 
-\* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
-
 ## Component Versioning
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
@@ -63,9 +61,9 @@ The components' versioning scheme is documented on the [AEM Core WCM Components'
 
 The latest version of the Core Components, require the below minimum system requirements:
 
-Core Components | Extension | AEM 6.4 | AEM 6.3 | Java
-----------------|-----------|---------|---------|------
-[2.3.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.2) | 1.0.12 | 6.4.2.0 | 6.3.3.0 | 1.8
+Core Components | AEM 6.4 | AEM 6.3 | Java
+----------------|---------|---------|------
+[2.3.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.2) | 6.4.2.0 | 6.3.3.0 | 1.8
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
