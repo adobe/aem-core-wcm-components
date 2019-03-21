@@ -1,0 +1,9 @@
+{
+    "jcr:primaryType": "nt:unstructured",
+    "bar": {
+        "jcr:primaryType": "nt:unstructured"
+    },
+    "qux": {
+        "jcr:primaryType": "nt:unstructured"
+    }
+}

@@ -23,7 +23,7 @@ public class ContentFragmentModelsCommonsTest extends AbstractModelTest {
 
     @Test
     public void testDefaultBehaviour() throws Exception {
-        testDefaultBehaviour(new String[] {
+        testDefaultBehaviour(new String[]{
                 "com.adobe.cq.wcm.core.components.models.v1.contentfragment"
         });
     }

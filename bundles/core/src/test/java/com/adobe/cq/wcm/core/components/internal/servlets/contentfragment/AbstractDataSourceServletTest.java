@@ -42,7 +42,7 @@ import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.ContentFragmentImplTest.ADAPTER;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.AbstractContentFragmentTest.ADAPTER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
