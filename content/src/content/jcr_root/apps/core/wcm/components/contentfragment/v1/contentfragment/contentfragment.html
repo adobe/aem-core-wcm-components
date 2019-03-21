@@ -15,12 +15,8 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.fragment="com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment"
      data-sly-test="${properties.fragmentPath}" data-sly-use.cfTemplates="templates.html">
-    <sly data-sly-test.isParagraphMode="${fragment.elements.size == 1 && fragment.elements[0].isMultiLine && properties.displayMode == 'singleText'}">
-        <sly data-sly-call="${cfTemplates.paragraphs @ fragment=fragment, fragmentPath=properties.fragmentPath, wcmmode=wcmmode}"></sly>
-    </sly>
-    <sly data-sly-test="${!isParagraphMode}">
-        <sly data-sly-call="${cfTemplates.elements @ fragment=fragment, fragmentPath=properties.fragmentPath, wcmmode=wcmmode}"></sly>
-    </sly>
+    <sly data-sly-call="${cfTemplates.contentFragment @ fragment=fragment, fragmentPath=properties.fragmentPath, wcmmode=wcmmode}"></sly>
 </sly>
+
 <sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-call="${template.placeholder @ isEmpty=!properties.fragmentPath || !fragment.elements || fragment.elements.isEmpty, classAppend='cq-dd-contentfragment'}"></sly>
+     data-sly-call="${template.placeholder @ isEmpty=!properties.fragmentPath, classAppend='cq-dd-contentfragment'}"></sly>
