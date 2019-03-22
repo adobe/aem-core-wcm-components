@@ -34,7 +34,7 @@ import com.day.cq.i18n.I18n;
 /**
  * Datasource that returns the variations of a content fragment.
  *
- * @see AbstractContentFragmentDataSource
+ * @see AbstractContentFragmentDataSourceServlet
  */
 @Component(
         service = {Servlet.class},
@@ -44,7 +44,7 @@ import com.day.cq.i18n.I18n;
                 "sling.servlet.extensions=html"
         }
 )
-public class VariationsDataSourceServlet extends AbstractContentFragmentDataSource<VariationsDataSourceServlet.Variation> {
+public class VariationsDataSourceServlet extends AbstractContentFragmentDataSourceServlet<VariationsDataSourceServlet.Variation> {
 
     /**
      * Represents a variation definition in the context of this datasource.
@@ -75,7 +75,7 @@ public class VariationsDataSourceServlet extends AbstractContentFragmentDataSour
     /**
      * Defines the resource type for this datasource.
      */
-    public final static String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/datasource/variations";
+    public static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/datasource/variations";
 
     @Reference
     private ExpressionResolver expressionResolver;
