@@ -217,7 +217,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ObjectMapper mapper = new ObjectMapper();
         mapper.writerWithView(DAMContentFragmentImpl.class).writeValue(writer, fragment);
         JsonReader jsonReaderOutput = Json.createReader(IOUtils.toInputStream(writer.toString(), StandardCharsets.UTF_8));
-        JsonReader jsonReaderExpected = Json.createReader(Thread.currentThread().getContextClassLoader().getClass()
+        JsonReader jsonReaderExpected = Json.createReader(getClass()
             .getResourceAsStream("/contentfragment/test-expected-content-export.json"));
         assertEquals(jsonReaderExpected.read(), jsonReaderOutput.read());
     }
