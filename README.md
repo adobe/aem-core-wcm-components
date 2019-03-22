@@ -19,6 +19,11 @@ If you're curious about how the next generation of components looks like, a tech
 
 Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
 
+## Mailing List
+
+For discussions and Q&A you can use our public mailing list hosted on [googlegroups.com](https://groups.google.com/forum/#!forum/aem-core-components-dev). 
+You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups.com](mailto:aem-core-components-dev+subscribe@googlegroups.com).
+
 ## Available Components
 
 * Page authoring components:
