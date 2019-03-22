@@ -33,6 +33,7 @@
     </article>
 </template>
 
+<!-- This template should not be used/called by the content fragment list component -->
 <template data-sly-template.paragraphs="${@ fragment='The content fragment'}">
     <div class="cmp-contentfragment__elements">
         <div data-sly-resource="${'par0' @ resourceType=fragment.gridResourceType}"></div>
