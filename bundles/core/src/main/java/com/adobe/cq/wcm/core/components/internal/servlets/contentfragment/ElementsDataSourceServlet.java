@@ -36,7 +36,7 @@ import com.adobe.granite.ui.components.ExpressionResolver;
 /**
  * Datasource that returns the elements of a content fragment.
  *
- * @see AbstractContentFragmentDataSource
+ * @see AbstractContentFragmentDataSourceServlet
  */
 @Component(
         service = {Servlet.class},
@@ -46,12 +46,12 @@ import com.adobe.granite.ui.components.ExpressionResolver;
                 "sling.servlet.extensions=html"
         }
 )
-public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource<ContentElement> {
+public class ElementsDataSourceServlet extends AbstractContentFragmentDataSourceServlet<ContentElement> {
 
     /**
      * Defines the resource type for this datasource.
      */
-    public final static String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/datasource/elements";
+    public static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/datasource/elements";
 
     /**
      * Defines a parameter name and property name whose value would define whether to return all elements or just
