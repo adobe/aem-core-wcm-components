@@ -6,7 +6,7 @@
 
 ## Documentation
 
-* [Component Library](http://opensource.adobe.com/aem-core-wcm-components/library.html)
+* [Component Library](https://www.adobe.com/go/aem_cmp_library)
 * [Using Core Components](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
 * [Tutorial for building a new site using the Core Components](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
 * [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
