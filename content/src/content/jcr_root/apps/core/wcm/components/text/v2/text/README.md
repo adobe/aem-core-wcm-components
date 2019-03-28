@@ -42,4 +42,4 @@ BLOCK cmp-text
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_text\_v2](https://www.adobe.com/go/aem_cmp_text_v2)
-* **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/text.html](http://opensource.adobe.com/aem-core-wcm-components/library/text.html)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_text](https://www.adobe.com/go/aem_cmp_library_text)
