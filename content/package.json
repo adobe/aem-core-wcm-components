@@ -11,7 +11,7 @@
     },
     "scripts": {
         "aemfed": "aemfed -e \"**/*___jb_+(old|tmp)___\" -w \"src/content/jcr_root/\"",
-        "eslint": "eslint .",
+        "eslint": "eslint --ignore-path tingle.min.js",
         "eslint:fix": "eslint . --fix",
         "lint": "npm-run-all --parallel eslint stylelint",
         "stylelint": "stylelint '**/*.css' '**/*.less'",

@@ -1,0 +1,26 @@
+{
+    "modal": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Container Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "modal-1"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:title"         : "Modal 1",
+                        "sling:resourceType": "core/wcm/components/modal/v1/modal",
+                        "modalId": "312835230",
+						"pagePath": "/content/experience-fragments/mid_markets/mmfxtest/master",
+    					"showModalByDefault": "false"          
+                    }
+                }
+            }
+        }
+    }
+}
