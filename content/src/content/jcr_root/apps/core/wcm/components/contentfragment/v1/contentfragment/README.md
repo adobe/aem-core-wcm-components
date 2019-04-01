@@ -22,6 +22,7 @@ Content Fragment component written in HTL that displays the elements of a Conten
 * Displays the elements of a Content Fragment as an HTML description list
 * By default renders all elements of a Content Fragment
 * Can be configured to render a subset of the elements in a specific order
+* Alternative Content Fragment variations are configurable
 
 ### Use Object
 The Content Fragment component uses the `com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment` Sling model as its Use-object.
