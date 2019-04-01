@@ -2,13 +2,13 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-01-16T14:20:39.952+01:00"
+        cq:lastModified="{Date}2019-04-01T16:47:17.469+02:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/reference]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Add a content fragment asset"
+        jcr:description="Display a list of content fragments"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Content Fragment"
+        jcr:title="Content Fragment List"
         sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -24,17 +24,17 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Content Fragment&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Content Fragment List&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T15:15:11.838+01:00"
+                    jcr:lastModified="{Date}2019-04-01T16:43:26.346+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Content Fragment allows a content fragment asset, its elements and variations to be presented on a page.&lt;/p>&#xa;"
+                    text="&lt;p>Content Fragment List allows the display of a list of content fragment assets on a page. Useful for authoring headless content that can be easily consumed by applications.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
@@ -49,7 +49,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_cf_v1"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_cflist_v1"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -65,7 +65,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_contentfragment_v1"
+                    linkURL="https://www.adobe.com/go/aem_cmp_cflist_v1"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <title_865328580
@@ -82,20 +82,20 @@
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2019-01-15T15:16:04.933+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T16:26:07.668+01:00"
+                    jcr:lastModified="{Date}2019-04-01T16:01:55.295+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Simple Content Fragment"
+                    jcr:title="Simple Content Fragment List"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h1"/>
                 <text_1424864129
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-16T14:19:16.662+01:00"
+                    jcr:lastModified="{Date}2019-04-01T16:47:17.461+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Content fragment component with an associated content fragment asset. The asset uses the&amp;nbsp;&lt;i>Simple Fragment&amp;nbsp;&lt;/i>template and displays some dummy article content, including a header and paragraph. It has one&amp;nbsp;&lt;i>Main&lt;/i>&amp;nbsp;element.&lt;/p>&#xa;"
+                    text="&lt;p>Content fragment list component that displays content fragments based on a bespoke&amp;nbsp;&lt;i>Core Component Model&lt;/i>, which allows the output of structured data associated with a Core Component. A &lt;i>Parent Path&lt;/i>&amp;nbsp;is used as a root for looking up the assets to display. There are four assets, showing data for the Text, Image, Carousel and Tabs components.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_759741754
                     jcr:created="{Date}2019-01-15T15:26:22.657+01:00"
@@ -107,22 +107,15 @@
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
-                        <contentfragment
-                            jcr:created="{Date}2019-01-15T15:21:48.208+01:00"
+                        <contentfragmentlist
+                            jcr:created="{Date}2019-04-01T16:00:44.130+02:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-01-15T15:28:41.607+01:00"
+                            jcr:lastModified="{Date}2019-04-01T16:01:30.956+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragment/v1/contentfragment"
-                            displayMode="multi"
-                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/simple-fragment"
-                            paragraphScope="all"
-                            text="Main Lorem Ipsum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis."
-                            variationName="master">
-                            <par2
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="wcm/foundation/components/responsivegrid"/>
-                        </contentfragment>
+                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+                            modelPath="/conf/core-components-examples/settings/dam/cfm/models/core-component-model"
+                            parentPath="/content/dam/core-components-examples/library/sample-assets"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -148,19 +141,19 @@
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2019-01-15T15:16:04.933+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T15:21:14.822+01:00"
+                    jcr:lastModified="{Date}2019-04-01T16:27:53.697+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Variations"
+                    jcr:title="Tags"
                     sling:resourceType="core/wcm/components/title/v2/title"/>
                 <text_1424864129_copy
                     jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-16T14:14:35.497+01:00"
+                    jcr:lastModified="{Date}2019-04-01T16:33:44.930+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>It is possible to output alternative variations on the page. Here we use the same simple content fragment asset, but instead display its &lt;i>Short&lt;/i> variation. Short variations are more suited to mobile apps, for example.&lt;/p>&#xa;"
+                    text="&lt;p>The list can be filtered to display content fragments associated with a tag. In this example, the list is filtered by the &lt;i>core-components-examples:component-type/basic &lt;/i>tag, displaying only the Text and Image component data.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
                     jcr:created="{Date}2019-01-15T15:24:16.176+01:00"
@@ -172,18 +165,16 @@
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
-                        <contentfragment_copy
-                            jcr:created="{Date}2019-01-15T15:21:48.208+01:00"
+                        <contentfragmentlist
+                            jcr:created="{Date}2019-04-01T16:27:02.259+02:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-01-15T15:25:29.831+01:00"
+                            jcr:lastModified="{Date}2019-04-01T16:27:37.669+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragment/v1/contentfragment"
-                            displayMode="multi"
-                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/simple-fragment"
-                            paragraphScope="all"
-                            text="Main Lorem Ipsum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                            variationName="short"/>
+                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+                            modelPath="/conf/core-components-examples/settings/dam/cfm/models/core-component-model"
+                            parentPath="/content/dam/core-components-examples/library/sample-assets"
+                            tagNames="[core-components-examples:component-type/basic]"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -205,108 +196,44 @@
                             reference="../../component"/>
                     </info>
                 </demo>
-                <title_1303909541
+                <title_219202184_copy_101761062
                     cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2019-01-15T15:50:54.471+01:00"
+                    jcr:created="{Date}2019-01-15T15:16:04.933+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T16:26:16.866+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Structured Content Fragment"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
-                <text_1263763772
-                    jcr:created="{Date}2019-01-15T15:51:50.915+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-16T14:19:51.394+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>In this example, the asset is based on a bespoke &lt;i>Core Component Model&lt;/i> template which allows the output of structured data associated with a Core Component. The asset contains data for the image component.&lt;/p>&#xa;"
-                    textIsRich="true"/>
-                <demo_981582357
-                    jcr:created="{Date}2019-01-15T15:54:23.280+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T15:54:23.280+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <contentfragment
-                            jcr:created="{Date}2019-01-15T15:54:35.201+01:00"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-01-15T15:55:06.376+01:00"
-                            jcr:lastModifiedBy="admin"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragment/v1/contentfragment"
-                            displayMode="multi"
-                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/image-fragment"
-                            paragraphScope="all"
-                            text="Title Image Description Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available. Latest Version 2.0 Type core-components-examples:component-type/basic"
-                            variationName="master"/>
-                    </component>
-                    <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
-                        <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
-                        <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
-                        <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
-                    </info>
-                </demo_981582357>
-                <title_1419122354
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2019-01-15T15:55:57.030+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T15:56:29.516+01:00"
+                    jcr:lastModified="{Date}2019-04-01T16:38:26.765+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Elements"
                     sling:resourceType="core/wcm/components/title/v2/title"/>
-                <text_1010010208
-                    jcr:created="{Date}2019-01-15T15:56:22.761+01:00"
+                <text_1424864129_copy_1972659711
+                    jcr:created="{Date}2019-01-15T15:16:13.958+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-16T14:20:39.945+01:00"
+                    jcr:lastModified="{Date}2019-04-01T16:41:35.465+02:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>For structured content fragments, it is possible to limit the output to certain elements in the data. In this example we again show the component data for the image component, but only its &lt;i>title&lt;/i> and&lt;i> type&lt;/i>.&lt;/p>&#xa;"
+                    text="&lt;p>The content fragment elements to be displayed in the list can be configured by an author. In this example we again list data for the Text, Image, Carousel and Tabs components, but filter the output to only show the &lt;i>title&lt;/i> and &lt;i>type&lt;/i>.&lt;/p>&#xa;"
                     textIsRich="true"/>
-                <demo_26077943
-                    jcr:created="{Date}2019-01-15T15:57:23.206+01:00"
+                <demo_copy
+                    jcr:created="{Date}2019-01-15T15:24:16.176+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-01-15T15:57:23.206+01:00"
+                    jcr:lastModified="{Date}2019-01-15T15:24:16.176+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
-                        <contentfragment
-                            jcr:created="{Date}2019-01-15T15:57:30.036+01:00"
+                        <contentfragmentlist
+                            jcr:created="{Date}2019-04-01T16:27:02.259+02:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-01-15T16:04:54.746+01:00"
+                            jcr:lastModified="{Date}2019-04-01T16:40:45.872+02:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/contentfragment/v1/contentfragment"
-                            displayMode="multi"
+                            sling:resourceType="core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
                             elementNames="[component-title,component-type]"
-                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/image-fragment"
-                            paragraphScope="all"
-                            text="Title Image Type core-components-examples:component-type/basic"
-                            variationName="master"/>
+                            modelPath="/conf/core-components-examples/settings/dam/cfm/models/core-component-model"
+                            parentPath="/content/dam/core-components-examples/library/sample-assets"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -327,7 +254,7 @@
                             sling:resourceType="core-components-examples/components/demo/json"
                             reference="../../component"/>
                     </info>
-                </demo_26077943>
+                </demo_copy>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">

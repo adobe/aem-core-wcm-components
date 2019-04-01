@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-02-15T19:23:42.224+01:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/atom]"
+        cq:tags="[core-components-examples:component-type/basic]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display an image asset"
         jcr:primaryType="cq:PageContent"
