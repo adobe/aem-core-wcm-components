@@ -33,7 +33,7 @@ You can add your voice to discussions around new and existing component features
 * Commenting on an RTC. New components and features that openly invite public comment are marked by an [RTC](https://github.com/adobe/aem-core-wcm-components/labels/rtc) (Request to Comment) label. We strongly encourage users of the Core Components to bring their own project experience to these issues, as there may be alternative use-cases or requirements that haven't yet been considered.
 * Subscribing to the [Component Round Table](https://gabrielwalt.typeform.com/to/aKeZS6) to participate in sessions on the Core Components.
 
-### Joining Developer Discussions
+### Joining Developer Discussions 💬
 
 If you have thoughts on the code, the general architecture of the project, or would like some initial feedback on a feature you are thinking of coding, you can join the [Core Components Developer Mailing List](https://groups.google.com/forum/#!forum/aem-core-components-dev).
 
@@ -47,9 +47,9 @@ If you have thoughts on the code, the general architecture of the project, or wo
 
 ##### Filing a Bug
 
-1. Visit our issue [tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
+1. Visit our [issue tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
 1. File a `New Issue` as a `Bug Report`.
-1. Ensure your issue follows the `Issue Report Guidelines`.
+1. Ensure your issue follows the [Issue Report Guidelines](#issue-report-guidelines).
 1. Thanks for the report! The committers will get back to you in a timely manner, typically within one week.
 
 ### Requesting Features 🚀
@@ -62,9 +62,9 @@ If you have thoughts on the code, the general architecture of the project, or wo
 
 ##### Requesting a Feature
 
-1. Visit our issue [tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
+1. Visit our [issue tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
 1. File a `New Issue` as a `Feature Request`.
-1. Ensure your issue follows the `Issue Report Guidelines`.
+1. Ensure your issue follows the [Issue Report Guidelines](#issue-report-guidelines).
 1. Thanks for the feature request!  The committers will get back to you in a timely manner, typically within one week.
 
 ### Contributing Code 👾 
@@ -94,10 +94,13 @@ We very much welcome issue reports or pull requests that improve our documentati
 A well defined issue report will help in quickly understanding and replicating the problem faced, or the feature requested. Below are some rough guidelines on what to include when reporting an issue:
 
 * Title
-    * **Descriptive** - Should be easy to understand.
-    * **Succinct** - If the issue can't be easily described in the title, then the problem is likely unfocused.
-    * **Keyword Rich** - Including keywords can help with quickly finding the issue in the backlog. Component related issues can be bracketed with label, for example `[Image]`.
-* Description - See our `bug report` and `feature request` issue templates for details on what is expected to be described.
+    * **Descriptive** - Should be specific and well described.
+    * **Understandable** - Should be readable at a glance.
+    * **Succinct** - If the issue can't be easily described in a short title, then the problem is likely unfocused.
+    * **Keyword Rich** - Including keywords can help with quickly finding the issue in the backlog. Component related issues can be prefixed with a bracketed with label with the component name, for example `[Image]`.
+* Description - See our [bug report template](.github/ISSUE_TEMPLATE/bug_report.md) or [feature request template](.github/ISSUE_TEMPLATE/feature_request.md) for details on what is expected to be described. The same information is available when creating a new issue on GitHub.
+
+See [this community reported issue](https://github.com/adobe/aem-core-wcm-components/issues/247) for an excellent example of how to write a successful issue report.
 
 ## Contributor License Agreement
 
