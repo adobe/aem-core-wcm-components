@@ -8,13 +8,13 @@ The following are a set of guidelines for contributing to the project.
 
 * [Code of Conduct](#code-of-conduct)
 * [Ways of Contributing](#ways-of-contributing)
-  * [Joining Feature Discussions](#joining-feature-discussions) 💭
-  * [Joining Developer Discussions](#joining-developer-discussions) 💬
-  * [Reporting Bugs](#reporting-bugs) 🐛
-  * [Requesting Features](#requesting-features) 🚀
-  * [Contributing Code](#contributing-code) 👾
-  * [Reviewing Code](#reviewing-code) 👀
-  * [Documenting](#documenting) 📜
+  * [Joining Feature Discussions](#joining-feature-discussions-) 💭
+  * [Joining Developer Discussions](#joining-developer-discussions-) 💬
+  * [Reporting Bugs](#reporting-bugs-) 🐛
+  * [Requesting Features](#requesting-features-) 🚀
+  * [Contributing Code](#contributing-code-) 👾
+  * [Reviewing Code](#reviewing-code-) 👀
+  * [Documenting](#documenting-) 📜
 * [Issue Report Guidelines](#issue-report-guidelines)
 * [Contributor License Agreement](#contributor-license-agreement)
 
@@ -91,16 +91,16 @@ We very much welcome issue reports or pull requests that improve our documentati
 
 ## Issue Report Guidelines
 
-A well defined issue report will help in quickly understanding and replicating the problem faced, or the feature requested. Below are some rough guidelines on what to include when reporting an issue:
+A well defined issue report will help in quickly understanding and replicating the problem faced, or the feature requested. Below are some guidelines on what to include when reporting an issue:
 
 * Title
     * **Descriptive** - Should be specific and well described.
     * **Understandable** - Should be readable at a glance.
     * **Succinct** - If the issue can't be easily described in a short title, then the problem is likely unfocused.
-    * **Keyword Rich** - Including keywords can help with quickly finding the issue in the backlog. Component related issues can be prefixed with a bracketed with label with the component name, for example `[Image]`.
+    * **Keyword Rich** - Including keywords can help with quickly finding the issue in the backlog. Component related issues can be prefixed with a bracketed label with the component name, for example `[Image]` for the image component.
 * Description - See our [bug report template](.github/ISSUE_TEMPLATE/bug_report.md) or [feature request template](.github/ISSUE_TEMPLATE/feature_request.md) for details on what is expected to be described. The same information is available when creating a new issue on GitHub.
 
-See [this community reported issue](https://github.com/adobe/aem-core-wcm-components/issues/247) for an excellent example of how to write a successful issue report.
+See [this community reported issue](https://github.com/adobe/aem-core-wcm-components/issues/247) for a good example of how to write a successful issue report.
 
 ## Contributor License Agreement
 
