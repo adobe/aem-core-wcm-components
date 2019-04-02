@@ -39,7 +39,7 @@ If you have thoughts on the code, the general architecture of the project, or wo
 
 ### Reporting Bugs 🐛
 
-##### Before Reporting 
+##### Before Reporting a Bug 
 
 * Have a quick search through the currently open [bug reports](https://github.com/adobe/aem-core-wcm-components/labels/bug) to see if the issue has already been reported.
 * Ensure that the issue is repeatable and that the actual behavior versus the expected results can be easily described.
@@ -49,7 +49,7 @@ If you have thoughts on the code, the general architecture of the project, or wo
 
 1. Visit our [issue tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
 1. File a `New Issue` as a `Bug Report`.
-1. Ensure your issue follows the [Issue Report Guidelines](#issue-report-guidelines).
+1. Ensure your issue follows the [issue report guidelines](#issue-report-guidelines).
 1. Thanks for the report! The committers will get back to you in a timely manner, typically within one week.
 
 ### Requesting Features 🚀
@@ -64,7 +64,7 @@ If you have thoughts on the code, the general architecture of the project, or wo
 
 1. Visit our [issue tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
 1. File a `New Issue` as a `Feature Request`.
-1. Ensure your issue follows the [Issue Report Guidelines](#issue-report-guidelines).
+1. Ensure your issue follows the [issue report guidelines](#issue-report-guidelines).
 1. Thanks for the feature request! The committers will get back to you in a timely manner, typically within one week.
 
 ### Contributing Code 👾 
@@ -73,7 +73,7 @@ High quality code is important to the project, and to keep it that way, all code
 
 ##### Before Contributing
 
-* Consider [Joining Developer Discussions](#joining-developer-discussions-) to get feedback on what you are thinking of contributing. It's better to get this early feedback before going ahead and potentially having to rewrite everything later.
+* Consider [joining developer discussions](#joining-developer-discussions-) to get feedback on what you are thinking of contributing. It's better to get this early feedback before going ahead and potentially having to rewrite everything later.
 * Create a [bug report](#reporting-bugs-) or [feature request](#requesting-features-) issue summarizing the problem that you will be solving. This will again help with early feedback and tracking.
 * Have a look at our [component checklist](Guidelines.md), for an idea of what certifies a production ready component.
 
@@ -87,7 +87,7 @@ The project accepts contributions primarily using GitHub pull requests. This pro
 
 Creating a pull request involves creating a fork of the project in your personal space, adding your new code in a branch and triggering a pull request. Check the GitHub [Using Pull Requests](https://help.github.com/articles/using-pull-requests) article on how to perform pull requests.
 
-The title of the pull request typically matches that of the issue it fixes, see [Issue Report Guidelines](#issue-report-guidelines).
+The title of the pull request typically matches that of the issue it fixes, see the [issue report guidelines](#issue-report-guidelines).
 Have a look at our [pull request template](.github/pull_request_template.md) to see what is expected to be included in the pull request description. The same template is available when the pull request is triggered. 
 
 ##### Your first contribution
