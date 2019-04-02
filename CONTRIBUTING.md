@@ -79,7 +79,16 @@ High quality code is important to the project, and to keep it that way, all code
 
 ##### Contributing
 
-New code contributions should be made primarily using GitHub pull requests. This involves creating a fork of the project in your personal space, adding your new code in a branch and triggering a pull request. Check the GitHub [Using Pull Requests](https://help.github.com/articles/using-pull-requests) article on how to perform pull requests.
+The project accepts contributions primarily using GitHub pull requests. This process:
+* Helps to maintain project quality
+* Engages the community in working towards commonly accepted solutions with peer review
+* Leads to a more meaningful and cleaner git history
+* Ensures sustainable code management 
+
+Creating a pull request involves creating a fork of the project in your personal space, adding your new code in a branch and triggering a pull request. Check the GitHub [Using Pull Requests](https://help.github.com/articles/using-pull-requests) article on how to perform pull requests.
+
+##### Your first contribution
+Would you would like to contribute to the project but don't have an issue in mind? Or are still fairly unfamiliar with the code? Then have a look at our [good first issues](https://github.com/adobe/aem-core-wcm-components/labels/good%20first%20issue), they are fairly simple starter issues that should only require a small amount of code and simple testing.
 
 ### Reviewing Code 👀
 
@@ -87,7 +96,7 @@ Reviewing others' code contributions is another great way to contribute - more e
 
 ### Documenting 📜
 
-We very much welcome issue reports or pull requests that improve our documentation pages. While the best effort is made to keep them error free, useful and up-to-date there are always things that could be improved. The component documentation pages (for example the [Image Component](https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/image/v2/image/README.md)), this contribution guide or our [GitHub Wiki](https://github.com/adobe/aem-core-wcm-components/wiki) pages are good places to start.
+We very much welcome issue reports or pull requests that improve our documentation pages. While the best effort is made to keep them error free, useful and up-to-date there are always things that could be improved. The component documentation pages (for example the [Image Component Documentation](https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/image/v2/image/README.md)), this contributing guide or our [GitHub Wiki](https://github.com/adobe/aem-core-wcm-components/wiki) pages are good places to start.
 
 ## Issue Report Guidelines
 
