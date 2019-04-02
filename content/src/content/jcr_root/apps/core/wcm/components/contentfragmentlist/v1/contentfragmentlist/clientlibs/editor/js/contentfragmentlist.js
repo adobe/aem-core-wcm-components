@@ -17,7 +17,7 @@
     "use strict";
 
     // class of the edit dialog content
-    var CLASS_EDIT_DIALOG = "cmp-contentfragmentlist__edit-dialog";
+    var CLASS_EDIT_DIALOG = "cmp-contentfragmentlist__editor";
 
     // field selectors
     var SELECTOR_MODEL_PATH = "[name='./modelPath']";
