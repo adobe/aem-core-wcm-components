@@ -65,7 +65,7 @@ If you have thoughts on the code, the general architecture of the project, or wo
 1. Visit our [issue tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
 1. File a `New Issue` as a `Feature Request`.
 1. Ensure your issue follows the [Issue Report Guidelines](#issue-report-guidelines).
-1. Thanks for the feature request!  The committers will get back to you in a timely manner, typically within one week.
+1. Thanks for the feature request! The committers will get back to you in a timely manner, typically within one week.
 
 ### Contributing Code 👾 
 
@@ -73,9 +73,9 @@ High quality code is important to the project, and to keep it that way, all code
 
 ##### Before Contributing
 
-* Consider [Joining Developer Discussions](#joining-developer-discussions) to get feedback on what you are thinking of contributing. It's better to get this early feedback before going ahead and potentially having to rewrite everything later.
-* Create a [bug report](#reporting-bugs) or [feature request](#suggesting-enhancements) issue summarizing the problem that you will be solving. This will again help with early feedback and tracking.
-* Check through the project [development guidelines](Guidelines.md).
+* Consider [Joining Developer Discussions](#joining-developer-discussions-) to get feedback on what you are thinking of contributing. It's better to get this early feedback before going ahead and potentially having to rewrite everything later.
+* Create a [bug report](#reporting-bugs-) or [feature request](#requesting-features-) issue summarizing the problem that you will be solving. This will again help with early feedback and tracking.
+* Have a look at our [component checklist](Guidelines.md), for an idea of what certifies a production ready component.
 
 ##### Contributing
 
@@ -86,6 +86,9 @@ The project accepts contributions primarily using GitHub pull requests. This pro
 * Ensures sustainable code management 
 
 Creating a pull request involves creating a fork of the project in your personal space, adding your new code in a branch and triggering a pull request. Check the GitHub [Using Pull Requests](https://help.github.com/articles/using-pull-requests) article on how to perform pull requests.
+
+The title of the pull request typically matches that of the issue it fixes, see [Issue Report Guidelines](#issue-report-guidelines).
+Have a look at our [pull request template](.github/pull_request_template.md) to see what is expected to be included in the pull request description. The same template is available when the pull request is triggered. 
 
 ##### Your first contribution
 Would you would like to contribute to the project but don't have an issue in mind? Or are still fairly unfamiliar with the code? Then have a look at our [good first issues](https://github.com/adobe/aem-core-wcm-components/labels/good%20first%20issue), they are fairly simple starter issues that should only require a small amount of code and simple testing.
