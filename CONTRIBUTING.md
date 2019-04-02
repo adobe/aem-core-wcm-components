@@ -1,20 +1,21 @@
 # Contributing
 
-Thank you for choosing to contribute to Adobe Experience Manager Core Components, we really appreciate your time and effort! :smiley::confetti_ball:
+Thank you for choosing to contribute to the Adobe Experience Manager Core Components project, we really appreciate your time and effort! 😃🎊
 
-The following are a set of guidelines to follow when contributing to the project.
+The following are a set of guidelines for contributing to the project.
 
 #### Contents
 
 * [Code of Conduct](#code-of-conduct)
 * [Ways of Contributing](#ways-of-contributing)
-  * [Joining Feature Discussions](#commenting-on-feature-requirements)
-  * [Joining Developer Discussions](https://groups.google.com/forum/#!forum/aem-core-components-dev)
-  * [Reporting Bugs](#reporting-bugs)
-  * [Suggesting Enhancements](#suggesting-enhancements)
-  * [Contributing Code](#contributing-code)
-  * [Reviewing Code](#reviewing-code)
-  * [Documenting](#documenting)
+  * [Joining Feature Discussions](#joining-feature-discussions) 💭
+  * [Joining Developer Discussions](#joining-developer-discussions) 💬
+  * [Reporting Bugs](#reporting-bugs) 🐛
+  * [Requesting Features](#requesting-features) 🚀
+  * [Contributing Code](#contributing-code) 👾
+  * [Reviewing Code](#reviewing-code) 👀
+  * [Documenting](#documenting) 📜
+* [Issue Report Guidelines](#issue-report-guidelines)
 * [Contributor License Agreement](#contributor-license-agreement)
 
 ## Code of Conduct
@@ -25,9 +26,9 @@ This project adheres to the Adobe [Code of Conduct](CODE_OF_CONDUCT.md). By part
 
 There are many ways of contributing, from testing and reporting an issue to suggesting and coding full components or features. Below is a summary of some of the best ways to get involved. 
 
-### Joining Feature Discussions
+### Joining Feature Discussions 💭
 
-There are a few different ways that you can add your voice to discussions around new and existing component features:
+You can add your voice to discussions around new and existing component features by:
 
 * Commenting on an RTC. New components and features that openly invite public comment are marked by an [RTC](https://github.com/adobe/aem-core-wcm-components/labels/rtc) (Request to Comment) label. We strongly encourage users of the Core Components to bring their own project experience to these issues, as there may be alternative use-cases or requirements that haven't yet been considered.
 * Subscribing to the [Component Round Table](https://gabrielwalt.typeform.com/to/aKeZS6) to participate in sessions on the Core Components.
@@ -36,33 +37,43 @@ There are a few different ways that you can add your voice to discussions around
 
 If you have thoughts on the code, the general architecture of the project, or would like some initial feedback on a feature you are thinking of coding, you can join the [Core Components Developer Mailing List](https://groups.google.com/forum/#!forum/aem-core-components-dev).
 
-### Reporting Bugs
+### Reporting Bugs 🐛
 
 ##### Before Reporting 
 
 * Have a quick search through the currently open [bug reports](https://github.com/adobe/aem-core-wcm-components/labels/bug) to see if the issue has already been reported.
 * Ensure that the issue is repeatable and that the actual behavior versus the expected results can be easily described.
-* Check that the issue you are experiencing is related to the Core Components project. It may be that the problem derives from the core AEM editor code rather than Core Components. If you're not sure, then feel free to report the issue anyway and the committers will clarify for you. Issues in the product can be reported via [Adobe Enterprise Support](https://helpx.adobe.com/contact/enterprise-support.ec.html).
+* Check that the issue you are experiencing is related to the Core Components project. It may be that the problem derives from AEM itself, typically editor code, rather than the Core Components. If you're not sure, then feel free to report the issue anyway and the committers will clarify for you. Issues in the product can be reported via [Adobe Enterprise Support](https://helpx.adobe.com/contact/enterprise-support.ec.html).
 
 ##### Filing a Bug
 
-### Suggesting Enhancements
+1. Visit our issue [tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
+1. File a `New Issue` as a `Bug Report`.
+1. Ensure your issue follows the `Issue Report Guidelines`.
+1. Thanks for the report! The committers will get back to you in a timely manner, typically within one week.
 
-##### Before Suggesting an Enhancement
+### Requesting Features 🚀
 
-* Have a quick search through the currently open [Enhancement](https://github.com/adobe/aem-core-wcm-components/labels/enhancement), [Feature](https://github.com/adobe/aem-core-wcm-components/labels/feature) and [Request to Comment](https://github.com/adobe/aem-core-wcm-components/labels/rtc) issues to see if the idea has already been suggested. If it has, you may still have a slightly different requirement that isn't covered, in which case, feel free to comment on the open issue. 
+##### Before Requesting a Feature
+
+* Have a quick search through the currently open [enhancement](https://github.com/adobe/aem-core-wcm-components/labels/enhancement), [feature](https://github.com/adobe/aem-core-wcm-components/labels/feature) and [request to comment](https://github.com/adobe/aem-core-wcm-components/labels/rtc) issues to see if the idea has already been suggested. If it has, you may still have a slightly different requirement that isn't covered, in which case, feel free to comment on the open issue. 
 * Take a look at the [Core Components Roadmap](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) to see if your feature is already on the radar. If it is and doesn't have a public issue yet, feel free to create one, listing your own requirements.
 * Consider whether your requirement is generically useful rather than project-specific and would therefore benefit all users of the Core Components.
 
-##### Suggesting an Enhancement
+##### Requesting a Feature
 
-### Contributing Code
+1. Visit our issue [tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
+1. File a `New Issue` as a `Feature Request`.
+1. Ensure your issue follows the `Issue Report Guidelines`.
+1. Thanks for the feature request!  The committers will get back to you in a timely manner, typically within one week.
+
+### Contributing Code 👾 
 
 High quality code is important to the project, and to keep it that way, all code submissions are reviewed by committers before being accepted. A close adherence to the guidelines below can help speed up the review process and increase the likelihood of the submission being accepted.
 
 ##### Before Contributing
 
-* Consider [Joining the Developer Discussion](#joining-the-developer-discussion) to get feedback what you are thinking of contributing. It's better to get this early feedback before going ahead, and having to rewrite everything later.
+* Consider [Joining Developer Discussions](#joining-developer-discussions) to get feedback on what you are thinking of contributing. It's better to get this early feedback before going ahead and potentially having to rewrite everything later.
 * Create a [bug report](#reporting-bugs) or [feature request](#suggesting-enhancements) issue summarizing the problem that you will be solving. This will again help with early feedback and tracking.
 * Check through the project [development guidelines](Guidelines.md).
 
@@ -70,13 +81,23 @@ High quality code is important to the project, and to keep it that way, all code
 
 New code contributions should be made primarily using GitHub pull requests. This involves creating a fork of the project in your personal space, adding your new code in a branch and triggering a pull request. Check the GitHub [Using Pull Requests](https://help.github.com/articles/using-pull-requests) article on how to perform pull requests.
 
-### Reviewing Code
+### Reviewing Code 👀
 
 Reviewing others' code contributions is another great way to contribute - more eyes on the code help to improve its overall quality. To review a pull request, check the [open pull requests](https://github.com/adobe/aem-core-wcm-components/pulls) for anything you can comment on. 
 
-### Documenting
+### Documenting 📜
 
 We very much welcome issue reports or pull requests that improve our documentation pages. While the best effort is made to keep them error free, useful and up-to-date there are always things that could be improved. The component documentation pages (for example the [Image Component](https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/image/v2/image/README.md)), this contribution guide or our [GitHub Wiki](https://github.com/adobe/aem-core-wcm-components/wiki) pages are good places to start.
+
+## Issue Report Guidelines
+
+A well defined issue report will help in quickly understanding and replicating the problem faced, or the feature requested. Below are some rough guidelines on what to include when reporting an issue:
+
+* Title
+    * **Descriptive** - Should be easy to understand.
+    * **Succinct** - If the issue can't be easily described in the title, then the problem is likely unfocused.
+    * **Keyword Rich** - Including keywords can help with quickly finding the issue in the backlog. Component related issues can be bracketed with label, for example `[Image]`.
+* Description - See our `bug report` and `feature request` issue templates for details on what is expected to be described.
 
 ## Contributor License Agreement
 
