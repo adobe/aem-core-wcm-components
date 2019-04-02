@@ -21,7 +21,7 @@ Content Fragment List component written in HTL that renders a list of Content Fr
 * Displays a list of a Content Fragment assets based on a Content Fragment model
 * The parent path for asset lookup is configurable
 * The list can be filtered by tag
-* A subset of elements in data model can be displayed
+* A subset of elements in the data model can be displayed
 
 ### Use Object
 The Content Fragment List component uses the `com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList` Sling model as its Use-object.
