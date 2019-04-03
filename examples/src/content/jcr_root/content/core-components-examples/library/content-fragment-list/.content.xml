@@ -34,7 +34,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Content Fragment List allows the display of a list of content fragment assets on a page. Useful for authoring headless content that can be easily consumed by applications.&lt;/p>&#xa;"
+                    text="&lt;p>Content Fragment List allows the display of a list of content fragments on a page. Useful for authoring headless content that can be easily consumed by applications.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
@@ -95,7 +95,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Content fragment list component that displays content fragments based on a bespoke&amp;nbsp;&lt;i>Core Component Model&lt;/i>, which allows the output of structured data associated with a Core Component. A &lt;i>Parent Path&lt;/i>&amp;nbsp;is used as a root for looking up the assets to display. There are four assets, showing data for the Text, Image, Carousel and Tabs components.&lt;/p>&#xa;"
+                    text="&lt;p>Content fragment list component that displays content fragments based on a bespoke&amp;nbsp;&lt;i>Core Component Model&lt;/i>, which allows the output of structured data associated with a Core Component. A &lt;i>Parent Path&lt;/i>&amp;nbsp;is used as a root for looking up the content fragments to display. There are four content fragments, showing data for the Text, Image, Carousel and Tabs components.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_759741754
                     jcr:created="{Date}2019-01-15T15:26:22.657+01:00"
