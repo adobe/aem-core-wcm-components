@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ import com.adobe.cq.wcm.core.components.models.GenericContainer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = GenericContainer.class, resourceType = GenericContainerImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = GenericContainer.class, resourceType = GenericContainerImpl.RESOURCE_TYPE_V1)
 public class GenericContainerImpl extends AbstractContainerImpl implements GenericContainer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GenericContainerImpl.class);
-    protected static final String RESOURCE_TYPE = "core/wcm/components/container/v1/container";
+    protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/container/v1/container";
     
     private boolean propertyDisabled = false;
     private boolean colorsDisabled = false;

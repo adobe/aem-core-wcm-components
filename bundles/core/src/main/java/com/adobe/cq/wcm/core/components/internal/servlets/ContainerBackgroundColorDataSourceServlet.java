@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public class ContainerBackgroundColorDataSourceServlet extends SlingSafeMethodsS
         request.setAttribute(DataSource.class.getName(), backgroundColorDataSource);
     }
 
-	private List<Resource> getColors(@NotNull SlingHttpServletRequest request) {
+	protected List<Resource> getColors(@NotNull SlingHttpServletRequest request) {
 		List<Resource> colorOptionsList = new ArrayList<>();
 		ResourceResolver resolver = request.getResourceResolver();
 		Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
