@@ -26,7 +26,7 @@ Container component written in HTL.
 * Allow hide/show for color picker properties
 
 ### Use Object
-The Carousel component uses the `com.adobe.cq.wcm.core.components.models.GenericContainer` Sling model as its Use-object.
+The Container component uses the `com.adobe.cq.wcm.core.components.models.GenericContainer` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
 The following configuration properties are used:
@@ -42,7 +42,7 @@ It is also possible to define the allowed components for the Container.
 The following properties are written to JCR for this Container component and are expected to be available as `Resource` properties:
 
 1. `./backgroundColor` - defines background color of container component.
-2. `./fileReference` - defines background image of container component..
+2. `./fileReference` - defines background image of container component.
 
 
 ## Client Libraries
@@ -60,5 +60,5 @@ BLOCK cmp-container__design
 * **Version**: v1
 * **Compatibility**: AEM 6.5
 * **Status**: production-ready
-* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_carousel\_v1](https://www.adobe.com/go/aem_cmp_container_v1)
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_container\_v1](https://www.adobe.com/go/aem_cmp_container_v1)
 * **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/container.html](http://opensource.adobe.com/aem-core-wcm-components/library/container.html)
