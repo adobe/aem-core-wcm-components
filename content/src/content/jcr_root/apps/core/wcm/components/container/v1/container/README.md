@@ -44,11 +44,6 @@ The following properties are written to JCR for this Container component and are
 1. `./backgroundColor` - defines background color of container component.
 2. `./fileReference` - defines background image of container component.
 
-
-## Client Libraries
-The component provides a `core.wcm.components.container.v1.design` client library category that contains a recommended base
-CSS styling and JavaScript component. It should be added to a relevant site client library using the `embed` property.
-
 ## BEM Description
 ```
 BLOCK cmp-container__design
