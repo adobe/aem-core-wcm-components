@@ -61,6 +61,13 @@ public interface Navigation extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     String PN_STRUCTURE_DEPTH = "structureDepth";
+    
+    String PN_CUSTOM_GROUP_TEMPLATE_PATH = "navigationCustomGroupTemplatePath";
+    
+    /**
+     * Default template path that will render the group's of navigation items.
+     */
+    String DEFAULT_GROUP_TEMPLATE_PATH = "group.html";
 
     /**
      * Returns the list of navigation items.
@@ -72,6 +79,10 @@ public interface Navigation extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
+    default String getGroupTemplatePath(){
+        return DEFAULT_GROUP_TEMPLATE_PATH;
+    }
+    
     /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0

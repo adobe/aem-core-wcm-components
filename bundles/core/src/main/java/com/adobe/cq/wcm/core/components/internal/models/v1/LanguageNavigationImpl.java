@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +30,6 @@ import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -38,6 +39,8 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
+
+import static com.adobe.cq.wcm.core.components.internal.models.v1.navigation.StyleUtils.getContentPolicyStyleFromPage;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {LanguageNavigation.class, ComponentExporter.class},
@@ -89,7 +92,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
         return items;
     }
 
-    @NotNull
+    @Nonnull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
@@ -112,7 +115,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title));
+                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title, getContentPolicyStyleFromPage(currentStyle,page)));
             }
         }
 

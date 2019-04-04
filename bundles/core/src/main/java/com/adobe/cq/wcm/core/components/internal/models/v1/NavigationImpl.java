@@ -51,6 +51,8 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 
+import static com.adobe.cq.wcm.core.components.internal.models.v1.navigation.StyleUtils.getContentPolicyStyleFromPage;
+
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Navigation.class, ComponentExporter.class},
        resourceType = {NavigationImpl.RESOURCE_TYPE})
@@ -134,7 +136,7 @@ public class NavigationImpl implements Navigation {
                 items = getItems(navigationRoot, navigationRoot.page);
                 if (!skipNavigationRoot) {
                     boolean isSelected = checkSelected(navigationRoot.page);
-                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, items);
+                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, items, getContentPolicyStyleFromPage(currentStyle, navigationRoot.page));
                     items = new ArrayList<>();
                     items.add(root);
                 }
@@ -150,7 +152,13 @@ public class NavigationImpl implements Navigation {
     public String getExportedType() {
         return request.getResource().getResourceType();
     }
-
+    
+    
+    @Override
+    public String getGroupTemplatePath() {
+        return currentStyle.get(PN_CUSTOM_GROUP_TEMPLATE_PATH, DEFAULT_GROUP_TEMPLATE_PATH);
+    }
+    
     /**
      * Builds the navigation tree for a {@code navigationRoot} page.
      *
@@ -171,7 +179,7 @@ public class NavigationImpl implements Navigation {
                 if (skipNavigationRoot) {
                     level = level - 1;
                 }
-                pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
+                pages.add(new NavigationItemImpl(page, isSelected, request, level, children, getContentPolicyStyleFromPage(currentStyle, page)));
             }
         }
         return pages;

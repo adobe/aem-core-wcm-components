@@ -29,7 +29,30 @@ import com.day.cq.wcm.api.Page;
  */
 @ConsumerType
 public interface NavigationItem extends ListItem {
-
+    
+    String PN_CUSTOM_GROUP_TEMPLATE_PATH = "navigationCustomGroupTemplatePath";
+    
+    String PN_CUSTOM_ITEM_TEMPLATE_PATH = "navigationCustomItemTemplatePath";
+    
+    String PN_CUSTOM_ITEM_CONTENT_TEMPLATE_PATH = "navigationCustomItemContentTemplatePath";
+    
+    
+    /**
+     * Default template path that will render the item content of navigation items.
+     */
+    String DEFAULT_ITEM_CONTENT_TEMPLATE_PATH = "itemContent.html";
+    
+    /**
+     * Default template path that will render the item's of navigation items.
+     */
+    String DEFAULT_ITEM_TEMPLATE_PATH = "item.html";
+    
+    /**
+     * Default template path that will render the group's of navigation items.
+     */
+    String DEFAULT_GROUP_TEMPLATE_PATH = "group.html";
+    
+    
     /**
      * Returns the {@link Page} contained by this navigation item.
      *
@@ -72,5 +95,42 @@ public interface NavigationItem extends ListItem {
     default int getLevel() {
         throw new UnsupportedOperationException();
     }
-
+    
+    /**
+     * Returns whether or not a custom template to render this navigation items' group (children) should be used
+     * @return
+     */
+    default boolean isCustomGroupTemplateActive() { return false; }
+    
+    /**
+     * Returns whether or not a custom template to render this navigation item should be used
+     * @return
+     */
+    default boolean isCustomItemTemplateActive() { return false; }
+    
+    /**
+     * Returns whether or not a custom template to render this navigation item content should be used
+     * @return
+     */
+    default boolean isCustomItemContentTemplateActive() { return false; }
+    
+    /**
+     * Returns whether or not a custom template to render this navigation items' group (children) should be used
+     * @return
+     */
+    default String getGroupTemplatePath() { return DEFAULT_GROUP_TEMPLATE_PATH; }
+    
+    /**
+     * Returns whether or not a custom template to render this navigation item should be used
+     * @return
+     */
+    default String getItemTemplatePath() { return DEFAULT_ITEM_TEMPLATE_PATH; }
+    
+    /**
+     * Returns whether or not a custom template to render this navigation item content should be used
+     * @return
+     */
+    default String getItemContentTemplatePath() { return DEFAULT_ITEM_CONTENT_TEMPLATE_PATH; }
+    
+    
 }

@@ -15,9 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Collections;
 import java.util.List;
 
+import com.day.cq.wcm.api.designer.Style;
 import org.apache.sling.api.SlingHttpServletRequest;
 
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -25,16 +25,19 @@ import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class NavigationItemImpl extends PageListItemImpl implements NavigationItem {
-
-    protected List<NavigationItem> children = Collections.emptyList();
-    protected int level;
-    protected boolean active;
-
-    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children) {
+    
+    
+    protected final List<NavigationItem> children;
+    protected final int level;
+    protected final boolean active;
+    protected final Style style;
+    
+    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, Style style) {
         super(request, page);
         this.active = active;
         this.level = level;
         this.children = children;
+        this.style = style;
     }
 
     @Override
@@ -57,5 +60,19 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     public int getLevel() {
         return level;
     }
-
+    
+    @Override
+    public String getGroupTemplatePath() {
+        return style.get(PN_CUSTOM_GROUP_TEMPLATE_PATH, DEFAULT_GROUP_TEMPLATE_PATH);
+    }
+    
+    @Override
+    public String getItemTemplatePath() {
+        return style.get(PN_CUSTOM_ITEM_TEMPLATE_PATH, DEFAULT_ITEM_TEMPLATE_PATH);
+    }
+    
+    @Override
+    public String getItemContentTemplatePath() {
+        return style.get(PN_CUSTOM_ITEM_CONTENT_TEMPLATE_PATH, DEFAULT_ITEM_CONTENT_TEMPLATE_PATH);
+    }
 }

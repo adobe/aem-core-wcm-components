@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.List;
 import java.util.Locale;
 
+import com.day.cq.wcm.api.designer.Style;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
+
 
 public class LanguageNavigationItemImpl extends NavigationItemImpl implements LanguageNavigationItem {
 
@@ -35,8 +37,8 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     protected String country;
     protected String language;
 
-    public LanguageNavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String title) {
-        super(page, active, request, level, children);
+    public LanguageNavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String title, Style style) {
+        super(page, active, request, level, children, style);
         this.title = title;
     }
 

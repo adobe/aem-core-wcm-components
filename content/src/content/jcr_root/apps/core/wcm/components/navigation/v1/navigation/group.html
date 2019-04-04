@@ -13,8 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.group="${@ items='The navigation items for the current level'}" data-sly-use.itemTemplate="item.html">
+<template data-sly-template.group="${@ items='The navigation items for the current level'}">
     <ul class="cmp-navigation__group" data-sly-list="${items}">
-        <sly data-sly-call="${itemTemplate.item @ item=item}"></sly>
+        <sly data-sly-use.itemTemplate="${item.itemTemplatePath}" data-sly-call="${itemTemplate.item @ item=item}"></sly>
     </ul>
 </template>

@@ -36,6 +36,8 @@ import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 
+import static com.adobe.cq.wcm.core.components.internal.models.v1.navigation.StyleUtils.getContentPolicyStyleFromPage;
+
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Breadcrumb.class, ComponentExporter.class},
        resourceType = {BreadcrumbImpl.RESOURCE_TYPE_V1, BreadcrumbImpl.RESOURCE_TYPE_V2})
@@ -98,7 +100,7 @@ public class BreadcrumbImpl implements Breadcrumb {
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList());
+                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList(), getContentPolicyStyleFromPage(currentStyle, page));
                     items.add(navigationItem);
                 }
             }

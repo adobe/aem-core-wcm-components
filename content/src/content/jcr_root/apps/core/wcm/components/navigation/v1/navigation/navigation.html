@@ -18,7 +18,7 @@
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-use.navigation="com.adobe.cq.wcm.core.components.models.Navigation"
      data-sly-test.hasContent="${navigation.items.size > 0}"
-     data-sly-use.groupTemplate="group.html"
+     data-sly-use.groupTemplate="${navigation.groupTemplatePath}"
      data-sly-call="${groupTemplate.group @ items=navigation.items}">
 </nav>
 <sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-navigation'}"></sly>
