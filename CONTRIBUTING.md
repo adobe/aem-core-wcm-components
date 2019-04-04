@@ -35,7 +35,7 @@ You can add your voice to discussions around new and existing component features
 
 ### Joining Developer Discussions 💬
 
-If you have thoughts on the code, the general architecture of the project, or would like some initial feedback on a feature you are thinking of coding, you can join the [Core Components Developer Mailing List](https://groups.google.com/forum/#!forum/aem-core-components-dev).
+If you have thoughts on the code, the general architecture of the project, or would like some initial feedback on a feature you are thinking of coding, you can visit the [Core Components Developer Mailing List](https://groups.google.com/forum/#!forum/aem-core-components-dev) on Google Groups, or [subscribe via email](mailto:aem-core-components-dev+subscribe@googlegroups.com).
 
 ### Reporting Bugs 🐛
 
