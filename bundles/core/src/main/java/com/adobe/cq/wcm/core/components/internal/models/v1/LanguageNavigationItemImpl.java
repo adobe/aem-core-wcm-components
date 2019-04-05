@@ -37,8 +37,8 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     protected String country;
     protected String language;
 
-    public LanguageNavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String title, Style style) {
-        super(page, active, request, level, children, style);
+    public LanguageNavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String title, Style style, boolean markActiveItem) {
+        super(page, active, request, level, children, style, markActiveItem);
         this.title = title;
     }
 

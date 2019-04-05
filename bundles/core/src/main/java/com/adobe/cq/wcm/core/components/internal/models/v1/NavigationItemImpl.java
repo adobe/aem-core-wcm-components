@@ -26,18 +26,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class NavigationItemImpl extends PageListItemImpl implements NavigationItem {
     
-    
     protected final List<NavigationItem> children;
     protected final int level;
     protected final boolean active;
     protected final Style style;
+    protected final boolean markActiveItem;
     
-    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, Style style) {
+    public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, Style style, boolean markActiveItem) {
         super(request, page);
         this.active = active;
         this.level = level;
         this.children = children;
         this.style = style;
+        this.markActiveItem = markActiveItem;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
 
     @Override
     public boolean isActive() {
-        return active;
+        return markActiveItem && active;
     }
 
     @Override
@@ -74,5 +75,20 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     @Override
     public String getItemContentTemplatePath() {
         return style.get(PN_CUSTOM_ITEM_CONTENT_TEMPLATE_PATH, DEFAULT_ITEM_CONTENT_TEMPLATE_PATH);
+    }
+    
+    @Override
+    public String getSecondaryGroupTemplatePath() {
+        return style.get(PN_CUSTOM_SECONDARY_GROUP_TEMPLATE_PATH, DEFAULT_SECONDARY_GROUP_TEMPLATE_PATH);
+    }
+    
+    @Override
+    public String getSecondaryItemTemplatePath() {
+        return style.get(PN_CUSTOM_SECONDARY_ITEM_TEMPLATE_PATH, DEFAULT_SECONDARY_ITEM_TEMPLATE_PATH);
+    }
+    
+    @Override
+    public String getSecondaryItemContentTemplatePath() {
+        return style.get(PN_CUSTOM_SECONDARY_ITEM_CONTENT_TEMPLATE_PATH, DEFAULT_SECONDARY_ITEM_CONTENT_TEMPLATE_PATH);
     }
 }

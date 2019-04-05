@@ -86,6 +86,7 @@ public class NavigationImpl implements Navigation {
     private String navigationRootPage;
     private List<NavigationItem> items;
     private boolean skipNavigationRoot;
+    private boolean markActiveItem;
 
     @PostConstruct
     private void initModel() {
@@ -96,6 +97,7 @@ public class NavigationImpl implements Navigation {
         }
         navigationRootPage = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
         skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
+        markActiveItem = properties.get(PN_MARK_ACTIVE_NAVIGATION_ITEM, currentStyle.get(PN_MARK_ACTIVE_NAVIGATION_ITEM, true));
     }
 
     @Override
@@ -136,7 +138,7 @@ public class NavigationImpl implements Navigation {
                 items = getItems(navigationRoot, navigationRoot.page);
                 if (!skipNavigationRoot) {
                     boolean isSelected = checkSelected(navigationRoot.page);
-                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, items, getContentPolicyStyleFromPage(currentStyle, navigationRoot.page));
+                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, items, getContentPolicyStyleFromPage(currentStyle, navigationRoot.page), markActiveItem);
                     items = new ArrayList<>();
                     items.add(root);
                 }
@@ -179,7 +181,7 @@ public class NavigationImpl implements Navigation {
                 if (skipNavigationRoot) {
                     level = level - 1;
                 }
-                pages.add(new NavigationItemImpl(page, isSelected, request, level, children, getContentPolicyStyleFromPage(currentStyle, page)));
+                pages.add(new NavigationItemImpl(page, isSelected, request, level, children, getContentPolicyStyleFromPage(currentStyle, page), markActiveItem));
             }
         }
         return pages;

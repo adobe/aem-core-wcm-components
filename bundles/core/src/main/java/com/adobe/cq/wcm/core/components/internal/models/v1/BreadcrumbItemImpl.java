@@ -28,8 +28,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(value = {"page", "children", "level", "description", "lastModified", "path"})
 public class BreadcrumbItemImpl extends NavigationItemImpl implements NavigationItem {
 
-    public BreadcrumbItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, Style style) {
-        super(page, active, request, level, children, style);
+    public BreadcrumbItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, Style style, boolean markActiveItem) {
+        super(page, active, request, level, children, style, markActiveItem);
     }
 
 }

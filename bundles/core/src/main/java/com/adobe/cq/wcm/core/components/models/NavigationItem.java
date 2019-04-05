@@ -52,6 +52,39 @@ public interface NavigationItem extends ListItem {
      */
     String DEFAULT_GROUP_TEMPLATE_PATH = "group.html";
     
+    /**
+     * Default template path that will render the group's of navigation items.
+     * This is applicable for the secondary / alternative rendition of the navigation, useful for flyouts / complex menu structures.
+     */
+    String PN_CUSTOM_SECONDARY_GROUP_TEMPLATE_PATH = "secondary/group.html";
+    
+    /**
+     * Default template path that will render the item's of navigation items.
+     * This is applicable for the secondary / alternative rendition of the navigation, useful for flyouts / complex menu structures.
+     */
+    String PN_CUSTOM_SECONDARY_ITEM_TEMPLATE_PATH = "secondary/item.html";
+    
+    /**
+     * Default template path that will render the item content of navigation items.
+     * This is applicable for the secondary / alternative rendition of the navigation, useful for flyouts / complex menu structures.
+     */
+    String  PN_CUSTOM_SECONDARY_ITEM_CONTENT_TEMPLATE_PATH = "secondary/itemContent.html";
+    
+    /**
+     * Default template path that will render the item content of navigation items.
+     */
+    String DEFAULT_SECONDARY_ITEM_CONTENT_TEMPLATE_PATH = "secondary/itemContent.html";
+    
+    /**
+     * Default template path that will render the item's of navigation items.
+     */
+    String DEFAULT_SECONDARY_ITEM_TEMPLATE_PATH = "secondary/item.html";
+    
+    /**
+     * Default template path that will render the group's of navigation items.
+     */
+    String DEFAULT_SECONDARY_GROUP_TEMPLATE_PATH = "secondary/group.html";
+    
     
     /**
      * Returns the {@link Page} contained by this navigation item.
@@ -132,5 +165,21 @@ public interface NavigationItem extends ListItem {
      */
     default String getItemContentTemplatePath() { return DEFAULT_ITEM_CONTENT_TEMPLATE_PATH; }
     
+    /**
+     * Returns whether or not a custom template to render this navigation items' group (children) should be used
+     * @return
+     */
+    default String getSecondaryGroupTemplatePath() { return DEFAULT_SECONDARY_GROUP_TEMPLATE_PATH; }
     
+    /**
+     * Returns whether or not a custom template to render this navigation item should be used
+     * @return
+     */
+    default String getSecondaryItemTemplatePath() { return DEFAULT_SECONDARY_ITEM_TEMPLATE_PATH; }
+    
+    /**
+     * Returns whether or not a custom template to render this navigation item content should be used
+     * @return
+     */
+    default String getSecondaryItemContentTemplatePath() { return DEFAULT_SECONDARY_ITEM_CONTENT_TEMPLATE_PATH; }
 }

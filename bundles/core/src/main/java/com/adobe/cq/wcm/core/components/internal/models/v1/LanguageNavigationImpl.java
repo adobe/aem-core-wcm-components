@@ -68,11 +68,13 @@ public class LanguageNavigationImpl implements LanguageNavigation {
     private Page rootPage;
     private List<NavigationItem> items;
     private int startLevel;
+    private boolean markActiveItem;
 
     @PostConstruct
     private void initModel() {
         navigationRoot = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
         structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, 1));
+        markActiveItem = properties.get(PN_MARK_ACTIVE_NAVIGATION_ITEM, currentStyle.get(PN_MARK_ACTIVE_NAVIGATION_ITEM, true));
     }
 
     @Override
@@ -115,7 +117,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title, getContentPolicyStyleFromPage(currentStyle,page)));
+                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title, getContentPolicyStyleFromPage(currentStyle,page), markActiveItem));
             }
         }
 

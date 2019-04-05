@@ -27,7 +27,13 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
 public interface LanguageNavigation extends ComponentExporter {
-
+    
+    /**
+     * Name of the resource / configuration policy property that defines if an active navigation item should get the CSS class 'cmp-navigation__item--active'
+     * The property should provide a Boolean value.
+     */
+    String PN_MARK_ACTIVE_NAVIGATION_ITEM = "markActiveNavigationItem";
+    
     /**
      * Name of the resource / configuration policy property that defines the navigation root from which to build the global
      * language structure navigation. The property should provide a String value.

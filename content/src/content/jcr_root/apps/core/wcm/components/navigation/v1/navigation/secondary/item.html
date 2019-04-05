@@ -15,10 +15,10 @@
   ~
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <template data-sly-template.item="${@ item='The navigation item'}"
-          data-sly-use.groupTemplate="${item.groupTemplatePath}"
-          data-sly-use.itemContentTemplate="${item.itemContentTemplatePath}">
-        <li data-item-target="${item.URL}" data-item-path="${item.path}" class="cmp-navigation__item cmp-navigation__item--level-${item.level}${item.active ? ' cmp-navigation__item--active' : ''}">
+          data-sly-use.groupTemplate="${item.secondaryGroupTemplatePath}"
+          data-sly-use.itemContentTemplate="${item.secondaryItemContentTemplatePath}">
+        <div data-item-target="${item.URL}" data-item-path="${item.path}" class="cmp-navigation__item cmp-navigation__item--level-${item.level}${item.active ? ' cmp-navigation__item--active' : ''}">
             <sly data-sly-call="${itemContentTemplate.itemContent @ item = item}"></sly>
             <sly data-sly-test="${item.children.size > 0}" data-sly-call="${groupTemplate.group @ items = item.children}"></sly>
-        </li>
+        </div>
 </template>

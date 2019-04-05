@@ -27,7 +27,12 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
 public interface Navigation extends ComponentExporter {
-
+    
+    /**
+     * Name of the resource / configuration policy property that defines if an active navigation item should get the CSS class 'cmp-navigation__item--active'
+     * The property should provide a Boolean value.
+     */
+    String PN_MARK_ACTIVE_NAVIGATION_ITEM = "markActiveNavigationItem";
     /**
      * Name of the resource / configuration policy property that defines the site's navigation root for which to build the navigation tree.
      * The property should provide a String value.
@@ -68,6 +73,8 @@ public interface Navigation extends ComponentExporter {
      * Default template path that will render the group's of navigation items.
      */
     String DEFAULT_GROUP_TEMPLATE_PATH = "group.html";
+    
+    String SECONDARY_GROUP_TEMPLATE_PATH = "secondary/group.html";
 
     /**
      * Returns the list of navigation items.
@@ -83,6 +90,9 @@ public interface Navigation extends ComponentExporter {
         return DEFAULT_GROUP_TEMPLATE_PATH;
     }
     
+    default String getSecondaryGroupTemplatePath(){
+        return SECONDARY_GROUP_TEMPLATE_PATH;
+    }
     /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0

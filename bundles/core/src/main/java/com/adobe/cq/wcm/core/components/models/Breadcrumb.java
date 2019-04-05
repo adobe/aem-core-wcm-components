@@ -30,6 +30,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 @ConsumerType
 public interface Breadcrumb extends ComponentExporter {
 
+    
     /**
      * Name of the resource property that will indicate if pages that are hidden for navigation will still be displayed.
      *

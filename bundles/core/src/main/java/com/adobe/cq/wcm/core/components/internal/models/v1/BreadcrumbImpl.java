@@ -67,7 +67,7 @@ public class BreadcrumbImpl implements Breadcrumb {
     private boolean hideCurrent;
     private int startLevel;
     private List<NavigationItem> items;
-
+    
     @PostConstruct
     private void initModel() {
         startLevel = properties.get(PN_START_LEVEL, currentStyle.get(PN_START_LEVEL, PROP_START_LEVEL_DEFAULT));
@@ -100,7 +100,7 @@ public class BreadcrumbImpl implements Breadcrumb {
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList(), getContentPolicyStyleFromPage(currentStyle, page));
+                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList(), getContentPolicyStyleFromPage(currentStyle, page), true);
                     items.add(navigationItem);
                 }
             }
