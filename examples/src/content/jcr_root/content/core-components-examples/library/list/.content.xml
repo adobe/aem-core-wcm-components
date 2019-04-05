@@ -315,7 +315,7 @@
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="asc"
-                            tags="[core-components-examples:component-type/atom]"
+                            tags="[core-components-examples:component-type/basic]"
                             tagsMatch="any"
                             tagsSearchRoot="/content/core-components-examples/library"/>
                     </component>
