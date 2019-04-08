@@ -37,11 +37,11 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                         text="Disable colors"
                                         name="./colorsDisabled"
-                                        value="{Boolean}false"/>
+                                        value="{Boolean}true"/>
                                     <swatchesonly
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Use swatches only"
+                                        text="Swatches only"
                                         name="./propertyDisabled"
                                         value="{Boolean}true"/>
                                     <swatcheslistlabel
@@ -81,7 +81,7 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                         text="Disable images"
                                         name="./imageDisabled"
-                                        value="{Boolean}false"/>   
+                                        value="{Boolean}true"/>   
                                 </items>
                             </container>
                             <imageDelegate

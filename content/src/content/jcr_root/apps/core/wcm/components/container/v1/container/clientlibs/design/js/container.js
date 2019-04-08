@@ -31,13 +31,13 @@
         if (dialogContent) {
             var $colorHiddenCheckbox = $dialogContent.find(colorHiddenCheckboxSelector);
             if ($colorHiddenCheckbox.size() > 0) {
-                var colorHidden = $colorHiddenCheckbox.adaptTo("foundation-field").getValue() === "false";
+                var colorHidden = $colorHiddenCheckbox.adaptTo("foundation-field").getValue() === "true";
                 toggle($dialogContent, colorMultifieldSelector, !colorHidden);
                 toggle($dialogContent, colorPropertyHiddenCheckboxSelector, !colorHidden);
                 toggle($dialogContent, swatchesListLabelSelector, !colorHidden);
 
                 $colorHiddenCheckbox.on("change", function(event) {
-                    var colorHidden = $(event.target).adaptTo("foundation-field").getValue() === "false";
+                    var colorHidden = $(event.target).adaptTo("foundation-field").getValue() === "true";
                     toggle($dialogContent, colorMultifieldSelector, !colorHidden);
                     toggle($dialogContent, colorPropertyHiddenCheckboxSelector, !colorHidden);
                     toggle($dialogContent, swatchesListLabelSelector, !colorHidden);

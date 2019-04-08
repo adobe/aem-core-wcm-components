@@ -32,7 +32,7 @@ The Container component uses the `com.adobe.cq.wcm.core.components.models.Generi
 The following configuration properties are used:
 
 1. `./colorsDisabled` - defines whether or not display background color picker option.
-2. `./propertyDisabled` -  defines whether or not display color picker properties tab.
+2. `./showProperties` -  defines whether or not display color picker properties tab.
 3. `./cq:swatchesList` - defines list of custom swatches list.
 3. `./imageDisabled` - defines whether or not display background image option.
 

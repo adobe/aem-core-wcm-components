@@ -16,13 +16,14 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
-/**
- * Created by aahlawat on 29/03/2019.
- */
 @ConsumerType
 public interface GenericContainer extends ContainerExporter {
 	
@@ -118,6 +119,36 @@ public interface GenericContainer extends ContainerExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean isImageDisabled() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * @see ContainerExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    @NotNull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ContainerExporter#getExportedItems()
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    @NotNull
+    @Override
+    default Map<String, ? extends ComponentExporter> getExportedItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ContainerExporter#getExportedItemsOrder()
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    @NotNull
+    @Override
+    default String[] getExportedItemsOrder() {
         throw new UnsupportedOperationException();
     }
 }
