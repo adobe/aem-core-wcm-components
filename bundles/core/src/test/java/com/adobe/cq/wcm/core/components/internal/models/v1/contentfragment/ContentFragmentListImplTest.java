@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList;
 import com.day.cq.search.Predicate;
 import com.day.cq.search.PredicateGroup;
@@ -45,9 +46,11 @@ import static org.mockito.Mockito.when;
 
 public class ContentFragmentListImplTest extends AbstractContentFragmentTest<ContentFragmentList> {
 
-    private static final String NO_MODEL = "no-model";
-    private static final String NON_EXISTING_MODEL = "non-existing-model";
-    private static final String NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "non-existing-module-path-tags";
+    private static final String TEST_BASE = "/contentfragmentlist";
+    private static final String NO_MODEL = "noModel";
+    private static final String NON_EXISTING_MODEL = "nonExistingModel";
+    private static final String NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "nonExistingModelPathTags";
+    private static final String PSEUDO_EXISTING_MODEL_WITH_PATH_AND_TAGS = "pseudoExistingModelPathTags";
 
     private ResourceResolver leakingResourceResolverMock;
 
@@ -58,7 +61,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
 
     @Override
     protected String getTestResourcesParentPath() {
-        return "/content/list/contentfragments/jcr:content/root/responsivegrid";
+        return "/content/tests/contentfragmentlist/jcr:content/root/responsivegrid";
     }
 
     @BeforeClass
@@ -66,7 +69,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         AbstractContentFragmentTest.beforeClass();
 
         // Load additional content for content list model
-        AEM_CONTEXT.load().json("/contentfragmentlist/test-content.json", "/content/list");
+        AEM_CONTEXT.load().json(TEST_BASE + "/test-content.json", "/content/tests");
     }
 
     @Before
@@ -85,6 +88,29 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         when(resource.getResourceResolver()).thenReturn(leakingResourceResolverMock);
         when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class)))
                 .thenReturn(query);
+    }
+
+
+    @Test
+    public void testPseudoListJsonExport() {
+        AEM_CONTEXT.load().json("/contentfragmentlist/test-content-dam-contentfragments.json", "/content/dam/contentfragments-for-list");
+
+        Resource fragmentRes = AEM_CONTEXT.resourceResolver().getResource("/content/dam/contentfragments-for-list/text-only");
+
+        Query query = Mockito.mock(Query.class);
+        SearchResult searchResult = Mockito.mock(SearchResult.class);
+        Iterator<Resource> iterator = Mockito.mock(Iterator.class);
+
+        when(query.getResult()).thenReturn(searchResult);
+        when(searchResult.getResources()).thenReturn(iterator);
+        when(iterator.hasNext()).thenReturn(true, false);
+        when(iterator.next()).thenReturn(fragmentRes);
+
+        when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class)))
+            .thenReturn(query);
+
+        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(PSEUDO_EXISTING_MODEL_WITH_PATH_AND_TAGS);
+        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, PSEUDO_EXISTING_MODEL_WITH_PATH_AND_TAGS));
     }
 
     @Test
@@ -158,6 +184,11 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         assertThat(contentFragmentList.getExportedType(),
                 is(ContentFragmentListImpl.RESOURCE_TYPE));
         assertThat(contentFragmentList.getListItems(), IsEmptyCollection.empty());
+    }
+    @Test
+    public void testNoModelListJsonExport() {
+        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(NO_MODEL);
+        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, NO_MODEL));
     }
 
     /**

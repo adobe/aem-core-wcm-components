@@ -1,5 +1,5 @@
 {
-    "contentfragments": {
+    "contentfragmentlist": {
         "jcr:primaryType": "cq:Page",
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
@@ -11,16 +11,23 @@
                 "responsivegrid"    : {
                     "jcr:primaryType"                      : "nt:unstructured",
                     "sling:resourceType"                   : "wcm/foundation/components/responsivegrid",
-                    "no-model"                             : {
+                    "noModel"                             : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
                     },
-                    "non-existing-model"                   : {
+                    "nonExistingModel"                   : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
                         "modelPath"         : "foobar"
                     },
-                    "non-existing-module-path-tags"        : {
+                    "nonExistingModelPathTags"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "parentPath"        : "/content/dam/some-other-parent-path",
+                        "tagNames"          : ["quux"]
+                    },
+                    "pseudoExistingModelPathTags"        : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
                         "modelPath"         : "foobar",
