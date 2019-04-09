@@ -76,6 +76,7 @@ High quality code is important to the project, and to keep it that way, all code
 * Consider [joining developer discussions](#joining-developer-discussions-) to get feedback on what you are thinking of contributing. It's better to get this early feedback before going ahead and potentially having to rewrite everything later.
 * Create a [bug report](#reporting-bugs-) or [feature request](#requesting-features-) issue summarizing the problem that you will be solving. This will again help with early feedback and tracking.
 * Have a look at our [component checklist](Guidelines.md), for an idea of what certifies a production ready component.
+* Ensure you have [signed the Adobe Contributor License Agreement](http://opensource.adobe.com/cla.html). If you are an Adobe employee, you do not have to sign the CLA.
 
 ##### Contributing
 
