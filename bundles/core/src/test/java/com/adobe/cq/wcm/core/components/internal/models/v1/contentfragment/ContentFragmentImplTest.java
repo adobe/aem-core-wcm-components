@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +52,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragment> {
+
+    private static final String TEST_BASE = "/contentfragment";
 
     private Logger cfmLogger;
     private Logger modelLogger;
@@ -99,6 +102,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     public void textOnly() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY));
     }
 
     @Test
@@ -106,6 +110,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_TEXT_ONLY);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_VARIATION));
     }
 
     @Test

@@ -23,7 +23,6 @@ import javax.jcr.Session;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,16 +40,18 @@ import com.google.common.collect.ImmutableMap;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 public class ContentFragmentListImplTest extends AbstractContentFragmentTest<ContentFragmentList> {
 
     private static final String TEST_BASE = "/contentfragmentlist";
-    private static final String NO_MODEL = "noModel";
-    private static final String NON_EXISTING_MODEL = "nonExistingModel";
-    private static final String NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "nonExistingModelPathTags";
-    private static final String PSEUDO_EXISTING_MODEL_WITH_PATH_AND_TAGS = "pseudoExistingModelPathTags";
+    private static final String LIST_WITH_NO_MODEL = "listWithNoModel";
+    private static final String LIST_WITH_MODEL_PATH_AND_TAGS = "listWithModelPathTags";
+    private static final String LIST_WITH_MODEL_ELEMENTS = "listWithModelElements";
+    private static final String LIST_WITH_NON_EXISTING_MODEL = "listWithNonExistingModel";
+    private static final String LIST_WITH_NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "listWithNonExistingModelPathTags";
 
     private ResourceResolver leakingResourceResolverMock;
 
@@ -70,6 +71,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
 
         // Load additional content for content list model
         AEM_CONTEXT.load().json(TEST_BASE + "/test-content.json", "/content/tests");
+        AEM_CONTEXT.load().json("/contentfragmentlist/test-content-dam-contentfragments.json", "/content/dam/contentfragments-for-list");
     }
 
     @Before
@@ -90,38 +92,49 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
                 .thenReturn(query);
     }
 
+    @Test
+    public void testListWithNoModel() {
+        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(LIST_WITH_NO_MODEL);
+        assertThat(contentFragmentList, not(nullValue()));
+        assertEquals(contentFragmentList.getListItems().size(), 0);
+        assertThat(contentFragmentList.getExportedType(),
+            is(ContentFragmentListImpl.RESOURCE_TYPE));
+        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, LIST_WITH_NO_MODEL));
+    }
 
     @Test
-    public void testPseudoListJsonExport() {
-        AEM_CONTEXT.load().json("/contentfragmentlist/test-content-dam-contentfragments.json", "/content/dam/contentfragments-for-list");
+    public void testListWithOneFragmentWithoutElements() {
+        testListWithOneFragment(LIST_WITH_MODEL_PATH_AND_TAGS);
+    }
 
-        Resource fragmentRes = AEM_CONTEXT.resourceResolver().getResource("/content/dam/contentfragments-for-list/text-only");
+    @Test
+    public void testListWithOneFragmentWithElements() {
+        testListWithOneFragment(LIST_WITH_MODEL_ELEMENTS);
+    }
+
+    private void testListWithOneFragment(String listName) {
+        Resource DAMFragment = Mockito.spy(AEM_CONTEXT.resourceResolver().getResource("/content/dam/contentfragments-for-list/text-only"));
 
         Query query = Mockito.mock(Query.class);
         SearchResult searchResult = Mockito.mock(SearchResult.class);
         Iterator<Resource> iterator = Mockito.mock(Iterator.class);
+        ResourceResolver spyResolver = Mockito.spy(DAMFragment.getResourceResolver());
 
         when(query.getResult()).thenReturn(searchResult);
         when(searchResult.getResources()).thenReturn(iterator);
         when(iterator.hasNext()).thenReturn(true, false);
-        when(iterator.next()).thenReturn(fragmentRes);
+        when(iterator.next()).thenReturn(DAMFragment);
+        when(DAMFragment.getResourceResolver()).thenReturn(spyResolver);
+        Mockito.doNothing().when(spyResolver).close();
+        when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class))).thenReturn(query);
 
-        when(queryBuilderMock.createQuery(Mockito.any(PredicateGroup.class), Mockito.any(Session.class)))
-            .thenReturn(query);
+        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(listName);
+        assertThat(contentFragmentList.getExportedType(),
+            is(ContentFragmentListImpl.RESOURCE_TYPE));
+        assertEquals(contentFragmentList.getListItems().size(), 1);
+        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, listName));
 
-        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(PSEUDO_EXISTING_MODEL_WITH_PATH_AND_TAGS);
-        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, PSEUDO_EXISTING_MODEL_WITH_PATH_AND_TAGS));
-    }
-
-    @Test
-    public void verifyNoModel() {
-        // GIVEN
-
-        // WHEN
-        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(NO_MODEL);
-
-        // THEN
-        assertThat(contentFragmentList, not(nullValue()));
+        Mockito.doCallRealMethod().when(spyResolver).close();
     }
 
     @Test
@@ -136,7 +149,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
                 "value", "foobar"));
 
         // WHEN
-        getModelInstanceUnderTest(NON_EXISTING_MODEL);
+        getModelInstanceUnderTest(LIST_WITH_NON_EXISTING_MODEL);
 
         // THEN
         verifyPredicateGroup(expectedPredicates);
@@ -146,7 +159,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
     public void verifyLeakingResourceResolverIsClosed() {
         // GIVEN
         // WHEN
-        getModelInstanceUnderTest(NON_EXISTING_MODEL);
+        getModelInstanceUnderTest(LIST_WITH_NON_EXISTING_MODEL);
 
         // THEN
         Mockito.verify(leakingResourceResolverMock).close();
@@ -167,28 +180,10 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
                 "1_value", "quux"));
 
         // WHEN
-        getModelInstanceUnderTest(NON_EXISTING_MODEL_WITH_PATH_AND_TAGS);
+        getModelInstanceUnderTest(LIST_WITH_NON_EXISTING_MODEL_WITH_PATH_AND_TAGS);
 
         // THEN
         verifyPredicateGroup(expectedPredicates);
-    }
-
-    @Test
-    public void verifyExportedTypeAndEmptyContentFragmentList() {
-        // GIVEN
-
-        // WHEN
-        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(NO_MODEL);
-
-        // THEN
-        assertThat(contentFragmentList.getExportedType(),
-                is(ContentFragmentListImpl.RESOURCE_TYPE));
-        assertThat(contentFragmentList.getListItems(), IsEmptyCollection.empty());
-    }
-    @Test
-    public void testNoModelListJsonExport() {
-        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(NO_MODEL);
-        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, NO_MODEL));
     }
 
     /**

@@ -1,0 +1,26 @@
+{
+    "description": "This is a test content fragment.",
+    "title": "Test Content Fragment",
+    "model": "/content/dam/contentfragments/text-only/jcr:content/model",
+    ":items": {},
+    ":itemsOrder": [],
+    "elementsOrder": [
+        "main",
+        "second"
+    ],
+    ":type": "core/wcm/components/contentfragment/v1/contentfragment",
+    "elements": {
+        "main": {
+            "value": "<p>Main content</p>",
+            "title": "Main",
+            ":type": "text/html",
+            "multiValue": false
+        },
+        "second": {
+            "value": "Second content",
+            "title": "Second",
+            ":type": "text/plain",
+            "multiValue": false
+        }
+    }
+}
