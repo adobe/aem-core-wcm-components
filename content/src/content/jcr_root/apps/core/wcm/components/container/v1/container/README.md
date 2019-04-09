@@ -46,7 +46,7 @@ The following properties are written to JCR for this Container component and are
 
 ## BEM Description
 ```
-BLOCK cmp-container__design
+BLOCK cmp-container
 ```
 
 
