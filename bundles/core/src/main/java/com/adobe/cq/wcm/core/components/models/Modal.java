@@ -21,52 +21,84 @@ import org.osgi.annotation.versioning.ConsumerType;
 import com.adobe.cq.export.json.ComponentExporter;
 
 /**
- * Defines the {@code Modal} Sling Model used for the {@code /apps/core/wcm/components/modal} component. This component
- * currently supports using "#{modalId}" in the url
+ * Defines the {@code Modal} Sling Model used for the
+ * {@code /apps/core/wcm/components/modal} component. This component currently
+ * supports using "#{modalId}" in the url
  *
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
 @ConsumerType
 public interface Modal extends ComponentExporter {
-	
+
 	/**
 	 * Returns the hash generated for the component path
 	 * 
 	 * @return modelId
-	 *  @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
 	default String getModalId() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
-	 * Returns the page path value
+	 * Returns the description for the modal
 	 * 
-	 * @return pagePath
-	 *  @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 * @return description
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default String getPagePath() {
+	default String getDescription() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
-	 * Returns the boolean value defining whether to show modal by default on page load or not
+	 * Returns the boolean value defining whether to show modal by default on page
+	 * load or not
 	 * 
 	 * @return defaultModalShow
-	 *  @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
 	default boolean getShowModalByDefault() {
 		throw new UnsupportedOperationException();
 	}
-	
+
 	/**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
+	 * Returns the type of the fragment chosen
+	 * 
+	 * @return fragmentType
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
+	default String getFragmentType() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Returns the content fragment path
+	 * 
+	 * @return contentFragmentPath
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
+	default String getContentFragmentPath() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Returns the experience fragment path
+	 * 
+	 * @return experienceFragmentPath
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
+	default String getExperienceFragmentPath() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see ComponentExporter#getExportedType()
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
+	@NotNull
+	@Override
+	default String getExportedType() {
+		throw new UnsupportedOperationException();
+	}
 
 }

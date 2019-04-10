@@ -44,7 +44,6 @@ public class ModalImpl implements Modal {
 	protected static final String RESOURCE_TYPE = "core/wcm/components/modal/v1/modal";
 
 	private static final String KEY_MODAL_ID = "modalId";
-	private static final String XF_PATH_CHECK = "/content/experience-fragments";
 	private static final String HTML_EXT = ".html";
 
 	@SlingObject
@@ -56,15 +55,28 @@ public class ModalImpl implements Modal {
 	private String modalId;
 
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-	private String pagePath;
+	private String description;
 
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
 	private boolean showModalByDefault;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	private String fragmentType;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	private String contentFragmentPath;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	private String experienceFragmentPath;
 
 	@PostConstruct
 	private void initModel() {
 		if (modalId == null) {
 			populateModalProperties();
+		}
+
+		if (experienceFragmentPath != null && !experienceFragmentPath.contains(HTML_EXT)) {
+			experienceFragmentPath = experienceFragmentPath.concat(HTML_EXT);
 		}
 	}
 
@@ -73,10 +85,6 @@ public class ModalImpl implements Modal {
 		int index = absoluteComponentPath.indexOf(JcrConstants.JCR_CONTENT);
 		String relativeComponentPath = absoluteComponentPath.substring(index);
 		modalId = String.valueOf(Math.abs(relativeComponentPath.hashCode() - 1));
-
-		if (pagePath != null && pagePath.startsWith(XF_PATH_CHECK) && !pagePath.contains(HTML_EXT)) {
-			pagePath = pagePath.concat(HTML_EXT);
-		}
 
 		ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
 		if (map != null) {
@@ -101,13 +109,28 @@ public class ModalImpl implements Modal {
 	}
 
 	@Override
-	public String getPagePath() {
-		return pagePath;
+	public String getDescription() {
+		return description;
 	}
 
 	@Override
 	public boolean getShowModalByDefault() {
 		return showModalByDefault;
+	}
+
+	@Override
+	public String getFragmentType() {
+		return fragmentType;
+	}
+
+	@Override
+	public String getContentFragmentPath() {
+		return contentFragmentPath;
+	}
+
+	@Override
+	public String getExperienceFragmentPath() {
+		return experienceFragmentPath;
 	}
 
 }
