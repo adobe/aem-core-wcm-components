@@ -1,7 +1,10 @@
 {
-    "title": "Test Content Fragment",
     "description": "This is a test content fragment.",
-    "model": "/content/dam/contentfragments/text-only/jcr:content/model",
+    "paragraphs": [
+        "<p>Main content</p>"
+    ],
+    "title": "Test Content Fragment",
+    "model": "global/models/test",
     ":type": "core/wcm/components/contentfragment/v1/contentfragment",
     "elements": {
         "main": {
@@ -11,10 +14,13 @@
             ":type": "text/html"
         },
         "second": {
-            "value": "Second content",
+            "value": [
+                "one",
+                "two",
+                "three"
+            ],
             "title": "Second",
-            "multiValue": false,
-            ":type": "text/plain"
+            "multiValue": true
         }
     },
     ":items": {},

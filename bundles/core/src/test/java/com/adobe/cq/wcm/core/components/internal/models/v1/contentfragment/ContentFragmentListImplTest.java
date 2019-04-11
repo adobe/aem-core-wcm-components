@@ -47,11 +47,11 @@ import static org.mockito.Mockito.when;
 public class ContentFragmentListImplTest extends AbstractContentFragmentTest<ContentFragmentList> {
 
     private static final String TEST_BASE = "/contentfragmentlist";
-    private static final String LIST_WITH_NO_MODEL = "listWithNoModel";
-    private static final String LIST_WITH_MODEL_PATH_AND_TAGS = "listWithModelPathTags";
-    private static final String LIST_WITH_MODEL_ELEMENTS = "listWithModelElements";
-    private static final String LIST_WITH_NON_EXISTING_MODEL = "listWithNonExistingModel";
-    private static final String LIST_WITH_NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "listWithNonExistingModelPathTags";
+    private static final String NO_MODEL = "no-model";
+    private static final String MODEL_PATH_AND_TAGS = "model-path-tags";
+    private static final String MODEL_ELEMENTS = "model-elements";
+    private static final String NON_EXISTING_MODEL = "non-existing-model";
+    private static final String NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "non-existing-model-path-tags";
 
     private ResourceResolver leakingResourceResolverMock;
 
@@ -94,22 +94,22 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
 
     @Test
     public void testListWithNoModel() {
-        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(LIST_WITH_NO_MODEL);
+        ContentFragmentList contentFragmentList = getModelInstanceUnderTest(NO_MODEL);
         assertThat(contentFragmentList, not(nullValue()));
         assertEquals(contentFragmentList.getListItems().size(), 0);
         assertThat(contentFragmentList.getExportedType(),
             is(ContentFragmentListImpl.RESOURCE_TYPE));
-        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, LIST_WITH_NO_MODEL));
+        Utils.testJSONExport(contentFragmentList, Utils.getTestExporterJSONPath(TEST_BASE, NO_MODEL));
     }
 
     @Test
     public void testListWithOneFragmentWithoutElements() {
-        testListWithOneFragment(LIST_WITH_MODEL_PATH_AND_TAGS);
+        testListWithOneFragment(MODEL_PATH_AND_TAGS);
     }
 
     @Test
     public void testListWithOneFragmentWithElements() {
-        testListWithOneFragment(LIST_WITH_MODEL_ELEMENTS);
+        testListWithOneFragment(MODEL_ELEMENTS);
     }
 
     private void testListWithOneFragment(String listName) {
@@ -149,7 +149,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
                 "value", "foobar"));
 
         // WHEN
-        getModelInstanceUnderTest(LIST_WITH_NON_EXISTING_MODEL);
+        getModelInstanceUnderTest(NON_EXISTING_MODEL);
 
         // THEN
         verifyPredicateGroup(expectedPredicates);
@@ -159,7 +159,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
     public void verifyLeakingResourceResolverIsClosed() {
         // GIVEN
         // WHEN
-        getModelInstanceUnderTest(LIST_WITH_NON_EXISTING_MODEL);
+        getModelInstanceUnderTest(NON_EXISTING_MODEL);
 
         // THEN
         Mockito.verify(leakingResourceResolverMock).close();
@@ -180,7 +180,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
                 "1_value", "quux"));
 
         // WHEN
-        getModelInstanceUnderTest(LIST_WITH_NON_EXISTING_MODEL_WITH_PATH_AND_TAGS);
+        getModelInstanceUnderTest(NON_EXISTING_MODEL_WITH_PATH_AND_TAGS);
 
         // THEN
         verifyPredicateGroup(expectedPredicates);
