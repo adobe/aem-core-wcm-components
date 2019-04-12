@@ -183,17 +183,6 @@
                                                                             text="Active"
                                                                             uncheckedValue="false"
                                                                             value="{Boolean}true"/>
-                                                                        <selected
-                                                                            jcr:primaryType="nt:unstructured"
-                                                                            sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
-                                                                            name="./selected">
-                                                                            <items jcr:primaryType="nt:unstructured">
-                                                                                <active
-                                                                                    jcr:primaryType="nt:unstructured"
-                                                                                    text="Active"
-                                                                                    value="{Boolean}true"/>
-                                                                            </items>
-                                                                        </selected>
                                                                         <disabled
                                                                             granite:class="cmp-form-option-item-disabled"
                                                                             jcr:primaryType="nt:unstructured"
