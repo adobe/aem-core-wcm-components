@@ -82,6 +82,9 @@ public class ContentFragmentUtils {
 
         Resource fragmentResource = contentFragment.adaptTo(Resource.class);
         FragmentTemplate fragmentTemplate = contentFragment.getTemplate();
+        if (fragmentTemplate == null) {
+            return type;
+        }
         Resource templateResource = fragmentTemplate.adaptTo(Resource.class);
         if (fragmentResource == null || templateResource == null) {
             LOG.warn("Unable to return type: fragment or template resource is null");
@@ -199,14 +202,17 @@ public class ContentFragmentUtils {
      * Returns an optional grid type configured via {@link ContentPolicy content policy} property
      * ({@value #PN_CFM_GRID_TYPE}) or {@value #DEFAULT_GRID_TYPE} as default.
      *
-     * @param resourceResolver a resource resolver
-     * @param resource         the resource to be checked
+     * @param fragmentResource         the content fragment resource resource to be checked
      * @return the configured grid type of a default
      */
-    public static String getGridResourceType(ResourceResolver resourceResolver, Resource resource) {
+    public static String getGridResourceType(Resource fragmentResource) {
         String gridResourceType = DEFAULT_GRID_TYPE;
+        if (fragmentResource == null) {
+            return gridResourceType;
+        }
+        ResourceResolver resourceResolver = fragmentResource.getResourceResolver();
         ContentPolicyManager contentPolicyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
-        ContentPolicy fragmentContentPolicy = contentPolicyManager != null ? contentPolicyManager.getPolicy(resource) : null;
+        ContentPolicy fragmentContentPolicy = contentPolicyManager != null ? contentPolicyManager.getPolicy(fragmentResource) : null;
         if (fragmentContentPolicy != null) {
             ValueMap contentPolicyProperties = fragmentContentPolicy.getProperties();
             gridResourceType = contentPolicyProperties.get(PN_CFM_GRID_TYPE, DEFAULT_GRID_TYPE);
