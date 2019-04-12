@@ -63,7 +63,7 @@ public class ModalImplTest {
 		assertEquals("Modal contentFragmentPath is not as expected", new String("/content/dam/modalcontentfragment"),
 				modal.getContentFragmentPath());
 		assertEquals("The experienceFragmentPath is not as expected",
-				new String("/content/experience-fragments/mid_markets/mmfxtest/master").concat(".html"),
+				new String("/content/experience-fragments/mmfxtest/master").concat(".html"),
 				modal.getExperienceFragmentPath());
 
 	}

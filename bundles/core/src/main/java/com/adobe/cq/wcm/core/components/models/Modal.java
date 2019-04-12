@@ -31,7 +31,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface Modal extends ComponentExporter {
 
 	/**
-	 * Returns the hash generated for the component path
+	 * Returns the modal id based on the hash generated from the component path
 	 * 
 	 * @return modelId
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0

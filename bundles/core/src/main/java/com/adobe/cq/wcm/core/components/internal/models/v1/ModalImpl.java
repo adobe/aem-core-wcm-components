@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.jackrabbit.vault.util.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ModifiableValueMap;
@@ -72,15 +73,15 @@ public class ModalImpl implements Modal {
 	@PostConstruct
 	private void initModel() {
 		if (modalId == null) {
-			populateModalProperties();
+			populateModalId();
 		}
 
-		if (experienceFragmentPath != null && !experienceFragmentPath.contains(HTML_EXT)) {
+		if (StringUtils.isNotBlank(experienceFragmentPath) && !experienceFragmentPath.contains(HTML_EXT)) {
 			experienceFragmentPath = experienceFragmentPath.concat(HTML_EXT);
 		}
 	}
 
-	void populateModalProperties() {
+	void populateModalId() {
 		String absoluteComponentPath = resource.getPath();
 		int index = absoluteComponentPath.indexOf(JcrConstants.JCR_CONTENT);
 		String relativeComponentPath = absoluteComponentPath.substring(index);

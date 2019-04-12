@@ -15,53 +15,58 @@
  ******************************************************************************/
 /* Getting Page URL  Modal ID */
 
-var getValOnPage = document.createElement('div');
-getValOnPage.setAttribute('id', 'data-modal-content');
+var getValOnPage = document.createElement("div");
+getValOnPage.setAttribute("id", "data-modal-content");
 document.body.appendChild(getValOnPage);
+var getUrlModalID;
 
-function getModalOpenBehavior() {
-    var getUrlModal = window.location.hash.substr(1).split("?")[0];
-    var isModalOn = document.querySelectorAll("div[data-modal-show='true']");
-    if ((getUrlModal != '' && isModalOn.length == 0) || (getUrlModal != '' && isModalOn.length >= 0)) {
-        return (
-            getUrlModalID = getUrlModal
-        )
-    } else if ((getUrlModal == '' && isModalOn.length > 0)) {
-        var isModalOnVal = isModalOn[0].id;
-        return (
-            getUrlModalID = isModalOnVal
-        )
-    } else if ((getUrlModal != '' && isModalOn.length == 0)) {
-        return (
-            getUrlModalID = getUrlModal
-        )
-    }
-}
+(function() {
+    "use strict";
 
-function fetchData(url, insertModalContent) {
-    var xhttp;
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            insertModalContent(this.responseText);
+    function getModalOpenBehavior() {
+        var getUrlModal = window.location.hash.substr(1).split("?")[0];
+        var isModalOn = document.querySelectorAll("div[data-modal-show='true']");
+        if ((getUrlModal !== "" && isModalOn.length === 0) || (getUrlModal !== "" && isModalOn.length >= 0)) {
+            return (
+                getUrlModalID = getUrlModal
+            );
+        } else if ((getUrlModal === "" && isModalOn.length > 0)) {
+            var isModalOnVal = isModalOn[0].id;
+            return (
+                getUrlModalID = isModalOnVal
+            );
+        } else if ((getUrlModal !== "" && isModalOn.length === 0)) {
+            return (
+                getUrlModalID = getUrlModal
+            );
         }
-    };
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
-
-function initializeModal(xhttp) {
-    document.getElementById("data-modal-content").innerHTML = xhttp;
-    var modalOpen = new tingle.modal({});
-    modalOpen.open();
-    modalOpen.setContent(document.getElementById("data-modal-content").innerHTML);
-}
-
-document.addEventListener('DOMContentLoaded', function (event) {
-    var getUrlModalID = getModalOpenBehavior();
-    if (getUrlModalID) {
-        var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
-        fetchData(modalContentUrl, initializeModal);
-        document.getElementById("data-modal-content").style.display = "none";
     }
-})
+
+    function fetchData(url, insertModalContent) {
+        var xhttp;
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                insertModalContent(this.responseText);
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+
+    function initializeModal(xhttp) {
+        document.getElementById("data-modal-content").innerHTML = xhttp;
+        var modalOpen = new tingle.modal({});
+        modalOpen.open();
+        modalOpen.setContent(document.getElementById("data-modal-content").innerHTML);
+    }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+        getUrlModalID = getModalOpenBehavior();
+        if (getUrlModalID) {
+            var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
+            fetchData(modalContentUrl, initializeModal);
+            document.getElementById("data-modal-content").style.display = "none";
+        }
+    });
+}());

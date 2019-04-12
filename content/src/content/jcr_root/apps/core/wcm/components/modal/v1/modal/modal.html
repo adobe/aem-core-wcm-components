@@ -16,9 +16,9 @@
 <div data-sly-use.modal="com.adobe.cq.wcm.core.components.models.Modal" data-sly-use.template="core/wcm/components/commons/v1/templates.html">
     <div data-sly-test="${wcmmode.edit}">
         <h4>Modal Id: ${modal.modalId}</h4>
-        <h4>Description: ${modal.description}</h4>
-        <h4 data-sly-test="${modal.fragmentType == 'cf'}"> Content Path: ${modal.contentFragmentPath}</h4>
-        <h4 data-sly-test="${modal.fragmentType == 'xf'}"> Content Path: ${modal.experienceFragmentPath}</h4>
+        <h4 data-sly-test="${modal.description}">Description: ${modal.description}</h4>
+        <h4 data-sly-test="${modal.fragmentType == 'cf' && modal.contentFragmentPath}"> Content Path: ${modal.contentFragmentPath}</h4>
+        <h4 data-sly-test="${modal.fragmentType == 'xf' && modal.experienceFragmentPath}"> Content Path: ${modal.experienceFragmentPath}</h4>
 
     </div>
     <div data-sly-test="${!wcmmode.edit}">

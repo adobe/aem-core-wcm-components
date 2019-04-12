@@ -20,7 +20,7 @@
 						"showModalByDefault": "false",
 						"fragmentType": "xf",
 						"contentFragmentPath": "/content/dam/modalcontentfragment",
-						"experienceFragmentPath": "/content/experience-fragments/mid_markets/mmfxtest/master"
+						"experienceFragmentPath": "/content/experience-fragments/mmfxtest/master"
 					}
 				}
 			}

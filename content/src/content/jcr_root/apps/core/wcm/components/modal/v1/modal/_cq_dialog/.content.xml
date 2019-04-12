@@ -70,7 +70,7 @@
                                     <cf-path
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                        fieldDescription="Path of the page"
+                                        fieldDescription="Path of the asset"
                                         fieldLabel="Content Fragment Path"
                                         name="./contentFragmentPath"
                                         rootPath="/content/dam"/>
@@ -87,7 +87,7 @@
                                     <xf-path
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                        fieldDescription="Path of the page"
+                                        fieldDescription="Path of the experience fragment"
                                         fieldLabel="Experience Fragment Path"
                                         name="./experienceFragmentPath"
                                         rootPath="/content/experience-fragments"/>
