@@ -51,6 +51,12 @@ public class GenericContainerImplTest {
     @Test
     public void testContainerProperties() {        
         GenericContainer container = getContainerUnderTest(CONTAINER_1);
+        assertNotNull("The container background color is null", container.getBackgroundColor());
+        assertNotNull("The container background image src is null", container.getBackgroundImageSrc());
+        assertNotNull("The container background style is null", container.getBackgroundStyleString());
+        assertNotNull("The container background exported items is null", container.getExportedItems());
+        assertNotNull("The container background exported item order is null", container.getExportedItemsOrder());
+        assertEquals("The container backgroun exported type doesnot match","core/wcm/components/container/v1/container", container.getExportedType());
         assertEquals("The container background color is not what was expected",new String("#000000"),container.getBackgroundColor());
         assertEquals("The container background image is not what was expected",new String("/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"),container.getBackgroundImageSrc());
         assertEquals("The container background style is not what was expected",new String("background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000"),container.getBackgroundStyleString());
