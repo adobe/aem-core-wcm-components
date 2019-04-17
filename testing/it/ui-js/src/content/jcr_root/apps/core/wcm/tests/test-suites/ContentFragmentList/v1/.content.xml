@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2016 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,19 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<workspaceFilter version="1.0">
-    <!-- Sample content -->
-    <filter root="/conf/core-components"/>
-    <filter root="/content/core-components"/>
-    <filter root="/content/campaigns/core_component_brand"/>
-    <filter root="/content/dam/core-components"/>
-    <filter root="/content/cq:tags/core-components"/>
-    <filter root="/home/users/core-component"/>
-    <filter root="/etc/blueprints/corecomp_blueprint"/>
-    <!-- Hobbes IT folder -->
-    <filter root="/apps/core/wcm/tests"/>
-    <filter root="/apps/core-component/components"/>
-    <filter root="/apps/msm">
-        <include pattern="/apps/msm/corecomp_blueprint(/.*)?"/>
-    </filter>
-</workspaceFilter>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:ClientLibraryFolder"
+    categories="[granite.testing.hobbes.tests,
+        aem.core-components.testsuite,
+        aem.core-components.testsuite.contentfragmentlist,
+        aem.core-components.testsuite.contentfragmentlist.v1]"
+    dependencies="[aem.core-components.tests.contentfragmentlist.v1]"/>
