@@ -8,7 +8,7 @@
         cq:lastModified="{Date}2019-03-29T18:53:34.491+01:00"
         cq:lastModifiedBy="admin"
         cq:name="image-fragment"
-        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        cq:parentPath="/content/dam/core-components/contentfragments-tests"
         jcr:lastModified="{Date}2019-04-01T16:34:24.240+02:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
@@ -19,7 +19,7 @@
             cq:model="/conf/core-components/settings/dam/cfm/models/core-component-model"
             jcr:primaryType="nt:unstructured">
             <master
-                cq:tags="[core-components-tests:component-type/basic]"
+                cq:tags="[core-components:component-type/basic]"
                 jcr:mixinTypes="[cq:Taggable]"
                 jcr:primaryType="nt:unstructured"
                 component-description="&lt;p>Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available.&lt;/p>&#xa;"
@@ -29,13 +29,13 @@
                 component-latest-version_x0040_LastModified="{Date}2019-03-29T19:09:36.629+01:00"
                 component-title="Image"
                 component-title_x0040_LastModified="{Date}2019-03-29T19:09:36.628+01:00"
-                component-type="[core-components-examples:component-type/basic]"
+                component-type="[core-components:component-type/basic]"
                 component-type_x0040_LastModified="{Date}2019-03-29T19:09:36.630+01:00"
-                type="[core-components-examples:component-type/basic]"
+                type="[core-components:component-type/basic]"
                 type_x0040_LastModified="{Date}2019-01-15T15:49:53.387+01:00"/>
         </data>
         <metadata
-            cq:tags="[core-components-tests:component-type/basic]"
+            cq:tags="[core-components:component-type/basic]"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

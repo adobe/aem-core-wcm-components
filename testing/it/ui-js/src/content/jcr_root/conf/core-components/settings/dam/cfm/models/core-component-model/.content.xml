@@ -6,7 +6,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-01-15T16:03:49.338+01:00"
         cq:lastModifiedBy="admin"
-        cq:scaffolding="/conf/core-components-examples/settings/dam/cfm/models/core-component-model/jcr:content/model"
+        cq:scaffolding="/conf/core-components/settings/dam/cfm/models/core-component-model/jcr:content/model"
         cq:templateType="/libs/settings/dam/cfm/model-types/fragment"
         jcr:description="Sample structured content fragment model for the Adobe Experience Manager Core Components Library. Contains structured data for a component."
         jcr:primaryType="cq:PageContent"
@@ -72,7 +72,7 @@
                             multiple="true"
                             name="component-type"
                             renderReadOnly="false"
-                            rootPath="/content/cq:tags/core-components-examples/component-type"
+                            rootPath="/content/cq:tags/core-components/component-type"
                             showEmptyInReadOnly="true"
                             valueType="string[]"/>
                     </items>

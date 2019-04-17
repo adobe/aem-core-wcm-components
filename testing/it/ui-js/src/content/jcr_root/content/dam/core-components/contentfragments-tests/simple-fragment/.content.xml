@@ -6,7 +6,7 @@
     jcr:uuid="1dc36ff7-fbf2-438b-8dce-9e324aaf648b">
     <jcr:content
         cq:name="simple-fragment"
-        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        cq:parentPath="/content/dam/core-components/contentfragments-tests"
         dam:assetState="processed"
         jcr:lastModified="{Date}2019-01-22T17:58:25.686+01:00"
         jcr:lastModifiedBy="admin"

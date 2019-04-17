@@ -8,7 +8,7 @@
         cq:lastModified="{Date}2019-03-29T18:53:28.646+01:00"
         cq:lastModifiedBy="admin"
         cq:name="text-fragment"
-        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        cq:parentPath="/content/dam/core-components/contentfragments-tests"
         jcr:lastModified="{Date}2019-04-01T16:34:12.291+02:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
@@ -19,7 +19,7 @@
             cq:model="/conf/core-components/settings/dam/cfm/models/core-component-model"
             jcr:primaryType="nt:unstructured">
             <master
-                cq:tags="[core-components-tests:component-type/basic]"
+                cq:tags="[core-components:component-type/basic]"
                 jcr:mixinTypes="[cq:Taggable]"
                 jcr:primaryType="nt:unstructured"
                 component-description="&lt;p>Text allows the display of a rich text paragraph on the page. Various formatting options are available.&lt;/p>&#xa;"
@@ -29,13 +29,13 @@
                 component-latest-version_x0040_LastModified="{Date}2019-03-29T19:08:58.396+01:00"
                 component-title="Text"
                 component-title_x0040_LastModified="{Date}2019-03-29T19:08:58.395+01:00"
-                component-type="[core-components-examples:component-type/basic]"
+                component-type="[core-components:component-type/basic]"
                 component-type_x0040_LastModified="{Date}2019-03-29T19:08:58.396+01:00"
-                type="[core-components-examples:component-type/basic]"
+                type="[core-components:component-type/basic]"
                 type_x0040_LastModified="{Date}2019-01-15T15:49:53.387+01:00"/>
         </data>
         <metadata
-            cq:tags="[core-components-tests:component-type/basic]"
+            cq:tags="[core-components:component-type/basic]"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

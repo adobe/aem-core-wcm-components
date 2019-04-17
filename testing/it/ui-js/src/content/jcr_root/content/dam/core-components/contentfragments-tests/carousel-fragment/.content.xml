@@ -8,7 +8,7 @@
         cq:lastModified="{Date}2019-03-29T18:53:26.269+01:00"
         cq:lastModifiedBy="admin"
         cq:name="carousel-fragment"
-        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        cq:parentPath="/content/dam/core-components/contentfragments-tests"
         jcr:lastModified="{Date}2019-04-01T16:34:34.215+02:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent"
@@ -19,7 +19,7 @@
             cq:model="/conf/core-components/settings/dam/cfm/models/core-component-model"
             jcr:primaryType="nt:unstructured">
             <master
-                cq:tags="[core-components-tests:component-type/container]"
+                cq:tags="[core-components:component-type/container]"
                 jcr:mixinTypes="[cq:Taggable]"
                 jcr:primaryType="nt:unstructured"
                 component-description="&lt;p>Carousel allows a user to cycle through content panels. Slides of varying component type can be created.&lt;/p>&#xa;"
@@ -29,13 +29,13 @@
                 component-latest-version_x0040_LastModified="{Date}2019-03-29T18:57:16.774+01:00"
                 component-title="Carousel"
                 component-title_x0040_LastModified="{Date}2019-03-29T18:57:16.773+01:00"
-                component-type="[core-components-examples:component-type/container]"
+                component-type="[core-components:component-type/container]"
                 component-type_x0040_LastModified="{Date}2019-03-29T18:57:16.774+01:00"
-                type="[core-components-examples:component-type/basic]"
+                type="[core-components:component-type/basic]"
                 type_x0040_LastModified="{Date}2019-01-15T15:49:53.387+01:00"/>
         </data>
         <metadata
-            cq:tags="[core-components-tests:component-type/container]"
+            cq:tags="[core-components:component-type/container]"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

@@ -17,9 +17,17 @@
 ;(function(h, $) { // eslint-disable-line no-extra-semi
     "use strict";
 
-    var PN_MODEL_PATH                                   = "./modelPath";
-
     window.CQ.CoreComponentsIT.ContentFragmentList.v1   = window.CQ.CoreComponentsIT.ContentFragmentList.v1 || {};
+
+    var PN_MODEL_PATH                                   = "./modelPath";
+    var PN_ELEMENT_NAMES                                = "./elementNames";
+    var ELEMENT_NAMES                                   = {
+        DESCRIPTION: "component-description",
+        LATEST_VERSION: "component-latest-version",
+        TITLE: "component-title",
+        TYPE: "component-type"
+    };
+
     var c                                               = window.CQ.CoreComponentsIT.commons;
     var contentfragmentlist                             = window.CQ.CoreComponentsIT.ContentFragmentList.v1;
     var pageName                                        = "contentfragmentlist-page";
@@ -27,7 +35,7 @@
     var pageDescription                                 = "contentfragmentlist page description";
     var modelPath                                       = "/conf/core-components/settings/dam/cfm/models/core-component-model";
     var parentPath                                      = "/content/dam/core-components/contentfragments-tests";
-    var tagName                                         = "core-components-tests:component-type/basic";
+    var tagName                                         = "core-components:component-type/basic";
 
     contentfragmentlist.tcExecuteBeforeTest = function(tcExecuteBeforeTest, contentfragmentlistRT, pageRT, clientlibs) {
         return new h.TestCase("Create sample content", {
@@ -150,14 +158,14 @@
             .click(selectors.editDialog.elements.addButton)
             .wait(200)
             // select the title element
-            .execTestCase(c.tcUseDialogSelect("./elementNames", "component-title"))
+            .execTestCase(c.tcUseDialogSelect(PN_ELEMENT_NAMES, ELEMENT_NAMES.TITLE))
             // add a second element
             .click(selectors.editDialog.elements.addButton)
             .wait(200)
             // expand the dropdown
             .click(selectors.editDialog.elements.last + " " + selectors.editDialog.elements.select.button)
             // select the type element
-            .click(selectors.editDialog.elements.last + " " + selectors.editDialog.elements.select.item + "[value='component-type']")
+            .click(selectors.editDialog.elements.last + " " + selectors.editDialog.elements.select.item + "[value='" + ELEMENT_NAMES.TYPE + "']")
 
             // save the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
