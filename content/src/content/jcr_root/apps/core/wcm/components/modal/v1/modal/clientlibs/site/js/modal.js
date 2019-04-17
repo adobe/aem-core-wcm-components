@@ -56,17 +56,38 @@ var getUrlModalID;
 
     function initializeModal(xhttp) {
         document.getElementById("data-modal-content").innerHTML = xhttp;
-        var modalOpen = new tingle.modal({});
+        var modalOpen = new tingle.modal({
+            onClose: function() {
+                window.location.hash = "";
+            }
+        });
         modalOpen.open();
         modalOpen.setContent(document.getElementById("data-modal-content").innerHTML);
     }
 
+    function openModalBasedOnHash(event) {
+        event.preventDefault();
+        if (window.location.hash !== "") {
+            getUrlModalID = getModalOpenBehavior();
+            if (getUrlModalID) {
+                var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
+                fetchData(modalContentUrl, initializeModal);
+                document.getElementById("data-modal-content").style.display = "none";
+            }
+        }
+
+    }
+    window.addEventListener("hashchange", openModalBasedOnHash);
+
     document.addEventListener("DOMContentLoaded", function(event) {
+        event.preventDefault();
         getUrlModalID = getModalOpenBehavior();
         if (getUrlModalID) {
             var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
             fetchData(modalContentUrl, initializeModal);
             document.getElementById("data-modal-content").style.display = "none";
+
         }
+
     });
 }());

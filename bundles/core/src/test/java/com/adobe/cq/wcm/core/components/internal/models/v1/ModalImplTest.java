@@ -25,6 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Modal;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
@@ -53,18 +54,19 @@ public class ModalImplTest {
 	@Test
 	public void testModalProperties() {
 		Modal modal = getModalUnderTest(MODAL_1);
-		assertNotNull("Modal Id should not be null", modal.getModalId());
-		assertEquals("Modal Description is not as expected", new String("Terms & Conditions Modal"),
+		assertNotNull("The modal id is not null", modal.getModalId());
+		assertEquals("The modal description is what was expected", new String("Terms & Conditions Modal"),
 				modal.getDescription());
-		assertNotNull("Modal Description should not be null", modal.getShowModalByDefault());
-		assertEquals("Modal showModalByDefault value is not as expected", new Boolean(false),
+		assertNotNull("The modal description is not null", modal.getShowModalByDefault());
+		assertEquals("The modal showModalByDefault value is what was expected", new Boolean(false),
 				modal.getShowModalByDefault());
-		assertEquals("Modal fragmentType is not as expected", new String("xf"), modal.getFragmentType());
-		assertEquals("Modal contentFragmentPath is not as expected", new String("/content/dam/modalcontentfragment"),
-				modal.getContentFragmentPath());
-		assertEquals("The experienceFragmentPath is not as expected",
+		assertEquals("The modal fragmentType is what was expected", new String("xf"), modal.getFragmentType());
+		assertEquals("The modal contentFragmentPath is what was expected",
+				new String("/content/dam/modalcontentfragment"), modal.getContentFragmentPath());
+		assertEquals("The modal experienceFragmentPath is what was expected",
 				new String("/content/experience-fragments/mmfxtest/master").concat(".html"),
 				modal.getExperienceFragmentPath());
+		Utils.testJSONExport(modal, Utils.getTestExporterJSONPath(TEST_BASE, "modal1"));
 
 	}
 
