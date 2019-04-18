@@ -40,9 +40,12 @@ The following JCR properties are used:
 ## BEM description
 ```
 BLOCK cmp-contentfragment
+    ELEMENT cmp-contentfragment__title
+    ELEMENT cmp-contentfragment__description
+    ELEMENT cmp-contentfragment__elements
     ELEMENT cmp-contentfragment__element
         MOD cmp-contentfragment__element--<name>
-    ELEMENT cmp-contentfragment__element-label
+    ELEMENT cmp-contentfragment__element-title
     ELEMENT cmp-contentfragment__element-value
 ```
 
