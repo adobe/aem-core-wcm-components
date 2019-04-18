@@ -18,11 +18,8 @@
     "use strict";
 
     var c = window.CQ.CoreComponentsIT.commons;
-    var contentfragmentlist = window.CQ.CoreComponentsIT.ContentFragmentList.v1;
+    var contentfragment = window.CQ.CoreComponentsIT.ContentFragment.v1;
     var selectors = {
-        contentfragmentlist: {
-            self: ".cmp-contentfragmentlist"
-        },
         contentfragment: {
             self: ".cmp-contentfragment",
             title: ".cmp-contentfragment__title",
@@ -35,8 +32,9 @@
             }
         },
         editDialog: {
+            content: "cq-dialog-content",
             tabs: {
-                elements: ".cmp-contentfragmentlist__editor coral-tab:eq(1)"
+                properties: ".cmp-contentfragment__editor coral-tab:eq(0)"
             },
             elements: {
                 addButton: "[coral-multifield-add]",
@@ -46,21 +44,22 @@
                     item: "coral-select[name='./elementNames'] coral-selectlist coral-selectlist-item"
                 }
             },
-            parentPath: "[name='./parentPath']",
+            fragmentPath: "[name='./fragmentPath']",
             tagNames: "[name='./tagNames']"
         }
     };
 
-    var tcExecuteBeforeTest = contentfragmentlist.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtContentFragmentList_v1,
-        "core/wcm/tests/components/test-page-v2", "core.wcm.components.contentfragmentlist.v1");
-    var tcExecuteAfterTest  = contentfragmentlist.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath, c.policyAssignmentPath);
+    var tcExecuteBeforeTest = contentfragment.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtContentFragment_v1,
+        "core/wcm/tests/components/test-page-v2", "core.wcm.components.contentfragment.v1");
+    var tcExecuteAfterTest  = contentfragment.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath, c.policyAssignmentPath);
 
-    new h.TestSuite("ContentFragmentList v1", {
-        path: "/apps/core/wcm/tests/core-components-it/v1/ContentFragmentList.js",
+    new h.TestSuite("ContentFragment v1", {
+        path: "/apps/core/wcm/tests/core-components-it/v1/ContentFragment.js",
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     })
-        .addTestCase(contentfragmentlist.tcSetParentPath(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(contentfragmentlist.tcSetTagNames(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(contentfragmentlist.tcSetElementNames(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
+        .addTestCase(contentfragment.tcSetFragmentPath(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(contentfragment.tcSetVariationName(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(contentfragment.tcSetStructuredContentFragment(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(contentfragment.tcSetElementNames(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
 }(hobs, jQuery));
