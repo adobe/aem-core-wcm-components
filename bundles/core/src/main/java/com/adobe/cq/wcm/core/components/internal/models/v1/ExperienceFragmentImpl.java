@@ -87,6 +87,11 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         return experFragmentVariationPath;
     }
 
+    @Override
+    public String getConfiguredExperienceFragmentPath() {
+        return fragmentPath;
+    }
+
     @NotNull
     @Override
     public String getExportedType() {

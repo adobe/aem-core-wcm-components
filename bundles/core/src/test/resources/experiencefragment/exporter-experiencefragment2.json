@@ -1,4 +1,5 @@
 {
    "experienceFragmentVariationPath":"/content/experience-fragments/language-masters/en/footer/master/jcr:content",
+   "configuredExperienceFragmentPath":"/content/experience-fragments/language-masters/en/footer/master",
    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment"
 }
