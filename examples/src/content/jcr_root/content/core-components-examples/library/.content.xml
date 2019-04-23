@@ -115,7 +115,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/content-fragment.svg"
+                    fileReference="/content/dam/core-components-examples/library/components/content-fragment-list.svg"
                     linkURL="/content/core-components-examples/library/content-fragment-list"
                     textIsRich="true"
                     titleFromPage="true">
