@@ -330,6 +330,7 @@
         </root>
     </jcr:content>
     <carousel/>
+    <container/>
     <content-fragment/>
     <image/>
     <list/>

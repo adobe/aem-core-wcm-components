@@ -4,5 +4,6 @@
     cq:isContainer="{Boolean}true"
     jcr:description="Components Container"
     jcr:primaryType="cq:Component"
+    sling:resourceSuperType="wcm/foundation/components/responsivegrid"
     jcr:title="Container (v1)"
     componentGroup=".core-wcm"/>
