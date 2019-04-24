@@ -13,81 +13,65 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/* Getting Page URL  Modal ID */
-
-var getValOnPage = document.createElement("div");
-getValOnPage.setAttribute("id", "data-modal-content");
-document.body.appendChild(getValOnPage);
-var getUrlModalID;
 
 (function() {
     "use strict";
 
     function getModalOpenBehavior() {
-        var getUrlModal = window.location.hash.substr(1).split("?")[0];
+        var hashVal = window.location.hash;
+        var getUrlModal = hashVal.substr(1).split("?")[0];
         var isModalOn = document.querySelectorAll("div[data-modal-show='true']");
         if ((getUrlModal !== "" && isModalOn.length === 0) || (getUrlModal !== "" && isModalOn.length >= 0)) {
-            return (
-                getUrlModalID = getUrlModal
-            );
+            return getUrlModal;
         } else if ((getUrlModal === "" && isModalOn.length > 0)) {
-            var isModalOnVal = isModalOn[0].id;
-            return (
-                getUrlModalID = isModalOnVal
-            );
-        } else if ((getUrlModal !== "" && isModalOn.length === 0)) {
-            return (
-                getUrlModalID = getUrlModal
-            );
+            return isModalOn[0].id;
         }
     }
 
-    function fetchData(url, insertModalContent) {
+    function fetchData(url) {
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
-                insertModalContent(this.responseText);
+                initializeModal(this.responseText);
             }
         };
         xhttp.open("GET", url, true);
         xhttp.send();
     }
 
-    function initializeModal(xhttp) {
-        document.getElementById("data-modal-content").innerHTML = xhttp;
-        var modalOpen = new tingle.modal({
+    function initializeModal(html) {
+        var modalOpen = new window.ModalLib({
             onClose: function() {
                 window.location.hash = "";
             }
         });
         modalOpen.open();
-        modalOpen.setContent(document.getElementById("data-modal-content").innerHTML);
+        modalOpen.setContent(html);
     }
 
     function openModalBasedOnHash(event) {
         event.preventDefault();
+        var getUrlModalID;
+
         if (window.location.hash !== "") {
             getUrlModalID = getModalOpenBehavior();
             if (getUrlModalID) {
                 var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
                 fetchData(modalContentUrl, initializeModal);
-                document.getElementById("data-modal-content").style.display = "none";
             }
         }
 
     }
     window.addEventListener("hashchange", openModalBasedOnHash);
 
-    document.addEventListener("DOMContentLoaded", function(event) {
-        event.preventDefault();
-        getUrlModalID = getModalOpenBehavior();
+    document.addEventListener("DOMContentLoaded", function() {
+        var getUrlModalID = getModalOpenBehavior();
         if (getUrlModalID) {
             var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
-            fetchData(modalContentUrl, initializeModal);
-            document.getElementById("data-modal-content").style.display = "none";
-
+            fetchData(modalContentUrl);
         }
 
     });
+
 }());

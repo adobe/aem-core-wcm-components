@@ -1,9 +1,9 @@
 {
-  "modalId": "12164497",
-  "description": "Terms & Conditions Modal",
-  "showModalByDefault": false,
-  "fragmentType": "xf",
+  "id": "12164497",
+  "title": "Terms & Conditions Modal",
+  "open": false,
+  "fragmentType": "EXPERIENCE_FRAGMENT",
   "contentFragmentPath": "/content/dam/modalcontentfragment",
-  "experienceFragmentPath": "/content/experience-fragments/mmfxtest/master.html",
+  "experienceFragmentPath": "/content/experience-fragments/mmfxtest/master",
   ":type": "core/wcm/components/modal/v1/modal"
 }

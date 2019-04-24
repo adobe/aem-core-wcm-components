@@ -13,16 +13,17 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div data-sly-use.modal="com.adobe.cq.wcm.core.components.models.Modal" data-sly-use.template="core/wcm/components/commons/v1/templates.html">
+<div data-sly-use.modal="com.adobe.cq.wcm.core.components.models.Modal" data-sly-use.template="core/wcm/components/commons/v1/templates.html"
+     class="cmp cmp-modal">
     <div data-sly-test="${wcmmode.edit}">
-        <h4>Modal Id: ${modal.modalId}</h4>
-        <h4 data-sly-test="${modal.description}">Description: ${modal.description}</h4>
-        <h4 data-sly-test="${modal.fragmentType == 'cf' && modal.contentFragmentPath}"> Content Path: ${modal.contentFragmentPath}</h4>
-        <h4 data-sly-test="${modal.fragmentType == 'xf' && modal.experienceFragmentPath}"> Content Path: ${modal.experienceFragmentPath}</h4>
+        <h4>Modal Id: ${modal.id}</h4>
+        <h4 data-sly-test="${modal.title}">Description: ${modal.title}</h4>
+        <h4 data-sly-test="${properties.fragmentType == 'cf' && modal.contentFragmentPath}"> Content Path: ${modal.contentFragmentPath}</h4>
+        <h4 data-sly-test="${properties.fragmentType == 'xf' && modal.experienceFragmentPath}"> Content Path: ${modal.experienceFragmentPath}</h4>
 
     </div>
-    <div data-sly-test="${!wcmmode.edit}">
-        <div class="cmp_modal" id="${modal.modalId}" data-modal-show="${properties.showModalByDefault}" tabindex="-1" role="dialog" aria-hidden="true" data-content-url="${modal.fragmentType == 'cf' ? modal.contentFragmentPath : modal.experienceFragmentPath}">
+    <div data-sly-test="${!wcmmode.edit}" data-sly-test.xfPathWithExt="${modal.experienceFragmentPath @ extension='html'}">
+        <div class="cmp_modal" id="${modal.id}" data-modal-show="${properties.open}" tabindex="-1" role="dialog" data-content-url="${properties.fragmentType == 'cf' ? modal.contentFragmentPath : xfPathWithExt}">
         </div>
     </div>
 </div>

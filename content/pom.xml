@@ -122,7 +122,7 @@
                         <exclude>**/*.editorconfig</exclude>
                         <exclude>**/*.stylelintrc.yaml</exclude>
                         <exclude>**/*.eslintignore</exclude>
-						<exclude>**/*.stylelintignore</exclude>
+                        <exclude>**/*.stylelintignore</exclude>
                         <!-- Ignore Node and npm -->
                         <exclude>**/node/**</exclude>
                         <exclude>**/node_modules/**</exclude>
