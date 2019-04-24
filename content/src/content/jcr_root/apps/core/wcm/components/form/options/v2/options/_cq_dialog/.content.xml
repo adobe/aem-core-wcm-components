@@ -161,8 +161,8 @@
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                                         composite="{Boolean}true"
-                                                        fieldDescription="Define the different options"
-                                                        fieldLabel="Option Entries"
+                                                        fieldDescription="Define the options. For single selection types, the last selected option in the list is selected in the result."
+                                                        fieldLabel="Options"
                                                         renderReadOnly="{Boolean}true">
                                                         <field
                                                             granite:class="cmp-form-options__editor-item-multifield-composite-item coral-Well"
@@ -175,25 +175,14 @@
                                                                     jcr:primaryType="nt:unstructured"
                                                                     sling:resourceType="granite/ui/components/coral/foundation/container">
                                                                     <items jcr:primaryType="nt:unstructured">
-                                                                        <checked
+                                                                        <selected
                                                                             granite:class="cmp-form-option-item-active"
                                                                             jcr:primaryType="nt:unstructured"
                                                                             sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                                             name="./selected"
-                                                                            text="Active"
+                                                                            text="Selected"
                                                                             uncheckedValue="false"
                                                                             value="{Boolean}true"/>
-                                                                        <selected
-                                                                            jcr:primaryType="nt:unstructured"
-                                                                            sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
-                                                                            name="./selected">
-                                                                            <items jcr:primaryType="nt:unstructured">
-                                                                                <active
-                                                                                    jcr:primaryType="nt:unstructured"
-                                                                                    text="Active"
-                                                                                    value="{Boolean}true"/>
-                                                                            </items>
-                                                                        </selected>
                                                                         <disabled
                                                                             granite:class="cmp-form-option-item-disabled"
                                                                             jcr:primaryType="nt:unstructured"
