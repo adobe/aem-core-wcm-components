@@ -4,13 +4,12 @@
     allowedPaths="[/content/entities(/.*)?]"
     ranking="{Long}100">
     <jcr:content
-        cq:lastModified="{Date}2019-01-15T16:03:49.338+01:00"
+        cq:lastModified="{Date}2019-04-25T11:59:48.501+01:00"
         cq:lastModifiedBy="admin"
-        cq:scaffolding="/conf/core-components-examples/settings/dam/cfm/models/core-component-model/jcr:content/model"
+        cq:scaffolding="/conf/core-components-examples/settings/dam/cfm/models/office/jcr:content/model"
         cq:templateType="/libs/settings/dam/cfm/model-types/fragment"
-        jcr:description="Sample structured content fragment model for the Adobe Experience Manager Core Components Library. Contains structured data for a component."
         jcr:primaryType="cq:PageContent"
-        jcr:title="Core Component Model"
+        jcr:title="Office"
         sling:resourceSuperType="dam/cfm/models/console/components/data/entity"
         sling:resourceType="dam/cfm/models/console/components/data/entity/default">
         <model
@@ -23,56 +22,78 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="cq/gui/components/authoring/dialog">
                 <content
-                    jcr:lastModified="{Date}2019-01-15T16:03:49.338+01:00"
+                    jcr:lastModified="{Date}2019-04-25T11:59:48.501+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
                     <items
                         jcr:primaryType="nt:unstructured"
-                        maxGeneratedOrder="20">
-                        <_x0031_547563037833
+                        maxGeneratedOrder="21">
+                        <_x0031_556183436218
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                             fieldLabel="Title"
                             listOrder="1"
                             maxlength="255"
                             metaType="text-single"
-                            name="component-title"
+                            name="title"
                             renderReadOnly="false"
                             showEmptyInReadOnly="true"
                             valueType="string"/>
-                        <_x0031_547563080981
+                        <_x0031_556183201062
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/multieditor"
-                            fieldLabel="Description"
+                            cfm-element="Street Address"
+                            default-mime-type="text/plain"
                             listOrder="2"
                             metaType="text-multi"
-                            name="component-description"
+                            name="streetAddress"
                             renderReadOnly="false"
                             showEmptyInReadOnly="true"
                             valueType="string"/>
-                        <_x0031_547563135805
+                        <_x0031_556183163042
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                            fieldLabel="Latest Version"
-                            listOrder="3"
-                            metaType="number"
-                            name="component-latest-version"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="City"
+                            listOrder="1"
+                            maxlength="255"
+                            metaType="text-single"
+                            name="city"
                             renderReadOnly="false"
                             showEmptyInReadOnly="true"
-                            step="1"
-                            typeHint="long"
-                            valueType="long"/>
-                        <_x0031_547563167191
+                            valueType="string"/>
+                        <_x0031_556183241288
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Postal Code"
+                            listOrder="1"
+                            maxlength="255"
+                            metaType="text-single"
+                            name="postalCode"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            valueType="string"/>
+                        <_x0031_556189972659
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Country"
+                            listOrder="21"
+                            maxlength="255"
+                            metaType="text-single"
+                            name="country"
+                            renderReadOnly="false"
+                            showEmptyInReadOnly="true"
+                            valueType="string"/>
+                        <_x0031_517869655786
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="cq/gui/components/coral/common/form/tagfield"
-                            fieldLabel="Type"
+                            fieldLabel="Region"
                             listOrder="7"
                             metaType="tags"
                             multiple="true"
-                            name="component-type"
+                            name="region"
                             renderReadOnly="false"
-                            rootPath="/content/cq:tags/core-components-examples/component-type"
+                            rootPath="/content/cq:tags"
                             showEmptyInReadOnly="true"
                             valueType="string[]"/>
                     </items>

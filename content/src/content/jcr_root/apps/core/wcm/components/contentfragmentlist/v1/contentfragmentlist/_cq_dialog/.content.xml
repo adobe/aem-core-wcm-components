@@ -32,6 +32,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                         emptyText="Select"
+                                        fieldDescription="Content Fragment Model from which to build the list."
                                         fieldLabel="Model"
                                         name="./modelPath">
                                         <datasource
@@ -41,12 +42,14 @@
                                     <parentPath
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                        fieldDescription="Path under which the Content Fragments are located."
                                         fieldLabel="Parent Path"
                                         name="./parentPath"
                                         rootPath="/content/dam"/>
                                     <tags
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="cq/gui/components/coral/common/form/tagfield"
+                                        fieldDescription="Tags for filtering the list."
                                         fieldLabel="Tags"
                                         multiple="{Boolean}true"
                                         name="./tagNames"/>
