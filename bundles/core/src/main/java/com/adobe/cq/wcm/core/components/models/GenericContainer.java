@@ -93,36 +93,6 @@ public interface GenericContainer extends ContainerExporter {
     }
     
     /**
-     * Checks if the property tab is hidden.
-     *
-     * @return {@code true} if the property tab is selected, {@code false} otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    default boolean isPropertyDisabled() {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * Checks if the background color is hidden.
-     *
-     * @return {@code true} if container background color is selected, {@code false} otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    default boolean isColorsDisabled() {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * Checks if the background image is hidden.
-     *
-     * @return {@code true} if the image is selected, {@code false} otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    default boolean isImageDisabled() {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
      * @see ContainerExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */

@@ -15,16 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
@@ -35,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.GenericContainer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,10 +43,6 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     private String backgroundImageSrc;
     private String backgroundColor;  
     private StringBuilder backgroundStyle;
-    protected Map<String, ? extends ComponentExporter> itemModelsContainer;
-    private String[] exportedItemsOrder;
-    
-    List<Resource> options;
     
     @ScriptVariable
     private ValueMap properties;
@@ -85,48 +73,12 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     public void setBackgroundStyleString()
     {
     	backgroundStyle = new StringBuilder();        
-        if(!imageDisabled){
+        if (!imageDisabled){
         	backgroundStyle.append("background-image:url(" + backgroundImageSrc + ");background-size:cover;background-repeat:no-repeat;");
         }
-        if(!colorsDisabled){
+        if (!colorsDisabled){
         	backgroundStyle.append("background-color:" + backgroundColor);
         }
-    }
-    
-    @NotNull
-    @Override
-    public Map<String, ? extends ComponentExporter> getExportedItems() {
-        if (itemModelsContainer == null) {
-            itemModelsContainer = getItemModels(request, ComponentExporter.class);
-        }
-        return itemModelsContainer;
-    }
-
-    @NotNull
-    @Override
-    public String[] getExportedItemsOrder() {
-        if (exportedItemsOrder == null) {
-            Map<String, ? extends ComponentExporter> models = getExportedItems();
-            if (!models.isEmpty()) {
-                exportedItemsOrder = models.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
-            } else {
-                exportedItemsOrder = ArrayUtils.EMPTY_STRING_ARRAY;
-            }
-        }
-        return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
-    }
-
-    @Override
-    protected Map<String, ComponentExporter> getItemModels(@NotNull SlingHttpServletRequest request,
-                                                           @NotNull Class<ComponentExporter> modelClass) {
-        Map<String, ComponentExporter> models = new LinkedHashMap<>();
-        getFilteredChildren().forEach(child -> {
-            ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
-            if (model != null) {
-                models.put(child.getName(), model);
-            }
-        });
-        return models;
     }
     
     @Override
@@ -143,21 +95,6 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     @Override
     public String getBackgroundColor() {
         return backgroundColor;
-    }
-    
-    @Override
-    public boolean isPropertyDisabled() {
-        return propertyDisabled;
-    }
-    
-    @Override
-    public boolean isColorsDisabled() {
-        return colorsDisabled;
-    }
-    
-    @Override
-    public boolean isImageDisabled() {
-        return imageDisabled;
     }
     
     @NotNull
