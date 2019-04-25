@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="a690e366-809a-44e3-9e9d-e7957e610672">
+    <jcr:content
+        cq:name="adobe-headquarters"
+        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        jcr:lastModified="{Date}2019-04-25T13:05:37.001+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Adobe Headquarters"
+        contentFragment="{Boolean}true"
+        lastFragmentSave="{Date}2019-04-25T13:05:37.003+01:00">
+        <data
+            cq:model="/conf/core-components-examples/settings/dam/cfm/models/office"
+            jcr:primaryType="nt:unstructured">
+            <master
+                cq:tags="[core-components-examples:region/north-america]"
+                jcr:mixinTypes="[cq:Taggable]"
+                jcr:primaryType="nt:unstructured"
+                city="San Jose"
+                city_x0040_LastModified="{Date}2019-04-25T13:05:27.051+01:00"
+                country="USA"
+                country_x0040_LastModified="{Date}2019-04-25T13:05:27.052+01:00"
+                postalCode="95110-2704"
+                postalCode_x0040_LastModified="{Date}2019-04-25T13:05:27.052+01:00"
+                region="[core-components-examples:region/north-america]"
+                region_x0040_LastModified="{Date}2019-04-25T12:57:49.756+01:00"
+                streetAddress="345 Park Avenue"
+                streetAddress_x0040_ContentType="text/plain"
+                streetAddress_x0040_LastModified="{Date}2019-04-25T13:05:27.047+01:00"
+                title="Adobe Headquarters"
+                title_x0040_LastModified="{Date}2019-04-25T13:05:27.046+01:00"/>
+        </data>
+        <metadata
+            cq:tags="[core-components-examples:region/north-america]"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

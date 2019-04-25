@@ -33,6 +33,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="dam/cfm/components/cfpicker"
                                         name="./fragmentPath"
+                                        fieldDescription="Path to the Content Fragment to display."
                                         fieldLabel="Content Fragment"
                                         emptyText="Enter or select Content Fragment"
                                         pickerTitle="Select Content Fragment"
@@ -41,8 +42,8 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
                                         deleteHint="{Boolean}false"
+                                        fieldDescription="Single Text Element mode allows selection of one multiline text element and enables paragraph control options. Multiple Elements mode allows selection of one or more elements of the Content Fragment."
                                         fieldLabel="Display Mode"
-                                        fieldDescription="&quot;Single Text Element&quot; mode allows to select one multiline text element to display and also enables paragraph control options. &quot;Multiple elements&quot; mode allows to select one or elements from content fragment."
                                         name="./displayMode"
                                         vertical="{Boolean}false">
                                         <granite:data
@@ -68,6 +69,7 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 emptyText="Select"
+                                                fieldDescription="Specify which element to display."
                                                 fieldLabel="Element"
                                                 name="./elementNames"
                                                 required="{Boolean}true">
