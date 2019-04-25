@@ -44,7 +44,7 @@ public class ModalImpl implements Modal {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ModalImpl.class);
 	protected static final String RESOURCE_TYPE = "core/wcm/components/modal/v1/modal";
 
-	private static final String PN_MODAL_ID = "id";
+	private static final String PN_ID = "id";
 
 	@SlingObject
 	private Resource resource;
@@ -72,11 +72,11 @@ public class ModalImpl implements Modal {
 	@PostConstruct
 	private void initModel() {
 		if (id == null) {
-			populateModalId();
+			populateId();
 		}
 	}
 
-	void populateModalId() {
+	void populateId() {
 		String modalPath = resource.getPath();
 		int index = modalPath.indexOf(JcrConstants.JCR_CONTENT);
 		String relativeComponentPath = modalPath.substring(index);
@@ -84,7 +84,7 @@ public class ModalImpl implements Modal {
 
 		ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
 		if (map != null) {
-			map.put(PN_MODAL_ID, id);
+			map.put(PN_ID, id);
 		}
 
 		try {
