@@ -6,7 +6,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-04-25T11:59:48.501+01:00"
         cq:lastModifiedBy="admin"
-        cq:scaffolding="/conf/we-retail/settings/dam/cfm/models/we-retail-store-info/jcr:content/model"
+        cq:scaffolding="/conf/core-components-examples/settings/dam/cfm/models/office/jcr:content/model"
         cq:templateType="/libs/settings/dam/cfm/model-types/fragment"
         jcr:primaryType="cq:PageContent"
         jcr:title="Office"
