@@ -1,0 +1,41 @@
+/*
+ *  Copyright 2016 Adobe Systems Incorporated
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+// allows the Well to render correctly
+.cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item {
+    box-sizing: border-box;
+}
+
+.cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item-container {
+    display: block;
+}
+
+// aligns all the fields inside the container
+.cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item-container > .coral-Form-field {
+    display: inline-block;
+}
+
+// @cloudui - correctly separates the items
+.cmp-form-options__editor .cmp-form-options__editor-item-multifield-composite-item > .coral-Form-fieldwrapper {
+    display: inline-block;
+
+    // we need to escape the calc so that the contents are passed directly
+    width: ~"calc(50% - 5px)";
+
+    + .coral-Form-fieldwrapper {
+        padding-left: 10px;
+    }
+}

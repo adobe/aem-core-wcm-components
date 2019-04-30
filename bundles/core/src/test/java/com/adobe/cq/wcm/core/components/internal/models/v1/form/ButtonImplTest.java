@@ -62,8 +62,7 @@ public class ButtonImplTest {
         assertEquals("", button.getName());
         assertEquals("", button.getValue());
         assertEquals(null, button.getHelpMessage());
-        String id = ID_PREFIX + "-" + String.valueOf(Math.abs(EMPTY_BUTTON_PATH.hashCode() - 1));
-        assertEquals(id, button.getId());
+        assertEquals("button-id", button.getId());
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, EMPTY_BUTTON_PATH));
     }
 

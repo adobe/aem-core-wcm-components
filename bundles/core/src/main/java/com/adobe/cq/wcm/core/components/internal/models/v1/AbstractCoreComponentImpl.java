@@ -34,9 +34,9 @@ public class AbstractCoreComponentImpl implements CoreComponent{
 
 	@Override
     public String getId() {
-        if (id == null) {
-            id = String.valueOf(Math.abs(resource.getPath().hashCode() - 1));
-        }
+//        if (id == null) {
+//            id = String.valueOf(Math.abs(resource.getPath().hashCode() - 1));
+//        }
         return id;
     }
 	
