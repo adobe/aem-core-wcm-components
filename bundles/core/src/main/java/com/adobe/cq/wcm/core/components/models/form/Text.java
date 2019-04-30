@@ -107,4 +107,14 @@ public interface Text extends Field {
     default boolean hideTitle() {
         throw new UnsupportedOperationException();
     }
+    
+    /**
+     * Returns the regex to be validated.
+     *
+     * @return the message to be displayed if the field is mandatory but has not been filled by the user
+     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
+     */
+    default String getRegexPattern() {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -38,6 +38,13 @@
          * @type {String}
          */
         requiredMessage: {
+        },
+        /**
+         * A validation message to display if no input is supplied, but input is expected for the field.
+         *
+         * @type {String}
+         */
+        regexPattern: {
         }
     };
 
@@ -81,13 +88,18 @@
 
     FormText.prototype._onInvalid = function(event) {
         event.target.setCustomValidity("");
-        if (event.target.validity.typeMismatch) {
-            if (this._properties.constraintMessage) {
-                event.target.setCustomValidity(this._properties.constraintMessage);
-            }
-        } else if (event.target.validity.valueMissing) {
+        if (event.target.validity.valueMissing) {
             if (this._properties.requiredMessage) {
                 event.target.setCustomValidity(this._properties.requiredMessage);
+            }
+        } else if (this._properties.regexPattern) {
+        	let regexValue = new RegExp(this._properties.regexPattern);
+            if (!regexValue.test(event.target.value)) {
+                event.target.setCustomValidity(this._properties.constraintMessage);
+            }
+        } else if (event.target.validity.typeMismatch) {
+            if (this._properties.constraintMessage) {
+                event.target.setCustomValidity(this._properties.constraintMessage);
             }
         }
     };

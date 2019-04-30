@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -182,7 +182,14 @@
                                                 fieldDescription="Message displayed as tooltip when submitting the form if the value does not validate the Type chosen"
                                                 fieldLabel="Constraint Message"
                                                 name="./constraintMessage"
-                                                wrapperClass="cmp-form-text__constraintmessage"/>
+                                                wrapperClass="cmp-form-text__constraintmessage"/>                                            
+                                             <regex
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Enter custom regex pattern to vaidate value before submitting the form"
+                                                fieldLabel="Regex Pattern"
+                                                name="./regexPattern"
+                                                wrapperClass="cmp-form-text__regexpattern"/>     
                                             <required
                                                 granite:class="cmp-form-text__required"
                                                 jcr:primaryType="nt:unstructured"

@@ -21,6 +21,7 @@
     var TEXTFIELD_ROWS = ".cmp-form-text__rows";
     var TEXTFIELD_REQUIRED = ".cmp-form-text__required";
     var TEXTFIELD_CONSTRAINTMESSAGE = ".cmp-form-text__constraintmessage";
+    var TEXTFIELD_REGEX = ".cmp-form-text__regexpattern";
     var TEXTFIELD_REQUIREDMESSAGE = ".cmp-form-text__requiredmessage";
     var TEXTFIELD_READONLY = ".cmp-form-text__readonly";
     var TEXTFIELD_READONLYSELECTED_ALERT = ".cmp-form-text__readonlyselected-alert";
@@ -72,13 +73,20 @@
     function handleConstraintMessage(dialog) {
         var component = dialog.find(TEXTFIELD_TYPES)[0];
         var constraintMessage = dialog.find(TEXTFIELD_CONSTRAINTMESSAGE);
+        var regexPattern = dialog.find(TEXTFIELD_REGEX);
         var displayConstraintMessage = component.value !== "text" && component.value !== "textarea";
         checkAndDisplay(constraintMessage,
+            true,
+            displayConstraintMessage);
+        checkAndDisplay(regexPattern,
             true,
             displayConstraintMessage);
         component.on("change", function() {
             displayConstraintMessage = this.value !== "text" && this.value !== "textarea";
             checkAndDisplay(constraintMessage,
+                true,
+                displayConstraintMessage);
+            checkAndDisplay(regexPattern,
                 true,
                 displayConstraintMessage);
         });
