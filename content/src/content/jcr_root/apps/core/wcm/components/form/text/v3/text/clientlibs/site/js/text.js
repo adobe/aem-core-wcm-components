@@ -93,7 +93,7 @@
                 event.target.setCustomValidity(this._properties.requiredMessage);
             }
         } else if (this._properties.regexPattern) {
-        	var regexValue = new RegExp(this._properties.regexPattern);
+            var regexValue = new RegExp(this._properties.regexPattern);
             if (!regexValue.test(event.target.value)) {
                 event.target.setCustomValidity(this._properties.constraintMessage);
             }
