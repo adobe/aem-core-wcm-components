@@ -109,9 +109,9 @@ public interface Text extends Field {
     }
     
     /**
-     * Returns the regex to be validated.
+     * Returns the regex pattern to be validated.
      *
-     * @return the message to be displayed if the field is mandatory but has not been filled by the user
+     * @return the regex pattern provide by user for validating form
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getRegexPattern() {
