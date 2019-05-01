@@ -33,11 +33,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public interface ContentFragmentList extends ComponentExporter {
 
     /**
-     * Name of the property (in JSON export) that provides the all content fragment items.
+     * Name of the property (in JSON export) that provides the content fragment items.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
-    String JSON_PN_FRAGMENTS = "items";
+    String JSON_PN_ITEMS = "items";
 
     /**
      * Name of the optional resource property that stores the names of the elements to be used.
@@ -54,18 +54,18 @@ public interface ContentFragmentList extends ComponentExporter {
     String PN_MODEL_PATH = "modelPath";
 
     /**
-     * Name of the optional resource property that stores the name of the variation to be used.
+     * Name of the optional resource property that stores the tag names for filtering the result.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
-    String PN_TAG_NAME = "tagNames";
+    String PN_TAG_NAMES = "tagNames";
 
     /**
-     * Name of the optional resource property that stores the name of the variation to be used.
+     * Name of the optional resource property that stores the parent path of the content fragments.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
-    String PN_FOLDER_NAME = "parentPath";
+    String PN_PARENT_PATH = "parentPath";
 
     /**
      * Returns a list of {@link DAMContentFragment content fragments}.
@@ -74,7 +74,7 @@ public interface ContentFragmentList extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @NotNull
-    @JsonProperty(JSON_PN_FRAGMENTS)
+    @JsonProperty(JSON_PN_ITEMS)
     default Collection<DAMContentFragment> getListItems() {
         throw new UnsupportedOperationException();
     }

@@ -40,7 +40,7 @@ The following properties are written to JCR for this Form Options component and 
 
 ## Client Libraries
 The component provides a `core.wcm.components.form.options.v1.editor` editor client library category that includes
-JavaScript handling for dialog interaction. It is already included by its edit dialog.
+CSS for dialog style adjustments. It is already included by its edit dialog.
 
 ## Information
 * **Vendor**: Adobe
