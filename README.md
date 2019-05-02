@@ -10,7 +10,7 @@ A set of standardized components for AEM 6.3+ that can be used to speed up devel
 * [Component Library](https://www.adobe.com/go/aem_cmp_library)
 * [Using Core Components](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
 * [Tutorial for building a new site using the Core Components (takes about 2 days)](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
-* [Tutorial for building a new site, used at Summit 2019 (takes about 2 hours](https://expleague.azureedge.net/labs/L767/index.html)
+* [Tutorial for building a new site, used at Adobe Summit 2019 (takes about 2 hours)](https://expleague.azureedge.net/labs/L767/index.html)
 * [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
 ## Development
