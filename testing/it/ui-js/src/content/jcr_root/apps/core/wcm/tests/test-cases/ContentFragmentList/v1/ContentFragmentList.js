@@ -105,11 +105,17 @@
 
     /**
      * Set the tag names
+     *
+     * Note: this test is ignored on 6.3 because it fails on 6.3 for the following reason:
+     * the expected tags location is "/etc/tags" for 6.3 and "/content/cq:tags" for versions > 6.3
      */
     contentfragmentlist.tcSetTagNames = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
         return new h.TestCase("Set the tag names", {
             execBefore: tcExecuteBeforeTest,
-            execAfter: tcExecuteAfterTest
+            execAfter: tcExecuteAfterTest,
+            metadata: {
+                ignoreOn63: true
+            }
         })
         // open the edit dialog
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
