@@ -11,6 +11,7 @@
     "requiredMessage"  : "please fill the field",
     "constraintMessage": "The value should be a valid email address",
     "rows"             : 3,
+    "regexPattern"     : "",
     "defaultValue"     : "",
     ":type"            : "core/wcm/components/form/text/v1/text"
 }
