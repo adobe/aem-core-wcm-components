@@ -50,7 +50,7 @@
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/include"
-                                                path="/apps/core/wcm/commons/id/id_design/idSection"/>
+                                                path="/apps/core/wcm/commons/comp_id/idSection"/>
                                             <type
                                                 granite:class="cq-dialog-dropdown-showhide"
                                                 jcr:primaryType="nt:unstructured"

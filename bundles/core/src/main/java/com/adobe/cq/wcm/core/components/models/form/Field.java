@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.form;
 
-import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -28,16 +27,6 @@ import com.adobe.cq.wcm.core.components.models.CoreComponent;
  */
 @ConsumerType
 public interface Field extends CoreComponent, ComponentExporter {
-
-//    /**
-//     * Returns an unique identifier for this field.
-//     *
-//     * @return an unique identifier for the field
-//     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
-//     */
-//    default String getId() {
-//        throw new UnsupportedOperationException();
-//    }
 
     /**
      * Returns the value of the HTML <code>name</code> attribute.
@@ -91,13 +80,4 @@ public interface Field extends CoreComponent, ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
-//    /**
-//     * @see ComponentExporter#getExportedType()
-//     * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
-//     */
-//    @NotNull
-//    @Override
-//    default String getExportedType() {
-//        throw new UnsupportedOperationException();
-//    }
 }

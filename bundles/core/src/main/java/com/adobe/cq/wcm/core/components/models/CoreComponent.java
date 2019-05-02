@@ -21,25 +21,27 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.export.json.ComponentExporter;
 
 public interface CoreComponent extends ComponentExporter {
-	
+
 	/**
-     * Retrieves the text value to be displayed.
-     *
-     * @return the text value to be displayed, or {@code null} if no value can be returned
-     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
-     */
-    default String getId() {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
+	 * Retrieves the text value to be displayed.
+	 *
+	 * @return the text value to be displayed, or {@code null} if no value can be
+	 *         returned
+	 * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked
+	 *        <code>default</code> in 12.1.0
+	 */
+	default String getId() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see ComponentExporter#getExportedType()
+	 * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
+	 */
+	@NotNull
+	@Override
+	default String getExportedType() {
+		throw new UnsupportedOperationException();
+	}
 
 }

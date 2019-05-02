@@ -24,26 +24,23 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.CoreComponent;
 
-public class AbstractCoreComponentImpl implements CoreComponent{
-	
+public class AbstractCoreComponentImpl implements CoreComponent {
+
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    protected String id;
-	
+	protected String id;
+
 	@SlingObject
-    private Resource resource;
+	private Resource resource;
 
 	@Override
-    public String getId() {
-//        if (id == null) {
-//            id = String.valueOf(Math.abs(resource.getPath().hashCode() - 1));
-//        }
-        return id;
-    }
-	
+	public String getId() {
+		return id;
+	}
+
 	@NotNull
-    @Override
-    public String getExportedType() {
-        return resource.getResourceType();
-    }
+	@Override
+	public String getExportedType() {
+		return resource.getResourceType();
+	}
 
 }

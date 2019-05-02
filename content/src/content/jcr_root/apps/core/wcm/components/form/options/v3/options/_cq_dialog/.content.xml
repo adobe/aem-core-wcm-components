@@ -55,7 +55,7 @@
                                             <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/include"
-                                                path="/apps/core/wcm/commons/id/id_design/idSection"/>
+                                                path="/apps/core/wcm/commons/comp_id/idSection"/>
                                             <optionTypes
                                                 granite:class="cmp-form-options__editor-type"
                                                 jcr:primaryType="nt:unstructured"
