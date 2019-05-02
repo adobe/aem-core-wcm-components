@@ -20,5 +20,4 @@
     <filter root="/content/core-components-examples"/>
     <filter root="/content/cq:tags/core-components-examples"/>
     <filter root="/content/dam/core-components-examples"/>
-    <filter root="/etc/tags/core-components-examples"/>
 </workspaceFilter>
