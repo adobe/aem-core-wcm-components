@@ -323,7 +323,7 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     };
 
     formOptions.setActiveOptionForCheckbox = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Set the 'Active' option for the Checkbox type", {
+        return new h.TestCase("Set the 'Selected' option for the Checkbox type", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
@@ -335,7 +335,7 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
             .execTestCase(formOptions.setMandatoryFields)
             // add one option
             .execTestCase(formOptions.addOption)
-            // check the 'Active' option
+            // check the 'Selected' option
             .click("input[type='checkbox'][name$='selected']")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
@@ -346,7 +346,7 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     };
 
     formOptions.setActiveOptionForRadioButton = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Set the 'Active' option for the Radio button type", {
+        return new h.TestCase("Set the 'Selected' option for the Radio button type", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
@@ -358,8 +358,8 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
             .execTestCase(formOptions.setMandatoryFields)
             // add one option
             .execTestCase(formOptions.addOption)
-            // check the 'Active' option
-            .click("input[type='radio'][name$='selected']")
+            // check the 'Selected' option
+            .click("input[type='checkbox'][name$='selected']")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
             // check if the option is active
@@ -369,7 +369,7 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     };
 
     formOptions.setActiveOptionForDropDown = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Set the 'Active' option for the Drop down type", {
+        return new h.TestCase("Set the 'Selected' option for the Drop down type", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
@@ -381,8 +381,8 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
             .execTestCase(formOptions.setMandatoryFields)
             // add one option
             .execTestCase(formOptions.addOption)
-            // check the 'Active' option
-            .click("input[type='radio'][name$='selected']")
+            // check the 'Selected' option
+            .click("input[type='checkbox'][name$='selected']")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
             // check if the option is active
@@ -392,7 +392,7 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
     };
 
     formOptions.setActiveOptionForMultiSelectDropDown = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
-        return new h.TestCase("Set the 'Active' option for the Multi select drop down type", {
+        return new h.TestCase("Set the 'Selected' option for the Multi select drop down type", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
 
@@ -404,7 +404,7 @@ window.CQ.CoreComponentsIT.FormOptions.v1 = window.CQ.CoreComponentsIT.FormOptio
             .execTestCase(formOptions.setMandatoryFields)
             // add one option
             .execTestCase(formOptions.addOption)
-            // check the 'Active' option
+            // check the 'Selected' option
             .click("input[type='checkbox'][name$='selected']")
             // close the edit dialog
             .execTestCase(c.tcSaveConfigureDialog)
