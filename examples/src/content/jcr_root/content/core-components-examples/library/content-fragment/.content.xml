@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/reference]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Add a content fragment asset"
+        jcr:description="Display a content fragment asset"
         jcr:primaryType="cq:PageContent"
         jcr:title="Content Fragment"
         sling:resourceType="core-components-examples/components/page">
