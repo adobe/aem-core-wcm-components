@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-/*This customization is required to set z-index for modal view */
+/* This customization is required to set z-index for modal view */
 .custom-modal {
     z-index: 999999;
 }
