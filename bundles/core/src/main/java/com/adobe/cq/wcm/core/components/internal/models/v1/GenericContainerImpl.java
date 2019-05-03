@@ -50,7 +50,8 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    @SlingObject
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @JsonIgnore
     protected Style currentStyle;
 
     @PostConstruct
