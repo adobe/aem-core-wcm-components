@@ -37,7 +37,7 @@ public interface ContentFragmentList extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
-    String JSON_PN_ITEMS = "items";
+    String JSON_PN_FRAGMENTS = "items";
 
     /**
      * Name of the optional resource property that stores the names of the elements to be used.
@@ -58,14 +58,14 @@ public interface ContentFragmentList extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
-    String PN_TAG_NAMES = "tagNames";
+    String PN_TAG_NAME = "tagNames";
 
     /**
      * Name of the optional resource property that stores the parent path of the content fragments.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
-    String PN_PARENT_PATH = "parentPath";
+    String PN_FOLDER_NAME = "parentPath";
 
     /**
      * Returns a list of {@link DAMContentFragment content fragments}.
@@ -74,7 +74,7 @@ public interface ContentFragmentList extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     @NotNull
-    @JsonProperty(JSON_PN_ITEMS)
+    @JsonProperty(JSON_PN_FRAGMENTS)
     default Collection<DAMContentFragment> getListItems() {
         throw new UnsupportedOperationException();
     }

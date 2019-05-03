@@ -85,10 +85,10 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     @ValueMapValue(name = ContentFragmentList.PN_ELEMENT_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String[] elementNames;
 
-    @ValueMapValue(name = ContentFragmentList.PN_TAG_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragmentList.PN_TAG_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String[] tagNames;
 
-    @ValueMapValue(name = ContentFragmentList.PN_PARENT_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragmentList.PN_FOLDER_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String parentPath;
 
     private List<DAMContentFragment> items = new ArrayList<>();
