@@ -64,10 +64,7 @@ public class ModalImpl implements Modal {
 	private String fragmentType;
 
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-	private String contentFragmentPath;
-
-	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-	private String experienceFragmentPath;
+	private String fragmentPath;
 
 	@PostConstruct
 	private void initModel() {
@@ -116,18 +113,12 @@ public class ModalImpl implements Modal {
 
 	@Override
 	public ModalFragmentType getFragmentType() {
-		String x = fragmentType;
-		return ModalFragmentType.lookupByValue(x);
+		return ModalFragmentType.lookupByValue(fragmentType);
 	}
 
 	@Override
-	public String getContentFragmentPath() {
-		return contentFragmentPath;
-	}
-
-	@Override
-	public String getExperienceFragmentPath() {
-		return experienceFragmentPath;
+	public String getFragmentPath() {
+		return fragmentPath;
 	}
 
 }

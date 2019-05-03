@@ -3,7 +3,6 @@
   "title": "Terms & Conditions Modal",
   "open": false,
   "fragmentType": "EXPERIENCE_FRAGMENT",
-  "contentFragmentPath": "/content/dam/modalcontentfragment",
-  "experienceFragmentPath": "/content/experience-fragments/mmfxtest/master",
+  "fragmentPath": "/content/dam/modalcontentfragment",
   ":type": "core/wcm/components/modal/v1/modal"
 }

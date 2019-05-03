@@ -72,22 +72,12 @@ public interface Modal extends ComponentExporter {
 	}
 
 	/**
-	 * Returns the content fragment path
+	 * Returns the fragment path
 	 * 
-	 * @return contentFragmentPath
+	 * @return fragmentPath
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default String getContentFragmentPath() {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Returns the experience fragment path
-	 * 
-	 * @return experienceFragmentPath
-	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
-	 */
-	default String getExperienceFragmentPath() {
+	default String getFragmentPath() {
 		throw new UnsupportedOperationException();
 	}
 

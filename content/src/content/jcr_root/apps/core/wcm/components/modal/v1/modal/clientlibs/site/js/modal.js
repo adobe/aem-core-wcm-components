@@ -42,6 +42,7 @@
 
     function initializeModal(html) {
         var modalOpen = new window.ModalLib({
+            cssClass: ["custom-modal"],
             onClose: function() {
                 window.location.hash = "";
             }

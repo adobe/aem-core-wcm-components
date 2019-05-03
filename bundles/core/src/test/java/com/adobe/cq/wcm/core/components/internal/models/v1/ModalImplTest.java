@@ -63,9 +63,7 @@ public class ModalImplTest {
 				modal.isOpen());
 		assertEquals("The modal fragmentType is what was expected", ModalFragmentType.EXPERIENCE_FRAGMENT, modal.getFragmentType());
 		assertEquals("The modal contentFragmentPath is what was expected",
-				new String("/content/dam/modalcontentfragment"), modal.getContentFragmentPath());
-		assertEquals("The modal experienceFragmentPath is what was expected",
-				new String("/content/experience-fragments/mmfxtest/master"), modal.getExperienceFragmentPath());
+				new String("/content/dam/modalcontentfragment"), modal.getFragmentPath());
 		Utils.testJSONExport(modal, Utils.getTestExporterJSONPath(TEST_BASE, "modal1"));
 
 	}

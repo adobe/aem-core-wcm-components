@@ -14,18 +14,19 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
-<div data-sly-use.modal="com.adobe.cq.wcm.core.components.models.Modal"
+<div class="cmp-modal" data-sly-use.modal="com.adobe.cq.wcm.core.components.models.Modal"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      role="dialog">
     <sly data-sly-test="${wcmmode.edit}">${modal.title || 'Dialog' @ i18n} - ${modal.id}</sly>
     <sly data-sly-test="${!wcmmode.edit}">
-        <sly data-sly-test.xfPathWithExt="${modal.experienceFragmentPath @ extension='html'}"></sly>
-        <div class="cmp-modal"
+        <sly data-sly-test.cfPathWithExt="${modal.fragmentPath @ extension='cfm.content.html'}"></sly>
+        <sly data-sly-test.xfPathWithExt="${modal.fragmentPath @ extension='html'}"></sly>
+        <div class="cmp-modal__view"
              id="${modal.id}"
              data-modal-show="${properties.open}"
              tabindex="-1"
              role="dialog"
-             data-content-url="${properties.fragmentType == 'cf' ? modal.contentFragmentPath : xfPathWithExt}">
+             data-content-url="${properties.fragmentType == 'cf' ? cfPathWithExt : xfPathWithExt}">
         </div>
     </sly>
 </div>
