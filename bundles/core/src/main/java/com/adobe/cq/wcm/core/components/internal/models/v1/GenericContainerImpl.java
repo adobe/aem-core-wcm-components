@@ -50,8 +50,7 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @JsonIgnore
+    @SlingObject
     protected Style currentStyle;
 
     @PostConstruct
@@ -63,11 +62,9 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     }
     
     private void populateStyleProperties() {
-        if (currentStyle != null) {
-        	propertyDisabled = currentStyle.get(GenericContainer.PN_PROPERTIES_DISABLED, propertyDisabled);
+        	propertyDisabled = currentStyle.get(GenericContainer.PN_COLOR_PROPERTIES_DISABLED, propertyDisabled);
         	colorsDisabled = currentStyle.get(GenericContainer.PN_COLORS_DISABLED, colorsDisabled);
         	imageDisabled = currentStyle.get(GenericContainer.PN_IMAGE_DISABLED, imageDisabled);
-        }
     }
     
     public void setBackgroundStyleString()

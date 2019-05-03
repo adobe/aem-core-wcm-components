@@ -55,8 +55,8 @@ public class ContainerBackgroundColorDataSourceServlet extends SlingSafeMethodsS
 
 	private static final long serialVersionUID = -4952312991923817824L;
 	protected static final String SWATCHES_LIST_NODE_NAME = "/cq:swatchesList";
-	protected static final String COLOR_VALUE ="value";
-	protected static final String COLOR_NAME ="color";
+	protected static final String PN_COLOR_VALUE ="value";
+	protected static final String PN_COLOR_NAME ="color";
 	protected static final String RESOURCE_TYPE = "core/wcm/components/container/v1/container/allowedcolors";
 
     @Override
@@ -67,36 +67,36 @@ public class ContainerBackgroundColorDataSourceServlet extends SlingSafeMethodsS
     }
 
 	protected List<Resource> getColors(@NotNull SlingHttpServletRequest request) {
-		List<Resource> colorOptionsList = new ArrayList<>();
+		List<Resource> colors = new ArrayList<>();
 		ResourceResolver resolver = request.getResourceResolver();
 		Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
 		ContentPolicyManager policyMgr = resolver.adaptTo(ContentPolicyManager.class);
 		if (policyMgr == null || contentResource == null) {
-			return colorOptionsList;
+			return colors;
 		}
 		ContentPolicy policy = policyMgr.getPolicy(contentResource);
 		if (policy == null) {
-			return colorOptionsList;
+			return colors;
 		}
-		ValueMap defaultOption = null;
-		Resource colorRes = resolver.getResource(policy.getPath() + SWATCHES_LIST_NODE_NAME);
-		if (colorRes == null) {
-			return colorOptionsList;
+		ValueMap color = null;
+		Resource swatches = resolver.getResource(policy.getPath() + SWATCHES_LIST_NODE_NAME);
+		if (swatches == null) {
+			return colors;
 		}
-		Iterator<Resource> childIterator = colorRes.listChildren();
-		while (childIterator.hasNext()) {
-			Resource childres = childIterator.next();
-			defaultOption = new ValueMapDecorator(new HashMap<String, Object>());
+		Iterator<Resource> swatchesIterator = swatches.listChildren();
+		while (swatchesIterator.hasNext()) {
+			Resource childres = swatchesIterator.next();
+			color = new ValueMapDecorator(new HashMap<String, Object>());
 			ValueMap childResValueMap = childres.getValueMap();
-			if (childResValueMap.containsKey(COLOR_VALUE) && childResValueMap.containsKey(COLOR_NAME)) {
-				defaultOption.put(COLOR_VALUE, childResValueMap.get(COLOR_VALUE, String.class));
-				defaultOption.put(COLOR_NAME, childResValueMap.get(COLOR_NAME, String.class));
-				colorOptionsList.add(new ValueMapResource(resolver, new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
-						defaultOption));
+			if (childResValueMap.containsKey(PN_COLOR_VALUE) && childResValueMap.containsKey(PN_COLOR_NAME)) {
+				color.put(PN_COLOR_VALUE, childResValueMap.get(PN_COLOR_VALUE, String.class));
+				color.put(PN_COLOR_NAME, childResValueMap.get(PN_COLOR_NAME, String.class));
+				colors.add(new ValueMapResource(resolver, new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
+						color));
 			}
 		}
 
-		return colorOptionsList;
+		return colors;
 	}
 
 }

@@ -32,7 +32,7 @@ public interface GenericContainer extends ContainerExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    String PN_PROPERTIES_DISABLED = "propertiesDisabled";
+    String PN_COLOR_PROPERTIES_DISABLED = "propertiesDisabled";
     
     /**
      * Name of the policy property that defines whether or not colors are disabled
@@ -94,7 +94,7 @@ public interface GenericContainer extends ContainerExporter {
     
     /**
      * @see ContainerExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @NotNull
     @Override
@@ -104,7 +104,7 @@ public interface GenericContainer extends ContainerExporter {
 
     /**
      * @see ContainerExporter#getExportedItems()
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @NotNull
     @Override
@@ -114,7 +114,7 @@ public interface GenericContainer extends ContainerExporter {
 
     /**
      * @see ContainerExporter#getExportedItemsOrder()
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @NotNull
     @Override

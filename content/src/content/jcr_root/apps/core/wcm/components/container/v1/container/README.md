@@ -19,11 +19,11 @@ Container component written in HTL.
 
 ## Features
 
-* Allows addition of Background Color and Background image of varying container.
-* Allowed components can be configured through policy configuration.
-* Allow addition of custom color swatches for background color.
-* Allow hide/show for background color and background images.
-* Allow hide/show for color picker properties
+* Allows to configure a background color and a background image
+* Allows components can be configured through policy configuration.
+* Allows addition of custom color swatches for background color.
+* Allows hide/show for background color and background images.
+* Allows hide/show for color picker properties
 
 ### Use Object
 The Container component uses the `com.adobe.cq.wcm.core.components.models.GenericContainer` Sling model as its Use-object.

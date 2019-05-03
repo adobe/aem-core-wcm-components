@@ -43,8 +43,8 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
-import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.COLOR_NAME;
-import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.COLOR_VALUE;
+import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.PN_COLOR_NAME;
+import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.PN_COLOR_VALUE;
 import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.SWATCHES_LIST_NODE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -112,13 +112,13 @@ public class ContainerBackgroundColorDataSourceServletTest {
         when(contentPolicyManager.getPolicy(currentResource)).thenReturn(contentPolicy);
         when(contentPolicy.getPath()).thenReturn(CURRENT_POLICY);
 
-        ValueMap defaultOption = new ValueMapDecorator(new HashMap<>());
-        defaultOption.put(COLOR_VALUE, BLACK_VALUE);
-        defaultOption.put(COLOR_NAME, BLACK_NAME);
-        List<Resource> colorOptionsList = new ArrayList<>();
-        colorOptionsList.add(new ValueMapResource(request.getResourceResolver(), new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
-                defaultOption));
-        when(swatchesList.listChildren()).thenReturn(colorOptionsList.iterator());
+        ValueMap color = new ValueMapDecorator(new HashMap<>());
+        color.put(PN_COLOR_VALUE, BLACK_VALUE);
+        color.put(PN_COLOR_NAME, BLACK_NAME);
+        List<Resource> colors = new ArrayList<>();
+        colors.add(new ValueMapResource(request.getResourceResolver(), new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
+                color));
+        when(swatchesList.listChildren()).thenReturn(colors.iterator());
         when(resourceResolver.getResource(CURRENT_POLICY + SWATCHES_LIST_NODE_NAME)).thenReturn(swatchesList);
         
         dataSourceServlet.doGet(request, response);
@@ -128,8 +128,8 @@ public class ContainerBackgroundColorDataSourceServletTest {
         assertTrue("Iterator should not be empty", iterator.hasNext());
         Resource next = iterator.next();
         assertNotNull("Colors resource should not be null", next);
-        assertEquals(BLACK_NAME, next.getValueMap().get(COLOR_NAME));
-        assertEquals(BLACK_VALUE, next.getValueMap().get(COLOR_VALUE));
+        assertEquals(BLACK_NAME, next.getValueMap().get(PN_COLOR_NAME));
+        assertEquals(BLACK_VALUE, next.getValueMap().get(PN_COLOR_VALUE));
         assertFalse("Iterator should not have more than one resource", iterator.hasNext());
     }
     
