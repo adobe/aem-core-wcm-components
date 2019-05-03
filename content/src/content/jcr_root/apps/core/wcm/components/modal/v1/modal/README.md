@@ -38,7 +38,7 @@ The following properties are written to JCR for this Modal component and are exp
 The component provides a `core.wcm.components.modal.v1` client library category that contains a recommended base
 CSS styling. It should be added to a relevant site client library using the `embed` property.
 
-The component provides a `core.wcm.components.list.v2.editor` editor client library category that includes JavaScript
+The component provides a `core.wcm.components.modal.v1.editor` editor client library category that includes JavaScript
 handling for dialog interaction. It is already included by its edit dialog.
 
 ## BEM description
