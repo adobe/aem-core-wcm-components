@@ -18,16 +18,15 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractContainerImpl;
 import com.adobe.cq.wcm.core.components.models.GenericContainer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -37,18 +36,16 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
 	private static final Logger LOGGER = LoggerFactory.getLogger(GenericContainerImpl.class);
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/container/v1/container";
     
-    private boolean propertyDisabled = false;
-    private boolean colorsDisabled = false;
-    private boolean imageDisabled = false;
-    private String backgroundImageSrc;
+    private static final boolean PROP_COLORS_DISABLED_DEFAULT = false;
+    private static final boolean PROP_IMAGE_DISABLED_DEFAULT = false;
+    private boolean colorsDisabled;
+    private boolean imageDisabled;
+    private String backgroundImagePath;
     private String backgroundColor;  
     private StringBuilder backgroundStyle;
     
     @ScriptVariable
     private ValueMap properties;
-    
-    @SlingObject
-    private ResourceResolver resourceResolver;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
@@ -58,23 +55,22 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     private void initModel() {    	
     	populateStyleProperties();    	
     	backgroundColor = properties.get(GenericContainer.PN_BACKGROUND_COLOR, String.class);
-    	backgroundImageSrc = properties.get(GenericContainer.PN_BACKGROUND_IMAGE, String.class);
+    	backgroundImagePath = properties.get(GenericContainer.PN_BACKGROUND_IMAGE, String.class);
     	setBackgroundStyleString();
     }
     
     private void populateStyleProperties() {
-        	propertyDisabled = currentStyle.get(GenericContainer.PN_COLOR_PROPERTIES_DISABLED, propertyDisabled);
-        	colorsDisabled = currentStyle.get(GenericContainer.PN_COLORS_DISABLED, colorsDisabled);
-        	imageDisabled = currentStyle.get(GenericContainer.PN_IMAGE_DISABLED, imageDisabled);
+        	colorsDisabled = currentStyle.get(GenericContainer.PN_COLORS_DISABLED, PROP_COLORS_DISABLED_DEFAULT);
+        	imageDisabled = currentStyle.get(GenericContainer.PN_IMAGE_DISABLED, PROP_IMAGE_DISABLED_DEFAULT);
     }
     
     public void setBackgroundStyleString()
     {
     	backgroundStyle = new StringBuilder();        
-        if (!imageDisabled){
-        	backgroundStyle.append("background-image:url(" + backgroundImageSrc + ");background-size:cover;background-repeat:no-repeat;");
+        if (!imageDisabled) {
+        	backgroundStyle.append("background-image:url(" + backgroundImagePath + ");background-size:cover;background-repeat:no-repeat;");
         }
-        if (!colorsDisabled){
+        if (!colorsDisabled) {
         	backgroundStyle.append("background-color:" + backgroundColor);
         }
     }
@@ -86,8 +82,8 @@ public class GenericContainerImpl extends AbstractContainerImpl implements Gener
     }
 
     @Override
-    public String getBackgroundImageSrc() {
-        return backgroundImageSrc;
+    public String getBackgroundImagePath() {
+        return backgroundImagePath;
     }
     
     @Override

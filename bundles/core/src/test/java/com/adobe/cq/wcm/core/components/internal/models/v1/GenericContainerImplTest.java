@@ -62,13 +62,13 @@ public class GenericContainerImplTest {
     public void testContainerProperties() {        
         GenericContainer container = getContainerUnderTest(CONTAINER_1);
         assertNotNull("The container background color is not null", container.getBackgroundColor());
-        assertNotNull("The container background image src is not null", container.getBackgroundImageSrc());
+        assertNotNull("The container background image src is not null", container.getBackgroundImagePath());
         assertNotNull("The container background style is not null", container.getBackgroundStyleString());
         assertNotNull("The container background exported items is not null", container.getExportedItems());
         assertNotNull("The container background exported item order is not null", container.getExportedItemsOrder());
         assertEquals("The container backgroun exported type match","core/wcm/components/container/v1/container", container.getExportedType());
         assertEquals("The container background color is what was expected",new String("#000000"),container.getBackgroundColor());
-        assertEquals("The container background image is what was expected",new String("/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"),container.getBackgroundImageSrc());
+        assertEquals("The container background image is what was expected",new String("/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"),container.getBackgroundImagePath());
         assertEquals("The container background style is what was expected",new String("background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000"),container.getBackgroundStyleString());
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container1"));
     }
@@ -77,14 +77,14 @@ public class GenericContainerImplTest {
     public void testContainerNullProperties() {        
         GenericContainer container = getContainerUnderTest(CONTAINER_2);
         assertNull("The container background color is null", container.getBackgroundColor());
-        assertNull("The container background image src is null", container.getBackgroundImageSrc());
+        assertNull("The container background image src is null", container.getBackgroundImagePath());
     }
     
     @Test
     public void testContainerPolicyAndDialogProperties() {        
         GenericContainer container = getContainerUnderTest(CONTAINER_3);
         assertNotNull("The container background color from dialog is not null", container.getBackgroundColor());
-        assertNotNull("The container background image src from dialog not is null", container.getBackgroundImageSrc());
+        assertNotNull("The container background image src from dialog not is null", container.getBackgroundImagePath());
         assertNotNull("The container background style is null because policy disabled from policy", container.getBackgroundStyleString());
     }
 

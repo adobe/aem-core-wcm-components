@@ -54,7 +54,7 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 public class ContainerBackgroundColorDataSourceServlet extends SlingSafeMethodsServlet {
 
 	private static final long serialVersionUID = -4952312991923817824L;
-	protected static final String SWATCHES_LIST_NODE_NAME = "/cq:swatchesList";
+	protected static final String NN_SWATCHES = "cq:swatches";
 	protected static final String PN_COLOR_VALUE ="value";
 	protected static final String PN_COLOR_NAME ="color";
 	protected static final String RESOURCE_TYPE = "core/wcm/components/container/v1/container/allowedcolors";
@@ -79,7 +79,7 @@ public class ContainerBackgroundColorDataSourceServlet extends SlingSafeMethodsS
 			return colors;
 		}
 		ValueMap color = null;
-		Resource swatches = resolver.getResource(policy.getPath() + SWATCHES_LIST_NODE_NAME);
+		Resource swatches = resolver.getResource(policy.getPath() + "/" + NN_SWATCHES);
 		if (swatches == null) {
 			return colors;
 		}

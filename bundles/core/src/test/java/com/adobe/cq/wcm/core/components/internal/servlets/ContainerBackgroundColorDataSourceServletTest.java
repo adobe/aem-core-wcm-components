@@ -45,7 +45,7 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
 import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.PN_COLOR_NAME;
 import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.PN_COLOR_VALUE;
-import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.SWATCHES_LIST_NODE_NAME;
+import static com.adobe.cq.wcm.core.components.internal.servlets.ContainerBackgroundColorDataSourceServlet.NN_SWATCHES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -119,7 +119,7 @@ public class ContainerBackgroundColorDataSourceServletTest {
         colors.add(new ValueMapResource(request.getResourceResolver(), new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
                 color));
         when(swatchesList.listChildren()).thenReturn(colors.iterator());
-        when(resourceResolver.getResource(CURRENT_POLICY + SWATCHES_LIST_NODE_NAME)).thenReturn(swatchesList);
+        when(resourceResolver.getResource(CURRENT_POLICY + "/" + NN_SWATCHES)).thenReturn(swatchesList);
         
         dataSourceServlet.doGet(request, response);
         DataSource dataSource = (DataSource) captor.getValue();

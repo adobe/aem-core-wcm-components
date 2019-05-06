@@ -39,7 +39,7 @@ public interface GenericContainer extends ContainerExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    String PN_COLORS_DISABLED = "colorsDisabled";
+    String PN_COLORS_DISABLED = "isColorsDisabled";
     
     /**
      * Name of the policy property that defines whether or not background image are disabled
@@ -68,7 +68,7 @@ public interface GenericContainer extends ContainerExporter {
      * @return the background image source or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    default String getBackgroundImageSrc() { 
+    default String getBackgroundImagePath() { 
     		throw new UnsupportedOperationException();
     	}
     
