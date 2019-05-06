@@ -27,7 +27,7 @@
                                 sling:resourceType="granite/ui/components/coral/foundation/container"
                                 granite:class="coral-Form-containerwrapper">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <label
+                                    <imageLabel
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/text"
                                         text="Image Configurations"
@@ -35,10 +35,10 @@
                                     <imagesDisabled
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Disabled images"
+                                        text="Disabled image"
                                         name="./imageDisabled"
                                         value="{Boolean}true"/>
-                                    <label
+                                    <colorLabel
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/text"
                                         text="Color Configurations"
