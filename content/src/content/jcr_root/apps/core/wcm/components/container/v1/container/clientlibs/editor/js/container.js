@@ -18,11 +18,11 @@
     "use strict";
 
 	var selectors = {
-		dialogContent = ".cmp-container__design",
-		colorHiddenCheckbox = 'coral-checkbox[name="./isColorsDisabled"]',
-		colorPropertyHiddenCheckbox = 'coral-checkbox[name="./propertyDisabled"]',
-		colorMultifield = ".cmp-container__design-multifield",
-		swatchesListLabel = ".coral-Form-fieldlabel-swatcheslist"
+		dialogContent: ".cmp-container__design",
+		colorHiddenCheckbox: 'coral-checkbox[name="./isColorsDisabled"]',
+		colorPropertyHiddenCheckbox: 'coral-checkbox[name="./propertyDisabled"]',
+		colorMultifield: ".cmp-container__design-multifield",
+		swatchesListLabel: ".coral-Form-fieldlabel-swatcheslist"
     };
 
     $(document).on("dialog-loaded", function(e) {
