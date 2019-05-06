@@ -30,4 +30,4 @@ Use-object.
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_sharing\_v1](https://www.adobe.com/go/aem_cmp_sharing_v1)
-* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_sharing](https://www.adobe.com/go/aem_cmp_library_sharing)
+* **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/social-sharing.html](http://opensource.adobe.com/aem-core-wcm-components/library/social-sharing.html)

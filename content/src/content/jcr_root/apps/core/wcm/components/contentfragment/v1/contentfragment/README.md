@@ -22,7 +22,6 @@ Content Fragment component written in HTL that displays the elements of a Conten
 * Displays the elements of a Content Fragment as an HTML description list
 * By default renders all elements of a Content Fragment
 * Can be configured to render a subset of the elements in a specific order
-* Alternative Content Fragment variations are configurable
 
 ### Use Object
 The Content Fragment component uses the `com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment` Sling model as its Use-object.
@@ -40,12 +39,9 @@ The following JCR properties are used:
 ## BEM description
 ```
 BLOCK cmp-contentfragment
-    ELEMENT cmp-contentfragment__title
-    ELEMENT cmp-contentfragment__description
-    ELEMENT cmp-contentfragment__elements
     ELEMENT cmp-contentfragment__element
         MOD cmp-contentfragment__element--<name>
-    ELEMENT cmp-contentfragment__element-title
+    ELEMENT cmp-contentfragment__element-label
     ELEMENT cmp-contentfragment__element-value
 ```
 
@@ -55,4 +51,4 @@ BLOCK cmp-contentfragment
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_contentfragment\_v1](https://www.adobe.com/go/aem_cmp_contentfragment_v1)
-* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_cf](https://www.adobe.com/go/aem_cmp_library_cf)
+* **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/content-fragment.html](http://opensource.adobe.com/aem-core-wcm-components/library/content-fragment.html)

@@ -132,4 +132,4 @@ In addition, SVG image types have a more limited set of editing options availabl
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v2](https://www.adobe.com/go/aem_cmp_image_v2)
-* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_image](https://www.adobe.com/go/aem_cmp_library_image)
+* **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/image.html](http://opensource.adobe.com/aem-core-wcm-components/library/image.html)

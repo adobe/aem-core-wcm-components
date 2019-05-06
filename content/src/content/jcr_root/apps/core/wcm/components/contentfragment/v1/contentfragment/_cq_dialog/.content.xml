@@ -9,7 +9,7 @@
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container"
-        granite:class="cmp-contentfragment__editor">
+        granite:class="cmp-contentfragment__edit-dialog">
         <granite:data
             jcr:primaryType="nt:unstructured"
             component-path="${requestPathInfo.suffix}"/>
@@ -145,7 +145,7 @@
                             <paragraphControls
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
-                                granite:class="cmp-contentfragment__editor-paragraph-controls">
+                                granite:class="cmp-contentfragment__edit-dialog-paragraph-controls">
                                 <granite:data
                                     jcr:primaryType="nt:unstructured"
                                     field-path="${requestPathInfo.resourcePath}"/>

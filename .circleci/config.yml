@@ -19,41 +19,38 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
-
-shared: &shared
-  working_directory: ~/repo
-
-  environment:
-    # Customize the JVM maximum heap limit
-    MAVEN_OPTS: -Xmx1024m -XX:MaxPermSize=512m
-
-  steps:
-    - checkout
-
-    - restore_cache: # restore the saved cache
-        key: aem-core-wcm-components
-
-    # run tests!
-    - run: mvn clean verify -B -U
-
-    - save_cache: # saves the project dependencies
-        paths:
-          - ~/.m2
-        key: aem-core-wcm-components
-
-    # run codecoverage check
-    - run: bash <(curl -s https://codecov.io/bash)
-
 jobs:
-  build-java-8:
+  build:
     docker:
       - image: circleci/openjdk:8-jdk-node
-    <<: *shared
 
-  build-java-11:
-    docker:
-      - image: circleci/openjdk:11-jdk-node
-    <<: *shared
+    # Specify service dependencies here if necessary
+    # CircleCI maintains a library of pre-built images
+    # documented at https://circleci.com/docs/2.0/circleci-images/
+    # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx1024m -XX:MaxPermSize=512m
+
+    steps:
+      - checkout
+
+      - restore_cache: # restore the saved cache
+          key: aem-core-wcm-components
+
+      # run tests!
+      - run: mvn clean verify -B -U
+
+      - save_cache: # saves the project dependencies
+          paths:
+            - ~/.m2
+          key: aem-core-wcm-components
+
+      # run codecoverage check
+      - run: bash <(curl -s https://codecov.io/bash)
 
   deploy_snapshot:
     docker:
@@ -91,19 +88,14 @@ workflows:
   version: 2
   build-and-release:
     jobs:
-      - build-java-8:
-          filters:
-            tags:
-              only: /.*/
-
-      - build-java-11:
+      - build:
           filters:
             tags:
               only: /.*/
 
       - deploy_snapshot:
           requires:
-            - build-java-11
+            - build
           filters:
             branches:
               ignore: /.*/
@@ -112,7 +104,7 @@ workflows:
 
       - release:
           requires:
-            - build-java-11
+            - build
           filters:
             branches:
               ignore: /.*/

@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-01-22T13:17:02.163+01:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/basic]"
+        cq:tags="[core-components-examples:component-type/atom]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display a rich text paragraph"
         jcr:primaryType="cq:PageContent"
@@ -50,7 +50,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_text_v2"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/text/v2/text"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830

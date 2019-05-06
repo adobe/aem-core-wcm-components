@@ -203,7 +203,6 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
         // mock data type
         DataType dataType = mock(DataType.class, withSettings().lenient());
         when(dataType.isMultiValue()).thenReturn(element.isMultiValued);
-        when(dataType.getTypeString()).thenReturn(element.typeString);
 
         // mock fragment data
         FragmentData data = mock(FragmentData.class, withSettings().lenient());
@@ -266,7 +265,6 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
             if (element.name.equals(properties.get(PN_ELEMENT_NAME))) {
                 // set the element title
                 element.title = properties.get(JCR_TITLE, String.class);
-                element.typeString = properties.get(PN_VALUE_TYPE, String.class);
                 found = true;
                 break;
             }
@@ -325,7 +323,6 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
                 element.title = properties.get(PN_ELEMENT_TITLE, String.class);
                 // determine if the element is multi-valued (if the value type is e.g. "string[]")
                 element.isMultiValued = properties.get(PN_VALUE_TYPE, "").endsWith("[]");
-                element.typeString = properties.get(PN_VALUE_TYPE, String.class);
                 found = true;
                 break;
             }
@@ -343,7 +340,6 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
             if ("master".equals(data.getName())) {
                 element.values = values;
                 element.contentType = contentType;
-                element.typeString = properties.get(PN_VALUE_TYPE, String.class);
             } else {
                 properties = resource.getChild(PATH_MODEL_VARIATIONS + "/" + data.getName()).getValueMap();
                 String title = properties.get(JCR_TITLE, String.class);

@@ -218,10 +218,9 @@ public class ContentFragmentUtilsTest {
         // GIVEN
         ResourceResolver resourceResolver = Mockito.mock(ResourceResolver.class);
         Resource resource = Mockito.mock(Resource.class);
-        Mockito.when(resource.getResourceResolver()).thenReturn(resourceResolver);
 
         // WHEN
-        String defaultGridResourceType = ContentFragmentUtils.getGridResourceType(resource);
+        String defaultGridResourceType = ContentFragmentUtils.getGridResourceType(resourceResolver, resource);
 
         // THEN
         Assert.assertThat(defaultGridResourceType, CoreMatchers.is(ContentFragmentUtils.DEFAULT_GRID_TYPE));
@@ -237,13 +236,12 @@ public class ContentFragmentUtilsTest {
         ValueMap valueMap = new MockValueMap(resource);
         valueMap.put(PN_CFM_GRID_TYPE, "foobar");
 
-        Mockito.when(resource.getResourceResolver()).thenReturn(resourceResolver);
         Mockito.when(resourceResolver.adaptTo(Mockito.eq(ContentPolicyManager.class))).thenReturn(contentPolicyManager);
         Mockito.when(contentPolicyManager.getPolicy(Mockito.eq(resource))).thenReturn(contentPolicy);
         Mockito.when(contentPolicy.getProperties()).thenReturn(valueMap);
 
         // WHEN
-        String defaultGridResourceType = ContentFragmentUtils.getGridResourceType(resource);
+        String defaultGridResourceType = ContentFragmentUtils.getGridResourceType(resourceResolver, resource);
 
         // THEN
         Assert.assertThat(defaultGridResourceType, CoreMatchers.is("foobar"));

@@ -29,8 +29,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Defines the API for a DAM content fragment used by the {@link ContentFragment content fragment component}
- * and the {@link ContentFragmentList content fragment list component}. The model provides information about the
- * referenced content fragment and access to representations of its elements.
+ * and the future list model. The model provides information about the referenced content fragment and access to
+ * representations of its elements.
  *
  * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
  */

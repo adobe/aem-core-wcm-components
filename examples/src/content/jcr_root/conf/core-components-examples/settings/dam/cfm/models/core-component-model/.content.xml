@@ -44,7 +44,7 @@
                         <_x0031_547563080981
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/multieditor"
-                            fieldLabel="Description"
+                            cfm-element="Description"
                             listOrder="2"
                             metaType="text-multi"
                             name="component-description"

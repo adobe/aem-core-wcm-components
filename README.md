@@ -6,10 +6,9 @@
 
 ## Documentation
 
-* [Component Library](https://www.adobe.com/go/aem_cmp_library)
+* [Component Library](http://opensource.adobe.com/aem-core-wcm-components/library.html)
 * [Using Core Components](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
-* [Tutorial for building a new site using the Core Components (takes about 2 days)](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
-* [Tutorial for building a new site, used at Summit 2019 (takes about 2 hours](https://expleague.azureedge.net/labs/L767/index.html)
+* [Tutorial for building a new site using the Core Components](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
 * [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
 ## Contributing
@@ -26,8 +25,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 * Page authoring components:
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
   * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-  * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
-  * [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+  * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)\*
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)

@@ -27,7 +27,6 @@ public class MockElement {
     public String[] values;
     public boolean isMultiLine;
     public String htmlValue;
-    public String typeString;
     public Map<String, MockVariation> variations = new LinkedHashMap<>();
 
     public MockElement() {

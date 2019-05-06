@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2019 Adobe Systems Incorporated
+  ~ Copyright 2018 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
      data-sly-test="${list.listItems.size>0}" data-sly-use.fragmentTemplate="core/wcm/components/contentfragment/v1/contentfragment/templates.html">
          
     <section data-sly-list.fragment="${list.listItems}"
-             class="cmp-contentfragmentlist">
+             class="cmp-contentfragment-list">
         <sly data-sly-call="${fragmentTemplate.contentFragment @ fragment=fragment, wcmmode=wcmmode}"></sly>
     </section>
 </sly>

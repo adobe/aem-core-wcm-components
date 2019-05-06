@@ -58,4 +58,4 @@ BLOCK cmp-title
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_title\_v2](https://www.adobe.com/go/aem_cmp_title_v2)
-* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_title](https://www.adobe.com/go/aem_cmp_library_title)
+* **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/title.html](http://opensource.adobe.com/aem-core-wcm-components/library/title.html)

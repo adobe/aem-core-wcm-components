@@ -44,8 +44,6 @@ import static org.mockito.Mockito.mock;
 
 public abstract class AbstractContentFragmentTest<T> {
 
-    private static final String CONTEXT_PATH = "/core";
-
     /* names of the content fragment component instances to test */
 
     protected static final String CF_TEXT_ONLY_NO_PATH = "text-only-no-path";
@@ -167,7 +165,6 @@ public abstract class AbstractContentFragmentTest<T> {
         slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
         httpServletRequest.setAttribute(SlingBindings.class.getName(), slingBindings);
-        httpServletRequest.setContextPath(CONTEXT_PATH);
         return httpServletRequest.adaptTo(getClassType());
     }
 

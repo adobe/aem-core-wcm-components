@@ -50,7 +50,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_separator_v1"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
