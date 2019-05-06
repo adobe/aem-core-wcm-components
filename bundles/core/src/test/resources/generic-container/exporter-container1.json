@@ -1,5 +1,5 @@
 {
-	"backgroundImageSrc": "/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg",
+	"backgroundImagePath": "/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg",
 	"backgroundColor": "#000000",
 	"backgroundStyleString": "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000",
 	":itemsOrder": [],
