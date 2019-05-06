@@ -17,7 +17,7 @@
     "use strict";
 
     // class of the edit dialog content
-    var CLASS_EDIT_DIALOG = "cmp-contentfragment__edit-dialog";
+    var CLASS_EDIT_DIALOG = "cmp-contentfragment__editor";
 
     // field selectors
     var SELECTOR_FRAGMENT_PATH = "[name='./fragmentPath']";
@@ -28,7 +28,7 @@
     var SELECTOR_VARIATION_NAME = "[name='./variationName']";
     var SELECTOR_DISPLAY_MODE_RADIO_GROUP = "[data-display-mode-radio-group='true']";
     var SELECTOR_DISPLAY_MODE_CHECKED = "[name='./displayMode']:checked";
-    var SELECTOR_PARAGRAPH_CONTROLS = ".cmp-contentfragment__edit-dialog-paragraph-controls";
+    var SELECTOR_PARAGRAPH_CONTROLS = ".cmp-contentfragment__editor-paragraph-controls";
     var SELECTOR_PARAGRAPH_SCOPE = "[name='./paragraphScope']";
     var SELECTOR_PARAGRAPH_RANGE = "[name='./paragraphRange']";
     var SELECTOR_PARAGRAPH_HEADINGS = "[name='./paragraphHeadings']";

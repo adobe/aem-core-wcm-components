@@ -15,18 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonReader;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
@@ -35,9 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -51,6 +43,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragment> {
+
+    private static final String TEST_BASE = "/contentfragment";
 
     private Logger cfmLogger;
     private Logger modelLogger;
@@ -99,6 +93,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     public void textOnly() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY));
     }
 
     @Test
@@ -106,24 +101,28 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_TEXT_ONLY);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_VARIATION));
     }
 
     @Test
     public void textOnlyNonExistingVariation() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NON_EXISTING_VARIATION);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_NON_EXISTING_VARIATION));
     }
 
     @Test
     public void textOnlySingleElement() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_SINGLE_ELEMENT);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_SINGLE_ELEMENT));
     }
 
     @Test
     public void textOnlyMultipleElements() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY, MAIN);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_MULTIPLE_ELEMENTS));
     }
 
     @Test
@@ -149,6 +148,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED));
     }
 
     @Test
@@ -156,6 +156,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_VARIATION));
     }
 
     @Test
@@ -163,6 +164,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_VARIATION);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_NON_EXISTING_VARIATION));
     }
 
     @Test
@@ -170,12 +172,14 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NESTED_MODEL);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE_NESTED, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_NESTED_MODEL));
     }
 
     @Test
     public void structuredSingleElement() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_SINGLE_ELEMENT));
     }
 
     @Test
@@ -183,12 +187,20 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_MULTIPLE_ELEMENTS);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED,
             MAIN);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_MULTIPLE_ELEMENTS));
+    }
+
+    @Test
+    public void structuredSingleElementMain() {
+        ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN);
+        assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN);
+        Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_SINGLE_ELEMENT_MAIN));
     }
 
     @Test
     public void getExportedType() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
-        //assertEquals(DAMContentFragmentImpl.RESOURCE_TYPE, fragment.getExportedType());
+        assertEquals(ContentFragmentImpl.RESOURCE_TYPE, fragment.getExportedType());
     }
 
     @Test
@@ -208,18 +220,6 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         assertNotNull(elements);
         final ComponentExporter mainElement = elements.get("main");
         assertEquals("text/html", mainElement.getExportedType());
-    }
-
-    @Test
-    public void jsonExport() throws IOException {
-        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
-        Writer writer = new StringWriter();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithView(DAMContentFragmentImpl.class).writeValue(writer, fragment);
-        JsonReader jsonReaderOutput = Json.createReader(IOUtils.toInputStream(writer.toString(), StandardCharsets.UTF_8));
-        JsonReader jsonReaderExpected = Json.createReader(getClass()
-            .getResourceAsStream("/contentfragment/test-expected-content-export.json"));
-        assertEquals(jsonReaderExpected.read(), jsonReaderOutput.read());
     }
 
     @Test
