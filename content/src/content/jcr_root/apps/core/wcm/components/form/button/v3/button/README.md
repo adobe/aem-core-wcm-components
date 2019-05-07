@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2019 Adobe Systems Incorporated
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,9 +26,10 @@ The Form Button component uses the `com.adobe.cq.wcm.core.components.models.form
 ### Edit Dialog Properties
 The following properties are written to JCR for this Form Button component and are expected to be available as `Resource` properties:
 
-1. `./jcr:title` - defines the text displayed on the button; if none is provided, the text will default to the button type
-2. `./name` - defines the name of the button, which will be submitted with the form data
-3. `./value` - defines the value of the button, which will be submitted with the form data
+1. `./id` - defines the id for the button
+2. `./jcr:title` - defines the text displayed on the button; if none is provided, the text will default to the button type
+3. `./name` - defines the name of the button, which will be submitted with the form data
+4. `./value` - defines the value of the button, which will be submitted with the form data
 
 ## Client Libraries
 The component provides a `core.wcm.components.form.button.v3.editor` editor client library category that includes

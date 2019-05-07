@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2019 Adobe Systems Incorporated
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ The Form Hidden component uses the `com.adobe.cq.wcm.core.components.models.form
 ### Edit Dialog Properties
 The following properties are written to JCR for this Form Hidden component and are expected to be available as `Resource` properties:
 
-1. `./name` - defines the name of the field, which will be submitted with the form data
-2. `./value` - defines the value of the field, which will be submitted with the form data
-3. `./id` - defines the identifier of this field, which should be unique on the page
+1. `./id` - defines the identifier of this hidden field
+2. `./name` - defines the name of the field, which will be submitted with the form data
+3. `./value` - defines the value of the field, which will be submitted with the form data
 
 ## Information
 * **Vendor**: Adobe

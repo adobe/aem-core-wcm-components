@@ -34,10 +34,11 @@ The following configuration properties are used:
 ### Edit Dialog Properties
 The following properties are written to JCR for this Form Container component and are expected to be available as `Resource` properties:
 
-1. `./actionType` - defines the action that will be performed by the form
-2. `./workflowModel` - defines the workflow which should be started with the stored content as payload
-3. `./workflowTitle` - defines the workflow's title
-4. `./redirect` - if left empty the form will be rendered after submission, otherwise the user will be redirected to the page stored by this
+1. `./id` - defines the id for the container
+2. `./actionType` - defines the action that will be performed by the form
+3. `./workflowModel` - defines the workflow which should be started with the stored content as payload
+4. `./workflowTitle` - defines the workflow's title
+5. `./redirect` - if left empty the form will be rendered after submission, otherwise the user will be redirected to the page stored by this
 property
 
 ## Client Libraries

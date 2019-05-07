@@ -11,6 +11,7 @@
                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                 fieldDescription="Provide unique id that binds with the component."
                 fieldLabel="Id"
+                validation="dialog-id-field-validation"
                 name="./id"/>
         </items>
     </idSection>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Form Options Field"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.form.options.v3.editor]"
+    extraClientlibs="[core.wcm.components.form.options.v3.editor, core.wcm.commons.comp_id.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_form_options_v3"
     trackingFeature="core-components:form-options:v3">
     <content
