@@ -23,6 +23,8 @@
         aria-multiselectable="false">
         <li data-sly-repeat.item="${tabs.items}"
             role="tab"
+            tabindex="${item.name == tabs.activeItem ? 0 : -1}"
+            aria-selected="${item.name == tabs.activeItem ? true : false}"
             class="cmp-tabs__tab${item.name == tabs.activeItem ? ' cmp-tabs__tab--active' : ''}"
             data-cmp-hook-tabs="tab">${item.title}</li>
     </ol>

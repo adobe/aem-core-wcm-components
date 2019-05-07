@@ -57,6 +57,8 @@
         <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
                 role="tab"
+                tabindex="${itemList.first ? 0 : -1}"
+                aria-selected="${itemList.first ? true : false}"
                 class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
                 data-cmp-hook-carousel="indicator">${item.title}</li>
         </ol>
