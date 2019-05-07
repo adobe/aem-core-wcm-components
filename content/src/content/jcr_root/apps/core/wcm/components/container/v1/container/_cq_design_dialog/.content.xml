@@ -91,21 +91,6 @@
                                     </colorFields>   
                                 </items>
                             </container>
-                            <imageDelegate
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                granite:class="coral-Form-fieldwrapper">
-                                <granite:rendercondition
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/renderconditions/imagedelegate"/>
-                                <items jcr:primaryType="nt:unstructured">
-                                    <text
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/text"
-                                        text="Image rendering is delegated to the ${imageDelegate.title} component.">
-                                    </text>
-                                </items>
-                            </imageDelegate>
                         </items>
                     </main>
                     <styletab

@@ -15,25 +15,20 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.GenericContainer;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
-import com.day.cq.wcm.api.designer.Style;
-import com.adobe.cq.wcm.core.components.Utils;
 
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -81,11 +76,10 @@ public class GenericContainerImplTest {
     }
     
     @Test
-    public void testContainerPolicyAndDialogProperties() {        
+    public void testDialogProperties() {        
         GenericContainer container = getContainerUnderTest(CONTAINER_3);
         assertNotNull("The container background color from dialog is not null", container.getBackgroundColor());
         assertNotNull("The container background image src from dialog not is null", container.getBackgroundImagePath());
-        assertNotNull("The container background style is null because policy disabled from policy", container.getBackgroundStyleString());
     }
 
     private GenericContainer getContainerUnderTest(String resourcePath) {
