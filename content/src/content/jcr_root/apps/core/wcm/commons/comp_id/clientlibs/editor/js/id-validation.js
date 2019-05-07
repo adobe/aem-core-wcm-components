@@ -28,7 +28,6 @@
                     return errorMessage;
                 }
             }
-            
         }
     });
 }(jQuery));
