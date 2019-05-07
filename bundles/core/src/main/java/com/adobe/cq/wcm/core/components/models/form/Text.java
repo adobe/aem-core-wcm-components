@@ -111,7 +111,7 @@ public interface Text extends Field {
     /**
      * Returns the regex pattern to be validated.
      *
-     * @return the regex pattern provide by user for validating form
+     * @return the regex pattern provided by author user for validating form
      * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
      */
     default String getRegexPattern() {
