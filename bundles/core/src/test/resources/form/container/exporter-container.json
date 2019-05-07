@@ -13,7 +13,6 @@
     ":type"                  : "core/wcm/components/form/container/v1/container",
     ":items"                 : {
         "text"          : {
-            "id"               : "form-text-1838886104",
             "title"            : "Text input field",
             "name"             : "input-field-1",
             "value"            : "",
@@ -28,7 +27,6 @@
             ":type"            : "core/wcm/components/form/text/v1/text"
         },
         "text_185087333": {
-            "id"               : "form-text-1203211035",
             "title"            : "Text input field",
             "name"             : "input-field-2",
             "value"            : "",

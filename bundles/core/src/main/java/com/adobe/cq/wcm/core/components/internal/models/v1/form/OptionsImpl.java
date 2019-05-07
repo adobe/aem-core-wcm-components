@@ -45,9 +45,9 @@ import com.adobe.cq.wcm.core.components.models.form.Options;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Options.class, ComponentExporter.class},
-       resourceType = {FormConstants.RT_CORE_FORM_OPTIONS_V1, FormConstants.RT_CORE_FORM_OPTIONS_V2})
+@Model(adaptables = SlingHttpServletRequest.class, adapters = { Options.class,
+		ComponentExporter.class }, resourceType = { FormConstants.RT_CORE_FORM_OPTIONS_V1,
+				FormConstants.RT_CORE_FORM_OPTIONS_V2, FormConstants.RT_CORE_FORM_OPTIONS_V3 })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class OptionsImpl extends AbstractFieldImpl implements Options {
 
