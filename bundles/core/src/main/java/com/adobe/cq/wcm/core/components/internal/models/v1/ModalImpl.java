@@ -15,10 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.PostConstruct; 
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.jackrabbit.vault.util.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.PersistenceException;
@@ -35,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Modal;
+import com.adobe.cq.wcm.core.components.models.ModalFragmentType;
+import com.day.cq.commons.jcr.JcrConstants;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { Modal.class,
 		ComponentExporter.class }, resourceType = ModalImpl.RESOURCE_TYPE)
@@ -44,8 +44,7 @@ public class ModalImpl implements Modal {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ModalImpl.class);
 	protected static final String RESOURCE_TYPE = "core/wcm/components/modal/v1/modal";
 
-	private static final String KEY_MODAL_ID = "modalId";
-	private static final String HTML_EXT = ".html";
+	private static final String PN_ID = "id";
 
 	@SlingObject
 	private Resource resource;
@@ -53,49 +52,42 @@ public class ModalImpl implements Modal {
 	@SlingObject
 	private ResourceResolver resourceResolver;
 
-	private String modalId;
+	private String id;
 
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-	private String description;
+	private String title;
 
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-	private boolean showModalByDefault;
+	private boolean open;
 
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
 	private String fragmentType;
 
 	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-	private String contentFragmentPath;
-
-	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-	private String experienceFragmentPath;
+	private String fragmentPath;
 
 	@PostConstruct
 	private void initModel() {
-		if (modalId == null) {
-			populateModalId();
-		}
-
-		if (StringUtils.isNotBlank(experienceFragmentPath) && !experienceFragmentPath.contains(HTML_EXT)) {
-			experienceFragmentPath = experienceFragmentPath.concat(HTML_EXT);
+		if (id == null) {
+			populateId();
 		}
 	}
 
-	void populateModalId() {
-		String absoluteComponentPath = resource.getPath();
-		int index = absoluteComponentPath.indexOf(JcrConstants.JCR_CONTENT);
-		String relativeComponentPath = absoluteComponentPath.substring(index);
-		modalId = String.valueOf(Math.abs(relativeComponentPath.hashCode() - 1));
+	void populateId() {
+		String modalPath = resource.getPath();
+		int index = modalPath.indexOf(JcrConstants.JCR_CONTENT);
+		String relativeComponentPath = modalPath.substring(index);
+		id = String.valueOf(Math.abs(relativeComponentPath.hashCode() - 1));
 
 		ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
 		if (map != null) {
-			map.put(KEY_MODAL_ID, modalId);
+			map.put(PN_ID, id);
 		}
 
 		try {
 			resourceResolver.commit();
 		} catch (PersistenceException e) {
-			LOGGER.error("Error occured while saving the modalId for {}", absoluteComponentPath, e);
+			LOGGER.error("Error occured while saving the modalId for {}", modalPath, e);
 		}
 	}
 
@@ -105,33 +97,28 @@ public class ModalImpl implements Modal {
 	}
 
 	@Override
-	public String getModalId() {
-		return modalId;
+	public String getId() {
+		return id;
 	}
 
 	@Override
-	public String getDescription() {
-		return description;
+	public String getTitle() {
+		return title;
 	}
 
 	@Override
-	public boolean getShowModalByDefault() {
-		return showModalByDefault;
+	public boolean isOpen() {
+		return open;
 	}
 
 	@Override
-	public String getFragmentType() {
-		return fragmentType;
+	public ModalFragmentType getFragmentType() {
+		return ModalFragmentType.lookupByValue(fragmentType);
 	}
 
 	@Override
-	public String getContentFragmentPath() {
-		return contentFragmentPath;
-	}
-
-	@Override
-	public String getExperienceFragmentPath() {
-		return experienceFragmentPath;
+	public String getFragmentPath() {
+		return fragmentPath;
 	}
 
 }

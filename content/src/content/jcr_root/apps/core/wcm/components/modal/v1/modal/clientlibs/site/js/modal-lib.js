@@ -14,7 +14,13 @@
  * limitations under the License.
  ******************************************************************************/
 
-/* This customization is required to set z-index for modal view */
-.custom-modal {
-    z-index: 999999;
-}
+(function(tingle, root) {
+    "use strict";
+
+    function ModalLib(opts) {
+        return new root.tingle.modal(opts);
+    }
+
+    root.ModalLib = ModalLib;
+
+})(tingle, window);
