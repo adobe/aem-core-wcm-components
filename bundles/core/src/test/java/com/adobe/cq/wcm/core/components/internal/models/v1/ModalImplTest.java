@@ -56,14 +56,13 @@ public class ModalImplTest {
 	public void testModalProperties() {
 		Modal modal = getModalUnderTest(MODAL_1);
 		assertNotNull("The modal id is not null", modal.getId());
-		assertEquals("The modal description is what was expected", new String("Terms & Conditions Modal"),
+		assertEquals("The modal title is what was expected", new String("Terms & Conditions Modal"),
 				modal.getTitle());
-		assertNotNull("The modal description is not null", modal.isOpen());
 		assertEquals("The modal showModalByDefault value is what was expected", new Boolean(false),
 				modal.isOpen());
-		assertEquals("The modal fragmentType is what was expected", ModalFragmentType.EXPERIENCE_FRAGMENT, modal.getFragmentType());
-		assertEquals("The modal contentFragmentPath is what was expected",
-				new String("/content/dam/modalcontentfragment"), modal.getFragmentPath());
+		assertEquals("The modal content type is what was expected", ModalFragmentType.EXPERIENCE_FRAGMENT, modal.getType());
+		assertEquals("The modal path is what was expected",
+				new String("/content/dam/modalcontentfragment"), modal.getPath());
 		Utils.testJSONExport(modal, Utils.getTestExporterJSONPath(TEST_BASE, "modal1"));
 
 	}

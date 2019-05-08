@@ -31,8 +31,8 @@ The following properties are written to JCR for this Modal component and are exp
 1. `./id` - represents the hash generated for the component path. Field is non-editable & shows up on page in author mode.
 2. `./title` - allows to provide title of the modal. This descirption value shows up on page in author mode.
 3. `./open` - allows you to enable/disable viewing of current modal on page load without providing #hash in url.
-4. `./fragmentType` - this select field allows author to choose either content fragment or experience fragment options.
-5. `./fragmentPath` - allows author to provide fragment path
+4. `./type` - this select field allows author to choose either content fragment or experience fragment options.
+5. `./path` - allows author to provide content path
 
 ## Client Libraries
 The component provides a `core.wcm.components.modal.v1` client library category that contains a recommended base

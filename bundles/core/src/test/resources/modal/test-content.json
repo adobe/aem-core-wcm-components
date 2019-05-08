@@ -18,8 +18,8 @@
 						"id": "312835230",
 						"title": "Terms & Conditions Modal",
 						"open": "false",
-						"fragmentType": "xf",
-						"fragmentPath": "/content/dam/modalcontentfragment"
+						"type": "xf",
+						"path": "/content/dam/modalcontentfragment"
 					}
 				}
 			}

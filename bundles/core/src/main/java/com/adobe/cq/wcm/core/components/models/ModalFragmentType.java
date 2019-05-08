@@ -22,18 +22,12 @@ import org.apache.commons.lang3.StringUtils;
 
 public enum ModalFragmentType {
 
-	EXPERIENCE_FRAGMENT("EXPERIENCE FRAGMENT", "xf"), CONTENT_FRAGMENT("CONTENT FRAGMENT", "cf");
+	EXPERIENCE_FRAGMENT("xf"), CONTENT_FRAGMENT("cf");
 
-	private String name;
 	private String value;
 
-	ModalFragmentType(String name, String value) {
-		this.name = name;
+	ModalFragmentType(String value) {
 		this.value = value;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public String getValue() {

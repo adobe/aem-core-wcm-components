@@ -6,6 +6,6 @@
     "globals": {
         "Coral": false,
         "Granite": false,
-		"tingle": "writable"
+        "tingle": "writable"
     }
 }

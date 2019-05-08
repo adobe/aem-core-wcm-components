@@ -22,7 +22,6 @@
                             <id
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                disabled="{Boolean}true"
                                 fieldDescription="An id that is displayed in the modal header and as a reference in the placeholder"
                                 fieldLabel="Id"
                                 name="./id"/>
@@ -35,17 +34,16 @@
                             <open
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                fieldDescription="Shows this model by default on page load"
                                 name="./open"
-                                text="Show modal on page load"
+                                text="Display the modal on page load"
                                 uncheckedValue="false"
                                 value="true"/>
-                            <fragmentType
+                            <type
                                 granite:class="cq-dialog-dropdown-showhide"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldLabel="Select the Fragment Type"
-                                name="./fragmentType">
+                                fieldLabel="Select the Content Type"
+                                name="./type">
                                 <granite:data
                                     jcr:primaryType="nt:unstructured"
                                     cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
@@ -59,13 +57,14 @@
                                         text="Experience Fragment"
                                         value="xf"/>
                                 </items>
-                            </fragmentType>
+                            </type>
                             <path
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                                 fieldDescription="Path of the asset"
-                                fieldLabel="Fragment Path"
-                                name="./fragmentPath"
+                                fieldLabel="Path"
+                                name="./path"
+                                required="{Boolean}true"
                                 rootPath="/content/dam"/>
                         </items>
                     </properties>

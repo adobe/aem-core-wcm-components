@@ -31,7 +31,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface Modal extends ComponentExporter {
 
 	/**
-	 * Returns the id for the modal based on the hash generated from the component path
+	 * Returns the id for the modal
 	 * 
 	 * @return id
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
@@ -62,22 +62,22 @@ public interface Modal extends ComponentExporter {
 	}
 
 	/**
-	 * Returns the type of the fragment chosen
+	 * Returns the type of the content chosen
 	 * 
-	 * @return fragmentType
+	 * @return type
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default ModalFragmentType getFragmentType() {
+	default ModalFragmentType getType() {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * Returns the fragment path
+	 * Returns the path
 	 * 
-	 * @return fragmentPath
+	 * @return path
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default String getFragmentPath() {
+	default String getPath() {
 		throw new UnsupportedOperationException();
 	}
 

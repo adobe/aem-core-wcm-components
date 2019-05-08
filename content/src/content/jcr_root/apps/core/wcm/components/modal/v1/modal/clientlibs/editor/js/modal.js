@@ -17,12 +17,12 @@
 (function($, $document) {
     "use strict";
     var CONTENT_FRAGMENT_PATH = "/content/dam";
-    var FRAGMENT_SELECT_NAME = "./fragmentType";
+    var FRAGMENT_SELECT_NAME = "./type";
     var EXPERIENCE_FRAGMENT_PATH = "/content/experience-fragments";
     var COMPONENT_PATH = "/apps/core/wcm/components/modal/v1/modal";
     var DIALOG_PATH = COMPONENT_PATH + "/cq:dialog";
     var CONTENT_FRAGMENT_VALUE = "cf";
-    var PATHFIELD_NAME = "./fragmentPath";
+    var PATHFIELD_NAME = "./path";
 
     $document.on("dialog-ready", function() {
         if (DIALOG_PATH === getDialogPath()) {

@@ -15,19 +15,17 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
 <div class="cmp-modal" data-sly-use.modal="com.adobe.cq.wcm.core.components.models.Modal"
-     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      role="dialog">
-    <sly data-sly-test="${wcmmode.edit}">${modal.title || 'Dialog' @ i18n} - ${modal.id}</sly>
+    <sly data-sly-test="${wcmmode.edit}">${modal.title || 'Modal Dialog' @ i18n} ${modal.id}</sly>
     <sly data-sly-test="${!wcmmode.edit}">
-        <sly data-sly-test.cfPathWithExt="${modal.fragmentPath @ extension='cfm.content.html'}"></sly>
-        <sly data-sly-test.xfPathWithExt="${modal.fragmentPath @ extension='html'}"></sly>
+        <sly data-sly-test.cfPathWithExt="${modal.path @ extension='cfm.content.html'}"></sly>
+        <sly data-sly-test.xfPathWithExt="${modal.path @ extension='html'}"></sly>
         <div class="cmp-modal__view"
              id="${modal.id}"
              data-modal-show="${properties.open}"
              tabindex="-1"
              role="dialog"
-             data-content-url="${properties.fragmentType == 'cf' ? cfPathWithExt : xfPathWithExt}">
+             data-content-url="${properties.type == 'cf' ? cfPathWithExt : xfPathWithExt}">
         </div>
     </sly>
 </div>
-<sly data-sly-call="${templates.placeholder @ isEmpty = wcmmode.edit, classAppend, emptyTextAppend = appendText}"></sly>
