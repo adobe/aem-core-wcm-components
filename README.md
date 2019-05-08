@@ -58,15 +58,17 @@ The components' versioning scheme is documented on the [AEM Core WCM Components'
 
 The latest version of the Core Components, require the below minimum system requirements:
 
-Core Components | Extension | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
-----------------|-----------|---------|---------|---------|------
-[2.3.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.2) | 1.0.12 | 6.5.0.0 | 6.4.2.0 | 6.3.3.0 | 1.8
+Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
+----------------|---------|---------|---------|------
+[2.4.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.4.0) | 6.5.0.0 | 6.4.2.0 | 6.3.3.0 | 1.8
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
 ## Installation
 
-The Sandbox components depend on [`AEM 6.3.3.0`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy.html?packagePath=/content/companies/public/adobe/packages/cq630/servicepack/AEM-6.3.3.0), [`AEM 6.4.2.0`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy.html?packagePath=/content/companies/public/adobe/packages/cq640/servicepack/AEM-6.4.2.0) or the latest AEM 6.5 release.
+To install everything, excluding examples, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
+
+For more information about the Package Manager please have a look at [How to Work With Packages](https://helpx.adobe.com/experience-manager/6-4/sites/administering/using/package-manager.html) documentation page.
 
 ## Build
 
@@ -104,6 +106,33 @@ Please note that
 
  * ``-pl/-projects`` option specifies the list of projects that you want to install
  * ``-am/-also-make`` options specifies that dependencies should also be built
+
+## Include core components as subpackage into your own project maven build
+
+The released version of the core components are available on the public maven repository at https://repo.adobe.com. To include the
+core components package into your own project maven build you can add the dependency
+ ```
+ <dependency>
+     <groupId>com.adobe.cq</groupId>
+     <artifactId>core.wcm.components.all</artifactId>
+     <type>zip</type>
+     <version>2.2.0</version>
+ </dependency>
+ ```
+
+ and sub package section
+```
+ <subPackage>
+     <groupId>com.adobe.cq</groupId>
+     <artifactId>core.wcm.components.all</artifactId>
+     <filter>true</filter>
+ </subPackage>
+```
+
+ to the `content-package-maven-plugin`.
+
+ For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
+ related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)
 
  ### Running the UI tests
 
