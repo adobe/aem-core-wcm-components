@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="665bdf97-8ede-40d9-b2b4-0b3fc9688f24">
+    <jcr:content
+        cq:name="tabs-fragment"
+        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        jcr:lastModified="{Date}2019-04-01T16:34:45.437+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Tabs Fragment"
+        contentFragment="{Boolean}true"
+        lastFragmentSave="{Date}2019-04-01T16:34:45.437+02:00">
+        <data
+            cq:model="/conf/core-components-examples/settings/dam/cfm/models/core-component-model"
+            jcr:primaryType="nt:unstructured">
+            <master
+                cq:tags="[core-components-examples:component-type/container]"
+                jcr:mixinTypes="[cq:Taggable]"
+                jcr:primaryType="nt:unstructured"
+                component-description="&lt;p>Tabs allow a user to switch between panels of related content. Panels of varying component type can be created.&lt;/p>&#xa;"
+                component-description_x0040_ContentType="text/html"
+                component-description_x0040_LastModified="{Date}2019-03-29T19:00:12.460+01:00"
+                component-latest-version="{Long}1"
+                component-latest-version_x0040_LastModified="{Date}2019-03-29T19:00:12.461+01:00"
+                component-title="Tabs"
+                component-title_x0040_LastModified="{Date}2019-03-29T19:00:12.459+01:00"
+                component-type="[core-components-examples:component-type/container]"
+                component-type_x0040_LastModified="{Date}2019-03-29T19:00:12.461+01:00"
+                type="[core-components-examples:component-type/basic]"
+                type_x0040_LastModified="{Date}2019-01-15T15:49:53.387+01:00"/>
+        </data>
+        <metadata
+            cq:tags="[core-components-examples:component-type/container]"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>
