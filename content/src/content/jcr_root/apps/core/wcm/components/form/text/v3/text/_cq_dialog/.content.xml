@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Form Text Field"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.form.text.v3.editor, core.wcm.commons.comp_id.editor]"
+    extraClientlibs="[core.wcm.components.form.text.v3.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_form_text_v3"
     trackingFeature="core-components:form-text:v3">
     <content
@@ -186,7 +186,14 @@
                                                 fieldDescription="Message displayed as tooltip when submitting the form if the value does not validate the Type chosen"
                                                 fieldLabel="Constraint Message"
                                                 name="./constraintMessage"
-                                                wrapperClass="cmp-form-text__constraintmessage"/>
+                                                wrapperClass="cmp-form-text__constraintmessage"/>                                            
+                                             <regex
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Enter custom regex pattern to validate value before submitting the form"
+                                                fieldLabel="Regex Pattern"
+                                                name="./regexPattern"
+                                                wrapperClass="cmp-form-text__regexpattern"/>     
                                             <required
                                                 granite:class="cmp-form-text__required"
                                                 jcr:primaryType="nt:unstructured"

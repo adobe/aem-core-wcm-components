@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Adobe Systems Incorporated
+ * Copyright 2016 Adobe Systems Incorporated
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,13 @@
          * @type {String}
          */
         requiredMessage: {
+        },
+        /**
+         * A validation message to display if no input is supplied, but input is expected for the field.
+         *
+         * @type {String}
+         */
+        regexPattern: {
         }
     };
 
@@ -81,13 +88,18 @@
 
     FormText.prototype._onInvalid = function(event) {
         event.target.setCustomValidity("");
-        if (event.target.validity.typeMismatch) {
-            if (this._properties.constraintMessage) {
-                event.target.setCustomValidity(this._properties.constraintMessage);
-            }
-        } else if (event.target.validity.valueMissing) {
+        if (event.target.validity.valueMissing) {
             if (this._properties.requiredMessage) {
                 event.target.setCustomValidity(this._properties.requiredMessage);
+            }
+        } else if (this._properties.regexPattern) {
+            var regexValue = new RegExp(this._properties.regexPattern);
+            if (!regexValue.test(event.target.value)) {
+                event.target.setCustomValidity(this._properties.constraintMessage);
+            }
+        } else if (event.target.validity.typeMismatch) {
+            if (this._properties.constraintMessage) {
+                event.target.setCustomValidity(this._properties.constraintMessage);
             }
         }
     };

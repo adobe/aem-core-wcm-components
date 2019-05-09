@@ -81,4 +81,3 @@ A `data-cmp-hook-form-text="input"` attribute should be added to the input field
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_form\_text\_v3](https://www.adobe.com/go/aem_cmp_form_text_v3)
-

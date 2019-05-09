@@ -1,4 +1,5 @@
 {
+    "id"               : "form-text-895490535",
     "title"            : "Custom title",
     "name"             : "Custom Name",
     "value"            : "Prefilled Sample Input",
@@ -7,10 +8,10 @@
     "type"             : "email",
     "readOnly"         : true,
     "required"         : true,
-    "requiredMessage"  : "please fill the field",
+    "requiredMessage"  : "please fill the field",    
     "constraintMessage": "The value should be a valid email address",
     "rows"             : 3,
-    "regexPattern"     : "",
+    "regexPattern"     : "/\/S+@\/S+\/.\/S+/",
     "defaultValue"     : "",
-    ":type"            : "core/wcm/components/form/text/v1/text"
+    ":type"            : "core/wcm/components/form/text/v3/text"
 }
