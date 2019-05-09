@@ -56,11 +56,11 @@ The components' versioning scheme is documented on the [AEM Core WCM Components'
 
 ## System Requirements
 
-The latest version of the Core Components, require the below minimum system requirements:
+The latest version of the Core Components, require the below system requirements:
 
 Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
 ----------------|---------|---------|---------|------
-[2.4.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.4.0) | 6.5.0.0 | 6.4.2.0 | 6.3.3.0 | 1.8
+[2.4.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.4.0) | 6.5.0.0+ | 6.4.2.0+ | 6.3.3.0+ | 8, 11
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
@@ -72,8 +72,8 @@ For more information about the Package Manager please have a look at [How to Wor
 
 ## Build
 
-The project has the following minimal requirements:
-* Java SE Development Kit 8 or newer
+The project has the following requirements:
+* Java SE Development Kit 8 or Java SE Development Kit 11
 * Apache Maven 3.3.1 or newer
 
 For ease of build and installation the following profiles are provided:
