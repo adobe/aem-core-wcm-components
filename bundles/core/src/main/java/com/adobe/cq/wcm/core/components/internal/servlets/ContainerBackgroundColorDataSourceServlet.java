@@ -54,9 +54,9 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 public class ContainerBackgroundColorDataSourceServlet extends SlingSafeMethodsServlet {
 
 	private static final long serialVersionUID = -4952312991923817824L;
-	private static final String SWATCHES_LIST_NODE_NAME = "/cq:swatchesList";
-	private static final String COLOR_VALUE ="value";
-	private static final String COLOR_NAME ="color";
+	protected static final String SWATCHES_LIST_NODE_NAME = "/cq:swatchesList";
+	protected static final String COLOR_VALUE ="value";
+	protected static final String COLOR_NAME ="color";
 	protected static final String RESOURCE_TYPE = "core/wcm/components/container/v1/container/allowedcolors";
 
     @Override

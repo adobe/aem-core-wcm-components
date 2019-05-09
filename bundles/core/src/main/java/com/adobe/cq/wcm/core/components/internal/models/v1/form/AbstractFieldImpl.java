@@ -21,18 +21,15 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
-import org.jetbrains.annotations.NotNull;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractCoreComponentImpl;
 import com.adobe.cq.wcm.core.components.models.form.Field;
 import com.day.cq.commons.jcr.JcrConstants;
 
 /**
  * Abstract class which can be used as base class for {@link Field} implementations.
  */
-public abstract class AbstractFieldImpl implements Field {
-
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    protected String id;
+public abstract class AbstractFieldImpl extends AbstractCoreComponentImpl implements Field {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
     protected String title;
@@ -59,14 +56,6 @@ public abstract class AbstractFieldImpl implements Field {
     private Resource resource;
 
     @Override
-    public String getId() {
-        if (id == null) {
-            id = getIDPrefix() + "-" + String.valueOf(Math.abs(resource.getPath().hashCode() - 1));
-        }
-        return id;
-    }
-
-    @Override
     public String getName() {
         if (name == null) {
             name = getDefaultName();
@@ -90,9 +79,4 @@ public abstract class AbstractFieldImpl implements Field {
         return title;
     }
 
-    @NotNull
-    @Override
-    public String getExportedType() {
-        return resource.getResourceType();
-    }
 }

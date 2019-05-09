@@ -28,17 +28,24 @@ The Modal component uses the `com.adobe.cq.wcm.core.components.models.Modal` Sli
 ### Edit Dialog Properties
 The following properties are written to JCR for this Modal component and are expected to be available as `Resource` properties:
 
-1. `./modalId` - represents the hash generated for the component path. Field is non-editable & shows up on page in author mode.
-2. `./description` - allows to provide description of the modal. This descirption value shows up on page in author mode.
-3. `./showModalByDefault` - allows you to enable/disable viewing of current modal on page load without providing #modalId in url.
+1. `./id` - represents the hash generated for the component path. Field is non-editable & shows up on page in author mode.
+2. `./title` - allows to provide title of the modal. This descirption value shows up on page in author mode.
+3. `./open` - allows you to enable/disable viewing of current modal on page load without providing #hash in url.
 4. `./fragmentType` - this select field allows author to choose either content fragment or experience fragment options.
-5. `./contentFragmentPath` - allows author to provide content fragment path
-6. `./experienceFragmentPath` - allows author to provide experience fragment path
+5. `./fragmentPath` - allows author to provide fragment path
 
 ## Client Libraries
 The component provides a `core.wcm.components.modal.v1` client library category that contains a recommended base
 CSS styling. It should be added to a relevant site client library using the `embed` property.
 
+The component provides a `core.wcm.components.modal.v1.editor` editor client library category that includes JavaScript
+handling for dialog interaction. It is already included by its edit dialog.
+
+## BEM description
+```
+BLOCK cmp-modal
+    ELEMENT cmp-modal__view
+```
 
 ## Information
 * **Vendor**: Adobe

@@ -14,15 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-.tingle-modal-box__content{
-	max-height:80vh;
-	overflow:auto;
-    margin-top:5vh;
-    margin-bottom:5vh;
-}
-
-.tingle-modal-box{
-	
-    background: #fff;
-
+/* This customization is required to set z-index for modal view */
+.custom-modal {
+    z-index: 999999;
 }

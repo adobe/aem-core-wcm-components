@@ -32,9 +32,9 @@ import com.adobe.cq.wcm.core.components.models.form.Field;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHelper;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Field.class, ComponentExporter.class},
-       resourceType = {FormConstants.RT_CORE_FORM_HIDDEN_V1, FormConstants.RT_CORE_FORM_HIDDEN_V2})
+@Model(adaptables = SlingHttpServletRequest.class, adapters = { Field.class, ComponentExporter.class }, resourceType = {
+		FormConstants.RT_CORE_FORM_HIDDEN_V1, FormConstants.RT_CORE_FORM_HIDDEN_V2,
+		FormConstants.RT_CORE_FORM_HIDDEN_V3 })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class HiddenImpl extends AbstractFieldImpl {

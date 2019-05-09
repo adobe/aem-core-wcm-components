@@ -4,6 +4,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Modal"
     sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.modal.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_modal_v1"
     trackingFeature="core-components:modal:v1">
     <content
@@ -18,31 +19,31 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
-                            <modal-id
+                            <id
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                 disabled="{Boolean}true"
-                                fieldLabel="Modal Id"
-                                name="./modalId"/>
-                            <description
+                                fieldDescription="An id that is displayed in the modal header and as a reference in the placeholder"
+                                fieldLabel="Id"
+                                name="./id"/>
+                            <title
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                fieldDescription="Provide description for the modal"
-                                fieldLabel="Description"
-                                name="./description"/>
-                            <default-modal-show
+                                fieldDescription="A title that is displayed in the modal header and as a reference in the placeholder"
+                                fieldLabel="Title"
+                                name="./title"/>
+                            <open
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                 fieldDescription="Shows this model by default on page load"
-                                name="./showModalByDefault"
+                                name="./open"
                                 text="Show modal on page load"
                                 uncheckedValue="false"
                                 value="true"/>
-                            <fragment-type
+                            <fragmentType
                                 granite:class="cq-dialog-dropdown-showhide"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                fieldDescription="Configure Number of Columns"
                                 fieldLabel="Select the Fragment Type"
                                 name="./fragmentType">
                                 <granite:data
@@ -58,41 +59,14 @@
                                         text="Experience Fragment"
                                         value="xf"/>
                                 </items>
-                            </fragment-type>
-                            <content-fragment
-                                granite:class="hide list-option-listfrom-showhide-target foundation-layout-util-vmargin"
+                            </fragmentType>
+                            <path
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container">
-                                <granite:data
-                                    jcr:primaryType="nt:unstructured"
-                                    showhidetargetvalue="cf"/>
-                                <items jcr:primaryType="nt:unstructured">
-                                    <cf-path
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                        fieldDescription="Path of the asset"
-                                        fieldLabel="Content Fragment Path"
-                                        name="./contentFragmentPath"
-                                        rootPath="/content/dam"/>
-                                </items>
-                            </content-fragment>
-                            <experience-fragment
-                                granite:class="hide list-option-listfrom-showhide-target foundation-layout-util-vmargin"
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container">
-                                <granite:data
-                                    jcr:primaryType="nt:unstructured"
-                                    showhidetargetvalue="xf"/>
-                                <items jcr:primaryType="nt:unstructured">
-                                    <xf-path
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                        fieldDescription="Path of the experience fragment"
-                                        fieldLabel="Experience Fragment Path"
-                                        name="./experienceFragmentPath"
-                                        rootPath="/content/experience-fragments"/>
-                                </items>
-                            </experience-fragment>
+                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                fieldDescription="Path of the asset"
+                                fieldLabel="Fragment Path"
+                                name="./fragmentPath"
+                                rootPath="/content/dam"/>
                         </items>
                     </properties>
                 </items>

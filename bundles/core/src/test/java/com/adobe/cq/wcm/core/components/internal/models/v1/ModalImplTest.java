@@ -28,6 +28,7 @@ import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Modal;
+import com.adobe.cq.wcm.core.components.models.ModalFragmentType;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -54,18 +55,15 @@ public class ModalImplTest {
 	@Test
 	public void testModalProperties() {
 		Modal modal = getModalUnderTest(MODAL_1);
-		assertNotNull("The modal id is not null", modal.getModalId());
+		assertNotNull("The modal id is not null", modal.getId());
 		assertEquals("The modal description is what was expected", new String("Terms & Conditions Modal"),
-				modal.getDescription());
-		assertNotNull("The modal description is not null", modal.getShowModalByDefault());
+				modal.getTitle());
+		assertNotNull("The modal description is not null", modal.isOpen());
 		assertEquals("The modal showModalByDefault value is what was expected", new Boolean(false),
-				modal.getShowModalByDefault());
-		assertEquals("The modal fragmentType is what was expected", new String("xf"), modal.getFragmentType());
+				modal.isOpen());
+		assertEquals("The modal fragmentType is what was expected", ModalFragmentType.EXPERIENCE_FRAGMENT, modal.getFragmentType());
 		assertEquals("The modal contentFragmentPath is what was expected",
-				new String("/content/dam/modalcontentfragment"), modal.getContentFragmentPath());
-		assertEquals("The modal experienceFragmentPath is what was expected",
-				new String("/content/experience-fragments/mmfxtest/master").concat(".html"),
-				modal.getExperienceFragmentPath());
+				new String("/content/dam/modalcontentfragment"), modal.getFragmentPath());
 		Utils.testJSONExport(modal, Utils.getTestExporterJSONPath(TEST_BASE, "modal1"));
 
 	}

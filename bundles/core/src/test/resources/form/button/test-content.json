@@ -8,6 +8,7 @@
         "jcr:created"        : "Tue Dec 06 2016 14:30:46 GMT+0200",
         "jcr:createdBy"      : "admin",
         "jcr:primaryType"    : "nt:unstructured",
+        "id"                 : "button-id",
         "sling:resourceType" : "core/wcm/components/form/button/v1/button"
     },
     "button1"    : {

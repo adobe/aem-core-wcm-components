@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured">
+    <idSection
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Id"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <id
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                fieldDescription="Provide unique id that binds with the component."
+                fieldLabel="Id"
+                validation="dialog-id-field-validation"
+                name="./id"/>
+        </items>
+    </idSection>
+</jcr:root>

@@ -30,8 +30,19 @@
                                     <label
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/text"
-                                        text="Image"
-                                        granite:class="coral-Form-fieldlabel"/>
+                                        text="Image Configurations"
+                                        granite:class="coral-Form-fieldlabel"/>                                                                                  
+                                    <imagesdisabled
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Disable images"
+                                        name="./imageDisabled"
+                                        value="{Boolean}true"/>
+                                    <label
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                        text="Color Configurations"
+                                        granite:class="coral-Form-fieldlabel"/>        
                                     <colordisabled
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -68,20 +79,16 @@
 		                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
 		                                            name="./color"/>
 		                                         <value
-		                                            jcr:primaryType="nt:unstructured"
-		                                            granite:class="cq-AllowedColors-styleField"
-		                                            emptyText="Color Value"
-		                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-		                                            name="./value"/>
+			                                        granite:class="cq-AllowedColors-styleField"
+	                                                jcr:primaryType="nt:unstructured"
+	                                                sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
+	                                                showDefaultColors="{Boolean}false"
+	                                                showSwatches="{Boolean}false"
+	                                                emptyText="Value"
+	                                                name="./value">
                                             </items>
                                           </field>  
-                                    </colorfields>                                              
-                                    <imagesdisabled
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Disable images"
-                                        name="./imageDisabled"
-                                        value="{Boolean}true"/>   
+                                    </colorfields>   
                                 </items>
                             </container>
                             <imageDelegate

@@ -31,22 +31,22 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface Modal extends ComponentExporter {
 
 	/**
-	 * Returns the modal id based on the hash generated from the component path
+	 * Returns the id for the modal based on the hash generated from the component path
 	 * 
-	 * @return modelId
+	 * @return id
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default String getModalId() {
+	default String getId() {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * Returns the description for the modal
+	 * Returns the title for the modal
 	 * 
-	 * @return description
+	 * @return title
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default String getDescription() {
+	default String getTitle() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -54,10 +54,10 @@ public interface Modal extends ComponentExporter {
 	 * Returns the boolean value defining whether to show modal by default on page
 	 * load or not
 	 * 
-	 * @return defaultModalShow
+	 * @return open
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default boolean getShowModalByDefault() {
+	default boolean isOpen() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -67,27 +67,17 @@ public interface Modal extends ComponentExporter {
 	 * @return fragmentType
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default String getFragmentType() {
+	default ModalFragmentType getFragmentType() {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * Returns the content fragment path
+	 * Returns the fragment path
 	 * 
-	 * @return contentFragmentPath
+	 * @return fragmentPath
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
-	default String getContentFragmentPath() {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Returns the experience fragment path
-	 * 
-	 * @return experienceFragmentPath
-	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
-	 */
-	default String getExperienceFragmentPath() {
+	default String getFragmentPath() {
 		throw new UnsupportedOperationException();
 	}
 

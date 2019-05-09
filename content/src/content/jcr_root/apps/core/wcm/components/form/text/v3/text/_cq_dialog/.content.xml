@@ -48,6 +48,10 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/include"
+                                                path="/apps/core/wcm/commons/comp_id/idSection"/>
                                             <fieldType
                                                 granite:class="cmp-form-text__types"
                                                 jcr:primaryType="nt:unstructured"

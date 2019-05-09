@@ -72,10 +72,6 @@ public class OptionsImplTest {
     public void testOptionsDefaultAttributes() {
         Options options = getOptionsUnderTest(OPTIONS_1);
         assertEquals(Type.CHECKBOX, options.getType());
-
-        String id = "form-options" + "-" + String.valueOf(Math.abs(OPTIONS_1.hashCode() - 1));
-        assertEquals(id, options.getId());
-
         assertEquals(null, options.getName());
         assertEquals(null, options.getValue());
         assertEquals(null, options.getTitle());
@@ -93,10 +89,6 @@ public class OptionsImplTest {
         FormsHelperGetValuesStubMethod.values = new String[] {"local-item2-value"};
         Options options = getOptionsUnderTest(OPTIONS_2);
         assertEquals(Type.CHECKBOX, options.getType());
-
-        String id = "form-options" + "-" + String.valueOf(Math.abs(OPTIONS_2.hashCode() - 1));
-        assertEquals(id, options.getId());
-
         assertEquals("local-name", options.getName());
         assertEquals("local-title", options.getTitle());
         assertEquals("local-helpMessage", options.getHelpMessage());
