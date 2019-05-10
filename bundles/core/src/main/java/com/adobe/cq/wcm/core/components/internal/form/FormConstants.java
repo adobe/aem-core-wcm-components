@@ -65,7 +65,7 @@ public final class FormConstants {
     /** The resource type for hidden fields v3 */
     public static final String RT_CORE_FORM_HIDDEN_V3 = RT_CORE_FORM_PREFIX + "hidden/v3/hidden";
 
-    /** The resource type for options fields vd1 */
+    /** The resource type for options fields v1 */
     public static final String RT_CORE_FORM_OPTIONS_V1 = RT_CORE_FORM_PREFIX + "options/v1/options";
     /** The resource type for options fields v2 */
     public static final String RT_CORE_FORM_OPTIONS_V2 = RT_CORE_FORM_PREFIX + "options/v2/options";
