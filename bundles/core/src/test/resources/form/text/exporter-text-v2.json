@@ -8,7 +8,7 @@
     "readOnly"         : true,
     "required"         : true,
     "requiredMessage"  : "please fill the field",
-    "consraintMessage": "The value should be a valid email address",
+    "constraintMessage": "The value should be a valid email address",
     "rows"             : 3,
     "regexPattern"     : "",
     "defaultValue"     : "",
