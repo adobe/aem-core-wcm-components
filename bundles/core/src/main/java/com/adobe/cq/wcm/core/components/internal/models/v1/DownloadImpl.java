@@ -25,11 +25,13 @@ import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.*;
@@ -58,6 +60,9 @@ public class DownloadImpl implements Download {
 
     @ScriptVariable
     private Resource resource;
+
+    @OSGiService
+    private MimeTypeService mimeTypeService;
 
     @ScriptVariable
     private ValueMap properties;
@@ -101,6 +106,8 @@ public class DownloadImpl implements Download {
     private String format;
 
     private String size;
+
+    private String extension;
 
     private long lastModified = 0;
 
@@ -169,6 +176,14 @@ public class DownloadImpl implements Download {
                     filename = downloadAsset.getName();
 
                     format = downloadAsset.getMetadataValue(DamConstants.DC_FORMAT);
+
+                    if (StringUtils.isNoneEmpty(format)) {
+                        extension = mimeTypeService.getExtension(format);
+                    }
+
+                    if (StringUtils.isEmpty(extension)) {
+                        extension = FilenameUtils.getExtension(filename);
+                    }
                 }
             }
         }
@@ -243,5 +258,10 @@ public class DownloadImpl implements Download {
     @Override
     public boolean displayFilename() {
         return displayFilename;
+    }
+
+    @Override
+    public String getExtension() {
+        return extension;
     }
 }

@@ -59,6 +59,7 @@ public class DownloadImplTest {
     private static final String PDF_FILESIZE_STRING = "147 KB";
     private static final String PDF_FILENAME = "Download_Test_PDF.pdf";
     private static final String PDF_FORMAT_STRING = "application/pdf";
+    private static final String PDF_EXTENSION = "pdf";
     private static final String COMPONENT_ACTION_TEXT = "Click";
     private static final String STYLE_ACTION_TEST = "Download";
     private static final String DOWNLOAD_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-1";
@@ -95,6 +96,7 @@ public class DownloadImplTest {
         assertEquals(DESCRIPTION, download.getDescription());
         assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
+        assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
         assertEquals(PDF_FORMAT_STRING, download.getFormat());
         assertEquals(COMPONENT_ACTION_TEXT, download.getActionText());
@@ -107,6 +109,7 @@ public class DownloadImplTest {
         assertEquals(DAM_DESCRIPTION, download.getDescription());
         assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
+        assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
         assertEquals(PDF_FORMAT_STRING, download.getFormat());
     }

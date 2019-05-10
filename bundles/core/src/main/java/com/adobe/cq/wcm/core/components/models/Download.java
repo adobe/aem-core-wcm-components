@@ -197,6 +197,16 @@ public interface Download extends ComponentExporter {
     }
 
     /**
+     * Returns the extension of file to be downloaded. Extension is mapped with the {@link org.apache.sling.commons.mime.MimeTypeService}
+     * . If no mapping can be found the extension is extracted from the filename.
+     *
+     * @return the extesion of the download file
+     */
+    default String getExtension() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
