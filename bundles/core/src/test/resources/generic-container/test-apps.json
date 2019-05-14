@@ -1,5 +1,19 @@
 {
-    "container": {
+    "teaser": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "teaser"         : {
+                "cq:icon"                : "image",
+                "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Teaser (v1)",
+                "sling:resourceSuperType": "core/wcm/components/teaser",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    },
+	"container": {
         "jcr:primaryType": "sling:Folder",
         "v1"             : {
             "jcr:primaryType": "nt:unstructured",

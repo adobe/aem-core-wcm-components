@@ -25,7 +25,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
 @ConsumerType
-public interface GenericContainer extends ContainerExporter {
+public interface GenericContainer extends Container {
 	
     /**
      * Name of the policy property that defines whether or not properties are disabled in color picker

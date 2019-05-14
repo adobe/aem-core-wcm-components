@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.List;
+
 import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,6 +30,7 @@ import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.GenericContainer;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -42,6 +45,7 @@ public class GenericContainerImplTest {
     private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
     private static final String CONTAINER_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-2";
     private static final String CONTAINER_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-3";
+    private static final String CONTAINER_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-4";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     @Rule
@@ -80,6 +84,27 @@ public class GenericContainerImplTest {
         GenericContainer container = getContainerUnderTest(CONTAINER_3);
         assertNotNull("The container background color from dialog is not null", container.getBackgroundColor());
         assertNotNull("The container background image src from dialog not is null", container.getBackgroundImagePath());
+    }
+    
+    @Test
+    public void testContainerWithItems() {        
+        GenericContainer container = getContainerUnderTest(CONTAINER_4);
+        Object[][] expectedItems = {
+                {"item_1", "Teaser 1"},
+                {"item_2", "Teaser 2"},
+                {"item_3", "Teaser 3"},
+        };
+        verifyContainerItems(expectedItems, container.getItems());
+    }
+    
+    private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
+        assertEquals("The container contains a different number of items than expected.", expectedItems.length, items.size());
+        int index = 0;
+        for (ListItem item : items) {
+            assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
+                expectedItems[index][1], item.getTitle());
+            index++;
+        }
     }
 
     private GenericContainer getContainerUnderTest(String resourcePath) {
