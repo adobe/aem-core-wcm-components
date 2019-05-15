@@ -16,4 +16,4 @@
 <sly data-sly-use.templates="core/wcm/components/commons/v1/templates.html"/>
 <div data-sly-test="${currentStyle.enableHtmlMode}">${properties.markup @ context = 'html'}</div>
 <div data-sly-test="${currentStyle.enableSelectionMode && properties.embedType}" data-sly-resource="${resource.path @ resourceType=properties.embedType, wcmmode='disabled'}" ></div>
-<sly data-sly-call="${templates.placeholder @ isEmpty = !(properties.embedType || properties.markup), classAppend = 'cmp-image cq-dd-image'}"></sly>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !(properties.embedType || properties.markup)}"></sly>
