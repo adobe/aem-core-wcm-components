@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public interface ContentFragmentList extends ComponentExporter {
 
     /**
-     * Name of the property (in JSON export) that provides the all content fragment items.
+     * Name of the property (in JSON export) that provides the content fragment items.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
@@ -54,14 +54,14 @@ public interface ContentFragmentList extends ComponentExporter {
     String PN_MODEL_PATH = "modelPath";
 
     /**
-     * Name of the optional resource property that stores the name of the variation to be used.
+     * Name of the optional resource property that stores the tag names for filtering the result.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
     String PN_TAG_NAMES = "tagNames";
 
     /**
-     * Name of the optional resource property that stores the name of the variation to be used.
+     * Name of the optional resource property that stores the parent path of the content fragments.
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */

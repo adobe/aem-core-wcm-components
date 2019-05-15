@@ -1,9 +1,8 @@
-# AEM Sites Core Components
-[![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components)
-[![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all)
+# AEM Sites Core Components Sandbox
+[![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development)
+[![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 
-A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.
+**The Sandbox represents a space where work-in-progress versions of the Core Components are developed. They provide _beta features_ and *should not be used in production*. When the components become stable, they will be promoted to new production-ready releases and moved out of sandbox.**
 
 ## Documentation
 
@@ -12,10 +11,6 @@ A set of standardized components for AEM 6.3+ that can be used to speed up devel
 * [Tutorial for building a new site using the Core Components (takes about 2 days)](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
 * [Tutorial for building a new site, used at Adobe Summit 2019 (takes about 2 hours)](https://expleague.azureedge.net/labs/L767/index.html)
 * [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
-
-## Development
-If you're curious about how the next generation of components looks like, a tech preview is made available in the
-[`development`](https://github.com/adobe/aem-core-wcm-components/tree/development) branch.
 
 ## Contributing
 
@@ -61,24 +56,24 @@ The components' versioning scheme is documented on the [AEM Core WCM Components'
 
 ## System Requirements
 
-The latest version of the Core Components, require the below minimum system requirements:
+The latest version of the Core Components, require the below system requirements:
 
-Core Components | Extension | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
-----------------|-----------|---------|---------|---------|------
-[2.3.2](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.2) | 1.0.12 | 6.5.0.0 | 6.4.2.0 | 6.3.3.0 | 1.8
+Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
+----------------|---------|---------|---------|------
+[2.4.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.4.0) | 6.5.0.0+ | 6.4.2.0+ | 6.3.3.0+ | 8, 11
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
 ## Installation
 
-To install everything, excluding extensions and examples, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
+To install everything, excluding examples, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
 
 For more information about the Package Manager please have a look at [How to Work With Packages](https://helpx.adobe.com/experience-manager/6-4/sites/administering/using/package-manager.html) documentation page.
 
 ## Build
 
-The project has the following minimal requirements:
-* Java SE Development Kit 8 or newer
+The project has the following requirements:
+* Java SE Development Kit 8 or Java SE Development Kit 11
 * Apache Maven 3.3.1 or newer
 
 For ease of build and installation the following profiles are provided:
@@ -138,3 +133,15 @@ core components package into your own project maven build you can add the depend
 
  For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)
+
+ ### Running the UI tests
+
+ The Sandbox components might use features not yet available on AEM 6.4. In order to correctly test the functionality that's still
+ supported for AEM 6.4, the Hobbes UI tests
+ should be executed using the following request parameters:
+
+```
+http://localhost:4502/libs/granite/testing/hobbes.html?runId=1&autoRun=true&optin=disabled&filter=aem.core-components.testsuite.sandbox&run.options={"withMetadata":{"ignoreOn63":{"value":true,"type":"exclude"}}}
+```
+
+This will make sure that tests which would normally fail on AEM 6.3 due to platform changes are not executed.
