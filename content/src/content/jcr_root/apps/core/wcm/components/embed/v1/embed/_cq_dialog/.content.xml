@@ -47,7 +47,7 @@
                                                 name="./embedType">
                                                 <datasource
                                                     jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="core/wcm/components/form/container/v1/datasource/embedoptions"/>
+                                                    sling:resourceType="core/wcm/components/embed/v1/datasource/embedoptions"/>
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
                                                     cq-dialog-dropdown-showhide-target=".embed-type-dialog"/>
@@ -59,7 +59,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
                                                 <datasource
                                                     jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="core/wcm/components/form/container/v1/datasource/embedsettings"/>
+                                                    sling:resourceType="core/wcm/components/embed/v1/datasource/embedsettings"/>
                                             </advanced>
                                         </items>
                                     </column>
