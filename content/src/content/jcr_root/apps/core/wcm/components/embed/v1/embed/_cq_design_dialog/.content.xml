@@ -8,7 +8,7 @@
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
-            <taps
+            <tabs
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="granite/ui/components/coral/foundation/tabs">
                 <items jcr:primaryType="nt:unstructured">
@@ -59,7 +59,7 @@
                         </items>
                     </general>
                 </items>
-            </taps>
+            </tabs>
         </items>
     </content>
 </jcr:root>
