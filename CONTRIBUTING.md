@@ -28,10 +28,7 @@ There are many ways of contributing, from testing and reporting an issue to sugg
 
 ### Joining Feature Discussions 💭
 
-You can add your voice to discussions around new and existing component features by:
-
-* Commenting on an RTC. New components and features that openly invite public comment are marked by an [RTC](https://github.com/adobe/aem-core-wcm-components/labels/rtc) (Request to Comment) label. We strongly encourage users of the Core Components to bring their own project experience to these issues, as there may be alternative use-cases or requirements that haven't yet been considered.
-* Subscribing to the [Component Round Table](https://gabrielwalt.typeform.com/to/aKeZS6) to participate in sessions on the Core Components.
+You can add your voice to discussions around new and existing component features by commenting on an RTC. New components and features that openly invite public comment are marked by an [RTC](https://github.com/adobe/aem-core-wcm-components/labels/rtc) (Request to Comment) label. We strongly encourage users of the Core Components to bring their own project experience to these issues, as there may be alternative use-cases or requirements that haven't yet been considered.
 
 ### Joining Developer Discussions 💬
 
