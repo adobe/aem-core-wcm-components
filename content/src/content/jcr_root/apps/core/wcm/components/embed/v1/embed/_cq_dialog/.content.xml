@@ -37,14 +37,12 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
                                                 deleteHint="{Boolean}true"
                                                 fieldLabel="Select Embed Type"
+                                                ignoreData="{Boolean}false"
                                                 name="./embedoption"
                                                 vertical="{Boolean}false">
-                                                <datasource
-                                                    jcr:primaryType="nt:unstructured"
-                                                    sling:resourceType="core/wcm/components/embed/v1/datasource/embedoptions"/>
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
-                                                    cq-dialog-dropdown-showhide-target=".embed-type-dialog"/>
+                                                    cq-dialog-radio-showhide-target=".cmp-embed-type-html,.cmp-embed-type-selection"/>
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <html
                                                         jcr:primaryType="nt:unstructured"
@@ -57,12 +55,18 @@
                                                 </items>
                                             </embedoptions>
                                             <markup
+                                                granite:class="cmp-embed-type-html"
                                                 granite:hide="${!cqDesign.enableHtmlMode}"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                checked="{Boolean}true"
                                                 fieldDescription="Leave empty to use the page title."
                                                 fieldLabel="HTML Markup"
-                                                name="./markup"/>
+                                                name="./markup">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    showhidetargetvalue="htmlMode"/>
+                                            </markup>
                                             <selectionMode
                                                 granite:class="cmp-embed-type-selection"
                                                 granite:hide="${!cqDesign.enableSelectionMode}"
@@ -76,16 +80,20 @@
                                                     sling:resourceType="core/wcm/components/embed/v1/datasource/embedoptions"/>
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
-                                                    cq-dialog-dropdown-showhide-target=".embed-type-dialog"/>
+                                                    cq-dialog-dropdown-showhide-target=".embed-type-dialog"
+                                                    showhidetargetvalue="embeddableMode"/>
                                             </selectionMode>
                                             <advanced
+                                                granite:class="cmp-embeddable-settings"
                                                 granite:hide="${!cqDesign.enableSelectionMode}"
-                                                granite:id="cmp-embed-type-settings"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
                                                 <datasource
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="core/wcm/components/embed/v1/datasource/embedsettings"/>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    showhidetargetvalue="embeddableMode"/>
                                             </advanced>
                                         </items>
                                     </column>

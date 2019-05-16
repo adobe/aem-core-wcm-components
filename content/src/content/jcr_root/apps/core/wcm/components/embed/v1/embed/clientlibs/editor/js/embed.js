@@ -19,12 +19,13 @@
 (function(document, $, Coral) {
     "use strict";
 
-    var ACTION_TYPE_SETTINGS_SELECTOR = "#cmp-embed-type-settings";
-    var ACTION_TYPE_ELEMENT_SELECTOR  = ".cmp-embed-type-selection";
+    var EMBEDDABLE_TYPE_SETTINGS_SELECTOR = ".cmp-embeddable-settings";
+    var EMBEDDABLE_TYPE_ELEMENT_SELECTOR  = ".cmp-embed-type-selection";
+    var EMBED_TYPE_RADIO_SELECTOR = ".cmp-embed-option-selection coral-radio";
 
     $(document).on("foundation-contentloaded", function(e) {
-        if ($(e.target).find(ACTION_TYPE_ELEMENT_SELECTOR).length > 0) {
-            $(ACTION_TYPE_ELEMENT_SELECTOR, e.target).each(function(i, element) {
+        if ($(e.target).find(EMBEDDABLE_TYPE_ELEMENT_SELECTOR).length > 0) {
+            $(EMBEDDABLE_TYPE_ELEMENT_SELECTOR, e.target).each(function(i, element) {
                 var target = $(element).data("cqDialogDropdownShowhideTarget");
                 if (target) {
                     Coral.commons.ready(element, function(component) {
@@ -37,19 +38,49 @@
             });
             showHide($(".cq-dialog-dropdown-showhide", e.target));
         }
+        if ($(e.target).find(EMBED_TYPE_RADIO_SELECTOR).length > 0) {
+            $(EMBED_TYPE_RADIO_SELECTOR, e.target).each(function(i, element) {
+                var target = $(element).parent().data("cqDialogRadioShowhideTarget");
+                if (target) {
+                    setVisibilityAndHandleFieldValidation($(target).parent().not(".hide"), false);
+        			setVisibilityAndHandleFieldValidation($(EMBEDDABLE_TYPE_SETTINGS_SELECTOR), false);
+                    Coral.commons.ready(element, function(component) {
+                        if ($(component).attr('checked') == 'checked') {
+                         	showHideEmbedOptions(component, target);
+                        }
+                        $(component).on("change", function(h) {
+                            showHideEmbedOptions(this, target);
+                        });
+                    });
+                }
+            });
+        }
 
     });
 
     function showHide(component, target) {
-        var value              = component.value;
-        var $target            = $(target);
-
+        var value = component.value;
+        var $target = $(target);
         setVisibilityAndHandleFieldValidation($target.not(".hide"), false);
-        $target.closest(ACTION_TYPE_SETTINGS_SELECTOR).addClass("hide");
+        $target.closest(EMBEDDABLE_TYPE_SETTINGS_SELECTOR).addClass("hide");
         $(target).filter("[data-showhidetargetvalue='" + value + "']").each(function(index, element) {
             var $element = $(element);
             setVisibilityAndHandleFieldValidation($element, true);
-            $element.closest(ACTION_TYPE_SETTINGS_SELECTOR).removeClass("hide");
+            $element.closest(EMBEDDABLE_TYPE_SETTINGS_SELECTOR).removeClass("hide");
+        });
+    }
+
+    function showHideEmbedOptions(component, target) {
+        var value = $(component).val();
+        var $target = $(target);
+        setVisibilityAndHandleFieldValidation($target.parent().not(".hide"), false);
+        setVisibilityAndHandleFieldValidation($(EMBEDDABLE_TYPE_SETTINGS_SELECTOR), false);
+        $(target).filter("[data-showhidetargetvalue='" + value + "']").each(function(index, element) {
+            var $element = $(element);
+            if ($element.hasClass(EMBEDDABLE_TYPE_ELEMENT_SELECTOR.substring(1))) {
+                setVisibilityAndHandleFieldValidation($(EMBEDDABLE_TYPE_SETTINGS_SELECTOR), true);
+            }
+			setVisibilityAndHandleFieldValidation($element.parent(), true);
         });
     }
 
@@ -65,14 +96,14 @@
     function setVisibilityAndHandleFieldValidation($element, show) {
         if (show) {
             $element.removeClass("hide");
-            $element.find("input[aria-required=false], coral-multifield[aria-required=false]").
+            $element.find("textarea[aria-required=false], input[aria-required=false], coral-multifield[aria-required=false]").
                 filter(":not(.hide>input)").filter(":not(input.hide)").
                 filter(":not(.hide>coral-multifield)").filter(":not(input.coral-multifield)").each(function(index, field) {
                     toggleValidation($(field));
                 });
         } else {
             $element.addClass("hide");
-            $element.find("input[aria-required=true], coral-multifield[aria-required=true]").each(function(index, field) {
+            $element.find("textarea[aria-required=true], input[aria-required=true], coral-multifield[aria-required=true]").each(function(index, field) {
                 toggleValidation($(field));
             });
         }
