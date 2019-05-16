@@ -30,6 +30,32 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
+                                            <embedoptions
+                                                granite:class="cmp-embed-option-selection"
+                                                granite:hide="${!(cqDesign.enableHtmlMode &amp;&amp; cqDesign.enableSelectionMode)}"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
+                                                deleteHint="{Boolean}true"
+                                                fieldLabel="Select Embed Type"
+                                                name="./embedoption"
+                                                vertical="{Boolean}false">
+                                                <datasource
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="core/wcm/components/embed/v1/datasource/embedoptions"/>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cq-dialog-dropdown-showhide-target=".embed-type-dialog"/>
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <html
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Free Form HTML"
+                                                        value="htmlMode"/>
+                                                    <embeddables
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Embeddables"
+                                                        value="embeddableMode"/>
+                                                </items>
+                                            </embedoptions>
                                             <markup
                                                 granite:hide="${!cqDesign.enableHtmlMode}"
                                                 jcr:primaryType="nt:unstructured"

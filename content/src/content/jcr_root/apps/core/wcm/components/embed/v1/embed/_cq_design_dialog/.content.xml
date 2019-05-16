@@ -36,7 +36,7 @@
                                         checked="true"
                                         fieldDescription="When checked, content authors can select an embeddable widgets from the list of available embeddables in a drop down"
                                         name="./enableSelectionMode"
-                                        text="Enable Selection Dropdown"
+                                        text="Enable Embeddables"
                                         uncheckedValue="false"
                                         value="{Boolean}true"/>
                                     <selectionModeOptions
