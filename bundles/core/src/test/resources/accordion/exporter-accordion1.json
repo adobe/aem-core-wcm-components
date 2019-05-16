@@ -1,0 +1,58 @@
+{
+    "expandedItem": "item_2",
+    ":itemsOrder": [
+        "item_1",
+        "item_2"
+    ],
+    ":type": "core/wcm/components/accordion/v1/accordion",
+    ":items": {
+        "item_1": {
+            ":itemsOrder": [
+                "item_1_1",
+                "item_1_2"
+            ],
+            ":type": "core/wcm/components/responsivegrid",
+            ":items": {
+                "item_1_1": {
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                },
+                "item_1_2": {
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                }
+            },
+            "cq:panelTitle": "Accordion 1"
+        },
+        "item_2": {
+            ":itemsOrder": [
+                "item_2_1",
+                "item_2_2"
+            ],
+            ":type": "core/wcm/components/responsivegrid",
+            ":items": {
+                "item_2_1": {
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                },
+                "item_2_2": {
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                }
+            },
+            "cq:panelTitle": "Accordion Panel 2"
+        }
+    }
+}
