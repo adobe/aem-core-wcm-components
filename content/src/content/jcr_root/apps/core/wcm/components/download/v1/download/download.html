@@ -27,7 +27,7 @@
         ${description @ context="html"}
     </div>
     <a class="cmp-download__action" href="${download.downloadUrl}"><span
-            class="cmp-download__action-icon cmp-icon--${download.extension}"></span>${download.actionText}</a>
+            class="cmp-download__action-icon cmp-download__action-icon--${download.extension}"></span>${download.actionText}</a>
     <span data-sly-test="${download.displayFilename && download.filename}" class="cmp-download__filename">${download.filename}</span>
     <span data-sly-test="${download.displaySize && download.size}" class="cmp-download__size">${download.size}</span>
     <span data-sly-test="${download.displayFormat && download.format}" class="cmp-download__format">${download.format}</span>
