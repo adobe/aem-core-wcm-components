@@ -25,6 +25,20 @@
             border-bottom: 1px solid black;
             cursor: pointer;
             padding: .5rem;
+
+            .cmp-accordion__item--title--icon {
+                display: inline-block;
+
+                &::after {
+                    content: "+";
+                }
+
+                &--expanded {
+                    &::after {
+                        content: "x";
+                    }
+                }
+            }
         }
     }
 
