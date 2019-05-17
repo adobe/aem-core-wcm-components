@@ -13,24 +13,35 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the {@code Accordion} Sling Model used for the {@code /apps/core/wcm/components/accordion} component.
- * @since com.adobe.cq.wcm.core.components.models 12.5.0
+ *
+ * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
 @ConsumerType
 public interface Accordion extends Container {
 
     /**
-     * Returns the expanded item
+     * Returns the expanded item.
+     *
      * @return The expanded item
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getExpandedItem() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the heading type.
+     *
+     * @return the heading type
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    default String getHeadingType() {
         throw new UnsupportedOperationException();
     }
 }

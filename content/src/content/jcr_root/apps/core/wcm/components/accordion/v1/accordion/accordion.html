@@ -19,22 +19,25 @@
      class="cmp-accordion"
      data-cmp-is="accordion">
     <ol data-sly-test="${accordion.items && accordion.items.size > 0}"
-        class="cmp-accordion__tablist"
-        role="tablist"
-        aria-multiselectable="false">
+        class="cmp-accordion__tablist">
         <li data-sly-repeat.item="${accordion.items}"
             class="cmp-accordion__item">
             <div class="cmp-accordion__item--title${item.name == accordion.expandedItem ? ' initially-expanded' : ''}"
-                 role="tab"
-                 data-cmp-hook-accordion="item">
-                ${item.title}
-                <span class="cmp-accordion__item--title--icon"></span>
+                 data-cmp-hook-accordion="item"
+                 aria-expanded="false"
+                 role="button"
+                 tabindex="0">
+                <h3 data-sly-element="${accordion.headingType @ context='elementName'}"
+                    role="heading">
+                    ${item.title}
+                    <span class="cmp-accordion__item--title--icon"></span>
+                </h3>
             </div>
 
             <div data-sly-resource="${item.name @ decorationTagName='div'}"
-                 role="tabpanel"
                  class="cmp-accordion__itempanel"
-                 data-cmp-hook-accordion="itempanel"></div>
+                 data-cmp-hook-accordion="itempanel"
+                 role="region"></div>
         </li>
     </ol>
 

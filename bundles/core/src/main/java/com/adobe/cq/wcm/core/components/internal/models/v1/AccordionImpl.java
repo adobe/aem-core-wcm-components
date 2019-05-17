@@ -42,6 +42,9 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
     @ValueMapValue(optional = true)
     private String expandedItem;
 
+    @ValueMapValue(optional = true)
+    private String headingType;
+
     private String expandedItemName;
 
     @Override
@@ -53,5 +56,10 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
             }
         }
         return expandedItemName;
+    }
+
+    @Override
+    public String getHeadingType() {
+        return headingType;
     }
 }

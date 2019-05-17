@@ -21,6 +21,8 @@
     var IS = "accordion";
 
     var keyCodes = {
+        ENTER: 13,
+        SPACE: 32,
         END: 35,
         HOME: 36,
         ARROW_LEFT: 37,
@@ -40,14 +42,16 @@
     };
 
     /**
-     * Accordion Configuration
+     * Accordion Configuration.
+     *
      * @typedef {Object} AccordionConfig Represents an Accordion configuration
      * @property {HTMLElement} element The HTMLElement representing the Accordion
      * @property {Object} options The Accordion options
      */
 
     /**
-     * Accordion
+     * Accordion.
+     *
      * @class Accordion
      * @classdesc An interactive Accordion component for navigating a list of accordion items
      * @param {AccordionConfig} config The Accordion configuration
@@ -60,7 +64,8 @@
         }
 
         /**
-         * Initializes the Accordion
+         * Initializes the Accordion.
+         *
          * @private
          * @param {AccordionConfig} config The Accordion configuration
          */
@@ -106,7 +111,8 @@
         }
 
         /**
-         * Returns the index of the initially expanded item, if no item is expanded returns 0
+         * Returns the index of the initially expanded item, if no item is expanded returns 0.
+         *
          * @param {Array} accordionItems Accordion items
          * @returns {Number} Index of the expanded item, 0 if none are expanded
          */
@@ -124,7 +130,8 @@
         }
 
         /**
-         * Caches the Accordion elements as defined via the {@code data-accordion-hook="ELEMENT_NAME"} markup API
+         * Caches the Accordion elements as defined via the {@code data-accordion-hook="ELEMENT_NAME"} markup API.
+         *
          * @private
          * @param {HTMLElement} wrapper The Accordion wrapper element
          */
@@ -153,7 +160,8 @@
         }
 
         /**
-         * Binds Accordion event handling
+         * Binds Accordion event handling.
+         *
          * @private
          */
         function bindEvents() {
@@ -165,7 +173,7 @@
                             navigateAndFocusAccordionItem(index);
                         });
                         items[i].addEventListener("keydown", function(event) {
-                            onKeyDown(event);
+                            onKeyDown(event, index);
                         });
                     })(i);
                 }
@@ -173,12 +181,13 @@
         }
 
         /**
-         * Handles tab keydown events
+         * Handles tab keydown events.
+         *
          * @private
          * @param {Object} event The keydown event
+         * @param {Number} index The keydown event
          */
-        function onKeyDown(event) {
-            var index = that._toggle;
+        function onKeyDown(event, index) {
             var lastIndex = that._elementItems.length - 1;
 
             switch (event.keyCode) {
@@ -186,23 +195,28 @@
                 case keyCodes.ARROW_UP:
                     event.preventDefault();
                     if (index > 0) {
-                        navigateAndFocusAccordionItem(index - 1);
+                        focusAccordionItem(index - 1);
                     }
                     break;
                 case keyCodes.ARROW_RIGHT:
                 case keyCodes.ARROW_DOWN:
                     event.preventDefault();
                     if (index < lastIndex) {
-                        navigateAndFocusAccordionItem(index + 1);
+                        focusAccordionItem(index + 1);
                     }
                     break;
                 case keyCodes.HOME:
                     event.preventDefault();
-                    navigateAndFocusAccordionItem(0);
+                    focusAccordionItem(0);
                     break;
                 case keyCodes.END:
                     event.preventDefault();
-                    navigateAndFocusAccordionItem(lastIndex);
+                    focusAccordionItem(lastIndex);
+                    break;
+                case keyCodes.ENTER:
+                case keyCodes.SPACE:
+                    event.preventDefault();
+                    navigateAndFocusAccordionItem(index);
                     break;
                 default:
                     return;
@@ -210,7 +224,8 @@
         }
 
         /**
-         * Refreshes the accordion item based on the current {@code Accordion#_toggle} index
+         * Refreshes the accordion item based on the current {@code Accordion#_toggle} index.
+         *
          * @private
          */
         function refreshAccordion() {
@@ -225,6 +240,7 @@
 
         /**
          * Collapses the provided accordion item.
+         *
          * @private
          * @param {Object} itempanel Provided accordion item's itempanel
          * @param {Object} item Provided accordion item's item
@@ -234,14 +250,14 @@
                 itempanel.classList.remove(selectors.expanded.itempanel);
                 itempanel.setAttribute("aria-hidden", true);
                 item.classList.remove(selectors.expanded.item);
-                item.setAttribute("aria-selected", false);
-                item.setAttribute("tabindex", "-1");
+                item.setAttribute("aria-expanded", false);
                 item.getElementsByClassName("cmp-accordion__item--title--icon")[0].classList.remove(selectors.expanded.icon);
             }
         }
 
         /**
          * Expands the provided accordion item.
+         *
          * @private
          * @param {Object} itempanel Provided accordion item's itempanel
          * @param {Object} item Provided accordion item's item
@@ -251,25 +267,25 @@
                 itempanel.classList.add(selectors.expanded.itempanel);
                 itempanel.removeAttribute("aria-hidden");
                 item.classList.add(selectors.expanded.item);
-                item.setAttribute("aria-selected", true);
-                item.setAttribute("tabindex", "0");
+                item.setAttribute("aria-expanded", true);
                 item.getElementsByClassName("cmp-accordion__item--title--icon")[0].classList.add(selectors.expanded.icon);
             }
         }
 
         /**
-         * Focuses the element and prevents scrolling the element into view
-         * @param {HTMLElement} element Element to focus
+         * Focuses the accordion item.
+         *
+         * @private
+         * @param {Number} index The index of the item to focus
          */
-        function focusWithoutScroll(element) {
-            var x = window.scrollX || window.pageXOffset;
-            var y = window.scrollY || window.pageYOffset;
-            element.focus();
-            window.scrollTo(x, y);
+        function focusAccordionItem(index) {
+            var item = that._elementItems[index];
+            item.focus();
         }
 
         /**
          * Handles collapse/expand for the authoring UI. Collapses all accordion items and expands the provided index accordion item.
+         *
          * @private
          * @param {Number} index The index of the accordion item to expand
          */
@@ -285,19 +301,21 @@
         }
 
         /**
-         * Navigates to the accordion item at the provided index and ensures the expanded/collapsed accordion item gains focus
+         * Navigates to the accordion item at the provided index and ensures the expanded/collapsed accordion item gains focus.
+         *
          * @private
          * @param {Number} index The index of the item to navigate to
          */
         function navigateAndFocusAccordionItem(index) {
             that._toggle = index;
             refreshAccordion();
-            focusWithoutScroll(that._elementItems[index]);
+            focusAccordionItem(that._elementItems[index]);
         }
     }
 
     /**
-     * Reads options data from the Accordion wrapper element, defined via {@code data-cmp-*} data attributes
+     * Reads options data from the Accordion wrapper element, defined via {@code data-cmp-*} data attributes.
+     *
      * @private
      * @param {HTMLElement} element The Accordion element to read options data from
      * @returns {Object} The options read from the component data attributes
@@ -329,6 +347,7 @@
 
     /**
      * Document ready handler and DOM mutation observers. Initializes Accordion components as necessary.
+     *
      * @private
      */
     function onDocumentReady() {
