@@ -34,7 +34,8 @@
         expanded: {
             initial: "initially-expanded",
             item: "cmp-accordion__item--expanded",
-            itempanel: "cmp-accordion__itempanel--expanded"
+            itempanel: "cmp-accordion__itempanel--expanded",
+            icon: "cmp-accordion__item--title--icon--expanded"
         }
     };
 
@@ -235,6 +236,7 @@
                 item.classList.remove(selectors.expanded.item);
                 item.setAttribute("aria-selected", false);
                 item.setAttribute("tabindex", "-1");
+                item.getElementsByClassName("cmp-accordion__item--title--icon")[0].classList.remove(selectors.expanded.icon);
             }
         }
 
@@ -251,6 +253,7 @@
                 item.classList.add(selectors.expanded.item);
                 item.setAttribute("aria-selected", true);
                 item.setAttribute("tabindex", "0");
+                item.getElementsByClassName("cmp-accordion__item--title--icon")[0].classList.add(selectors.expanded.icon);
             }
         }
 
