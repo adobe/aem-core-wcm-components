@@ -22,7 +22,7 @@
         class="cmp-accordion__tablist">
         <li data-sly-repeat.item="${accordion.items}"
             class="cmp-accordion__item">
-            <div class="cmp-accordion__item--title${item.name == accordion.expandedItem ? ' initially-expanded' : ''}"
+            <div class="cmp-accordion__item__title${item.name == accordion.expandedItem ? ' initially-expanded' : ''}"
                  data-cmp-hook-accordion="item"
                  aria-expanded="false"
                  role="button"
@@ -30,7 +30,7 @@
                 <h3 data-sly-element="${accordion.headingType @ context='elementName'}"
                     role="heading">
                     ${item.title}
-                    <span class="cmp-accordion__item--title--icon"></span>
+                    <span class="cmp-accordion__item__title__icon"></span>
                 </h3>
             </div>
 

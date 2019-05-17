@@ -33,11 +33,12 @@
 
     var selectors = {
         self: "[data-" +  NS + '-is="' + IS + '"]',
+        icon: "cmp-accordion__item__title__icon",
         expanded: {
             initial: "initially-expanded",
             item: "cmp-accordion__item--expanded",
             itempanel: "cmp-accordion__itempanel--expanded",
-            icon: "cmp-accordion__item--title--icon--expanded"
+            icon: "cmp-accordion__item__title__icon--expanded"
         }
     };
 
@@ -79,7 +80,7 @@
             that._toggle = getInitiallyExpandedAccordionItem(that._elementItems);
 
             if (that._elements.itempanel) {
-                refreshAccordion();
+                refreshAccordionItem();
                 bindEvents();
             }
 
@@ -170,7 +171,7 @@
                 for (var i = 0; i < items.length; i++) {
                     (function(index) {
                         items[i].addEventListener("click", function(event) {
-                            navigateAndFocusAccordionItem(index);
+                            refreshAndFocusAccordionItem(index);
                         });
                         items[i].addEventListener("keydown", function(event) {
                             onKeyDown(event, index);
@@ -216,7 +217,7 @@
                 case keyCodes.ENTER:
                 case keyCodes.SPACE:
                     event.preventDefault();
-                    navigateAndFocusAccordionItem(index);
+                    refreshAndFocusAccordionItem(index);
                     break;
                 default:
                     return;
@@ -228,7 +229,7 @@
          *
          * @private
          */
-        function refreshAccordion() {
+        function refreshAccordionItem() {
             if (that._toggle >= 0 && that._elementItempanels && that._elementItems) {
                 if (!that._elementItempanels[that._toggle].classList.contains(selectors.expanded.itempanel)) {
                     expandAccordionItem(that._elementItempanels[that._toggle], that._elementItems[that._toggle]);
@@ -251,7 +252,7 @@
                 itempanel.setAttribute("aria-hidden", true);
                 item.classList.remove(selectors.expanded.item);
                 item.setAttribute("aria-expanded", false);
-                item.getElementsByClassName("cmp-accordion__item--title--icon")[0].classList.remove(selectors.expanded.icon);
+                item.getElementsByClassName(selectors.icon)[0].classList.remove(selectors.expanded.icon);
             }
         }
 
@@ -268,7 +269,7 @@
                 itempanel.removeAttribute("aria-hidden");
                 item.classList.add(selectors.expanded.item);
                 item.setAttribute("aria-expanded", true);
-                item.getElementsByClassName("cmp-accordion__item--title--icon")[0].classList.add(selectors.expanded.icon);
+                item.getElementsByClassName(selectors.icon)[0].classList.add(selectors.expanded.icon);
             }
         }
 
@@ -297,18 +298,18 @@
             }
 
             that._toggle = index;
-            refreshAccordion();
+            refreshAccordionItem();
         }
 
         /**
-         * Navigates to the accordion item at the provided index and ensures the expanded/collapsed accordion item gains focus.
+         * Refreshes the accordion item at the provided index and ensures the expanded/collapsed accordion item gains focus.
          *
          * @private
          * @param {Number} index The index of the item to navigate to
          */
-        function navigateAndFocusAccordionItem(index) {
+        function refreshAndFocusAccordionItem(index) {
             that._toggle = index;
-            refreshAccordion();
+            refreshAccordionItem();
             focusAccordionItem(index);
         }
     }

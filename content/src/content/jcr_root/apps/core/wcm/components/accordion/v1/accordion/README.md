@@ -34,6 +34,7 @@ The component policy dialog allows definition of allowed components for the Acco
 The following properties are written to JCR for this Accordion component and are expected to be available as `Resource` properties:
 
 1. `./expandedItem` - defines the name of the item that is expanded by default.
+2. `./headingType` - defines the heading type to use for the accordion item's labels.
 
 The edit dialog also allows editing of Accordion items (adding, removing, naming, re-ordering).
 
@@ -47,8 +48,9 @@ BLOCK cmp-accordion
     ELEMENT cmp-accordion__tablist
     ELEMENT cmp-accordion__item
         MOD cmp-accordion__item--expanded
-    ELEMENT accordion__item--title
-    ELEMENT accordion__item--title--icon
+    ELEMENT accordion__item__title
+    ELEMENT accordion__item__title__icon
+        MOD accordion__item__title__icon--expanded
     ELEMENT cmp-accordion__itempanel
         MOD cmp-accordion__itempanel--expanded
 ```
