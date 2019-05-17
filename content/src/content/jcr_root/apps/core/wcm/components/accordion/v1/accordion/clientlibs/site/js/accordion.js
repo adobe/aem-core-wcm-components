@@ -68,7 +68,9 @@
             config.element.removeAttribute("data-" + NS + "-is");
 
             cacheElements(config.element);
-            that._toggle = getInitiallyExpandedAccordionItem(that._elements["item"]);
+            that._elementItems = Array.isArray(that._elements["item"]) ? that._elements["item"] : [that._elements["item"]];
+            that._elementItempanels = Array.isArray(that._elements["itempanel"]) ? that._elements["itempanel"] : [that._elements["itempanel"]];
+            that._toggle = getInitiallyExpandedAccordionItem(that._elementItems);
 
             if (that._elements.itempanel) {
                 refreshAccordion();
@@ -76,6 +78,16 @@
             }
 
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
+                if (that._elementItems) {
+                    if (that._elementItems.length === 1) {
+                        /*
+                         * if there is only 1 accordion item, always expand it in author
+                         * mode, even if it is not author to be initially expanded.
+                         */
+                        handleAuthoring(0);
+                    }
+                }
+
                 /*
                  * Editor message handling:
                  * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
@@ -144,7 +156,7 @@
          * @private
          */
         function bindEvents() {
-            var items = that._elements["item"];
+            var items = that._elementItems;
             if (items) {
                 for (var i = 0; i < items.length; i++) {
                     (function(index) {
@@ -166,7 +178,7 @@
          */
         function onKeyDown(event) {
             var index = that._toggle;
-            var lastIndex = that._elements["item"].length - 1;
+            var lastIndex = that._elementItems.length - 1;
 
             switch (event.keyCode) {
                 case keyCodes.ARROW_LEFT:
@@ -201,14 +213,11 @@
          * @private
          */
         function refreshAccordion() {
-            var itempanels = that._elements["itempanel"];
-            var items = that._elements["item"];
-
-            if (that._toggle >= 0 && itempanels && items) {
-                if (!itempanels[that._toggle].classList.contains(selectors.expanded.itempanel)) {
-                    expandAccordionItem(itempanels[that._toggle], items[that._toggle]);
+            if (that._toggle >= 0 && that._elementItempanels && that._elementItems) {
+                if (!that._elementItempanels[that._toggle].classList.contains(selectors.expanded.itempanel)) {
+                    expandAccordionItem(that._elementItempanels[that._toggle], that._elementItems[that._toggle]);
                 } else {
-                    collapseAccordionItem(itempanels[that._toggle], items[that._toggle]);
+                    collapseAccordionItem(that._elementItempanels[that._toggle], that._elementItems[that._toggle]);
                 }
             }
         }
@@ -216,8 +225,8 @@
         /**
          * Collapses the provided accordion item.
          * @private
-         * @param itempanel Provided accordion item's itempanel
-         * @param item Provided accordion item's item
+         * @param {Object} itempanel Provided accordion item's itempanel
+         * @param {Object} item Provided accordion item's item
          */
         function collapseAccordionItem(itempanel, item) {
             if (itempanel && item) {
@@ -232,8 +241,8 @@
         /**
          * Expands the provided accordion item.
          * @private
-         * @param itempanel Provided accordion item's itempanel
-         * @param item Provided accordion item's item
+         * @param {Object} itempanel Provided accordion item's itempanel
+         * @param {Object} item Provided accordion item's item
          */
         function expandAccordionItem(itempanel, item) {
             if (itempanel && item) {
@@ -262,12 +271,9 @@
          * @param {Number} index The index of the accordion item to expand
          */
         function handleAuthoring(index) {
-            var itempanels = that._elements["itempanel"];
-            var items = that._elements["item"];
-
-            if (itempanels && items) {
-                for (var i = 0; i < items.length; i++) {
-                    collapseAccordionItem(itempanels[i], items[i]);
+            if (that._elementItempanels && that._elementItems) {
+                for (var i = 0; i < that._elementItems.length; i++) {
+                    collapseAccordionItem(that._elementItempanels[i], that._elementItems[i]);
                 }
             }
 
@@ -283,7 +289,7 @@
         function navigateAndFocusAccordionItem(index) {
             that._toggle = index;
             refreshAccordion();
-            focusWithoutScroll(that._elements["item"][index]);
+            focusWithoutScroll(that._elementItems[index]);
         }
     }
 
