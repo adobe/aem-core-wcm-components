@@ -309,7 +309,7 @@
         function navigateAndFocusAccordionItem(index) {
             that._toggle = index;
             refreshAccordion();
-            focusAccordionItem(that._elementItems[index]);
+            focusAccordionItem(index);
         }
     }
 
