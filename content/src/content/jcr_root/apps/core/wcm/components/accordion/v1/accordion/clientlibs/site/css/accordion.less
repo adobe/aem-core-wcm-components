@@ -15,12 +15,9 @@
  */
 
 .cmp-accordion {
-    &__tablist {
-        padding-left: 0;
-        list-style: none;
-    }
-
     &__item {
+        padding-left: 0;
+
         &__title {
             border-bottom: 1px solid black;
             cursor: pointer;
@@ -34,8 +31,12 @@
                 &:after {
                     content: "+";
                 }
+            }
+        }
 
-                &--expanded {
+        [class*="--expanded"] & {
+            &__title {
+                &__icon {
                     &:after {
                         content: "x";
                     }

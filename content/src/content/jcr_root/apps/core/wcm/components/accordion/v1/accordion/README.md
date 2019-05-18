@@ -45,12 +45,10 @@ CSS styling and JavaScript component. It should be added to a relevant site clie
 ## BEM Description
 ```
 BLOCK cmp-accordion
-    ELEMENT cmp-accordion__tablist
-    ELEMENT cmp-accordion__item
+    BLOCK cmp-accordion__item
         MOD cmp-accordion__item--expanded
-    ELEMENT accordion__item__title
-    ELEMENT accordion__item__title__icon
-        MOD accordion__item__title__icon--expanded
+        BLOCK accordion__item__title
+            ELEMENT accordion__item__title__icon
     ELEMENT cmp-accordion__itempanel
         MOD cmp-accordion__itempanel--expanded
 ```
