@@ -33,12 +33,10 @@
 
     var selectors = {
         self: "[data-" +  NS + '-is="' + IS + '"]',
-        icon: "cmp-accordion__item__title__icon",
         expanded: {
             initial: "initially-expanded",
             item: "cmp-accordion__item--expanded",
-            itempanel: "cmp-accordion__itempanel--expanded",
-            icon: "cmp-accordion__item__title__icon--expanded"
+            itempanel: "cmp-accordion__itempanel--expanded"
         }
     };
 
@@ -252,7 +250,6 @@
                 itempanel.setAttribute("aria-hidden", true);
                 item.classList.remove(selectors.expanded.item);
                 item.setAttribute("aria-expanded", false);
-                item.getElementsByClassName(selectors.icon)[0].classList.remove(selectors.expanded.icon);
             }
         }
 
@@ -269,7 +266,6 @@
                 itempanel.removeAttribute("aria-hidden");
                 item.classList.add(selectors.expanded.item);
                 item.setAttribute("aria-expanded", true);
-                item.getElementsByClassName(selectors.icon)[0].classList.add(selectors.expanded.icon);
             }
         }
 
