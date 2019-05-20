@@ -38,6 +38,7 @@
                                                 deleteHint="{Boolean}true"
                                                 fieldLabel="Select Embed Type"
                                                 ignoreData="{Boolean}false"
+												required="{Boolean}true"
                                                 name="./embedoption"
                                                 vertical="{Boolean}false">
                                                 <granite:data
@@ -74,6 +75,7 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 deleteHint="{Boolean}true"
+												required="{Boolean}true"
                                                 fieldLabel="Select Embeddable"
                                                 name="./embedType">
                                                 <datasource
