@@ -43,10 +43,10 @@
                 var target = $(element).parent().data("cqDialogRadioShowhideTarget");
                 if (target) {
                     setVisibilityAndHandleFieldValidation($(target).parent().not(".hide"), false);
-        			setVisibilityAndHandleFieldValidation($(EMBEDDABLE_TYPE_SETTINGS_SELECTOR), false);
+                    setVisibilityAndHandleFieldValidation($(EMBEDDABLE_TYPE_SETTINGS_SELECTOR), false);
                     Coral.commons.ready(element, function(component) {
-                        if ($(component).attr('checked') == 'checked') {
-                         	showHideEmbedOptions(component, target);
+                        if ($(component).attr("checked") === "checked") {
+                            showHideEmbedOptions(component, target);
                         }
                         $(component).on("change", function(h) {
                             showHideEmbedOptions(this, target);
@@ -80,9 +80,9 @@
             if ($element.hasClass(EMBEDDABLE_TYPE_ELEMENT_SELECTOR.substring(1))) {
                 var target = $(element).data("cqDialogDropdownShowhideTarget");
                 // Handle Dialog dropdown too
-               showHide(element, target);
+                showHide(element, target);
             }
-			setVisibilityAndHandleFieldValidation($element.parent(), true);
+            setVisibilityAndHandleFieldValidation($element.parent(), true);
         });
     }
 
