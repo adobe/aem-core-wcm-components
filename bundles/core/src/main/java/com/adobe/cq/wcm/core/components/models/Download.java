@@ -75,7 +75,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the download title
      */
-    default String getTitle(){
+    default String getTitle() {
         throw new UnsupportedOperationException();
     }
 
@@ -85,7 +85,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the download description
      */
-    default String getDescription(){
+    default String getDescription() {
         throw new UnsupportedOperationException();
     }
 
@@ -94,7 +94,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the asset url
      */
-    default String getDownloadUrl(){
+    default String getDownloadUrl() {
         throw new UnsupportedOperationException();
     }
 
@@ -104,8 +104,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the button text
      */
-    default String getActionText()
-    {
+    default String getActionText() {
         throw new UnsupportedOperationException();
     }
 
@@ -115,8 +114,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the path to the image representation of the asset.
      */
-    default String getImagePath()
-    {
+    default String getImagePath() {
         throw new UnsupportedOperationException();
     }
 
@@ -125,8 +123,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the title header element type
      */
-    default String getTitleType()
-    {
+    default String getTitleType() {
         throw new UnsupportedOperationException();
     }
 
@@ -135,8 +132,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the size of download file
      */
-    default String getSize()
-    {
+    default String getSize() {
         throw new UnsupportedOperationException();
     }
 
@@ -145,8 +141,7 @@ public interface Download extends ComponentExporter {
      *
      * @return {@code true} if the size should be displayed, {@code false} otherwise
      */
-    default boolean displaySize()
-    {
+    default boolean displaySize() {
         throw new UnsupportedOperationException();
     }
 
@@ -155,24 +150,25 @@ public interface Download extends ComponentExporter {
      *
      * @return the format of the download file
      */
-    default String getFormat()
-    {
+    default String getFormat() {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Checks if an image should be displayed for the download file.
+     *
      * @return @code true} if the image should be displayed, {@code false} otherwise
      */
-    default boolean displayImage() { throw new UnsupportedOperationException(); }
+    default boolean displayImage() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Checks if the file format should be displayed.
      *
      * @return {@code true} if the format should be displayed, {@code false} otherwise
      */
-    default boolean displayFormat()
-    {
+    default boolean displayFormat() {
         throw new UnsupportedOperationException();
     }
 
@@ -181,8 +177,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the filename of the download file
      */
-    default String  getFilename()
-    {
+    default String getFilename() {
         throw new UnsupportedOperationException();
     }
 
@@ -191,8 +186,7 @@ public interface Download extends ComponentExporter {
      *
      * @return {@code true} if the filename should be displayed, {@code false} otherwise
      */
-    default boolean displayFilename()
-    {
+    default boolean displayFilename() {
         throw new UnsupportedOperationException();
     }
 
