@@ -79,10 +79,6 @@
                                                 fieldLabel="Heading Type"
                                                 name="./headingType">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <h1
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H1"
-                                                        value="h1"/>
                                                     <h2
                                                         jcr:primaryType="nt:unstructured"
                                                         text="H2"
