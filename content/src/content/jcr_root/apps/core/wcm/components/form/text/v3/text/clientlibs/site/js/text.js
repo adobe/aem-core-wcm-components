@@ -92,9 +92,8 @@
             if (this._properties.requiredMessage) {
                 event.target.setCustomValidity(this._properties.requiredMessage);
             }
-        } else if (this._properties.regexPattern) {
-            var regexValue = new RegExp(this._properties.regexPattern);
-            if (!regexValue.test(event.target.value)) {
+        } else if (event.target.validity.patternMismatch) {
+            if (this._properties.constraintMessage) {
                 event.target.setCustomValidity(this._properties.constraintMessage);
             }
         } else if (event.target.validity.typeMismatch) {
