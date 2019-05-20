@@ -55,7 +55,7 @@
         event.preventDefault();
         var getUrlModalID;
 
-        if (window.location.hash !== "") {
+        if (window.location.hash !== "" && window.location.hash !== "#") {
             getUrlModalID = getModalOpenBehavior();
             if (getUrlModalID) {
                 var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");

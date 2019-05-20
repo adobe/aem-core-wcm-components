@@ -32,12 +32,15 @@
                 var rootURL = $pathButton.attr("pickersrc");
                 var $pathValue = $pathButton.find("input");
                 $pathValue.val("");
+
+                var getPathChange = $("coral-taglist[name='" + PATHFIELD_NAME + "'] coral-tag");
+                if (getPathChange !== "") {
+                    getPathChange.remove();
+                }
                 if (value === CONTENT_FRAGMENT_VALUE) {
                     $pathButton.attr("pickersrc", rootURL.replace(/(root=).*?(&)/, "$1" + encodeURIComponent(CONTENT_FRAGMENT_PATH) + "$2"));
                 } else {
-
                     $pathButton.attr("pickersrc", rootURL.replace(/(root=).*?(&)/, "$1" + encodeURIComponent(EXPERIENCE_FRAGMENT_PATH) + "$2"));
-
                 }
 
             });

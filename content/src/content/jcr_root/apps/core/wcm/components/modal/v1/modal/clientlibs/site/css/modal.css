@@ -14,7 +14,14 @@
  * limitations under the License.
  ******************************************************************************/
 
-/* This customization is required to set z-index for modal view */
 .custom-modal {
     z-index: 999999;
+}
+
+/*=======Fixed applied for IOS fixed header scrolling issue===========*/
+.tingle-enabled {
+    position: static !important;
+}
+.tingle-modal__close {
+	overflow : hidden !important;
 }
