@@ -78,7 +78,9 @@
         $(target).filter("[data-showhidetargetvalue='" + value + "']").each(function(index, element) {
             var $element = $(element);
             if ($element.hasClass(EMBEDDABLE_TYPE_ELEMENT_SELECTOR.substring(1))) {
-                setVisibilityAndHandleFieldValidation($(EMBEDDABLE_TYPE_SETTINGS_SELECTOR), true);
+                var target = $(element).data("cqDialogDropdownShowhideTarget");
+                // Handle Dialog dropdown too
+               showHide(element, target);
             }
 			setVisibilityAndHandleFieldValidation($element.parent(), true);
         });

@@ -60,6 +60,7 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
                                                 checked="{Boolean}true"
+												required="{Boolean}true"
                                                 fieldDescription="Leave empty to use the page title."
                                                 fieldLabel="HTML Markup"
                                                 name="./markup">
