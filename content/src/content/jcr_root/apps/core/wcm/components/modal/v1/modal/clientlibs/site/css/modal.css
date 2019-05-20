@@ -18,10 +18,13 @@
     z-index: 999999;
 }
 
-/*=======Fixed applied for IOS fixed header scrolling issue===========*/
-.tingle-enabled {
-    position: static !important;
+
+/* Fix applied for IOS fixed header scrolling issue */
+
+body.tingle-enabled {
+    position: static;
 }
-.tingle-modal__close {
-	overflow : hidden !important;
+
+.tingle-enabled .custom-modal .tingle-modal__close {
+    overflow: hidden;
 }
