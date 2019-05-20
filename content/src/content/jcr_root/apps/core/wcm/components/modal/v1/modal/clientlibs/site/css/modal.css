@@ -17,14 +17,3 @@
 .custom-modal {
     z-index: 999999;
 }
-
-
-/* Fix applied for IOS fixed header scrolling issue */
-
-body.tingle-enabled {
-    position: static;
-}
-
-.tingle-enabled .custom-modal .tingle-modal__close {
-    overflow: hidden;
-}
