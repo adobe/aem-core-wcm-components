@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
-          xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-          jcr:primaryType="nt:unstructured"
-          jcr:title="Download"
-          sling:resourceType="cq/gui/components/authoring/dialog"
-          extraClientlibs="[core.wcm.components.download.v1.download.editor]">
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Download"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.download.v1.download.editor]">
     <content
+        granite:class="cmp-download__editor"
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/coral/foundation/container"
-        granite:class="cmp-download__editor">
+        sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
             <tabs
                 jcr:primaryType="nt:unstructured"
@@ -33,6 +32,7 @@
                                             <file
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                                allowUpload="{Boolean}false"
                                                 autoStart="{Boolean}false"
                                                 class="cq-droptarget"
                                                 fieldLabel="Download Asset"
@@ -66,9 +66,9 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
                                             <titleGroup
+                                                granite:hide="${cqDesign.titleHidden}"
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/well"
-                                                granite:hide="${cqDesign.titleHidden}">
+                                                sling:resourceType="granite/ui/components/coral/foundation/well">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <title
                                                         jcr:primaryType="nt:unstructured"
@@ -80,18 +80,18 @@
                                                     <titleFromLinkedAsset
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
                                                         fieldDescription="When checked, populate the title with the download asset's title."
-                                                        text="Get title from DAM asset"
                                                         name="./titleFromAsset"
-                                                        value="{Boolean}true"
+                                                        text="Get title from DAM asset"
                                                         uncheckedValue="{Boolean}false"
-                                                        checked="{Boolean}true"/>
+                                                        value="{Boolean}true"/>
                                                 </items>
                                             </titleGroup>
                                             <descriptionGroup
+                                                granite:hide="${cqDesign.descriptionHidden}"
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/well"
-                                                granite:hide="${cqDesign.descriptionHidden}">
+                                                sling:resourceType="granite/ui/components/coral/foundation/well">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <description
                                                         jcr:primaryType="nt:unstructured"
@@ -221,20 +221,19 @@
                                                                 </dialogFullScreen>
                                                                 <tableEditOptions
                                                                     jcr:primaryType="nt:unstructured"
-                                                                    toolbar="[table#insertcolumn-before,table#insertcolumn-after,table#removecolumn,-,table#insertrow-before,table#insertrow-after,table#removerow,-,table#mergecells-right,table#mergecells-down,table#mergecells,table#splitcell-horizontal,table#splitcell-vertical,-,table#selectrow,table#selectcolumn,-,table#ensureparagraph,-,table#modifytableandcell,table#removetable,-,undo#undo,undo#redo,-,table#exitTableEditing,-]">
-                                                                </tableEditOptions>
+                                                                    toolbar="[table#insertcolumn-before,table#insertcolumn-after,table#removecolumn,-,table#insertrow-before,table#insertrow-after,table#removerow,-,table#mergecells-right,table#mergecells-down,table#mergecells,table#splitcell-horizontal,table#splitcell-vertical,-,table#selectrow,table#selectcolumn,-,table#ensureparagraph,-,table#modifytableandcell,table#removetable,-,undo#undo,undo#redo,-,table#exitTableEditing,-]"/>
                                                             </cui>
                                                         </uiSettings>
                                                     </description>
                                                     <descriptionFromLinkedAsset
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
                                                         fieldDescription="When checked, populate the description with the download asset's description."
-                                                        text="Get description from DAM asset"
                                                         name="./descriptionFromAsset"
-                                                        value="{Boolean}true"
+                                                        text="Get description from DAM asset"
                                                         uncheckedValue="{Boolean}false"
-                                                        checked="{Boolean}true"/>
+                                                        value="{Boolean}true"/>
                                                 </items>
                                             </descriptionGroup>
                                             <actionText
