@@ -61,21 +61,26 @@ public class EmbedAllOptionsDataSourceServletTest {
     @Before
     public void setUp() {
 	Resource embeddable = context.resourceResolver().getResource("/apps/wcm-examples/embeddables");
+	Resource embeddable2 = context.resourceResolver().getResource("/apps/wcm-examples/chatbot");
 	List<Resource> embeddableResources = new ArrayList<>();
 	embeddableResources.add(embeddable);
+	embeddableResources.add(embeddable2);
 	when(request.getResourceResolver()).thenReturn(resolver);
 
-	final ValueMap properties = ResourceUtil.getValueMap(embeddable);
 	final String rt = embeddable.getPath().substring("/apps".length() + 1);
 	List<Resource> outputResources = new ArrayList<>();
-	Resource resources = new EmbeddableTypeResource(new EmbedComponentDescription(rt, embeddable.getName(),
-		properties), resolver);
-	outputResources.add(resources);
+	Resource resource1 = new EmbeddableTypeResource(new EmbedComponentDescription(rt, embeddable.getName(),
+		ResourceUtil.getValueMap(embeddable)), resolver);
+	Resource resource2 = new EmbeddableTypeResource(new EmbedComponentDescription(rt, embeddable2.getName(),
+		ResourceUtil.getValueMap(embeddable2)), resolver);
+	outputResources.add(resource1);
+	outputResources.add(resource2);
 	when(request.getAttribute(DataSource.class.getName())).thenReturn(
 		new SimpleDataSource(outputResources.iterator()));
 	when(resolver.findResources(any(), any())).thenReturn(embeddableResources.iterator());
 	when(resolver.getSearchPath()).thenReturn(context.resourceResolver().getSearchPath());
 	when(resolver.getResource("wcm-examples/embeddables/cq:dialog")).thenReturn(embeddable.getChild("cq:dialog"));
+	when(resolver.getResource("wcm-examples/chatbot/cq:dialog")).thenReturn(embeddable2.getChild("cq:dialog"));
     }
 
     @Test

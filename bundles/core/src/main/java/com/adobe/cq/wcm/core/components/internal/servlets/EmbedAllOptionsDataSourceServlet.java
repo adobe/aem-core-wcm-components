@@ -139,39 +139,24 @@ public class EmbedAllOptionsDataSourceServlet extends SlingSafeMethodsServlet {
 
 	private final String resourceType;
 	private final String title;
-	private final String hint;
 	private final int order;
 
 	public EmbedComponentDescription(final String rt, final String defaultName, final ValueMap props) {
 	    this.resourceType = rt;
 	    this.title = props.get(JcrConstants.JCR_TITLE, defaultName);
 	    this.order = props.get(FormsConstants.COMPONENT_PROPERTY_ORDER, 0);
-	    this.hint = props.get(FormsConstants.COMPONENT_PROPERTY_HINT, String.class);
 	}
 
-	/**
-	 * @see com.day.cq.wcm.foundation.forms.FormsManager.ComponentDescription#getResourceType()
-	 */
 	public String getResourceType() {
 	    return this.resourceType;
 	}
 
-	/**
-	 * @see com.day.cq.wcm.foundation.forms.FormsManager.ComponentDescription#getTitle()
-	 */
 	public String getTitle() {
 	    return this.title;
 	}
 
 	public int getOrder() {
 	    return this.order;
-	}
-
-	/**
-	 * @see com.day.cq.wcm.foundation.forms.FormsManager.ComponentDescription#getHint()
-	 */
-	public String getHint() {
-	    return this.hint;
 	}
 
 	/**
