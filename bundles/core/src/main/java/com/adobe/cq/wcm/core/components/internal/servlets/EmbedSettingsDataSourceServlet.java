@@ -52,12 +52,12 @@ public class EmbedSettingsDataSourceServlet extends SlingSafeMethodsServlet {
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
 	    throws ServletException, IOException {
-	SimpleDataSource actionTypeSettingsDataSource = new SimpleDataSource(getSettingsDialogs(request).iterator());
-	request.setAttribute(DataSource.class.getName(), actionTypeSettingsDataSource);
+	SimpleDataSource embeddableSettingsDataSource = new SimpleDataSource(getSettingsDialogs(request).iterator());
+	request.setAttribute(DataSource.class.getName(), embeddableSettingsDataSource);
     }
 
     private List<Resource> getSettingsDialogs(@NotNull SlingHttpServletRequest request) {
-	List<Resource> actionTypeSettingsResources = new ArrayList<>();
+	List<Resource> embeddableSettingsResources = new ArrayList<>();
 	ResourceResolver resolver = request.getResourceResolver();
 	Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
 	ContentPolicyManager policyMgr = resolver.adaptTo(ContentPolicyManager.class);
@@ -71,13 +71,13 @@ public class EmbedSettingsDataSourceServlet extends SlingSafeMethodsServlet {
 			for (String embedType : embedTypes) {
 			    Resource dialogResource = resolver.getResource(embedType + "/" + FormConstants.NN_DIALOG);
 			    if (dialogResource != null) {
-				actionTypeSettingsResources.add(dialogResource);
+				embeddableSettingsResources.add(dialogResource);
 			    }
 			}
 		    }
 		}
 	    }
 	}
-	return actionTypeSettingsResources;
+	return embeddableSettingsResources;
     }
 }
