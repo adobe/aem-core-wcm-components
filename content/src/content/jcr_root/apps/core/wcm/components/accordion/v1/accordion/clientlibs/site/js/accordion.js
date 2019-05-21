@@ -87,7 +87,7 @@
                     if (that._elementItems.length === 1) {
                         /*
                          * if there is only 1 accordion item, always expand it in author
-                         * mode, even if it is not author to be initially expanded.
+                         * mode, even if it is not authored to be initially expanded.
                          */
                         handleAuthoring(0);
                     }
@@ -110,10 +110,10 @@
         }
 
         /**
-         * Returns the index of the initially expanded item, if no item is expanded returns 0.
+         * Returns the index of the initially expanded item, if no item is expanded returns -1.
          *
          * @param {Array} accordionItems Accordion items
-         * @returns {Number} Index of the expanded item, 0 if none are expanded
+         * @returns {Number} Index of the expanded item, -1 if none are expanded
          */
         function getInitiallyExpandedAccordionItem(accordionItems) {
             if (accordionItems) {
