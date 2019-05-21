@@ -64,7 +64,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/component.svg"
-                    linkURL="/content/core-components-examples/library/breadcrumb"
+                    linkURL="/content/core-components-examples/library/breadcrumb/breadcrumb/breadcrumb"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
