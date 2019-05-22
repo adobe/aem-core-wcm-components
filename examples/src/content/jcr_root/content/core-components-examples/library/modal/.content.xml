@@ -116,7 +116,7 @@
                             sling:resourceType="core/wcm/components/modal/v1/modal"
                             id="modal-123"
                             open="false"
-                            path="/content/dam/modalcontentfragment"
+                            path="/content/dam/core-components-examples/library/sample-assets/simple-fragment"
                             title="Content Fragment"
                             type="cf"/>
                     </component>
@@ -142,7 +142,7 @@
                     jcr:lastModified="{Date}2018-12-06T19:26:38.094+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Experience Fragment"
+                    jcr:title="CTA"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h3"/>
                 <text_2
@@ -152,66 +152,9 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Modal with experience fragment to be displayed in modal view.&lt;/p>&#xa;"
-                    textIsRich="true"/>
-                <demo_2
-                    jcr:created="{Date}2018-12-07T12:38:18.713+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T12:38:18.713+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <modal
-                            jcr:created="{Date}2019-05-20T17:23:10.628+05:30"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-05-20T17:23:58.522+05:30"
-                            jcr:lastModifiedBy="admin"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/modal/v1/modal"
-                            id="modal-456"
-                            open="false"
-                            path="/content/experience-fragments/mid_markets/mmfxtest/master"
-                            title="Experience Fragment"
-                            type="xf"/>
-                    </component>
-                    <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
-                        <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
-                        <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
-                    </info>
-                </demo_2>
-                <title_3
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-06T19:26:38.094+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="CTA"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h3"/>
-                <text_3
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-06T19:27:20.010+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>Modal with CTA Links.&lt;/p>&#xa;"
                     textIsRich="true"/>
-                <demo_3
+                <demo_2
                     jcr:created="{Date}2018-12-07T12:38:18.713+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T12:38:18.713+01:00"
@@ -250,7 +193,7 @@
                             sling:resourceType="core-components-examples/components/demo/json"
                             reference="../../component"/>
                     </info>
-                </demo_3>
+                </demo_2>
             </responsivegrid>
         </root>
         <image jcr:primaryType="nt:unstructured">
