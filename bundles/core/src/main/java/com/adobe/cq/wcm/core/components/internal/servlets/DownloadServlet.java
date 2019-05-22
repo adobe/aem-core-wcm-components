@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.servlet.Servlet;
 import javax.servlet.ServletOutputStream;
@@ -49,6 +50,9 @@ public class DownloadServlet extends SlingAllMethodsServlet {
 
 
     public static final String SELECTOR = "cmp_download";
+    public static final String INLINE_SELECTOR = "inline";
+
+    private static final String CONTENT_DISPOSITION = "Content-Disposition";
 
     @Override
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
@@ -67,7 +71,11 @@ public class DownloadServlet extends SlingAllMethodsServlet {
             return;
         }
 
-        sendResponse(bytes, asset, response);
+        sendResponse(bytes, asset, response, checkForInlineSelector(request));
+    }
+
+    private boolean checkForInlineSelector(SlingHttpServletRequest request) {
+        return Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(INLINE_SELECTOR);
     }
 
 
@@ -87,11 +95,14 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         return bytes;
     }
 
-    private void sendResponse(byte[] bytes, Asset asset, SlingHttpServletResponse response) throws IOException {
+    private void sendResponse(byte[] bytes, Asset asset, SlingHttpServletResponse response, boolean inline) throws IOException {
+        response.setContentType(asset.getMimeType());
         response.setContentLength(bytes.length);
-
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + asset.getName() + "\"");
-
+        if (inline) {
+            response.setHeader(CONTENT_DISPOSITION, "inline");
+        } else {
+            response.setHeader(CONTENT_DISPOSITION, "attachment; filename=\"" + asset.getName() + "\"");
+        }
         ServletOutputStream outputStream = response.getOutputStream();
         outputStream.write(bytes);
         outputStream.close();

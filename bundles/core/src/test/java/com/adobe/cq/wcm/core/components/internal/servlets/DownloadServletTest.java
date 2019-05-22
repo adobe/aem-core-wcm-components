@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,23 +38,38 @@ public class DownloadServletTest {
     public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
 
 
-    DownloadServlet downloadServlet;
+    private DownloadServlet downloadServlet;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUp() throws Exception {
         AEM_CONTEXT.load().json(TEST_BASE + TEST_CONTENT_DAM_JSON, "/content/dam/core/documents");
         AEM_CONTEXT.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_PATH + "/jcr:content/renditions/original");
+    }
+
+    @Before
+    public void init() {
         downloadServlet = new DownloadServlet();
     }
 
     @Test
-    public void doGet() throws Exception {
+    public void testAttachmentDownload() throws Exception {
         AEM_CONTEXT.currentResource(PDF_ASSET_PATH);
-        AEM_CONTEXT.requestPathInfo().setSelectorString(DownloadServlet.SELECTOR);
         AEM_CONTEXT.requestPathInfo().setSelectorString(DownloadServlet.SELECTOR);
         AEM_CONTEXT.requestPathInfo().setExtension("pdf");
         downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
         assertTrue(AEM_CONTEXT.response().containsHeader("Content-Disposition"));
+        assertEquals("attachment; filename=\"Download_Test_PDF.pdf\"", AEM_CONTEXT.response().getHeader("Content-Disposition"));
+        assertEquals(8192, AEM_CONTEXT.response().getBufferSize());
+    }
+
+    @Test
+    public void testInlineDownload() throws Exception {
+        AEM_CONTEXT.currentResource(PDF_ASSET_PATH);
+        AEM_CONTEXT.requestPathInfo().setSelectorString(DownloadServlet.SELECTOR + "." + DownloadServlet.INLINE_SELECTOR);
+        AEM_CONTEXT.requestPathInfo().setExtension("pdf");
+        downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
+        assertTrue(AEM_CONTEXT.response().containsHeader("Content-Disposition"));
+        assertEquals("inline", AEM_CONTEXT.response().getHeader("Content-Disposition"));
         assertEquals(8192, AEM_CONTEXT.response().getBufferSize());
     }
 }

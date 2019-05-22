@@ -35,6 +35,11 @@ public interface Download extends ComponentExporter {
      */
     String PN_DESCRIPTION_FROM_ASSET = "descriptionFromAsset";
 
+    /**
+     * Name of the resource property that defines whether or not the download item should be displayed inline vs. attachment.
+     */
+    String PN_INLINE = "inline";
+
 
     /**
      * Name of the policy property that defines the text to be displayed on the Call-to-Action.

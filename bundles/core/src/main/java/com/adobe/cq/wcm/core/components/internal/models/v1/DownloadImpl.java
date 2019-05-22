@@ -25,6 +25,7 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +47,8 @@ import java.util.Calendar;
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Download.class, ComponentExporter.class},
        resourceType = DownloadImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class DownloadImpl implements Download {
 
     private static final Logger LOG = LoggerFactory.getLogger(DownloadImpl.class);
@@ -82,6 +84,8 @@ public class DownloadImpl implements Download {
 
     private boolean descriptionFromAsset = false;
 
+    private boolean inline = false;
+
     private boolean displayImage;
 
     private boolean displaySize;
@@ -90,10 +94,12 @@ public class DownloadImpl implements Download {
 
     private boolean displayFilename;
 
-    @ValueMapValue(optional = true, name = JcrConstants.JCR_TITLE)
+    @ValueMapValue(optional = true,
+                   name = JcrConstants.JCR_TITLE)
     private String title;
 
-    @ValueMapValue(optional = true, name = JcrConstants.JCR_DESCRIPTION)
+    @ValueMapValue(optional = true,
+                   name = JcrConstants.JCR_DESCRIPTION)
     private String description;
 
     @ValueMapValue(optional = true)
@@ -118,6 +124,7 @@ public class DownloadImpl implements Download {
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         titleFromAsset = properties.get(PN_TITLE_FROM_ASSET, titleFromAsset);
         descriptionFromAsset = properties.get(PN_DESCRIPTION_FROM_ASSET, descriptionFromAsset);
+        inline = properties.get(PN_INLINE, inline);
         if (currentStyle != null) {
             if (StringUtils.isBlank(actionText)) {
                 actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
@@ -154,7 +161,7 @@ public class DownloadImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    downloadUrl = downloadAsset.getPath() + "." + DownloadServlet.SELECTOR + "." + extension;
+                    downloadUrl = populateDownloadUrl(downloadAsset);
 
                     StringBuilder imagePathBuilder = new StringBuilder();
 
@@ -182,13 +189,27 @@ public class DownloadImpl implements Download {
 
                     size = null;
                     Object rawFileSizeObject = downloadAsset.getMetadata(DamConstants.DAM_SIZE);
-                    if(rawFileSizeObject != null){
-                        long rawFileSize = (Long)rawFileSizeObject;
+                    if (rawFileSizeObject != null) {
+                        long rawFileSize = (Long) rawFileSizeObject;
                         size = FileUtils.byteCountToDisplaySize(rawFileSize);
                     }
                 }
             }
         }
+    }
+
+    private String populateDownloadUrl(Asset downloadAsset) {
+        StringBuilder downloadUrlBuilder = new StringBuilder();
+        downloadUrlBuilder.append(downloadAsset.getPath())
+                .append(".")
+                .append(DownloadServlet.SELECTOR)
+                .append(".");
+        if (inline) {
+            downloadUrlBuilder.append(DownloadServlet.INLINE_SELECTOR)
+                    .append(".");
+        }
+        downloadUrlBuilder.append(extension);
+        return downloadUrlBuilder.toString();
     }
 
     @Nonnull
