@@ -14,13 +14,28 @@
  * limitations under the License.
  ******************************************************************************/
 
-(function(tingle, root) {
+(function(root) {
     "use strict";
+    root.modelLib = {
+        lib: null,
+        setLibrary: function(currLib, config) {
+            if (currLib) {
+                this.currLib = currLib;
+            }
+        },
+        setContent: function(content) {
+            this.lib.setContent(content);
+        },
+        open: function() {
+            this.lib.open();
+        },
+        initializeModel: function(config, html) {
+            if (this.currLib) {
+                this.lib = new this.currLib(config);
+            }
+            this.open();
+            this.setContent(html);
+        }
+    };
 
-    function ModalLib(opts) {
-        return new root.tingle.modal(opts);
-    }
-
-    root.ModalLib = ModalLib;
-
-})(tingle, window);
+})(window);

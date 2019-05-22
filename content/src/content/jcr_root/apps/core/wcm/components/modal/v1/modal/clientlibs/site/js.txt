@@ -14,5 +14,5 @@
 # limitations under the License.
 ###############################################################################
 
-js/modal.js
 js/modal-lib.js
+js/modal.js

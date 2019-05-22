@@ -14,8 +14,27 @@
  * limitations under the License.
  ******************************************************************************/
 
-(function() {
+var popupModal = tingle;
+(function(popupModal, window) {
     "use strict";
+    var config = {
+        cssClass: ["custom-modal"],
+        onClose: function() {
+            window.location.hash = "";
+        }
+    };
+
+    window.modelLib.setLibrary(popupModal.modal);
+
+    function getDataContentUrl() {
+        var getUrlModalId = getModalOpenBehavior();
+        if (getUrlModalId) {
+            var modalIdEl = document.getElementById(getUrlModalId);
+            if (modalIdEl) {
+                return modalIdEl.getAttribute("data-content-url");
+            }
+        }
+    }
 
     function getModalOpenBehavior() {
         var hashVal = window.location.hash;
@@ -28,51 +47,36 @@
         }
     }
 
+    function openModalBasedOnHash(event) {
+        event.preventDefault();
+
+        if (window.location.hash !== "" && window.location.hash !== "#") {
+            var modalContentUrl = getDataContentUrl();
+            if (modalContentUrl) {
+                fetchData(modalContentUrl);
+            }
+        }
+    }
+
     function fetchData(url) {
         var xhttp;
         xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
-                initializeModal(this.responseText);
+                window.modelLib.initializeModel(config, this.responseText);
             }
         };
         xhttp.open("GET", url, true);
         xhttp.send();
     }
 
-    function initializeModal(html) {
-        var modalOpen = new window.ModalLib({
-            cssClass: ["custom-modal"],
-            onClose: function() {
-                window.location.hash = "";
-            }
-        });
-        modalOpen.open();
-        modalOpen.setContent(html);
-    }
-
-    function openModalBasedOnHash(event) {
-        event.preventDefault();
-        var getUrlModalID;
-
-        if (window.location.hash !== "" && window.location.hash !== "#") {
-            getUrlModalID = getModalOpenBehavior();
-            if (getUrlModalID) {
-                var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
-                fetchData(modalContentUrl, initializeModal);
-            }
-        }
-
-    }
     window.addEventListener("hashchange", openModalBasedOnHash);
 
     document.addEventListener("DOMContentLoaded", function() {
-        var getUrlModalID = getModalOpenBehavior();
-        if (getUrlModalID) {
-            var modalContentUrl = document.getElementById(getUrlModalID).getAttribute("data-content-url");
+        var modalContentUrl = getDataContentUrl();
+        if (modalContentUrl) {
             fetchData(modalContentUrl);
         }
-
     });
 
-}());
+}(popupModal, window));
