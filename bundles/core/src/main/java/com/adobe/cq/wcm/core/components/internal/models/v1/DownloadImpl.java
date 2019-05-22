@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -66,6 +67,7 @@ public class DownloadImpl implements Download {
 
     @ScriptVariable
     private ValueMap properties;
+
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
@@ -140,7 +142,19 @@ public class DownloadImpl implements Download {
                         lastModified = assetLastModified;
                     }
 
-                    downloadUrl = downloadAsset.getPath();
+                    filename = downloadAsset.getName();
+
+                    format = downloadAsset.getMetadataValue(DamConstants.DC_FORMAT);
+
+                    if (StringUtils.isNoneEmpty(format)) {
+                        extension = mimeTypeService.getExtension(format);
+                    }
+
+                    if (StringUtils.isEmpty(extension)) {
+                        extension = FilenameUtils.getExtension(filename);
+                    }
+
+                    downloadUrl = downloadAsset.getPath() + "." + DownloadServlet.SELECTOR + "." + extension;
 
                     StringBuilder imagePathBuilder = new StringBuilder();
 
@@ -171,18 +185,6 @@ public class DownloadImpl implements Download {
                     if(rawFileSizeObject != null){
                         long rawFileSize = (Long)rawFileSizeObject;
                         size = FileUtils.byteCountToDisplaySize(rawFileSize);
-                    }
-
-                    filename = downloadAsset.getName();
-
-                    format = downloadAsset.getMetadataValue(DamConstants.DC_FORMAT);
-
-                    if (StringUtils.isNoneEmpty(format)) {
-                        extension = mimeTypeService.getExtension(format);
-                    }
-
-                    if (StringUtils.isEmpty(extension)) {
-                        extension = FilenameUtils.getExtension(filename);
                     }
                 }
             }

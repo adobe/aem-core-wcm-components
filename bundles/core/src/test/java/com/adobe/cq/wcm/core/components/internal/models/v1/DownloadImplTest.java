@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.wcm.api.components.Component;
@@ -48,6 +49,7 @@ public class DownloadImplTest {
     private static final String CONTENT_ROOT = "/content";
     private static final String PDF_BINARY_NAME = "Download_Test_PDF.pdf";
     private static final String PDF_ASSET_PATH = "/content/dam/core/documents/" + PDF_BINARY_NAME;
+    private static final String PDF_ASSET_DOWNLOAD_PATH = PDF_ASSET_PATH + "." + DownloadServlet.SELECTOR + ".pdf";
     private static final String TEST_CONTENT_DAM_JSON = "/test-content-dam.json";
     private static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT_PAGE = "/content/downloads";
@@ -94,7 +96,7 @@ public class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_1);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
+        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getDownloadUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -107,7 +109,7 @@ public class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_2);
         assertEquals(DAM_TITLE, download.getTitle());
         assertEquals(DAM_DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_PATH, download.getDownloadUrl());
+        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getDownloadUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
