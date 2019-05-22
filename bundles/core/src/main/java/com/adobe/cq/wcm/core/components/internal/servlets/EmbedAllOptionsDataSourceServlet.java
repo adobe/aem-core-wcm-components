@@ -155,19 +155,11 @@ public class EmbedAllOptionsDataSourceServlet extends SlingSafeMethodsServlet {
 	    return this.title;
 	}
 
-	public int getOrder() {
-	    return this.order;
-	}
-
 	/**
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(EmbedComponentDescription o) {
 	    if (o == null) {
-		return 0;
-	    }
-
-	    if (this.getClass() != o.getClass()) {
 		return 0;
 	    }
 	    final EmbedComponentDescription obj = (EmbedComponentDescription) o;

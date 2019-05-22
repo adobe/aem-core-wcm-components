@@ -32,8 +32,6 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.EmbedConstants;
 import com.adobe.granite.ui.components.Value;
@@ -56,16 +54,16 @@ public class EmbedAllowedOptionsDataSourceServlet extends SlingSafeMethodsServle
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
 	    throws ServletException, IOException {
-	SimpleDataSource actionTypeDataSource = new SimpleDataSource(getAllowedTypes(request).iterator());
-	request.setAttribute(DataSource.class.getName(), actionTypeDataSource);
+	SimpleDataSource embedTypeDataSource = new SimpleDataSource(getAllowedEmbeds(request).iterator());
+	request.setAttribute(DataSource.class.getName(), embedTypeDataSource);
     }
 
-    private List<Resource> getAllowedTypes(@NotNull SlingHttpServletRequest request) {
+    private List<Resource> getAllowedEmbeds(@NotNull SlingHttpServletRequest request) {
 	List<Resource> allowedTypes = new ArrayList<>();
 	ResourceResolver resolver = request.getResourceResolver();
 	Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
 	ContentPolicyManager policyMgr = resolver.adaptTo(ContentPolicyManager.class);
-	if (null != contentResource && null != policyMgr) {
+	if (null != policyMgr) {
 	    ContentPolicy policy = policyMgr.getPolicy(contentResource);
 	    if (policy != null) {
 		ValueMap props = policy.getProperties();

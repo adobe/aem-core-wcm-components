@@ -58,13 +58,16 @@ public class EmbedAllOptionsDataSourceServletTest {
 
     private EmbedAllOptionsDataSourceServlet dataSourceServlet;
 
+    List<Resource> embeddableResources = new ArrayList<>();
+
     @Before
     public void setUp() {
 	Resource embeddable = context.resourceResolver().getResource("/apps/wcm-examples/embeddables");
 	Resource embeddable2 = context.resourceResolver().getResource("/apps/wcm-examples/chatbot");
-	List<Resource> embeddableResources = new ArrayList<>();
+	Resource embeddable3 = context.resourceResolver().getResource("/apps/wcm-examples/social");
 	embeddableResources.add(embeddable);
 	embeddableResources.add(embeddable2);
+	embeddableResources.add(embeddable3);
 	when(request.getResourceResolver()).thenReturn(resolver);
 
 	final String rt = embeddable.getPath().substring("/apps".length() + 1);
@@ -95,6 +98,12 @@ public class EmbedAllOptionsDataSourceServletTest {
 	ValueMap valueMap = resource.adaptTo(ValueMap.class);
 	assertEquals("You tube", valueMap.get(TextValueDataResourceSource.PN_TEXT, String.class));
 	assertEquals("wcm-examples/embeddables", valueMap.get(TextValueDataResourceSource.PN_VALUE, String.class));
+	EmbedComponentDescription embed1 = new EmbedComponentDescription(null, embeddableResources.get(1).getName(),
+		ResourceUtil.getValueMap(embeddableResources.get(1)));
+	EmbedComponentDescription embed2 = new EmbedComponentDescription(null, embeddableResources.get(0).getName(),
+		ResourceUtil.getValueMap(embeddableResources.get(0)));
+	assertEquals(false, embed1.equals(embed2));
+	assertNotNull(embed1.hashCode());
     }
 
 }
