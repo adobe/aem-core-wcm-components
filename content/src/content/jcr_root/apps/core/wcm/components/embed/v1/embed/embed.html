@@ -16,10 +16,12 @@
 <sly data-sly-use.templates="core/wcm/components/commons/v1/templates.html"/>
 <sly data-sly-test.dualModeEnabled="${currentStyle.enableHtmlMode && currentStyle.enableSelectionMode}">
 	<div data-sly-test="${properties.embedoption=='htmlMode'}">${properties.markup @ context = 'html'}</div>
-	<div data-sly-test="${properties.embedoption=='embeddableMode'}" data-sly-resource="${resource.path @ resourceType=properties.embedType, wcmmode='disabled'}" ></div>
+	<div data-sly-test="${(properties.embedoption=='embeddableMode') && properties.embedType}" data-sly-resource="${resource.path @ resourceType=properties.embedType, wcmmode='disabled'}" ></div>
 </sly>
 <sly data-sly-test="${!dualModeEnabled}">
     <div data-sly-test="${currentStyle.enableHtmlMode}">${properties.markup @ context = 'html'}</div>
 	<div data-sly-test="${currentStyle.enableSelectionMode && properties.embedType}" data-sly-resource="${resource.path @ resourceType=properties.embedType, wcmmode='disabled'}" ></div>
-</sly>    
-<sly data-sly-call="${templates.placeholder @ isEmpty = (!(properties.embedType || properties.markup) || !(currentStyle.enableHtmlMode || currentStyle.enableSelectionMode))}"></sly>
+</sly>
+
+<sly data-sly-call="${templates.placeholder @ isEmpty = !((!dualModeEnabled && ((currentStyle.enableHtmlMode && properties.markup) || (currentStyle.enableSelectionMode && properties.embedType)))
+|| (dualModeEnabled && ((properties.embedoption=='htmlMode' && properties.markup)||(properties.embedoption=='embeddableMode' && properties.embedType))))}"></sly>
