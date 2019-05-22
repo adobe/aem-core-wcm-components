@@ -61,7 +61,7 @@ public class EmbedSettingsDataSourceServlet extends SlingSafeMethodsServlet {
 	ResourceResolver resolver = request.getResourceResolver();
 	Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
 	ContentPolicyManager policyMgr = resolver.adaptTo(ContentPolicyManager.class);
-	if (null != contentResource && null != policyMgr) {
+	if (null != policyMgr) {
 	    ContentPolicy policy = policyMgr.getPolicy(contentResource);
 	    if (policy != null) {
 		ValueMap props = policy.getProperties();

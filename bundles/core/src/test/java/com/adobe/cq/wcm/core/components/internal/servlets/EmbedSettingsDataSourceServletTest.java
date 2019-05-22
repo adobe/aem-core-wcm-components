@@ -17,8 +17,6 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -41,13 +39,13 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.google.common.base.Function;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmbedAllowedOptionsDataSourceServletTest {
+public class EmbedSettingsDataSourceServletTest {
 
     @Rule
     public AemContext context = CoreComponentTestContext.createContext("/embed/v1/datasource/embedalloweddatasource",
 	    "/apps");
 
-    private EmbedAllowedOptionsDataSourceServlet dataSourceServlet;
+    private EmbedSettingsDataSourceServlet dataSourceServlet;
 
     @Mock
     private ContentPolicyManager contentPolicyManager;
@@ -55,29 +53,24 @@ public class EmbedAllowedOptionsDataSourceServletTest {
     @Mock
     private ContentPolicy contentPolicy;
 
-
     @Before
     public void setUp() {
 
 	Resource policyResource = context.resourceResolver().getResource("/apps/conf/policy_1558011912823");
 	ValueMap properties = ResourceUtil.getValueMap(policyResource);
-	dataSourceServlet = new EmbedAllowedOptionsDataSourceServlet();
+	dataSourceServlet = new EmbedSettingsDataSourceServlet();
 	registerContentPolicyManager();
 	when(contentPolicyManager.getPolicy(context.currentResource())).thenReturn(contentPolicy);
 	when(contentPolicy.getProperties()).thenReturn(properties);
     }
 
     @Test
-    public void testEmbedDataSource() throws Exception {
+    public void testGetSettingsDialogs() throws Exception {
 	dataSourceServlet.doGet(context.request(), context.response());
 	DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
 	assertNotNull(dataSource);
 	dataSource.iterator().forEachRemaining(resource -> {
 	    assertNotNull(resource);
-	    assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
-            TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource)resource;
-            assertTrue(textValueDataResourceSource.getText().matches("Select|Chat bot|Social"));
-            assertTrue(textValueDataResourceSource.getValue().matches("^$|.*\\b(wcm-examples)\\b.*"));
 	});
     }
 
