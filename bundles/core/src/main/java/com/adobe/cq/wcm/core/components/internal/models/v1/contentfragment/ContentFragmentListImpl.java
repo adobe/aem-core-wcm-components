@@ -71,7 +71,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
 
     public static final String DEFAULT_DAM_PARENT_PATH = "/content/dam";
     
-    public static final int DEFAULT_RESULT_LIMIT = 10;
+    public static final int DEFAULT_MAX_ITEMS = -1;
 
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
@@ -94,9 +94,9 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     @ValueMapValue(name = ContentFragmentList.PN_PARENT_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String parentPath;
 
-    @ValueMapValue(name = ContentFragmentList.PN_RESULT_LIMIT, injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Default(intValues = DEFAULT_RESULT_LIMIT)
-    private int resultLimit;
+    @ValueMapValue(name = ContentFragmentList.PN_MAX_ITEMS, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(intValues = DEFAULT_MAX_ITEMS)
+    private int maxItems;
 
     private List<DAMContentFragment> items = new ArrayList<>();
 
@@ -127,7 +127,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
         Map<String, String> queryParameterMap = new HashMap<>();
         queryParameterMap.put("path", parentPath);
         queryParameterMap.put("type", "dam:Asset");
-        queryParameterMap.put("p.limit", Integer.toString(resultLimit));
+        queryParameterMap.put("p.limit", Integer.toString(maxItems));
         queryParameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/data/cq:model");
         queryParameterMap.put("1_property.value", modelPath);
 

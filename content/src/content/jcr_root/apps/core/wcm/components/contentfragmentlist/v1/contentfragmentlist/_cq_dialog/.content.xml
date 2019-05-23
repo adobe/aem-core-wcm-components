@@ -53,6 +53,14 @@
                                         fieldLabel="Tags"
                                         multiple="{Boolean}true"
                                         name="./tagNames"/>
+                                    <maxItems
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                        fieldDescription="Maximum number of items displayed in list. Empty for all items."
+                                        fieldLabel="Max Items"
+                                        min="{Long}0"
+                                        value="{Long}10"
+                                        name="./maxItems"/>
                                 </items>
                             </column>
                         </items>
@@ -92,27 +100,6 @@
                             </column>
                         </items>
                     </elements>
-                    <results
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Results"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <column
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <resultLimit
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                        fieldDescription="Maximum number of fragments displayed, defaults to 10. Enter -1 for all items"
-                                        fieldLabel="Result Limit"
-                                        min="{Long}-1"
-                                        name="./resultLimit"/>
-                                </items>
-                            </column>
-                        </items>
-                    </results>
                 </items>
             </tabs>
         </items>

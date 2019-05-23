@@ -72,7 +72,7 @@ public interface ContentFragmentList extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.1.0
      */
-    String PN_RESULT_LIMIT = "resultLimit";
+    String PN_MAX_ITEMS= "maxItems";
 
     /**
      * Returns a list of {@link DAMContentFragment content fragments}.
