@@ -54,6 +54,7 @@ public class DownloadServletTest {
 
     @Test
     public void testAttachmentDownload() throws Exception {
+        AEM_CONTEXT.request().setHeader("If-Modified-Since", "");
         AEM_CONTEXT.requestPathInfo().setSelectorString(DownloadServlet.SELECTOR);
         AEM_CONTEXT.requestPathInfo().setExtension("pdf");
         downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
@@ -64,6 +65,7 @@ public class DownloadServletTest {
 
     @Test
     public void testInlineDownload() throws Exception {
+        AEM_CONTEXT.request().setHeader("If-Modified-Since", "");
         AEM_CONTEXT.requestPathInfo().setSelectorString(DownloadServlet.SELECTOR + "." + DownloadServlet.INLINE_SELECTOR);
         AEM_CONTEXT.requestPathInfo().setExtension("pdf");
         downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
