@@ -13,7 +13,6 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 (function(channel) {
     "use strict";
 
@@ -23,8 +22,8 @@
             window.CQ.CoreComponents.panelcontainer.v1.registry.register({
                 name: "cmp-accordion",
                 selector: ".cmp-accordion",
-                itemSelector: "[data-cmp-hook-accordion='itempanel']",
-                itemActiveSelector: ".cmp-accordion__itempanel--expanded"
+                itemSelector: "[data-cmp-hook-accordion='panel']",
+                itemActiveSelector: "[data-cmp-hook-accordion='item'][data-cmp-expanded] [data-cmp-hook-accordion='panel']"
             });
         }
     });

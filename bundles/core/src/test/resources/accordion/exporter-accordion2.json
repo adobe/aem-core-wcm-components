@@ -1,5 +1,8 @@
 {
-    "expandedItem": "item_2",
+    "singleExpansion": false,
+    "expandedItems": [
+        "item_2"
+    ],
     ":itemsOrder": [
         "item_1",
         "item_2"
@@ -17,7 +20,10 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
-                    "expandedItem": "item_1_2_2",
+                    "singleExpansion": false,
+                    "expandedItems": [
+                        "item_1_2_2"
+                    ],
                     ":itemsOrder": [
                         "item_1_2_1",
                         "item_1_2_2"
@@ -46,7 +52,7 @@
                                 "item_1_2_1_1",
                                 "item_1_2_1_2"
                             ],
-                            "cq:panelTitle": "Tab 1.1"
+                            "cq:panelTitle": "Accordion Item 1.1"
                         },
                         "item_1_2_2": {
                             ":type": "core/wcm/components/responsivegrid",
@@ -100,7 +106,7 @@
                                 "item_1_2_2_1",
                                 "item_1_2_2_2"
                             ],
-                            "cq:panelTitle": "Tab 1.2"
+                            "cq:panelTitle": "Accordion Item 1.2"
                         }
                     }
                 }
@@ -109,7 +115,7 @@
                 "item_1_1",
                 "item_1_2"
             ],
-            "cq:panelTitle": "Accordion 1"
+            "cq:panelTitle": "Accordion Item 1"
         },
         "item_2": {
             ":type": "core/wcm/components/responsivegrid",
@@ -133,7 +139,7 @@
                 "item_2_1",
                 "item_2_2"
             ],
-            "cq:panelTitle": "Accordion 2"
+            "cq:panelTitle": "Accordion Item 2"
         }
     }
 }

@@ -14,42 +14,21 @@
  *  limitations under the License.
  */
 
-.cmp-accordion {
-    &__item {
-        padding-left: 0;
+.cmp-accordion__header {
+    margin: 0;
+}
 
-        &__title {
-            border-bottom: 1px solid black;
-            cursor: pointer;
-            padding: .5rem;
+.cmp-accordion__button {
+    display: block;
+    width: 100%;
 
-            &__icon {
-                display: inline-block;
-                position: absolute;
-                right: 10px;
+    text-align: left;
+}
 
-                &:after {
-                    content: "+";
-                }
-            }
-        }
+.cmp-accordion__panel {
+    display: none;
 
-        [class*="--expanded"] & {
-            &__title {
-                &__icon {
-                    &:after {
-                        content: "x";
-                    }
-                }
-            }
-        }
-    }
-
-    &__itempanel {
-        display: none;
-
-        &--expanded {
-            display: block;
-        }
+    &--expanded {
+        display: block;
     }
 }

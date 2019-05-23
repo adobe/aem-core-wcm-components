@@ -15,6 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.List;
+
+import org.apache.sling.api.resource.Resource;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -23,12 +31,6 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import io.wcm.testing.mock.aem.junit.AemContext;
-import java.util.List;
-import org.apache.sling.api.resource.Resource;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,6 +43,7 @@ public class AccordionImplTest {
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String ACCORDION_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-1";
     private static final String ACCORDION_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-2";
+    private static final String ACCORDION_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-3";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     @Rule
@@ -64,11 +67,12 @@ public class AccordionImplTest {
     public void testAccordionWithItems() {
         Accordion accordion = getAccordionUnderTest(ACCORDION_1);
         Object[][] expectedItems = {
-            {"item_1", "Accordion 1"},
+            {"item_1", "Accordion Item 1"},
             {"item_2", "Accordion Panel 2"},
         };
         verifyAccordionItems(expectedItems, accordion.getItems());
-        assertEquals("item_2", accordion.getExpandedItem());
+        assertEquals(new String[]{"item_2"}, accordion.getExpandedItems());
+        assertEquals(false, accordion.isSingleExpansion());
         Utils.testJSONExport(accordion, Utils.getTestExporterJSONPath(TEST_BASE, "accordion1"));
     }
 
@@ -76,6 +80,19 @@ public class AccordionImplTest {
     public void testAccordionWithNestedAccordion() {
         Accordion accordion = getAccordionUnderTest(ACCORDION_2);
         Utils.testJSONExport(accordion, Utils.getTestExporterJSONPath(TEST_BASE, "accordion2"));
+    }
+
+    @Test
+    public void testAccordionSingleExpansion() {
+        Accordion accordion = getAccordionUnderTest(ACCORDION_3);
+        Object[][] expectedItems = {
+            {"item_1", "Accordion Item 1"},
+            {"item_2", "Accordion Panel 2"},
+        };
+        verifyAccordionItems(expectedItems, accordion.getItems());
+        assertEquals(new String[]{"item_2"}, accordion.getExpandedItems());
+        assertEquals(true, accordion.isSingleExpansion());
+        Utils.testJSONExport(accordion, Utils.getTestExporterJSONPath(TEST_BASE, "accordion3"));
     }
 
     private Accordion getAccordionUnderTest(String resourcePath) {

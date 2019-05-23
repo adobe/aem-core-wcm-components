@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 (function() {
     "use strict";
 
@@ -32,11 +31,38 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]',
-        expanded: {
-            initial: "initially-expanded",
-            item: "cmp-accordion__item--expanded",
-            itempanel: "cmp-accordion__itempanel--expanded"
+        self: "[data-" +  NS + '-is="' + IS + '"]'
+    };
+
+    var cssClasses = {
+        button: {
+            expanded: "cmp-accordion__button--expanded"
+        },
+        panel: {
+            expanded: "cmp-accordion__panel--expanded"
+        }
+    };
+
+    var dataAttributes = {
+        item: {
+            expanded: "data-cmp-expanded"
+        }
+    };
+
+    var properties = {
+        /**
+         * Determines whether a only single accordion item is forced to be expanded at a time.
+         * Expanding one item will collapse all others.
+         *
+         * @memberof Accordion
+         * @type {Boolean}
+         * @default false
+         */
+        "singleExpansion": {
+            "default": false,
+            "transform": function(value) {
+                return !(value === null || typeof value === "undefined");
+            }
         }
     };
 
@@ -52,7 +78,7 @@
      * Accordion.
      *
      * @class Accordion
-     * @classdesc An interactive Accordion component for navigating a list of accordion items
+     * @classdesc An interactive Accordion component for toggling panels of related content
      * @param {AccordionConfig} config The Accordion configuration
      */
     function Accordion(config) {
@@ -72,60 +98,52 @@
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
+            setupProperties(config.options);
             cacheElements(config.element);
-            that._elementItems = Array.isArray(that._elements["item"]) ? that._elements["item"] : [that._elements["item"]];
-            that._elementItempanels = Array.isArray(that._elements["itempanel"]) ? that._elements["itempanel"] : [that._elements["itempanel"]];
-            that._toggle = getInitiallyExpandedAccordionItem(that._elementItems);
 
-            if (that._elements.itempanel) {
-                refreshAccordionItem();
+            if (that._elements["item"]) {
+                // ensures multiple element types are arrays.
+                that._elements["item"] = Array.isArray(that._elements["item"]) ? that._elements["item"] : [that._elements["item"]];
+                that._elements["button"] = Array.isArray(that._elements["button"]) ? that._elements["button"] : [that._elements["button"]];
+                that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
+
+                if (that._properties.singleExpansion) {
+                    var expandedItems = getExpandedItems();
+                    // no expanded item annotated, force the first item to display.
+                    if (expandedItems.length === 0) {
+                        toggle(0);
+                    }
+                    // multiple expanded items annotated, display the last item open.
+                    if (expandedItems.length > 1) {
+                        toggle(expandedItems.length - 1);
+                    }
+                }
+
+                refreshItems();
                 bindEvents();
-            }
 
-            if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
-                if (that._elementItems) {
-                    if (that._elementItems.length === 1) {
-                        /*
-                         * if there is only 1 accordion item, always expand it in author
-                         * mode, even if it is not authored to be initially expanded.
-                         */
-                        handleAuthoring(0);
-                    }
-                }
+                if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
+                    /*
+                     * Editor message handling:
+                     * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
+                     * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
+                     * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
+                     */
+                    new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                        if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
+                            if (message.data.operation === "navigate") {
+                                // switch to single expansion mode when navigating in edit mode.
+                                var singleExpansion = that._properties.singleExpansion;
+                                that._properties.singleExpansion = true;
+                                toggle(message.data.index);
 
-                /*
-                 * Editor message handling:
-                 * - subscribe to "cmp.panelcontainer" message requests sent by the editor frame
-                 * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
-                 * - if so, route the "navigate" operation to enact a navigation of the accordion items based on index data
-                 */
-                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
-                    if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
-                        if (message.data.operation === "navigate") {
-                            handleAuthoring(message.data.index);
+                                // revert to the configured state.
+                                that._properties.singleExpansion = singleExpansion;
+                            }
                         }
-                    }
-                });
-            }
-        }
-
-        /**
-         * Returns the index of the initially expanded item, if no item is expanded returns -1.
-         *
-         * @param {Array} accordionItems Accordion items
-         * @returns {Number} Index of the expanded item, -1 if none are expanded
-         */
-        function getInitiallyExpandedAccordionItem(accordionItems) {
-            if (accordionItems) {
-                for (var i = 0; i < accordionItems.length; i++) {
-                    if (accordionItems[i].classList.contains(selectors.expanded.initial)) {
-                        // removes the 'initially-expanded' class since it is no longer needed.
-                        accordionItems[i].classList.remove(selectors.expanded.initial);
-                        return i;
-                    }
+                    });
                 }
             }
-            return -1;
         }
 
         /**
@@ -159,20 +177,54 @@
         }
 
         /**
+         * Sets up properties for the Accordion based on the passed options.
+         *
+         * @private
+         * @param {Object} options The Accordion options
+         */
+        function setupProperties(options) {
+            that._properties = {};
+
+            for (var key in properties) {
+                if (properties.hasOwnProperty(key)) {
+                    var property = properties[key];
+                    var value = null;
+
+                    if (options && options[key] != null) {
+                        value = options[key];
+
+                        // transform the provided option
+                        if (property && typeof property.transform === "function") {
+                            value = property.transform(value);
+                        }
+                    }
+
+                    if (value === null) {
+                        // value still null, take the property default
+                        value = properties[key]["default"];
+                    }
+
+                    that._properties[key] = value;
+                }
+            }
+        }
+
+        /**
          * Binds Accordion event handling.
          *
          * @private
          */
         function bindEvents() {
-            var items = that._elementItems;
-            if (items) {
-                for (var i = 0; i < items.length; i++) {
+            var buttons = that._elements["button"];
+            if (buttons) {
+                for (var i = 0; i < buttons.length; i++) {
                     (function(index) {
-                        items[i].addEventListener("click", function(event) {
-                            refreshAndFocusAccordionItem(index);
+                        buttons[i].addEventListener("click", function(event) {
+                            toggle(index);
+                            focusButton(index);
                         });
-                        items[i].addEventListener("keydown", function(event) {
-                            onKeyDown(event, index);
+                        buttons[i].addEventListener("keydown", function(event) {
+                            onButtonKeyDown(event, index);
                         });
                     })(i);
                 }
@@ -180,42 +232,43 @@
         }
 
         /**
-         * Handles tab keydown events.
+         * Handles keydown events.
          *
          * @private
          * @param {Object} event The keydown event
-         * @param {Number} index The keydown event
+         * @param {Number} index The index of the button triggering the event
          */
-        function onKeyDown(event, index) {
-            var lastIndex = that._elementItems.length - 1;
+        function onButtonKeyDown(event, index) {
+            var lastIndex = that._elements["button"].length - 1;
 
             switch (event.keyCode) {
                 case keyCodes.ARROW_LEFT:
                 case keyCodes.ARROW_UP:
                     event.preventDefault();
                     if (index > 0) {
-                        focusAccordionItem(index - 1);
+                        focusButton(index - 1);
                     }
                     break;
                 case keyCodes.ARROW_RIGHT:
                 case keyCodes.ARROW_DOWN:
                     event.preventDefault();
                     if (index < lastIndex) {
-                        focusAccordionItem(index + 1);
+                        focusButton(index + 1);
                     }
                     break;
                 case keyCodes.HOME:
                     event.preventDefault();
-                    focusAccordionItem(0);
+                    focusButton(0);
                     break;
                 case keyCodes.END:
                     event.preventDefault();
-                    focusAccordionItem(lastIndex);
+                    focusButton(lastIndex);
                     break;
                 case keyCodes.ENTER:
                 case keyCodes.SPACE:
                     event.preventDefault();
-                    refreshAndFocusAccordionItem(index);
+                    toggle(index);
+                    focusButton(index);
                     break;
                 default:
                     return;
@@ -223,90 +276,156 @@
         }
 
         /**
-         * Refreshes the accordion item based on the current {@code Accordion#_toggle} index.
+         * General handler for toggle of an item.
          *
          * @private
+         * @param {Number} index The index of the item to toggle
          */
-        function refreshAccordionItem() {
-            if (that._toggle >= 0 && that._elementItempanels && that._elementItems) {
-                if (!that._elementItempanels[that._toggle].classList.contains(selectors.expanded.itempanel)) {
-                    expandAccordionItem(that._elementItempanels[that._toggle], that._elementItems[that._toggle]);
+        function toggle(index) {
+            var item = that._elements["item"][index];
+            if (item) {
+                if (that._properties.singleExpansion) {
+                    // ensure only a single item is expanded if single expansion is enabled.
+                    for (var i = 0; i < that._elements["item"].length; i++) {
+                        if (that._elements["item"][i] !== item) {
+                            var expanded = getItemExpanded(that._elements["item"][i]);
+                            if (expanded) {
+                                setItemExpanded(that._elements["item"][i], false);
+                            }
+                        }
+                    }
+                    setItemExpanded(item, true);
                 } else {
-                    collapseAccordionItem(that._elementItempanels[that._toggle], that._elementItems[that._toggle]);
+                    setItemExpanded(item, !getItemExpanded(item));
                 }
             }
         }
 
         /**
-         * Collapses the provided accordion item.
+         * Sets an item's expanded state based on the provided flag and refreshes its internals.
          *
          * @private
-         * @param {Object} itempanel Provided accordion item's itempanel
-         * @param {Object} item Provided accordion item's item
+         * @param {HTMLElement} item The item to mark as expanded, or not expanded
+         * @param {Boolean} expanded true to mark the item expanded, false otherwise
          */
-        function collapseAccordionItem(itempanel, item) {
-            if (itempanel && item) {
-                itempanel.classList.remove(selectors.expanded.itempanel);
-                itempanel.setAttribute("aria-hidden", true);
-                item.classList.remove(selectors.expanded.item);
-                item.setAttribute("aria-expanded", false);
+        function setItemExpanded(item, expanded) {
+            if (expanded) {
+                item.setAttribute(dataAttributes.item.expanded, "");
+            } else {
+                item.removeAttribute(dataAttributes.item.expanded);
+            }
+            refreshItem(item);
+        }
+
+        /**
+         * Gets an item's expanded state.
+         *
+         * @private
+         * @param {HTMLElement} item The item for checking its expanded state
+         * @returns {Boolean} true if the item is expanded, false otherwise
+         */
+        function getItemExpanded(item) {
+            return item && item.dataset && item.dataset["cmpExpanded"] !== undefined;
+        }
+
+        /**
+         * Refreshes an item based on its expanded state.
+         *
+         * @private
+         * @param {HTMLElement} item The item to refresh
+         */
+        function refreshItem(item) {
+            var expanded = getItemExpanded(item);
+            if (expanded) {
+                expandItem(item);
+            } else {
+                collapseItem(item);
             }
         }
 
         /**
-         * Expands the provided accordion item.
+         * Refreshes all items based on their expanded state.
          *
          * @private
-         * @param {Object} itempanel Provided accordion item's itempanel
-         * @param {Object} item Provided accordion item's item
          */
-        function expandAccordionItem(itempanel, item) {
-            if (itempanel && item) {
-                itempanel.classList.add(selectors.expanded.itempanel);
-                itempanel.removeAttribute("aria-hidden");
-                item.classList.add(selectors.expanded.item);
-                item.setAttribute("aria-expanded", true);
+        function refreshItems() {
+            for (var i = 0; i < that._elements["item"].length; i++) {
+                refreshItem(that._elements["item"][i]);
             }
         }
 
         /**
-         * Focuses the accordion item.
+         * Returns all expanded items.
          *
          * @private
-         * @param {Number} index The index of the item to focus
+         * @returns {HTMLElement[]} The expanded items
          */
-        function focusAccordionItem(index) {
-            var item = that._elementItems[index];
-            item.focus();
-        }
+        function getExpandedItems() {
+            var expandedItems = [];
 
-        /**
-         * Handles collapse/expand for the authoring UI. Collapses all accordion items and expands the provided index accordion item.
-         *
-         * @private
-         * @param {Number} index The index of the accordion item to expand
-         */
-        function handleAuthoring(index) {
-            if (that._elementItempanels && that._elementItems) {
-                for (var i = 0; i < that._elementItems.length; i++) {
-                    collapseAccordionItem(that._elementItempanels[i], that._elementItems[i]);
+            for (var i = 0; i < that._elements["item"].length; i++) {
+                var item = that._elements["item"][i];
+                var expanded = getItemExpanded(item);
+                if (expanded) {
+                    expandedItems.push(item);
                 }
             }
 
-            that._toggle = index;
-            refreshAccordionItem();
+            return expandedItems;
         }
 
         /**
-         * Refreshes the accordion item at the provided index and ensures the expanded/collapsed accordion item gains focus.
+         * Annotates the item and its internals with
+         * the necessary style and accessibility attributes to indicate it is expanded.
          *
          * @private
-         * @param {Number} index The index of the item to navigate to
+         * @param {HTMLElement} item The item to annotate as expanded
          */
-        function refreshAndFocusAccordionItem(index) {
-            that._toggle = index;
-            refreshAccordionItem();
-            focusAccordionItem(index);
+        function expandItem(item) {
+            var index = that._elements["item"].indexOf(item);
+            if (index > -1) {
+                var button = that._elements["button"][index];
+                var panel = that._elements["panel"][index];
+                button.classList.add(cssClasses.button.expanded);
+                button.setAttribute("aria-expanded", true);
+                panel.classList.add(cssClasses.panel.expanded);
+                panel.setAttribute("aria-hidden", false);
+
+                if (that._properties.singleExpansion) {
+                    button.setAttribute("aria-disabled", true);
+                }
+            }
+        }
+
+        /**
+         * Annotates the item and its internals with
+         * the necessary style and accessibility attributes to indicate it is not expanded.
+         *
+         * @private
+         * @param {HTMLElement} item The item to annotate as not expanded
+         */
+        function collapseItem(item) {
+            var index = that._elements["item"].indexOf(item);
+            if (index > -1) {
+                var button = that._elements["button"][index];
+                var panel = that._elements["panel"][index];
+                button.classList.remove(cssClasses.button.expanded);
+                button.setAttribute("aria-expanded", false);
+                button.removeAttribute("aria-disabled");
+                panel.classList.remove(cssClasses.panel.expanded);
+                panel.setAttribute("aria-hidden", true);
+            }
+        }
+
+        /**
+         * Focuses the button at the provided index.
+         *
+         * @private
+         * @param {Number} index The index of the button to focus
+         */
+        function focusButton(index) {
+            var button = that._elements["button"][index];
+            button.focus();
         }
     }
 
