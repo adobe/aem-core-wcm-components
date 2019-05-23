@@ -24,6 +24,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 ## Available Components
 
 * Page authoring components:
+  * [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
   * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
   * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
