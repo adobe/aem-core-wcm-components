@@ -5,7 +5,7 @@
     <jcr:content
         cq:allowedTemplates="/conf/core-components-examples/settings/wcm/templates/.*"
         cq:deviceGroups="[/etc/mobile/groups/responsive]"
-        cq:lastModified="{Date}2019-05-21T10:46:25.874+03:00"
+        cq:lastModified="{Date}2019-05-23T13:21:29.310+03:00"
         cq:lastModifiedBy="admin"
         cq:redirectTarget="/content/core-components-examples/library/breadcrumb/breadcrumb/breadcrumb"
         jcr:primaryType="nt:unstructured"
@@ -13,6 +13,10 @@
         sling:redirectStatus="{Long}302"
         sling:resourceType="foundation/components/redirect"
         navTitle="Breadcrumb 1">
-        <image jcr:primaryType="nt:unstructured"/>
+        <image
+            jcr:primaryType="nt:unstructured"
+            fileReference="/content/dam/core-components-examples/library/components/breadcrumb.svg">
+            <file/>
+        </image>
     </jcr:content>
 </jcr:root>

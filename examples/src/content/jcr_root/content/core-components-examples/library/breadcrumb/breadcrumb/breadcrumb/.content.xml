@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-05-21T15:14:14.183+03:00"
+        cq:lastModified="{Date}2019-05-23T13:33:43.701+03:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/template]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
@@ -259,7 +259,7 @@
                             reference="../../component"/>
                     </info>
                 </demo_copy>
-                <title_290384409
+                <Copy_x0020_of_x0020_title_290384408_copy
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
                     jcr:createdBy="admin"
@@ -278,7 +278,7 @@
                     sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>By default, the current page is&amp;nbsp;shown in the navigation, but it's possible to configure a breadcrumb such that it will be hidden.&lt;/p>&#xa;"
                     textIsRich="true"/>
-                <demo_copy_290384409
+                <Copy_x0020_of_x0020_demo_copy
                     jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2018-12-07T12:55:03.496+01:00"
@@ -318,9 +318,11 @@
                             sling:resourceType="core-components-examples/components/demo/json"
                             reference="../../component"/>
                     </info>
-                </demo_copy_290384409>
+                </Copy_x0020_of_x0020_demo_copy>
             </responsivegrid>
         </root>
-        <image jcr:primaryType="nt:unstructured"/>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
     </jcr:content>
 </jcr:root>

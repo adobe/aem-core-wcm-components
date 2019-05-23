@@ -4,7 +4,7 @@
     <jcr:content
         cq:allowedTemplates="/conf/core-components-examples/settings/wcm/templates/.*"
         cq:deviceGroups="[/etc/mobile/groups/responsive]"
-        cq:lastModified="{Date}2019-03-07T11:58:01.345+01:00"
+        cq:lastModified="{Date}2019-05-23T13:33:30.815+03:00"
         cq:lastModifiedBy="admin"
         cq:redirectTarget="/content/core-components-examples/library/breadcrumb/breadcrumb/breadcrumb/breadcrumb"
         jcr:primaryType="nt:unstructured"
@@ -13,6 +13,10 @@
         sling:redirectStatus="{Long}302"
         sling:resourceType="foundation/components/redirect"
         hideInNav="true"
-        navTitle="Hidden"/>
+        navTitle="Hidden">
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
+    </jcr:content>
     <breadcrumb/>
 </jcr:root>
