@@ -18,13 +18,13 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DownloadServletTest {
 
@@ -49,11 +49,11 @@ public class DownloadServletTest {
     @Before
     public void init() {
         downloadServlet = new DownloadServlet();
+        AEM_CONTEXT.currentResource(PDF_ASSET_PATH);
     }
 
     @Test
     public void testAttachmentDownload() throws Exception {
-        AEM_CONTEXT.currentResource(PDF_ASSET_PATH);
         AEM_CONTEXT.requestPathInfo().setSelectorString(DownloadServlet.SELECTOR);
         AEM_CONTEXT.requestPathInfo().setExtension("pdf");
         downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
@@ -64,12 +64,25 @@ public class DownloadServletTest {
 
     @Test
     public void testInlineDownload() throws Exception {
-        AEM_CONTEXT.currentResource(PDF_ASSET_PATH);
         AEM_CONTEXT.requestPathInfo().setSelectorString(DownloadServlet.SELECTOR + "." + DownloadServlet.INLINE_SELECTOR);
         AEM_CONTEXT.requestPathInfo().setExtension("pdf");
         downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
         assertTrue(AEM_CONTEXT.response().containsHeader("Content-Disposition"));
         assertEquals("inline", AEM_CONTEXT.response().getHeader("Content-Disposition"));
         assertEquals(8192, AEM_CONTEXT.response().getBufferSize());
+    }
+
+    @Test
+    public void tesNotModifiedResponse() throws Exception {
+        AEM_CONTEXT.request().setHeader("If-Modified-Since", "Fri, 19 Oct 2018 19:24:07 GMT");
+        downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
+        assertEquals(304, AEM_CONTEXT.response().getStatus());
+    }
+
+    @Test
+    public void testETagResponse() throws Exception {
+        AEM_CONTEXT.request().setHeader("If-None-Match", "78003C8AA0B29FB814691244B231E294");
+        downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
+        assertEquals(304, AEM_CONTEXT.response().getStatus());
     }
 }
