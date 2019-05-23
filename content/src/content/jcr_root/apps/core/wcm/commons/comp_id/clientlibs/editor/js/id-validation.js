@@ -20,11 +20,10 @@
     foundationReg.register("foundation.validation.validator", {
         selector: 'input[data-foundation-validation="dialog-id-field-validation"]',
         validate: function(el) {
-            var regexPattern = /^[a-zA-Z0-9&,.()'!/?:;-]+$/;
-            var errorMessage = "Only contain letters, numbers and special characters [&,.()'!/?:;-]!";
+            var regexPattern = /[\s]+/;
+            var errorMessage = "Whitespaces are not allowed";
             if (el.value !== "") {
-                var result = el.value.match(regexPattern);
-                if (result === null) {
+                if (regexPattern.test(el.value)) {
                     return errorMessage;
                 }
             }
