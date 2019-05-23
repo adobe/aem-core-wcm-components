@@ -54,7 +54,7 @@ public interface Accordion extends Container {
     }
 
     /**
-     * Returns the HTML element to use for accordion headers
+     * Returns the HTML element to use for accordion headers.
      *
      * @return the HTML element to use for accordion headers
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
