@@ -137,7 +137,7 @@
             .execTestCase(c.tcSaveConfigureDialog)
             // 4.
             .asserts.isTrue(function() {
-                return h.find(".cmp-button__icon--email']", "#ContentFrame").size() === 1;
+                return h.find(".cmp-button__icon--email", "#ContentFrame").size() === 1;
             });
     };
 
