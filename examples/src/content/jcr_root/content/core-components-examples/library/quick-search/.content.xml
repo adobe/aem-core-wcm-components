@@ -85,7 +85,7 @@
                     jcr:lastModified="{Date}2018-12-07T12:50:42.422+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Example 1"
+                    jcr:title="Standard"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h3"/>
                 <text_1337506761
@@ -95,7 +95,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Example 1 description.&lt;/p>&#xa;"
+                    text="&lt;p>Quick Search with a &lt;i>Search Root&lt;/i> configured as the root page of this component library.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
                     jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
@@ -106,7 +106,16 @@
                     sling:resourceType="core-components-examples/components/demo">
                     <component
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component"/>
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <search
+                            jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-05-21T19:28:11.709+03:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/search/v1/search"
+                            searchRoot="/content/core-components-examples/library"/>
+                    </component>
                     <info
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core/wcm/components/tabs/v1/tabs">
