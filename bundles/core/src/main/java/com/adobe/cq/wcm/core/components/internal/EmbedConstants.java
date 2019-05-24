@@ -20,12 +20,18 @@ public final class EmbedConstants {
     private EmbedConstants() {
 	// Constructor private
     }
+    
+   public enum EmbedOptions {
+	HTML,
+	EMBEDDABLE
+    }
 
     public static final String RT_CORE_EMBED_DATASOURCE_V1 = "core/wcm/components/embed/v1/datasource";
     public static final String ALLOWED_OPTIONS_RESOURCE_TYPE = RT_CORE_EMBED_DATASOURCE_V1 + "/embedoptions";
     public static final String ALL_OPTIONS_RESOURCE_TYPE = RT_CORE_EMBED_DATASOURCE_V1 + "/allembedoptions";
     public static final String EMBED_SETTINGS_RESOURCE_TYPE = RT_CORE_EMBED_DATASOURCE_V1 + "/embedsettings";
-    public static final String PN_EMBED_OPTIONS = "allowedEmbedOptions";
     public static final String EMBEDDABLE_RESOURCE_TYPE = "core/wcm/components/embed/embeddable";
-
+    public static final String PN_EMBED_OPTIONS = "allowedEmbedOptions";
+    public static final String PN_ENABLE_HTML_MODE = "enableHtmlMode";
+    public static final String PN_ENABLE_SELECTION_MODE = "enableSelectionMode";
 }

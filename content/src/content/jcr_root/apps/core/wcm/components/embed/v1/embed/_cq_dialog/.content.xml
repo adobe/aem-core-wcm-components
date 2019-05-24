@@ -48,11 +48,11 @@
                                                     <html
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Free Form HTML"
-                                                        value="htmlMode"/>
+                                                        value="html"/>
                                                     <embeddables
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Embeddables"
-                                                        value="embeddableMode"/>
+                                                        value="embeddable"/>
                                                 </items>
                                             </embedoptions>
                                             <markup
@@ -67,7 +67,7 @@
                                                 name="./markup">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
-                                                    showhidetargetvalue="htmlMode"/>
+                                                    showhidetargetvalue="html"/>
                                             </markup>
                                             <selectionMode
                                                 granite:class="cmp-embed-type-selection"
@@ -84,7 +84,7 @@
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
                                                     cq-dialog-dropdown-showhide-target=".embed-type-dialog"
-                                                    showhidetargetvalue="embeddableMode"/>
+                                                    showhidetargetvalue="embeddable"/>
                                             </selectionMode>
                                             <advanced
                                                 granite:class="cmp-embeddable-settings"

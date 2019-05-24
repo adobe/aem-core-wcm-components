@@ -13,15 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.templates="core/wcm/components/commons/v1/templates.html"/>
-<sly data-sly-test.dualModeEnabled="${currentStyle.enableHtmlMode && currentStyle.enableSelectionMode}">
-	<div data-sly-test="${properties.embedoption=='htmlMode' && properties.markup}">${properties.markup @ context = 'html'}</div>
-	<div data-sly-test="${(properties.embedoption=='embeddableMode') && properties.embedType}" data-sly-resource="${resource.path @ resourceType=properties.embedType, wcmmode='disabled'}" ></div>
-</sly>
-<sly data-sly-test="${!dualModeEnabled}">
-    <div data-sly-test="${currentStyle.enableHtmlMode && properties.markup}">${properties.markup @ context = 'html'}</div>
-	<div data-sly-test="${currentStyle.enableSelectionMode && properties.embedType}" data-sly-resource="${resource.path @ resourceType=properties.embedType, wcmmode='disabled'}" ></div>
-</sly>
-
-<sly data-sly-call="${templates.placeholder @ isEmpty = !((!dualModeEnabled && ((currentStyle.enableHtmlMode && properties.markup) || (currentStyle.enableSelectionMode && properties.embedType)))
-|| (dualModeEnabled && ((properties.embedoption=='htmlMode' && properties.markup)||(properties.embedoption=='embeddableMode' && properties.embedType))))}"></sly>
+<sly data-sly-use.embed="com.adobe.cq.wcm.core.components.models.Embed"
+data-sly-use.templates="core/wcm/components/commons/v1/templates.html"/>
+	<div data-sly-test="${embed.markup}">${embed.markup @ context = 'html'}</div>
+	<div data-sly-test="${embed.embedType}" data-sly-resource="${resource.path @ resourceType=embed.embedType, wcmmode='disabled'}" ></div>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !(embed.markup || embed.embedType)}"></sly>
