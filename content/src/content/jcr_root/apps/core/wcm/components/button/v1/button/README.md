@@ -28,7 +28,7 @@ The Button component uses the `com.adobe.cq.wcm.core.components.models.Button` S
 ### Edit Dialog Properties
 The following properties are written to JCR for the Button component and are expected to be available as `Resource` properties:
 
-1. `./text` - defines the button text
+1. `./jcr:title` - defines the button text
 2. `./link` - defines the button link
 3. `./icon` - defines an icon identifier for rendering an icon
 
