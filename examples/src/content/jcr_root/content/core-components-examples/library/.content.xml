@@ -223,7 +223,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/quick-search.svg"
-                    linkURL="/content/core-components-examples/library/search"
+                    linkURL="/content/core-components-examples/library/quick-search"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -416,7 +416,7 @@
     <image/>
     <list/>
     <navigation/>
-    <search/>
+    <quick-search/>
     <separator/>
     <social-sharing/>
     <tabs/>
