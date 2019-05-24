@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -69,6 +70,8 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
 
     public static final String DEFAULT_DAM_PARENT_PATH = "/content/dam";
+    
+    public static final int DEFAULT_MAX_ITEMS = -1;
 
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
     private SlingHttpServletRequest slingHttpServletRequest;
@@ -90,6 +93,10 @@ public class ContentFragmentListImpl implements ContentFragmentList {
 
     @ValueMapValue(name = ContentFragmentList.PN_PARENT_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String parentPath;
+
+    @ValueMapValue(name = ContentFragmentList.PN_MAX_ITEMS, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(intValues = DEFAULT_MAX_ITEMS)
+    private int maxItems;
 
     private List<DAMContentFragment> items = new ArrayList<>();
 
@@ -120,6 +127,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
         Map<String, String> queryParameterMap = new HashMap<>();
         queryParameterMap.put("path", parentPath);
         queryParameterMap.put("type", "dam:Asset");
+        queryParameterMap.put("p.limit", Integer.toString(maxItems));
         queryParameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/data/cq:model");
         queryParameterMap.put("1_property.value", modelPath);
 
@@ -141,7 +149,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
 
         PredicateGroup predicateGroup = PredicateGroup.create(queryParameterMap);
         Query query = queryBuilder.createQuery(predicateGroup, session);
-
+        
         SearchResult searchResult = query.getResult();
 
         LOG.debug("Query statement: '{}'", searchResult.getQueryStatement());
