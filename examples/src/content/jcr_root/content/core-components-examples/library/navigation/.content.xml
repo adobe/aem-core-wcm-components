@@ -95,7 +95,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Simple navigation with no configuration applied. Shows a navigation structure built from a page tree where the navigation root is excluded.&lt;/p>&#xa;"
+                    text="&lt;p>Simple navigation with no configuration applied. Shows a navigation structure built from a page tree. The navigation root is excluded by default.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo
                     jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
@@ -148,7 +148,7 @@
                     jcr:lastModified="{Date}2019-05-22T11:05:50.276+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Show the navigation root"
+                    jcr:title="Show Navigation Root"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h3"/>
                 <text_1337509867
@@ -158,7 +158,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>By default, the navigation root is not shown in the navigation structure. In this example we make it visible.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>By default, the navigation root is excluded in the navigation structure. In this example we display it.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_56474747
                     jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
@@ -210,7 +210,7 @@
                     jcr:lastModified="{Date}2019-05-22T11:09:04.067+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Set the navigation structure depth"
+                    jcr:title="Navigation Structure Depth"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h3"/>
                 <text_894947512
@@ -220,7 +220,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Navigation is built by default from all child pages. In this example, we reduce the structutre depth to one, and only one child level from the navigation root is shown.&amp;nbsp;&lt;/p>&#xa;"
+                    text="&lt;p>By default, the navigation is built from all child pages. In this example, we again display the navigation root and reduce the structure depth to one. As a result, only one level from the navigation root is shown.&amp;nbsp;&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_650088868
                     jcr:created="{Date}2019-05-21T19:08:47.049+03:00"
