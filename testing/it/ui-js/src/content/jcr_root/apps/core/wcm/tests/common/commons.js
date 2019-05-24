@@ -49,6 +49,8 @@
     // breadcrumb component
     c.rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
     c.rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
+    // button component
+    c.rtButton_v1 = "core/wcm/components/button/v1/button";
     // navigation component
     c.rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
     // language navigation component
