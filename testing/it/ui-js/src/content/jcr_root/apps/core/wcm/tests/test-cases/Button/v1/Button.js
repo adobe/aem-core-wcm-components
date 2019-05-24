@@ -132,7 +132,7 @@
             // 1.
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
             // 2.
-            .fillInput(selectors.icon, "email")
+            .fillInput(selectors.editDialog.icon, "email")
             // 3.
             .execTestCase(c.tcSaveConfigureDialog)
             // 4.
