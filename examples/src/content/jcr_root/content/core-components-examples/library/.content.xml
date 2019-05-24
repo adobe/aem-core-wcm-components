@@ -358,6 +358,7 @@
     <carousel/>
     <content-fragment/>
     <content-fragment-list/>
+	<embed/>
     <image/>
     <list/>
     <separator/>

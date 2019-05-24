@@ -17,7 +17,6 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import io.wcm.testing.mock.aem.junit.AemContext;

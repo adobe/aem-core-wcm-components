@@ -33,5 +33,5 @@
     </items>
     <granite:data
         jcr:primaryType="nt:unstructured"
-        showhidetargetvalue="core/wmc/components/embed/embeddables/youtube"/>
+        showhidetargetvalue="core/wcm/components/embed/embeddables/youtube"/>
 </jcr:root>

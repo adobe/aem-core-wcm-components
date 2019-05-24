@@ -28,5 +28,5 @@
     </items>
     <granite:data
         jcr:primaryType="nt:unstructured"
-        showhidetargetvalue="core/wmc/components/embed/embeddables/chat-bot"/>
+        showhidetargetvalue="core/wcm/components/embed/embeddables/chat-bot"/>
 </jcr:root>
