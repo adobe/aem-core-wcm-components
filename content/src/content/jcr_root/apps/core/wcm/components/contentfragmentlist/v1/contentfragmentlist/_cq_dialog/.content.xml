@@ -53,6 +53,14 @@
                                         fieldLabel="Tags"
                                         multiple="{Boolean}true"
                                         name="./tagNames"/>
+                                    <maxItems
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                        fieldDescription="Maximum number of items displayed in list. Empty for all items."
+                                        fieldLabel="Max Items"
+                                        min="{Long}0"
+                                        value="{Long}10"
+                                        name="./maxItems"/>
                                 </items>
                             </column>
                         </items>

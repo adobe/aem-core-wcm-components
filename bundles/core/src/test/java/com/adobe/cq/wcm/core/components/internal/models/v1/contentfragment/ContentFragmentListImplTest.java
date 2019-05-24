@@ -52,7 +52,9 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
     private static final String MODEL_ELEMENTS = "model-elements";
     private static final String NON_EXISTING_MODEL = "non-existing-model";
     private static final String NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "non-existing-model-path-tags";
-
+    private static final String MODEL_MAX_LIMIT = "model-max-limit"; 
+    private static final String DEFAULT_NO_MAX_LIMIT_SET = "-1";
+    
     private ResourceResolver leakingResourceResolverMock;
 
     @Override
@@ -152,7 +154,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         getModelInstanceUnderTest(NON_EXISTING_MODEL);
 
         // THEN
-        verifyPredicateGroup(expectedPredicates);
+        verifyPredicateGroup(expectedPredicates, DEFAULT_NO_MAX_LIMIT_SET);
     }
 
     @Test
@@ -183,18 +185,46 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
         getModelInstanceUnderTest(NON_EXISTING_MODEL_WITH_PATH_AND_TAGS);
 
         // THEN
-        verifyPredicateGroup(expectedPredicates);
+        verifyPredicateGroup(expectedPredicates, DEFAULT_NO_MAX_LIMIT_SET );
+    }
+    
+    @Test
+    public void verifyQueryBuilderInteractionWhenMaxLimitIsGiven() {
+        // GIVEN
+        // Expected predicate parameters
+        Map<String, Map<String, String>> expectedPredicates = new HashMap();
+        expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
+        expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
+        expectedPredicates.put("1_property", ImmutableMap.of(
+                "property", "jcr:content/data/cq:model",
+                "value", "foobar"));
+
+        //Expected Max Limit
+        String expectedLimit = "20";
+        
+        // WHEN
+        getModelInstanceUnderTest(MODEL_MAX_LIMIT);
+
+        // THEN
+        verifyPredicateGroup(expectedPredicates, expectedLimit);
     }
 
     /**
      * Verifies that given expected predicates have been set on
      * {@link com.day.cq.search.QueryBuilder#createQuery(PredicateGroup, Session)} call.
      */
-    private void verifyPredicateGroup(final Map<String, Map<String, String>> expectedPredicates) {
+    private void verifyPredicateGroup(final Map<String, Map<String, String>> expectedPredicates, String expectedLimit) {
         Mockito.verify(queryBuilderMock).createQuery(ArgumentMatchers.argThat(argument -> {
-            PredicateGroup predicateGroup = argument;
+           PredicateGroup predicateGroup = argument;
+           
+           //Check the result limit
+           String actualLimit = predicateGroup.get(PredicateGroup.PARAM_LIMIT);
+           if(actualLimit == null || !actualLimit.equals(expectedLimit)) {
+        	   return false;
+           }
+          
             for (String predicateName : expectedPredicates.keySet()) {
-                Predicate predicate = predicateGroup.getByName(predicateName);
+                Predicate predicate = predicateGroup.getByName(predicateName);               
                 for (String predicateParameterName : expectedPredicates.get(predicateName).keySet()) {
                     String predicateParameterValue = predicate.getParameters().get(predicateParameterName);
                     String expectedPredicateParameterValue =
