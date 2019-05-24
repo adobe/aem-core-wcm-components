@@ -13,9 +13,9 @@
                     "sling:resourceType": "wcm/foundation/components/responsivegrid",
                     "button-1"          : {
                         "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:title"         : "Adobe",
                         "sling:resourceType": "core/wcm/components/button/v1/button",
                         "link"              : "https://www.adobe.com",
-                        "text"              : "Adobe",
                         "icon"              : "adobe"
                     }
                 }

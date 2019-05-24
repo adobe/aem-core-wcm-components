@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import javax.inject.Named;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -25,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Button;
+import com.day.cq.commons.jcr.JcrConstants;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -43,6 +46,7 @@ public class ButtonImpl implements Button {
     private SlingHttpServletRequest request;
 
     @ValueMapValue(optional = true)
+    @Named(JcrConstants.JCR_TITLE)
     private String text;
 
     @ValueMapValue(optional = true)
