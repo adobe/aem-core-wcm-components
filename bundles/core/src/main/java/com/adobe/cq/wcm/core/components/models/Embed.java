@@ -21,10 +21,10 @@ import org.osgi.annotation.versioning.ConsumerType;
 import com.adobe.cq.export.json.ComponentExporter;
 
 /**
- * Defines the {@code Text} Sling Model used for the
+ * Defines the {@code Embed} Sling Model used for the
  * {@code /apps/core/wcm/components/embed} component.
  *
- * @since com.adobe.cq.wcm.core.components.models 11.0.0
+ * @since com.adobe.cq.wcm.core.components.models 12.8
  */
 @ConsumerType
 public interface Embed extends ComponentExporter {
@@ -34,8 +34,7 @@ public interface Embed extends ComponentExporter {
      *
      * @return the Embed mode value to be displayed, or {@code null} if no value
      *         can be returned
-     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked
-     *        <code>default</code> in 12.1.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8
      */
     default String getEmbedMode() {
 	throw new UnsupportedOperationException();
@@ -44,9 +43,8 @@ public interface Embed extends ComponentExporter {
     /**
      * Retrieves the HTML markup if HTML mode enabled.
      *
-     * @return HTML markup string if HTML mode is enabled otherwsie returns null
-     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked
-     *        <code>default</code> in 12.1.0
+     * @return HTML markup string if HTML mode is enabled otherwise returns null
+     * @since com.adobe.cq.wcm.core.components.models 12.8
      */
     default String getMarkup() {
 	throw new UnsupportedOperationException();
@@ -55,10 +53,9 @@ public interface Embed extends ComponentExporter {
     /**
      * Retrieves the embed resource type if Embed mode enabled.
      *
-     * @return The embed resource type if Embed mode is enabled. otherwsie
+     * @return The embed resource type if Embed mode is enabled. otherwise
      *         returns null
-     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked
-     *        <code>default</code> in 12.1.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8
      */
     default String getEmbedType() {
 	throw new UnsupportedOperationException();
@@ -66,7 +63,7 @@ public interface Embed extends ComponentExporter {
 
     /**
      * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8
      */
     @NotNull
     @Override
