@@ -37,6 +37,7 @@ The following properties are written to JCR for the Button component and are exp
 BLOCK cmp-button
     ELEMENT cmp-button__text
     ELEMENT cmp-button__icon
+        MOD cmp-button__icon--<icon>
 ```
 
 ## Information
