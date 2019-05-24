@@ -2,20 +2,20 @@
 <jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="ea764779-61ae-4b40-bd72-27889abd6f70">
+    jcr:uuid="99104768-166b-4a65-bc43-0e0291b968c8">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-22T17:46:23.323+03:00"
+        jcr:lastModified="{Date}2019-05-24T13:26:26.415+02:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-05-22T17:46:06.907+03:00"
-            dam:sha1="5d9f13814866c1a69a6fdf6b89eb0867b2c2b464"
-            dam:size="{Long}2010"
+            dam:extracted="{Date}2019-05-24T13:21:57.120+02:00"
+            dam:sha1="a6c0b203501a627752b294a678b0d01d7250deb5"
+            dam:size="{Long}4356"
             dc:format="image/svg+xml"
-            dc:modified="{Date}2019-05-22T17:46:23.323+03:00"
+            dc:modified="{Date}2019-05-24T13:26:26.415+02:00"
             dc:title="Breadcrumb"
-            jcr:lastModified="{Date}2019-05-22T17:46:23.323+03:00"
+            jcr:lastModified="{Date}2019-05-24T13:26:26.415+02:00"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured">
