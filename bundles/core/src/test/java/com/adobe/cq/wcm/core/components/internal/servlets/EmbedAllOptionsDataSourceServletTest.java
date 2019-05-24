@@ -82,8 +82,6 @@ public class EmbedAllOptionsDataSourceServletTest {
 		new SimpleDataSource(outputResources.iterator()));
 	when(resolver.findResources(any(), any())).thenReturn(embeddableResources.iterator());
 	when(resolver.getSearchPath()).thenReturn(context.resourceResolver().getSearchPath());
-	when(resolver.getResource("wcm-examples/embeddables/cq:dialog")).thenReturn(embeddable.getChild("cq:dialog"));
-	when(resolver.getResource("wcm-examples/chatbot/cq:dialog")).thenReturn(embeddable2.getChild("cq:dialog"));
     }
 
     @Test

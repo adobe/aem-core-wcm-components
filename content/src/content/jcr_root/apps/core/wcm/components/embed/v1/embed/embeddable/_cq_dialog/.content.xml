@@ -27,10 +27,10 @@
                                 required="{Boolean}true"/>
                             <embedURL
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
                                 fieldDescription="URL to Widget"
                                 fieldLabel="Link"
-                                name="./linkURL"
+                                name="./embedURL"
                                 rootPath="/content"/>
                         </items>
                     </column>

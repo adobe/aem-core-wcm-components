@@ -40,7 +40,6 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
 import com.adobe.cq.wcm.core.components.internal.EmbedConstants;
-import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -70,11 +69,7 @@ public class EmbedAllOptionsDataSourceServlet extends SlingSafeMethodsServlet {
 		FormsConstants.PROPERTY_RST, resourceResolver).iterator();
 	while (embeddables.hasNext()) {
 	    EmbedComponentDescription description = embeddables.next();
-	    Resource dialogResource = resourceResolver.getResource(description.getResourceType() + "/"
-		    + FormConstants.NN_DIALOG);
-	    if (dialogResource != null) {
-		embeddableResources.add(new EmbeddableTypeResource(description, resourceResolver));
-	    }
+	    embeddableResources.add(new EmbeddableTypeResource(description, resourceResolver));
 	}
 	return embeddableResources;
     }
@@ -88,25 +83,26 @@ public class EmbedAllOptionsDataSourceServlet extends SlingSafeMethodsServlet {
 	final Map<String, EmbedComponentDescription> map = new HashMap<>();
 	final List<String> disabledComponents = new ArrayList<>();
 	for (final String path : searchPaths) {
-	    final StringBuilder buffer = new StringBuilder("/jcr:root");
-	    buffer.append(path);
-	    buffer.append("//* [@");
-	    buffer.append(propName);
-	    buffer.append("='");
-	    buffer.append(propValue);
-	    buffer.append("']");
+	    final StringBuilder queryStringBuilder = new StringBuilder("/jcr:root");
+	    queryStringBuilder.append(path);
+	    queryStringBuilder.append("//* [@");
+	    queryStringBuilder.append(propName);
+	    queryStringBuilder.append("='");
+	    queryStringBuilder.append(propValue);
+	    queryStringBuilder.append("']");
 
-	    final Iterator<Resource> i = resourceResolver.findResources(buffer.toString(), "xpath");
+	    final Iterator<Resource> i = resourceResolver.findResources(queryStringBuilder.toString(), "xpath");
 	    while (i.hasNext()) {
-		final Resource rsrc = i.next();
-		final ValueMap properties = ResourceUtil.getValueMap(rsrc);
-		final String rt = rsrc.getPath().substring(path.length() + 1);
+		final Resource embeddableResource = i.next();
+		final ValueMap properties = ResourceUtil.getValueMap(embeddableResource);
+		final String resourceType = embeddableResource.getPath().substring(path.length() + 1);
 		if (properties.get(FormsConstants.COMPONENT_PROPERTY_ENABLED, Boolean.TRUE)) {
-		    if (!map.containsKey(rt) && !disabledComponents.contains(rt)) {
-			map.put(rt, new EmbedComponentDescription(rt, rsrc.getName(), properties));
+		    if (!map.containsKey(resourceType) && !disabledComponents.contains(resourceType)) {
+			map.put(resourceType, new EmbedComponentDescription(resourceType, embeddableResource.getName(),
+				properties));
 		    }
 		} else {
-		    disabledComponents.add(rt);
+		    disabledComponents.add(resourceType);
 		}
 	    }
 	}
