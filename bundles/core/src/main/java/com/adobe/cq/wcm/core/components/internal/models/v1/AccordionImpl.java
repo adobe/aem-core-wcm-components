@@ -99,7 +99,7 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
         if (heading == null) {
             heading = Utils.Heading.getHeading(headingElement);
             if (heading == null) {
-                heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_HEADING_ELEMENT, String.class));
+                heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_HEADING_ELEMENT, String.class));
             }
         }
         if (heading != null) {

@@ -31,7 +31,7 @@ public interface Accordion extends Container {
      * @see #getHeadingElement()
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    String PN_DESIGN_DEFAULT_HEADING_ELEMENT = "headingElement";
+    String PN_DESIGN_HEADING_ELEMENT = "headingElement";
 
     /**
      * Indicates whether the accordion forces a single item to be expanded at a time or not.
