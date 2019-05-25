@@ -1,5 +1,5 @@
 <!--
-Copyright 2018 Adobe Systems Incorporated
+Copyright 2019 Adobe Systems Incorporated
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,22 +19,31 @@ Accordion component written in HTL.
 
 ## Features
 
-* Allows addition of accordion item components of varying resource type.
+* Allows addition of accordion items of varying resource type.
 * Allowed components can be configured through policy configuration.
-* Navigate the accordion items by expanding/collapsing the items.
+* Toggle accordion panels from accordion header controls.
+* Ability to force a single panel to be displayed.
+* Items expanded by default are configurable.
+* Item header HTML element is configurable (`h2` - `h6`).
 * Editing features for accordion items (adding, removing, editing, re-ordering).
 
 ### Use Object
 The Accordion component uses the `com.adobe.cq.wcm.core.components.models.Accordion` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
-The component policy dialog allows definition of allowed components for the Accordion.
+The following configuration properties are used:
+
+1. `./allowedHeadingElements` - the heading elements (`h2` - `h6`) that are allowed to be selected in the edit dialog.
+2. `./headingElement` - the default heading element (`h2` - `h6`) to use for the accordion headers.
+
+It is also possible to define the allowed components for the Accordion.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Accordion component and are expected to be available as `Resource` properties:
 
-1. `./expandedItem` - defines the name of the item that is expanded by default.
-2. `./headingType` - defines the heading type to use for the accordion item's labels (H2-H6).
+1. `./singleExpansion` - `true` if one panel should be forced to be expanded at a time, `false` otherwise.
+1. `./expandedItems` - defines the names of the items that are expanded by default.
+2. `./headingElement` - defines the heading type to use for the accordion headers (`h2` - `h6`).
 
 The edit dialog also allows editing of Accordion items (adding, removing, naming, re-ordering).
 
@@ -42,25 +51,39 @@ The edit dialog also allows editing of Accordion items (adding, removing, naming
 The component provides a `core.wcm.components.accordion.v1` client library category that contains a recommended base
 CSS styling and JavaScript component. It should be added to a relevant site client library using the `embed` property.
 
+It also provides a `core.wcm.components.accordion.v1.editor` editor client library category that includes JavaScript
+handling for dialog interaction. It is already included by its edit and policy dialogs.
+
 ## BEM Description
 ```
 BLOCK cmp-accordion
-    BLOCK cmp-accordion__item
-        MOD cmp-accordion__item--expanded
-        BLOCK accordion__item__title
-            ELEMENT accordion__item__title__icon
-    ELEMENT cmp-accordion__itempanel
-        MOD cmp-accordion__itempanel--expanded
+    ELEMENT cmp-accordion__item
+    ELEMENT cmp-accordion__header
+    ELEMENT cmp-accordion__button
+        MOD cmp-accordion__button--expanded
+    ELEMENT cmp-accordion__title
+    ELEMENT cmp-accordion__icon
+    ELEMENT cmp-accordion__panel
+        MOD cmp-accordion__panel--expanded
 ```
 
 ## JavaScript Data Attribute Bindings
 Apply a `data-cmp-is="accordion"` attribute to the wrapper block to enable initialization of the JavaScript component.
 
+The following attributes can be added to the same element to provide options:
+
+1. `data-cmp-single-expansion` - if the attribute is present, forces a single panel to be expanded at a time.
+
+The following attributes can be added to the accordion item (`data-cmp-hook-accordion="item"`):
+
+1. `data-cmp-expanded` - if the attribute is present, indicates that the item should be initially expanded.
+
 A hook attribute from the following should be added to the corresponding element so that the JavaScript is able to target it:
 
 ```
 data-cmp-hook-accordion="item"
-data-cmp-hook-accordion="itempanel"
+data-cmp-hook-accordion="button"
+data-cmp-hook-accordion="panel"
 ```
 
 ### Enabling Accordion Editing Functionality

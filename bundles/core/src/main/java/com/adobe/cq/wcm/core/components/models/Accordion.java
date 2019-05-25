@@ -26,22 +26,40 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface Accordion extends Container {
 
     /**
-     * Returns the expanded item.
+     * Name of the configuration policy property that stores the default value for the accordion heading's HTML element.
      *
-     * @return The expanded item
+     * @see #getHeadingElement()
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    default String getExpandedItem() {
+    String PN_DESIGN_DEFAULT_HEADING_ELEMENT = "headingElement";
+
+    /**
+     * Indicates whether the accordion forces a single item to be expanded at a time or not.
+     *
+     * @return true if the accordion forces a single item to be expanded at a time; false otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    default boolean isSingleExpansion() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns the heading type.
+     * Returns the expanded items.
      *
-     * @return the heading type
+     * @return The expanded items
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    default String getHeadingType() {
+    default String[] getExpandedItems() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the HTML element to use for accordion headers.
+     *
+     * @return the HTML element to use for accordion headers
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    default String getHeadingElement() {
         throw new UnsupportedOperationException();
     }
 }

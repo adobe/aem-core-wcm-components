@@ -32,6 +32,95 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <allowedHeadingElements
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldDescription="The accordion item heading HTML elements that are allowed to be selected by an author."
+                                        fieldLabel="Allowed Heading Elements"
+                                        multiple="{Boolean}true"
+                                        name="./allowedHeadingElements"
+                                        ordered="{Boolean}true"
+                                        required="{Boolean}true">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <h2
+                                                jcr:primaryType="nt:unstructured"
+                                                selected="{Boolean}true"
+                                                text="h2"
+                                                value="h2"/>
+                                            <h3
+                                                jcr:primaryType="nt:unstructured"
+                                                selected="{Boolean}true"
+                                                text="h3"
+                                                value="h3"/>
+                                            <h4
+                                                jcr:primaryType="nt:unstructured"
+                                                selected="{Boolean}true"
+                                                text="h4"
+                                                value="h4"/>
+                                            <h5
+                                                jcr:primaryType="nt:unstructured"
+                                                selected="{Boolean}true"
+                                                text="h5"
+                                                value="h5"/>
+                                            <h6
+                                                jcr:primaryType="nt:unstructured"
+                                                selected="{Boolean}true"
+                                                text="h6"
+                                                value="h6"/>
+                                        </items>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-accordion-v1-dialog-policy-hook="allowedHeadingElements"/>
+                                    </allowedHeadingElements>
+                                    <headingElement
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        fieldDescription="The default accordion item heading HTML element."
+                                        fieldLabel="Default Heading Element"
+                                        name="./headingElement"
+                                        ordered="{Boolean}true"
+                                        wrapperClass="foundation-toggleable">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <h2
+                                                jcr:primaryType="nt:unstructured"
+                                                text="h2"
+                                                value="h2"/>
+                                            <h3
+                                                jcr:primaryType="nt:unstructured"
+                                                selected="{Boolean}true"
+                                                text="h3"
+                                                value="h3"/>
+                                            <h4
+                                                jcr:primaryType="nt:unstructured"
+                                                text="h4"
+                                                value="h4"/>
+                                            <h5
+                                                jcr:primaryType="nt:unstructured"
+                                                text="h5"
+                                                value="h5"/>
+                                            <h6
+                                                jcr:primaryType="nt:unstructured"
+                                                text="h6"
+                                                value="h6"/>
+                                        </items>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-accordion-v1-dialog-policy-hook="headingElement"/>
+                                    </headingElement>
+                                </items>
+                            </column>
+                        </items>
+                    </properties>
                     <allowedcomponents
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Allowed Components"

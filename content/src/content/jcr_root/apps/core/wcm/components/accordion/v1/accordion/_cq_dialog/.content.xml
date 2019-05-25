@@ -33,7 +33,7 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <accordionitems
+                    <accordionItems
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Items"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
@@ -48,7 +48,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <accordionitems
+                                            <accordionItems
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="core/wcm/components/commons/editor/dialog/childreneditor/v1/childreneditor"/>
                                         </items>
@@ -56,7 +56,7 @@
                                 </items>
                             </columns>
                         </items>
-                    </accordionitems>
+                    </accordionItems>
                     <properties
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Properties"
@@ -72,58 +72,86 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <headingType
+                                            <singleExpansion
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
-                                                fieldDescription="The heading type each accordion's label is."
-                                                fieldLabel="Heading Type"
-                                                name="./headingType">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <h2
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H2"
-                                                        value="h2"/>
-                                                    <h3
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H3"
-                                                        value="h3"/>
-                                                    <h4
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H4"
-                                                        value="h4"/>
-                                                    <h5
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H5"
-                                                        value="h5"/>
-                                                    <h6
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="H6"
-                                                        value="h6"/>
-                                                </items>
-                                            </headingType>
-                                            <expandedItem
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/hidden"
-                                                name="./expandedItem">
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="{Boolean}false"
+                                                fieldDescription="Forces a single accordion item to be expanded at a time. Expanding one item will collapse all others."
+                                                name="./singleExpansion"
+                                                text="Single item expansion"
+                                                uncheckedValue="{Boolean}false"
+                                                value="{Boolean}true">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
-                                                    cmp-accordion-v1-dialog-edit-hook="expandedItem"/>
-                                            </expandedItem>
+                                                    cmp-accordion-v1-dialog-edit-hook="singleExpansion"/>
+                                            </singleExpansion>
+                                            <expandedItems
+                                                granite:hidden="{Boolean}true"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                                composite="{Boolean}false"
+                                                fieldDescription="Multifield containing hidden fields for reading the expanded items selection state">
+                                                <field
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                                    name="./expandedItems">
+                                                    <items jcr:primaryType="nt:unstructured">
+                                                        <expandedItems
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                            disabled="{Boolean}true"
+                                                            name="./expandedItems">
+                                                            <granite:data
+                                                                jcr:primaryType="nt:unstructured"
+                                                                cmp-accordion-v1-dialog-edit-hook="expandedItems"/>
+                                                        </expandedItems>
+                                                    </items>
+                                                </field>
+                                            </expandedItems>
+                                            <expandedItemsTypeHint
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                name="./expandedItems@TypeHint"
+                                                value="String[]">
+                                            </expandedItemsTypeHint>
                                             <expandedSelect
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="/libs/granite/ui/components/coral/foundation/form/select"
-                                                fieldDescription="The item that is expanded by default."
-                                                fieldLabel="Expanded Item">
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The items that are expanded by default."
+                                                fieldLabel="Expanded Items"
+                                                multiple="{Boolean}true"
+                                                name="./expandedItems"
+                                                wrapperClass="foundation-toggleable">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
                                                     cmp-accordion-v1-dialog-edit-hook="expandedSelect"/>
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <none
-                                                        jcr:primaryType="nt:unstructured"
-                                                        text="No Expanded Item"
-                                                        value=""/>
-                                                </items>
                                             </expandedSelect>
+                                            <expandedSelectSingle
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The item that is expanded by default."
+                                                fieldLabel="Expanded Item"
+                                                name="./expandedItems"
+                                                wrapperClass="foundation-toggleable">
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-accordion-v1-dialog-edit-hook="expandedSelectSingle"/>
+                                            </expandedSelectSingle>
+                                            <headingElement
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldDescription="The accordion item heading HTML element."
+                                                fieldLabel="Heading Element"
+                                                name="./headingElement"
+                                                ordered="{Boolean}true"
+                                                wrapperClass="foundation-toggleable">
+                                                <datasource
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="core/wcm/components/commons/datasources/allowedheadingelements/v1"/>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-accordion-v1-dialog-edit-hook="headingElement"/>
+                                            </headingElement>
                                         </items>
                                     </column>
                                 </items>
