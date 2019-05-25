@@ -59,6 +59,9 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
     @ScriptVariable
     private Style currentStyle;
 
+    /**
+     * The cached node names of the expanded items for which there is a valid matching child resource.
+     */
     private String[] expandedItemNames;
 
     /**
