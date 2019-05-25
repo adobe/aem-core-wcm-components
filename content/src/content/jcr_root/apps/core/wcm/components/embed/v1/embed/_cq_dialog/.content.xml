@@ -38,8 +38,8 @@
                                                 deleteHint="{Boolean}true"
                                                 fieldLabel="Select Embed Type"
                                                 ignoreData="{Boolean}false"
-												required="{Boolean}true"
                                                 name="./embedoption"
+                                                required="{Boolean}true"
                                                 vertical="{Boolean}false">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
@@ -61,10 +61,10 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
                                                 checked="{Boolean}true"
-												required="{Boolean}true"
                                                 fieldDescription="Leave empty to use the page title."
                                                 fieldLabel="HTML Markup"
-                                                name="./markup">
+                                                name="./markup"
+                                                required="{Boolean}true">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
                                                     showhidetargetvalue="html"/>
@@ -75,9 +75,9 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 deleteHint="{Boolean}true"
-												required="{Boolean}true"
                                                 fieldLabel="Select Embeddable"
-                                                name="./embedType">
+                                                name="./embedType"
+                                                required="{Boolean}true">
                                                 <datasource
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="core/wcm/components/embed/v1/datasource/embedoptions"/>
