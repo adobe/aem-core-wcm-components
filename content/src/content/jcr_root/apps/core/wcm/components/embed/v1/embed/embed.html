@@ -1,0 +1,25 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div class="cmp-embed"
+	data-sly-use.embed="com.adobe.cq.wcm.core.components.models.Embed"
+	data-sly-use.templates="core/wcm/components/commons/v1/templates.html">
+	<div class="cmp-embed__markup" data-sly-test="${embed.markup}">${embed.markup
+		@context = 'html'}</div>
+	<div class="cmp-embed__embeddable" data-sly-test="${embed.embedType}"
+		data-sly-resource="${resource.path @ resourceType=embed.embedType, wcmmode='disabled'}"></div>
+</div>
+<sly
+	data-sly-call="${templates.placeholder @ isEmpty = !(embed.markup || embed.embedType)}"></sly>

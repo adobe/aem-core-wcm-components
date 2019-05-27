@@ -1,0 +1,5 @@
+{
+	"markup": "<h2>hello html</h2>",
+	"embedMode": "html",
+	":type": "weretail/components/content/embed"
+}

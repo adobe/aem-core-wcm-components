@@ -1,0 +1,5 @@
+{
+  "embedType": "core/wcm/components/embed/embeddables/youtube",
+  "embedMode": "embeddable",
+  ":type": "weretail/components/content/embed"
+}

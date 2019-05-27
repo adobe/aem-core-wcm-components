@@ -1,0 +1,26 @@
+{
+	"embeddable": 
+	{
+		"jcr:primaryType": "nt:unstructured",
+		"jcr:createdBy": "admin",
+		"embedType": "core/wcm/components/embed/embeddables/youtube",
+		"jcr:lastModifiedBy": "admin",
+		"jcr:created": "Fri May 24 2019 18:28:35 GMT+0530",
+		"embedoption": "embeddable",
+		"youtubeId": "6v2L2UGZJAM",
+		"jcr:lastModified": "Fri May 24 2019 18:32:06 GMT+0530",
+		"sling:resourceType": "weretail/components/content/embed"
+	},
+
+	"html": 
+	{
+		"jcr:primaryType": "nt:unstructured",
+		"jcr:createdBy": "admin",
+		"jcr:lastModifiedBy": "admin",
+		"markup": "<h2>hello html</h2>",
+		"jcr:created": "Fri May 24 2019 18:28:35 GMT+0530",
+		"embedoption": "html",
+		"jcr:lastModified": "Fri May 24 2019 18:32:06 GMT+0530",
+		"sling:resourceType": "weretail/components/content/embed"
+	}
+}

@@ -1,0 +1,152 @@
+{
+	"conf": 
+	{
+		"policy_1558011912823": 
+		{
+			"jcr:primaryType": "nt:unstructured",
+			"jcr:title": "Embed",
+			"jcr:lastModifiedBy": "admin",
+			"allowedEmbedOptions": 
+			[
+				"/apps/wcm-examples/chatbot",
+				"/apps/wcm-examples/social"
+			],
+
+			"enableSelectionMode": "true",
+			"enableHtmlMode": "true",
+			"jcr:lastModified": "Thu May 16 2019 23:56:59 GMT+0530",
+			"sling:resourceType": "wcm/core/components/policy/policy",
+			"jcr:content": 
+			{
+				"jcr:primaryType": "nt:unstructured"
+			}
+		}
+	},
+
+	"wcm-examples": 
+	{
+		"chatbot": 
+		{
+			"jcr:primaryType": "cq:Component",
+			"jcr:createdBy": "admin",
+			"jcr:title": "Chat bot",
+			"order": 2,
+			"jcr:created": "Thu May 16 2019 12:41:00 GMT+0530",
+			"sling:resourceSuperType": "core/wcm/components/embed/embeddable",
+			"componentGroup": ".hidden",
+			"chat-bot.html": 
+			{
+				"jcr:primaryType": "nt:file",
+				"jcr:createdBy": "admin",
+				"jcr:created": "Thu May 16 2019 12:41:00 GMT+0530",
+				"jcr:content": 
+				{
+					"jcr:primaryType": "nt:resource",
+					"jcr:lastModifiedBy": "admin",
+					"jcr:mimeType": "text/html",
+					"jcr:lastModified": "Thu May 16 2019 12:41:00 GMT+0530",
+					":jcr:data": 2402,
+					"jcr:uuid": "0ae6d2c7-6fb1-43f2-8a84-3050458d6dca"
+				}
+			},
+
+			"cq:dialog": 
+			{
+				"jcr:primaryType": "nt:unstructured",
+				"jcr:title": "Form Container",
+				"granite:class": "embed-type-dialog",
+				"sling:resourceType": "granite/ui/components/coral/foundation/container",
+				"items": 
+				{
+					"jcr:primaryType": "nt:unstructured",
+					"caption": 
+					{
+						"jcr:primaryType": "nt:unstructured",
+						"name": "./chatbotCaption",
+						"fieldLabel": "Caption",
+						"sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+						"fieldDescription": "Additional information about the Embed Component"
+					},
+
+					"videoid": 
+					{
+						"jcr:primaryType": "nt:unstructured",
+						"required": true,
+						"name": "./chatbotId",
+						"fieldLabel": "Chat ID",
+						"sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+						"fieldDescription": "Chatbot ID"
+					}
+				},
+
+				"granite:data": 
+				{
+					"jcr:primaryType": "nt:unstructured",
+					"showhidetargetvalue": "core-components-examples/components/embeddables/chat-bot"
+				}
+			}
+		},
+
+		"social": 
+		{
+			"jcr:primaryType": "cq:Component",
+			"jcr:createdBy": "admin",
+			"jcr:title": "Social",
+			"order": 2,
+			"jcr:created": "Thu May 16 2019 12:41:00 GMT+0530",
+			"sling:resourceSuperType": "core/wcm/components/embed/embeddable",
+			"componentGroup": ".hidden",
+			"social.html": 
+			{
+				"jcr:primaryType": "nt:file",
+				"jcr:createdBy": "admin",
+				"jcr:created": "Thu May 16 2019 12:41:00 GMT+0530",
+				"jcr:content": 
+				{
+					"jcr:primaryType": "nt:resource",
+					"jcr:lastModifiedBy": "admin",
+					"jcr:mimeType": "text/html",
+					"jcr:lastModified": "Thu May 16 2019 12:41:00 GMT+0530",
+					":jcr:data": 2402,
+					"jcr:uuid": "0ae6d2c7-6fb1-43f2-8a84-3050458d6dca"
+				}
+			},
+
+			"cq:dialog": 
+			{
+				"jcr:primaryType": "nt:unstructured",
+				"jcr:title": "Form Container",
+				"granite:class": "embed-type-dialog",
+				"sling:resourceType": "granite/ui/components/coral/foundation/container",
+				"items": 
+				{
+					"jcr:primaryType": "nt:unstructured",
+					"caption": 
+					{
+						"jcr:primaryType": "nt:unstructured",
+						"name": "./socialCaption",
+						"fieldLabel": "Caption",
+						"sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+						"fieldDescription": "Additional information about the Embed Component"
+					},
+
+					"videoid": 
+					{
+						"jcr:primaryType": "nt:unstructured",
+						"required": true,
+						"name": "./socialId",
+						"fieldLabel": "social ID",
+						"sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+						"fieldDescription": "social ID"
+					}
+				},
+
+				"granite:data": 
+				{
+					"jcr:primaryType": "nt:unstructured",
+					"showhidetargetvalue": "core-components-examples/components/embeddables/social"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="List"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="https://www.adobe.com/go/aem_cmp_list_v1">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                <items jcr:primaryType="nt:unstructured">
+                    <general
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Embed Settings"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <htmlMode
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        checked="true"
+                                        fieldDescription="When checked, content authors can enter free-form html to render an embeddable widget"
+                                        name="./enableHtmlMode"
+                                        text="Enable Free Form HTML "
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
+                                    <selectionMode
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        checked="true"
+                                        fieldDescription="When checked, content authors can select an embeddable widgets from the list of available embeddables in a drop down"
+                                        name="./enableSelectionMode"
+                                        text="Enable Embeddables"
+                                        uncheckedValue="false"
+                                        value="{Boolean}true"/>
+                                    <selectionModeOptions
+                                        granite:class="cmp-action-type-selection"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        deleteHint="{Boolean}true"
+                                        fieldLabel="Select Embeddable"
+                                        multiple="{Boolean}true"
+                                        name="./allowedEmbedOptions">
+                                        <datasource
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="core/wcm/components/embed/v1/datasource/allembedoptions"/>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cq-dialog-dropdown-showhide-target=".action-type-dialog"/>
+                                    </selectionModeOptions>
+                                </items>
+                            </column>
+                        </items>
+                    </general>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
