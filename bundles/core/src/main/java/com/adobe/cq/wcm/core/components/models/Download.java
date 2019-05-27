@@ -161,9 +161,9 @@ public interface Download extends ComponentExporter {
     }
 
     /**
-     * Returns the format of the file to be downloaded.
+     * Returns the mime type of the file to be downloaded.
      *
-     * @return the format of the download file
+     * @return the mime type of the download file
      */
     default String getFormat() {
         throw new UnsupportedOperationException();
