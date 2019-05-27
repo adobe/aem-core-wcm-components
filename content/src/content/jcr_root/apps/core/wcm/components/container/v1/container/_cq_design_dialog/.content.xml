@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Container with background"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="https://www.adobe.com/go/aem_cmp_container_v1"
+    extraClientlibs="[core.wcm.components.container.v1.editor]">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        granite:class="cmp-container__design">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <main
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Background"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <container
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container"
+                                granite:class="coral-Form-containerwrapper">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <imageLabel
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                        text="Image Configurations"
+                                        granite:class="coral-Form-fieldlabel"/>                                                                                  
+                                    <imagesDisabled
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Disabled image"
+                                        name="./imageDisabled"
+                                        value="{Boolean}true"/>
+                                    <colorLabel
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                        text="Color Configurations"
+                                        granite:class="coral-Form-fieldlabel"/>        
+                                    <colorDisabled
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Disable colors"
+                                        name="./isColorsDisabled"
+                                        value="{Boolean}true"/>
+                                    <swatchesOnly
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Swatches only"
+                                        name="./propertyDisabled"
+                                        value="{Boolean}true"/>
+                                    <swatchesListLabel
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                        text="Swatches"
+                                        fieldDescription="Define a list of swatches that will be used for setting background color."
+                                        granite:class="coral-Form-fieldlabel-swatcheslist"/>     
+                                    <colorFields                                        
+                                        jcr:primaryType="nt:unstructured"
+                                        granite:class="cq-AllowedColors-styles cmp-container__design-multifield"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                        composite="{Boolean}true">                                        
+                                        <field
+                                        	name = "./cq:swatches"
+                                        	jcr:primaryType="nt:unstructured"
+                                        	granite:class="cq-AllowedColors-style"
+                                        	sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        	<items jcr:primaryType="nt:unstructured">
+		                                        <color
+		                                            jcr:primaryType="nt:unstructured"
+		                                            granite:class="cq-AllowedColors-styleField"
+		                                            emptyText="Color"
+		                                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+		                                            name="./color"/>
+		                                        <value
+												    granite:class="cq-AllowedColors-styleField"
+	                                                jcr:primaryType="nt:unstructured"
+	                                                sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
+	                                                showDefaultColors="{Boolean}false"
+	                                                showSwatches="{Boolean}false"
+	                                                emptyText="Value"
+	                                                name="./value">
+                                            </items>
+                                        </field>  
+                                    </colorFields>   
+                                </items>
+                            </container>
+                        </items>
+                    </main>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
