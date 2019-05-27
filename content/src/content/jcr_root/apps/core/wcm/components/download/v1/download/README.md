@@ -31,7 +31,7 @@ The Download component uses the `com.adobe.cq.wcm.core.components.models.Downloa
 The following JCR properties are used:
 
 1. `./fileReference` - defines the path to the asset from DAM
-2. `./inline` - defines if the download item should be displayed inline into the browser vs. attachment
+2. `./inline` - defines if the download item should be displayed inline in the browser vs. attachment
 3. `./jcr:title` - title of the download item
 4. `./titleFromAsset` - defines if the the title should be reused from the asset dam title
 5. `./jcr:description` - description of the download item
@@ -45,7 +45,9 @@ BLOCK cmp-download
     ELEMENT cmp-download__title
     ELEMENT cmp-download__description
     ELEMENT cmp-download__action
-        MOD cmp-download__action-icon--<extension>
+        ELEMENT cmp-download__action-icon
+            MOD cmp-download__action-icon--<extension>
+        ELEMENT cmp-download__action-text
     ELEMENT cmp-download__filename
     ELEMENT cmp-download__size
     ELEMENT cmp-download__format

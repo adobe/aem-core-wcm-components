@@ -131,10 +131,9 @@
                                                 maximized="{Boolean}true">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <allowupload
-                                                        granite:class="js-cq-ImageEditor-allowUpload"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="{Boolean}true"
+                                                        checked="{Boolean}false"
                                                         deleteHint="{Boolean}false"
                                                         name="./allowUpload"
                                                         text="Allow asset upload from file system"

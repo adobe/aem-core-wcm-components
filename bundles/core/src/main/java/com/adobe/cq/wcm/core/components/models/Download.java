@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
-import com.adobe.cq.export.json.ComponentExporter;
-
 import javax.annotation.Nonnull;
+
+import com.adobe.cq.export.json.ComponentExporter;
 
 /**
  * Defines the {@code Download} Sling Model for the {@code /apps/core/wcm/components/download} component.
@@ -56,7 +56,7 @@ public interface Download extends ComponentExporter {
     /**
      * Name of the policy property that defines whether an image representing the file will be displayed.
      */
-    String PN_DISPLAY_THUMBNAIL = "displayImage";
+    String PN_DISPLAY_IMAGE = "displayImage";
 
     /**
      * Name of the policy property that defines whether the file's size will be displayed.
@@ -99,7 +99,7 @@ public interface Download extends ComponentExporter {
      *
      * @return the asset url
      */
-    default String getDownloadUrl() {
+    default String getURL() {
         throw new UnsupportedOperationException();
     }
 
@@ -138,6 +138,16 @@ public interface Download extends ComponentExporter {
      * @return the size of download file
      */
     default String getSize() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the extension of file to be downloaded. Extension is mapped with the {@link org.apache.sling.commons.mime.MimeTypeService}
+     * . If no mapping can be found the extension is extracted from the filename.
+     *
+     * @return the extesion of the download file
+     */
+    default String getExtension() {
         throw new UnsupportedOperationException();
     }
 
@@ -192,16 +202,6 @@ public interface Download extends ComponentExporter {
      * @return {@code true} if the filename should be displayed, {@code false} otherwise
      */
     default boolean displayFilename() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the extension of file to be downloaded. Extension is mapped with the {@link org.apache.sling.commons.mime.MimeTypeService}
-     * . If no mapping can be found the extension is extracted from the filename.
-     *
-     * @return the extesion of the download file
-     */
-    default String getExtension() {
         throw new UnsupportedOperationException();
     }
 

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,16 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
-import com.adobe.cq.wcm.core.components.models.Download;
-import com.day.cq.commons.DownloadResource;
-import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.dam.api.Asset;
-import com.day.cq.dam.api.DamConstants;
-import com.day.cq.wcm.api.designer.Style;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Calendar;
+import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -36,13 +32,26 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.*;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
-import java.util.Calendar;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
+import com.adobe.cq.wcm.core.components.models.Download;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.api.DamConstants;
+import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Download.class, ComponentExporter.class},
@@ -70,7 +79,6 @@ public class DownloadImpl implements Download {
     @ScriptVariable
     private ValueMap properties;
 
-
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
     protected Style currentStyle;
@@ -78,7 +86,7 @@ public class DownloadImpl implements Download {
     @SlingObject
     private ResourceResolver resourceResolver;
 
-    private String downloadUrl;
+    private String url;
 
     private boolean titleFromAsset = false;
 
@@ -130,12 +138,50 @@ public class DownloadImpl implements Download {
                 actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
             }
             titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
-            displayImage = currentStyle.get(PN_DISPLAY_THUMBNAIL, false);
+            displayImage = currentStyle.get(PN_DISPLAY_IMAGE, false);
             displaySize = currentStyle.get(PN_DISPLAY_SIZE, false);
             displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, false);
             displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, false);
         }
         if (StringUtils.isNotBlank(fileReference)) {
+            initAssetDownload(fileReference);
+        } else {
+            Resource file = resource.getChild(DownloadResource.NN_FILE);
+            if (file != null) {
+                initFileDownload(file);
+            }
+        }
+    }
+
+    private void initFileDownload(Resource file) {
+        filename = properties.get(DownloadResource.PN_FILE_NAME, String.class);
+        if (StringUtils.isNotEmpty(filename)) {
+            Resource fileContent = file.getChild(JcrConstants.JCR_CONTENT);
+            if (fileContent != null) {
+                ValueMap valueMap = fileContent.adaptTo(ValueMap.class);
+                if (valueMap != null) {
+                    format = valueMap.get(JcrConstants.JCR_MIMETYPE, String.class);
+
+                    if (StringUtils.isNotEmpty(format)) {
+                        extension = mimeTypeService.getExtension(format);
+                    }
+                    Calendar calendar = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+                    if (calendar != null) {
+                        lastModified = calendar.getTimeInMillis();
+                    }
+                    if (StringUtils.isNotEmpty(format)) {
+                        extension = mimeTypeService.getExtension(format);
+                    }
+
+                    url = getDownloadUrl(file) + "/" + filename;
+                    size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
+                    imagePath = populateImagePath();
+                }
+            }
+        }
+    }
+
+    private void initAssetDownload(String fileReference) {
             Resource downloadResource = resourceResolver.getResource(fileReference);
             if (downloadResource != null) {
                 Asset downloadAsset = downloadResource.adaptTo(Asset.class);
@@ -161,18 +207,8 @@ public class DownloadImpl implements Download {
                         extension = FilenameUtils.getExtension(filename);
                     }
 
-                    downloadUrl = populateDownloadUrl(downloadAsset);
-
-                    StringBuilder imagePathBuilder = new StringBuilder();
-
-                    String resourcePath = resourceResolver.map(request, resource.getPath());
-
-                    imagePathBuilder.append(resourcePath).append(IMAGE_SERVLET_EXTENSION);
-                    if (lastModified > 0) {
-                        imagePathBuilder.append("/").append(lastModified).append(JPEG_EXTENSION);
-                    }
-
-                    imagePath = imagePathBuilder.toString();
+                    url = getDownloadUrl(downloadResource);
+                    imagePath = populateImagePath();
 
                     if (titleFromAsset) {
                         String assetTitle = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
@@ -193,23 +229,8 @@ public class DownloadImpl implements Download {
                         long rawFileSize = (Long) rawFileSizeObject;
                         size = FileUtils.byteCountToDisplaySize(rawFileSize);
                     }
-                }
             }
         }
-    }
-
-    private String populateDownloadUrl(Asset downloadAsset) {
-        StringBuilder downloadUrlBuilder = new StringBuilder();
-        downloadUrlBuilder.append(downloadAsset.getPath())
-                .append(".")
-                .append(DownloadServlet.SELECTOR)
-                .append(".");
-        if (inline) {
-            downloadUrlBuilder.append(DownloadServlet.INLINE_SELECTOR)
-                    .append(".");
-        }
-        downloadUrlBuilder.append(extension);
-        return downloadUrlBuilder.toString();
     }
 
     @Nonnull
@@ -219,8 +240,8 @@ public class DownloadImpl implements Download {
     }
 
     @Override
-    public String getDownloadUrl() {
-        return downloadUrl;
+    public String getURL() {
+        return url;
     }
 
     @Override
@@ -286,5 +307,49 @@ public class DownloadImpl implements Download {
     @Override
     public String getExtension() {
         return extension;
+    }
+
+    private long getFileSize(Resource resource) {
+        long size = 0;
+        Node node = resource.adaptTo(Node.class);
+        if (node != null) {
+            try {
+                Property data = node.getProperty(JcrConstants.JCR_DATA);
+                size = data.getBinary().getSize();
+            }
+            catch (RepositoryException ex) {
+                throw new RuntimeException("Unable to detect binary file size for " + resource.getPath(), ex);
+            }
+        }
+        return size;
+    }
+
+    @NotNull
+    private String populateImagePath() {
+        StringBuilder imagePathBuilder = new StringBuilder();
+
+        String resourcePath = resourceResolver.map(request, resource.getPath());
+
+        imagePathBuilder.append(resourcePath).append(IMAGE_SERVLET_EXTENSION);
+        if (lastModified > 0) {
+            imagePathBuilder.append("/").append(lastModified).append(JPEG_EXTENSION);
+        }
+
+        return imagePathBuilder.toString();
+    }
+
+    @NotNull
+    private String getDownloadUrl(Resource resource) {
+        StringBuilder downloadUrlBuilder = new StringBuilder();
+        downloadUrlBuilder.append(resource.getPath())
+                .append(".")
+                .append(DownloadServlet.SELECTOR)
+                .append(".");
+        if (inline) {
+            downloadUrlBuilder.append(DownloadServlet.INLINE_SELECTOR)
+                    .append(".");
+        }
+        downloadUrlBuilder.append(extension);
+        return downloadUrlBuilder.toString();
     }
 }
