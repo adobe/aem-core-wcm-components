@@ -29,7 +29,7 @@
                                         <items jcr:primaryType="nt:unstructured">
                                             <colorpicker
                                                 granite:class="core-container-backgroundType"
-                                                granite:hide="${cqDesign.backgroundColorDisabled || cqDesign.backgroundSwatchesOnly}"
+                                                granite:hide="${!cqDesign.backgroundColorEnabled || cqDesign.backgroundSwatchesOnly}"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
                                                 fieldLabel="Color Picker"
@@ -41,7 +41,7 @@
                                             </colorpicker>
                                             <swatches
                                                 granite:class="core-container-backgroundType"
-                                                granite:hide="${cqDesign.backgroundColorDisabled || !cqDesign.backgroundSwatchesOnly}"
+                                                granite:hide="${!cqDesign.backgroundColorEnabled || !cqDesign.backgroundSwatchesOnly}"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
                                                 fieldLabel="Color Picker"
@@ -55,7 +55,7 @@
                                             <image
                                                 jcr:primaryType="nt:unstructured"
                                                 jcr:title="Image"
-                                                granite:hide="${cqDesign.backgroundImageDisabled}"
+                                                granite:hide="${!cqDesign.backgroundImageEnabled}"
                                                 sling:resourceType="granite/ui/components/coral/foundation/container"
                                                 margin="{Boolean}true">
                                                 <items jcr:primaryType="nt:unstructured">

@@ -41,16 +41,16 @@ public class AbstractComponentImpl implements Component {
     @JsonIgnore
     protected Style currentStyle;
 
-    private boolean backgroundColorDisabled;
-    private boolean backgroundImageDisabled;
+    private boolean backgroundColorEnabled;
+    private boolean backgroundImageEnabled;
     private String backgroundImageReference;
     private String backgroundColor;
     private StringBuilder styleBuilder;
 
 
     private void populateStyleProperties() {
-        backgroundColorDisabled = currentStyle.get(Component.PN_BACKGROUND_COLOR_DISABLED, false);
-        backgroundImageDisabled = currentStyle.get(Component.PN_BACKGROUND_IMAGE_DISABLED, false);
+        backgroundColorEnabled = currentStyle.get(Component.PN_BACKGROUND_COLOR_ENABLED, false);
+        backgroundImageEnabled = currentStyle.get(Component.PN_BACKGROUND_IMAGE_ENABLED, false);
         backgroundColor = properties.get(Component.PN_BACKGROUND_COLOR, String.class);
         backgroundImageReference = properties.get(Container.PN_BACKGROUND_IMAGE_REFERENCE, String.class);
     }
@@ -58,10 +58,10 @@ public class AbstractComponentImpl implements Component {
     private void setBackgroundStyleString()
     {
         styleBuilder = new StringBuilder();
-        if (!backgroundImageDisabled && !StringUtils.isEmpty(backgroundImageReference)) {
+        if (backgroundImageEnabled && !StringUtils.isEmpty(backgroundImageReference)) {
             styleBuilder.append("background-image:url(" + backgroundImageReference + ");background-size:cover;background-repeat:no-repeat;");
         }
-        if (!backgroundColorDisabled && !StringUtils.isEmpty(backgroundColor)) {
+        if (backgroundColorEnabled && !StringUtils.isEmpty(backgroundColor)) {
             styleBuilder.append("background-color:" + backgroundColor + ";");
         }
     }

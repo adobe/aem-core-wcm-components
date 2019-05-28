@@ -35,8 +35,8 @@
                                     <imagesDisabled
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Disable background image"
-                                        name="./backgroundImageDisabled"
+                                        text="Enable background image"
+                                        name="./backgroundImageEnabled"
                                         value="{Boolean}true"/>
                                     <colorLabel
                                         jcr:primaryType="nt:unstructured"
@@ -46,8 +46,8 @@
                                     <colorDisabled
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                        text="Disable background colors"
-                                        name="./backgroundColorDisabled"
+                                        text="Enable background colors"
+                                        name="./backgroundColorEnabled"
                                         value="{Boolean}true"/>
                                     <swatchesOnly
                                         jcr:primaryType="nt:unstructured"

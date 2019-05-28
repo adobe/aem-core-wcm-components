@@ -22,40 +22,51 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
 
 @ConsumerType
 public interface Component extends ComponentExporter {
 
     String PN_ID = "id";
-    String PN_BACKGROUND_IMAGE_DISABLED = "backgroundImageDisabled";
-    String PN_BACKGROUND_COLOR_DISABLED = "backgroundColorDisabled";
+    String PN_BACKGROUND_IMAGE_ENABLED = "backgroundImageEnabled";
+    String PN_BACKGROUND_COLOR_ENABLED = "backgroundColorEnabled";
     String PN_BACKGROUND_SWATCHES_ONLY = "backgroundSwatchesOnly";
     String PN_BACKGROUND_IMAGE_REFERENCE = "backgroundImageReference";
     String PN_BACKGROUND_COLOR = "backgroundColor";
 
+    /**
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
     @Nullable
     default String getId() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
     @Nullable
     default String[] getClasses() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
     @Nullable
     default String getStyle() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
     @Nullable
     default Map<String, String> getAttributes() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * @see ContainerExporter#getExportedType()
+     * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @NotNull

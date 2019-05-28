@@ -15,29 +15,37 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.testing.resourceresolver.MockValueMap;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
+import com.adobe.cq.wcm.core.components.testing.MockStyle;
+import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 
 public class ContainerImplTest {
 
     private static final String TEST_BASE = "/container";
     private static final String CONTENT_ROOT = "/content";
+    private static final String TEST_PAGE = "/content/container";
     private static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT_PAGE = "/content/container";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
@@ -56,8 +64,12 @@ public class ContainerImplTest {
     }
 
     @Test
-    public void testContainerWithBackgroundAndItems() {
-        Container container = getContainerUnderTest(CONTAINER_1);
+    public void testContainerWithPropertiesAndPolicy() {
+        Resource mockResource = mock(Resource.class);
+        Container container = getContainerUnderTest(CONTAINER_1, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(Component.PN_BACKGROUND_IMAGE_ENABLED, true);
+            put(Component.PN_BACKGROUND_COLOR_ENABLED, true);
+        }})));
         assertEquals("Style mismatch",
                 "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
                 container.getStyle());
@@ -74,15 +86,16 @@ public class ContainerImplTest {
     
     @Test
     public void testContainerNoProperties() {
-        Container container = getContainerUnderTest(CONTAINER_2);
+        Container container = getContainerUnderTest(CONTAINER_2, null);
+        assertNull("Id", container.getId());
         assertNull("Style", container.getStyle());
     }
     
     @Test
-    public void testContainerWithPropertiesAndDisabledBackgroundFromContentPolicies() {
-        Container container = getContainerUnderTest(CONTAINER_3);
-        // TODO: mock content policy to disable backgrounds
-        //assertNull("Style", container.getStyle());
+    public void testContainerWithPropertiesAndNoPolicy() {
+        Container container = getContainerUnderTest(CONTAINER_3, null);
+        assertNull("Id", container.getId());
+        assertNull("Style", container.getStyle());
     }
     
     private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
@@ -94,11 +107,25 @@ public class ContainerImplTest {
         }
     }
 
-    private Container getContainerUnderTest(String resourcePath) {
+    private Container getContainerUnderTest(String resourcePath, Style style) {
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
-        }        
+        }
+
+        SlingBindings bindings = new SlingBindings();
+        bindings.put(SlingBindings.RESOURCE, resource);
+        bindings.put(SlingBindings.REQUEST, AEM_CONTEXT.request());
+        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
+        bindings.put(WCMBindings.CURRENT_PAGE, AEM_CONTEXT.pageManager().getPage(TEST_PAGE));
+        bindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
+        if (style == null) {
+            Resource mockResource = mock(Resource.class);
+            style = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap()));
+        }
+        bindings.put(WCMBindings.CURRENT_STYLE, style);
+        AEM_CONTEXT.request().setAttribute(SlingBindings.class.getName(), bindings);
+
         AEM_CONTEXT.currentResource(resource);
         AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
         return AEM_CONTEXT.request().adaptTo(Container.class);

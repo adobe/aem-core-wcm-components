@@ -31,8 +31,8 @@ The Container component uses the `com.adobe.cq.wcm.core.components.models.Contai
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./backgroundImageDisabled` - defines whether or not display background image option.
-2. `./backgroundColorDisabled` - defines whether or not to display background color picker option.
+1. `./backgroundImageEnabled` - defines whether or not display background image option.
+2. `./backgroundColorEnabled` - defines whether or not to display background color picker option.
 3. `./backgroundSwatchesOnly` -  defines whether or not to display color picker properties tab.
 4. `./cq:swatches` - defines list of custom swatches list.
 
@@ -56,4 +56,4 @@ BLOCK cmp-container
 * **Compatibility**: AEM 6.5
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_container\_v1](https://www.adobe.com/go/aem_cmp_container_v1)
-* **Component Library**: [http://opensource.adobe.com/aem-core-wcm-components/library/container.html](http://opensource.adobe.com/aem-core-wcm-components/library/container.html)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_container](https://www.adobe.com/go/aem_cmp_library_container)

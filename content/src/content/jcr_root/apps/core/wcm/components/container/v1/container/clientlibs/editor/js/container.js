@@ -19,7 +19,7 @@
 
     var selectors = {
         dialogContent: ".cmp-container__design",
-        backgroundColorDisabled: 'coral-checkbox[name="./backgroundColorDisabled"]',
+        backgroundColorEnabled: 'coral-checkbox[name="./backgroundColorEnabled"]',
         backgroundSwatchesOnly: 'coral-checkbox[name="./backgroundSwatchesOnly"]',
         colorMultifield: ".cmp-container__design-multifield",
         swatchesListLabel: ".coral-Form-fieldlabel-swatcheslist"
@@ -31,18 +31,18 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-            var $colorHiddenCheckbox = $dialogContent.find(selectors.backgroundColorDisabled);
-            if ($colorHiddenCheckbox.size() > 0) {
-                var colorHidden = $colorHiddenCheckbox.adaptTo("foundation-field").getValue() === "true";
-                toggle($dialogContent, selectors.colorMultifield, !colorHidden);
-                toggle($dialogContent, selectors.backgroundSwatchesOnly, !colorHidden);
-                toggle($dialogContent, selectors.swatchesListLabel, !colorHidden);
+            var $backgroundColorEnabledCheckbox = $dialogContent.find(selectors.backgroundColorEnabled);
+            if ($backgroundColorEnabledCheckbox.size() > 0) {
+                var backgroundColorEnabled = $backgroundColorEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
+                toggle($dialogContent, selectors.colorMultifield, backgroundColorEnabled);
+                toggle($dialogContent, selectors.backgroundSwatchesOnly, backgroundColorEnabled);
+                toggle($dialogContent, selectors.swatchesListLabel, backgroundColorEnabled);
 
-                $colorHiddenCheckbox.on("change", function(event) {
-                    var colorHidden = $(event.target).adaptTo("foundation-field").getValue() === "true";
-                    toggle($dialogContent, selectors.colorMultifield, !colorHidden);
-                    toggle($dialogContent, selectors.backgroundSwatchesOnly, !colorHidden);
-                    toggle($dialogContent, selectors.swatchesListLabel, !colorHidden);
+                $backgroundColorEnabledCheckbox.on("change", function(event) {
+                    var backgroundColorEnabled = $(event.target).adaptTo("foundation-field").getValue() === "true";
+                    toggle($dialogContent, selectors.colorMultifield, backgroundColorEnabled);
+                    toggle($dialogContent, selectors.backgroundSwatchesOnly, backgroundColorEnabled);
+                    toggle($dialogContent, selectors.swatchesListLabel, backgroundColorEnabled);
                 });
             }
         }
