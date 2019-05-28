@@ -18,7 +18,7 @@
           xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
           xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
     jcr:primaryType="nt:unstructured"
-    jcr:title="List"
+    jcr:title="Image List"
     sling:resourceType="cq/gui/components/authoring/dialog"
     helpPath="https://www.adobe.com/go/aem_cmp_image_list_v1">
     <content

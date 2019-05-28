@@ -15,19 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.util.Calendar;
-
 import javax.inject.Inject;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
-import org.jetbrains.annotations.Nullable;
-import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Interface for a generic list item, used by the {@link List} and {@link Search} models.
+ * Interface for a generic image list item, used by the {@item ImageList} models.
  *
- * @since com.adobe.cq.wcm.core.components.models 12.2.0
+ * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
 @Model(adaptables = Resource.class)
 public class ImageListItem {
@@ -43,10 +39,21 @@ public class ImageListItem {
 	
 	private Resource imageResource;
 	
+	/**
+     * Returns the Image Resource of this {@code ImageListItem}.
+     *
+     * @return the Image Resource of this image list item or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
     public Resource getImageResource() {
 		return imageResource;
 	}
-
+    
+    /**
+     * Sets the Image Resource of this {@code ImageListItem}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
 	public void setImageResource(Resource imageResource) {
 		this.imageResource = imageResource;
 	}
@@ -55,58 +62,57 @@ public class ImageListItem {
      * Returns the ImagePath of this {@code ImageListItem}.
      *
      * @return the ImagePath of this image list item or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-	/*@Inject
-    @Nullable
-    default String getImagePath() {
-        throw new UnsupportedOperationException();
-    }*/
 	public String getImagePath() {
 		return fileReference;
 	}
-
+	
+	/**
+     * Sets the ImagePath of this {@code ImageListItem}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
 	public void setImagePath(String fileReference) {
 		this.fileReference = fileReference;
 	}
-
+	
+	/**
+	 * Returns the LinkText of this {@code ImageListItem}.
+	 *
+	 * @return the LinkText of this image list item or {@code null}
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
 	public String getLinkText() {
 		return linkText;
 	}
-
+	
+	/**
+	 * Sets the LinkText of this {@code ImageListItem}.
+	 *
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
 	public void setLinkText(String linkText) {
 		this.linkText = linkText;
 	}
-
-	public String getLinkURL() {
-		return linkURL;
-	}
-
-	public void setLinkURL(String linkURL) {
-		this.linkURL = linkURL;
-	}
-
-    /**
-     * Returns the LinkText of this {@code ImageListItem}.
-     *
-     * @return the LinkText of this image list item or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-	/*@Inject
-    @Nullable
-    default String getLinkText() {
-        throw new UnsupportedOperationException();
-    }*/
 
     /**
      * Returns the LinkUrl of this {@code ImageListItem}.
      *
      * @return the image list item LinkUrl or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-	/*@Inject
-    @Nullable
-    default String getLinkUrl() {
-        throw new UnsupportedOperationException();
-    }*/
+	public String getLinkURL() {
+		return linkURL;
+	}
+
+	/**
+     * Sets the LinkUrl of this {@code ImageListItem}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+	public void setLinkURL(String linkURL) {
+		this.linkURL = linkURL;
+	}
+
 }

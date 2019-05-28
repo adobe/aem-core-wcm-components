@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,30 +15,20 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +37,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ImageList;
 import com.adobe.cq.wcm.core.components.models.ImageListItem;
-import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
@@ -90,15 +79,6 @@ public class ImageListImpl implements ImageList {
     
     protected java.util.List<ImageListItem> listItems;
 
-    @PostConstruct
-    private void initModel() {
-        readProperties();
-    }
-
-    private void readProperties() {
-        // read edit config properties
-    }
-
     @Override
     public Collection<ImageListItem> getListItems() {
         if (listItems == null) {
@@ -119,10 +99,10 @@ public class ImageListImpl implements ImageList {
         if(imageList != null) {
             Iterator<Resource> imagesList = imageList.listChildren();
             while(imagesList.hasNext()) {
-            	Resource currentResource = imagesList.next();
+            	Resource imageItem = imagesList.next();
             	ImageDelegatingModelImpl imageDelegatingModel = new ImageDelegatingModelImpl();
-            	imageDelegatingModel.setImageResource(component, currentResource, hiddenImageResourceProperties);
-            	ImageListItem imageListItem = currentResource.adaptTo(ImageListItem.class);            	
+            	imageDelegatingModel.setImageResource(component, imageItem, hiddenImageResourceProperties);
+            	ImageListItem imageListItem = imageItem.adaptTo(ImageListItem.class);            	
                 if(imageListItem != null) {
                 	imageListItem.setImageResource(imageDelegatingModel.getImageResource());
                 	listItems.add(imageListItem);
