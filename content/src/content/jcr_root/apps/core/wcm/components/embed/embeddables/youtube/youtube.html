@@ -13,47 +13,24 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<h2 class="cmp-embeddable-youtube__title" data-sly-test="${properties.youtubeTitle}">${properties.youtubeTitle}</h2>
-<div class="cmp-embeddable-youtube__player" id="player"></div>
-<script>
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
-
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: "${properties.youtubeHeight || 390 @ context='scriptString'}",
-          width: "${properties.youtubeWidth || 640 @ context='scriptString'}",
-          videoId: "${properties.youtubeId @ context='scriptString'}",
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
-
-      // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
-        //event.target.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 6000);
-          done = true;
-        }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
-</script>
+<div class="cmp-embeddable-youtube" data-sly-test="${properties.youtubeId}">
+	<h2 class="cmp-embeddable-youtube__title"
+		data-sly-test="${properties.youtubeTitle}">${properties.youtubeTitle}</h2>
+	<iframe id="youtube-iframe-${resource.name}"
+		width="${properties.youtubeWidth || '100%' @ context='scriptString'}"
+		height="${properties.youtubeHeight || 390 @ context='scriptString'}"
+		src="${'https://www.youtube.com/embed/{0}?enablejsapi=1&origin={1}://{2}' @ format=[properties.youtubeId, request.scheme, request.serverName]}"
+		frameborder="0"></iframe>
+	<script type="text/javascript">
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		var YOUTUBE_IFRAME_API = "https://www.youtube.com/iframe_api";
+		if (firstScriptTag.src != YOUTUBE_IFRAME_API) {
+			var youtubeScriptTag = document.createElement('script');
+			youtubeScriptTag.src = YOUTUBE_IFRAME_API;
+			firstScriptTag.parentNode.insertBefore(youtubeScriptTag, firstScriptTag);
+		}
+		function onYouTubeIframeAPIReady() {
+		  new YT.Player("youtube-iframe-${resource.name @ context='scriptString'}");
+		}
+	</script>
+</div>

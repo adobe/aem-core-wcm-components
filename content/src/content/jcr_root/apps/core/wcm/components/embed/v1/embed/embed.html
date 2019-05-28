@@ -16,10 +16,8 @@
 <div class="cmp-embed"
 	data-sly-use.embed="com.adobe.cq.wcm.core.components.models.Embed"
 	data-sly-use.templates="core/wcm/components/commons/v1/templates.html">
-	<div class="cmp-embed__markup" data-sly-test="${embed.markup}">${embed.markup
-		@context = 'html'}</div>
+	<div class="cmp-embed__markup" data-sly-test="${embed.markup}">${embed.markup @context = 'html'}</div>
 	<div class="cmp-embed__embeddable" data-sly-test="${embed.embedType}"
 		data-sly-resource="${resource.path @ resourceType=embed.embedType, wcmmode='disabled'}"></div>
 </div>
-<sly
-	data-sly-call="${templates.placeholder @ isEmpty = !(embed.markup || embed.embedType)}"></sly>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !(embed.markup || embed.embedType)}"></sly>
