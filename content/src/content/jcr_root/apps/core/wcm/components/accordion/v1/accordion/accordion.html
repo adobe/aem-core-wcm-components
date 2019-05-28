@@ -25,7 +25,6 @@
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">
             <button class="cmp-accordion__button${item.name in accordion.expandedItems ? ' cmp-accordion__button--expanded' : ''}"
-                    aria-expanded="${item.name in accordion.expandedItems ? 'true' : 'false'}"
                     data-cmp-hook-accordion="button">
                 <span class="cmp-accordion__title">${item.title}</span>
                 <span class="cmp-accordion__icon"></span>
@@ -33,8 +32,7 @@
         </h3>
         <div data-sly-resource="${item.name @ decorationTagName='div'}"
              data-cmp-hook-accordion="panel"
-             class="cmp-accordion__panel${item.name in accordion.expandedItems ? ' cmp-accordion__panel--expanded' : ''}"
-             aria-hidden="${item.name in accordion.expandedItems ? 'false' : 'true'}"
+             class="cmp-accordion__panel${item.name in accordion.expandedItems ? ' cmp-accordion__panel--expanded' : ' cmp-accordion__panel--hidden'}"
              role="region"></div>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"

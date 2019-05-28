@@ -39,6 +39,7 @@
             expanded: "cmp-accordion__button--expanded"
         },
         panel: {
+            hidden: "cmp-accordion__panel--hidden",
             expanded: "cmp-accordion__panel--expanded"
         }
     };
@@ -389,6 +390,7 @@
                 button.classList.add(cssClasses.button.expanded);
                 button.setAttribute("aria-expanded", true);
                 panel.classList.add(cssClasses.panel.expanded);
+                panel.classList.remove(cssClasses.panel.hidden);
                 panel.setAttribute("aria-hidden", false);
 
                 if (that._properties.singleExpansion) {
@@ -412,6 +414,7 @@
                 button.classList.remove(cssClasses.button.expanded);
                 button.setAttribute("aria-expanded", false);
                 button.removeAttribute("aria-disabled");
+                panel.classList.add(cssClasses.panel.hidden);
                 panel.classList.remove(cssClasses.panel.expanded);
                 panel.setAttribute("aria-hidden", true);
             }
