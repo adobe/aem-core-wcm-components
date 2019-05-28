@@ -20,7 +20,7 @@
     var selectors = {
         dialogContent: ".cmp-container__design",
         backgroundColorDisabled: 'coral-checkbox[name="./backgroundColorDisabled"]',
-        backgroundSwatchesOnly : 'coral-checkbox[name="./backgroundSwatchesOnly"]',
+        backgroundSwatchesOnly: 'coral-checkbox[name="./backgroundSwatchesOnly"]',
         colorMultifield: ".cmp-container__design-multifield",
         swatchesListLabel: ".coral-Form-fieldlabel-swatcheslist"
     };

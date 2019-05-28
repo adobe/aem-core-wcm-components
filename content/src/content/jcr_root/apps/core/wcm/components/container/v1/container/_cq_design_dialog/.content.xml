@@ -67,7 +67,7 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                         composite="{Boolean}true">                                        
                                         <field
-                                        	name = "./cq:swatches"
+                                        	name="./cq:swatches"
                                         	jcr:primaryType="nt:unstructured"
                                         	granite:class="cq-AllowedColors-style"
                                         	sling:resourceType="granite/ui/components/coral/foundation/container">
