@@ -6,5 +6,6 @@
     jcr:title="Core Components Examples"
     sling:resourceType="cq/tagging/components/tag">
     <component-type/>
+    <region/>
     <rep:policy/>
 </jcr:root>

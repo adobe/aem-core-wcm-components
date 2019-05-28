@@ -49,6 +49,8 @@
     // breadcrumb component
     c.rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
     c.rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
+    // button component
+    c.rtButton_v1 = "core/wcm/components/button/v1/button";
     // navigation component
     c.rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
     // language navigation component
@@ -61,6 +63,10 @@
     c.rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
     // tabs component
     c.rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
+    // content fragment component
+    c.rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
+    // content fragment list component
+    c.rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
     // form container
     c.rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
     c.rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";

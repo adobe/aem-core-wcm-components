@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/reference]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Add a content fragment asset"
+        jcr:description="Display a content fragment asset"
         jcr:primaryType="cq:PageContent"
         jcr:title="Content Fragment"
         sling:resourceType="core-components-examples/components/page">
@@ -95,7 +95,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Content fragment component with an associated content fragment asset. The asset uses the&amp;nbsp;&lt;i>Simple Fragment&amp;nbsp;&lt;/i>template and displays some dummy article content, including a header and paragraph. It has one&amp;nbsp;&lt;i>Main&lt;/i>&amp;nbsp;element.&lt;/p>&#xa;"
+                    text="&lt;p>Content fragment component with an associated content fragment asset. The asset uses the&amp;nbsp;&lt;i>Simple Fragment&amp;nbsp;&lt;/i>model and displays some dummy article content, including a header and paragraph. It has one&amp;nbsp;&lt;i>Main&lt;/i>&amp;nbsp;element.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_759741754
                     jcr:created="{Date}2019-01-15T15:26:22.657+01:00"
@@ -103,7 +103,8 @@
                     jcr:lastModified="{Date}2019-01-15T15:26:22.657+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
@@ -168,7 +169,8 @@
                     jcr:lastModified="{Date}2019-01-15T15:24:16.176+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
@@ -221,7 +223,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>In this example, the asset is based on a bespoke &lt;i>Core Component Model&lt;/i> template which allows the output of structured data associated with a Core Component. The asset contains data for the image component.&lt;/p>&#xa;"
+                    text="&lt;p>In this example, the asset is based on a bespoke &lt;i>Office&amp;nbsp;&lt;/i> model&amp;nbsp;which allows the output of structured data associated with a business location or office.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_981582357
                     jcr:created="{Date}2019-01-15T15:54:23.280+01:00"
@@ -229,7 +231,8 @@
                     jcr:lastModified="{Date}2019-01-15T15:54:23.280+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
@@ -241,9 +244,8 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/contentfragment/v1/contentfragment"
                             displayMode="multi"
-                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/image-fragment"
+                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/adobe-headquarters"
                             paragraphScope="all"
-                            text="Title Image Description Image allows a single image asset to be displayed on the page. Images are adaptive; the relevant image width is selected for the screen size and lazy loading is available. Latest Version 2.0 Type core-components-examples:component-type/basic"
                             variationName="master"/>
                     </component>
                     <info
@@ -282,7 +284,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>For structured content fragments, it is possible to limit the output to certain elements in the data. In this example we again show the component data for the image component, but only its &lt;i>title&lt;/i> and&lt;i> type&lt;/i>.&lt;/p>&#xa;"
+                    text="&lt;p>For structured content fragments, it is possible to limit the output to certain elements in the data. In this example we again show the same office, but only its &lt;i>title&lt;/i> and&lt;i> city&lt;/i>.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_26077943
                     jcr:created="{Date}2019-01-15T15:57:23.206+01:00"
@@ -290,7 +292,8 @@
                     jcr:lastModified="{Date}2019-01-15T15:57:23.206+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
@@ -302,10 +305,9 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/contentfragment/v1/contentfragment"
                             displayMode="multi"
-                            elementNames="[component-title,component-type]"
-                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/image-fragment"
+                            elementNames="[title,city]"
+                            fragmentPath="/content/dam/core-components-examples/library/sample-assets/adobe-headquarters"
                             paragraphScope="all"
-                            text="Title Image Type core-components-examples:component-type/basic"
                             variationName="master"/>
                     </component>
                     <info

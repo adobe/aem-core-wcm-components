@@ -26,7 +26,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Component Library &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.2&quot;>2.3.2&lt;/a>&lt;/h1>&#xa;"
+                    text="&lt;h1>Component Library &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.4.0&quot;>2.4.0&lt;/a>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -53,6 +53,32 @@
                     rows="1"
                     type="text"
                     usePlaceholder="true"/>
+                <button
+                    cq:styleIds="[1547060090076]"
+                    jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="true"
+                    fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                    linkURL="/content/core-components-examples/library/button"
+                    textIsRich="true"
+                    titleFromPage="true">
+                    <cq:responsive jcr:primaryType="nt:unstructured">
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            width="4"/>
+                        <small
+                            jcr:primaryType="nt:unstructured"
+                            width="6"/>
+                        <extrasmall
+                            jcr:primaryType="nt:unstructured"
+                            width="12"/>
+                    </cq:responsive>
+                </button>
                 <teaser
                     cq:styleIds="[1547060090076]"
                     jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
@@ -141,7 +167,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/content-fragment.svg"
+                    fileReference="/content/dam/core-components-examples/library/components/content-fragment-list.svg"
                     linkURL="/content/core-components-examples/library/content-fragment-list"
                     textIsRich="true"
                     titleFromPage="true">
@@ -157,6 +183,33 @@
                             width="12"/>
                     </cq:responsive>
                 </teaser_931274384>
+                <teaser_1138854624
+                    cq:styleIds="[1547060090076]"
+                    jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-05-21T11:52:24.956+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="true"
+                    fileReference="/content/dam/core-components-examples/library/components/download.svg"
+                    linkURL="/content/core-components-examples/library/download"
+                    textIsRich="true"
+                    titleFromPage="true">
+                    <cq:responsive jcr:primaryType="nt:unstructured">
+                        <default
+                            jcr:primaryType="nt:unstructured"
+                            offset="0"
+                            width="4"/>
+                        <small
+                            jcr:primaryType="nt:unstructured"
+                            width="6"/>
+                        <extrasmall
+                            jcr:primaryType="nt:unstructured"
+                            width="12"/>
+                    </cq:responsive>
+                </teaser_1138854624>
                 <teaser_1579987477
                     cq:styleIds="[1547060090076]"
                     jcr:created="{Date}2019-01-09T16:29:52.616+01:00"
@@ -381,10 +434,12 @@
             </responsivegrid>
         </root>
     </jcr:content>
+    <button/>
     <carousel/>
     <container/>
     <content-fragment/>
     <content-fragment-list/>
+    <download/>
     <image/>
     <list/>
     <separator/>
