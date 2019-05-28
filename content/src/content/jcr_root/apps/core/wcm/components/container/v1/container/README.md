@@ -19,30 +19,30 @@ Container component written in HTL.
 
 ## Features
 
-* Allows to configure a background color and a background image
-* Allows components can be configured through policy configuration.
-* Allows addition of custom color swatches for background color.
-* Allows hide/show for background color and background images.
-* Allows hide/show for color picker properties
+* Configurable background image and color
+* Custom-defined color swatches for background color.
+* Background images and colors can be disabled through content policies.
+* Background color can be restricted to predefined swatches through content policies.
+* Allowed components can be configured through policy configuration.
 
 ### Use Object
-The Container component uses the `com.adobe.cq.wcm.core.components.models.GenericContainer` Sling model as its Use-object.
+The Container component uses the `com.adobe.cq.wcm.core.components.models.Container` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./isColorsDisabled` - defines whether or not display background color picker option.
-2. `./showProperties` -  defines whether or not display color picker properties tab.
-3. `./cq:swatches` - defines list of custom swatches list.
-3. `./imageDisabled` - defines whether or not display background image option.
+1. `./backgroundImageDisabled` - defines whether or not display background image option.
+2. `./backgroundColorDisabled` - defines whether or not to display background color picker option.
+3. `./backgroundSwatchesOnly` -  defines whether or not to display color picker properties tab.
+4. `./cq:swatches` - defines list of custom swatches list.
 
 It is also possible to define the allowed components for the Container.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Container component and are expected to be available as `Resource` properties:
 
-1. `./backgroundColor` - defines background color of container component.
-2. `./fileReference` - defines background image of container component.
+1. `./backgroundImageReference` - defines background image of container component.
+2. `./backgroundColor` - defines background color of container component.
 
 ## BEM Description
 ```

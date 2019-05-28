@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,51 +15,53 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
-/**
- * A base interface to be extended by containers such as the {@link Carousel} and {@link Tabs} models.
- *
- * @since com.adobe.cq.wcm.core.components.models 12.5.0
- */
 @ConsumerType
-public interface Container extends Component, ContainerExporter {
+public interface Component extends ComponentExporter {
 
-    /**
-     * Returns a list of container items
-     *
-     * @return List of container items
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
-     */
-    @NotNull
-    default List<ListItem> getItems() {
+    String PN_ID = "id";
+    String PN_BACKGROUND_IMAGE_DISABLED = "backgroundImageDisabled";
+    String PN_BACKGROUND_COLOR_DISABLED = "backgroundColorDisabled";
+    String PN_BACKGROUND_SWATCHES_ONLY = "backgroundSwatchesOnly";
+    String PN_BACKGROUND_IMAGE_REFERENCE = "backgroundImageReference";
+    String PN_BACKGROUND_COLOR = "backgroundColor";
+
+    @Nullable
+    default String getId() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nullable
+    default String[] getClasses() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nullable
+    default String getStyle() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Nullable
+    default Map<String, String> getAttributes() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * @see ContainerExporter#getExportedItems()
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * @see ContainerExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @NotNull
     @Override
-    default Map<String, ? extends ComponentExporter> getExportedItems() {
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @see ContainerExporter#getExportedItemsOrder()
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
-     */
-    @NotNull
-    @Override
-    default String[] getExportedItemsOrder() {
-        throw new UnsupportedOperationException();
-    }
 }

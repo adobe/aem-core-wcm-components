@@ -118,7 +118,7 @@
                        <container
                            jcr:primaryType="nt:unstructured"
                            sling:resourceType="core/wcm/components/container/v1/container"
-                           fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
+                           backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
                            <text
                                jcr:primaryType="nt:unstructured"
                                sling:resourceType="core/wcm/components/text/v2/text"
@@ -161,7 +161,7 @@
                            jcr:primaryType="nt:unstructured"
                            sling:resourceType="core/wcm/components/container/v1/container"
                            backgroundColor="#39CCCC"
-                           fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
+                           backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
                            <text
                                jcr:primaryType="nt:unstructured"
                                sling:resourceType="core/wcm/components/text/v2/text"

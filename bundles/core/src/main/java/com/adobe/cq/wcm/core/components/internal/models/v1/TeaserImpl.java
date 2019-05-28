@@ -26,6 +26,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Via;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -76,9 +77,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @ScriptVariable
     private Component component;
 
-    @ScriptVariable
-    private ValueMap properties;
-
     @Inject
     private Resource resource;
 
@@ -96,6 +94,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @PostConstruct
     private void initModel() {
+        ValueMap properties = resource.getValueMap();
         actionsEnabled = properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled);
 
         populateStyleProperties();

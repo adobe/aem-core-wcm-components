@@ -41,10 +41,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
  */
-public abstract class AbstractContainerImpl implements Container {
-
-    @SlingObject
-    protected Resource resource;
+public abstract class AbstractContainerImpl extends AbstractComponentImpl implements Container {
 
     @Self
     protected SlingHttpServletRequest request;
