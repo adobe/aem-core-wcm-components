@@ -36,6 +36,7 @@
 
     var cssClasses = {
         button: {
+            disabled: "cmp-accordion__button--disabled",
             expanded: "cmp-accordion__button--expanded"
         },
         panel: {
@@ -394,6 +395,7 @@
                 panel.setAttribute("aria-hidden", false);
 
                 if (that._properties.singleExpansion) {
+                    button.classList.add(cssClasses.button.disabled);
                     button.setAttribute("aria-disabled", true);
                 }
             }
@@ -411,9 +413,10 @@
             if (index > -1) {
                 var button = that._elements["button"][index];
                 var panel = that._elements["panel"][index];
+                button.classList.remove(cssClasses.button.disabled);
                 button.classList.remove(cssClasses.button.expanded);
-                button.setAttribute("aria-expanded", false);
                 button.removeAttribute("aria-disabled");
+                button.setAttribute("aria-expanded", false);
                 panel.classList.add(cssClasses.panel.hidden);
                 panel.classList.remove(cssClasses.panel.expanded);
                 panel.setAttribute("aria-hidden", true);
