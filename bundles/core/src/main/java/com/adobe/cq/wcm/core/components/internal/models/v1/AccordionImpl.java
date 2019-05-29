@@ -79,10 +79,12 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
     public String[] getExpandedItems() {
         if (expandedItemNames == null) {
             List<String> expanded = new ArrayList<>();
-            for (String expandedItemName : expandedItems) {
-                Resource child = resource.getChild(expandedItemName);
-                if (child != null) {
-                    expanded.add(expandedItemName);
+            if (expandedItems != null) {
+                for (String expandedItemName : expandedItems) {
+                    Resource child = resource.getChild(expandedItemName);
+                    if (child != null) {
+                        expanded.add(expandedItemName);
+                    }
                 }
             }
             if (!expanded.isEmpty()) {
