@@ -6,8 +6,6 @@
   "titleLinkHidden": false,
   "actionsEnabled": false,
   "actions": [ ],
-  "anlalyticData": "",
-  "trackList": {},
   "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-1",
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

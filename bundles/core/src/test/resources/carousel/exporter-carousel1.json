@@ -14,8 +14,6 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "anlalyticData": "",
-			"trackList": {},
             ":type": "core/wcm/components/teaser/v1/teaser",
             "cq:panelTitle": "Teaser 1"
         },
@@ -24,8 +22,6 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "anlalyticData": "",
-			"trackList": {},
             ":type": "core/wcm/components/teaser/v1/teaser",
             "cq:panelTitle": "Teaser 2"
         },
@@ -34,8 +30,6 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "anlalyticData": "",
-			"trackList": {},
             ":type": "core/wcm/components/teaser/v1/teaser",
             "cq:panelTitle": "Carousel Panel 3"
         }
