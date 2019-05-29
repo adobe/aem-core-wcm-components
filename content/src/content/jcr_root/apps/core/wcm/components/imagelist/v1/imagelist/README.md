@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-ImageList (v2)
+ImageList (v1)
 ====
 ImageList component written in HTL that renders a configurable collection of items or content.
 
@@ -37,7 +37,7 @@ The following properties are written to JCR for this Image List component and ar
 BLOCK cmp-image-list
     ELEMENT cmp-image-list__item
     ELEMENT cmp-imagelist__image
-    ELEMENT cmp-list__item-title
+    ELEMENT cmp-imagelist__item-title
 ```
 
 ## Information

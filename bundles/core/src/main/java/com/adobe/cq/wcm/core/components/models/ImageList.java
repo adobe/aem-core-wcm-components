@@ -26,7 +26,7 @@ import com.day.cq.wcm.api.Page;
 import com.adobe.cq.wcm.core.components.models.ImageListItem;
 /**
  * Defines the {@code ImageList} Sling Model used for the {@code /apps/core/wcm/components/imagelist} component. This component
- * currently only fixed lists.
+ * currently supports only fixed image list.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
