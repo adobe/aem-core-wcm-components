@@ -68,6 +68,13 @@ public interface ContentFragmentList extends ComponentExporter {
     String PN_PARENT_PATH = "parentPath";
 
     /**
+     * Name of the optional resource property that sets the query limit for the number of results to return.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.1.0
+     */
+    String PN_MAX_ITEMS= "maxItems";
+
+    /**
      * Returns a list of {@link DAMContentFragment content fragments}.
      *
      * @return the list of content fragments

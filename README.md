@@ -26,9 +26,11 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 * Page authoring components:
   * [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
   * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
   * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
   * [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+  * [Download](content/jcr_root/apps/core/wcm/components/download/v1/download)
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)

@@ -32,7 +32,8 @@ The following properties are written to JCR for the Content Fragment List compon
 1. `./modelPath` - path to the Content Fragment Model on which the list is based.
 2. `./parentPath` - parent path from which the list should be built.
 3. `./tagNames` - tag names for filtering the list.
-4. `./elementNames` - element names for limiting the model data displayed in the result.
+4. `./maxItems` - defines the maximum number of items rendered by the list. If not defined, all fragments matching the query criteria are returned.
+5. `./elementNames` - element names for limiting the model data displayed in the result.
 
 ## Client Libraries
 The component provides a `core.wcm.components.contentfragmentlist.v1.editor` editor client library category that includes JavaScript

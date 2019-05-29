@@ -1,0 +1,11 @@
+{
+  "url": "/content/dam/core/documents/Download_Test_PDF.pdf.coredownload.pdf",
+  "title": "This is the title from the PDF.",
+  "description": "This is the description from the PDF.",
+  "imagePath": "/core/content/downloads/_jcr_content/root/responsivegrid/download-2.coreimg.jpeg/1539906644000.jpeg",
+  "filename": "Download_Test_PDF.pdf",
+  "format": "application/pdf",
+  "size": "147 KB",
+  "extension": "pdf",
+  ":type": "core/wcm/components/download/v1/download"
+}

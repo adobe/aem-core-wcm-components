@@ -39,6 +39,12 @@
                         "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
                         "modelPath"         : "foobar",
                         "elementNames"      : "main"
+                    },
+                    "model-max-limit"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "maxItems"          : "20"
                     }
                 }
             }
