@@ -6,5 +6,7 @@
   "imageLinkHidden": false,
   "titleLinkHidden": false,
   "actions": [],
+  "trackList": {},
+  "anlalyticData": "",
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

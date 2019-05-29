@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -113,6 +114,36 @@ public interface Teaser extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     String PN_TITLE_TYPE = "titleType";
+    
+    /**
+     * Name of the policy property that stores the value for link tracking.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_ENABLED  = "linktrackingEnabled";
+    
+    /**
+     * Name of the policy property that stores the value for link tracking key.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_KEY  = "linktrackkey";
+    
+    /**
+     * Name of the policy property that stores the value for link tracking value.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_VALUE  = "linktrackvalue";
+    
+
+    /**
+     * Name of the policy property that stores the value for link tracking value.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_OBJECT_ID  = "objectid";
+
 
     /**
      * Checks if the teaser has Call-to-Action elements
@@ -202,6 +233,26 @@ public interface Teaser extends ComponentExporter {
      */
     default String getTitleType() {
         throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Return Data tracking
+     *
+     * @return tracking data for the link
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */    
+    default Map<String,String> getTrackList() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Return analytics data
+     *
+     * @return analytics data for the link
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default String getAnlalyticData() {
+    	throw new UnsupportedOperationException();
     }
 
     /**

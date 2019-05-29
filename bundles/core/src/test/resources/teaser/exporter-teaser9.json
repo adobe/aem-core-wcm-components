@@ -7,13 +7,17 @@
   "actions": [
     {
       "title": "Adobe",
-      "url": "http://www.adobe.com"
+      "url": "http://www.adobe.com",
+      "analyticsDataList": ""
     },
     {
       "title": "Teasers",
-      "url": "/core/content/teasers.html"
+      "url": "/core/content/teasers.html",
+      "analyticsDataList": ""
     }
   ],
+  "trackList": {},
+  "anlalyticData": "",
   "imagePath": "/content/teasers/jcr:content/root/responsivegrid/teaser-7",
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

@@ -93,4 +93,15 @@ public interface ListItem {
     default String getName() {
         throw new UnsupportedOperationException();
     }
+    
+    /**
+     * Returns the ana of this {@code ListItem}.
+     *
+     * @return the list item name or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.6.0
+     */
+    @Nullable
+    default String getAnalyticsDataList() {
+        throw new UnsupportedOperationException();
+    }
 }

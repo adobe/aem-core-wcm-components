@@ -18,6 +18,8 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "anlalyticData": "",
+					"trackList": {},
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
@@ -40,6 +42,8 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "anlalyticData": "",
+									"trackList": {},                                    
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_1_2": {
@@ -47,6 +51,8 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "anlalyticData": "",
+									"trackList": {},
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
@@ -64,6 +70,8 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "anlalyticData": "",
+									"trackList": {},
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
@@ -82,6 +90,8 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "anlalyticData": "",
+											"trackList": {},
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 1"
                                         },
@@ -90,6 +100,8 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "anlalyticData": "",
+											"trackList": {},
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 2"
                                         },
@@ -98,6 +110,8 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "anlalyticData": "",
+											"trackList": {},
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 3"
                                         }
@@ -123,6 +137,8 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "anlalyticData": "",
+					"trackList": {},
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_2_2": {
@@ -130,6 +146,8 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "anlalyticData": "",
+					"trackList": {},
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
