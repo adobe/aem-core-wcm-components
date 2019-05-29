@@ -95,7 +95,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private Page targetPage;
 
     @PostConstruct
-    private void initModel() {
+	protected void initModel() {
         actionsEnabled = properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled);
 
         populateStyleProperties();
@@ -184,7 +184,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
     }
 
-    private void populateActions() {
+    protected void populateActions() {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
             for(Resource action : actionsNode.getChildren()) {
