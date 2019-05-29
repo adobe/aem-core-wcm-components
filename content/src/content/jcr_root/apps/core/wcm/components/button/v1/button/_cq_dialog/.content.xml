@@ -39,7 +39,7 @@
                                             <link
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="cq/gui/components/coral/common/form/pagefield"
-                                                fieldDescription="Link to a content page, external URL or page anchors."
+                                                fieldDescription="Link to a content page, external URL or page anchor."
                                                 fieldLabel="Link"
                                                 name="./link"/>
                                             <icon

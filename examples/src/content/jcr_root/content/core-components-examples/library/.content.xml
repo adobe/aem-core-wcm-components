@@ -53,7 +53,7 @@
                     rows="1"
                     type="text"
                     usePlaceholder="true"/>
-                <button
+                <teaser_931274390
                     cq:styleIds="[1547060090076]"
                     jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
                     jcr:createdBy="admin"
@@ -63,7 +63,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                    fileReference="/content/dam/core-components-examples/library/components/button.svg"
                     linkURL="/content/core-components-examples/library/button"
                     textIsRich="true"
                     titleFromPage="true">
@@ -78,7 +78,7 @@
                             jcr:primaryType="nt:unstructured"
                             width="12"/>
                     </cq:responsive>
-                </button>
+                </teaser_931274390>
                 <teaser
                     cq:styleIds="[1547060090076]"
                     jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
