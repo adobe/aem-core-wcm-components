@@ -62,12 +62,6 @@ public class ImageListImpl implements ImageList {
     @ScriptVariable
     private Component component;
 
-    @ScriptVariable
-    private Style currentStyle;
-
-    @ScriptVariable
-    private Page currentPage;
-
     @SlingObject
     private ResourceResolver resourceResolver;
 
