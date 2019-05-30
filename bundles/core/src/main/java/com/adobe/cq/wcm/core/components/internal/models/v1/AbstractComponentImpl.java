@@ -34,15 +34,13 @@ public class AbstractComponentImpl implements Component {
     @SlingObject
     protected Resource resource;
 
-    @ScriptVariable
-    private ValueMap properties;
-
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
     protected Style currentStyle;
 
     private boolean backgroundColorEnabled;
     private boolean backgroundImageEnabled;
+    private String id;
     private String backgroundImageReference;
     private String backgroundColor;
     private StringBuilder styleBuilder;
@@ -51,8 +49,11 @@ public class AbstractComponentImpl implements Component {
     private void populateStyleProperties() {
         backgroundColorEnabled = currentStyle.get(Component.PN_BACKGROUND_COLOR_ENABLED, false);
         backgroundImageEnabled = currentStyle.get(Component.PN_BACKGROUND_IMAGE_ENABLED, false);
-        backgroundColor = properties.get(Component.PN_BACKGROUND_COLOR, String.class);
-        backgroundImageReference = properties.get(Container.PN_BACKGROUND_IMAGE_REFERENCE, String.class);
+        if (resource != null) {
+            ValueMap properties = resource.getValueMap();
+            backgroundColor = properties.get(Component.PN_BACKGROUND_COLOR, String.class);
+            backgroundImageReference = properties.get(Container.PN_BACKGROUND_IMAGE_REFERENCE, String.class);
+        }
     }
 
     private void setBackgroundStyleString()
@@ -69,7 +70,13 @@ public class AbstractComponentImpl implements Component {
     @Nullable
     @Override
     public String getId() {
-        return null;
+        if (id == null) {
+            if (resource != null) {
+                ValueMap properties = resource.getValueMap();
+                id = properties.get(Component.PN_ID, String.class);
+            }
+        }
+        return id;
     }
 
     @Nullable

@@ -17,6 +17,8 @@
                         "sling:resourceType": "core/wcm/components/container/v1/container",
                         "backgroundColor": "#000000",
                         "backgroundImageReference": "/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg",
+                        "layout": "responsive",
+                        "id": "test",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Teaser 1",

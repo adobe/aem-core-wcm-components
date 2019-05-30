@@ -13,10 +13,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-
-<div data-sly-use.container="com.adobe.cq.wcm.core.components.models.Container"
-     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     class="cmp-accordion__panel${container.backgroundColor in container.exportedItemsOrder ? ' cmp-accordion__panel--expanded' : ''}"
-     style="${container.style @ context='styleString'}" class="cmp-container">
-    <sly data-sly-resource="${ resource @ resourceType='wcm/foundation/components/responsivegrid'}"></sly>
-</div>
+<sly data-sly-use.container="com.adobe.cq.wcm.core.components.models.LayoutContainer">
+    <sly data-sly-test.responsive="${container.layoutType == 'RESPONSIVE_GRID'}"
+         data-sly-use.responsiveTpl="responsive.html"
+         data-sly-call="${responsiveTpl.responsive @ container=container}"></sly>
+    <sly data-sly-test.simple="${!responsive}"
+         data-sly-use.simpleTpl="simple.html"
+         data-sly-call="${simpleTpl.simple @ container=container}"></sly>
+</sly>

@@ -30,7 +30,7 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.models.Container;
+import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
@@ -41,7 +41,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 
-public class ContainerImplTest {
+public class LayoutContainerImplTest {
 
     private static final String TEST_BASE = "/container";
     private static final String CONTENT_ROOT = "/content";
@@ -66,13 +66,19 @@ public class ContainerImplTest {
     @Test
     public void testContainerWithPropertiesAndPolicy() {
         Resource mockResource = mock(Resource.class);
-        Container container = getContainerUnderTest(CONTAINER_1, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+        LayoutContainer container = getContainerUnderTest(CONTAINER_1, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
             put(Component.PN_BACKGROUND_IMAGE_ENABLED, true);
             put(Component.PN_BACKGROUND_COLOR_ENABLED, true);
         }})));
         assertEquals("Style mismatch",
                 "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
                 container.getStyle());
+        assertEquals("Layout type mismatch",
+                LayoutContainer.LayoutType.RESPONSIVE_GRID,
+                container.getLayoutType());
+        assertEquals("Id mismatch",
+                "test",
+                container.getId());
         Object[][] expectedItems = {
                 {"item_1", "Teaser 1"},
                 {"item_2", "Teaser 2"}
@@ -86,14 +92,17 @@ public class ContainerImplTest {
     
     @Test
     public void testContainerNoProperties() {
-        Container container = getContainerUnderTest(CONTAINER_2, null);
+        LayoutContainer container = getContainerUnderTest(CONTAINER_2, null);
         assertNull("Id", container.getId());
         assertNull("Style", container.getStyle());
+        assertEquals("Layout type mismatch",
+                LayoutContainer.LayoutType.SIMPLE,
+                container.getLayoutType());
     }
     
     @Test
     public void testContainerWithPropertiesAndNoPolicy() {
-        Container container = getContainerUnderTest(CONTAINER_3, null);
+        LayoutContainer container = getContainerUnderTest(CONTAINER_3, null);
         assertNull("Id", container.getId());
         assertNull("Style", container.getStyle());
     }
@@ -107,7 +116,7 @@ public class ContainerImplTest {
         }
     }
 
-    private Container getContainerUnderTest(String resourcePath, Style style) {
+    private LayoutContainer getContainerUnderTest(String resourcePath, Style style) {
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
@@ -128,6 +137,6 @@ public class ContainerImplTest {
 
         AEM_CONTEXT.currentResource(resource);
         AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
-        return AEM_CONTEXT.request().adaptTo(Container.class);
+        return AEM_CONTEXT.request().adaptTo(LayoutContainer.class);
     }
 }

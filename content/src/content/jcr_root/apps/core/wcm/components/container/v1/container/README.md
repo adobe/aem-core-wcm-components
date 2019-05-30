@@ -19,6 +19,8 @@ Container component written in HTL.
 
 ## Features
 
+* Configurable HTML id
+* Configurable layout type
 * Configurable background image and color
 * Custom-defined color swatches for background color.
 * Background images and colors can be disabled through content policies.
@@ -26,7 +28,7 @@ Container component written in HTL.
 * Allowed components can be configured through policy configuration.
 
 ### Use Object
-The Container component uses the `com.adobe.cq.wcm.core.components.models.Container` Sling model as its Use-object.
+The Container component uses the `com.adobe.cq.wcm.core.components.models.LayoutContainer` Sling model as its Use-object.
 
 ### Component Policy Configuration Properties
 The following configuration properties are used:
@@ -41,8 +43,13 @@ It is also possible to define the allowed components for the Container.
 ### Edit Dialog Properties
 The following properties are written to JCR for this Container component and are expected to be available as `Resource` properties:
 
-1. `./backgroundImageReference` - defines background image of container component.
-2. `./backgroundColor` - defines background color of container component.
+#### Common Properties
+1. `id` - defines the HTML element id
+2. `./backgroundImageReference` - defines background image of container component.
+3. `./backgroundColor` - defines background color of container component.
+
+#### Container Properties
+1. `layout` - defines the layout type, either `simpe` (defaut) or `responsive`
 
 ## BEM Description
 ```

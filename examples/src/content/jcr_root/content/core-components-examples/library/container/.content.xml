@@ -60,7 +60,7 @@
                <title_290384408
                    cq:styleIds="[1544759676459]"
                    jcr:primaryType="nt:unstructured"
-                   jcr:title="Container With Background Color"
+                   jcr:title="Simple Container With Background Color"
                    sling:resourceType="core/wcm/components/title/v2/title"
                    type="h3"/>
                <demo
@@ -72,7 +72,8 @@
                        <container
                            jcr:primaryType="nt:unstructured"
                            sling:resourceType="core/wcm/components/container/v1/container"
-                           backgroundColor="rgba(255,133,27,0.25)">
+                           backgroundColor="rgba(255,133,27,0.25)"
+                           id="test1">
                            <title
                                jcr:primaryType="nt:unstructured"
                                jcr:title="Some title"
@@ -107,7 +108,7 @@
                </demo>
                <title
                    jcr:primaryType="nt:unstructured"
-                   jcr:title="Container With Background Image"
+                   jcr:title="Simple Container With Background Image"
                    sling:resourceType="core/wcm/components/title/v2/title"
                    type="h3"/>
                <demo_295699411
@@ -119,7 +120,8 @@
                        <container
                            jcr:primaryType="nt:unstructured"
                            sling:resourceType="core/wcm/components/container/v1/container"
-                           backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
+                           backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"
+                           id="test2">
                            <text
                                jcr:primaryType="nt:unstructured"
                                sling:resourceType="core/wcm/components/text/v2/text"
@@ -149,7 +151,7 @@
                </demo_295699411>
                <title_530068996
                    jcr:primaryType="nt:unstructured"
-                   jcr:title="Nested containers"
+                   jcr:title="Nested Responsive Containers"
                    sling:resourceType="core/wcm/components/title/v2/title"
                    type="h3"/>
                <demo_2146960736
@@ -162,7 +164,8 @@
                            jcr:primaryType="nt:unstructured"
                            sling:resourceType="core/wcm/components/container/v1/container"
                            backgroundColor="#39CCCC"
-                           backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
+                           backgroundImageReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                           layout="responsive">
                            <text
                                jcr:primaryType="nt:unstructured"
                                sling:resourceType="core/wcm/components/text/v2/text"
@@ -171,7 +174,8 @@
                            <container_793091227
                                jcr:primaryType="nt:unstructured"
                                sling:resourceType="core/wcm/components/container/v1/container"
-                               backgroundColor="rgba(255,133,27,0.75)">
+                               backgroundColor="rgba(255,133,27,0.75)"
+                               layout="responsive">
                                <text
                                    jcr:primaryType="nt:unstructured"
                                    sling:resourceType="core/wcm/components/text/v2/text"
@@ -187,7 +191,8 @@
                            <container_793091227_
                                jcr:primaryType="nt:unstructured"
                                sling:resourceType="core/wcm/components/container/v1/container"
-                               backgroundColor="rgba(127,219,255,0.5)">
+                               backgroundColor="rgba(127,219,255,0.5)"
+                               layout="responsive">
                                <text
                                    jcr:primaryType="nt:unstructured"
                                    sling:resourceType="core/wcm/components/text/v2/text"
