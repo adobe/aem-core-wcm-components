@@ -197,6 +197,16 @@ public interface Image extends ComponentExporter {
     }
 
     /**
+     * Returns the image's link target, if one was set.
+     *
+     * @return {@code true} if the image's link should be opened in a new tab, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.4.1; marked <code>default</code> in 12.4.1
+     */
+    default boolean getLinkTarget() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Checks if the image should display its caption as a popup (through the <code>&lt;img&gt;</code> {@code title}
      * attribute).
      *

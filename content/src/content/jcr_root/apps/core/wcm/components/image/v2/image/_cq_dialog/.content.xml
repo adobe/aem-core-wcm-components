@@ -152,6 +152,18 @@
                                                 name="./linkURL"
                                                 rootPath="/content"
                                                 wrapperClass="cmp-image__editor-link"/>
+                                            <linkTarget
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Open image link in a new tab."
+                                                text="Link Target"
+                                                name="./linkTarget"
+                                                value="true"/>
+                                            <linkTargetTypeHint
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                name="./linkTarget@TypeHint"
+                                                value="Boolean"/>
                                         </items>
                                     </column>
                                 </items>

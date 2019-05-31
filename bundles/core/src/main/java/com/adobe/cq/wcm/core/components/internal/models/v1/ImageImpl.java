@@ -110,6 +110,9 @@ public class ImageImpl implements Image {
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
 
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private boolean linkTarget;
+
     protected String src;
     protected String[] smartImages = new String[]{};
     protected int[] smartSizes = new int[0];
@@ -307,6 +310,11 @@ public class ImageImpl implements Image {
     @Override
     public String getLink() {
         return linkURL;
+    }
+
+    @Override
+    public boolean getLinkTarget() {
+        return linkTarget;
     }
 
     @Override
