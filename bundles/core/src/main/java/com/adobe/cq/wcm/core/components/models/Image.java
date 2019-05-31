@@ -145,6 +145,20 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     String PN_MAP = "imageMap";
+    
+    /**
+     * Name of the policy property that stores the value for link tracking.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_ENABLED  = "linktrackingEnabled";
+    
+     /**
+     * Name of the policy property that stores the value for link tracking value.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_OBJECT_ID  = "objectid";
 
     /**
      * Returns the value for the {@code src} attribute of the image.
@@ -284,6 +298,17 @@ public interface Image extends ComponentExporter {
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
+    /**
+     * Return analytics data
+     *
+     * @return analytics data for the link
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    
+    default String getAnlalyticData() {
+    	throw new UnsupportedOperationException();
+    }
+    
     @NotNull
     @Override
     default String getExportedType() {

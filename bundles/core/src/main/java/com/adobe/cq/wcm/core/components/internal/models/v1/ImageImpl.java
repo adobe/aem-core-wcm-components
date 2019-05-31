@@ -108,7 +108,7 @@ public class ImageImpl implements Image {
     protected String title;
 
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String linkURL;
+    protected String linkURL;
 
     protected String src;
     protected String[] smartImages = new String[]{};
