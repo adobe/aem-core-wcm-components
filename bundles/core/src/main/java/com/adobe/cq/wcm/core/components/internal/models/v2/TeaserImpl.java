@@ -59,7 +59,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
    
     private String objectId = StringUtils.EMPTY;
     private boolean trackingEnabled = false;
-    private String analyticsObjectId = StringUtils.EMPTY;
+    private String analyticData;
     private int counter = 0;
     String id = StringUtils.EMPTY;
     
@@ -138,8 +138,8 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
                     @Override
                     public String getAnalyticsDataList() {
                     	if(trackingEnabled && !objectId.isEmpty()){
-                    		analyticsObjectId = OBJECT_ID + objectId + SPACE + ++counter + "';" ;
-                	        return analyticsObjectId;
+                    		analyticData = OBJECT_ID + objectId + SPACE + ++counter + "';" ;
+                	        return analyticData;
                     	}
                     	return StringUtils.EMPTY;
                     }
@@ -154,10 +154,10 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     }
         
     @Override
-    public String getAnlalyticData() {
+    public String getAnalyticData() {
     	if(trackingEnabled && !objectId.isEmpty()){
-    		analyticsObjectId = OBJECT_ID + objectId + "';" ;
-	        return analyticsObjectId;
+    		analyticData = OBJECT_ID + objectId + "';" ;
+	        return analyticData;
     	}
     	return StringUtils.EMPTY;
     }

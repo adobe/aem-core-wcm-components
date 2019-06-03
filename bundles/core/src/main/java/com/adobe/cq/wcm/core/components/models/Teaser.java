@@ -241,7 +241,7 @@ public interface Teaser extends ComponentExporter {
      * @return tracking data for the link
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */    
-    default Map<String,String> getTrackList() {
+    default Map<String,String> getTrackingList() {
         throw new UnsupportedOperationException();
     }
     
@@ -251,7 +251,7 @@ public interface Teaser extends ComponentExporter {
      * @return analytics data for the link
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    default String getAnlalyticData() {
+    default String getAnalyticData() {
     	throw new UnsupportedOperationException();
     }
 

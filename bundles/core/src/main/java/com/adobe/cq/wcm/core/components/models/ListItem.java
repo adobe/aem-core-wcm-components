@@ -20,6 +20,8 @@ import java.util.Calendar;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Interface for a generic list item, used by the {@link List} and {@link Search} models.
  *
@@ -101,6 +103,7 @@ public interface ListItem {
      * @since com.adobe.cq.wcm.core.components.models 12.6.0
      */
     @Nullable
+    @JsonIgnore
     default String getAnalyticsDataList() {
         throw new UnsupportedOperationException();
     }

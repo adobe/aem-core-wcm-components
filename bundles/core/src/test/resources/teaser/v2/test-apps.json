@@ -1,0 +1,15 @@
+{
+	"teaser": {
+		"jcr:primaryType": "sling:Folder",
+		"v1": {
+			"jcr:primaryType": "nt:unstructured",
+			"teaser": {
+				"cq:icon": "mbox",
+				"jcr:description": "Teaser Component",
+				"jcr:primaryType": "cq:Component",
+				"jcr:title": "Teaser (v2)",
+				"componentGroup": ".core-wcm"
+			}
+		}
+	}
+} 

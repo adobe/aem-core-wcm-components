@@ -1,0 +1,72 @@
+{
+    "Adobe_Systems_logo_and_wordmark.png": {
+        "jcr:primaryType": "dam:Asset",
+        "jcr:mixinTypes" : [
+            "mix:referenceable"
+        ],
+        "jcr:createdBy"  : "admin",
+        "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+        "jcr:uuid"       : "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "dam:AssetContent",
+            "jcr:lastModifiedBy": "admin",
+            "dam:assetState"    : "processed",
+            "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+            "dam:relativePath"  : "core/images/Adobe_Systems_logo_and_wordmark.png",
+            "renditions"        : {
+                "jcr:primaryType"         : "nt:folder",
+                "jcr:createdBy"           : "admin",
+                "jcr:created"             : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                "cq5dam.web.1280.1280.png": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "workflow-process-service",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "workflow-process-service",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:39 GMT+0100",
+                        ":jcr:data"         : 27795
+                    }
+                },
+                "original"                : {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:createdBy"  : "admin",
+                    "jcr:created"    : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                    "jcr:content"    : {
+                        "jcr:primaryType"   : "oak:Resource",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:mimeType"      : "image/png",
+                        "jcr:lastModified"  : "Mon Mar 20 2017 11:20:37 GMT+0100",
+                        ":jcr:data"         : 49069
+                    }
+                }
+            },
+            "related"           : {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "metadata"          : {
+                "jcr:primaryType"            : "nt:unstructured",
+                "jcr:mixinTypes"             : [
+                    "cq:Taggable"
+                ],
+                "dam:Physicalheightininches" : "27.77777862548828",
+                "dam:Physicalwidthininches"  : "27.77777862548828",
+                "dam:Fileformat"             : "PNG",
+                "dam:Progressive"            : "no",
+                "tiff:ImageLength"           : 2000,
+                "dam:extracted"              : "Mon Mar 20 2017 11:20:38 GMT+0100",
+                "dc:format"                  : "image/png",
+                "dam:Bitsperpixel"           : 8,
+                "dam:MIMEtype"               : "image/png",
+                "dam:Physicalwidthindpi"     : 72,
+                "dam:Physicalheightindpi"    : 72,
+                "dam:Numberofimages"         : 1,
+                "dam:Numberoftextualcomments": 0,
+                "tiff:ImageWidth"            : 2000,
+                "dam:sha1"                   : "bb3aa5c9b452b04808006037911705d3592bfd71",
+                "dam:size"                   : 49069
+            }
+        }
+    }
+}
