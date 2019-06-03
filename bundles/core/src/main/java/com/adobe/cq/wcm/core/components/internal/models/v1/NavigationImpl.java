@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
 
@@ -37,6 +34,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -146,7 +145,7 @@ public class NavigationImpl implements Navigation {
         return items;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
@@ -207,8 +206,8 @@ public class NavigationImpl implements Navigation {
         return StringUtils.countMatches(page.getPath(), "/") - 1;
     }
 
-    @CheckForNull
-    private String getRelativePath(@Nonnull Page root, @Nonnull Page child) {
+    @Nullable
+    private String getRelativePath(@NotNull Page root, @NotNull Page child) {
         if (child.equals(root)) {
             return ".";
         } else if ((child.getPath() + "/").startsWith(root.getPath())) {
@@ -222,7 +221,7 @@ public class NavigationImpl implements Navigation {
         int startLevel;
         int structureDepth = -1;
 
-        private NavigationRoot(@Nonnull Page navigationRoot, int configuredStructureDepth) {
+        private NavigationRoot(@NotNull Page navigationRoot, int configuredStructureDepth) {
             page = navigationRoot;
             this.startLevel = getLevel(navigationRoot);
             if (configuredStructureDepth > -1) {

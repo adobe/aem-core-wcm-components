@@ -17,11 +17,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 
-import javax.annotation.Nonnull;
-
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +38,7 @@ public class ResourceListItemImpl implements ListItem {
     protected String path;
     protected String name;
 
-    public ResourceListItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
+    public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             title = valueMap.get(JcrConstants.JCR_TITLE, String.class);

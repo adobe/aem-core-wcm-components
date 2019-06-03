@@ -35,8 +35,6 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
-import com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;

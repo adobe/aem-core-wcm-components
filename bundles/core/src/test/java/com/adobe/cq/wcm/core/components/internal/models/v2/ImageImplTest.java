@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.List;
 
-import org.apache.jackrabbit.util.Text;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -28,9 +27,7 @@ import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
 

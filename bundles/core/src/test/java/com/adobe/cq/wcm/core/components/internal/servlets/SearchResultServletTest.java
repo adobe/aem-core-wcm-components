@@ -20,23 +20,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.util.reflection.Whitebox;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
+import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
@@ -50,8 +49,8 @@ import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SearchResultServletTest {
@@ -89,9 +88,9 @@ public class SearchResultServletTest {
         when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
         when(mockQuery.getResult()).thenReturn(mockSearchResult);
         when(mockSearchResult.getHits()).thenReturn(Arrays.asList(new Hit[]{mockHit}));
-        Whitebox.setInternalState(underTest, "queryBuilder", mockQueryBuilder);
-        Whitebox.setInternalState(underTest, "languageManager", new MockLanguageManager());
-        Whitebox.setInternalState(underTest, "relationshipManager", mockLiveRelationshipManager);
+        Utils.setInternalState(underTest, "queryBuilder", mockQueryBuilder);
+        Utils.setInternalState(underTest, "languageManager", new MockLanguageManager());
+        Utils.setInternalState(underTest, "relationshipManager", mockLiveRelationshipManager);
     }
 
     @Test

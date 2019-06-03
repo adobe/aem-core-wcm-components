@@ -24,8 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -41,6 +39,7 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -194,7 +193,7 @@ public class PageImpl implements Page {
         return Arrays.copyOf(clientLibCategories, clientLibCategories.length);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         if (childModels == null) {
@@ -204,7 +203,7 @@ public class PageImpl implements Page {
         return childModels;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         Map<String, ? extends ComponentExporter> models = getExportedItems();
@@ -217,7 +216,7 @@ public class PageImpl implements Page {
 
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         if (StringUtils.isEmpty(resourceType)) {
@@ -236,9 +235,9 @@ public class PageImpl implements Page {
      * @param modelClass  The Sling Model class to be adapted to.
      * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
      */
-    @Nonnull
-    private <T> Map<String, T> getChildModels(@Nonnull SlingHttpServletRequest slingRequest,
-                                              @Nonnull Class<T> modelClass) {
+    @NotNull
+    private <T> Map<String, T> getChildModels(@NotNull SlingHttpServletRequest slingRequest,
+                                              @NotNull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
         for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {

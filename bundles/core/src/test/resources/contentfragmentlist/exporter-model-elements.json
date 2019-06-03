@@ -1,0 +1,22 @@
+{
+    "items": [
+        {
+            "description": "This is a test content fragment.",
+            "title": "Test Content Fragment",
+            "model": "/content/dam/contentfragments-for-list/text-only/jcr:content/model",
+            "elements": {
+                "main": {
+                    "value": "",
+                    "title": "Main",
+                    ":type": "text/html",
+                    "multiValue": false
+                }
+            },
+            "elementsOrder": [
+                "main"
+            ],
+            ":type": "dam:Asset"
+        }
+    ],
+    ":type": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+}

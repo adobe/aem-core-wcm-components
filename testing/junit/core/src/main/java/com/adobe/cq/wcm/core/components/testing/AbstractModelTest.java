@@ -15,18 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.testing;
 
-import java.io.IOException;
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.ClassPath;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
 import static org.junit.Assert.fail;
 
@@ -38,10 +39,6 @@ public class AbstractModelTest {
             models.addAll(getClasses(p));
         }
 
-        final Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
-        if (!constructor.isAccessible()) {
-            constructor.setAccessible(true);
-        }
         StringBuilder errors = new StringBuilder();
         for (Class clazz : models) {
             if (clazz.isInterface() && !clazz.getName().contains("package-info")) {
@@ -49,9 +46,35 @@ public class AbstractModelTest {
                         (Object proxy, Method method, Object[] arguments) -> {
                             if (method.isDefault()) {
                                 final Class<?> declaringClass = method.getDeclaringClass();
-                                return constructor.newInstance(declaringClass, MethodHandles.Lookup.PRIVATE)
-                                        .unreflectSpecial(method, declaringClass)
-                                        .bindTo(proxy)
+
+                                MethodHandle mh;
+                                try {
+                                    // should work for <= Java 8
+                                    // ensure allowed mode will not check visibility
+                                    MethodHandles.Lookup lookup = MethodHandles.lookup().in(declaringClass);
+                                    final Field f = MethodHandles.Lookup.class.getDeclaredField("allowedModes");
+                                    final int modifiers = f.getModifiers();
+                                    if (Modifier.isFinal(modifiers)) { // should be done a single time
+                                        final Field modifiersField = Field.class.getDeclaredField("modifiers");
+                                        modifiersField.setAccessible(true);
+                                        modifiersField.setInt(f, modifiers & ~Modifier.FINAL);
+                                        f.setAccessible(true);
+                                        f.set(lookup, MethodHandles.Lookup.PRIVATE);
+                                    }
+
+                                    mh = lookup.unreflectSpecial(method, declaringClass);
+                                } catch (Throwable t) {
+                                    // should work for > Java 8
+                                    mh = MethodHandles.lookup()
+                                            .findSpecial(
+                                                    declaringClass,
+                                                    method.getName(),
+                                                    MethodType.methodType(
+                                                            method.getReturnType(),
+                                                            method.getParameterTypes()),
+                                                    declaringClass);
+                                }
+                                return mh.bindTo(proxy)
                                         .invokeWithArguments(arguments);
                             }
 
@@ -87,15 +110,10 @@ public class AbstractModelTest {
         }
     }
 
-    private static List<Class> getClasses(String packageName) throws ClassNotFoundException, IOException {
+    private static List<Class> getClasses(String packageName) {
         List<Class> classes = new ArrayList<>();
-        ClassPath classpath = ClassPath.from(AbstractModelTest.class.getClassLoader());
-        String packagePrefix = packageName + '.';
-        ImmutableSet.Builder<ClassPath.ClassInfo> builder = ImmutableSet.builder();
-        classpath.getAllClasses().stream().filter(classInfo -> classInfo.getName().startsWith(packagePrefix)).forEach(builder::add);
-        ImmutableSet<ClassPath.ClassInfo> packageClasses = builder.build();
-        classes.addAll(packageClasses.stream().map(ClassPath.ClassInfo::load).collect(Collectors.toList()));
+        Reflections reflections = new Reflections(packageName,  new SubTypesScanner(false));
+        reflections.getSubTypesOf(Object.class).forEach(clazz -> classes.add(clazz));
         return classes;
     }
-
 }

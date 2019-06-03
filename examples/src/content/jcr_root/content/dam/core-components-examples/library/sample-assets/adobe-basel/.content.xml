@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="56f007f8-c6c8-40b0-8d3b-eebf1c13bbe2">
+    <jcr:content
+        cq:name="adobe-basel"
+        cq:parentPath="/content/dam/core-components-examples/library/sample-assets"
+        jcr:lastModified="{Date}2019-04-25T13:06:43.662+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Adobe Research Schweiz AG"
+        contentFragment="{Boolean}true"
+        lastFragmentSave="{Date}2019-04-25T13:06:43.663+01:00">
+        <data
+            cq:model="/conf/core-components-examples/settings/dam/cfm/models/office"
+            jcr:primaryType="nt:unstructured">
+            <master
+                cq:tags="[core-components-examples:region/europe-middleeast-africa]"
+                jcr:mixinTypes="[cq:Taggable]"
+                jcr:primaryType="nt:unstructured"
+                city="Basel"
+                city_x0040_LastModified="{Date}2019-04-25T13:06:21.016+01:00"
+                country="Switzerland"
+                country_x0040_LastModified="{Date}2019-04-25T13:06:21.018+01:00"
+                postalCode="CH-4051"
+                postalCode_x0040_LastModified="{Date}2019-04-25T13:06:21.017+01:00"
+                region="[core-components-examples:region/europe-middleeast-africa]"
+                region_x0040_LastModified="{Date}2019-04-25T12:58:28.588+01:00"
+                streetAddress="Barfüsserplatz 6"
+                streetAddress_x0040_ContentType="text/plain"
+                streetAddress_x0040_LastModified="{Date}2019-04-25T13:06:21.016+01:00"
+                title="Adobe Research Schweiz AG"
+                title_x0040_LastModified="{Date}2019-04-25T13:06:21.015+01:00"/>
+        </data>
+        <metadata
+            cq:tags="[core-components-examples:region/europe-middleeast-africa]"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

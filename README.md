@@ -6,21 +6,30 @@
 
 ## Documentation
 
-* [Component Library](http://opensource.adobe.com/aem-core-wcm-components/library.html)
+* [Component Library](https://www.adobe.com/go/aem_cmp_library)
 * [Using Core Components](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
-* [Tutorial for building a new site using the Core Components](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
+* [Tutorial for building a new site using the Core Components (takes about 2 days)](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
+* [Tutorial for building a new site, used at Adobe Summit 2019 (takes about 2 hours)](https://expleague.azureedge.net/labs/L767/index.html)
 * [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
 ## Contributing
 
 Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
 
+## Mailing List
+
+For discussions and Q&A you can use our public mailing list hosted on [googlegroups.com](https://groups.google.com/forum/#!forum/aem-core-components-dev). 
+You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups.com](mailto:aem-core-components-dev+subscribe@googlegroups.com).
+
 ## Available Components
 
 * Page authoring components:
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
   * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-  * [Content Fragment](extension/contentfragment/content/src/content/jcr_root/apps/core/wcm/extension/components/contentfragment/v1/contentfragment)\*
+  * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
+  * [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+  * [Download](content/jcr_root/apps/core/wcm/components/download/v1/download)
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
@@ -43,30 +52,30 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
 
-\* The Content Fragment Component is an extension to the Core Components and must be separately downloaded and explicitly enabled.
-
 ## Component Versioning
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
 
 ## System Requirements
 
-The latest version of the Core Components, require the below minimum system requirements:
+The latest version of the Core Components, require the below system requirements:
 
-Core Components | Extension | AEM 6.4 | AEM 6.3 | Java
-----------------|-----------|---------|---------|------
-[2.3.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.0) | 1.0.10 | 6.4.2.0 | 6.3.3.0 | 1.8
+Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
+----------------|---------|---------|---------|------
+[2.4.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.4.0) | 6.5.0.0+ | 6.4.2.0+ | 6.3.3.0+ | 8, 11
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
 ## Installation
 
-The Sandbox components depend on [`AEM 6.3 SP2`](https://www.adobeaemcloud.com/content/marketplace/marketplaceProxy.html?packagePath=/content/companies/public/adobe/packages/cq630/servicepack/AEM-6.3.2.0) or the latest AEM 6.4 release.
+To install everything, excluding examples, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
+
+For more information about the Package Manager please have a look at [How to Work With Packages](https://helpx.adobe.com/experience-manager/6-4/sites/administering/using/package-manager.html) documentation page.
 
 ## Build
 
-The project has the following minimal requirements:
-* Java SE Development Kit 8 or newer
+The project has the following requirements:
+* Java SE Development Kit 8 or Java SE Development Kit 11
 * Apache Maven 3.3.1 or newer
 
 For ease of build and installation the following profiles are provided:
@@ -99,6 +108,33 @@ Please note that
 
  * ``-pl/-projects`` option specifies the list of projects that you want to install
  * ``-am/-also-make`` options specifies that dependencies should also be built
+
+## Include core components as subpackage into your own project maven build
+
+The released version of the core components are available on the public maven repository at https://repo.adobe.com. To include the
+core components package into your own project maven build you can add the dependency
+ ```
+ <dependency>
+     <groupId>com.adobe.cq</groupId>
+     <artifactId>core.wcm.components.all</artifactId>
+     <type>zip</type>
+     <version>2.2.0</version>
+ </dependency>
+ ```
+
+ and sub package section
+```
+ <subPackage>
+     <groupId>com.adobe.cq</groupId>
+     <artifactId>core.wcm.components.all</artifactId>
+     <filter>true</filter>
+ </subPackage>
+```
+
+ to the `content-package-maven-plugin`.
+
+ For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
+ related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)
 
  ### Running the UI tests
 

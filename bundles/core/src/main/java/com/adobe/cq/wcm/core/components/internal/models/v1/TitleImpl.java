@@ -16,7 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +27,7 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -127,7 +127,7 @@ public class TitleImpl implements Title {
         return linkDisabled;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return resource.getResourceType();

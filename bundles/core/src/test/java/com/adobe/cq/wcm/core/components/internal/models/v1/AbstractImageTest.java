@@ -15,13 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import javax.annotation.Nullable;
-
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.mime.MimeTypeService;
+import org.jetbrains.annotations.Nullable;
 import org.junit.ClassRule;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -30,8 +26,10 @@ import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.google.common.base.Function;
-
 import io.wcm.testing.mock.aem.junit.AemContext;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AbstractImageTest {
 

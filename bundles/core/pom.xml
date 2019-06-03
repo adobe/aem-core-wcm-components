@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.3.1-SNAPSHOT</version>
+        <version>2.4.1-SNAPSHOT</version>
         <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>core.wcm.components.core</artifactId>
-    <version>2.3.1-SNAPSHOT</version>
+    <version>2.4.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>Adobe Experience Manager Core WCM Components Core Bundle</name>
@@ -65,6 +65,7 @@
                         <_metatypeannotations>*</_metatypeannotations>
                         <Import-Package>
                             com.adobe.cq.commerce.*;resolution:=optional,
+                            javax.annotation;version=0.0.0,
                             *
                         </Import-Package>
                     </instructions>
@@ -143,8 +144,9 @@
                                     </rules>
                                     <excludes>
                                         <!-- private enum; cannot test valueOf / values -->
-                                        <exclude>**/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
-                                        <exclude>**/AdaptiveImageServlet$Source.class</exclude>
+                                        <exclude>com/adobe/cq/wcm/core/components/internal/models/v1/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
+                                        <exclude>com/adobe/cq/wcm/core/components/internal/servlets/AdaptiveImageServlet$Source.class
+                                        </exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
@@ -305,6 +307,10 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax.jcr</groupId>
             <artifactId>jcr</artifactId>
         </dependency>
@@ -321,8 +327,8 @@
             <artifactId>osgi.annotation</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
         </dependency>
         <!-- javax.inject 1 -->
         <dependency>
@@ -368,6 +374,15 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.adobe.cq.dam</groupId>
+            <artifactId>cq-dam-cfm-api</artifactId>
         </dependency>
 
         <!-- Testing dependencies -->
@@ -446,26 +461,13 @@
             <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-core</artifactId>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.18.2-GA</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
+            <version>3.23.1-GA</version>
             <scope>test</scope>
         </dependency>
         <dependency>

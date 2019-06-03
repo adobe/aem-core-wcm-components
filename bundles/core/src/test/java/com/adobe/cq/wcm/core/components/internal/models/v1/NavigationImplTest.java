@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.resource.Resource;
@@ -29,7 +28,6 @@ import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.mockito.Matchers;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
@@ -47,15 +45,12 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
-import com.day.cq.wcm.msm.api.RolloutManager;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -94,7 +89,7 @@ public class NavigationImplTest {
         AEM_CONTEXT.load().json("/navigation/test-conf.json", "/conf");
         AEM_CONTEXT.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
-        when(relationshipManager.getLiveRelationships(any(Resource.class), any(String.class), any(RolloutManager.Trigger.class))).then(
+        when(relationshipManager.getLiveRelationships(any(Resource.class), isNull(), isNull())).then(
                 invocation -> {
                     Object[] arguments = invocation.getArguments();
                     Resource resource = (Resource) arguments[0];
@@ -323,7 +318,7 @@ public class NavigationImplTest {
             currentStyle = new MockContentPolicyStyle(contentPolicy);
         } else {
             currentStyle = mock(Style.class);
-            when(currentStyle.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
+            when(currentStyle.get(anyString(), (Object) any())).thenAnswer(
                     invocation -> invocation.getArguments()[1]
             );
         }

@@ -17,8 +17,7 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
 
-import javax.annotation.Nullable;
-
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
