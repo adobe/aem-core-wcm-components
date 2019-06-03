@@ -60,8 +60,7 @@ public class TeaserImplTesting {
 	@BeforeClass
 	public static void setUp() throws Exception {
 		AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
-		AEM_CONTEXT.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME,
-				PNG_ASSET_PATH + "/jcr:content/renditions/original");
+		AEM_CONTEXT.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
 	}
 
 	@Test
