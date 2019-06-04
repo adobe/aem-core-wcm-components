@@ -174,7 +174,7 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/text/v2/text"
-                            text="&lt;p>&lt;b>Bold &lt;/b>can be used to emphasize a word or phrase, as can &lt;u>underline&lt;/u> and &lt;i>italics.&amp;nbsp;&lt;/i>&lt;sup>Superscript&lt;/sup> and &lt;sub>subscript&lt;/sub> are useful for mathematical (E = mc&lt;sup>2&lt;/sup>) or scientific (h&lt;sub>2&lt;/sub>O) expressions. Paragraph styles can provide alternative renderings, such as quote sections:&lt;/p>&#xa;&lt;blockquote>&lt;i>&amp;quot;Be yourself; everyone else is already taken&amp;quot;&lt;/i>&lt;/blockquote>&#xa;&lt;blockquote>- Oscar Wilde&lt;/blockquote>&#xa;"
+                            text="&lt;p>&lt;b>Bold &lt;/b>can be used to emphasize a word or phrase, as can &lt;u>underline&lt;/u> and &lt;i>italics.&amp;nbsp;&lt;/i>&lt;sup>Superscript&lt;/sup> and &lt;sub>subscript&lt;/sub> are useful for mathematical (E = mc&lt;sup>2&lt;/sup>) or scientific (h&lt;sub>2&lt;/sub>O) expressions. Paragraph styles can provide alternative renderings, such as quote sections:&lt;/p>&#xa;&lt;blockquote>&amp;quot;&lt;i>Be yourself; everyone else is already taken&amp;quot;&lt;/i>&lt;/blockquote>&#xa;&lt;blockquote>- Oscar Wilde&lt;/blockquote>&#xa;"
                             textIsRich="true"/>
                     </component>
                     <info

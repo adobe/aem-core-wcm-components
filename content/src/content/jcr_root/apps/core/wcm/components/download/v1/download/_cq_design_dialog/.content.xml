@@ -69,15 +69,6 @@
                                         value="h6"/>
                                 </items>
                             </type>
-                            <displayImage
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                fieldDescription="When checked, an image representing the download file will be displayed if one is available."
-                                name="./displayImage"
-                                checked="{Boolean}true"
-                                text="Display Image"
-                                uncheckedValue="false"
-                                value="{Boolean}true"/>
                             <displaySize
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
