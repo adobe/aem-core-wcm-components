@@ -40,15 +40,18 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 @Component(
         service = { Servlet.class },
         property = {
-                "sling.servlet.resourceTypes=" + AllowedHeadingElementsDataSourceServlet.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + AllowedHeadingElementsDataSourceServlet.RESOURCE_TYPE_V1,
+                "sling.servlet.resourceTypes=" + AllowedHeadingElementsDataSourceServlet.RESOURCE_TYPE_TITLE_V1,
                 "sling.servlet.methods=GET",
                 "sling.servlet.extensions=html"
         }
 )
 public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsServlet {
 
-    public final static String RESOURCE_TYPE = "core/wcm/components/commons/datasources/allowedheadingelements/v1";
+    public final static String RESOURCE_TYPE_V1 = "core/wcm/components/commons/datasources/allowedheadingelements/v1";
+    public final static String RESOURCE_TYPE_TITLE_V1 = "core/wcm/components/title/v1/datasource/allowedtypes";
     public final static String PN_ALLOWED_HEADING_ELEMENTS = "allowedHeadingElements";
+    public final static String PN_ALLOWED_TYPES = "allowedTypes";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
@@ -68,6 +71,10 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
                 ValueMap props = policy.getProperties();
                 if (props != null) {
                     String[] headingElements = props.get(PN_ALLOWED_HEADING_ELEMENTS, String[].class);
+                    String[] allowedTypes = props.get(PN_ALLOWED_TYPES, String[].class);
+                    if (headingElements == null || headingElements.length == 0) {
+                        headingElements = allowedTypes;
+                    }
                     if (headingElements != null && headingElements.length > 0) {
                         for (String headingElement : headingElements) {
                             allowedHeadingElements.add(new HeadingElementResource(headingElement, resolver));
