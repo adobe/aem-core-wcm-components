@@ -34,6 +34,8 @@
     c.proxyPath = "/apps/core-component/components/";
 
     // core component resource types
+    // accordion component
+    c.rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
     // text component
     c.rtText_v1 = "core/wcm/components/text/v1/text";
     c.rtText_v2 = "core/wcm/components/text/v2/text";
