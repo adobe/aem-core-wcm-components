@@ -90,8 +90,5 @@
         .addTestCase(accordion.tcPanelSelectReorder(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(accordion.tcNested(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
         .addTestCase(accordion.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/accordion", "core-component/components",
-            c.policyPath, c.policyAssignmentPath, "core/wcm/tests/components/test-page-v2", c.rtAccordion_v1))
-        .addTestCase(accordion.tcAccessibilityNavigateRight(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(accordion.tcAccessibilityNavigateLeft(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(accordion.tcAccessibilityNavigateEndStart(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
+            c.policyPath, c.policyAssignmentPath, "core/wcm/tests/components/test-page-v2", c.rtAccordion_v1));
 }(hobs, jQuery));
