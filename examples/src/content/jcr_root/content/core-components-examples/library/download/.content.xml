@@ -32,6 +32,7 @@
                     text="&lt;h1>Download&lt;sub>v1&lt;/sub>&lt;/h1>"
                     textIsRich="true"/>
                 <text_442449340
+                    cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2019-05-21T12:26:28.282+02:00"
                     jcr:createdBy="admin"
                     jcr:lastModified="{Date}2019-05-27T18:12:38.654+02:00"
