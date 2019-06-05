@@ -173,7 +173,7 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     	try {
     		resourceResolver.commit();
     	} catch (PersistenceException e) {
-    		LOGGER.error("Error occured while saving the modalId for {}", currentPage.getName(), e);
+    		LOGGER.error("Error occured while saving the objectId for {}", currentPage.getName(), e);
     	}    	
     }
 }
