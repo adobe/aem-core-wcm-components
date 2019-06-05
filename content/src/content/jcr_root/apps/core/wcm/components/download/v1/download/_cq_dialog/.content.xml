@@ -3,7 +3,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="Download"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.download.v1.download.editor]">
+    extraClientlibs="[core.wcm.components.download.v1.editor]">
     <content
         granite:class="cmp-download__editor"
         jcr:primaryType="nt:unstructured"
@@ -246,7 +246,7 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 checked="{Boolean}false"
-                                                fieldDescription="When checked, download item will be displayed inline in the browser"
+                                                fieldDescription="When checked, the download asset will be displayed inline in the browser."
                                                 name="./inline"
                                                 text="Display inline"
                                                 uncheckedValue="{Boolean}false"
