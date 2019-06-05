@@ -38,11 +38,11 @@
                                         text="Disable Call-To-Actions"
                                         name="./actionsDisabled"
                                         value="{Boolean}true"/>
-                                     <linktrackingEnabled
+                                     <linkTrackingEnabled
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                         text="Enable Link Tracking"
-                                        name="./linktrackingEnabled"
+                                        name="./linkTrackingEnabled"
                                         value="{Boolean}true"/>
                                 </items>
                             </actions>

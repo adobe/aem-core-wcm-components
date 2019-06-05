@@ -120,29 +120,14 @@ public interface Teaser extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    String PN_TRACKING_ENABLED  = "linktrackingEnabled";
+    String PN_TRACKING_ENABLED  = "linkTrackingEnabled";
     
-    /**
-     * Name of the policy property that stores the value for link tracking key.
+     /**
+     * Name of the policy property that stores the value for link tracking .
      *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    String PN_TRACKING_KEY  = "linktrackkey";
-    
-    /**
-     * Name of the policy property that stores the value for link tracking value.
-     *
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     */
-    String PN_TRACKING_VALUE  = "linktrackvalue";
-    
-
-    /**
-     * Name of the policy property that stores the value for link tracking value.
-     *
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     */
-    String PN_TRACKING_OBJECT_ID  = "objectid";
+    String PN_TRACKING_OBJECT_ID  = "objectId";
 
 
     /**
@@ -234,16 +219,7 @@ public interface Teaser extends ComponentExporter {
     default String getTitleType() {
         throw new UnsupportedOperationException();
     }
-    
-    /**
-     * Return Data tracking
-     *
-     * @return tracking data for the link
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     */    
-    default Map<String,String> getTrackingList() {
-        throw new UnsupportedOperationException();
-    }
+       
     
     /**
      * Return analytics data
@@ -251,7 +227,7 @@ public interface Teaser extends ComponentExporter {
      * @return analytics data for the link
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    default String getAnalyticData() {
+    default String getAnalyticsData() {
     	throw new UnsupportedOperationException();
     }
 

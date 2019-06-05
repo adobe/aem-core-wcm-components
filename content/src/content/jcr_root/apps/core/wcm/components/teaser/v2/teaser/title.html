@@ -15,6 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-template.title="${@ teaser}">
     <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}" data-sly-element="${teaser.titleType}">
-        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || teaser.titleLinkHidden}" onClick= "${teaser.anlalyticData @ context='html'}">${title}</a>
+        <a class="cmp-teaser__title-link" href="${teaser.linkURL}" data-sly-unwrap="${!teaser.linkURL || teaser.titleLinkHidden}" onClick= "${teaser.analyticsData @ context='html'}">${title}</a>
     </h2>
 </sly>

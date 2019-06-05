@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -54,12 +54,14 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     private static final Logger LOGGER = LoggerFactory.getLogger(TeaserImpl.class);
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v2/teaser";
-    public final static String OBJECT_ID = "s_objectID='";
-    public final static String SPACE = " ";
-   
-    private String objectId = StringUtils.EMPTY;
+    public final static String OBJECT_ID = "s_objectID=";
+    public final static String SPACE = StringUtils.SPACE;
+    public final static String APOSTROPHE = "'";
+    public final static String SEMICOLON = ";";   
+    
+    private String compHashCode = StringUtils.EMPTY;
     private boolean trackingEnabled = false;
-    private String analyticData;
+    private StringBuilder analyticData ;
     private int counter = 0;
     String id = StringUtils.EMPTY;
     
@@ -84,15 +86,15 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     private ResourceResolver resourceResolver;	
     
     @ScriptVariable
-    protected com.day.cq.wcm.api.Page currentPage;    
+    protected com.day.cq.wcm.api.Page currentPage;   
 
     @PostConstruct
     protected void initModel() {    	
-    	objectId = properties.get(Teaser.PN_TRACKING_OBJECT_ID,objectId);
+    	compHashCode = properties.get(Teaser.PN_TRACKING_OBJECT_ID,compHashCode);
     	trackingEnabled = properties.get(Teaser.PN_TRACKING_ENABLED, trackingEnabled);
     	super.initModel();
       	id = String.valueOf(Math.abs(resource.getPath().hashCode()-1));   
-      	populateObjectId();       
+      	populateObjectId(); 
     }
    
     @Override
@@ -136,12 +138,13 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
                     }
                     @Nullable
                     @Override
-                    public String getAnalyticsDataList() {
-                    	if(trackingEnabled && !objectId.isEmpty()){
-                    		analyticData = OBJECT_ID + objectId + SPACE + ++counter + "';" ;
-                	        return analyticData;
+                    public String getAnalyticsData() {
+                    	analyticData = new StringBuilder();
+                    	counter++;
+                    	if(trackingEnabled && !compHashCode.isEmpty()){
+                    		analyticData = analyticData.append(OBJECT_ID).append(APOSTROPHE).append( compHashCode).append( SPACE).append(counter).append(APOSTROPHE).append(SEMICOLON);                	       
                     	}
-                    	return StringUtils.EMPTY;
+                    	return analyticData.toString();
                     }
                 });
             }
@@ -154,17 +157,17 @@ public class TeaserImpl extends com.adobe.cq.wcm.core.components.internal.models
     }
         
     @Override
-    public String getAnalyticData() {
-    	if(trackingEnabled && !objectId.isEmpty()){
-    		analyticData = OBJECT_ID + objectId + "';" ;
-	        return analyticData;
+    public String getAnalyticsData() {
+    	analyticData = new StringBuilder() ;
+    	if(trackingEnabled && !compHashCode.isEmpty()){
+    		analyticData = analyticData.append(OBJECT_ID).append(APOSTROPHE).append(compHashCode).append(APOSTROPHE).append(SEMICOLON) ;	        
     	}
-    	return StringUtils.EMPTY;
+    	return analyticData.toString();
     }
     
-    public void populateObjectId(){
+    private void populateObjectId(){
     	ModifiableValueMap map = resource.adaptTo(ModifiableValueMap.class);
-    	if (null != map && objectId.isEmpty() ) {
+    	if (null != map && compHashCode.isEmpty() ) {
     		map.put(Teaser.PN_TRACKING_OBJECT_ID, currentPage.getName()+ SPACE + component.getCellName()+ SPACE + id);
     	}
     	try {

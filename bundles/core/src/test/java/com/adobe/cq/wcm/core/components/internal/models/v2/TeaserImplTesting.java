@@ -70,7 +70,7 @@ public class TeaserImplTesting {
 		assertEquals(TITLE, teaser.getTitle());
 		assertEquals(DESCRIPTION, teaser.getDescription());
 		assertEquals("https://www.adobe.com", teaser.getLinkURL());
-		assertEquals("", teaser.getAnalyticData());
+		assertEquals("", teaser.getAnalyticsData());
 		Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser15"));
 	}
 

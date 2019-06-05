@@ -104,7 +104,7 @@ public interface ListItem {
      */
     @Nullable
     @JsonIgnore
-    default String getAnalyticsDataList() {
+    default String getAnalyticsData() {
         throw new UnsupportedOperationException();
     }
 }

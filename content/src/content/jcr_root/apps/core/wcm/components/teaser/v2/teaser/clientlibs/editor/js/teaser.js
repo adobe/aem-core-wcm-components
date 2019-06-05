@@ -20,7 +20,7 @@
     var dialogContentSelector = ".cmp-teaser__editor";
     var actionsEnabledCheckboxSelector = 'coral-checkbox[name="./actionsEnabled"]';
     var actionsMultifieldSelector = ".cmp-teaser__editor-multifield_actions";
-    var linkcheckerEnabledCheckboxSelector = 'coral-checkbox[name="./linktrackingEnabled"]';
+    var linkcheckerEnabledCheckboxSelector = 'coral-checkbox[name="./linkTrackingEnabled"]';
     var titleCheckboxSelector = 'coral-checkbox[name="./titleFromPage"]';
     var titleTextfieldSelector = 'input[name="./jcr:title"]';
     var descriptionCheckboxSelector = 'coral-checkbox[name="./descriptionFromPage"]';
@@ -52,10 +52,10 @@
             if ($linkEnabledCheckbox.size() > 0) {
                 linkchecherEnabled = $linkEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
                 if (!linkchecherEnabled) {
-                    $dialogContent.find('[name="./objectid"]').parent().hide();
+                    $dialogContent.find('[name="./objectId"]').parent().hide();
                 }
                 $linkEnabledCheckbox.on("change", function(e) {
-                    $dialogContent.find('[name="./objectid"]').parent().toggle();
+                    $dialogContent.find('[name="./objectId"]').parent().toggle();
                 });
             }
             var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
