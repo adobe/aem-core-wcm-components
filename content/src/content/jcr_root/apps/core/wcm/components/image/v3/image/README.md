@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Image (v2)
+Image (v3)
 ====
 Image component written in HTL that renders an adaptive image.
 
@@ -48,6 +48,9 @@ The following properties are written to JCR for this Image component and are exp
 `./displayPopupTitle`
 6. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
 otherwise a caption will be rendered
+7. `./linkTrackingEnabled`  -if it set to 'true' , image URL will be tracked .
+8. `./objectId` - if link tracking is enabled then objectId value will be added to the link , so page can be tracked .
+
 
 ## Extending from This Component
 1. In case you overwrite the image's HTL script, make sure the necessary attributes for the JavaScript loading script are contained in the markup at the right position (see section below).
