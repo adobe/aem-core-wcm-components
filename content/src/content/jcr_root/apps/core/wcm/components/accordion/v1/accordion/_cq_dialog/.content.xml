@@ -89,8 +89,7 @@
                                                 granite:hidden="{Boolean}true"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                                composite="{Boolean}false"
-                                                fieldDescription="Multifield containing hidden fields for reading the expanded items selection state">
+                                                composite="{Boolean}false">
                                                 <field
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="granite/ui/components/coral/foundation/container"

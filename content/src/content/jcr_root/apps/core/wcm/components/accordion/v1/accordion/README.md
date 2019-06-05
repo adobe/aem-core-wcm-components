@@ -33,8 +33,8 @@ The Accordion component uses the `com.adobe.cq.wcm.core.components.models.Accord
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./allowedHeadingElements` - the heading elements (`h2` - `h6`) that are allowed to be selected in the edit dialog.
-2. `./headingElement` - the default heading element (`h2` - `h6`) to use for the accordion headers.
+1. `./allowedHeadingElements` - the heading elements (`h2` - `h6`, `h1` is omitted for SEO reasons) that are allowed to be selected in the edit dialog.
+2. `./headingElement` - the default heading element (`h2` - `h6`, `h1` is omitted for SEO reasons) to use for the accordion headers.
 
 It is also possible to define the allowed components for the Accordion.
 

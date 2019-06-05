@@ -44,7 +44,7 @@ public interface Accordion extends Container {
     }
 
     /**
-     * Returns the expanded items.
+     * Returns the items that are expanded by default.
      *
      * @return The expanded items
      * @since com.adobe.cq.wcm.core.components.models 12.8.0

@@ -53,7 +53,7 @@
 
     var properties = {
         /**
-         * Determines whether a only single accordion item is forced to be expanded at a time.
+         * Determines whether a single accordion item is forced to be expanded at a time.
          * Expanding one item will collapse all others.
          *
          * @memberof Accordion

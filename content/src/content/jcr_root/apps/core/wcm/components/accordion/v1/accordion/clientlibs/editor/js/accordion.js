@@ -156,19 +156,16 @@
             expandedSelectToggleable.hide();
             expandedSelectSingleField.setDisabled(true);
             expandedSelectSingleToggleable.hide();
-            return;
-        }
-
-        if (singleExpansion) {
-            expandedSelectToggleable.hide();
+        } else if (singleExpansion) {
             expandedSelectField.setDisabled(true);
+            expandedSelectToggleable.hide();
             expandedSelectSingleField.setDisabled(false);
             expandedSelectSingleToggleable.show();
         } else {
-            expandedSelectSingleToggleable.hide();
-            expandedSelectSingleField.setDisabled(true);
             expandedSelectField.setDisabled(false);
             expandedSelectToggleable.show();
+            expandedSelectSingleField.setDisabled(true);
+            expandedSelectSingleToggleable.hide();
         }
     }
 
