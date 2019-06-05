@@ -39,7 +39,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Download allows linking to an asset for download. Optionally displays a title, description, metadata and a download link.&lt;/p>&#xa;"
+                    text="&lt;p>Download allows linking to an asset for download. Optionally displays a title, description, metadata and a download action.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <teaser_copy
                     cq:styleIds="[1550165685463]"
