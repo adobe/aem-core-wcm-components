@@ -100,7 +100,7 @@ public interface Download extends ComponentExporter {
      * Returns the action text from the dialog if it is configured there. Otherwise, it returns the value set in the
      * component policy.
      *
-     * @return the button text
+     * @return the action text
      */
     default String getActionText() {
         throw new UnsupportedOperationException();
