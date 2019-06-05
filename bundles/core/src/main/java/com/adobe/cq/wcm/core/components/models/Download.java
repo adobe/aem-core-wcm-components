@@ -40,9 +40,8 @@ public interface Download extends ComponentExporter {
      */
     String PN_INLINE = "inline";
 
-
     /**
-     * Name of the policy property that defines the text to be displayed on the Call-to-Action.
+     * Name of the policy property that defines the text to be displayed on the action.
      */
     String PN_ACTION_TEXT = "actionText";
 
@@ -67,7 +66,6 @@ public interface Download extends ComponentExporter {
      * Name of the policy property that defines whether the filename will be displayed.
      */
     String PN_DISPLAY_FILENAME = "displayFilename";
-
 
     /**
      * Returns either the title configured in the dialog or the title of the DAM asset,
@@ -99,10 +97,10 @@ public interface Download extends ComponentExporter {
     }
 
     /**
-     * Returns the button text from the dialog if it is configured there. Otherwise, it returns the value set in the
+     * Returns the action text from the dialog if it is configured there. Otherwise, it returns the value set in the
      * component policy.
      *
-     * @return the button text
+     * @return the action text
      */
     default String getActionText() {
         throw new UnsupportedOperationException();
