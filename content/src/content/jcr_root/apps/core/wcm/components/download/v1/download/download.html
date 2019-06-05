@@ -15,20 +15,19 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.download="com.adobe.cq.wcm.core.components.models.Download"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     data-sly-test.hasContent="download.title || download.description}"
+     data-sly-test.hasContent="${download.title || download.description || download.actionText}"
      class="cmp-download${!wcmmode.disabled ? ' cq-dd-file' : ''}">
-    <h2 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${download.titleType}">
-        ${title}
-    </h2>
-    <div class="cmp-download__description" data-sly-test.description="${download.description}">
-        ${description @ context="html"}
+    <h3 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${download.titleType}">${title}</h3>
+    <div class="cmp-download__description" data-sly-test.description="${download.description}">${description @ context="html"}</div>
+    <div data-sly-test="${(download.displayFilename && download.filename) || (download.displaySize && download.size) || (download.displayFormat && download.format)}"
+         class="cmp-download__metadata">
+        <span data-sly-test="${download.displayFilename && download.filename}" class="cmp-download__filename">${download.filename}</span>
+        <span data-sly-test="${download.displaySize && download.size}" class="cmp-download__size">${download.size}</span>
+        <span data-sly-test="${download.displayFormat && download.format}" class="cmp-download__format">${download.format}</span>
     </div>
     <a class="cmp-download__action" href="${download.url}">
         <span class="cmp-download__action-icon cmp-download__action-icon--${download.extension}"></span>
         <span class="cmp-download__action-text">${download.actionText}</span>
     </a>
-    <span data-sly-test="${download.displayFilename && download.filename}" class="cmp-download__filename">${download.filename}</span>
-    <span data-sly-test="${download.displaySize && download.size}" class="cmp-download__size">${download.size}</span>
-    <span data-sly-test="${download.displayFormat && download.format}" class="cmp-download__format">${download.format}</span>
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty=!hasContent, classAppend='cmp-download cq-dd-file'}"></sly>
