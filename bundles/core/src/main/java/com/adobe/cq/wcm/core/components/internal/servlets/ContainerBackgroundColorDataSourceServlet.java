@@ -85,12 +85,12 @@ public class ContainerBackgroundColorDataSourceServlet extends SlingSafeMethodsS
 		}
 		Iterator<Resource> swatchesIterator = swatches.listChildren();
 		while (swatchesIterator.hasNext()) {
-			Resource childres = swatchesIterator.next();
+			Resource swatch = swatchesIterator.next();
 			color = new ValueMapDecorator(new HashMap<String, Object>());
-			ValueMap childResValueMap = childres.getValueMap();
-			if (childResValueMap.containsKey(PN_COLOR_VALUE) && childResValueMap.containsKey(PN_COLOR_NAME)) {
-				color.put(PN_COLOR_VALUE, childResValueMap.get(PN_COLOR_VALUE, String.class));
-				color.put(PN_COLOR_NAME, childResValueMap.get(PN_COLOR_NAME, String.class));
+			ValueMap swatchProps = swatch.getValueMap();
+			if (swatchProps.containsKey(PN_COLOR_VALUE) && swatchProps.containsKey(PN_COLOR_NAME)) {
+				color.put(PN_COLOR_VALUE, swatchProps.get(PN_COLOR_VALUE, String.class));
+				color.put(PN_COLOR_NAME, swatchProps.get(PN_COLOR_NAME, String.class));
 				colors.add(new ValueMapResource(resolver, new ResourceMetadata(), JcrConstants.NT_UNSTRUCTURED,
 						color));
 			}

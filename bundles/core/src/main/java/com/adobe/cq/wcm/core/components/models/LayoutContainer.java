@@ -16,11 +16,26 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import org.jetbrains.annotations.NotNull;
+import org.osgi.annotation.versioning.ConsumerType;
 
+/**
+ * Defines the {@code LayoutContainer} Sling Model used for the {@code /apps/core/wcm/components/container} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 12.8.0
+ */
+@ConsumerType
 public interface LayoutContainer extends Container {
 
+    /**
+     * Name of the resource property that indicates which layout type should be used by the container component.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
     String PN_LAYOUT_TYPE = "layout";
 
+    /**
+     * Enumeration of supported layout types for the container component
+     */
     enum LayoutType {
         SIMPLE("simple"),
         RESPONSIVE_GRID("responsive")
@@ -47,7 +62,9 @@ public interface LayoutContainer extends Container {
     }
 
     /**
+     * Returns the {@link LayoutType} to be used by the container component
      *
+     * @return {@link LayoutType} for the container component
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @NotNull

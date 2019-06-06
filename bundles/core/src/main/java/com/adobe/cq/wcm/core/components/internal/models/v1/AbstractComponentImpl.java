@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -29,7 +29,10 @@ import com.adobe.cq.wcm.core.components.models.Container;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class AbstractComponentImpl implements Component {
+/**
+ * Abstract class that can be used as a base class for {@link Component} implementations.
+ */
+public abstract class AbstractComponentImpl implements Component {
 
     @SlingObject
     protected Resource resource;
@@ -56,8 +59,7 @@ public class AbstractComponentImpl implements Component {
         }
     }
 
-    private void setBackgroundStyleString()
-    {
+    private void setBackgroundStyleString() {
         styleBuilder = new StringBuilder();
         if (backgroundImageEnabled && !StringUtils.isEmpty(backgroundImageReference)) {
             styleBuilder.append("background-image:url(" + backgroundImageReference + ");background-size:cover;background-repeat:no-repeat;");

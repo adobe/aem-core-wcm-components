@@ -23,6 +23,11 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 
+/**
+ * A base interface to be extended by components that need to provide access to common properties.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 12.8.0
+ */
 @ConsumerType
 public interface Component extends ComponentExporter {
 
@@ -34,6 +39,9 @@ public interface Component extends ComponentExporter {
     String PN_BACKGROUND_COLOR = "backgroundColor";
 
     /**
+     * Returns the HTML id of the the component's root element
+     *
+     * @return HTML id of the component's root element
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @Nullable
@@ -42,6 +50,9 @@ public interface Component extends ComponentExporter {
     }
 
     /**
+     * Returns a list of classes to be applied to the component's root element
+     *
+     * @return List of classes for the component's root element
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @Nullable
@@ -50,6 +61,9 @@ public interface Component extends ComponentExporter {
     }
 
     /**
+     * Returns the CSS style to be applied to the component's root element
+     *
+     * @return CSS style string for the component's root element
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @Nullable
@@ -58,6 +72,9 @@ public interface Component extends ComponentExporter {
     }
 
     /**
+     *  Returns a map of HTML attributes to be added to the component's root element
+     *
+     * @return {@link Map<String, String>} of HTML attributes for the component's root element
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @Nullable
