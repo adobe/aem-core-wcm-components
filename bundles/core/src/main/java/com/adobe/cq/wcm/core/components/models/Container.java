@@ -25,7 +25,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
 /**
- * A base interface to be extended by containers such as the {@link Carousel} and {@link Tabs} models.
+ * A base interface to be extended by containers such as the {@link Carousel}, {@link Tabs} and {@link Accordion} models.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */

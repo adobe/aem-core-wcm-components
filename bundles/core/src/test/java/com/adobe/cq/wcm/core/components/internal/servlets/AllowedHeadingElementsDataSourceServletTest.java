@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import org.apache.sling.api.resource.ResourceResolver;
@@ -37,7 +36,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AllowedTitleSizesDataSourceServletTest {
+public class AllowedHeadingElementsDataSourceServletTest {
 
     @Rule
     public AemContext context = CoreComponentTestContext.createContext(null, "/apps");
@@ -51,20 +50,19 @@ public class AllowedTitleSizesDataSourceServletTest {
     @Mock
     private ValueMap properties;
 
-    private AllowedTitleSizesDataSourceServlet dataSourceServlet;
+    private AllowedHeadingElementsDataSourceServlet dataSourceServlet;
 
     @Before
     public void setUp() throws Exception {
-        dataSourceServlet = new AllowedTitleSizesDataSourceServlet();
+        dataSourceServlet = new AllowedHeadingElementsDataSourceServlet();
         registerContentPolicyManager();
         when(contentPolicyManager.getPolicy(context.currentResource())).thenReturn(contentPolicy);
         when(contentPolicy.getProperties()).thenReturn(properties);
-
     }
 
     @Test
     public void testDataSource() throws Exception {
-        when(properties.get("allowedTypes", String[].class)).thenReturn(new String[]{"h3", "h4"});
+        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_HEADING_ELEMENTS, String[].class)).thenReturn(new String[]{"h3", "h4"});
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
@@ -78,7 +76,7 @@ public class AllowedTitleSizesDataSourceServletTest {
 
     @Test
     public void testDataSourceWithInvalidValues() throws Exception {
-        when(properties.get("allowedTypes", String[].class)).thenReturn(new String[] {"foo", "h10"});
+        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_HEADING_ELEMENTS, String[].class)).thenReturn(new String[] {"foo", "h10"});
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);

@@ -206,13 +206,13 @@
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.scripting.sightly.compiler</artifactId>
-            <version>1.0.14</version>
+            <version>1.0.22-1.4.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.sling</groupId>
             <artifactId>org.apache.sling.scripting.sightly.compiler.java</artifactId>
-            <version>1.0.16</version>
+            <version>1.0.24-1.4.0</version>
             <scope>provided</scope>
         </dependency>
 

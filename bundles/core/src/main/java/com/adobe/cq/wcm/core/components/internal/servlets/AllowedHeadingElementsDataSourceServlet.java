@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -40,56 +40,64 @@ import com.day.cq.wcm.api.policies.ContentPolicyManager;
 @Component(
         service = { Servlet.class },
         property = {
-                "sling.servlet.resourceTypes="+ AllowedTitleSizesDataSourceServlet.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + AllowedHeadingElementsDataSourceServlet.RESOURCE_TYPE_V1,
+                "sling.servlet.resourceTypes=" + AllowedHeadingElementsDataSourceServlet.RESOURCE_TYPE_TITLE_V1,
                 "sling.servlet.methods=GET",
                 "sling.servlet.extensions=html"
         }
 )
-public class AllowedTitleSizesDataSourceServlet extends SlingSafeMethodsServlet {
+public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsServlet {
 
-    public final static String RESOURCE_TYPE = "core/wcm/components/title/v1/datasource/allowedtypes";
+    public final static String RESOURCE_TYPE_V1 = "core/wcm/components/commons/datasources/allowedheadingelements/v1";
+    public final static String RESOURCE_TYPE_TITLE_V1 = "core/wcm/components/title/v1/datasource/allowedtypes";
+    public final static String PN_ALLOWED_HEADING_ELEMENTS = "allowedHeadingElements";
+    public final static String PN_ALLOWED_TYPES = "allowedTypes";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws ServletException, IOException {
-        SimpleDataSource allowedTypesDataSource = new SimpleDataSource(getAllowedTypes(request).iterator());
-        request.setAttribute(DataSource.class.getName(), allowedTypesDataSource);
+        SimpleDataSource allowedHeadingElementsDataSource = new SimpleDataSource(getAllowedHeadingElements(request).iterator());
+        request.setAttribute(DataSource.class.getName(), allowedHeadingElementsDataSource);
     }
 
-    private List<Resource> getAllowedTypes(@NotNull SlingHttpServletRequest request) {
-        List<Resource> allowedTypes = new ArrayList<>();
+    private List<Resource> getAllowedHeadingElements(@NotNull SlingHttpServletRequest request) {
+        List<Resource> allowedHeadingElements = new ArrayList<>();
         ResourceResolver resolver = request.getResourceResolver();
         Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
-        ContentPolicyManager policyMgr = resolver.adaptTo(ContentPolicyManager.class);
-        if (policyMgr != null) {
-            ContentPolicy policy = policyMgr.getPolicy(contentResource);
+        ContentPolicyManager policyManager = resolver.adaptTo(ContentPolicyManager.class);
+        if (policyManager != null) {
+            ContentPolicy policy = policyManager.getPolicy(contentResource);
             if (policy != null) {
                 ValueMap props = policy.getProperties();
                 if (props != null) {
-                    String[] titleTypes = props.get("allowedTypes", String[].class);
-                    if (titleTypes != null && titleTypes.length > 0) {
-                        for (String titleType : titleTypes) {
-                            allowedTypes.add(new TitleTypeResource(titleType, resolver));
+                    String[] headingElements = props.get(PN_ALLOWED_HEADING_ELEMENTS, String[].class);
+                    String[] allowedTypes = props.get(PN_ALLOWED_TYPES, String[].class);
+                    if (headingElements == null || headingElements.length == 0) {
+                        headingElements = allowedTypes;
+                    }
+                    if (headingElements != null && headingElements.length > 0) {
+                        for (String headingElement : headingElements) {
+                            allowedHeadingElements.add(new HeadingElementResource(headingElement, resolver));
                         }
                     }
                 }
             }
         }
-        return allowedTypes;
+        return allowedHeadingElements;
     }
 
-    private static class TitleTypeResource extends TextValueDataResourceSource {
+    private static class HeadingElementResource extends TextValueDataResourceSource {
 
-        private final String type;
+        private final String elementName;
 
-        TitleTypeResource(String titleType, ResourceResolver resourceResolver) {
+        HeadingElementResource(String headingElement, ResourceResolver resourceResolver) {
             super(resourceResolver, StringUtils.EMPTY, RESOURCE_TYPE_NON_EXISTING);
-            this.type = titleType;
+            this.elementName = headingElement;
         }
 
         @Override
         protected String getText() {
-            Heading heading = Heading.getHeading(type);
+            Heading heading = Heading.getHeading(elementName);
             if (heading != null) {
                 return heading.getElement();
             }
@@ -98,7 +106,7 @@ public class AllowedTitleSizesDataSourceServlet extends SlingSafeMethodsServlet 
 
         @Override
         protected String getValue() {
-            return type;
+            return elementName;
         }
     }
 
