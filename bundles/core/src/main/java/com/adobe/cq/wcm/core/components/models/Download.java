@@ -40,9 +40,8 @@ public interface Download extends ComponentExporter {
      */
     String PN_INLINE = "inline";
 
-
     /**
-     * Name of the policy property that defines the text to be displayed on the Call-to-Action.
+     * Name of the policy property that defines the text to be displayed on the action.
      */
     String PN_ACTION_TEXT = "actionText";
 
@@ -52,11 +51,6 @@ public interface Download extends ComponentExporter {
      * @see #getTitleType()
      */
     String PN_TITLE_TYPE = "titleType";
-
-    /**
-     * Name of the policy property that defines whether an image representing the file will be displayed.
-     */
-    String PN_DISPLAY_IMAGE = "displayImage";
 
     /**
      * Name of the policy property that defines whether the file's size will be displayed.
@@ -72,7 +66,6 @@ public interface Download extends ComponentExporter {
      * Name of the policy property that defines whether the filename will be displayed.
      */
     String PN_DISPLAY_FILENAME = "displayFilename";
-
 
     /**
      * Returns either the title configured in the dialog or the title of the DAM asset,
@@ -99,27 +92,17 @@ public interface Download extends ComponentExporter {
      *
      * @return the asset url
      */
-    default String getURL() {
+    default String getUrl() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns the button text from the dialog if it is configured there. Otherwise, it returns the value set in the
+     * Returns the action text from the dialog if it is configured there. Otherwise, it returns the value set in the
      * component policy.
      *
-     * @return the button text
+     * @return the action text
      */
     default String getActionText() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the path to display the image representation of the asset, which is constructed using the core adaptive
-     * image servlet.
-     *
-     * @return the path to the image representation of the asset.
-     */
-    default String getImagePath() {
         throw new UnsupportedOperationException();
     }
 
@@ -166,15 +149,6 @@ public interface Download extends ComponentExporter {
      * @return the mime type of the download file
      */
     default String getFormat() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Checks if an image should be displayed for the download file.
-     *
-     * @return @code true} if the image should be displayed, {@code false} otherwise
-     */
-    default boolean displayImage() {
         throw new UnsupportedOperationException();
     }
 

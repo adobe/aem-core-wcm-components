@@ -39,8 +39,6 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -60,12 +58,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class DownloadImpl implements Download {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DownloadImpl.class);
-
     public final static String RESOURCE_TYPE = "core/wcm/components/download/v1/download";
-
-    protected static final String JPEG_EXTENSION = ".jpeg";
-    protected static final String IMAGE_SERVLET_EXTENSION = ".coreimg" + JPEG_EXTENSION;
 
     @Self
     private SlingHttpServletRequest request;
@@ -94,8 +87,6 @@ public class DownloadImpl implements Download {
 
     private boolean inline = false;
 
-    private boolean displayImage;
-
     private boolean displaySize;
 
     private boolean displayFormat;
@@ -112,8 +103,6 @@ public class DownloadImpl implements Download {
 
     @ValueMapValue(optional = true)
     private String actionText;
-
-    private String imagePath;
 
     private String titleType;
 
@@ -138,7 +127,6 @@ public class DownloadImpl implements Download {
                 actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
             }
             titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
-            displayImage = currentStyle.get(PN_DISPLAY_IMAGE, false);
             displaySize = currentStyle.get(PN_DISPLAY_SIZE, false);
             displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, false);
             displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, false);
@@ -175,7 +163,6 @@ public class DownloadImpl implements Download {
 
                     url = getDownloadUrl(file) + "/" + filename;
                     size = FileUtils.byteCountToDisplaySize(getFileSize(fileContent));
-                    imagePath = populateImagePath();
                 }
             }
         }
@@ -208,7 +195,6 @@ public class DownloadImpl implements Download {
                     }
 
                     url = getDownloadUrl(downloadResource);
-                    imagePath = populateImagePath();
 
                     if (titleFromAsset) {
                         String assetTitle = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
@@ -240,7 +226,7 @@ public class DownloadImpl implements Download {
     }
 
     @Override
-    public String getURL() {
+    public String getUrl() {
         return url;
     }
 
@@ -257,11 +243,6 @@ public class DownloadImpl implements Download {
     @Override
     public String getActionText() {
         return actionText;
-    }
-
-    @Override
-    public String getImagePath() {
-        return imagePath;
     }
 
     @Override
@@ -282,11 +263,6 @@ public class DownloadImpl implements Download {
     @Override
     public String getSize() {
         return size;
-    }
-
-    @Override
-    public boolean displayImage() {
-        return displayImage;
     }
 
     @Override
@@ -322,20 +298,6 @@ public class DownloadImpl implements Download {
             }
         }
         return size;
-    }
-
-    @NotNull
-    private String populateImagePath() {
-        StringBuilder imagePathBuilder = new StringBuilder();
-
-        String resourcePath = resourceResolver.map(request, resource.getPath());
-
-        imagePathBuilder.append(resourcePath).append(IMAGE_SERVLET_EXTENSION);
-        if (lastModified > 0) {
-            imagePathBuilder.append("/").append(lastModified).append(JPEG_EXTENSION);
-        }
-
-        return imagePathBuilder.toString();
     }
 
     @NotNull

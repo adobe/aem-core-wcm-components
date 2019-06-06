@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 import org.apache.sling.api.resource.Resource;
@@ -24,12 +22,9 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.resourceresolver.MockValueMap;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
@@ -43,7 +38,6 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 public class DownloadImplTest {
 
@@ -78,9 +72,7 @@ public class DownloadImplTest {
     private static final String DOWNLOAD_WITH_TITLE_TYPE = "download-with-title-type";
 
 
-    private Logger downloadLogger;
-
-        @ClassRule
+    @ClassRule
     public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
 
     @BeforeClass
@@ -89,25 +81,12 @@ public class DownloadImplTest {
         AEM_CONTEXT.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_PATH + "/jcr:content/renditions/original");
     }
 
-    @Before
-    public void setTestFixture() throws NoSuchFieldException, IllegalAccessException {
-        downloadLogger = spy(LoggerFactory.getLogger("FakeLogger"));
-        Field field = DownloadImpl.class.getDeclaredField("LOG");
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        field.setAccessible(true);
-        // remove final modifier from field
-
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, downloadLogger);
-    }
-
     @Test
     public void testFullyConfiguredDownload() {
         Download download = getDownloadUnderTest(DOWNLOAD_1);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getURL());
+        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
@@ -121,7 +100,7 @@ public class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_3);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
-        assertEquals(PDF_FILE_DOWNLOAD_PATH, download.getURL());
+        assertEquals(PDF_FILE_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FORMAT_STRING, download.getFormat());
@@ -134,7 +113,7 @@ public class DownloadImplTest {
         Download download = getDownloadUnderTest(DOWNLOAD_2);
         assertEquals(DAM_TITLE, download.getTitle());
         assertEquals(DAM_DESCRIPTION, download.getDescription());
-        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getURL());
+        assertEquals(PDF_ASSET_DOWNLOAD_PATH, download.getUrl());
         assertEquals(PDF_FILENAME, download.getFilename());
         assertEquals(PDF_EXTENSION, download.getExtension());
         assertEquals(PDF_FILESIZE_STRING, download.getSize());
