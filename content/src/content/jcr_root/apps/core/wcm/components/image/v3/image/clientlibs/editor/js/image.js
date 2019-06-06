@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
     var $cqFileUploadEdit;
     var fileReference;
     var linkchecherEnabled;
-    var linkcheckerEnabledCheckboxSelector = 'coral-checkbox[name="./linktrackingEnabled"]';
+    var linkcheckerEnabledCheckboxSelector = 'coral-checkbox[name="./linkTrackingEnabled"]';
 
     $(document).on("dialog-loaded", function(e) {
         var $dialog        = e.dialog;
@@ -50,11 +50,11 @@
             if ($linkEnabledCheckbox.size() > 0) {
                 linkchecherEnabled = $linkEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
                 if (!linkchecherEnabled) {
-                    $dialogContent.find('[name="./objectid"]').parent().hide();
+                    $dialogContent.find('[name="./objectId"]').parent().hide();
                 }
             }
             $linkEnabledCheckbox.on("change", function(e) {
-                $dialogContent.find('[name="./objectid"]').parent().toggle();
+                $dialogContent.find('[name="./objectId"]').parent().toggle();
             });
             if ($cqFileUpload) {
                 $cqFileUpload.on("assetselected", function(e) {

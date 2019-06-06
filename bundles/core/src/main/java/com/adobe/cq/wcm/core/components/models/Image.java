@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -151,14 +151,14 @@ public interface Image extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    String PN_TRACKING_ENABLED  = "linktrackingEnabled";
+    String PN_TRACKING_ENABLED  = "linkTrackingEnabled";
     
      /**
      * Name of the policy property that stores the value for link tracking value.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    String PN_TRACKING_OBJECT_ID  = "objectid";
+    String PN_TRACKING_OBJECT_ID  = "objectId";
 
     /**
      * Returns the value for the {@code src} attribute of the image.
@@ -305,7 +305,7 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     
-    default String getAnlalyticData() {
+    default String getLinkTrackingCode() {
     	throw new UnsupportedOperationException();
     }
     

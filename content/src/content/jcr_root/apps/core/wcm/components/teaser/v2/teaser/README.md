@@ -1,5 +1,5 @@
 <!--
-Copyright 2018 Adobe Systems Incorporated
+Copyright 2019 Adobe Systems Incorporated
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,10 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Teaser (v1)
+Teaser (v2)
 ====
 Teaser component written in HTL, allowing definition of an image, title, rich text description and actions/links.
 Teaser variations can include some or all of these elements.
+
+Teaser variation includes link tracking
 
 ## Features
 * Combines image, title, rich text description and actions/links.
@@ -35,6 +37,8 @@ The following configuration properties are used:
 4. `./imageLinkHidden` - defines whether or not the image link is hidden
 5. `./titleLinkHidden` - defines whether or not the title link is hidden
 6. `./titleType` - stores the value for this title's HTML element type
+7. `./linkTrackingEnabled`  -if it set to 'true' , image URL will be tracked .
+8. `./objectId` - if link tracking is enabled then objectId value will be added to the link , so page can be tracked .
 
 The following configuration properties are inherited from the image component:
 

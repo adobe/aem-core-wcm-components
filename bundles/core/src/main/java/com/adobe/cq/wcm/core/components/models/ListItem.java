@@ -104,7 +104,7 @@ public interface ListItem {
      */
     @Nullable
     @JsonIgnore
-    default String getAnalyticsData() {
+    default String getLinkTrackingCode() {
         throw new UnsupportedOperationException();
     }
 }

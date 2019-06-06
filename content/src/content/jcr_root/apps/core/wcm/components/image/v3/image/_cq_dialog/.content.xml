@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -152,21 +152,21 @@
                                                 name="./linkURL"
                                                 rootPath="/content"
                                                 wrapperClass="cmp-image__editor-link"/>
-                                             </actions>
-                                             <linktrackingEnabled
+                                         	<linkTrackingEnabled
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"                                                
-                                                fieldDescription="When clicked link tracking will be enabled."
-                                                name="./linktrackingEnabled"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                checked="${not empty cqDesign.linkTrackingEnabled ? cqDesign.linkTrackingEnabled : false}"
+                                                fieldDescription="When checked, enables tranking of the link."
+                                                name="./linkTrackingEnabled"
                                                 text="Enable Link Tracking"
                                                 uncheckedValue="{Boolean}false"
-                                                value="{Boolean}true"/>
-                                               <objectid
+                                                value="{Boolean}true"/>                                            
+                                            <objectId
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="A title to display as the headline for the teaser."
+                                                fieldDescription="Value for tracking of the link."
                                                 fieldLabel="Object ID for Tracking"
-                                                name="./objectid"/>
+                                                name="./objectId"/>
                                         </items>
                                     </column>
                                 </items>

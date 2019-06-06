@@ -227,7 +227,7 @@ public interface Teaser extends ComponentExporter {
      * @return analytics data for the link
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    default String getAnalyticsData() {
+    default String getLinkTrackingCode() {
     	throw new UnsupportedOperationException();
     }
 
