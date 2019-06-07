@@ -18,7 +18,7 @@
 						"sling:resourceType": "core/wcm/components/teaser/v2/teaser",
 						"trackingEnabled": true,
 						"trackingList": [],
-						"analyticData": "X",
+						"linkTrackingCode": "X",
 						"fileReference": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
 						"linkURL": "https://www.adobe.com",
 						"actions": {
