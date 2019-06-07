@@ -362,6 +362,22 @@
                         </separator>
                     </v1>
                 </separator>
+                <container jcr:primaryType="nt:unstructured">
+                    <v1 jcr:primaryType="nt:unstructured">
+                        <container jcr:primaryType="nt:unstructured">
+                            <policy_1559057070844
+                                jcr:lastModified="{Date}2019-05-28T18:24:48.269+03:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Default"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                backgroundColorEnabled="true"
+                                backgroundImageEnabled="true">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1559057070844>
+                        </container>
+                    </v1>
+                </container>
             </components>
         </wcm>
     </core>
