@@ -32,17 +32,19 @@
             var activeSelect = tabsEditor.querySelector(activeSelectSelector);
             var activeItem = tabsEditor.querySelector(activeItemSelector);
 
-            Coral.commons.ready(childrenEditor, function() {
-                updateActiveSelect(childrenEditor, activeSelect, activeItem);
-            });
+            if (childrenEditor && activeSelect && activeItem) {
+                Coral.commons.ready(childrenEditor, function() {
+                    updateActiveSelect(childrenEditor, activeSelect, activeItem);
+                });
 
-            childrenEditor.on("change", function() {
-                updateActiveSelect(childrenEditor, activeSelect, activeItem);
-            });
+                childrenEditor.on("change", function() {
+                    updateActiveSelect(childrenEditor, activeSelect, activeItem);
+                });
 
-            activeSelect.on("change", function() {
-                activeItem.value = activeSelect.value;
-            });
+                activeSelect.on("change", function() {
+                    activeItem.value = activeSelect.value;
+                });
+            }
         }
     });
 
