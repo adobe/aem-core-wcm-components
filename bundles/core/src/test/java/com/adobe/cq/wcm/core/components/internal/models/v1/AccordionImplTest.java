@@ -32,6 +32,7 @@ import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class AccordionImplTest {
@@ -71,7 +72,7 @@ public class AccordionImplTest {
             {"item_2", "Accordion Panel 2"},
         };
         verifyAccordionItems(expectedItems, accordion.getItems());
-        assertEquals(new String[]{"item_2"}, accordion.getExpandedItems());
+        assertArrayEquals(new String[]{"item_2"}, accordion.getExpandedItems());
         assertEquals(false, accordion.isSingleExpansion());
         Utils.testJSONExport(accordion, Utils.getTestExporterJSONPath(TEST_BASE, "accordion1"));
     }
