@@ -38,7 +38,7 @@
                     <socialmedia
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Social Media & Analytics"
+                        jcr:title="Social Media &amp; Analytics"
                         sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
                         sling:orderBefore="cloudservices">
                         <items jcr:primaryType="nt:unstructured">
