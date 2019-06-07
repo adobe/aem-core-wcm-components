@@ -362,6 +362,24 @@
                         </separator>
                     </v1>
                 </separator>
+                <download jcr:primaryType="nt:unstructured">
+                    <v1 jcr:primaryType="nt:unstructured">
+                        <download jcr:primaryType="nt:unstructured">
+                            <policy_1559906471859
+                                jcr:lastModified="{Date}2019-06-07T13:36:21.106+02:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="download"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                allowUpload="true"
+                                displayFilename="true"
+                                displayFormat="true"
+                                displaySize="true">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1559906471859>
+                        </download>
+                    </v1>
+                </download>
             </components>
         </wcm>
     </core>

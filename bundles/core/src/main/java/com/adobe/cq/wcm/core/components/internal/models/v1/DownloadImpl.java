@@ -127,9 +127,9 @@ public class DownloadImpl implements Download {
                 actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
             }
             titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
-            displaySize = currentStyle.get(PN_DISPLAY_SIZE, false);
-            displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, false);
-            displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, false);
+            displaySize = currentStyle.get(PN_DISPLAY_SIZE, true);
+            displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, true);
+            displayFilename = currentStyle.get(PN_DISPLAY_FILENAME, true);
         }
         if (StringUtils.isNotBlank(fileReference)) {
             initAssetDownload(fileReference);
