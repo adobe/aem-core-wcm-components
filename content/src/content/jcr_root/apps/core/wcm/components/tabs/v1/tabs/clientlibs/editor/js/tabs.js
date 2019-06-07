@@ -56,23 +56,25 @@
      * @param {HTMLElement} activeItem Active tab hidden input
      */
     function updateActiveSelect(childrenEditor, activeSelect, activeItem) {
-        var selectedValue = activeSelect.value || activeItem.value;
-        activeSelect.items.getAll().forEach(function(item) {
-            if (item.value !== "") {
-                activeSelect.items.remove(item);
-            }
-        });
-        var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
-        if (cmpChildrenEditor) {
-            cmpChildrenEditor.items().forEach(function(item) {
-                activeSelect.items.add({
-                    selected: item.name === selectedValue,
-                    value: item.name,
-                    content: {
-                        textContent: item.description
-                    }
-                });
+        if (childrenEditor && activeSelect && activeItem) {
+            var selectedValue = activeSelect.value || activeItem.value;
+            activeSelect.items.getAll().forEach(function(item) {
+                if (item.value !== "") {
+                    activeSelect.items.remove(item);
+                }
             });
+            var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
+            if (cmpChildrenEditor) {
+                cmpChildrenEditor.items().forEach(function(item) {
+                    activeSelect.items.add({
+                        selected: item.name === selectedValue,
+                        value: item.name,
+                        content: {
+                            textContent: item.description
+                        }
+                    });
+                });
+            }
         }
     }
 })(jQuery, Coral);
