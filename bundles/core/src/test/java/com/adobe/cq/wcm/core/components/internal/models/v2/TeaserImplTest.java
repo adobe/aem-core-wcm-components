@@ -15,11 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -34,6 +35,7 @@ import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.wcm.api.components.Component;
 
@@ -50,6 +52,8 @@ public class TeaserImplTest {
     private static final String TEST_ROOT_PAGE = "/content/teasers";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String TEASER_15 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-15";
+    private static final String TEASER_28 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-28";
+    private static final String TEASER_26 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-26";
     private static final String TITLE = "Teasers Test";
     private static final String DESCRIPTION = "Description";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
@@ -73,6 +77,30 @@ public class TeaserImplTest {
         assertEquals("https://www.adobe.com", teaser.getLinkURL());
         assertEquals("", teaser.getLinkTrackingCode());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser15"));
+    }
+
+    @Test
+    public void testPageInheritedProperties() {
+        Teaser teaser = getTeaserUnderTest(TEASER_26);
+        assertEquals("Container Test", teaser.getTitle());
+        assertEquals("/core/content/teasers.html", teaser.getLinkURL());
+        assertEquals(false, teaser.isActionsEnabled());
+    }
+
+    @Test
+    public void testTeaserWithTitleAndDescriptionFromActions() {
+        Teaser teaser1 = getTeaserUnderTest(TEASER_28);
+        assertTrue("Expected teaser with actions", teaser1.isActionsEnabled());
+        assertEquals("Expected to find two Actions", 2, teaser1.getActions().size());
+        assertEquals(2, teaser1.getActions().size());
+        ListItem action = teaser1.getActions().get(0);
+        assertEquals("Action link does not match", "/content/teasers", action.getPath());
+        assertEquals("Action text does not match", "Teasers", action.getTitle());
+        assertEquals("Action text does not match", "", action.getLinkTrackingCode());
+        action = teaser1.getActions().get(1);
+        assertEquals("Action link does not match", "http://www.adobe.com", action.getPath());
+        assertEquals("Action text does not match", "Adobe", action.getTitle());
+        assertEquals("Action text does not match", "", action.getLinkTrackingCode());
     }
 
     private Teaser getTeaserUnderTest(String resourcePath) {
