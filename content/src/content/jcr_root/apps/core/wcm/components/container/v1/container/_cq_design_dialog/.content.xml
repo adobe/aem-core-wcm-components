@@ -85,7 +85,7 @@
 	                                                showDefaultColors="{Boolean}false"
 	                                                showSwatches="{Boolean}false"
 	                                                emptyText="Value"
-	                                                name="./value">
+	                                                name="./value"/>
                                             </items>
                                         </field>  
                                     </colorFields>   
