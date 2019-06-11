@@ -74,6 +74,13 @@ public interface Image extends ComponentExporter {
     String PN_DISPLAY_POPUP_TITLE = "displayPopupTitle";
 
     /**
+     * Name of the resource property that will indicate if the image's link will be opened in a new tab.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.1
+     */
+    String PN_LINK_TARGET = "linkTarget";
+
+    /**
      * Name of the JSON property that will store the smart sizes for smart loading.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
@@ -202,7 +209,7 @@ public interface Image extends ComponentExporter {
      * @return {@code true} if the image's link should be opened in a new tab, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.4.1; marked <code>default</code> in 12.4.1
      */
-    default boolean getLinkTarget() {
+    default boolean linkTarget() {
         throw new UnsupportedOperationException();
     }
 

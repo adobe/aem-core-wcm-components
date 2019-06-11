@@ -110,15 +110,13 @@ public class ImageImpl implements Image {
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private boolean linkTarget;
-
     protected String src;
     protected String[] smartImages = new String[]{};
     protected int[] smartSizes = new int[0];
     protected String json;
     protected boolean displayPopupTitle;
     protected boolean isDecorative;
+    protected boolean linkTarget;
 
     protected boolean hasContent;
     protected String mimeType;
@@ -146,6 +144,7 @@ public class ImageImpl implements Image {
         mimeType = MIME_TYPE_IMAGE_JPEG;
         displayPopupTitle = properties.get(PN_DISPLAY_POPUP_TITLE, currentStyle.get(PN_DISPLAY_POPUP_TITLE, false));
         isDecorative = properties.get(PN_IS_DECORATIVE, currentStyle.get(PN_IS_DECORATIVE, false));
+
         Asset asset = null;
         if (StringUtils.isNotEmpty(fileReference)) {
             // the image is coming from DAM
@@ -240,6 +239,7 @@ public class ImageImpl implements Image {
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
+                    linkTarget = properties.get(PN_LINK_TARGET, false);
                 }
             } else {
                 linkURL = null;
@@ -313,7 +313,7 @@ public class ImageImpl implements Image {
     }
 
     @Override
-    public boolean getLinkTarget() {
+    public boolean linkTarget() {
         return linkTarget;
     }
 
