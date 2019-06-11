@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
@@ -206,10 +207,11 @@ public interface Image extends ComponentExporter {
     /**
      * Returns the image's link target, if one was set.
      *
-     * @return {@code true} if the image's link should be opened in a new tab, {@code false} otherwise
+     * @return {@code true} if the image's link URL was set and should be opened in a new tab, {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.4.1; marked <code>default</code> in 12.4.1
      */
-    default boolean linkTarget() {
+    @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
+    default boolean getLinkTarget() {
         throw new UnsupportedOperationException();
     }
 

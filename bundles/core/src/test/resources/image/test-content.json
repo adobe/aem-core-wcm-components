@@ -368,6 +368,18 @@
                             "jcr:uuid"          : "22a0a463-9614-48c5-8215-a35ffc7d1088"
                         }
                     }
+                },
+                "image28"            : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "jcr:createdBy"     : "admin",
+                    "jcr:lastModified"  : "Tue Jun 11 2019 13:12:39 GMT+0100",
+                    "sling:resourceType": "core/wcm/components/image/v1/image",
+                    "cq:policy"         : "coretest/components/content/image/policy_1478854677328",
+                    "alt"               : "Adobe Logo",
+                    "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                    "jcr:title"         : "Adobe Logo",
+                    "linkTarget"        : true,
+                    "linkURL"           : "https://www.adobe.com"
                 }
             },
             "cq:template": "/conf/coretest/settings/wcm/templates/testtemplate"

@@ -211,6 +211,22 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
     }
 
     @Test
+    public void testOpenImageLinkInNewTab() {
+        String escapedResourcePath = IMAGE28_PATH.replace("jcr:content", "_jcr_content");
+        Image image = getImageUnderTest(IMAGE28_PATH);
+        assertTrue("Image should display a caption popup.", image.displayPopupTitle());
+        assertEquals(IMAGE_LINK, image.getLink());
+        assertTrue("Image's link should be opened in a new tab.", image.getLinkTarget());
+        assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + "." + jpegQuality +
+            ".600.png/1560255159000/" + ASSET_NAME + ".png", image.getSrc());
+        String expectedJson = "{\"smartImages\":[\"" + CONTEXT_PATH + escapedResourcePath + "." + selector + "." + jpegQuality +
+            ".600.png/1560255159000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
+        compareJSON(expectedJson, image.getJson());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE28_PATH));
+    }
+
+    @Test
     public void testSVGImage() {
         Image image = getImageUnderTest(IMAGE22_PATH);
         assertTrue(image.getWidths().length == 0);

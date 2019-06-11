@@ -313,7 +313,7 @@ public class ImageImpl implements Image {
     }
 
     @Override
-    public boolean linkTarget() {
+    public boolean getLinkTarget() {
         return linkTarget;
     }
 

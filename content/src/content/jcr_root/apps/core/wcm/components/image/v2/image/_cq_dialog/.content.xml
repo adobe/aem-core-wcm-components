@@ -165,7 +165,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
                                                 name="./linkTarget@TypeHint"
                                                 value="Boolean"
-                                                wrapperClass="cmp-image__editor-link"/>/>
+                                                wrapperClass="cmp-image__editor-link"/>
                                         </items>
                                     </column>
                                 </items>
