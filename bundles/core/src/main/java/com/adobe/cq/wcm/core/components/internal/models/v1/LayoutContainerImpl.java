@@ -34,24 +34,24 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
     @ScriptVariable
     private Resource resource;
 
-    private LayoutType layoutType;
+    private LayoutType layout;
 
     @PostConstruct
     protected void initModel() {
         if (resource != null) {
             ValueMap properties = resource.getValueMap();
             if (properties != null) {
-                String layout = properties.get(LayoutContainer.PN_LAYOUT_TYPE, String.class);
-                layoutType = LayoutType.getLayoutType(layout);
-                if (layoutType == null) {
-                    layoutType = LayoutType.SIMPLE;
+                String layoutProperty = properties.get(LayoutContainer.PN_LAYOUT, String.class);
+                layout = LayoutType.getLayoutType(layoutProperty);
+                if (layout == null) {
+                    layout = LayoutType.SIMPLE;
                 }
             }
         }
     }
 
     @Override
-    public @NotNull LayoutType getLayoutType() {
-        return layoutType;
+    public @NotNull LayoutType getLayout() {
+        return layout;
     }
 }

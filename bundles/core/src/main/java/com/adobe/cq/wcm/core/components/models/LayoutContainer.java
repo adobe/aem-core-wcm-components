@@ -27,18 +27,18 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface LayoutContainer extends Container {
 
     /**
-     * Name of the resource property that indicates which layout type should be used by the container component.
+     * Name of the resource property that indicates the layout that should be used by the container component.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    String PN_LAYOUT_TYPE = "layout";
+    String PN_LAYOUT = "layout";
 
     /**
      * Enumeration of supported layout types for the container component
      */
     enum LayoutType {
         SIMPLE("simple"),
-        RESPONSIVE_GRID("responsive")
+        RESPONSIVE_GRID("responsiveGrid")
         ;
 
         private String layout;
@@ -68,7 +68,7 @@ public interface LayoutContainer extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @NotNull
-    default LayoutType getLayoutType() {
+    default LayoutType getLayout() {
         throw new UnsupportedOperationException();
     }
 }

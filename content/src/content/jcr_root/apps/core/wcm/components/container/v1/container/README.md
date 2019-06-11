@@ -34,10 +34,10 @@ The Container component uses the `com.adobe.cq.wcm.core.components.models.Layout
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./backgroundImageEnabled` - defines whether or not display background image option.
-2. `./backgroundColorEnabled` - defines whether or not to display background color picker option.
-3. `./backgroundSwatchesOnly` -  defines whether or not to display color picker properties tab.
-4. `./cq:swatches` - defines list of custom swatches list.
+1. `./backgroundImageEnabled` - defines whether to display a background image option.
+2. `./backgroundColorEnabled` - defines whether to display a background color option.
+3. `./backgroundColorSwatchesOnly` -  defines whether or not to display swatches in the background color picker.
+4. `./allowedColorSwatches` - defines a list of background color swatches that are allowed to be selected by an author.
 
 It is also possible to define the allowed components for the Container.
 
@@ -45,7 +45,8 @@ It is also possible to define the allowed components for the Container.
 The following properties are written to JCR for this Container component and are expected to be available as `Resource` properties:
 
 #### Container Properties
-1. `layout` - defines the layout type, either `simpe` (defaut) or `responsive`
+1. `./layout` - defines the layout type, either `simple` (default) or `responsiveGrid`
+
 #### Common Properties
 1. `./id` - defines the component HTML ID attribute.
 2. `./backgroundImageReference` - defines the container background image.
