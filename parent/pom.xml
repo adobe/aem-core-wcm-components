@@ -399,6 +399,32 @@
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${frontend-maven-plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>xml-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>validate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <validationSets>
+                            <validationSet>
+                                <dir>.</dir>
+                                <includes>
+                                    <include>**/*.xml</include>
+                                </includes>
+                                <excludes>
+                                    <exclude>**/node/**</exclude>
+                                    <exclude>**/node_modules/**</exclude>
+                                    <exclude>**/target/**</exclude>
+                                </excludes>
+                            </validationSet>
+                        </validationSets>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
