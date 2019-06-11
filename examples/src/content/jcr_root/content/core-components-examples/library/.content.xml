@@ -299,7 +299,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/language-navigation.svg"
-                    linkURL="/content/core-components-examples/library/language-navigation/us/en/language-navigation"
+                    linkURL="/content/core-components-examples/library/language-navigation/language-structure/us/en/language-navigation"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
