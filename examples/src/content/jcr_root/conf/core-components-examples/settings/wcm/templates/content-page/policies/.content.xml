@@ -60,6 +60,14 @@
                                         sling:resourceType="wcm/core/components/policies/mapping"/>
                                 </v1>
                             </separator>
+                            <download jcr:primaryType="nt:unstructured">
+                                <v1 jcr:primaryType="nt:unstructured">
+                                    <download
+                                        cq:policy="core/wcm/components/download/v1/download/policy_1559906471859"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="wcm/core/components/policies/mapping"/>
+                                </v1>
+                            </download>
                             <container jcr:primaryType="nt:unstructured">
                                 <v1 jcr:primaryType="nt:unstructured">
                                     <container
