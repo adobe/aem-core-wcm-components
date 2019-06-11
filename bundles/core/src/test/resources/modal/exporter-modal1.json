@@ -1,0 +1,8 @@
+{
+  "id": "312835230",
+  "title": "Terms & Conditions Modal",
+  "open": false,
+  "type": "EXPERIENCE_FRAGMENT",
+  "path": "/content/dam/modalcontentfragment",
+  ":type": "core/wcm/components/modal/v1/modal"
+}

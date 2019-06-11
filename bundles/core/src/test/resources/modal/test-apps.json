@@ -1,0 +1,15 @@
+{
+	"modal": {
+		"jcr:primaryType": "sling:Folder",
+		"v1": {
+			"jcr:primaryType": "nt:unstructured",
+			"modal": {
+				"cq:icon": "mbox",
+				"jcr:description": "Modal Component",
+				"jcr:primaryType": "cq:Component",
+				"jcr:title": "Modal (v1)",
+				"componentGroup": ".core-wcm"
+			}
+		}
+	}
+}

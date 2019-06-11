@@ -1,0 +1,31 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+
+<div class="cmp-modal" data-sly-use.modal="com.adobe.cq.wcm.core.components.models.Modal"
+     role="dialog">
+    <sly data-sly-test="${wcmmode.edit}">${modal.title || 'Modal Dialog' @ i18n} ${modal.id}</sly>
+    <sly data-sly-test="${!wcmmode.edit}">
+        <sly data-sly-test.cfPathWithExt="${modal.path @ extension='cfm.content.html'}"></sly>
+        <sly data-sly-test.xfPathWithExt="${modal.path @ extension='html'}"></sly>
+        <div class="cmp-modal__view"
+             id="${modal.id}"
+             data-modal-show="${properties.open}"
+             tabindex="-1"
+             role="dialog"
+             data-content-url="${properties.type == 'cf' ? cfPathWithExt : xfPathWithExt}">
+        </div>
+    </sly>
+</div>

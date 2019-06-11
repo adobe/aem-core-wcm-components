@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:description="Modal Dialog"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Modal"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.modal.v1.editor]"
+    helpPath="https://www.adobe.com/go/aem_cmp_modal_v1"
+    trackingFeature="core-components:modal:v1">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <fixedcolumns
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+                            <id
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="An id that is displayed in the modal header and as a reference in the placeholder"
+                                fieldLabel="Id"
+                                name="./id"/>
+                            <title
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="A title that is displayed in the modal header and as a reference in the placeholder"
+                                fieldLabel="Title"
+                                name="./title"/>
+                            <open
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                name="./open"
+                                text="Display the modal on page load"
+                                uncheckedValue="false"
+                                value="true"/>
+                            <type
+                                granite:class="cq-dialog-dropdown-showhide"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                fieldLabel="Select the Content Type"
+                                name="./type">
+                                <granite:data
+                                    jcr:primaryType="nt:unstructured"
+                                    cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
+                                <items jcr:primaryType="nt:unstructured">
+                                    <cf
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Content Fragment"
+                                        value="cf"/>
+                                    <xf
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Experience Fragment"
+                                        value="xf"/>
+                                </items>
+                            </type>
+                            <path
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                fieldDescription="Path of the asset"
+                                fieldLabel="Path"
+                                name="./path"
+                                required="{Boolean}true"
+                                rootPath="/content/dam"/>
+                        </items>
+                    </properties>
+                </items>
+            </fixedcolumns>
+        </items>
+    </content>
+</jcr:root>
