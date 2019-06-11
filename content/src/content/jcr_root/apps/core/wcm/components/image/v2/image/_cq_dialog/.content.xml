@@ -156,14 +156,16 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                 fieldDescription="Open image link in a new tab."
-                                                text="Link Target"
+                                                text="Open link in new tab"
                                                 name="./linkTarget"
-                                                value="true"/>
+                                                value="true"
+                                                wrapperClass="cmp-image__editor-link"/>
                                             <linkTargetTypeHint
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
                                                 name="./linkTarget@TypeHint"
-                                                value="Boolean"/>
+                                                value="Boolean"
+                                                wrapperClass="cmp-image__editor-link"/>/>
                                         </items>
                                     </column>
                                 </items>
