@@ -4,15 +4,18 @@
     <jcr:content
         cq:lastModified="{Date}2019-06-06T10:01:12.686+03:00"
         cq:lastModifiedBy="admin"
-        cq:redirectTarget="/content/core-components-examples/library/language-navigation/us/en/language-navigation"
+        cq:redirectTarget="/content/core-components-examples/library/language-navigation/language-structure/us/en/language-navigation"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:language="en_US"
         jcr:primaryType="cq:PageContent"
-        jcr:title="English"
-        sling:resourceType="core-components-examples/components/page">
+        jcr:title="Language Structure"
+        sling:resourceType="core-components-examples/components/page"
+        hideInNav="true"
+        navTitle="Language Structure">
         <image jcr:primaryType="nt:unstructured">
             <file/>
         </image>
     </jcr:content>
-    <language-navigation/>
+    <de/>
+    <fr/>
+    <us/>
 </jcr:root>
