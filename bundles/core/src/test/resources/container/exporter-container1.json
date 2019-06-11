@@ -1,0 +1,30 @@
+{
+    "style"      : "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
+    "layoutType" : "RESPONSIVE_GRID",
+    "id"         :  "test",
+    ":itemsOrder": [
+        "item_1",
+        "item_2"
+    ],
+    ":items"     : {
+        "item_1": {
+            "title"          : "Teaser 1",
+            "description"    : "Teaser 1 description",
+            "actionsEnabled" : false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions"        : [],
+            ":type"          : "core/wcm/components/teaser/v1/teaser"
+        },
+        "item_2": {
+            "title"          : "Teaser 2",
+            "description"    : "Teaser 2 description",
+            "actionsEnabled" : false,
+            "imageLinkHidden": false,
+            "titleLinkHidden": false,
+            "actions"        : [],
+            ":type"          : "core/wcm/components/teaser/v1/teaser"
+        }
+    },
+    ":type"      : "core/wcm/components/container/v1/container"
+}
