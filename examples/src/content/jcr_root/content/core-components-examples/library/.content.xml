@@ -167,7 +167,7 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                    fileReference="/content/dam/core-components-examples/library/components/container.svg"
                     linkURL="/content/core-components-examples/library/container"
                     textIsRich="true"
                     titleFromPage="true">
