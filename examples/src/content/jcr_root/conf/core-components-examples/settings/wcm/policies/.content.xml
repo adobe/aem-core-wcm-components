@@ -83,6 +83,21 @@
     <core jcr:primaryType="nt:unstructured">
         <wcm jcr:primaryType="nt:unstructured">
             <components jcr:primaryType="nt:unstructured">
+                <embed jcr:primaryType="nt:unstructured">
+                    <v1 jcr:primaryType="nt:unstructured">
+                        <embed jcr:primaryType="nt:unstructured">
+                            <policy_1558686151045
+                                jcr:lastModified="{Date}2019-05-24T13:52:49.696+05:30"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Core Components Examples - Embed"
+                                sling:resourceType="wcm/core/components/policy/policy"
+                                allowedEmbeddables="[core/wcm/components/embed/embeddables/youtube]">
+                                <jcr:content jcr:primaryType="nt:unstructured"/>
+                            </policy_1558686151045>
+                        </embed>
+                    </v1>
+                </embed>
                 <title jcr:primaryType="nt:unstructured">
                     <v2 jcr:primaryType="nt:unstructured">
                         <title jcr:primaryType="nt:unstructured">

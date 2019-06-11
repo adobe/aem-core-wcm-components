@@ -88,7 +88,11 @@ public class AbstractModelTest {
                     }
                     Throwable t = null;
                     try {
-                        m.invoke(instance);
+                        if (m.getParameterCount() > 0) {
+                            m.invoke(instance, new Object[] { null });
+                        } else {
+                            m.invoke(instance);
+                        }
                     } catch (InvocationTargetException e) {
                         t = e.getCause();
                     }

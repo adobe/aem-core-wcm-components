@@ -1,0 +1,109 @@
+{
+    "conf": {
+        "policy_1558011912823": {
+            "jcr:content": {
+                "jcr:primaryType": "nt:unstructured"
+            },
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:title": "Embed Policy",
+            "sling:resourceType": "wcm/core/components/policy/policy",
+            "allowedEmbeddables": [
+                "/apps/app/chatbot",
+                "/apps/app/social"
+            ],
+            "embeddablesDisabled": "false",
+            "htmlDisabled": "true",
+            "urlDisabled": "true"
+        }
+    },
+    "my-app": {
+        "chatbot": {
+            "jcr:primaryType": "cq:Component",
+            "jcr:title": "Chatbot",
+            "sling:resourceSuperType": "core/wcm/components/embed/embeddable",
+            "order": 2,
+            "componentGroup": ".hidden",
+            "chatbot.html": {
+                "jcr:primaryType": "nt:file",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:mimeType": "text/html",
+                    ":jcr:data": 2402,
+                    "jcr:uuid": "0ae6d2c7-6fb1-43f2-8a84-3050458d6dca"
+                }
+            },
+            "cq:dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "Chatbot Options",
+                "sling:resourceType": "granite/ui/components/coral/foundation/container",
+                "items": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "chatbotId": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Chatbot ID",
+                        "fieldLabel": "ID",
+                        "name": "./chatbotId",
+                        "required": true
+                    },
+                    "chatbotCaption": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Chatbot caption.",
+                        "fieldLabel": "Caption",
+                        "name": "./chatbotCaption"
+                    }
+                },
+                "granite:data": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "cmp-embed-dialog-edit-embeddableoptions": true,
+                    "cmp-embed-dialog-edit-showhidetargetvalue": "core-components-examples/components/embeddables/chatbot"
+                }
+            }
+        },
+        "social": {
+            "jcr:primaryType": "cq:Component",
+            "jcr:title": "Social",
+            "sling:resourceSuperType": "core/wcm/components/embed/embeddable",
+            "order": 2,
+            "componentGroup": ".hidden",
+            "social.html": {
+                "jcr:primaryType": "nt:file",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:mimeType": "text/html",
+                    ":jcr:data": 2402,
+                    "jcr:uuid": "0ae6d2c7-6fb1-43f2-8a84-3050458d6dca"
+                }
+            },
+            "cq:dialog": {
+                "jcr:primaryType": "nt:unstructured",
+                "jcr:title": "Social Options",
+                "sling:resourceType": "granite/ui/components/coral/foundation/container",
+                "items": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "socialId": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Social ID.",
+                        "fieldLabel": "ID",
+                        "name": "./socialId",
+                        "required": true
+                    },
+                    "socialCaption": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "granite/ui/components/coral/foundation/form/textfield",
+                        "fieldDescription": "Social caption.",
+                        "fieldLabel": "Caption",
+                        "name": "./socialCaption"
+                    }
+                },
+                "granite:data": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "cmp-embed-dialog-edit-embeddableoptions": true,
+                    "cmp-embed-dialog-edit-showhidetargetvalue": "core-components-examples/components/embeddables/social"
+                }
+            }
+        }
+    }
+}

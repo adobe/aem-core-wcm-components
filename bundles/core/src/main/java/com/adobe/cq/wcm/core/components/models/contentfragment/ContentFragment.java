@@ -53,7 +53,6 @@ public interface ContentFragment extends DAMContentFragment, ContainerExporter {
      */
     String PN_VARIATION_NAME = "variationName";
 
-
     /**
      * Name of the required property that stores whether a single text element (<code>singleText</code>) or multiple
      * elements (<code>multi</code>) are displayed.
