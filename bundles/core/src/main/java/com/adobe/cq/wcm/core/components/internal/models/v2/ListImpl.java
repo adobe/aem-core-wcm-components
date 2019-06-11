@@ -55,7 +55,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return listItems;
     }
 
-    private Collection<Page> getPages() {
+    protected Collection<Page> getPages() {
         if (listItems == null) {
             Source listType = getListType();
             populateListItems(listType);

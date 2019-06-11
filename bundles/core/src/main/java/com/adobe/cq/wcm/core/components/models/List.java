@@ -141,6 +141,20 @@ public interface List extends ComponentExporter {
     String PN_DATE_FORMAT = "dateFormat";
 
     /**
+     * Name of the policy property that stores the value for link tracking.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_ENABLED  = "linkTrackingEnabled";
+    
+     /**
+     * Name of the policy property that stores the value for link tracking .
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TRACKING_OBJECT_ID  = "objectId";
+
+    /**
      * Returns the list's items collection, as {@link Page} elements.
      *
      * @return {@link Collection} of {@link Page}s

@@ -120,7 +120,7 @@ public class ListImpl implements List {
     protected java.util.List<Page> listItems;
 
     @PostConstruct
-    private void initModel() {
+    protected void initModel() {
         pageManager = resourceResolver.adaptTo(PageManager.class);
         readProperties();
     }
