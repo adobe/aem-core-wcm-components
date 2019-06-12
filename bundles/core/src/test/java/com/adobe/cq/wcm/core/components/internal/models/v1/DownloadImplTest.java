@@ -175,19 +175,6 @@ public class DownloadImplTest {
     }
 
     @Test
-    public void testDownloadWithActionTextFromStyle() throws Exception
-    {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
-        }}));
-
-        Download download = getDownloadUnderTest(DOWNLOAD_2, mockStyle);
-        assertEquals("Expected action text is not correct", STYLE_ACTION_TEST, download.getActionText());
-        Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_ACTION_TEXT_FROM_STYLE));
-    }
-
-    @Test
     public void testDownloadsWithDefaultActionText() throws Exception
     {
         Resource mockResource = mock(Resource.class);
@@ -200,7 +187,6 @@ public class DownloadImplTest {
         assertEquals("Expected action text is not correct", null, downloadWithoutConfiguredActionText.getActionText());
         Utils.testJSONExport(downloadWithConfiguredActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
-
 
     private Download getDownloadUnderTest(String resourcePath) {
         return getDownloadUnderTest(resourcePath, null);
