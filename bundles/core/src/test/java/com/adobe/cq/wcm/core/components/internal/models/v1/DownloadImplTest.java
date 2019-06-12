@@ -68,7 +68,6 @@ public class DownloadImplTest {
     private static final String DOWNLOAD_FULLY_CONFIGURED = "download-fully-configured";
     private static final String DOWNLOAD_WITH_DAM_PROPERTIES = "download-with-dam-properties";
     private static final String DOWNLOAD_FULLY_CONFIGURED_FILE = "download-fully-configured-file";
-    private static final String DOWNLOAD_WITH_ACTION_TEXT_FROM_STYLE = "download-with-action-text-from-style";
     private static final String DOWNLOAD_WITH_TITLE_TYPE = "download-with-title-type";
 
 
@@ -175,17 +174,17 @@ public class DownloadImplTest {
     }
 
     @Test
-    public void testDownloadsWithDefaultActionText() throws Exception
+    public void testDownloadWithoutActionText() throws Exception
     {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource));
 
-        Download downloadWithConfiguredActionText = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
-        assertEquals("Expected action text is not correct", COMPONENT_ACTION_TEXT, downloadWithConfiguredActionText.getActionText());
+        Download downloadWithActionText = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+        assertEquals("Expected action text is not correct", COMPONENT_ACTION_TEXT, downloadWithActionText.getActionText());
 
-        Download downloadWithoutConfiguredActionText = getDownloadUnderTest(DOWNLOAD_2, mockStyle);
-        assertEquals("Expected action text is not correct", null, downloadWithoutConfiguredActionText.getActionText());
-        Utils.testJSONExport(downloadWithConfiguredActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
+        Download downloadWithoutActionText = getDownloadUnderTest(DOWNLOAD_2, mockStyle);
+        assertEquals("Expected action text is not correct", null, downloadWithoutActionText.getActionText());
+        Utils.testJSONExport(downloadWithActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
 
     private Download getDownloadUnderTest(String resourcePath) {
