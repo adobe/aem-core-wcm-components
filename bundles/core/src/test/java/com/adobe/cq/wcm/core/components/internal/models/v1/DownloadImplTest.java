@@ -69,6 +69,7 @@ public class DownloadImplTest {
     private static final String DOWNLOAD_WITH_DAM_PROPERTIES = "download-with-dam-properties";
     private static final String DOWNLOAD_FULLY_CONFIGURED_FILE = "download-fully-configured-file";
     private static final String DOWNLOAD_WITH_TITLE_TYPE = "download-with-title-type";
+    private static final String PN_ACTION_TEXT = "actionText";
 
 
     @ClassRule
@@ -165,7 +166,7 @@ public class DownloadImplTest {
     {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
+            put(PN_ACTION_TEXT, STYLE_ACTION_TEST);
         }}));
 
         Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
