@@ -75,7 +75,7 @@ public class LayoutContainerImplTest {
                 container.getStyle());
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.RESPONSIVE_GRID,
-                container.getLayoutType());
+                container.getLayout());
         assertEquals("Id mismatch",
                 "test",
                 container.getId());
@@ -97,7 +97,7 @@ public class LayoutContainerImplTest {
         assertNull("Style", container.getStyle());
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.SIMPLE,
-                container.getLayoutType());
+                container.getLayout());
     }
     
     @Test

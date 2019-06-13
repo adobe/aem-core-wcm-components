@@ -34,7 +34,7 @@ public interface Component extends ComponentExporter {
     String PN_ID = "id";
     String PN_BACKGROUND_IMAGE_ENABLED = "backgroundImageEnabled";
     String PN_BACKGROUND_COLOR_ENABLED = "backgroundColorEnabled";
-    String PN_BACKGROUND_SWATCHES_ONLY = "backgroundSwatchesOnly";
+    String PN_BACKGROUND_COLOR_SWATCHES_ONLY = "backgroundColorSwatchesOnly";
     String PN_BACKGROUND_IMAGE_REFERENCE = "backgroundImageReference";
     String PN_BACKGROUND_COLOR = "backgroundColor";
 
