@@ -41,6 +41,11 @@ public interface Download extends ComponentExporter {
     String PN_INLINE = "inline";
 
     /**
+     * Name of the policy property that defines the text to be displayed on the action.
+     */
+    String PN_ACTION_TEXT = "actionText";
+
+    /**
      * Name of the policy property that stores the value for this title's HTML element type.
      *
      * @see #getTitleType()
