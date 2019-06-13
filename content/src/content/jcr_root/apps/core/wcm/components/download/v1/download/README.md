@@ -35,7 +35,6 @@ The Download component uses the `com.adobe.cq.wcm.core.components.models.Downloa
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./actionText` - defines the default action text to use if none is provided in the edit dialog.
 2. `./allowUpload` - defines whether direct upload from a local file system is allowed.
 3. `./titleType` - defines the HTML element to use for the download title.
 4. `./displaySize` - defines whether the file size should be displayed.
