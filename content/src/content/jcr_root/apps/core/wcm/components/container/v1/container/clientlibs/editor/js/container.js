@@ -18,11 +18,12 @@
     "use strict";
 
     var selectors = {
-        dialogContent: ".cmp-container__design",
-        backgroundColorEnabled: 'coral-checkbox[name="./backgroundColorEnabled"]',
-        backgroundSwatchesOnly: 'coral-checkbox[name="./backgroundSwatchesOnly"]',
-        colorMultifield: ".cmp-container__design-multifield",
-        swatchesListLabel: ".coral-Form-fieldlabel-swatcheslist"
+        dialogContent: ".cmp-container__editor",
+        policy: {
+            backgroundColorEnabled: "[data-cmp-container-v1-dialog-policy-hook='backgroundColorEnabled']",
+            backgroundColorSwatchesOnly: "[data-cmp-container-v1-dialog-policy-hook='backgroundColorSwatchesOnly']",
+            backgroundColorAllowedSwatches: "[data-cmp-container-v1-dialog-policy-hook='backgroundColorAllowedSwatches']"
+        }
     };
 
     $(document).on("dialog-loaded", function(e) {
@@ -31,31 +32,40 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-            var $backgroundColorEnabledCheckbox = $dialogContent.find(selectors.backgroundColorEnabled);
-            if ($backgroundColorEnabledCheckbox.size() > 0) {
-                var backgroundColorEnabled = $backgroundColorEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";
-                toggle($dialogContent, selectors.colorMultifield, backgroundColorEnabled);
-                toggle($dialogContent, selectors.backgroundSwatchesOnly, backgroundColorEnabled);
-                toggle($dialogContent, selectors.swatchesListLabel, backgroundColorEnabled);
-
-                $backgroundColorEnabledCheckbox.on("change", function(event) {
-                    var backgroundColorEnabled = $(event.target).adaptTo("foundation-field").getValue() === "true";
-                    toggle($dialogContent, selectors.colorMultifield, backgroundColorEnabled);
-                    toggle($dialogContent, selectors.backgroundSwatchesOnly, backgroundColorEnabled);
-                    toggle($dialogContent, selectors.swatchesListLabel, backgroundColorEnabled);
-                });
+            if (dialogContent.querySelector("[data-cmp-container-v1-dialog-policy-hook]")) {
+                handlePolicyDialog(dialogContent);
             }
         }
     });
 
-    function toggle(dialog, selector, show) {
-        var $target = dialog.find(selector);
-        if ($target) {
-            if (show) {
-                $target.show();
-            } else {
-                $target.hide();
-            }
+    /**
+     * Binds policy dialog handling
+     *
+     * @param {HTMLElement} containerEditor The dialog wrapper
+     */
+    function handlePolicyDialog(containerEditor) {
+        var backgroundColorEnabled = containerEditor.querySelector(selectors.policy.backgroundColorEnabled);
+        var backgroundColorSwatchesOnly = containerEditor.querySelector(selectors.policy.backgroundColorSwatchesOnly);
+        var backgroundColorAllowedSwatches = containerEditor.querySelector(selectors.policy.backgroundColorAllowedSwatches);
+
+        if (backgroundColorEnabled && backgroundColorSwatchesOnly && backgroundColorAllowedSwatches) {
+            var backgroundColorSwatchesOnlyToggleable = $(backgroundColorSwatchesOnly).adaptTo("foundation-toggleable");
+            var backgroundColorAllowedSwatchesToggleable = $(backgroundColorAllowedSwatches.parentNode).adaptTo("foundation-toggleable");
+            toggle(backgroundColorSwatchesOnlyToggleable, backgroundColorEnabled.checked);
+            toggle(backgroundColorAllowedSwatchesToggleable, backgroundColorEnabled.checked);
+
+            backgroundColorEnabled.on("change", function(event) {
+                toggle(backgroundColorSwatchesOnlyToggleable, backgroundColorEnabled.checked);
+                toggle(backgroundColorAllowedSwatchesToggleable, backgroundColorEnabled.checked);
+            });
+        }
+    }
+
+    function toggle(toggleable, show) {
+        if (show) {
+            toggleable.show();
+        } else {
+            toggleable.hide();
         }
     }
 
