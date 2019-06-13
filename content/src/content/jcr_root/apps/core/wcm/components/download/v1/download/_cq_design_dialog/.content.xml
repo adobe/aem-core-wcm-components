@@ -19,19 +19,6 @@
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
-                            <action
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                granite:class="coral-Form-fieldwrapper">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <actionText
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                        fieldDescription="The default text for the download action."
-                                        fieldLabel="Default Action Text"
-                                        name="./actionText"/>
-                                </items>
-                            </action>
                             <allowUpload
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
