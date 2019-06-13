@@ -320,7 +320,7 @@
                     "alt"               : "Adobe Logo",
                     "fileReference"     : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
                     "jcr:title"         : "Adobe Logo",
-                    "linkTarget"        : true,
+                    "linkTargetBlank"   : true,
                     "linkURL"           : "https://www.adobe.com"
                 }
             },

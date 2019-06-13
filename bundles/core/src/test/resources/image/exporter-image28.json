@@ -3,6 +3,6 @@
     "title": "Adobe Logo",
     "src": "/core/content/test/_jcr_content/root/image28.img.82.600.png/1560255159000/adobe-systems-logo-and-wordmark.png",
     "link": "https://www.adobe.com",
-    "linkTarget": true,
+    "linkTargetBlank": true,
     ":type": "core/wcm/components/image/v1/image"
 }

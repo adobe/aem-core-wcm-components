@@ -216,7 +216,7 @@ public class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.mod
         Image image = getImageUnderTest(IMAGE28_PATH);
         assertTrue("Image should display a caption popup.", image.displayPopupTitle());
         assertEquals(IMAGE_LINK, image.getLink());
-        assertTrue("Image's link should be opened in a new tab.", image.getLinkTarget());
+        assertTrue("Image's link should be opened in a new tab.", image.isLinkTargetBlank());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + "." + jpegQuality +
             ".600.png/1560255159000/" + ASSET_NAME + ".png", image.getSrc());

@@ -80,7 +80,7 @@ public class ImageImplTest extends AbstractImageTest {
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
-        assertFalse("Image's link should not be opened in a new tab.", image.getLinkTarget());
+        assertFalse("Image's link should not be opened in a new tab.", image.isLinkTargetBlank());
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE0_PATH));
     }
@@ -94,7 +94,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertNull("Did not expect a file reference.", image.getFileReference());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertEquals(IMAGE_LINK, image.getLink());
-        assertFalse("Image's link should not be opened in a new tab.", image.getLinkTarget());
+        assertFalse("Image's link should not be opened in a new tab.", image.isLinkTargetBlank());
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".82.600.png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image3." + selector +  "." + jpegQuality +
         ".600.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
@@ -110,7 +110,7 @@ public class ImageImplTest extends AbstractImageTest {
         assertNull("Did not expect a title for this image.", image.getTitle());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertNull("Did not expect a link for this image, since it's marked as decorative.", image.getLink());
-        assertFalse("Image's link should not be opened in a new tab.", image.getLinkTarget());
+        assertFalse("Image's link should not be opened in a new tab.", image.isLinkTargetBlank());
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe-systems-logo-and-wordmark.png", image.getSrc());
         compareJSON(
                 "{\"" + Image.JSON_SMART_IMAGES + "\":[], \"" + Image.JSON_SMART_SIZES + "\":[], \"" + Image.JSON_LAZY_ENABLED +
@@ -195,7 +195,7 @@ public class ImageImplTest extends AbstractImageTest {
         Image image = getImageUnderTest(IMAGE28_PATH);
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertEquals(IMAGE_LINK, image.getLink());
-        assertTrue("Image's link should be opened in a new tab.", image.getLinkTarget());
+        assertTrue("Image's link should be opened in a new tab.", image.isLinkTargetBlank());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + "." + jpegQuality +
             ".600.png/1560255159000/" + ASSET_NAME + ".png", image.getSrc());

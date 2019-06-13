@@ -59,20 +59,14 @@
                                 name="./linkURL"
                                 rootPath="/content"
                                 wrapperClass="cmp-image--editor-link"/>
-                            <linkTarget
+                            <linkTargetBlank
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                fieldDescription="Open image link in a new tab."
-                                text="Open link in new tab"
-                                name="./linkTarget"
-                                value="true"
-                                wrapperClass="cmp-image__editor-link"/>
-                            <linkTargetTypeHint
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
-                                name="./linkTarget@TypeHint"
-                                value="Boolean"
-                                wrapperClass="cmp-image__editor-link"/>
+                                fieldDescription="When checked, indicates that the image link should be opened in a new browser tab."
+                                text="Open link in a new tab"
+                                name="./linkTargetBlank"
+                                value="{Boolean}true"
+                                wrapperClass="cmp-image--editor-link"/>
                             <caption
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"

@@ -44,7 +44,7 @@ The following properties are written to JCR for this Image component and are exp
 2. `./isDecorative` - if set to `true`, then the image will be ignored by assistive technology
 3. `./alt` - defines the value of the HTML `alt` attribute (not needed if `./isDecorative` is set to `true`)
 4. `./linkURL` - allows defining a URL to which the image will link to
-5. `./linkTarget` - allows opening the URL set in `./linkURL` in a new browser tab
+5. `./linkTargetBlank` - allows opening the URL set in `./linkURL` in a new browser tab
 6. `./jcr:title` - defines the value of the HTML `title` attribute or the value of the caption, depending on the value of
 `./displayPopupTitle`
 7. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,

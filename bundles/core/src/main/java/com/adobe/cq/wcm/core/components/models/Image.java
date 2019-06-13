@@ -75,11 +75,11 @@ public interface Image extends ComponentExporter {
     String PN_DISPLAY_POPUP_TITLE = "displayPopupTitle";
 
     /**
-     * Name of the resource property that will indicate if the image's link will be opened in a new tab.
+     * Name of the resource property that indicates if the image's link should be opened in a new tab.
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.4.1
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    String PN_LINK_TARGET = "linkTarget";
+    String PN_LINK_TARGET_BLANK = "linkTargetBlank";
 
     /**
      * Name of the JSON property that will store the smart sizes for smart loading.
@@ -205,13 +205,13 @@ public interface Image extends ComponentExporter {
     }
 
     /**
-     * Returns the image's link target, if one was set.
+     * Indicates if the image's link should be opened in a new tab.
      *
      * @return {@code true} if the image's link URL was set and should be opened in a new tab, {@code false} otherwise
-     * @since com.adobe.cq.wcm.core.components.models 12.4.1; marked <code>default</code> in 12.4.1
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-    default boolean getLinkTarget() {
+    default boolean isLinkTargetBlank() {
         throw new UnsupportedOperationException();
     }
 

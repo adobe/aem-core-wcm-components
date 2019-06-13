@@ -116,7 +116,7 @@ public class ImageImpl implements Image {
     protected String json;
     protected boolean displayPopupTitle;
     protected boolean isDecorative;
-    protected boolean linkTarget;
+    protected boolean linkTargetBlank;
 
     protected boolean hasContent;
     protected String mimeType;
@@ -239,7 +239,7 @@ public class ImageImpl implements Image {
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
-                    linkTarget = properties.get(PN_LINK_TARGET, false);
+                    linkTargetBlank = properties.get(PN_LINK_TARGET_BLANK, false);
                 }
             } else {
                 linkURL = null;
@@ -313,8 +313,8 @@ public class ImageImpl implements Image {
     }
 
     @Override
-    public boolean getLinkTarget() {
-        return linkTarget;
+    public boolean isLinkTargetBlank() {
+        return linkTargetBlank;
     }
 
     @Override
