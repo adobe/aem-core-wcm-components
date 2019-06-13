@@ -3,9 +3,9 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="List"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientlibs="[core.wcm.components.list.v2.editor]"
-    helpPath="https://www.adobe.com/go/aem_cmp_list_v2"
-    trackingFeature="core-components:list:v2">
+    extraClientlibs="[core.wcm.components.list.v3.editor]"
+    helpPath="https://www.adobe.com/go/aem_cmp_list_v3"
+    trackingFeature="core-components:list:v3">
     <content
         granite:class="cmp-list__editor"
         jcr:primaryType="nt:unstructured"

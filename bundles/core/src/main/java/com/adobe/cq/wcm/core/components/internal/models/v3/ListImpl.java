@@ -125,7 +125,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         Collection<Page> pages = getPages();
         for (Page page : pages) {
             if (page != null) {
-                listItems.add(new com.adobe.cq.wcm.core.components.internal.models.v3.PageListItemImpl(request, page,
+                listItems.add(new com.adobe.cq.wcm.core.components.internal.models.v2.PageListItemImpl(request, page,
                         getLinktrackinCode()));
             }
         }
