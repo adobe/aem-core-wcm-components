@@ -59,12 +59,9 @@ BLOCK cmp-download
     ELEMENT cmp-download__title
     ELEMENT cmp-download__description
     ELEMENT cmp-download__metadata
-    ELEMENT cmp-download__filename
-    ELEMENT cmp-download__size
-    ELEMENT cmp-download__format
+        ELEMENT cmp-download__property-label
+        ELEMENT cmp-download__property-content
     ELEMENT cmp-download__action
-        ELEMENT cmp-download__action-icon
-            MOD cmp-download__action-icon--<extension>
         ELEMENT cmp-download__action-text
 ```
 
