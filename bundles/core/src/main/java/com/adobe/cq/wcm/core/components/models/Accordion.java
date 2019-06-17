@@ -15,14 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Defines the {@code Accordion} Sling Model used for the {@code /apps/core/wcm/components/accordion} component.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
-@ConsumerType
 public interface Accordion extends Container {
 
     /**

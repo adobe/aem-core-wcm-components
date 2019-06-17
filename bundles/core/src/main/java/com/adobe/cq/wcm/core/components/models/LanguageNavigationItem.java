@@ -18,14 +18,11 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Locale;
 
-import org.osgi.annotation.versioning.ConsumerType;
-
 /**
  * Interface for a single language navigation item, used by the {@link LanguageNavigation} model.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
-@ConsumerType
 public interface LanguageNavigationItem extends NavigationItem {
 
     /**

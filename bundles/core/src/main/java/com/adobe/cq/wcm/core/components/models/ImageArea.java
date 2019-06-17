@@ -15,14 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Interface for an image map area, used by the {@link Image} model.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.4.0
  */
-@ConsumerType
 public interface ImageArea {
 
     /**

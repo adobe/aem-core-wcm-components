@@ -15,14 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import org.osgi.annotation.versioning.ConsumerType;
-
 /**
  * Defines the {@code Tabs} Sling Model used for the {@code /apps/core/wcm/components/tabs} component.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
-@ConsumerType
 public interface Tabs extends Container {
 
     /**

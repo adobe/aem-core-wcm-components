@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
-@ConsumerType
 public interface Image extends ComponentExporter {
 
     /**

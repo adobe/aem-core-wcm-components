@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import org.jetbrains.annotations.NotNull;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 
@@ -25,7 +24,6 @@ import com.adobe.cq.export.json.ComponentExporter;
  *
  * @since com.adobe.cq.wcm.core.components.models 12.7.0
  */
-@ConsumerType
 public interface Separator extends ComponentExporter {
     /**
      * @see ComponentExporter#getExportedType()

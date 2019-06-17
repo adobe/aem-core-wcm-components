@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 
@@ -28,7 +27,6 @@ import com.adobe.cq.export.json.ComponentExporter;
  *
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
-@ConsumerType
 public interface Component extends ComponentExporter {
 
     String PN_ID = "id";

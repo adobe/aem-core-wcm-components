@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.models.form;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -28,7 +27,6 @@ import com.adobe.cq.export.json.ContainerExporter;
  *
  * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
-@ConsumerType
 public interface Container extends ContainerExporter {
 
     /**

@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
 
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.day.cq.wcm.api.Page;
 
@@ -27,7 +26,6 @@ import com.day.cq.wcm.api.Page;
  *
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
-@ConsumerType
 public interface NavigationItem extends ListItem {
 
     /**

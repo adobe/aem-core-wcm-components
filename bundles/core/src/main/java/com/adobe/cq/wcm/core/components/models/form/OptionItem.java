@@ -15,14 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.form;
 
-import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Interface for a single item of the {@link Options} form element.
  *
  * @since com.adobe.cq.wcm.core.components.models.form 13.0.0
  */
-@ConsumerType
 public interface OptionItem {
 
     /**

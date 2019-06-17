@@ -20,7 +20,6 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -31,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
-@ConsumerType
 public interface Page extends ContainerExporter {
 
     /**

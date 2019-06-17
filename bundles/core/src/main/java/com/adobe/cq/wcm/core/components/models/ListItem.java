@@ -18,14 +18,12 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.Calendar;
 
 import org.jetbrains.annotations.Nullable;
-import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Interface for a generic list item, used by the {@link List} and {@link Search} models.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
-@ConsumerType
 public interface ListItem {
 
     /**

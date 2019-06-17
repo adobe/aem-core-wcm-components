@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.day.cq.wcm.api.Page;
@@ -29,7 +28,6 @@ import com.day.cq.wcm.api.Page;
  *
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
-@ConsumerType
 public interface List extends ComponentExporter {
 
     /**

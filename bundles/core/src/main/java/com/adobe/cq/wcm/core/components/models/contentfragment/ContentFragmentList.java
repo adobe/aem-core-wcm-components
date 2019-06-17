@@ -19,7 +19,6 @@ package com.adobe.cq.wcm.core.components.models.contentfragment;
 import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
  */
-@ConsumerType
 public interface ContentFragmentList extends ComponentExporter {
 
     /**

@@ -21,7 +21,6 @@ import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,7 +33,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
  */
-@ConsumerType
 public interface DAMContentFragment extends ComponentExporter {
 
     /**
@@ -65,7 +63,6 @@ public interface DAMContentFragment extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
      */
-    @ConsumerType
     interface DAMContentElement extends ComponentExporter {
 
         /**

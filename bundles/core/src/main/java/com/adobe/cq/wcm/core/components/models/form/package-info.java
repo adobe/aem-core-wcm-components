@@ -25,8 +25,7 @@
  * <p>
  *      All the interfaces from this package provide {@code default} methods that throw {@link java.lang.UnsupportedOperationException}s.
  *      The reasoning behind this pattern is that implementors can upgrade the bundle without being forced to implement all the
- *      new methods provided by a newer API version, since the interfaces from this package are
- *      {@link org.osgi.annotation.versioning.ConsumerType}s. An {@link java.lang.UnsupportedOperationException} could be thrown when a
+ *      new methods provided by a newer API version. An {@link java.lang.UnsupportedOperationException} could be thrown when a
  *      component script would start using the newer API, without the actual implementation to support it. This can happen when an
  *      implementor migrates a
  *      <a href="https://helpx.adobe.com/experience-manager/core-components-v1/using/guidelines.html#ProxyComponentPattern">proxy component
@@ -34,7 +33,7 @@
  *      version, is bound to this proxy component resource type.
  * </p>
  */
-@Version("14.2.1")
+@Version("14.2.2")
 package com.adobe.cq.wcm.core.components.models.form;
 
 import org.osgi.annotation.versioning.Version;
