@@ -13,31 +13,28 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <main
+                    <properties
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Download"
+                        jcr:title="Properties"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items jcr:primaryType="nt:unstructured">
-                            <action
+                            <allowUpload
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                granite:class="coral-Form-fieldwrapper">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <actionText
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                        fieldDescription="The default text for the call-to-action."
-                                        fieldLabel="Default Call-to-Action Text"
-                                        name="./actionText"/>
-                                </items>
-                            </action>
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                checked="{Boolean}false"
+                                deleteHint="{Boolean}false"
+                                fieldDescription="Allow direct asset upload from a local file system."
+                                name="./allowUpload"
+                                text="Allow upload from file system"
+                                uncheckedValue="{Boolean}false"
+                                value="{Boolean}true"/>
                             <type
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                fieldDescription="The HTML element to use for the download title. If no type is configured, the default (H3) will be used."
                                 fieldLabel="Title Type"
-                                name="./titleType"
-                                granite:class="foundation-toggleable">
+                                name="./titleType">
                                 <items jcr:primaryType="nt:unstructured">
                                     <def
                                         jcr:primaryType="nt:unstructured"
@@ -97,50 +94,7 @@
                                 uncheckedValue="false"
                                 value="{Boolean}true"/>
                         </items>
-                    </main>
-                    <features
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Features"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <content
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                margin="{Boolean}false">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <accordion
-                                        granite:class="js-cq-IPEPlugin-container"
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/accordion"
-                                        variant="quiet">
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <source
-                                                jcr:primaryType="nt:unstructured"
-                                                jcr:title="Source"
-                                                sling:resourceType="granite/ui/components/coral/foundation/container"
-                                                maximized="{Boolean}true">
-                                                <items jcr:primaryType="nt:unstructured">
-                                                    <allowupload
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="{Boolean}false"
-                                                        deleteHint="{Boolean}false"
-                                                        name="./allowUpload"
-                                                        text="Allow asset upload from file system"
-                                                        uncheckedValue="{Boolean}false"
-                                                        value="{Boolean}true"/>
-                                                </items>
-                                                <parentConfig
-                                                    jcr:primaryType="nt:unstructured"
-                                                    active="{Boolean}true"/>
-                                            </source>
-                                        </items>
-                                    </accordion>
-                                </items>
-                            </content>
-                        </items>
-                    </features>
+                    </properties>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"

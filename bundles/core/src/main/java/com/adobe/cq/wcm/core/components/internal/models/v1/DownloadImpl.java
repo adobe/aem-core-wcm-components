@@ -123,9 +123,6 @@ public class DownloadImpl implements Download {
         descriptionFromAsset = properties.get(PN_DESCRIPTION_FROM_ASSET, descriptionFromAsset);
         inline = properties.get(PN_INLINE, inline);
         if (currentStyle != null) {
-            if (StringUtils.isBlank(actionText)) {
-                actionText = currentStyle.get(PN_ACTION_TEXT, String.class);
-            }
             titleType = currentStyle.get(PN_TITLE_TYPE, String.class);
             displaySize = currentStyle.get(PN_DISPLAY_SIZE, true);
             displayFormat = currentStyle.get(PN_DISPLAY_FORMAT, true);
