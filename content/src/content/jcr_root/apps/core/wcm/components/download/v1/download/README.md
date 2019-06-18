@@ -58,11 +58,13 @@ The following JCR properties are used:
 BLOCK cmp-download
     ELEMENT cmp-download__title
     ELEMENT cmp-download__description
-    ELEMENT cmp-download__metadata
-        ELEMENT cmp-download__property-label
-        ELEMENT cmp-download__property-content
+    ELEMENT cmp-download__properties
+    ELEMENT cmp-download__property
+        MOD cmp-download__property--<property>
+    ELEMENT cmp-download__property-label
+    ELEMENT cmp-download__property-content
     ELEMENT cmp-download__action
-        ELEMENT cmp-download__action-text
+    ELEMENT cmp-download__action-text
 ```
 
 ## Information
