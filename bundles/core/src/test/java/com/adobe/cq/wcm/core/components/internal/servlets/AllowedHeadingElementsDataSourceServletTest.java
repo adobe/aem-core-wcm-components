@@ -62,7 +62,9 @@ public class AllowedHeadingElementsDataSourceServletTest {
 
     @Test
     public void testDataSource() throws Exception {
-        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_HEADING_ELEMENTS, String[].class)).thenReturn(new String[]{"h3", "h4"});
+        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_HEADING_ELEMENTS, String[].class))
+                .thenReturn(new String[]{"h3", "h4"});
+        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_DEFAULT_TYPE, String.class)).thenReturn("h3");
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
@@ -71,18 +73,24 @@ public class AllowedHeadingElementsDataSourceServletTest {
             TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
             assertTrue("Expected type in (h3, h4)", textValueDataResourceSource.getText().matches("h[3|4]"));
             assertTrue("Expected value in (h3, h4)", textValueDataResourceSource.getValue().matches("h[3|4]"));
+            if (textValueDataResourceSource.getValue().equals("h3")) {
+                assertTrue(textValueDataResourceSource.getSelected());
+            } else {
+                assertFalse(textValueDataResourceSource.getSelected());
+            }
         });
     }
 
     @Test
     public void testDataSourceWithInvalidValues() throws Exception {
-        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_HEADING_ELEMENTS, String[].class)).thenReturn(new String[] {"foo", "h10"});
+        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_HEADING_ELEMENTS, String[].class))
+                .thenReturn(new String[]{"foo", "h10"});
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
             assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
-            TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource)resource;
+            TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
             assertNull("Expected null type", textValueDataResourceSource.getText());
             assertTrue("Expected value in (foo, h10)", textValueDataResourceSource.getValue().matches("foo|h10"));
         });
