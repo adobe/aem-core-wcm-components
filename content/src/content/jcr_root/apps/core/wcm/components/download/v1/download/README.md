@@ -56,6 +56,7 @@ The following JCR properties are used:
 ```
 BLOCK cmp-download
     ELEMENT cmp-download__title
+    ELEMENT cmp-download__title-link
     ELEMENT cmp-download__description
     ELEMENT cmp-download__properties
     ELEMENT cmp-download__property

@@ -14,15 +14,19 @@
  *  limitations under the License.
  */
 
-@import 'accordion/index.less';
-@import 'breadcrumb/index.less';
-@import 'button/index.less';
-@import 'carousel/index.less';
-@import 'download/index.less';
-@import 'image/index.less';
-@import 'list/index.less';
-@import 'separator/index.less';
-@import 'tabs/index.less';
-@import 'teaser/index.less';
-@import 'text/index.less';
-@import 'title/index.less';
+@cmp-clean-light-button-border-color: @cmp-clean-color-gray-600;
+@cmp-clean-light-button-color: @cmp-clean-color-gray-600;
+@cmp-clean-light-button-hover-border-color: @cmp-clean-color-gray-900;
+@cmp-clean-light-button-hover-color: @cmp-clean-color-gray-900;
+
+.t-cmp-clean--light {
+    .cmp-button {
+        border-color: @cmp-clean-light-button-border-color;
+        color: @cmp-clean-light-button-color;
+
+        &:hover {
+            border-color: @cmp-clean-light-button-hover-border-color;
+            color: @cmp-clean-light-button-hover-color;
+        }
+    }
+}

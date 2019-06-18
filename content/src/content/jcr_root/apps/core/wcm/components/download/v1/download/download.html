@@ -18,7 +18,7 @@
      data-sly-test.hasContent="${download.title || download.description || download.actionText}"
      class="cmp-download${!wcmmode.disabled ? ' cq-dd-file' : ''}">
     <h3 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${download.titleType}">
-        <a data-sly-unwrap="${!download.url}" href="${download.url}">${title}</a>
+        <a data-sly-unwrap="${!download.url}" class="cmp-download__title-link" href="${download.url}">${title}</a>
     </h3>
     <div class="cmp-download__description" data-sly-test.description="${download.description}">${description @ context="html"}</div>
     <dl data-sly-test="${(download.displayFilename && download.filename) || (download.displaySize && download.size) || (download.displayFormat && download.format)}" class="cmp-download__properties">
