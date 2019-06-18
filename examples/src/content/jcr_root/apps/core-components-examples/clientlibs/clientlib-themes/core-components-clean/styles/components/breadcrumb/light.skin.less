@@ -14,15 +14,24 @@
  *  limitations under the License.
  */
 
-@import 'accordion/index.less';
-@import 'breadcrumb/index.less';
-@import 'button/index.less';
-@import 'carousel/index.less';
-@import 'download/index.less';
-@import 'image/index.less';
-@import 'list/index.less';
-@import 'separator/index.less';
-@import 'tabs/index.less';
-@import 'teaser/index.less';
-@import 'text/index.less';
-@import 'title/index.less';
+@cmp-clean-light-breadcrumb-separator-color: @cmp-clean-color-gray-600;
+@cmp-clean-light-breadcrumb-item-link-color: @cmp-clean-color-gray-600;
+@cmp-clean-light-breadcrumb-item-link-hover-color: @cmp-clean-color-gray-900;
+
+.t-cmp-clean--light {
+    .cmp-breadcrumb__item {
+        &:after {
+            color: @cmp-clean-light-breadcrumb-separator-color;
+        }
+    }
+
+    .cmp-breadcrumb__item-link {
+        color: @cmp-clean-light-breadcrumb-item-link-color;
+
+        &:hover {
+            color: @cmp-clean-light-breadcrumb-item-link-hover-color;
+        }
+    }
+
+
+}

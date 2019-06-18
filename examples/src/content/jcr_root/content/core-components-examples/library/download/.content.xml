@@ -249,7 +249,6 @@
                             actionText="Download"
                             descriptionFromAsset="false"
                             fileName="lava-into-ocean.jpg"
-                            inline="true"
                             textIsRich="true"
                             titleFromAsset="false">
                             <file/>
