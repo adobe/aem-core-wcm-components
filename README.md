@@ -123,7 +123,7 @@ To include the core components package into your own project's maven build using
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.4.0</version>
+     <version>2.5.0</version>
  </dependency>
  ```
 
@@ -148,7 +148,7 @@ To include the core components package into your own project using AEM Archetype
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.4.0</version>
+     <version>2.5.0</version>
  </dependency>
  ```
 
