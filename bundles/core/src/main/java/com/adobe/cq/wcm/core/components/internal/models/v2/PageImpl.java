@@ -139,7 +139,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public Map<String, String> getFavicons() {
-        throw new UnsupportedOperationException();
+        return super.getFavicons();
     }
 
     @Override
