@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -83,11 +84,11 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         testJSONExport(page, getTestExporterJSONPath(TEST_BASE, PAGE));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     @Override
     public void testFavicons() {
         Page page = getPageUnderTest(PAGE);
-        page.getFavicons();
+        assertEquals(new HashMap<>(), page.getFavicons());
     }
 
     @Test

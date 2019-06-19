@@ -138,11 +138,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Override
-    public Map<String, String> getFavicons() {
-        return super.getFavicons();
-    }
-
-    @Override
     @JsonIgnore
     public String[] getClientLibCategoriesJsBody() {
         return Arrays.copyOf(clientLibCategoriesJsBody, clientLibCategoriesJsBody.length);
