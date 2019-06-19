@@ -21,14 +21,21 @@
         <a data-sly-unwrap="${!download.url}" href="${download.url}">${title}</a>
     </h3>
     <div class="cmp-download__description" data-sly-test.description="${download.description}">${description @ context="html"}</div>
-    <div data-sly-test="${(download.displayFilename && download.filename) || (download.displaySize && download.size) || (download.displayFormat && download.format)}"
-         class="cmp-download__metadata">
-        <span data-sly-test="${download.displayFilename && download.filename}" class="cmp-download__filename">${download.filename}</span>
-        <span data-sly-test="${download.displaySize && download.size}" class="cmp-download__size">${download.size}</span>
-        <span data-sly-test="${download.displayFormat && download.format}" class="cmp-download__format">${download.format}</span>
-    </div>
-    <a data-sly-unwrap="${!download.url}" class="cmp-download__action" href="${download.url}">
-        <span class="cmp-download__action-icon${download.extension ? ' cmp-download__action-icon--${download.extension}' : ''}"></span>
+    <dl data-sly-test="${(download.displayFilename && download.filename) || (download.displaySize && download.size) || (download.displayFormat && download.format)}" class="cmp-download__properties">
+        <div data-sly-test="${download.displayFilename && download.filename}" class="cmp-download__property cmp-download__property--filename">
+            <dt class="cmp-download__property-label">${'Filename' @ i18n}</dt>
+            <dd class="cmp-download__property-content">${download.filename}</dd>
+        </div>
+        <div data-sly-test="${download.displaySize && download.size}" class="cmp-download__property cmp-download__property--size">
+            <dt class="cmp-download__property-label">${'Size' @ i18n}</dt>
+            <dd class="cmp-download__property-content">${download.size}</dd>
+        </div>
+        <div data-sly-test="${download.displayFormat && download.format}" class="cmp-download__property cmp-download__property--format">
+            <dt class="cmp-download__property-label">${'Format' @ i18n}</dt>
+            <dd class="cmp-download__property-content">${download.format}</dd>
+        </div>
+    </dl>
+    <a data-sly-test="${download.url && download.actionText}" class="cmp-download__action" href="${download.url}">
         <span class="cmp-download__action-text">${download.actionText}</span>
     </a>
 </div>
