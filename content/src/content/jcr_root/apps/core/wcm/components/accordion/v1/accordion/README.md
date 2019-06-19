@@ -24,7 +24,7 @@ Accordion component written in HTL.
 * Toggle accordion panels from accordion header controls.
 * Ability to force a single panel to be displayed.
 * Items expanded by default are configurable.
-* Item header HTML element is configurable (`h2` - `h6`).
+* Item header HTML element is configurable (`h2` - `h6`, `h1` is omitted for SEO reasons).
 * Editing features for accordion items (adding, removing, editing, re-ordering).
 
 ### Use Object
@@ -43,7 +43,7 @@ The following properties are written to JCR for this Accordion component and are
 
 1. `./singleExpansion` - `true` if one panel should be forced to be expanded at a time, `false` otherwise.
 1. `./expandedItems` - defines the names of the items that are expanded by default.
-2. `./headingElement` - defines the heading type to use for the accordion headers (`h2` - `h6`).
+2. `./headingElement` - defines the heading element to use for the accordion headers (`h2` - `h6`).
 
 The edit dialog also allows editing of Accordion items (adding, removing, naming, re-ordering).
 
@@ -65,6 +65,7 @@ BLOCK cmp-accordion
     ELEMENT cmp-accordion__icon
     ELEMENT cmp-accordion__panel
         MOD cmp-accordion__panel--expanded
+        MOD cmp-accordion__panel--hidden
 ```
 
 ## JavaScript Data Attribute Bindings
@@ -114,3 +115,4 @@ that the UI component is updated when the active item is switched in the editor 
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_accordion\_v1](https://www.adobe.com/go/aem_cmp_accordion_v1)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_accordion](https://www.adobe.com/go/aem_cmp_library_accordion)

@@ -58,4 +58,4 @@ BLOCK cmp-breadcrumb
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_breadcrumb\_v2](https://www.adobe.com/go/aem_cmp_breadcrumb_v2)
-
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_breadcrumb](https://www.adobe.com/go/aem_cmp_library_breadcrumb)

@@ -309,7 +309,7 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/download/v1/download"
-                            actionText="Download"
+                            actionText="View"
                             descriptionFromAsset="true"
                             fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                             inline="true"
