@@ -17,16 +17,6 @@
 <sly data-sly-test="${currentPage.listChildren}">
     <sly data-sly-list.childPage="${currentPage.listChildren @ begin = 0, end = 1}">
         <sly data-sly-set.childPageTitle="${childPage.title}" />
-        <sly data-sly-test="${childPage.listChildren}">
-            <sly data-sly-list.subchildPage="${childPage.listChildren @ begin = 0, end = 1}">
-                <sly data-sly-set.subchildPageTitle="${subchildPage.title}" />
-                <sly data-sly-test="${subchildPage.listChildren}">
-                    <sly data-sly-list.tertiarychild="${subchildPage.listChildren @ begin = 0, end = 1}">
-                        <sly data-sly-set.tertiarychildTitle="${tertiarychild.title}" />
-                    </sly>
-                </sly>
-            </sly>
-        </sly>
     </sly>
 </sly>
 <!--/* Data layer JavaScript object: */-->
@@ -40,13 +30,13 @@
             pageInfo: {
                 pageName: '${currentPage.title @context="scriptString"}',
                 pageURL: window.location.href,
-                pageType: '${page.templateName @context="unsafe"}',
+                pageType: '${page.templateName @context="scriptString"}',
                 pageRef: document.referrer, // Referring URL
                 locale: navigator.language, // Locale of the site
                 primaryCategory: '${currentPage.title @context="scriptString"}', //Main Section as per the Site Hierarchy
                 subCategory: '${childPageTitle @context="scriptString"}', //Site Section 1 as per the Site Hierarchy
                 domain: window.location.hostname, // Domain of the site
-                language: '${page.language @context="unsafe"}', //Language where the user has visted(en, etc)
+                language: '${page.language @context="scriptString"}', //Language where the user has visted(en, etc)
                 country: navigator.language.split("-")[1] //Country where the user has visted(US, etc)
             }
         },

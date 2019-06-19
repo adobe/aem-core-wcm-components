@@ -112,13 +112,6 @@
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/foundation/form/autocomplete/list"/>
                             </appResourcesClientlib>
-                        </items>
-                    </properties>
-                    <analyticssection
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Analytics Configurations"
-                        sling:resourceType="granite/ui/components/coral/foundation/container">
-                        <items jcr:primaryType="nt:unstructured">
                             <datalayer
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -129,7 +122,7 @@
                                 value="true">
                             </datalayer>
                         </items>
-                    </analyticssection>
+                    </properties>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
