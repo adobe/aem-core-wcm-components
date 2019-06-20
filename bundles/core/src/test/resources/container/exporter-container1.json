@@ -1,5 +1,5 @@
 {
-    "style"      : "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
+    "backgroundStyle"      : "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
     "layout"     : "RESPONSIVE_GRID",
     "id"         : "test",
     ":itemsOrder": [

@@ -22,12 +22,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
@@ -35,6 +40,7 @@ import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
+import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -44,6 +50,10 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     @Self
     protected SlingHttpServletRequest request;
+
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @JsonIgnore
+    protected Style currentStyle;
 
     @OSGiService
     protected SlingModelFilter slingModelFilter;
@@ -57,6 +67,13 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     protected Map<String, ? extends ComponentExporter> itemModels;
     private String[] exportedItemsOrder;
+
+    private boolean backgroundColorEnabled;
+    private boolean backgroundImageEnabled;
+    private String backgroundImageReference;
+    private String backgroundColor;
+    private StringBuilder styleBuilder;
+
 
     /**
      * Read the list of children resources that are components
@@ -122,6 +139,26 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         });
         return items;
     }
+    private void populateStyleProperties() {
+        backgroundColorEnabled = currentStyle.get(PN_BACKGROUND_COLOR_ENABLED, false);
+        backgroundImageEnabled = currentStyle.get(PN_BACKGROUND_IMAGE_ENABLED, false);
+        if (resource != null) {
+            ValueMap properties = resource.getValueMap();
+            backgroundColor = properties.get(PN_BACKGROUND_COLOR, String.class);
+            backgroundImageReference = properties.get(PN_BACKGROUND_IMAGE_REFERENCE, String.class);
+        }
+    }
+
+    private void setBackgroundStyleString() {
+        styleBuilder = new StringBuilder();
+        if (backgroundImageEnabled && !StringUtils.isEmpty(backgroundImageReference)) {
+            styleBuilder.append("background-image:url(" + backgroundImageReference + ");background-size:cover;background-repeat:no-repeat;");
+        }
+        if (backgroundColorEnabled && !StringUtils.isEmpty(backgroundColor)) {
+            styleBuilder.append("background-color:" + backgroundColor + ";");
+        }
+    }
+
 
     @Override
     @JsonIgnore
@@ -130,6 +167,21 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
             items = readItems();
         }
         return items;
+    }
+
+
+    @Nullable
+    @Override
+    public String getBackgroundStyle() {
+        if (styleBuilder == null) {
+            populateStyleProperties();
+            setBackgroundStyleString();
+        }
+        String style = styleBuilder.toString();
+        if (StringUtils.isEmpty(style)) {
+            return null;
+        }
+        return style;
     }
 
     @NotNull

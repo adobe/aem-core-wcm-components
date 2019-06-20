@@ -18,7 +18,7 @@
     <div data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
          id="${container.id}"
          class="cmp-container"
-         style="${container.style @ context='styleString'}">
+         style="${container.backgroundStyle @ context='styleString'}">
         <sly data-sly-test.isAllowedApplicable="${allowed.isApplicable}"
              data-sly-test="${isAllowedApplicable}"
              data-sly-use.allowedTemplate="/libs/wcm/foundation/components/parsys/allowedcomponents/allowedcomponents-tpl.html"

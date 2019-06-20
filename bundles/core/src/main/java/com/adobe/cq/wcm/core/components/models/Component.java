@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
@@ -31,12 +29,12 @@ import com.adobe.cq.export.json.ComponentExporter;
 @ConsumerType
 public interface Component extends ComponentExporter {
 
+    /**
+     * Name of the resource property that indicates HTML id for the component.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
     String PN_ID = "id";
-    String PN_BACKGROUND_IMAGE_ENABLED = "backgroundImageEnabled";
-    String PN_BACKGROUND_COLOR_ENABLED = "backgroundColorEnabled";
-    String PN_BACKGROUND_COLOR_SWATCHES_ONLY = "backgroundColorSwatchesOnly";
-    String PN_BACKGROUND_IMAGE_REFERENCE = "backgroundImageReference";
-    String PN_BACKGROUND_COLOR = "backgroundColor";
 
     /**
      * Returns the HTML id of the the component's root element
@@ -46,39 +44,6 @@ public interface Component extends ComponentExporter {
      */
     @Nullable
     default String getId() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns a list of classes to be applied to the component's root element
-     *
-     * @return List of classes for the component's root element
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @Nullable
-    default String[] getClasses() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the CSS style to be applied to the component's root element
-     *
-     * @return CSS style string for the component's root element
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @Nullable
-    default String getStyle() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     *  Returns a map of HTML attributes to be added to the component's root element
-     *
-     * @return {@link Map<String, String>} of HTML attributes for the component's root element
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @Nullable
-    default Map<String, String> getAttributes() {
         throw new UnsupportedOperationException();
     }
 
