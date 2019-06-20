@@ -44,6 +44,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
                 c.openSidePanel(done);
             })
             .fillInput('foundation-autocomplete[name="assetfilter_image_path"] input[is="coral-textfield"]', testAssetsPath)
+            .click('foundation-autocomplete[name="assetfilter_image_path"] [is="coral-buttonlist-item"][value="' + testAssetsPath + '"]')
             .cui.dragdrop('coral-card.cq-draggable[data-path="' + testImagePath + '"]', 'coral-fileupload[name="./file"')
             .execTestCase(c.closeSidePanel);
     };

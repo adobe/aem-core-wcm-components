@@ -44,7 +44,11 @@
         },
         assetFinder: {
             filters: {
-                path: 'foundation-autocomplete[name="assetfilter_image_path"] input[is="coral-textfield"]'
+                path: {
+                    self: 'foundation-autocomplete[name="assetfilter_image_path"]',
+                    textField: 'foundation-autocomplete[name="assetfilter_image_path"] [is="coral-textfield"]',
+                    buttonListItem: 'foundation-autocomplete[name="assetfilter_image_path"] [is="coral-buttonlist-item"]'
+                }
             }
         }
     };

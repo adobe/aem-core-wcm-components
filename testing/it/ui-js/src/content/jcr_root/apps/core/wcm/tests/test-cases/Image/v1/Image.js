@@ -96,6 +96,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             })
             // filter by test assets path
             .fillInput('foundation-autocomplete[name="assetfilter_image_path"] input[is="coral-textfield"]', testAssetsPath)
+            .click('foundation-autocomplete[name="assetfilter_image_path"] [is="coral-buttonlist-item"][value="' + testAssetsPath + '"]')
             // drag'n'drop the test image
             .cui.dragdrop("coral-card.cq-draggable[data-path='" + testImagePath + "']", "coral-fileupload[name='./file'")
             // set mandatory alt text

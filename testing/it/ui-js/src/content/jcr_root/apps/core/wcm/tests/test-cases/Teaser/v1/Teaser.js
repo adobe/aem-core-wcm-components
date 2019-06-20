@@ -109,7 +109,8 @@
                 c.openSidePanel(done);
             })
             // filter by test assets path
-            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -143,7 +144,8 @@
                 c.openSidePanel(done);
             })
             // filter by test assets path
-            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -252,7 +254,8 @@
                 c.openSidePanel(done);
             })
             // filter by test assets path
-            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -320,7 +323,8 @@
                 c.openSidePanel(done);
             })
             // filter by test assets path
-            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .click(selectors.editDialog.actionsEnabled)
@@ -376,7 +380,8 @@
                 c.openSidePanel(done);
             })
             // filter by test assets path
-            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .click(selectors.editDialog.actionsEnabled)
