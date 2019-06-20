@@ -21,7 +21,8 @@
     window.CQ.CoreComponentsIT.Teaser.v1 = window.CQ.CoreComponentsIT.Teaser.v1 || {};
     var c                                = window.CQ.CoreComponentsIT.commons;
     var teaser                           = window.CQ.CoreComponentsIT.Teaser.v1;
-    var testImagePath                    = "/content/dam/core-components/core-comp-test-image.jpg";
+    var testAssetsPath                   = "/content/dam/core-components";
+    var testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
     var title                            = "Teaser Title";
     var description                      = "Teaser Description";
     var pageName                         = "teaser-page";
@@ -107,6 +108,8 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -139,6 +142,8 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -246,7 +251,8 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
-
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -313,7 +319,8 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
-
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .click(selectors.editDialog.actionsEnabled)
@@ -368,7 +375,8 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
-
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path, testAssetsPath)
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .click(selectors.editDialog.actionsEnabled)

@@ -41,6 +41,11 @@
             actionsEnabled: 'coral-checkbox[name="./actionsEnabled"]',
             actionLinkURL: '[data-cmp-teaser-v1-dialog-edit-hook="actionLink"]',
             actionText: '[data-cmp-teaser-v1-dialog-edit-hook="actionTitle"]'
+        },
+        assetFinder: {
+            filters: {
+                path: 'foundation-autocomplete[name="assetfilter_image_path"] input[is="coral-textfield"]'
+            }
         }
     };
 
