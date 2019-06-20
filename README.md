@@ -28,6 +28,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
   * [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
   * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
+  * [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
   * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
   * [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
   * [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
