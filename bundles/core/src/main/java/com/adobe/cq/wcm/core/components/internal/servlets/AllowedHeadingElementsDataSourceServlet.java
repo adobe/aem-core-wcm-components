@@ -51,7 +51,9 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
     public final static String RESOURCE_TYPE_V1 = "core/wcm/components/commons/datasources/allowedheadingelements/v1";
     public final static String RESOURCE_TYPE_TITLE_V1 = "core/wcm/components/title/v1/datasource/allowedtypes";
     public final static String PN_ALLOWED_HEADING_ELEMENTS = "allowedHeadingElements";
+    public final static String PN_DEFAULT_HEADING_ELEMENT = "headingElement";
     public final static String PN_ALLOWED_TYPES = "allowedTypes";
+    public final static String PN_DEFAULT_TYPE = "type";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
@@ -72,12 +74,14 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
                 if (props != null) {
                     String[] headingElements = props.get(PN_ALLOWED_HEADING_ELEMENTS, String[].class);
                     String[] allowedTypes = props.get(PN_ALLOWED_TYPES, String[].class);
+                    String defaultHeadingElement = props.get(PN_DEFAULT_HEADING_ELEMENT, props.get(PN_DEFAULT_TYPE, String.class));
                     if (headingElements == null || headingElements.length == 0) {
                         headingElements = allowedTypes;
                     }
                     if (headingElements != null && headingElements.length > 0) {
                         for (String headingElement : headingElements) {
-                            allowedHeadingElements.add(new HeadingElementResource(headingElement, resolver));
+                            allowedHeadingElements.add(new HeadingElementResource(headingElement,
+                                    StringUtils.equals(headingElement, defaultHeadingElement), resolver));
                         }
                     }
                 }
@@ -89,10 +93,12 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
     private static class HeadingElementResource extends TextValueDataResourceSource {
 
         private final String elementName;
+        private final boolean selected;
 
-        HeadingElementResource(String headingElement, ResourceResolver resourceResolver) {
+        HeadingElementResource(String headingElement, boolean defaultElement, ResourceResolver resourceResolver) {
             super(resourceResolver, StringUtils.EMPTY, RESOURCE_TYPE_NON_EXISTING);
             this.elementName = headingElement;
+            this.selected = defaultElement;
         }
 
         @Override
@@ -107,6 +113,11 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
         @Override
         protected String getValue() {
             return elementName;
+        }
+
+        @Override
+        protected boolean getSelected() {
+            return selected;
         }
     }
 
