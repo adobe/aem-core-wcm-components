@@ -64,7 +64,8 @@ public class AllowedHeadingElementsDataSourceServletTest {
     public void testDataSource() throws Exception {
         when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_ALLOWED_HEADING_ELEMENTS, String[].class))
                 .thenReturn(new String[]{"h3", "h4"});
-        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_DEFAULT_TYPE, String.class)).thenReturn("h3");
+        when(properties.get(AllowedHeadingElementsDataSourceServlet.PN_DEFAULT_HEADING_ELEMENT,
+                properties.get(AllowedHeadingElementsDataSourceServlet.PN_DEFAULT_TYPE, String.class))).thenReturn("h3");
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
