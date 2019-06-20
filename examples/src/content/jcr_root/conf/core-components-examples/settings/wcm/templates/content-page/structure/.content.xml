@@ -69,9 +69,10 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/navigation/v1/navigation"
-                    collectAllPages="true"
+                    collectAllPages="false"
                     navigationRoot="/content/core-components-examples/library"
-                    skipNavigationRoot="true"/>
+                    skipNavigationRoot="true"
+                    structureDepth="1"/>
             </responsivegrid_1755067073>
             <responsivegrid
                 cq:styleIds="[1545309110033]"

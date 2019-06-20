@@ -8,7 +8,7 @@
 
 * [Component Library](https://www.adobe.com/go/aem_cmp_library)
 * [Using Core Components](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
-* [Tutorial for building a new site using the Core Components (takes about 2 days)](https://helpx.adobe.com/experience-manager/kt/sites/using/getting-started-wknd-tutorial-develop.html)
+* [Tutorial for building a new site using the Core Components (takes about 2 days)](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/overview.html)
 * [Tutorial for building a new site, used at Adobe Summit 2019 (takes about 2 hours)](https://expleague.azureedge.net/labs/L767/index.html)
 * [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
 
@@ -24,10 +24,13 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 ## Available Components
 
 * Page authoring components:
+  * [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
   * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+  * [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
   * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
   * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
   * [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+  * [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
   * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
   * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
   * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
@@ -107,20 +110,24 @@ Please note that
  * ``-pl/-projects`` option specifies the list of projects that you want to install
  * ``-am/-also-make`` options specifies that dependencies should also be built
 
-## Include core components as subpackage into your own project maven build
+## Include core components into your own project maven build
 
-The released version of the core components are available on the public maven repository at https://repo.adobe.com. To include the
-core components package into your own project maven build you can add the dependency
+To add core components to your project, you will need to add it to your maven build.
+The released version of the core components are available on the public maven repository at https://repo1.maven.org/maven2/com/adobe/cq/core.wcm.components.all/ 
+
+### For Projects using Maven Archetype 17 and below
+
+To include the core components package into your own project's maven build using AEM's maven archetype 17 and below, you can add the dependency to your pom.xml like this
  ```
  <dependency>
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.2.0</version>
+     <version>2.4.0</version>
  </dependency>
  ```
 
- and sub package section
+ and then add this subpackage to your sub package section
 ```
  <subPackage>
      <groupId>com.adobe.cq</groupId>
@@ -129,7 +136,32 @@ core components package into your own project maven build you can add the depend
  </subPackage>
 ```
 
- to the `content-package-maven-plugin`.
+ inside the configuration of the `content-package-maven-plugin`.
+
+ Also, make sure that if you have a sub module like ui.apps to add the core components as a dependency to ui.apps/pom.xml as well.
+
+ ### For Projects Using Maven Archetype 18 and Above
+
+To include the core components package into your own project using AEM Archetype 18+, add it as a dependency to your build like so:
+ ```
+ <dependency>
+     <groupId>com.adobe.cq</groupId>
+     <artifactId>core.wcm.components.all</artifactId>
+     <type>zip</type>
+     <version>2.4.0</version>
+ </dependency>
+ ```
+
+Then add it as a subpackage
+```
+ <subPackage>
+     <groupId>com.adobe.cq</groupId>
+     <artifactId>core.wcm.components.all</artifactId>
+     <filter>true</filter>
+ </subPackage>
+```
+
+inside the configuration of the `filevault-package-maven-plugin`.
 
  For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)

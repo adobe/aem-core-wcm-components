@@ -1,0 +1,11 @@
+{
+  "url": "/content/downloads/jcr:content/root/responsivegrid/download-3/file.coredownload.inline.pdf/Download_Test_PDF.pdf",
+  "title": "Download",
+  "description": "Description",
+  "actionText": "Click",
+  "filename": "Download_Test_PDF.pdf",
+  "format": "application/pdf",
+  "size": "0 bytes",
+  "extension": "pdf",
+  ":type": "core/wcm/components/download/v1/download"
+}

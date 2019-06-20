@@ -26,7 +26,6 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,10 +40,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
  */
-public abstract class AbstractContainerImpl implements Container {
-
-    @SlingObject
-    protected Resource resource;
+public abstract class AbstractContainerImpl extends AbstractComponentImpl implements Container {
 
     @Self
     protected SlingHttpServletRequest request;

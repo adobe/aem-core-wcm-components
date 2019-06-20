@@ -116,9 +116,9 @@
                             sling:resourceType="core/wcm/components/image/v2/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                             isDecorative="false"
-                            titleValueFromDAM="true"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
+                            titleValueFromDAM="true"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

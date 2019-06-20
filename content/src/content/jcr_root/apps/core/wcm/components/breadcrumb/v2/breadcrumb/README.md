@@ -48,6 +48,7 @@ CSS styling. It should be added to a relevant site client library using the `emb
 BLOCK cmp-breadcrumb
     ELEMENT cmp-breadcrumb__list
     ELEMENT cmp-breadcrumb__item
+        MOD cmp-breadcrumb__item--active
     ELEMENT cmp-breadcrumb__item-link
 ```
 

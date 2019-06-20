@@ -25,12 +25,12 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
 /**
- * A base interface to be extended by containers such as the {@link Carousel} and {@link Tabs} models.
+ * A base interface to be extended by containers such as the {@link Carousel}, {@link Tabs} and {@link Accordion} models.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
 @ConsumerType
-public interface Container extends ContainerExporter {
+public interface Container extends Component, ContainerExporter {
 
     /**
      * Returns a list of container items
@@ -40,16 +40,6 @@ public interface Container extends ContainerExporter {
      */
     @NotNull
     default List<ListItem> getItems() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @see ContainerExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 
