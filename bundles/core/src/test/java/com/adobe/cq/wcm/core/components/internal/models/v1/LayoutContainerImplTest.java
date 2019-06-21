@@ -29,7 +29,7 @@ import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.Component;
+import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
@@ -67,12 +67,12 @@ public class LayoutContainerImplTest {
     public void testContainerWithPropertiesAndPolicy() {
         Resource mockResource = mock(Resource.class);
         LayoutContainer container = getContainerUnderTest(CONTAINER_1, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Component.PN_BACKGROUND_IMAGE_ENABLED, true);
-            put(Component.PN_BACKGROUND_COLOR_ENABLED, true);
+            put(Container.PN_BACKGROUND_IMAGE_ENABLED, true);
+            put(Container.PN_BACKGROUND_COLOR_ENABLED, true);
         }})));
         assertEquals("Style mismatch",
                 "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
-                container.getStyle());
+                container.getBackgroundStyle());
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.RESPONSIVE_GRID,
                 container.getLayout());
@@ -94,7 +94,7 @@ public class LayoutContainerImplTest {
     public void testContainerNoProperties() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_2, null);
         assertNull("Id", container.getId());
-        assertNull("Style", container.getStyle());
+        assertNull("Style", container.getBackgroundStyle());
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.SIMPLE,
                 container.getLayout());
@@ -104,7 +104,7 @@ public class LayoutContainerImplTest {
     public void testContainerWithPropertiesAndNoPolicy() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_3, null);
         assertNull("Id", container.getId());
-        assertNull("Style", container.getStyle());
+        assertNull("Style", container.getBackgroundStyle());
     }
     
     private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
