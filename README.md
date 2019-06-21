@@ -64,7 +64,7 @@ The latest version of the Core Components, require the below system requirements
 
 Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
 ----------------|---------|---------|---------|------
-[2.4.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.4.0) | 6.5.0.0+ | 6.4.2.0+ | 6.3.3.0+ | 8, 11
+[2.5.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.5.0) | 6.5.0.0+ | 6.4.2.0+ | 6.3.3.0+ | 8, 11
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
@@ -124,7 +124,7 @@ To include the core components package into your own project's maven build using
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.4.0</version>
+     <version>2.5.0</version>
  </dependency>
  ```
 
@@ -149,7 +149,7 @@ To include the core components package into your own project using AEM Archetype
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.4.0</version>
+     <version>2.5.0</version>
  </dependency>
  ```
 

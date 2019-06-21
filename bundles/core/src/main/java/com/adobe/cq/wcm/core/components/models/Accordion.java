@@ -36,7 +36,7 @@ public interface Accordion extends Container {
     /**
      * Indicates whether the accordion forces a single item to be expanded at a time or not.
      *
-     * @return true if the accordion forces a single item to be expanded at a time; false otherwise
+     * @return {@code true} if the accordion forces a single item to be expanded at a time; {@code false} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean isSingleExpansion() {
@@ -46,7 +46,7 @@ public interface Accordion extends Container {
     /**
      * Returns the items that are expanded by default.
      *
-     * @return The expanded items
+     * @return the expanded items
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String[] getExpandedItems() {

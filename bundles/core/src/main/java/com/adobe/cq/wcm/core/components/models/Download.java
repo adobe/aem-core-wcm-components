@@ -21,27 +21,37 @@ import javax.annotation.Nonnull;
 import com.adobe.cq.export.json.ComponentExporter;
 
 /**
- * Defines the {@code Download} Sling Model for the {@code /apps/core/wcm/components/download} component.
+ * Defines the {@code Download} Sling Model used for the {@code /apps/core/wcm/components/download} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
 public interface Download extends ComponentExporter {
 
     /**
      * Name of the resource property that defines whether or not the title value is taken from the configured asset.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_TITLE_FROM_ASSET = "titleFromAsset";
 
     /**
      * Name of the resource property that defines whether or not the description value is taken from the configured asset.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_DESCRIPTION_FROM_ASSET = "descriptionFromAsset";
 
     /**
      * Name of the resource property that defines whether or not the download item should be displayed inline vs. attachment.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_INLINE = "inline";
 
     /**
      * Name of the policy property that defines the text to be displayed on the action.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_ACTION_TEXT = "actionText";
 
@@ -49,21 +59,28 @@ public interface Download extends ComponentExporter {
      * Name of the policy property that stores the value for this title's HTML element type.
      *
      * @see #getTitleType()
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_TITLE_TYPE = "titleType";
 
     /**
      * Name of the policy property that defines whether the file's size will be displayed.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_DISPLAY_SIZE = "displaySize";
 
     /**
      * Name of the policy property that defines whether the file's format will be displayed.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_DISPLAY_FORMAT = "displayFormat";
 
     /**
      * Name of the policy property that defines whether the filename will be displayed.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     String PN_DISPLAY_FILENAME = "displayFilename";
 
@@ -72,6 +89,7 @@ public interface Download extends ComponentExporter {
      * depending on the state of the titleFromAsset checkbox.
      *
      * @return the download title
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getTitle() {
         throw new UnsupportedOperationException();
@@ -82,6 +100,7 @@ public interface Download extends ComponentExporter {
      * depending on the state of the descriptionFromAsset checkbox.
      *
      * @return the download description
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getDescription() {
         throw new UnsupportedOperationException();
@@ -91,6 +110,7 @@ public interface Download extends ComponentExporter {
      * Returns the url to the asset.
      *
      * @return the asset url
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getUrl() {
         throw new UnsupportedOperationException();
@@ -101,6 +121,7 @@ public interface Download extends ComponentExporter {
      * component policy.
      *
      * @return the action text
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getActionText() {
         throw new UnsupportedOperationException();
@@ -110,6 +131,7 @@ public interface Download extends ComponentExporter {
      * Returns the HTML element to be used for the title as defined in the component policy.
      *
      * @return the title header element type
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getTitleType() {
         throw new UnsupportedOperationException();
@@ -119,6 +141,7 @@ public interface Download extends ComponentExporter {
      * Returns the size of the file to be downloaded.
      *
      * @return the size of download file
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getSize() {
         throw new UnsupportedOperationException();
@@ -128,7 +151,8 @@ public interface Download extends ComponentExporter {
      * Returns the extension of file to be downloaded. Extension is mapped with the {@link org.apache.sling.commons.mime.MimeTypeService}
      * . If no mapping can be found the extension is extracted from the filename.
      *
-     * @return the extesion of the download file
+     * @return the extension of the download file
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getExtension() {
         throw new UnsupportedOperationException();
@@ -138,6 +162,7 @@ public interface Download extends ComponentExporter {
      * Checks if the file size should be displayed.
      *
      * @return {@code true} if the size should be displayed, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean displaySize() {
         throw new UnsupportedOperationException();
@@ -147,6 +172,7 @@ public interface Download extends ComponentExporter {
      * Returns the mime type of the file to be downloaded.
      *
      * @return the mime type of the download file
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getFormat() {
         throw new UnsupportedOperationException();
@@ -156,6 +182,7 @@ public interface Download extends ComponentExporter {
      * Checks if the file format should be displayed.
      *
      * @return {@code true} if the format should be displayed, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean displayFormat() {
         throw new UnsupportedOperationException();
@@ -165,6 +192,7 @@ public interface Download extends ComponentExporter {
      * Returns the filename of the file to be downloaded.
      *
      * @return the filename of the download file
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getFilename() {
         throw new UnsupportedOperationException();
@@ -174,6 +202,7 @@ public interface Download extends ComponentExporter {
      * Checks if the filename should be displayed.
      *
      * @return {@code true} if the filename should be displayed, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default boolean displayFilename() {
         throw new UnsupportedOperationException();
@@ -181,7 +210,7 @@ public interface Download extends ComponentExporter {
 
     /**
      * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     @Nonnull
     @Override
