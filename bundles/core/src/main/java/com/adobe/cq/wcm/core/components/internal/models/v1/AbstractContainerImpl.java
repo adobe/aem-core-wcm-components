@@ -74,7 +74,6 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     private String backgroundColor;
     private StringBuilder styleBuilder;
 
-
     /**
      * Read the list of children resources that are components
      *
@@ -139,6 +138,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         });
         return items;
     }
+
     private void populateStyleProperties() {
         backgroundColorEnabled = currentStyle.get(PN_BACKGROUND_COLOR_ENABLED, false);
         backgroundImageEnabled = currentStyle.get(PN_BACKGROUND_IMAGE_ENABLED, false);
@@ -159,7 +159,6 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         }
     }
 
-
     @Override
     @JsonIgnore
     public List<ListItem> getItems() {
@@ -168,7 +167,6 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         }
         return items;
     }
-
 
     @Nullable
     @Override

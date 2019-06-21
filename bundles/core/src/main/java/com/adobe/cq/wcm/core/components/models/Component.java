@@ -30,7 +30,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface Component extends ComponentExporter {
 
     /**
-     * Name of the resource property that indicates HTML id for the component.
+     * Name of the resource property that indicates the HTML id for the component.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
@@ -56,5 +56,4 @@ public interface Component extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
-
 }
