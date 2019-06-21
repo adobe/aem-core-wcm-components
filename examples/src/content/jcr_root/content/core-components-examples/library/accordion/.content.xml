@@ -352,8 +352,8 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/accordion/v1/accordion"
-                            expandedItems="[text]">
-                            <text
+                            expandedItems="[item_1]">
+                            <item_1
                                 cq:panelTitle="Item 1"
                                 jcr:created="{Date}2018-12-07T13:12:23.990+01:00"
                                 jcr:createdBy="admin"
@@ -364,7 +364,7 @@
                                 sling:resourceType="core/wcm/components/text/v2/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xa;"
                                 textIsRich="true"/>
-                            <text_397543178
+                            <item_2
                                 cq:panelTitle="Item 2"
                                 jcr:created="{Date}2018-12-07T13:13:32.541+01:00"
                                 jcr:createdBy="admin"
@@ -375,7 +375,7 @@
                                 sling:resourceType="core/wcm/components/text/v2/text"
                                 text="&lt;p>Hac habitasse platea dictumst quisque sagittis purus. At risus viverra adipiscing at in tellus integer. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Leo vel orci porta non pulvinar neque laoreet suspendisse. Volutpat diam ut venenatis tellus in metus vulputate eu.&lt;/p>&#xa;"
                                 textIsRich="true"/>
-                            <text_397543177
+                            <item_3
                                 cq:panelTitle="Item 3"
                                 jcr:created="{Date}2018-12-07T13:13:55.658+01:00"
                                 jcr:createdBy="admin"
@@ -445,8 +445,8 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/accordion/v1/accordion"
-                            expandedItems="[text,text_397543155,text_397543156]">
-                            <text
+                            expandedItems="[item_1,item_2,item_3]">
+                            <item_1
                                 cq:panelTitle="Item 1"
                                 jcr:created="{Date}2018-12-07T13:12:23.990+01:00"
                                 jcr:createdBy="admin"
@@ -457,7 +457,7 @@
                                 sling:resourceType="core/wcm/components/text/v2/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xa;"
                                 textIsRich="true"/>
-                            <text_397543155
+                            <item_2
                                 cq:panelTitle="Item 2"
                                 jcr:created="{Date}2018-12-07T13:13:32.541+01:00"
                                 jcr:createdBy="admin"
@@ -468,7 +468,7 @@
                                 sling:resourceType="core/wcm/components/text/v2/text"
                                 text="&lt;p>Hac habitasse platea dictumst quisque sagittis purus. At risus viverra adipiscing at in tellus integer. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Leo vel orci porta non pulvinar neque laoreet suspendisse. Volutpat diam ut venenatis tellus in metus vulputate eu.&lt;/p>&#xa;"
                                 textIsRich="true"/>
-                            <text_397543156
+                            <item_3
                                 cq:panelTitle="Item 3"
                                 jcr:created="{Date}2018-12-07T13:13:55.658+01:00"
                                 jcr:createdBy="admin"
@@ -538,9 +538,9 @@
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/accordion/v1/accordion"
-                            expandedItems="[item_617130698]"
+                            expandedItems="[item_1]"
                             singleExpansion="{Boolean}true">
-                            <text
+                            <item_1
                                 cq:panelTitle="Item 1"
                                 jcr:created="{Date}2018-12-07T13:12:23.990+01:00"
                                 jcr:createdBy="admin"
@@ -551,7 +551,7 @@
                                 sling:resourceType="core/wcm/components/text/v2/text"
                                 text="&lt;p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu mi bibendum neque egestas congue quisque egestas. Varius morbi enim nunc faucibus a pellentesque. Scelerisque eleifend donec pretium vulputate sapien nec sagittis.&lt;/p>&#xa;"
                                 textIsRich="true"/>
-                            <text_397543144
+                            <item_2
                                 cq:panelTitle="Item 2"
                                 jcr:created="{Date}2018-12-07T13:13:32.541+01:00"
                                 jcr:createdBy="admin"
@@ -562,7 +562,7 @@
                                 sling:resourceType="core/wcm/components/text/v2/text"
                                 text="&lt;p>Hac habitasse platea dictumst quisque sagittis purus. At risus viverra adipiscing at in tellus integer. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Leo vel orci porta non pulvinar neque laoreet suspendisse. Volutpat diam ut venenatis tellus in metus vulputate eu.&lt;/p>&#xa;"
                                 textIsRich="true"/>
-                            <text_397543145
+                            <item_3
                                 cq:panelTitle="Item 3"
                                 jcr:created="{Date}2018-12-07T13:13:55.658+01:00"
                                 jcr:createdBy="admin"

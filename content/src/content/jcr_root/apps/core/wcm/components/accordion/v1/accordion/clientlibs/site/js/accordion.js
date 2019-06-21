@@ -234,7 +234,7 @@
         }
 
         /**
-         * Handles keydown events.
+         * Handles button keydown events.
          *
          * @private
          * @param {Object} event The keydown event

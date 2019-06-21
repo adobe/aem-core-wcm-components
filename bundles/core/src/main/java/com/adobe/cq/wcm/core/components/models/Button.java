@@ -51,7 +51,7 @@ public interface Button extends ComponentExporter {
     /**
      * Returns the button icon identifier.
      *
-     * @return the button icon
+     * @return the button icon identifier
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
     default String getIcon() {
