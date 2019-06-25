@@ -153,7 +153,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Button linked to an external URL. Buttons with links provided are rendered as anchors.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Button linked to a page. Buttons with links provided are rendered as anchors.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo_1160408466
                     jcr:created="{Date}2018-12-07T13:36:07.808+01:00"
@@ -173,7 +173,7 @@
                             jcr:primaryType="nt:unstructured"
                             jcr:title="Anchor Button"
                             sling:resourceType="core/wcm/components/button/v1/button"
-                            link="http://opensource.adobe.com/aem-core-wcm-components"/>
+                            link="/content/core-components-examples/library/button"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
