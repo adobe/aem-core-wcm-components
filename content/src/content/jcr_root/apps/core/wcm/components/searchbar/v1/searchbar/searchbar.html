@@ -1,0 +1,26 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly class="cmp-search-bar"
+	data-sly-use.searchbar="com.adobe.cq.wcm.core.components.models.Searchbar"
+	data-sly-use.template="core/wcm/components/commons/v1/templates.html" />
+<form action="${searchbar.resultpage}" class="cmp-search-bar__field" />
+	<input type="text" id="js-search-results" class="cmp-search-bar__field--text"
+		placeholder="${searchbar.placeHolder || 'Search' @ i18n}" name="fulltext">
+	<button data-sly-test="${!searchbar.hideButton}" type="submit" id="js-search-btn" class="cmp-search-bar__field--btn">
+		<span class="cmp-search-bar__action-icon"></span>
+        <span class="cmp-search-bar__action-text">${searchbar.buttonLabel || 'Search' @ i18n}</span>
+	</button>
+</form>

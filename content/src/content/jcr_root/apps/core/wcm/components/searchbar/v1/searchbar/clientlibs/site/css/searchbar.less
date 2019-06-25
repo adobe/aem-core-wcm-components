@@ -1,0 +1,59 @@
+/*
+ *  Copyright 2019 Adobe Systems Incorporated
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+// Color variables (appears count calculates by raw css)
+@color0: #0080ff; // Appears 5 times
+@color1: #ffffff; // Appears 3 times
+@color2: #f9f9f9; // Appears 2 times
+
+.cmp-search-bar__field {
+	margin-left: 145px;
+	position: relative;
+	&::after {
+		content: "";
+		clear: both;
+		display: table;
+	}
+}
+.cmp-search-bar__field--btn {
+	float: left;
+	width: 10%;
+	padding: 10px;
+	background: #2196F3;
+	color: white;
+	border: 1px solid grey;
+	border-left: none; /* Prevent double borders */
+	cursor: pointer;
+	&:hover {
+		background: #0b7dda;
+	}
+}
+.cmp-search-bar__field--text {
+	float: left;
+	width: calc(100% - 20%);
+	background: #f1f1f1;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	border-top-left-radius: 0.25rem;
+	border-bottom-left-radius: 0.25rem;
+	border: 0.0625rem solid #d3d3d3;
+	font-size: 0.875rem;
+	padding: 10px;
+	
+	&:hover {
+		border-color: @color0;
+	}
+}

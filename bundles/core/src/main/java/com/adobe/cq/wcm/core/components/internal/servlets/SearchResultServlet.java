@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v2.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.search.PredicateConverter;
@@ -77,12 +77,16 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
 
     protected static final String DEFAULT_SELECTOR = "searchresults";
     protected static final String PARAM_FULLTEXT = "fulltext";
+    protected static final String PARAM_SORT = "sort";
+    protected static final String PARAM_ORDERBY = "orderby";
 
     private static final String PARAM_RESULTS_OFFSET = "resultsOffset";
     private static final String PREDICATE_FULLTEXT = "fulltext";
     private static final String PREDICATE_TYPE = "type";
     private static final String PREDICATE_PATH = "path";
     private static final String NN_STRUCTURE = "structure";
+    private static final String PREDICATE_ORDERBY = "orderby";
+    private static final String PREDICATE_SORT = "orderby.sort";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
 
@@ -159,6 +163,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         int searchTermMinimumLength = SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
         int resultsSize = SearchImpl.PROP_RESULTS_SIZE_DEFAULT;
         String searchRootPagePath;
+        String sort = StringUtils.EMPTY;
+        String orderBy = StringUtils.EMPTY;
         if (searchResource != null) {
             ValueMap valueMap = searchResource.getValueMap();
             ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
@@ -166,8 +172,10 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                         .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
             resultsSize = valueMap.get(Search.PN_RESULTS_SIZE, contentPolicyMap.get(Search.PN_RESULTS_SIZE,
                         SearchImpl.PROP_RESULTS_SIZE_DEFAULT));
-            String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));
+            String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));            
             searchRootPagePath = getSearchRootPagePath(searchRoot, currentPage);
+            sort= request.getParameter(PARAM_SORT) != null ? request.getParameter(PARAM_SORT) : valueMap.get(Search.PN_DEFAULT_SORT_DIRECTION,String.class);
+            orderBy= "@"+request.getParameter(PARAM_ORDERBY) != null ? request.getParameter(PARAM_ORDERBY) : valueMap.get(Search.PN_DEFAULT_SORT,String.class);
         } else {
             String languageRoot = languageManager.getLanguageRoot(currentPage.getContentResource()).getPath();
             searchRootPagePath = getSearchRootPagePath(languageRoot, currentPage);
@@ -188,6 +196,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         predicatesMap.put(PREDICATE_FULLTEXT, fulltext);
         predicatesMap.put(PREDICATE_PATH, searchRootPagePath);
         predicatesMap.put(PREDICATE_TYPE, NameConstants.NT_PAGE);
+        predicatesMap.put(PREDICATE_ORDERBY, orderBy);
+        predicatesMap.put(PREDICATE_SORT, sort);
         PredicateGroup predicates = PredicateConverter.createPredicates(predicatesMap);
         ResourceResolver resourceResolver = request.getResource().getResourceResolver();
         Query query = queryBuilder.createQuery(predicates, resourceResolver.adaptTo(Session.class));

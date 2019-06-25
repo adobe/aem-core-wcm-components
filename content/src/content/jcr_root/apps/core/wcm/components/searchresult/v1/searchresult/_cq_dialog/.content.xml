@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+	xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+	xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+	jcr:primaryType="nt:unstructured" jcr:title="Search Result Settings"
+	sling:resourceType="cq/gui/components/authoring/dialog">
+	<content granite:class="cmp-form-textfield-editDialog"
+		jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/container">
+		<items jcr:primaryType="nt:unstructured">
+			<tabs jcr:primaryType="nt:unstructured"
+				sling:resourceType="granite/ui/components/coral/foundation/tabs">
+				<items jcr:primaryType="nt:unstructured">
+					<tab1 jcr:primaryType="nt:unstructured" jcr:title="Search"
+						sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+						margin="{Boolean}true">
+						<items jcr:primaryType="nt:unstructured">
+							<column jcr:primaryType="nt:unstructured"
+								sling:resourceType="granite/ui/components/coral/foundation/container">
+								<items jcr:primaryType="nt:unstructured">
+									<searchpath jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+										fieldDescription="Search root path." fieldLabel="Search Path"
+										name="./searchRoot" rootPath="/content" />
+									<resultsSize jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+										fieldDescription="Maximal number of results fetched by a search request"
+										fieldLabel="Results Size" min="1" name="./resultsSize" step="1"
+										value="10" />
+									<showResultCount jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+										fieldDescription="Display result count on page" text="Show Result Count"
+										checked="true" uncheckedValue="false" value="{Boolean}true"
+										name="./showResultCount" />
+									<resultCountFormat jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										emptyText="Displaying {count} of {total} results" fieldLabel="Result Count Text Format"
+										name="./resultCountFormat" />
+									<imagePropertyPath jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										fieldDescription="Relative path of image on the result nodes to be used to display in search results"
+										emptyText="jcr:content/pageImage/responsivegrid/tile/image"
+										fieldLabel="Image path property" name="./resultCountFormat" />
+								</items>
+							</column>
+						</items>
+					</tab1>
+					<tab2 jcr:primaryType="nt:unstructured" jcr:title="Result"
+						sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+						margin="{Boolean}true">
+						<items jcr:primaryType="nt:unstructured">
+							<column jcr:primaryType="nt:unstructured"
+								sling:resourceType="granite/ui/components/coral/foundation/container">
+								<items jcr:primaryType="nt:unstructured">
+									<defaultSort jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/select"
+										deleteHint="{Boolean}true" fieldLabel="Default Sort"
+										name="./defaultSort">
+										<items jcr:primaryType="nt:unstructured">
+											<title jcr:primaryType="nt:unstructured" text="Sort by title"
+												value="jcr:content/jcr:title" />
+											<lastmodified jcr:primaryType="nt:unstructured"
+												text="Sort by last modified" value="jcr:content/jcr:lastModified" />
+											<jcrscore jcr:primaryType="nt:unstructured" text="Sort by jcr score"
+												value="jcr:content/jcr:score" />
+										</items>
+									</defaultSort>
+									<defaultSortDirection jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/select"
+										deleteHint="{Boolean}true" fieldLabel="Default Sort Direction"
+										ignoreData="{Boolean}false" name="./defaultSortDirection" vertical="{Boolean}false">
+										<items jcr:primaryType="nt:unstructured">
+											<asc jcr:primaryType="nt:unstructured" text="Ascending"
+												value="asc" />
+											<desc jcr:primaryType="nt:unstructured" text="Descending"
+												value="desc" />
+										</items>
+									</defaultSortDirection>
+									<loadMoreText jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										fieldLabel="Load more text" name="./loadMoreText" emptyText="Load More" />
+									<noResultText jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										fieldLabel="No Result Text" name="./noResultText" emptyText="No Results" />
+									<missingImagePath jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+										fieldLabel="Missing Image Path" name="./missingImagePath"
+										rootPath="/content/dam" />
+								</items>
+							</column>
+						</items>
+					</tab2>
+					<tab3 jcr:primaryType="nt:unstructured" jcr:title="Filter"
+						sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+						margin="{Boolean}true">
+						<items jcr:primaryType="nt:unstructured">
+							<column jcr:primaryType="nt:unstructured"
+								sling:resourceType="granite/ui/components/coral/foundation/container">
+								<items jcr:primaryType="nt:unstructured">
+									<enableFacet jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+										text="Enable Facet" checked="{Boolean}true" uncheckedValue="{Boolean}false"
+										value="{Boolean}true" name="./enableFacet" />
+									<title jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										fieldDescription="Legend to describe the role of the field."
+										fieldLabel="Title" name="./facetTitle" required="{Boolean}true" />
+									<property jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										sling:orderBefore="name"
+										fieldDescription="The name of the field, which is submitted with the form data"
+										fieldLabel="Tags Property" emptyText="jcr:content/metadata/cq:tags"
+										name="./property"/>
+									<tags jcr:primaryType="nt:unstructured"
+										sling:resourceType="cq/gui/components/common/tagspicker"
+										fieldLabel="Tags" fieldDescription="Select tags to populate the filter options"
+										metaType="tags" name="./cq:tags" />
+								</items>
+							</column>
+						</items>
+					</tab3>
+					<tab4 jcr:primaryType="nt:unstructured" jcr:title="Sort By"
+						sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+						margin="{Boolean}true">
+						<items jcr:primaryType="nt:unstructured">
+							<column jcr:primaryType="nt:unstructured"
+								sling:resourceType="granite/ui/components/coral/foundation/container">
+								<items jcr:primaryType="nt:unstructured">
+									<enableSort jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+										text="Enable Sort" checked="{Boolean}true" uncheckedValue="{Boolean}false"
+										value="{Boolean}true" name="./enableSort" />
+									<properties jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+										composite="{Boolean}true" fieldLabel="Sort By Options"
+										renderReadOnly="{Boolean}true">
+										<field
+											granite:class="cmp-options--editor-item-multifield-composite-item coral-Well"
+											jcr:primaryType="nt:unstructured"
+											sling:resourceType="granite/ui/components/coral/foundation/container"
+											name="./items">
+											<items jcr:primaryType="nt:unstructured">
+												<option
+													granite:class="cmp-options--editor-item-multifield-composite-item-container"
+													jcr:primaryType="nt:unstructured"
+													sling:resourceType="granite/ui/components/coral/foundation/container">
+													<items jcr:primaryType="nt:unstructured">														
+														<text jcr:primaryType="nt:unstructured"
+															sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+															fieldLabel="Title" name="./text" />
+														<property jcr:primaryType="nt:unstructured"
+															sling:resourceType="granite/ui/components/coral/foundation/form/select"
+															fieldLabel="Sort By" name="./value">
+															<items jcr:primaryType="nt:unstructured">
+																<title jcr:primaryType="nt:unstructured" text="Title"
+																	value="jcr:content/jcr:title" />
+																<lastmodified jcr:primaryType="nt:unstructured"
+																	text="Last modified" value="jcr:content/jcr:lastModified" />
+																<jcrscore jcr:primaryType="nt:unstructured"
+																	text="Jcr score" value="jcr:content/jcr:score" />
+															</items>
+														</property>
+													</items>
+												</option>
+											</items>
+										</field>
+									</properties>
+								</items>
+							</column>
+						</items>
+					</tab4>
+				</items>
+			</tabs>
+		</items>
+	</content>
+</jcr:root>

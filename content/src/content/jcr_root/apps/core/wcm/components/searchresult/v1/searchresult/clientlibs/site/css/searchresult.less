@@ -1,0 +1,121 @@
+/*
+ *  Copyright 2019 Adobe Systems Incorporated
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+@color0: #0080ff;
+@color1: #ffffff;
+@color2: #f9f9f9;
+.list--view {
+	background: none;
+	font-size: 1rem;
+	height: auto;
+	padding: 0 0.833em 0 0;
+	text-align: left;
+	vertical-align: middle;
+	&:hover {
+		color: @color0;
+	}
+	i {
+		font-size: 1.55rem;
+	}
+}
+.grid--view {
+	background: none;
+	font-size: 1rem;
+	height: auto;
+	padding: 0 0.833em 0 0;
+	text-align: left;
+	vertical-align: middle;
+	&:hover {
+		color: @color0;
+	}
+	i {
+		font-size: 1.55rem;
+	}
+}
+.search__field--results {
+	display: flex;
+	justify-content: space-between;
+}
+.search__field--view {
+    width: 80%;
+	padding: 10px 20px;
+    ul {
+        list-style: none;
+        display: grid;
+    }
+	li {
+		margin-bottom: 40px;
+	}
+	p {
+		margin: 0.75em 0 0 0;
+	}
+}
+.search__field--filters {
+	padding: 10px 20px;
+}
+.search__img--card {
+	border-radius: 0.28571429rem;
+	float: left;
+	margin: 0 20px 20px 0;
+	max-height: 12rem;
+	object-fit: cover;
+	object-position: center;
+	width: 10em;
+}
+.search__results--footer {
+	button {
+		display: block;
+		width: 100%;
+	}
+}
+@media (max-width: 400px) {
+    .search__field--results { 
+        display: block;
+    }
+}
+.search--viewchange {
+	img {
+		height: 11.25rem;
+		margin: 0 0 10px 0;
+		width: 100%;
+	}
+	ul {
+        list-style: none;
+		display: grid;
+		grid-gap: 50px;
+		grid-template-columns: auto auto auto;
+	}
+	li {
+		background: @color2;
+		border-radius: 0.25rem;
+		border-radius: 0.28571429rem;
+		border: 0.2em solid @color2;
+		box-shadow: none, 0px 0px 0px 1px #d4d4d5;
+		margin-bottom: 2.5rem;
+		overflow: hidden;
+		position: relative;
+		transition: box-shadow 0.1s ease, transform 0.1s ease;
+	}
+	h3 {
+		margin: 0 0 0 0;
+		padding: 0.75rem 1rem 1rem;
+	}
+	span {
+		display: none;
+	}
+	p {
+		display: none;
+	}
+}
