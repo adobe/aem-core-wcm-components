@@ -20,14 +20,18 @@ import javax.inject.Named;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Button;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -42,8 +46,13 @@ public class ButtonImpl implements Button {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/button/v1/button";
 
+    private String linkURL;
+
     @Self
     private SlingHttpServletRequest request;
+
+    @ScriptVariable
+    private PageManager pageManager;
 
     @ValueMapValue(optional = true)
     @Named(JcrConstants.JCR_TITLE)
@@ -62,7 +71,15 @@ public class ButtonImpl implements Button {
 
     @Override
     public String getLink() {
-        return link;
+        if (linkURL == null) {
+            Page targetPage = pageManager.getPage(link);
+            if (targetPage != null) {
+                linkURL = Utils.getURL(request, targetPage);
+            } else {
+                linkURL = link;
+            }
+        }
+        return linkURL;
     }
 
     @Override
