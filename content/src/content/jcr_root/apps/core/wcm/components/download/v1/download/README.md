@@ -74,3 +74,7 @@ BLOCK cmp-download
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_download\_v1](https://www.adobe.com/go/aem_cmp_download_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_download](https://www.adobe.com/go/aem_cmp_library_download)
+* **Author**: [bkheadwire](https://github.com/bkheadwire)
+* **Co-authors**: [Burkhard Pauli](https://github.com/bpauli)
+
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components)._
