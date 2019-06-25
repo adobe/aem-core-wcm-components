@@ -64,3 +64,7 @@ BLOCK cmp-container
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_container\_v1](https://www.adobe.com/go/aem_cmp_container_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_container](https://www.adobe.com/go/aem_cmp_library_container)
+* **Author**: [Ankur Ahlawat](https://github.com/aahlawat)
+* **Co-authors**: [Vlad Bailescu](https://github.com/bailescu), Shailesh Bassi
+
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components)._

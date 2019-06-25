@@ -116,3 +116,7 @@ that the UI component is updated when the active item is switched in the editor 
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_accordion\_v1](https://www.adobe.com/go/aem_cmp_accordion_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_accordion](https://www.adobe.com/go/aem_cmp_library_accordion)
+* **Author**: [Brandon M. Maynard](https://github.com/brandonmaynard)
+* **Co-authors**: [Richard Hand](https://github.com/richardhand)
+
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components)._
