@@ -15,9 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Collection;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.form.OptionItem;
 
 /**
  * Defines the {@code Search} Sling Model used for the {@code /apps/core/wcm/components/search} component.
@@ -33,6 +36,22 @@ public interface Search extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     String PN_SEARCH_ROOT = "searchRoot";
+    
+    /**
+     * Name of the resource / configuration policy property that defines whether to enable sort or not.
+     * The property should provide a String value.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    String PN_ENABLE_SORT = "enableSort";
+    
+    /**
+     * Name of the resource / configuration policy property that defines whether to enable facet or not.
+     * The property should provide a String value.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    String PN_ENABLE_FACET = "enableFacet";
 
     /**
      * Name of the configuration policy property that defines the minimum length of the search term to start the search.
@@ -47,6 +66,20 @@ public interface Search extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     String PN_RESULTS_SIZE = "resultsSize";
+    
+    /**
+     * Name of the configuration policy property that defines the maximal number of results fetched by a search request.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    String PN_DEFAULT_SORT = "defaultSort";
+    
+    /**
+     * Name of the configuration policy property that defines the maximal number of results fetched by a search request.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    String PN_DEFAULT_SORT_DIRECTION = "defaultSortDirection";
 
     /**
      * The maximal number of results fetched by a search request.
@@ -88,4 +121,73 @@ public interface Search extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
+    
+    /**
+     * Checks if the facet is enabled
+     *
+     * @return {@code true} if facet is enabled, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+     
+    default boolean isFacetEnabled() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Checks if the sorting is enabled
+     *
+     * @return {@code true} if sort is enabled, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+     
+    default boolean isSortEnabled() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+    * Returns the list's items collection, as {@link ListItem}s elements.
+    *
+    * @return {@link Collection} of {@link ListItem}s
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+    
+   default Collection<ListItem> getTags() {
+       throw new UnsupportedOperationException();
+   }
+   /**
+    * @see ComponentExporter#getFacetTitle()
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+   
+   default String getFacetTitle() {
+       throw new UnsupportedOperationException();
+   }
+   
+   /**
+    * @see ComponentExporter#getProperty()
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+   default String getProperty() {
+       throw new UnsupportedOperationException();
+   }
+   default Collection<OptionItem> getSortOptions() {
+       throw new UnsupportedOperationException();
+   }
+   
+   /**
+    * @see ComponentExporter#getAscLabel()
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+   default String getAscLabel() {
+       throw new UnsupportedOperationException();
+   }
+   
+   /**
+    * @see ComponentExporter#getDescLabel()
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+   
+   default String getDescLabel() {
+       throw new UnsupportedOperationException();
+   }
 }
