@@ -65,7 +65,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 24. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
 25. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
-Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for upcoming changes.
+Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for main upcoming components and features.
 
 ## Component Versioning
 
