@@ -25,12 +25,12 @@
             pageInfo: {
                 pageName: '${currentPage.title @context="scriptString"}',
                 pageURL: window.location.href,
-                pageType: '${page.templateName @context="scriptString"}',
                 pageRef: document.referrer // Referring URL
             	},
             category:{
             	primaryCategory: '${page.primaryCategory @context="scriptString"}', //Main Section as per the Site Hierarchy
-                subCategory: '${page.secondaryCategory @context="scriptString"}' //Site Section 1 as per the Site Hierarchy
+                subCategory: '${page.secondaryCategory @context="scriptString"}', //Site Section 1 as per the Site Hierarchy
+                pageType: '${page.templateName @context="scriptString"}'
              	},
             attributes:{
             	locale: navigator.language, // Locale of the site
