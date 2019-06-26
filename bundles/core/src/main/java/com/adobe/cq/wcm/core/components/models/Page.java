@@ -226,6 +226,26 @@ public interface Page extends ContainerExporter {
     }
 
     /**
+     * Returns the primary category of this page.
+     *
+     * @return the page's primary category
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     */
+    default String getPrimaryCategory() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Returns the secondary category of primary page.
+     *
+     * @return the page's secondary category
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     */
+    default String getSecondaryCategory() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
      * If this page is associated with a Template, then this method will return the Template's client library categories
      * to be included in the page as defined by the user in the policy.
      *

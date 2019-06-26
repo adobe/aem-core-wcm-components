@@ -102,5 +102,15 @@ public class PageTest {
         public String getExportedType() {
             return null;
         }
+        
+        @Override
+        public String getPrimaryCategory() {
+            return null;
+        }
+        
+        @Override
+        public String getSecondaryCategory() {
+            return null;
+        }
     }
 }

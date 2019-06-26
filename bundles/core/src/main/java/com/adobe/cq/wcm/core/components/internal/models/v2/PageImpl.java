@@ -21,11 +21,13 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -58,6 +60,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
     protected static final String PN_CLIENTLIBS_JS_HEAD = "clientlibsJsHead";
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
+    public static final String PN_PRIMARY_CATEGORY = "primaryCategory";
+	public static final String PN_SECONDARY_CATEGORY = "secondaryCategory";
 
     private Boolean hasCloudconfigSupport;
 
@@ -77,6 +81,12 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                    name = PN_REDIRECT_TARGET)
     private String redirectTargetValue;
 
+    private String primaryCategory;
+	private String secondaryCategory;
+
+	@ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+	protected ValueMap inheritedPageProperties;
+	
     private String appResourcesPath;
     private NavigationItem redirectTarget;
 
@@ -97,6 +107,10 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         populateClientLibCategoriesJs();
         setRedirect();
+        if(inheritedPageProperties!=null) {
+			primaryCategory = inheritedPageProperties.get(PN_PRIMARY_CATEGORY, String.class);
+			secondaryCategory = inheritedPageProperties.get(PN_SECONDARY_CATEGORY,String.class);
+		}
     }
 
     private void setRedirect() {
@@ -195,4 +209,14 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return hasCloudconfigSupport;
     }
+    
+    @Override
+	public String getPrimaryCategory() {
+		return primaryCategory;
+	}
+
+	@Override
+	public String getSecondaryCategory() {
+		return secondaryCategory;
+	}
 }

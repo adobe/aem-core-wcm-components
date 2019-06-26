@@ -80,6 +80,8 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertArrayEquals(new String[] {"coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
         assertArrayEquals(new String[] {"coretest.product-page"}, page.getClientLibCategoriesJsBody());
         assertEquals("product-page", page.getTemplateName());
+        assertNull(page.getPrimaryCategory());
+        assertNull(page.getSecondaryCategory());
         testJSONExport(page, getTestExporterJSONPath(TEST_BASE, PAGE));
     }
 

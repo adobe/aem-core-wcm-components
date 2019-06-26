@@ -115,6 +115,42 @@
                             </column>
                         </items>
                     </socialmedia>
+                    <datalayer
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Data Layer"
+                        sling:orderBefore="cloudservices"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <section
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Data Layer Settings"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <primary
+                                                cq:showOnCreate="{Boolean}true"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Primary type of page e.g. Products"
+                                                fieldLabel="Page primary category"
+                                                name="./primaryCategory"/>
+                                            <secondary
+                                                cq:showOnCreate="{Boolean}true"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Secondary type of page e.g. Surfing"
+                                                fieldLabel="Page secondary category"
+                                                name="./secondaryCategory"/>
+                                        </items>
+                                    </section>
+                                </items>
+                            </column>
+                        </items>
+                    </datalayer>
                 </items>
             </tabs>
         </items>

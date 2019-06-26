@@ -33,8 +33,8 @@
                 pageType: '${page.templateName @context="scriptString"}',
                 pageRef: document.referrer, // Referring URL
                 locale: navigator.language, // Locale of the site
-                primaryCategory: '${currentPage.title @context="scriptString"}', //Main Section as per the Site Hierarchy
-                subCategory: '${childPageTitle @context="scriptString"}', //Site Section 1 as per the Site Hierarchy
+                primaryCategory: '${page.primaryCategory @context="scriptString"}', //Main Section as per the Site Hierarchy
+                subCategory: '${page.secondaryCategory @context="scriptString"}', //Site Section 1 as per the Site Hierarchy
                 domain: window.location.hostname, // Domain of the site
                 language: '${page.language @context="scriptString"}', //Language where the user has visted(en, etc)
                 country: navigator.language.split("-")[1] //Country where the user has visted(US, etc)
