@@ -28,36 +28,44 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 ## Available Components
 
-* Page authoring components:
-  * [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
-  * [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
-  * [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
-  * [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-  * [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
-  * [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
-  * [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
-  * [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
-  * [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
-  * [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
-  * [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
-  * [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
-  * [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
-  * [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
-  * [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
-  * [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
-  * [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
-  * [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
-  * [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
-  * [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
+### Template components
 
-* Form components:
-  * [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
-  * [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
-  * [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
-  * [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
-  * [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
+2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
+3. [Language Navigation](content/src/content/jcr_root/apps/core/wcm/components/languagenavigation/v1/languagenavigation)
+4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
+5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
-Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) for upcoming changes.
+### Page authoring components
+
+6. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
+7. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
+9. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
+10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
+11. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
+16. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
+14. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
+15. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+12. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
+13. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+
+### Container components
+
+17. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
+18. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
+19. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
+20. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+
+### Form components
+
+21. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+22. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+23. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+24. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+25. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
+
+Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for upcoming changes.
 
 ## Component Versioning
 
