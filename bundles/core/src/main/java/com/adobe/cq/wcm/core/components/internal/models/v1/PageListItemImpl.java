@@ -88,6 +88,10 @@ public class PageListItemImpl implements ListItem {
     public String getName() {
         return page.getName();
     }
+    
+    public String getAuthor() {
+        return page.getLastModifiedBy();
+    }
 
     private Page getRedirectTarget(@NotNull Page page) {
         Page result = page;

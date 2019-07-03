@@ -24,14 +24,13 @@
 </section>
 
 <section data-cmp-results-size="${search.resultsSize}"
-	data-cmp-relativePath="${search.relativePath}"
+	data-cmp-relative-path="${search.relativePath}"
 	class="search__field--view" id="js-display-diff-view">
-	<ul class="cmp-search-list__item">
+	<ul class="cmp-search-list__item-group">
 	</ul>
 </section>
 
-<section class="search__results--footer"
-	data-sly-test="${search.searchResults.isMore}">
+<section class="search__results--footer">
 	<button>Load More</button>
 </section>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !(search.searchResults.results)}"></sly>

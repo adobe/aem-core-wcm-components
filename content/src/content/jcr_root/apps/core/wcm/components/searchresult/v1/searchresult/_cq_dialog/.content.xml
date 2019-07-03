@@ -3,8 +3,9 @@
 	xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
 	xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
 	jcr:primaryType="nt:unstructured" jcr:title="Search Result Settings"
+	extraClientlibs="[core.wcm.components.searchresult.v1.editor]"
 	sling:resourceType="cq/gui/components/authoring/dialog">
-	<content granite:class="cmp-form-textfield-editDialog"
+	<content granite:class="cmp-searchresult-editDialog"
 		jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/coral/foundation/container">
 		<items jcr:primaryType="nt:unstructured">
 			<tabs jcr:primaryType="nt:unstructured"
@@ -109,7 +110,7 @@
 										sling:orderBefore="name"
 										fieldDescription="The name of the field, which is submitted with the form data"
 										fieldLabel="Tags Property" emptyText="jcr:content/metadata/cq:tags"
-										name="./property"/>
+										name="./tagProperty"/>
 									<tags jcr:primaryType="nt:unstructured"
 										sling:resourceType="cq/gui/components/common/tagspicker"
 										fieldLabel="Tags" fieldDescription="Select tags to populate the filter options"
@@ -137,7 +138,7 @@
 											granite:class="cmp-options--editor-item-multifield-composite-item coral-Well"
 											jcr:primaryType="nt:unstructured"
 											sling:resourceType="granite/ui/components/coral/foundation/container"
-											name="./items">
+											name="./sortItems">
 											<items jcr:primaryType="nt:unstructured">
 												<option
 													granite:class="cmp-options--editor-item-multifield-composite-item-container"
@@ -154,9 +155,9 @@
 																<title jcr:primaryType="nt:unstructured" text="Title"
 																	value="jcr:content/jcr:title" />
 																<lastmodified jcr:primaryType="nt:unstructured"
-																	text="Last modified" value="jcr:content/jcr:lastModified" />
+																	text="Last modified date" value="jcr:content/jcr:lastModified" />
 																<jcrscore jcr:primaryType="nt:unstructured"
-																	text="Jcr score" value="jcr:content/jcr:score" />
+																	text="Relevance" value="jcr:content/jcr:score" />
 															</items>
 														</property>
 													</items>

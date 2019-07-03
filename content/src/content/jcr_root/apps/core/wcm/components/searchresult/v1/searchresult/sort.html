@@ -15,12 +15,12 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.sort="${@ search}">
 <div class="cmp-sort__heading">
-<select>
- <option value="asc">${search.ascLabel}</option>
- <option value="desc">${search.descLabel}</option>
-</select>
-<select data-sly-list="${search.sortOptions}">
- <option value="${item.value}">${item.text}</option>
- </select>
+    <select id="js-sorting-des-asc">
+         <option value="asc">${search.ascLabel}</option>
+         <option value="desc">${search.descLabel}</option>
+    </select>
+    <select data-sly-list="${search.sortOptions}" id="js-sort-dir">
+     	<option value="${item.value}">${item.text}</option>
+     </select>
 </div>
 </template>

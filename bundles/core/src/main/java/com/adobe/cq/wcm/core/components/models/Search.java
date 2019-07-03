@@ -167,9 +167,14 @@ public interface Search extends ComponentExporter {
     * @see ComponentExporter#getProperty()
     * @since com.adobe.cq.wcm.core.components.models 12.8.0
     */
-   default String getProperty() {
+   default String getTagProperty() {
        throw new UnsupportedOperationException();
    }
+   
+   /**
+    * 
+    * @return
+    */
    default Collection<OptionItem> getSortOptions() {
        throw new UnsupportedOperationException();
    }

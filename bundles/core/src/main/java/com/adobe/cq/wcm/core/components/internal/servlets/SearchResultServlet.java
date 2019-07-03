@@ -25,6 +25,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -79,6 +80,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     protected static final String PARAM_FULLTEXT = "fulltext";
     protected static final String PARAM_SORT = "sort";
     protected static final String PARAM_ORDERBY = "orderby";
+    protected static final String PARAM_TAGS = "tags";
 
     private static final String PARAM_RESULTS_OFFSET = "resultsOffset";
     private static final String PREDICATE_FULLTEXT = "fulltext";
@@ -87,6 +89,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     private static final String NN_STRUCTURE = "structure";
     private static final String PREDICATE_ORDERBY = "orderby";
     private static final String PREDICATE_SORT = "orderby.sort";
+    private static final String PREDICATE_TAG = "tagid.property";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
 
@@ -165,6 +168,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         String searchRootPagePath;
         String sort = StringUtils.EMPTY;
         String orderBy = StringUtils.EMPTY;
+        String[] tags = ArrayUtils.EMPTY_STRING_ARRAY;
+        String tagProperty = StringUtils.EMPTY;
         if (searchResource != null) {
             ValueMap valueMap = searchResource.getValueMap();
             ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
@@ -175,7 +180,9 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));            
             searchRootPagePath = getSearchRootPagePath(searchRoot, currentPage);
             sort= request.getParameter(PARAM_SORT) != null ? request.getParameter(PARAM_SORT) : valueMap.get(Search.PN_DEFAULT_SORT_DIRECTION,String.class);
-            orderBy= "@"+request.getParameter(PARAM_ORDERBY) != null ? request.getParameter(PARAM_ORDERBY) : valueMap.get(Search.PN_DEFAULT_SORT,String.class);
+            orderBy= request.getParameter(PARAM_ORDERBY) != null ? request.getParameter(PARAM_ORDERBY) : valueMap.get(Search.PN_DEFAULT_SORT,String.class);
+            tags= request.getParameter(PARAM_TAGS) != null ? request.getParameter(PARAM_TAGS).split(","): tags;
+            tagProperty = valueMap.get("property", String.class);
         } else {
             String languageRoot = languageManager.getLanguageRoot(currentPage.getContentResource()).getPath();
             searchRootPagePath = getSearchRootPagePath(languageRoot, currentPage);
@@ -198,6 +205,13 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         predicatesMap.put(PREDICATE_TYPE, NameConstants.NT_PAGE);
         predicatesMap.put(PREDICATE_ORDERBY, orderBy);
         predicatesMap.put(PREDICATE_SORT, sort);
+        if(tags.length>0){
+        	predicatesMap.put(PREDICATE_TAG, tagProperty);
+        	for (int i=0; i< tags.length ; i++) 
+            { 
+        		predicatesMap.put("tagid."+i+"_value", tags[i]);
+            }        	
+        }
         PredicateGroup predicates = PredicateConverter.createPredicates(predicatesMap);
         ResourceResolver resourceResolver = request.getResource().getResourceResolver();
         Query query = queryBuilder.createQuery(predicates, resourceResolver.adaptTo(Session.class));
@@ -208,7 +222,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             query.setStart(resultsOffset);
         }
         SearchResult searchResult = query.getResult();
-
+        
+        //long totalMatches = searchResult.getTotalMatches();
         List<Hit> hits = searchResult.getHits();
         if (hits != null) {
             for (Hit hit : hits) {

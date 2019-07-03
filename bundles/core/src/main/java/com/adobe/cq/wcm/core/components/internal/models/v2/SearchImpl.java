@@ -55,7 +55,7 @@ import com.day.cq.wcm.api.designer.Style;
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class SearchImpl implements Search {
 
-	protected static final String RESOURCE_TYPE = "core/wcm/components/search/advance/searchresult/v1/searchresult";
+	protected static final String RESOURCE_TYPE = "core/wcm/components/searchresult/v1/searchresult";
     
 
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
@@ -63,7 +63,7 @@ public class SearchImpl implements Search {
     public static final String PROP_SEARCH_ROOT_DEFAULT = "/content";
     public static final String PN_TEXT = "text";
     public static final String PN_VALUE = "value";
-    public static final String NN_ITEMS = "items";
+    public static final String NN_ITEMS = "sortItems";
     
     @Self
     private SlingHttpServletRequest request;
@@ -100,7 +100,7 @@ public class SearchImpl implements Search {
     private boolean enableFacet;
     
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String property;
+    private String tagProperty;
     
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
 	@Named("ascendingLabel")
@@ -134,7 +134,7 @@ public class SearchImpl implements Search {
             if (tagList != null) {
                 for (final Tag tag : tagList) {
                     tags.add(new ListItem() {
-                        private String tagName = tag.getName();
+                        private String tagName = tag.getTagID();
                         private String tagTitle = tag.getTitle();
                         @Nullable
                         @Override
@@ -209,8 +209,8 @@ public class SearchImpl implements Search {
     }
     
     @Override
-    public String getProperty() {
-        return property;
+    public String getTagProperty() {
+        return tagProperty;
     }
 
     @Override

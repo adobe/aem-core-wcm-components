@@ -1,19 +1,19 @@
 /*******************************************************************************
-* Copyright 2017 Adobe Systems Incorporated
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-******************************************************************************/
-(function () {
+ * Copyright 2017 Adobe Systems Incorporated
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+(function() {
     "use strict";
     var RESULTS_JSON = "searchresults.json";
     var PARAM_RESULTS_OFFSET = "resultsOffset";
@@ -21,94 +21,118 @@
     var currentPageUrl = window.location.href;
     var getPageURL = currentPageUrl.substring(0, currentPageUrl.lastIndexOf("."));
     var getQueryParam = window.location.search;
-    var getRelativePath = document.querySelector(".search__field--view").dataset.cmpRelativepath;
-    var $getLoadMoreBtn = document.querySelector(".search__results--footer button");
+    var searchFieldListGroup = document.querySelector(".cmp-search-list__item-group");
+
+    var searchField = document.querySelector(".search__field--view");
+
+    var getRelativePath = searchField.dataset.cmpRelativePath;
+    var getLoadMoreBtn = document.querySelector(".search__results--footer button");
+
+    var $getSortAscDesVal = document.getElementById("js-sorting-des-asc");
+    var $getSortDirVal = document.getElementById("js-sort-dir");
+
     var getCategory = new Array();
     var resultSize = 0;
-    
+    var LIST_GROUP;
+
+    var getSortAscDesVal = getSortingVal($getSortAscDesVal);
+    var getSortDirVal = getSortingVal($getSortDirVal);
+
+    // GET SORTING DROP-DOWN VALUES
+    function getSortingVal(val) {
+        return Array.from(val.options)
+            .filter(function(option) {
+                return option.selected;
+            })
+            .map(function(option) {
+                return option.value;
+            });
+    }
+
     // Load More Button Click Function
-    $getLoadMoreBtn.addEventListener("click", function(event) {
+    getLoadMoreBtn.addEventListener("click", function(event) {
         resultSize = resultSize + parseInt(document.querySelector(".search__field--view").dataset.cmpResultsSize);
-        console.log(resultSize)
-        fetchDataNew();
-    })
-    
-    //CATEGORIES CLICK EVENT
+        getCategory.length > 0 ? fetchDataNew(getCategory) : fetchDataNew();
+    });
+
+    // CATEGORIES CLICK EVENT
     $getFacetFilterCheckbox.forEach(function(getFacetFilterCheckbox) {
         getFacetFilterCheckbox.addEventListener("click", function(event) {
-            getCategory = $(
-                'input[type="checkbox"]:checked'
-            )
-            .map(function() {
-                return this.value;
-            })
-            .get();
+            resultSize = 0;
+            if (getFacetFilterCheckbox.checked) {
+                getCategory.push(getFacetFilterCheckbox.value);
+            } else {
+                var NEW_LIST = getCategory.filter(function(item) {
+                    return item !== getFacetFilterCheckbox.value;
+                });
+                getCategory = NEW_LIST;
+            }
             getCategory.length > 0 ? fetchDataNew(getCategory) : fetchDataNew();
         });
     });
-    
+
+    // SORT BY CLICK EVENT AND PAGE LOAD
+    $getSortAscDesVal.addEventListener("change", function(event) {
+        resultSize = 0;
+        getSortAscDesVal = getSortingVal($getSortAscDesVal);
+        getCategory.length > 0 ? fetchDataNew(getCategory) : fetchDataNew();
+    });
+
+    $getSortDirVal.addEventListener("change", function(event) {
+        resultSize = 0;
+        getSortDirVal = getSortingVal($getSortDirVal.options);
+        getCategory.length > 0 ? fetchDataNew(getCategory) : fetchDataNew();
+    });
+
     // On page load function
     function onDocumentReady() {
         fetchDataNew();
     }
-    
-    //FETCH DATA API CALL
+
+    // FETCH DATA API CALL
     function fetchDataNew(getCategory) {
-        let apiURL = getDataURL(getCategory);
-        console.log(apiURL);
+        var apiURL = getDataURL(getCategory);
         fetch(apiURL)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(json) {
-            return displayDataOnPage(json);
-        });
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(json) {
+                return displayDataOnPage(json);
+            });
     }
-    
-    //FETCH DATA URL CREATION
+
+    // FETCH DATA URL CREATION
     function getDataURL(getCategory) {
-        var getDefaultDisplayOfSearchResults = getCategory ? 0 : resultSize;
-        var fetchAPIURL =
-            getPageURL +
-                "." +
-                    RESULTS_JSON + getRelativePath+
-                        getQueryParam +
-                            "&" +
-                                PARAM_RESULTS_OFFSET +
-                                    "=" +
-                                        getDefaultDisplayOfSearchResults;
-        var fetchAPIURLNew = getCategory
-        ? fetchAPIURL + "&tag=" + getCategory
-        : fetchAPIURL;
+        var fetchAPIURL = getPageURL + "." + RESULTS_JSON + getRelativePath + getQueryParam + "&" + PARAM_RESULTS_OFFSET + "=" + resultSize + "&orderby=" + getSortDirVal + "&sort=" + getSortAscDesVal;
+        var fetchAPIURLNew = getCategory ? fetchAPIURL + "&tags=" + getCategory : fetchAPIURL;
         return fetchAPIURLNew;
     }
-    
-    //DISPLAY DATA ON PAGE LOAD
-    function displayDataOnPage(data) {
-        var items = [];
-        resultSize === 0 ? $(".search__field--view").empty() : '';
-        $.each(data, function (key, val) {
-            items.push(
-                "<li id='" +
-                key +
-                "'><img src='https://dummyimage.com/600x400/000/fff' class='search__img--card' /><h3>" +
-                val.title +
-                "</h3><span>" +
-                val.lastModified +
-                "</span> | <span>" +
-                val.path +
-                "</span> | <span>" +
-                val.url +
-                "</span><p>" +
-                val.description +
-                "</p></li>"
-            );
-        });
-        $("<ul/>", {
-            class: "my-new-list",
-            html: items.join("")
-        }).appendTo(".search__field--view");
+
+    // Check null value and replace with empty string
+    function checkNull(inputValue) {
+        var value = "";
+        if (inputValue === null) {
+            return value;
+        } else {
+            return inputValue;
+        }
     }
-    
+
+    // DISPLAY DATA ON PAGE LOAD
+    function displayDataOnPage(data) {
+
+        if (resultSize === parseInt(0)) {
+            searchFieldListGroup.innerHTML = "";
+            LIST_GROUP = "";
+        }
+        var dataCount = Object.keys(data).length;
+
+        for (var i = 0; i < dataCount; i++) {
+            LIST_GROUP += "<li id='" + data[i].key + "'><h3>" + checkNull(data[i].title) + "</h3><span>" + checkNull(data[i].lastModified) + "</span> | <span>" + checkNull(data[i].path) + "</span> | <span>" + checkNull(data[i].url) + "</span><p>" + checkNull(data[i].description) + "</p><p>" + checkNull(data[i].author) + "</p></li>";
+        }
+        searchFieldListGroup.innerHTML = LIST_GROUP;
+
+    }
+
     document.addEventListener("DOMContentLoaded", onDocumentReady);
 })();
