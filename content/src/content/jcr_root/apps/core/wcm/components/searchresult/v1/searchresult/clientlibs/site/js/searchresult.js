@@ -128,7 +128,7 @@
         var dataCount = Object.keys(data).length;
 
         for (var i = 0; i < dataCount; i++) {
-            LIST_GROUP += "<li id='" + data[i].key + "'><h3>" + checkNull(data[i].title) + "</h3><span>" + checkNull(data[i].lastModified) + "</span> | <span>" + checkNull(data[i].path) + "</span> | <span>" + checkNull(data[i].url) + "</span><p>" + checkNull(data[i].description) + "</p><p>" + checkNull(data[i].author) + "</p></li>";
+            LIST_GROUP += "<li id='" + data[i].key + "'><h3>" + checkNull(data[i].title) + "</h3><span>" + checkNull(data[i].formattedLastModifiedDate) + "</span> | <span>" + checkNull(data[i].path) + "</span> | <span>" + checkNull(data[i].url) + "</span><p>" + checkNull(data[i].description) + "</p><p>" + checkNull(data[i].author) + "</p></li>";
         }
         searchFieldListGroup.innerHTML = LIST_GROUP;
 

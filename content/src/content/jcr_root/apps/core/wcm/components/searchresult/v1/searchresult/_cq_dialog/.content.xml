@@ -36,11 +36,6 @@
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
 										emptyText="Displaying {count} of {total} results" fieldLabel="Result Count Text Format"
 										name="./resultCountFormat" />
-									<imagePropertyPath jcr:primaryType="nt:unstructured"
-										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-										fieldDescription="Relative path of image on the result nodes to be used to display in search results"
-										emptyText="jcr:content/pageImage/responsivegrid/tile/image"
-										fieldLabel="Image path property" name="./resultCountFormat" />
 								</items>
 							</column>
 						</items>
@@ -55,13 +50,17 @@
 									<defaultSort jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/select"
 										deleteHint="{Boolean}true" fieldLabel="Default Sort"
+										fieldDescription="Select select parameter on which default sorting is performed"
 										name="./defaultSort">
 										<items jcr:primaryType="nt:unstructured">
-											<title jcr:primaryType="nt:unstructured" text="Sort by title"
+											<title jcr:primaryType="nt:unstructured" text="Title"
+											    fieldDescription="Sort by title"
 												value="jcr:content/jcr:title" />
 											<lastmodified jcr:primaryType="nt:unstructured"
-												text="Sort by last modified" value="jcr:content/jcr:lastModified" />
-											<jcrscore jcr:primaryType="nt:unstructured" text="Sort by jcr score"
+											    fieldDescription="Sort by publish date"
+												text="Last modified date" value="jcr:content/jcr:lastModified" />
+											<jcrscore jcr:primaryType="nt:unstructured" text="Relevance"
+											    fieldDescription="Sort by relevance"
 												value="jcr:content/jcr:score" />
 										</items>
 									</defaultSort>
@@ -78,14 +77,13 @@
 									</defaultSortDirection>
 									<loadMoreText jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-										fieldLabel="Load more text" name="./loadMoreText" emptyText="Load More" />
+										fieldLabel="Load more text" 
+										fieldDescription="Enter load more button text else default Load More text will be displayed"
+										name="./loadMoreText" emptyText="Load More" />
 									<noResultText jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										fieldDescription="Enter text that you want to display when no results found"
 										fieldLabel="No Result Text" name="./noResultText" emptyText="No Results" />
-									<missingImagePath jcr:primaryType="nt:unstructured"
-										sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-										fieldLabel="Missing Image Path" name="./missingImagePath"
-										rootPath="/content/dam" />
 								</items>
 							</column>
 						</items>
@@ -99,11 +97,13 @@
 								<items jcr:primaryType="nt:unstructured">
 									<enableFacet jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-										text="Enable Facet" checked="{Boolean}true" uncheckedValue="{Boolean}false"
+										text="Enable Facet" 
+										fieldDescription="Select this check box to enable sorting based on facet"
+										checked="{Boolean}true" uncheckedValue="{Boolean}false"
 										value="{Boolean}true" name="./enableFacet" />
 									<title jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-										fieldDescription="Legend to describe the role of the field."
+										fieldDescription="Enter facet title to be displayed."
 										fieldLabel="Title" name="./facetTitle" required="{Boolean}true" />
 									<property jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
@@ -130,6 +130,10 @@
 										sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
 										text="Enable Sort" checked="{Boolean}true" uncheckedValue="{Boolean}false"
 										value="{Boolean}true" name="./enableSort" />
+									<title jcr:primaryType="nt:unstructured"
+										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+										fieldDescription="Enter sort title to be displayed."
+										fieldLabel="Title" name="./sortTitle" required="{Boolean}true" />	
 									<properties jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
 										composite="{Boolean}true" fieldLabel="Sort By Options"
@@ -147,6 +151,7 @@
 													<items jcr:primaryType="nt:unstructured">														
 														<text jcr:primaryType="nt:unstructured"
 															sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+															fieldDescription="Enter sort property title"
 															fieldLabel="Title" name="./text" />
 														<property jcr:primaryType="nt:unstructured"
 															sling:resourceType="granite/ui/components/coral/foundation/form/select"

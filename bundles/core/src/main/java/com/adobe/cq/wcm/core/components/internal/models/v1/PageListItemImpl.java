@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -35,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class PageListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
+    public static final String DATE_FORMAT = "MMMM dd, yyyy";
 
     protected SlingHttpServletRequest request;
     protected Page page;
@@ -92,6 +94,10 @@ public class PageListItemImpl implements ListItem {
     public String getAuthor() {
         return page.getLastModifiedBy();
     }
+    
+    public String getFormattedLastModifiedDate() {
+        return getFormattedDate(page.getLastModified(), DATE_FORMAT);
+    }
 
     private Page getRedirectTarget(@NotNull Page page) {
         Page result = page;
@@ -110,5 +116,13 @@ public class PageListItemImpl implements ListItem {
         }
         return result;
     }
+    
+    private String getFormattedDate(Calendar date, String format) {
+        if (null == date) {
+          return StringUtils.EMPTY;
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        return formatter.format(date.getTime());
+      }
 
 }

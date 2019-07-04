@@ -64,6 +64,8 @@ public class SearchImpl implements Search {
     public static final String PN_TEXT = "text";
     public static final String PN_VALUE = "value";
     public static final String NN_ITEMS = "sortItems";
+    public static final String PN_LOAD_MORE_TEXT = "loadMoreText";
+    public static final String LOAD_MORE_TEXT_DEFAULT_VALUE = "Load More";
     
     @Self
     private SlingHttpServletRequest request;
@@ -88,8 +90,16 @@ public class SearchImpl implements Search {
 	private Resource resource;
 	
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Named("loadMoreText")
+    private String loadMoreText;
+    
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Named("facetTitle")
     private String facetTitle;
+    
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Named("sortTitle")
+    private String sortTitle;
     
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Named("enableSort")
@@ -116,6 +126,7 @@ public class SearchImpl implements Search {
     private void initModel() {
         resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
         searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH, PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
+        loadMoreText = properties.get(PN_LOAD_MORE_TEXT, LOAD_MORE_TEXT_DEFAULT_VALUE);
         PageManager pageManager = currentPage.getPageManager();
         Resource currentResource = request.getResource();
         if (pageManager != null) {
@@ -209,6 +220,11 @@ public class SearchImpl implements Search {
     }
     
     @Override
+    public String getSortTitle() {
+        return sortTitle;
+    }
+    
+    @Override
     public String getTagProperty() {
         return tagProperty;
     }
@@ -216,6 +232,11 @@ public class SearchImpl implements Search {
     @Override
     public int getResultsSize() {
         return resultsSize;
+    }
+    
+    @Override
+    public String getLoadMoreText() {
+        return loadMoreText;
     }
 
     @Override

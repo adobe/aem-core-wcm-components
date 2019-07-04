@@ -154,12 +154,22 @@ public interface Search extends ComponentExporter {
    default Collection<ListItem> getTags() {
        throw new UnsupportedOperationException();
    }
+   
    /**
     * @see ComponentExporter#getFacetTitle()
     * @since com.adobe.cq.wcm.core.components.models 12.8.0
     */
    
    default String getFacetTitle() {
+       throw new UnsupportedOperationException();
+   }
+   
+   /**
+    * @see ComponentExporter#getSortTitle()
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+   
+   default String getSortTitle() {
        throw new UnsupportedOperationException();
    }
    
@@ -193,6 +203,15 @@ public interface Search extends ComponentExporter {
     */
    
    default String getDescLabel() {
+       throw new UnsupportedOperationException();
+   }
+   
+   /**
+    * @see ComponentExporter#getLoadMoreText()
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+   
+   default String getLoadMoreText() {
        throw new UnsupportedOperationException();
    }
 }
