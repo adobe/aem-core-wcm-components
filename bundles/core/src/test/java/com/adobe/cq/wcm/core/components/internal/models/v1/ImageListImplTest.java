@@ -87,7 +87,7 @@ public class ImageListImplTest {
         	verifyImageListItems(EXPECTED_IMAGE_LIST_DEPTH_2, imageItem, index);
         	index ++;
         }
-        //Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
+        Utils.testJSONExport(imageList, Utils.getTestExporterJSONPath(TEST_BASE, "imagelist1"));
     }
     
     @Test
@@ -97,7 +97,6 @@ public class ImageListImplTest {
         for(ImageListItem imageItem: listItems){
         	verifyNullImageListItems(imageItem);
         }
-        //Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
     
     private void verifyImageListItems(Object[][] expectedimageList, ImageListItem item, int index) {

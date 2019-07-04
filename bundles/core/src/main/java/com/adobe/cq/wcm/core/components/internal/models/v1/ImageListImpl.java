@@ -46,7 +46,7 @@ import com.day.cq.wcm.api.designer.Style;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageListImpl implements ImageList {
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/list/v1/imagelist";
+    protected static final String RESOURCE_TYPE = "core/wcm/components/imagelist/v1/imagelist";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageListImpl.class);
     
