@@ -31,6 +31,6 @@
 </section>
 
 <section class="search__results--footer">
-	<button>"${search.loadMoreText}</button>
+	<button>${search.loadMoreText}</button>
 </section>
-<sly data-sly-call="${templates.placeholder @ isEmpty = !(search.searchResults.results)}"></sly>
+<sly data-sly-call="${templates.placeholder @ isEmpty = !(search.results)}"></sly>

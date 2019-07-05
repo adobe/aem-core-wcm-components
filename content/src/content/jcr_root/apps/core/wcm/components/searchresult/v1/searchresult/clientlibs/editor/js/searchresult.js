@@ -44,6 +44,7 @@
                     var facetTitleHidden = $(event.target).adaptTo("foundation-field").getValue() !== "true";
                     toggle($dialogContent, facetTitleSelector, !facetTitleHidden);
                     toggle($dialogContent, facetTagPropertySelector, !facetTitleHidden);
+                    toggle($dialogContent, facetTagsSelector, !facetTitleHidden);
                 });
             }
             if ($sortHiddenCheckbox.size() > 0) {
