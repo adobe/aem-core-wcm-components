@@ -182,6 +182,14 @@ public interface Search extends ComponentExporter {
    }
    
    /**
+    * @see ComponentExporter#getNoResultText()
+    * @since com.adobe.cq.wcm.core.components.models 12.8.0
+    */
+   default String getNoResultText() {
+       throw new UnsupportedOperationException();
+   }
+   
+   /**
     * 
     * @return
     */

@@ -66,6 +66,8 @@ public class SearchImpl implements Search {
     public static final String NN_ITEMS = "sortItems";
     public static final String PN_LOAD_MORE_TEXT = "loadMoreText";
     public static final String LOAD_MORE_TEXT_DEFAULT_VALUE = "Load More";
+    public static final String PN_NO_RESULT_TEXT = "noResultText";
+    public static final String NO_RESULT_TEXT_DEFAULT_VALUE = "No more results";
     
     @Self
     private SlingHttpServletRequest request;
@@ -113,6 +115,9 @@ public class SearchImpl implements Search {
     private String tagProperty;
     
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String noResultText;
+    
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
 	@Named("ascendingLabel")
 	@Default(values = "ASC")
 	private String ascLabel;
@@ -127,6 +132,7 @@ public class SearchImpl implements Search {
         resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
         searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH, PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
         loadMoreText = properties.get(PN_LOAD_MORE_TEXT, LOAD_MORE_TEXT_DEFAULT_VALUE);
+        noResultText = properties.get(PN_NO_RESULT_TEXT, NO_RESULT_TEXT_DEFAULT_VALUE);
         PageManager pageManager = currentPage.getPageManager();
         Resource currentResource = request.getResource();
         if (pageManager != null) {
@@ -242,6 +248,11 @@ public class SearchImpl implements Search {
     @Override
     public int getSearchTermMinimumLength() {
         return searchTermMinimumLength;
+    }
+    
+    @Override
+    public String getNoResultText() {
+        return noResultText;
     }
 
     @NotNull

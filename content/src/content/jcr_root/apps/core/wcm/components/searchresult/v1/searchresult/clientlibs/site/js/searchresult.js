@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Adobe Systems Incorporated
+ * Copyright 2019 Adobe Systems Incorporated
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 
     var getRelativePath = searchField.dataset.cmpRelativePath;
     var getLoadMoreBtn = document.querySelector(".search__results--footer button");
-
+    var searchResultEndMessage = document.getElementById("js-searchResults-endData");
     var $getSortAscDesVal = document.getElementById("js-sorting-des-asc");
     var $getSortDirVal = document.getElementById("js-sort-dir");
 
@@ -86,6 +86,8 @@
 
     // On page load function
     function onDocumentReady() {
+        searchResultEndMessage.style.display = "none";
+        getLoadMoreBtn.style.display = "none";
         fetchDataNew();
     }
 
@@ -126,9 +128,17 @@
             LIST_GROUP = "";
         }
         var dataCount = Object.keys(data).length;
+        if (dataCount !== 0) {
+            searchResultEndMessage.style.display = "none";
+            getLoadMoreBtn.style.display = "block";
+
+        } else {
+            searchResultEndMessage.style.display = "block";
+            getLoadMoreBtn.style.display = "none";
+        }
 
         for (var i = 0; i < dataCount; i++) {
-            LIST_GROUP += "<li id='" + data[i].key + "'><h3>" + checkNull(data[i].title) + "</h3><span>" + checkNull(data[i].formattedLastModifiedDate) + "</span> | <span>" + checkNull(data[i].path) + "</span> | <span>" + checkNull(data[i].url) + "</span><p>" + checkNull(data[i].description) + "</p><p>" + checkNull(data[i].author) + "</p></li>";
+            LIST_GROUP += "<li class='cmp-searchresult-item'><h3 class='cmp-searchresult-title'><a class='cmp-searchresult-link' href=" + checkNull(data[i].url) + ">" + checkNull(data[i].title) + "</a></h3><span class='cmp-searchresult-tags'>" + checkNull(data[i].tags) + "</span> <span class='cmp-searchresult-author'>" + checkNull(data[i].author) + "</span> | <span class='cmp-searchresult-date'>" + checkNull(data[i].formattedLastModifiedDate) + "</span> <p class='cmp-searchresult-description'>" + checkNull(data[i].description) + "</p></li>";
         }
         searchFieldListGroup.innerHTML = LIST_GROUP;
 

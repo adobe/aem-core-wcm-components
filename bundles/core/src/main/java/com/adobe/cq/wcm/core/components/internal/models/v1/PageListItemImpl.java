@@ -16,7 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -29,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -83,6 +87,19 @@ public class PageListItemImpl implements ListItem {
     @Override
     public String getPath() {
         return page.getPath();
+    }
+    
+    public String getTags() {    	
+    	String tags = StringUtils.EMPTY;
+    	Tag[] tagsArray = page.getTags();
+    	if(tagsArray.length>0){
+	    	ArrayList<String> tagList = new ArrayList<String>();
+	    	for(Tag tagItem : tagsArray){
+	    		tagList.add(tagItem.getTitle());
+	    	}
+	        tags = tagList.toString();
+        }
+    	return tags;
     }
 
     @Override
