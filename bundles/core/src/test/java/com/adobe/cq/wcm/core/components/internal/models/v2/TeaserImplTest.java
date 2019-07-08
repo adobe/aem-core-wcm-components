@@ -15,18 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -67,6 +68,11 @@ public class TeaserImplTest {
         AEM_CONTEXT.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME,
                 PNG_ASSET_PATH + "/jcr:content/renditions/original");
     }
+    
+    @Before
+    public void setDefaultRunMode() throws Exception {
+        AEM_CONTEXT.runMode("publish");
+    }
 
     @Test
     public void testFullyConfiguredTeaserVanityPath() {
@@ -75,14 +81,24 @@ public class TeaserImplTest {
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals("https://www.adobe.com", teaser.getLinkURL());
-        assertEquals("", teaser.getLinkTrackingCode());
+        assertEquals("s_objectID='teasers teaser 1291652432';", teaser.getLinkTrackingCode());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser15"));
+    }
+    
+    @Test
+    public void testTeaserInAuthorMode() {
+        Teaser teaser = getTeaserUnderTest(TEASER_15, "author");
+        assertEquals(TEASER_15, teaser.getImageResource().getPath());
+        assertEquals(TITLE, teaser.getTitle());
+        assertEquals(DESCRIPTION, teaser.getDescription());
+        assertEquals("https://www.adobe.com", teaser.getLinkURL());
+        assertEquals("", teaser.getLinkTrackingCode());
     }
 
     @Test
     public void testPageInheritedProperties() {
         Teaser teaser = getTeaserUnderTest(TEASER_26);
-        assertEquals("Container Test", teaser.getTitle());
+        assertEquals("Teaser Test", teaser.getTitle());
         assertEquals("/core/content/teasers.html", teaser.getLinkURL());
         assertEquals(false, teaser.isActionsEnabled());
     }
@@ -96,11 +112,11 @@ public class TeaserImplTest {
         ListItem action = teaser1.getActions().get(0);
         assertEquals("Action link does not match", "/content/teasers", action.getPath());
         assertEquals("Action text does not match", "Teasers", action.getTitle());
-        assertEquals("Action text does not match", "", action.getLinkTrackingCode());
+        assertEquals("Action text does not match", "s_objectID='teasers teaser 1291652432 1';", action.getLinkTrackingCode());
         action = teaser1.getActions().get(1);
         assertEquals("Action link does not match", "http://www.adobe.com", action.getPath());
         assertEquals("Action text does not match", "Adobe", action.getTitle());
-        assertEquals("Action text does not match", "", action.getLinkTrackingCode());
+        assertEquals("Action text does not match", "s_objectID='teasers teaser 1291652432 2';", action.getLinkTrackingCode());
     }
 
     private Teaser getTeaserUnderTest(String resourcePath) {
@@ -123,9 +139,15 @@ public class TeaserImplTest {
                 put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
             }
         }));
+        when(component.getCellName()).thenReturn("teaser");
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(Teaser.class);
+    }
+    
+    private Teaser getTeaserUnderTest(String resourcePath, String runMode) {
+      AEM_CONTEXT.runMode(runMode);
+      return getTeaserUnderTest(resourcePath);
     }
 
 }

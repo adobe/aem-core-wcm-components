@@ -62,7 +62,6 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public final static String SEMICOLON = ";";
     public final static String OBJECT_ID = "s_objectID=";
 
-    private int counter = 0;
     private String compHashCode = StringUtils.EMPTY;
     private String hashCodeValue = StringUtils.EMPTY;
     private boolean trackingEnabled = false;
@@ -123,21 +122,22 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public Collection<ListItem> getListItems() {
         Collection<ListItem> listItems = new ArrayList<>();
         Collection<Page> pages = getPages();
+        int index = 1;
         for (Page page : pages) {
             if (page != null) {
                 listItems.add(new com.adobe.cq.wcm.core.components.internal.models.v2.PageListItemImpl(request, page,
-                        getLinktrackinCode()));
+                        getLinktrackinCode(index)));
+                index++;
             }
         }
         return listItems;
     }
 
-    private String getLinktrackinCode() {
-        counter++;
+    private String getLinktrackinCode(int index) {
         linkTrackingCode = new StringBuilder();
         if(trackingEnabled){
             linkTrackingCode = linkTrackingCode.append(OBJECT_ID).append(APOSTROPHE).append(compHashCode)
-                .append(StringUtils.SPACE).append(counter).append(APOSTROPHE).append(SEMICOLON);
+                .append(StringUtils.SPACE).append(index).append(APOSTROPHE).append(SEMICOLON);
         }
         return linkTrackingCode.toString();
     }

@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl
         implements ListItem {
@@ -35,6 +36,7 @@ public class PageListItemImpl extends com.adobe.cq.wcm.core.components.internal.
         this.linkTrackingCode = linkTrackingCode;
     }
 
+    @JsonIgnore(false)
     public String getLinkTrackingCode() {
         return linkTrackingCode;
     }

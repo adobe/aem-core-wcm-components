@@ -97,9 +97,9 @@ public interface ListItem {
     }
     
     /**
-     * Returns the ana of this {@code ListItem}.
+     * Returns the analytics code of this {@code ListItem}.
      *
-     * @return the list item name or {@code null}
+     * @return the link tracking code or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.6.0
      */
     @Nullable

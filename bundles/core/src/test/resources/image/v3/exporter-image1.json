@@ -1,0 +1,14 @@
+{
+    "alt"           : "Adobe Systems Logo and Wordmark in PNG format",
+    "title"         : "Adobe Systems Logo and Wordmark",
+    "src"           : "/core/content/test/_jcr_content/root/image1.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+    "srcUriTemplate": "/core/content/test/_jcr_content/root/image1.coreimg.82{.width}.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+    "areas"         : [],
+    "linkTrackingCode":"s_objectID='test image 1111311570';",
+    "lazyEnabled"   : false,
+    "widths"        : [
+        600,
+        700
+    ],
+    ":type"         : "core/wcm/components/image/v3/image"
+}
