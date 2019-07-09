@@ -268,7 +268,7 @@
      *
      * @param {Function} cancelCallback - callback to call if change is cancelled
      * @param {Object} cancelCallbackScope - scope (value of "this" keyword) for cancelCallback
-     * @param {Function} confirmCallback a callback to execute after the change is confirmed
+     * @param {Function} confirmCallback - a callback to execute after the change is confirmed
      * @param {Object} confirmCallbackScope - the scope (value of "this" keyword) to use for confirmCallback
      */
     function confirmModelChange(cancelCallback, cancelCallbackScope, confirmCallback, confirmCallbackScope) {

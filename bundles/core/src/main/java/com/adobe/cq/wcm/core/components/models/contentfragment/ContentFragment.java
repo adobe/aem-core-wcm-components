@@ -25,7 +25,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Defines the Sling model for the {@code /apps/core/wcm/components/contentfragment/v1} component. The model
+ * Defines the Sling model for the {@code /apps/core/wcm/components/contentfragment} component. The model
  * provides information about the referenced content fragment and access to representations of its elements.
  *
  * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.0.0
