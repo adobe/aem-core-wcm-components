@@ -135,7 +135,7 @@ public class ContentFragmentImpl implements ContentFragment {
     @NotNull
     @Override
     public String getGridResourceType() {
-        return ContentFragmentUtils.getGridResourceType(resourceResolver, resource);
+        return ContentFragmentUtils.getGridResourceType(resource);
     }
 
     @NotNull

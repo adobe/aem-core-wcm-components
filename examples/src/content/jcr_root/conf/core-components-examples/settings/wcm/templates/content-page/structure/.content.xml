@@ -69,9 +69,10 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/navigation/v1/navigation"
-                    collectAllPages="true"
+                    collectAllPages="false"
                     navigationRoot="/content/core-components-examples/library"
-                    skipNavigationRoot="true"/>
+                    skipNavigationRoot="true"
+                    structureDepth="1"/>
             </responsivegrid_1755067073>
             <responsivegrid
                 cq:styleIds="[1545309110033]"
@@ -108,7 +109,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Built with &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.3.2&quot;>Core Components 2.3.2&lt;/a>.&lt;/p>&#xa;"
+                    text="&lt;p>Built with &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.5.0&quot;>Core Components 2.5.0&lt;/a>.&lt;/p>&#xa;"
                     textIsRich="true"/>
             </responsivegrid_2176569853>
         </root>

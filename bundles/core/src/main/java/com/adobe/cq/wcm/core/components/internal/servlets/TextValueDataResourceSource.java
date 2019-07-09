@@ -26,6 +26,7 @@ public abstract class TextValueDataResourceSource extends SyntheticResource {
 
     protected static final String PN_VALUE = "value";
     protected static final String PN_TEXT = "text";
+    protected static final String PN_SELECTED = "selected";
 
     private ValueMap valueMap;
 
@@ -51,9 +52,14 @@ public abstract class TextValueDataResourceSource extends SyntheticResource {
         valueMap = new ValueMapDecorator(new HashMap<String, Object>());
         valueMap.put(PN_VALUE, getValue());
         valueMap.put(PN_TEXT, getText());
+        valueMap.put(PN_SELECTED, getSelected());
     }
 
     protected abstract String getText();
 
     protected abstract String getValue();
+
+    protected boolean getSelected() {
+        return false;
+    }
 }
