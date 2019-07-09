@@ -1,0 +1,65 @@
+{
+    "downloads": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Downloads Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description"   : "Downloads description",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "download-1"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/documents/Download_Test_PDF.pdf",
+                        "jcr:title"         : "Download",
+                        "jcr:description"   : "Description",
+                        "actionText"        : "Click",
+                        "sling:resourceType": "core/wcm/components/download/v1/download"
+                    },
+                    "download-2"          : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "fileReference": "/content/dam/core/documents/Download_Test_PDF.pdf",
+                        "sling:resourceType": "core/wcm/components/download/v1/download",
+                        "jcr:title"         : "Download",
+                        "jcr:description"   : "Description",
+                        "titleFromAsset": "true",
+                        "descriptionFromAsset": "true"
+                    },
+                    "download-3"          : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "jcr:createdBy": "admin",
+                        "jcr:lastModifiedBy": "admin",
+                        "inline": "true",
+                        "fileName": "Download_Test_PDF.pdf",
+                        "jcr:title": "Download",
+                        "jcr:created": "Mon May 27 2019 15:44:52 GMT+0200",
+                        "jcr:lastModified": "Mon May 27 2019 16:37:12 GMT+0200",
+                        "sling:resourceType": "core/wcm/components/download/v1/download",
+                        "titleFromAsset": "true",
+                        "textIsRich": "true",
+                        "actionText": "Download",
+                        "jcr:description"   : "Description",
+                        "actionText"        : "Click",
+                        "file": {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:createdBy": "admin",
+                            "jcr:created": "Mon May 27 2019 16:37:11 GMT+0200",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:resource",
+                                "jcr:lastModifiedBy": "admin",
+                                "jcr:mimeType": "application/pdf",
+                                "jcr:lastModified": "Mon May 27 2019 16:37:11 GMT+0200",
+                                ":jcr:data": 150654,
+                                "jcr:uuid": "1927d32d-fc6c-4046-85d1-d0c3c87d4449"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,5 @@
 {
-    "contentfragments": {
+    "contentfragmentlist": {
         "jcr:primaryType": "cq:Page",
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
@@ -20,12 +20,31 @@
                         "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
                         "modelPath"         : "foobar"
                     },
-                    "non-existing-module-path-tags"        : {
+                    "non-existing-model-path-tags"        : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
                         "modelPath"         : "foobar",
                         "parentPath"        : "/content/dam/some-other-parent-path",
                         "tagNames"          : ["quux"]
+                    },
+                    "model-path-tags"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "parentPath"        : "/content/dam/some-other-parent-path",
+                        "tagNames"          : ["quux"]
+                    },
+                    "model-elements"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "elementNames"      : "main"
+                    },
+                    "model-max-limit"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "maxItems"          : "20"
                     }
                 }
             }

@@ -14,7 +14,11 @@
                     "container-1"       : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:title"         : "Container 1",
-                        "sling:resourceType": "core/wcm/components/carousel/v1/carousel",
+                        "sling:resourceType": "core/wcm/components/container/v1/container",
+                        "backgroundColor": "#000000",
+                        "backgroundImageReference": "/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg",
+                        "layout": "responsiveGrid",
+                        "id": "test",
                         "item_1": {
                             "jcr:primaryType"   : "nt:unstructured",
                             "jcr:title"         : "Teaser 1",
@@ -28,6 +32,18 @@
                             "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
                         },
                         "item_3": {}
+                    },
+                    "container-2"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:title"         : "Container 1",
+                        "sling:resourceType": "core/wcm/components/container/v1/container"
+                    },
+                    "container-3"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:title"         : "Container 1",
+                        "sling:resourceType": "core/wcm/components/container/v1/container",
+                        "backgroundColor": "#000000",
+                        "backgroundImageReference": "/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"
                     }
                 }
             }
