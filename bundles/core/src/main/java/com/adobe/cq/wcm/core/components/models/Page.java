@@ -211,6 +211,7 @@ public interface Page extends ContainerExporter {
      * @deprecated since 12.2.0
      */
     @Deprecated
+    @JsonIgnore
     default Map<String, String> getFavicons() {
         throw new UnsupportedOperationException();
     }
