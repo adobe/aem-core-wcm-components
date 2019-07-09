@@ -44,24 +44,43 @@ public class ImageListItem {
 	private Resource imageResource;
 
 	/**
-	 * Sets the Image Resource of this {@code ImageListItem}.
-	 *
-	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
-	 */
+     * Returns the Image Resource of this {@code ImageListItem}.
+     *
+     * @return the Image Resource of this image list item or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    public Resource getImageResource() {
+		return imageResource;
+	}
+    
+    /**
+     * Sets the Image Resource of this {@code ImageListItem}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
 	public void setImageResource(Resource imageResource) {
 		this.imageResource = imageResource;
 	}
 
 	/**
-	 * Returns the ImagePath of this {@code ImageListItem}.
-	 *
-	 * @return the ImagePath of this image list item or {@code null}
-	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
-	 */
+     * Returns the ImagePath of this {@code ImageListItem}.
+     *
+     * @return the ImagePath of this image list item or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
 	public String getImagePath() {
 		return fileReference;
 	}
-
+	
+	/**
+     * Sets the ImagePath of this {@code ImageListItem}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+	public void setImagePath(String fileReference) {
+		this.fileReference = fileReference;
+	}
+	
 	/**
 	 * Returns the LinkText of this {@code ImageListItem}.
 	 *
@@ -71,15 +90,33 @@ public class ImageListItem {
 	public String getLinkText() {
 		return linkText;
 	}
-
+	
 	/**
-	 * Returns the LinkUrl of this {@code ImageListItem}.
+	 * Sets the LinkText of this {@code ImageListItem}.
 	 *
-	 * @return the image list item LinkUrl or {@code null}
 	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
 	 */
+	public void setLinkText(String linkText) {
+		this.linkText = linkText;
+	}
+
+    /**
+     * Returns the LinkUrl of this {@code ImageListItem}.
+     *
+     * @return the image list item LinkUrl or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
 	public String getLinkURL() {
 		return linkURL;
+	}
+
+	/**
+     * Sets the LinkUrl of this {@code ImageListItem}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+	public void setLinkURL(String linkURL) {
+		this.linkURL = linkURL;
 	}
 
 }
