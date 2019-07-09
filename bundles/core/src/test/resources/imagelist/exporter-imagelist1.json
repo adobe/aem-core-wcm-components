@@ -1,0 +1,15 @@
+{
+  "listItems": [
+    {
+      "linkText": "Adobe",
+      "linkURL": "http://www.adobe.com",
+      "imagePath": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+    },
+    {
+      "linkText": "Teasers",
+      "linkURL": "/content/teasers",
+      "imagePath": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
+    }
+  ],
+  ":type": "core/wcm/components/imagelist/v1/imagelist"
+}

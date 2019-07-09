@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:tags="[core-components-examples:component-type/reference]"
+        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:description="Link list of image and text"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Image List"
+        sling:resourceType="core-components-examples/components/page">
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="wcm/foundation/components/responsivegrid">
+                <text_1740702241
+                    cq:styleIds="[1644862132301]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;h1>Image List&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
+                    textIsRich="true"/>
+                <text
+                    cq:styleIds="[1544762734201]"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;p>Image List allows list of images, link text and link url to be created.&lt;/p>&#xa;"
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/imagelist/v1/imagelist"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_imagelist_v1"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <title_865328580
+                    cq:styleIds="[1544759664489]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Examples"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    type="h2"/>
+                <title_290384408
+                    cq:styleIds="[1544759676459]"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Images and Text"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    type="h3"/>
+                <text_1337506761
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;p>Image List with images and text.&lt;/p>&#xa;"
+                    textIsRich="true"/>
+                <demo
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <imagelist
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/imagelist/v1/imagelist">
+                            <imageList
+                                jcr:primaryType="nt:unstructured">
+                                <item0
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core/wcm/components/image"
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                                    linkText="Title1"
+                                    linkURL="/content/core-components-examples/library/imagelist">
+                                </item0>
+                                <item1
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="core/wcm/components/image"
+                                    fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                                    linkText="Title2"
+                                    linkURL="/content/core-components-examples/library/imagelist">
+                                </item1>
+                                </imageList>
+                            </imagelist>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo>                
+            </responsivegrid>
+        </root>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
+    </jcr:content>
+</jcr:root>
