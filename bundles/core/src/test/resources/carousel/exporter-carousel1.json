@@ -10,6 +10,8 @@
     ":type": "core/wcm/components/carousel/v1/carousel",
     ":items": {
         "item_1": {
+            "title": "Teaser 1",
+            "description": "Teaser 1 description",
             "actionsEnabled": false,
             "imageLinkHidden": false,
             "titleLinkHidden": false,
@@ -18,7 +20,9 @@
             "cq:panelTitle": "Teaser 1"
         },
         "item_2": {
-            "actionsEnabled": false,
+            "title": "Teaser 2",
+            "description": "Teaser 2 description",
+            "actionsEnabled" : false,
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
@@ -26,7 +30,9 @@
             "cq:panelTitle": "Teaser 2"
         },
         "item_3": {
-            "actionsEnabled": false,
+            "title": "Teaser 3",
+            "description": "Teaser 3 description",
+            "actionsEnabled" : false,
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],

@@ -1,0 +1,29 @@
+{
+    "title": "Test Content Fragment",
+    "description": "This is a test content fragment.",
+    "model": "global/models/test",
+    ":type": "core/wcm/components/contentfragment/v1/contentfragment",
+    "elements": {
+        "second": {
+            "value": [
+                "one",
+                "two",
+                "three"
+            ],
+            "title": "Second",
+            "multiValue": true
+        },
+        "main": {
+            "value": "<p>Main content</p>",
+            "title": "Main",
+            ":type": "text/html",
+            "multiValue": false
+        }
+    },
+    ":items": {},
+    ":itemsOrder": [],
+    "elementsOrder": [
+        "second",
+        "main"
+    ]
+}

@@ -37,9 +37,6 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     protected static final Long DEFAULT_DELAY = 5000L; // milliseconds
 
     @ScriptVariable
-    protected Style currentStyle;
-
-    @ScriptVariable
     protected ValueMap properties;
 
     protected boolean autoplay;

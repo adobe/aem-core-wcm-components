@@ -19,18 +19,54 @@ import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 
 /**
- * A base interface to be extended by containers such as the {@link Carousel} and {@link Tabs} models.
+ * A base interface to be extended by containers such as the {@link Carousel}, {@link Tabs} and {@link Accordion} models.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
 @ConsumerType
-public interface Container extends ContainerExporter {
+public interface Container extends Component, ContainerExporter {
+
+    /**
+     * Name of the configuration policy property that indicates if background images are enabled
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    String PN_BACKGROUND_IMAGE_ENABLED = "backgroundImageEnabled";
+
+    /**
+     * Name of the configuration policy property that indicates if background colors are enabled
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    String PN_BACKGROUND_COLOR_ENABLED = "backgroundColorEnabled";
+
+    /**
+     * Name of the configuration policy property that indicates if background colors are to be restricted to predefined values
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    String PN_BACKGROUND_COLOR_SWATCHES_ONLY = "backgroundColorSwatchesOnly";
+
+    /**
+     * Name of the resource property that indicates that path to the background image
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    String PN_BACKGROUND_IMAGE_REFERENCE = "backgroundImageReference";
+
+    /**
+     * Name of the resource property that indicates the background color
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    String PN_BACKGROUND_COLOR = "backgroundColor";
 
     /**
      * Returns a list of container items
@@ -44,12 +80,13 @@ public interface Container extends ContainerExporter {
     }
 
     /**
-     * @see ContainerExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     * Returns the background CSS style to be applied to the component's root element
+     *
+     * @return CSS style string for the component's root element
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    @NotNull
-    @Override
-    default String getExportedType() {
+    @Nullable
+    default String getBackgroundStyle() {
         throw new UnsupportedOperationException();
     }
 

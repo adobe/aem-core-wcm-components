@@ -76,9 +76,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @ScriptVariable
     private Component component;
 
-    @ScriptVariable
-    private ValueMap properties;
-
     @Inject
     private Resource resource;
 
@@ -96,6 +93,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @PostConstruct
     private void initModel() {
+        ValueMap properties = resource.getValueMap();
         actionsEnabled = properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled);
 
         populateStyleProperties();

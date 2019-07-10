@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Container"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="https://www.adobe.com/go/aem_cmp_container_v1"
+    extraClientlibs="[core.wcm.components.container.v1.editor]">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        granite:class="cmp-container__editor">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <background
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Background"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <container
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <backgroundImageLabel
+                                        granite:class="coral-Form-fieldlabel"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                        text="Background Image"/>
+                                    <backgroundImageEnabled
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Enable background image"
+                                        name="./backgroundImageEnabled"
+                                        value="{Boolean}true"/>
+                                    <backgroundColorLabel
+                                        granite:class="coral-Form-fieldlabel"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                        text="Background Color"/>
+                                    <backgroundColorEnabled
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Enable background color"
+                                        name="./backgroundColorEnabled"
+                                        value="{Boolean}true">
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-container-v1-dialog-policy-hook="backgroundColorEnabled"/>
+                                    </backgroundColorEnabled>
+                                    <backgroundColorSwatchesOnly
+                                        granite:class="foundation-toggleable"
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Swatches only"
+                                        name="./backgroundColorSwatchesOnly"
+                                        value="{Boolean}true">
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-container-v1-dialog-policy-hook="backgroundColorSwatchesOnly"/>
+                                    </backgroundColorSwatchesOnly>
+                                    <backgroundColorAllowedSwatches
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                        fieldDescription="The background color swatches that can be selected by an author."
+                                        fieldLabel="Allowed Swatches"
+                                        wrapperClass="foundation-toggleable">
+                                        <field
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/colorfield"
+                                            showDefaultColors="{Boolean}false"
+                                            showSwatches="{Boolean}false"
+                                            name="./allowedColorSwatches"/>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            cmp-container-v1-dialog-policy-hook="backgroundColorAllowedSwatches"/>
+                                    </backgroundColorAllowedSwatches>
+                                </items>
+                            </container>
+                        </items>
+                    </background>
+                    <styletab
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                        path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

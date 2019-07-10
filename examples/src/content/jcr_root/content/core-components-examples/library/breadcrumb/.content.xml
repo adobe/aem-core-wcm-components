@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <hidden/>
+    <jcr:content
+        cq:allowedTemplates="/conf/core-components-examples/settings/wcm/templates/.*"
+        cq:deviceGroups="[/etc/mobile/groups/responsive]"
+        cq:lastModified="{Date}2019-05-29T16:27:12.239+03:00"
+        cq:lastModifiedBy="admin"
+        cq:redirectTarget="/content/core-components-examples/library/breadcrumb/hidden/level-1/level-2/breadcrumb/"
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Breadcrumb"
+        sling:redirectStatus="{Long}302"
+        sling:resourceType="foundation/components/redirect">
+        <image
+            jcr:primaryType="nt:unstructured"
+            fileReference="/content/dam/core-components-examples/library/components/breadcrumb.svg">
+            <file/>
+        </image>
+    </jcr:content>
+</jcr:root>
