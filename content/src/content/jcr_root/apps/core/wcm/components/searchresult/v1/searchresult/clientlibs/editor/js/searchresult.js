@@ -23,6 +23,7 @@
     var facetTagPropertySelector = '.coral-Form-fieldwrapper:has(input[name="./tagProperty"])';
     var facetTagsSelector = '.coral-Form-fieldwrapper:has(span[data-property-path="./cq:tags"])';
 
+    var sortTitleSelector = '.coral-Form-fieldwrapper:has(input[name="./sortTitle"])';
     var sortHiddenCheckboxSelector = 'coral-checkbox[name="./enableSort"]';
     var sortMultifieldSelector = '.coral-Form-fieldwrapper:has(coral-multifield[data-granite-coral-multifield-name="./sortItems"])';
 
@@ -49,10 +50,12 @@
             }
             if ($sortHiddenCheckbox.size() > 0) {
                 var sortMultifieldHidden = $sortHiddenCheckbox.adaptTo("foundation-field").getValue() !== "true";
+                toggle($dialogContent, sortTitleSelector, !sortMultifieldHidden);
                 toggle($dialogContent, sortMultifieldSelector, !sortMultifieldHidden);
 
                 $sortHiddenCheckbox.on("change", function(event) {
                     var sortMultifieldHidden = $(event.target).adaptTo("foundation-field").getValue() !== "true";
+                    toggle($dialogContent, sortTitleSelector, !sortMultifieldHidden);
                     toggle($dialogContent, sortMultifieldSelector, !sortMultifieldHidden);
                 });
             }

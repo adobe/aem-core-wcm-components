@@ -3,7 +3,10 @@
         {
             "url"   : "/content/breadcrumb/women.html",
             "title" : "Women",
-            "active": false
+            "active": false,
+            "tags":"",
+            "author":"admin",
+            "formattedLastModifiedDate":"June 29, 2016"
         }
     ],
     ":type": "core/wcm/components/breadcrumb"

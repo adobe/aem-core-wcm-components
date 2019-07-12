@@ -15,11 +15,17 @@
           "active": true,
           "children": [],
           "level": 1,
-          "url": "/core/content/navigation/navigation-1/navigation-1-1.html"
+          "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
+          "tags":"",
+          "author":null,
+          "formattedLastModifiedDate":""
         }
       ],
       "level": 0,
-      "url": "/core/navigation-1-vanity"
+      "url": "/core/navigation-1-vanity",
+      "tags":"",
+      "author":null,
+      "formattedLastModifiedDate":""
     },
     {
       "path": "/content/navigation/navigation-2",
@@ -29,7 +35,10 @@
       "active": false,
       "children": [],
       "level": 0,
-      "url": "/core/content/navigation/navigation-2.html"
+      "url": "/core/content/navigation/navigation-2.html",
+      "tags":"",
+      "author":null,
+      "formattedLastModifiedDate":""
     }
   ],
   ":type": "core/wcm/components/navigation/v1/navigation"

@@ -11,7 +11,10 @@
       "title": "LOCALE 1",
       "locale": "en_US",
       "country": "US",
-      "language": "en-US"
+      "language": "en-US",
+      "tags":"",
+      "author":null,
+      "formattedLastModifiedDate":""
     },
     {
       "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
@@ -24,7 +27,10 @@
       "title": "LOCALE 2",
       "locale": "en_CA",
       "country": "CA",
-      "language": "en-CA"
+      "language": "en-CA",
+      "tags":"",
+      "author":null,
+      "formattedLastModifiedDate":""
     },
     {
       "path": "/content/languagenavigation/LOCALE-3",
@@ -37,7 +43,10 @@
       "title": "LOCALE 3",
       "locale": "de_CH",
       "country": "CH",
-      "language": "de-CH"
+      "language": "de-CH",
+      "tags":"",
+      "author":null,
+      "formattedLastModifiedDate":""
     },
     {
       "path": "/content/languagenavigation/LOCALE-4",
@@ -50,7 +59,10 @@
       "title": "LOCALE 4",
       "locale": "de_DE",
       "country": "DE",
-      "language": "de-DE"
+      "language": "de-DE",
+      "tags":"",
+      "author":null,
+      "formattedLastModifiedDate":""
     }
   ],
   ":type": "core/wcm/components/languagenavigation/v1/languagenavigation"

@@ -55,13 +55,13 @@
 										<items jcr:primaryType="nt:unstructured">
 											<title jcr:primaryType="nt:unstructured" text="Title"
 											    fieldDescription="Sort by title"
-												value="jcr:content/jcr:title" />
+												value="@jcr:content/jcr:title" />
 											<lastmodified jcr:primaryType="nt:unstructured"
 											    fieldDescription="Sort by publish date"
-												text="Last modified date" value="jcr:content/jcr:lastModified" />
+												text="Last modified date" value="@jcr:content/jcr:lastModified" />
 											<jcrscore jcr:primaryType="nt:unstructured" text="Relevance"
 											    fieldDescription="Sort by relevance"
-												value="jcr:content/jcr:score" />
+												value="@jcr:content/jcr:score" />
 										</items>
 									</defaultSort>
 									<defaultSortDirection jcr:primaryType="nt:unstructured"
@@ -104,7 +104,7 @@
 									<title jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
 										fieldDescription="Enter facet title to be displayed."
-										fieldLabel="Title" name="./facetTitle" required="{Boolean}true" />
+										fieldLabel="Title" name="./facetTitle"/>
 									<property jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
 										sling:orderBefore="name"
@@ -133,7 +133,7 @@
 									<title jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
 										fieldDescription="Enter sort title to be displayed."
-										fieldLabel="Title" name="./sortTitle" required="{Boolean}true" />	
+										fieldLabel="Title" name="./sortTitle"/>	
 									<properties jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
 										composite="{Boolean}true" fieldLabel="Sort By Options"
@@ -158,11 +158,11 @@
 															fieldLabel="Sort By" name="./value">
 															<items jcr:primaryType="nt:unstructured">
 																<title jcr:primaryType="nt:unstructured" text="Title"
-																	value="jcr:content/jcr:title" />
+																	value="@jcr:content/jcr:title" />
 																<lastmodified jcr:primaryType="nt:unstructured"
-																	text="Last modified date" value="jcr:content/jcr:lastModified" />
+																	text="Last modified date" value="@jcr:content/jcr:lastModified" />
 																<jcrscore jcr:primaryType="nt:unstructured"
-																	text="Relevance" value="jcr:content/jcr:score" />
+																	text="Relevance" value="@jcr:content/jcr:score" />
 															</items>
 														</property>
 													</items>

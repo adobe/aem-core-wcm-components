@@ -6,14 +6,20 @@
             "path": "/content/list/pages/page_1",
             "title": "Page 1",
             "description": null,
-            "lastModified": 1474672365000
+            "lastModified": 1474672365000,            
+            "formattedLastModifiedDate":"September 24, 2016",
+            "author":null,
+            "tags":""
         },
         {
             "url": "/context/content/list/pages/page_2.html",
             "path": "/content/list/pages/page_2",
             "title": "Page 2",
             "description": null,
-            "lastModified": 1474499565000
+            "lastModified": 1474499565000,
+            "formattedLastModifiedDate":"September 22, 2016",
+            "author":null,
+            "tags":""
         }
     ],
     "showDescription": true,

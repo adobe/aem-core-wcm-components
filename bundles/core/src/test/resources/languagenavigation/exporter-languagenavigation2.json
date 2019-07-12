@@ -17,7 +17,10 @@
           "title": "LOCALE 5",
           "locale": "en_US",
           "country": "US",
-          "language": "en-US"
+          "language": "en-US",
+          "formattedLastModifiedDate":"",
+          "author":null,
+          "tags":""
         },
         {
           "path": "/content/languagenavigation/LOCALE-1/LOCALE-6",
@@ -30,7 +33,10 @@
           "title": "LOCALE 6",
           "locale": "es_US",
           "country": "US",
-          "language": "es-US"
+          "language": "es-US",
+          "formattedLastModifiedDate":"",
+          "author":null,
+          "tags":""
         }
       ],
       "level": 0,
@@ -38,7 +44,10 @@
       "title": "LOCALE 1",
       "locale": "en_US",
       "country": "US",
-      "language": "en-US"
+      "language": "en-US",
+      "formattedLastModifiedDate":"",
+      "author":null,
+      "tags":""
     },
     {
       "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
@@ -57,7 +66,10 @@
           "title": "LOCALE 5",
           "locale": "en_CA",
           "country": "CA",
-          "language": "en-CA"
+          "language": "en-CA",
+          "formattedLastModifiedDate":"",
+          "author":null,
+          "tags":""
         },
         {
           "path": "/content/languagenavigation/LOCALE-2/LOCALE-7",
@@ -70,7 +82,10 @@
           "title": "LOCALE 7",
           "locale": "fr_CA",
           "country": "CA",
-          "language": "fr-CA"
+          "language": "fr-CA",
+          "formattedLastModifiedDate":"",
+          "author":null,
+          "tags":""
         }
       ],
       "level": 0,
@@ -78,7 +93,10 @@
       "title": "LOCALE 2",
       "locale": "en_CA",
       "country": "CA",
-      "language": "en-CA"
+      "language": "en-CA",
+      "formattedLastModifiedDate":"",
+      "author":null,
+      "tags":""
     },
     {
       "path": "/content/languagenavigation/LOCALE-3",
@@ -97,7 +115,10 @@
           "title": "LOCALE 8",
           "locale": "de_CH",
           "country": "CH",
-          "language": "de-CH"
+          "language": "de-CH",
+          "formattedLastModifiedDate":"",
+          "author":null,
+          "tags":""
         }
       ],
       "level": 0,
@@ -105,7 +126,10 @@
       "title": "LOCALE 3",
       "locale": "de_CH",
       "country": "CH",
-      "language": "de-CH"
+      "language": "de-CH",
+      "formattedLastModifiedDate":"",
+      "author":null,
+      "tags":""
     },
     {
       "path": "/content/languagenavigation/LOCALE-4",
@@ -124,7 +148,10 @@
           "title": "LOCALE 9",
           "locale": "de_DE",
           "country": "DE",
-          "language": "de-DE"
+          "language": "de-DE",
+          "formattedLastModifiedDate":"",
+          "author":null,
+          "tags":""
         }
       ],
       "level": 0,
@@ -132,7 +159,10 @@
       "title": "LOCALE 4",
       "locale": "de_DE",
       "country": "DE",
-      "language": "de-DE"
+      "language": "de-DE",
+      "formattedLastModifiedDate":"",
+      "author":null,
+      "tags":""
     }
   ],
   ":type": "core/wcm/components/languagenavigation/v1/languagenavigation"

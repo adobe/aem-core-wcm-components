@@ -105,7 +105,10 @@ public class SearchResultServletTest {
         List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
                         "url", "null/content/en/search/page.html",
-                        "title", "Page"
+                        "title", "Page",
+                        "description","Yoda is back!",
+                        "formattedLastModifiedDate","August 04, 2017"
+                        
                 )
         );
 
@@ -124,7 +127,9 @@ public class SearchResultServletTest {
         List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
                         "url", "null/content/en/search/page-template.html",
-                        "title", "Page"
+                        "title", "Page",
+                        "description","Yoda is back!",
+                        "formattedLastModifiedDate","August 04, 2017"
                 )
         );
 
@@ -146,6 +151,8 @@ public class SearchResultServletTest {
             ListItem listItem = listItems[i];
             assertEquals(expectedMap.get("url"), listItem.getURL());
             assertEquals(expectedMap.get("title"), listItem.getTitle());
+            assertEquals(expectedMap.get("description"), listItem.getDescription());
+            assertEquals(expectedMap.get("formattedLastModifiedDate"), listItem.getFormattedLastModifiedDate());
 
         }
     }
@@ -156,7 +163,10 @@ public class SearchResultServletTest {
         private String path;
         private String description;
         private String lastModified;
+        private String formattedLastModifiedDate;
         private String name;
+        private String tags;
+        private String author;
 
         public Item() {
         }
@@ -171,6 +181,24 @@ public class SearchResultServletTest {
         @Override
         public String getTitle() {
             return title;
+        }
+        
+        @Nullable
+        @Override
+        public String getDescription() {
+            return description;
+        }
+        
+        @Nullable
+        @Override
+        public String getAuthor() {
+            return author;
+        }
+        
+        @Nullable
+        @Override
+        public String getFormattedLastModifiedDate() {
+            return formattedLastModifiedDate;
         }
     }
 }
