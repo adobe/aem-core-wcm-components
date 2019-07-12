@@ -6,8 +6,8 @@
       "imagePath": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
     },
     {
-      "linkText": "Teasers",
-      "linkURL": "/content/teasers",
+      "linkText": "ImageList",
+      "linkURL": "https://www.google.com/",
       "imagePath": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png"
     }
   ],

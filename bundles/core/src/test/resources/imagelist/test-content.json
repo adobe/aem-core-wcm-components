@@ -28,8 +28,8 @@
                                 "jcr:primaryType" : "nt:unstructured",
                                 "sling:resourceType"  :"core/wcm/components/image",
                                 "fileReference"   : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-                                "linkURL": "/content/teasers",
-                                "linkText": "Teasers"
+                                "linkURL": "https://www.google.com/",
+                                "linkText": "ImageList"
                             }
                         }
                     },

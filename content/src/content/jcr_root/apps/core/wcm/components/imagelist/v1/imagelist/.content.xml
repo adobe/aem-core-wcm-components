@@ -4,4 +4,5 @@
     jcr:description="Configurable collection of items or content"
     jcr:primaryType="cq:Component"
     jcr:title="Image List (v1)"
+    imageDelegate="core/wcm/components/image/v2/image"
     componentGroup=".core-wcm"/>

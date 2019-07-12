@@ -32,10 +32,20 @@ The following properties are written to JCR for this Image List component and ar
 3. `./linkText` - defines the link text for the image
 4. `./sling:resourceType` - allows this node to be used as synthetic image component
 
+### Extending the Imagelist Component
+When extending the Imagelist component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for
+the proxy component and point it to the designated Image component.
+
+For example:
+```
+imageDelegate="core/wcm/components/image/v2/image"
+```
+
 ## BEM Description
 ```
 BLOCK cmp-image-list
     ELEMENT cmp-image-list__item
+    ELEMENT cmp-imagelist__item
     ELEMENT cmp-imagelist__image
     ELEMENT cmp-imagelist__item-title
 ```

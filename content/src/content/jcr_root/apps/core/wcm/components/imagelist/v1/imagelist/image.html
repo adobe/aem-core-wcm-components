@@ -14,8 +14,8 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.item="${@ item}">
-        <a href="${item.linkURL}">
-        <sly class="cmp-imagelist__image" data-sly-test="${item.imageResource}" data-sly-resource="${item.imageResource}"></sly>
+        <a class="cmp-imagelist__item" href="${item.linkURL}">
             <span class="cmp-imagelist__item-title">${item.linkText}</span>
+            <sly class="cmp-imagelist__image" data-sly-test="${item.imageResource}" data-sly-resource="${item.imageResource}"></sly>
         </a>
 </template>

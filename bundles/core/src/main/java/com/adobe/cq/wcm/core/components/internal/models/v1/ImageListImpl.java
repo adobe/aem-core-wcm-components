@@ -38,9 +38,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ImageList;
 import com.adobe.cq.wcm.core.components.models.ImageListItem;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {ImageList.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)

@@ -15,35 +15,23 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.apache.sling.testing.resourceresolver.MockValueMap;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ImageListItem;
-import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
-import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.NavigationItem;
-import com.adobe.cq.wcm.core.components.models.Teaser;
-import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
@@ -67,7 +55,7 @@ public class ImageListImplTest {
    
     private static final Object[][] EXPECTED_IMAGE_LIST_DEPTH_2 = {
         {"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", "http://www.adobe.com", "Adobe"},
-        {"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", "/content/teasers", "Teasers"},
+        {"/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png", "https://www.google.com/", "ImageList"},
 };
     @ClassRule
     public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
@@ -103,6 +91,9 @@ public class ImageListImplTest {
             assertEquals("The image item's path is not what was expected: " + item.getImagePath(), expectedimageList[index][0], item.getImagePath());
             assertEquals("The image item's url is not what was expected: " + item.getLinkURL(), expectedimageList[index][1], item.getLinkURL());
             assertEquals("The image item's text is not what was expected: " + item.getLinkText(), expectedimageList[index][2], item.getLinkText());
+            item.setImagePath(expectedimageList[index][0].toString());
+            item.setLinkURL(expectedimageList[index][1].toString());
+            item.setLinkText(expectedimageList[index][2].toString());
     }
     
     private void verifyNullImageListItems(ImageListItem item) {
