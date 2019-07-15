@@ -40,7 +40,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Search;
-import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.adobe.cq.wcm.core.components.models.form.OptionItem;
 import com.day.cq.tagging.Tag;
 import com.day.cq.tagging.TagManager;
