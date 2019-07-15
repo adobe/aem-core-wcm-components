@@ -109,7 +109,7 @@
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
 										sling:orderBefore="name"
 										fieldDescription="The name of the field, which is submitted with the form data"
-										fieldLabel="Tags Property" emptyText="jcr:content/metadata/cq:tags"
+										fieldLabel="Tags Property" emptyText="jcr:content/cq:tags"
 										name="./tagProperty"/>
 									<tags jcr:primaryType="nt:unstructured"
 										sling:resourceType="cq/gui/components/common/tagspicker"

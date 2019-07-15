@@ -182,7 +182,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             sort= request.getParameter(PARAM_SORT) != null ? request.getParameter(PARAM_SORT) : valueMap.get(Search.PN_DEFAULT_SORT_DIRECTION,String.class);
             orderBy= request.getParameter(PARAM_ORDERBY) != null ? request.getParameter(PARAM_ORDERBY) : valueMap.get(Search.PN_DEFAULT_SORT,String.class);
             tags= request.getParameter(PARAM_TAGS) != null ? request.getParameter(PARAM_TAGS).split(","): tags;
-            tagProperty = valueMap.get("property", String.class);
+            tagProperty = valueMap.get("tagProperty", String.class);
         } else {
             String languageRoot = languageManager.getLanguageRoot(currentPage.getContentResource()).getPath();
             searchRootPagePath = getSearchRootPagePath(languageRoot, currentPage);
@@ -209,7 +209,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         	predicatesMap.put(PREDICATE_TAG, tagProperty);
         	for (int i=0; i< tags.length ; i++) 
             { 
-        		predicatesMap.put("tagid."+i+"_value", tags[i]);
+        		predicatesMap.put("tagid."+i+"_value", "@"+tags[i]);
             }        	
         }
         PredicateGroup predicates = PredicateConverter.createPredicates(predicatesMap);

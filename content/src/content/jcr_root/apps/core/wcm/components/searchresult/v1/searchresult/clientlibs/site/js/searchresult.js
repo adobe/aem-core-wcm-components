@@ -138,7 +138,7 @@
         }
 
         for (var i = 0; i < dataCount; i++) {
-            LIST_GROUP += "<li class='cmp-searchresult-item'><h3 class='cmp-searchresult-title'><a class='cmp-searchresult-link' href=" + checkNull(data[i].url) + ">" + checkNull(data[i].title) + "</a></h3><span class='cmp-searchresult-tags'>" + checkNull(data[i].tags) + "</span> <span class='cmp-searchresult-author'>" + checkNull(data[i].author) + "</span> | <span class='cmp-searchresult-date'>" + checkNull(data[i].formattedLastModifiedDate) + "</span> <p class='cmp-searchresult-description'>" + checkNull(data[i].description) + "</p></li>";
+            LIST_GROUP += "<li class='cmp-searchresult-item'><h3 class='cmp-searchresult-title'><a class='cmp-searchresult-link' target='_blank' href=" + checkNull(data[i].url) + ">" + checkNull(data[i].title) + "</a></h3><span class='cmp-searchresult-tags'>" + checkNull(data[i].tags) + "</span> <span class='cmp-searchresult-author'>" + checkNull(data[i].author) + "</span> | <span class='cmp-searchresult-date'>" + checkNull(data[i].formattedLastModifiedDate) + "</span> <p class='cmp-searchresult-description'>" + checkNull(data[i].description) + "</p></li>";
         }
         searchFieldListGroup.innerHTML = LIST_GROUP;
 
