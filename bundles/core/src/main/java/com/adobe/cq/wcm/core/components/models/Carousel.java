@@ -76,4 +76,14 @@ public interface Carousel extends Container {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Returns the value of label
+     *
+     * @return The value of label
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getLabel() {
+        throw new UnsupportedOperationException();
+    }
+
 }

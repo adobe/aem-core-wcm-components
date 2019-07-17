@@ -22,6 +22,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -38,6 +39,9 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
 
     @ScriptVariable
     protected ValueMap properties;
+
+    @ValueMapValue(optional = true)
+    protected String label;
 
     protected boolean autoplay;
     protected Long delay;
@@ -63,6 +67,11 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     @Override
     public boolean getAutopauseDisabled() {
         return autopauseDisabled;
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 
 }
