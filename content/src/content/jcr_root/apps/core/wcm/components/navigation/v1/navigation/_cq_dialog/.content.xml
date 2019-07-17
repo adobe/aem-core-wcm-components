@@ -51,11 +51,11 @@
                                             <label
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Value of aria-label for the navigation. Should be specified if more than one naviagtion is used on a page."
+                                                fieldDescription="Value of aria-label attribute for the navigation. Should be specified if more than one naviagtion is used on a page."
                                                 fieldLabel="Navigation Label"
                                                 name="./label"
                                                 value=""
-                                                emptyText="Enter value of aria-label for the navigation."
+                                                emptyText="Enter value of label."
                                                 required="{Boolean}false"/>
                                             <navigationRoot
                                                 jcr:primaryType="nt:unstructured"
