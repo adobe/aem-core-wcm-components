@@ -54,7 +54,10 @@
                 <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
             </button>
         </div>
-        <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
+        <ol role="tablist"
+            class="cmp-carousel__indicators"
+            data-cmp-hook-carousel="indicators"
+            aria-label="${carousel.label}">
             <li data-sly-repeat.item="${carousel.items}"
                 role="tab"
                 class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
