@@ -29,11 +29,14 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.day.cq.wcm.api.designer.Style;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
+@Model(adaptables = SlingHttpServletRequest.class,
+       adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class},
+       resourceType = {CarouselImpl.RESOURCE_TYPE_V1, CarouselImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class CarouselImpl extends PanelContainerImpl implements Carousel {
 
-    public static final String RESOURCE_TYPE = "core/wcm/components/carousel/v1/carousel";
+    public static final String RESOURCE_TYPE_V1 = "core/wcm/components/carousel/v1/carousel";
+    public static final String RESOURCE_TYPE_V2 = "core/wcm/components/carousel/v2/carousel";
     protected static final Long DEFAULT_DELAY = 5000L; // milliseconds
 
     @ScriptVariable
