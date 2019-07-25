@@ -110,11 +110,6 @@ public class PageListItemImpl implements ListItem {
     }
     
     @Override
-    public String getAuthor() {
-        return page.getLastModifiedBy();
-    }
-    
-    @Override
     public String getFormattedLastModifiedDate() {
         return getFormattedDate(page.getLastModified(), DATE_FORMAT);
     }

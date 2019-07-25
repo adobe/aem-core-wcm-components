@@ -15,13 +15,14 @@
  ******************************************************************************/
 (function() {
     "use strict";
-    var RESULTS_JSON = "searchresults.json";
+    var RESULTS_JSON = "advancesearchresults.json";
     var PARAM_RESULTS_OFFSET = "resultsOffset";
     var $getFacetFilterCheckbox = document.getElementsByName("facet");
     var currentPageUrl = window.location.href;
     var getPageURL = currentPageUrl.substring(0, currentPageUrl.lastIndexOf("."));
     var getQueryParam = window.location.search;
     var searchFieldListGroup = document.querySelector(".cmp-search-list__item-group");
+    var totalRecords = document.querySelector(".cmp-search__total-records");
 
     var searchField = document.querySelector(".search__field--view");
 
@@ -34,19 +35,14 @@
     var getCategory = new Array();
     var resultSize = 0;
     var LIST_GROUP;
+    var NUMBER_OF_RECORDS;
 
     var getSortAscDesVal = getSortingVal($getSortAscDesVal);
     var getSortDirVal = getSortingVal($getSortDirVal);
 
     // GET SORTING DROP-DOWN VALUES
     function getSortingVal(val) {
-        return Array.from(val.options)
-            .filter(function(option) {
-                return option.selected;
-            })
-            .map(function(option) {
-                return option.value;
-            });
+        return val[val.selectedIndex].value;
     }
 
     // Load More Button Click Function
@@ -121,26 +117,42 @@
     }
 
     // DISPLAY DATA ON PAGE LOAD
-    function displayDataOnPage(data) {
+    function displayDataOnPage(resultData) {
+
+        totalRecords.innerHTML = "";
+        NUMBER_OF_RECORDS = "";
+        var showCountVal = "";
 
         if (resultSize === parseInt(0)) {
             searchFieldListGroup.innerHTML = "";
             LIST_GROUP = "";
         }
+        var data = resultData.data;
         var dataCount = Object.keys(data).length;
         if (dataCount !== 0) {
             searchResultEndMessage.style.display = "none";
-            getLoadMoreBtn.style.display = "block";
-
+            if (resultData.hasMore === true) {
+                getLoadMoreBtn.style.display = "block";
+                showCountVal += resultData.totalRecords + "+";
+            } else {
+                getLoadMoreBtn.style.display = "none";
+                showCountVal += resultData.totalRecords;
+                if (resultData.isLastPage !== true) {
+                    getLoadMoreBtn.style.display = "block";
+                }
+            }
         } else {
             searchResultEndMessage.style.display = "block";
             getLoadMoreBtn.style.display = "none";
+            showCountVal += resultData.totalRecords;
         }
 
         for (var i = 0; i < dataCount; i++) {
-            LIST_GROUP += "<li class='cmp-searchresult-item'><h3 class='cmp-searchresult-title'><a class='cmp-searchresult-link' target='_blank' href=" + checkNull(data[i].url) + ">" + checkNull(data[i].title) + "</a></h3><span class='cmp-searchresult-tags'>" + checkNull(data[i].tags) + "</span> <span class='cmp-searchresult-author'>" + checkNull(data[i].author) + "</span> | <span class='cmp-searchresult-date'>" + checkNull(data[i].formattedLastModifiedDate) + "</span> <p class='cmp-searchresult-description'>" + checkNull(data[i].description) + "</p></li>";
+            LIST_GROUP += "<li class='cmp-searchresult-item'><h3 class='cmp-searchresult-title'><a class='cmp-searchresult-link' target='_blank' href=" + checkNull(data[i].url) + ">" + checkNull(data[i].title) + "</a></h3><span class='cmp-searchresult-tags'>" + checkNull(data[i].tags) + "<span class='cmp-searchresult-date'>" + checkNull(data[i].formattedLastModifiedDate) + "</span> <p class='cmp-searchresult-description'>" + checkNull(data[i].description) + "</p></li>";
         }
         searchFieldListGroup.innerHTML = LIST_GROUP;
+        NUMBER_OF_RECORDS += "TOTAL RECORDS : " + showCountVal;
+        totalRecords.innerHTML = NUMBER_OF_RECORDS;
 
     }
 

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe Systems Incorporated
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -43,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
-import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v2.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Search;
 import com.day.cq.search.PredicateConverter;
@@ -67,24 +68,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component(
         service = Servlet.class,
         property = {
-                "sling.servlet.selectors=" + SearchResultServlet.DEFAULT_SELECTOR,
+                "sling.servlet.selectors=" + AdvanceSearchResultServlet.DEFAULT_SELECTOR,
                 "sling.servlet.resourceTypes=cq/Page",
                 "sling.servlet.extensions=json",
                 "sling.servlet.methods=GET"
         }
 )
-public class SearchResultServlet extends SlingSafeMethodsServlet {
+public class AdvanceSearchResultServlet extends SlingSafeMethodsServlet {
 
-    protected static final String DEFAULT_SELECTOR = "searchresults";
+    protected static final String DEFAULT_SELECTOR = "advancesearchresults";
     protected static final String PARAM_FULLTEXT = "fulltext";
+    protected static final String PARAM_SORT = "sort";
+    protected static final String PARAM_ORDERBY = "orderby";
+    protected static final String PARAM_TAGS = "tags";
 
     private static final String PARAM_RESULTS_OFFSET = "resultsOffset";
     private static final String PREDICATE_FULLTEXT = "fulltext";
     private static final String PREDICATE_TYPE = "type";
     private static final String PREDICATE_PATH = "path";
     private static final String NN_STRUCTURE = "structure";
+    private static final String PREDICATE_ORDERBY = "orderby";
+    private static final String PREDICATE_SORT = "orderby.sort";
+    private static final String PREDICATE_TAG = "tagid.property";
+    private static final String PREDICATE_GUESS_TOTAL = "p.guessTotal";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdvanceSearchResultServlet.class);
 
     @Reference
     private QueryBuilder queryBuilder;
@@ -101,7 +109,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         Page currentPage = getCurrentPage(request);
         if (currentPage != null) {
             Resource searchResource = getSearchContentResource(request, currentPage);
-            List<ListItem> results = getResults(request, searchResource, currentPage);
+            Map<String, Object> results = getResults(request, searchResource, currentPage);            
             writeJson(results, response);
         }
     }
@@ -117,7 +125,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return currentPage;
     }
 
-    private void writeJson(List<ListItem> results, SlingHttpServletResponse response) {
+    private void writeJson(Map<String, Object> results, SlingHttpServletResponse response) {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         ObjectMapper mapper = new ObjectMapper();
@@ -155,10 +163,17 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     }
 
 
-    private List<ListItem> getResults(SlingHttpServletRequest request, Resource searchResource, Page currentPage) {
+    private Map<String, Object> getResults(SlingHttpServletRequest request, Resource searchResource, Page currentPage) {
         int searchTermMinimumLength = SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
         int resultsSize = SearchImpl.PROP_RESULTS_SIZE_DEFAULT;
+        Map<String, Object> resultsMap = new HashMap<>();
         String searchRootPagePath;
+        String sort = StringUtils.EMPTY;
+        String orderBy = StringUtils.EMPTY;
+        String[] tags = ArrayUtils.EMPTY_STRING_ARRAY;
+        String tagProperty = StringUtils.EMPTY;
+        boolean showResultCount = false;
+        String guessTotal = "false";
         if (searchResource != null) {
             ValueMap valueMap = searchResource.getValueMap();
             ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
@@ -166,8 +181,18 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                         .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
             resultsSize = valueMap.get(Search.PN_RESULTS_SIZE, contentPolicyMap.get(Search.PN_RESULTS_SIZE,
                         SearchImpl.PROP_RESULTS_SIZE_DEFAULT));
-            String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));
+            String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));            
             searchRootPagePath = getSearchRootPagePath(searchRoot, currentPage);
+            sort= request.getParameter(PARAM_SORT) != null ? request.getParameter(PARAM_SORT) : valueMap.get(Search.PN_DEFAULT_SORT_DIRECTION,String.class);
+            orderBy= request.getParameter(PARAM_ORDERBY) != null ? request.getParameter(PARAM_ORDERBY) : valueMap.get(Search.PN_DEFAULT_SORT,String.class);
+            tags= request.getParameter(PARAM_TAGS) != null ? request.getParameter(PARAM_TAGS).split(","): tags;
+            tagProperty = valueMap.get("tagProperty", String.class);
+            showResultCount = valueMap.get("showResultCount", false) ;
+            if (showResultCount) {
+                guessTotal = valueMap.get("guessTotal", String.class) != null
+                        ? valueMap.get("guessTotal", String.class)
+                        : "false";
+            }
         } else {
             String languageRoot = languageManager.getLanguageRoot(currentPage.getContentResource()).getPath();
             searchRootPagePath = getSearchRootPagePath(languageRoot, currentPage);
@@ -178,7 +203,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         List<ListItem> results = new ArrayList<>();
         String fulltext = request.getParameter(PARAM_FULLTEXT);
         if (fulltext == null || fulltext.length() < searchTermMinimumLength) {
-            return results;
+            return resultsMap;
         }
         long resultsOffset = 0;
         if (request.getParameter(PARAM_RESULTS_OFFSET) != null) {
@@ -188,6 +213,16 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         predicatesMap.put(PREDICATE_FULLTEXT, fulltext);
         predicatesMap.put(PREDICATE_PATH, searchRootPagePath);
         predicatesMap.put(PREDICATE_TYPE, NameConstants.NT_PAGE);
+        predicatesMap.put(PREDICATE_ORDERBY, orderBy);
+        predicatesMap.put(PREDICATE_SORT, sort);
+        predicatesMap.put(PREDICATE_GUESS_TOTAL, guessTotal);
+        if(tags.length>0){
+        	predicatesMap.put(PREDICATE_TAG, tagProperty);
+        	for (int i=0; i< tags.length ; i++) 
+            { 
+        		predicatesMap.put("tagid."+i+"_value", tags[i]);
+            }        	
+        }
         PredicateGroup predicates = PredicateConverter.createPredicates(predicatesMap);
         ResourceResolver resourceResolver = request.getResource().getResourceResolver();
         Query query = queryBuilder.createQuery(predicates, resourceResolver.adaptTo(Session.class));
@@ -198,7 +233,12 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             query.setStart(resultsOffset);
         }
         SearchResult searchResult = query.getResult();
-
+        
+        long totalRecords = searchResult.getTotalMatches();
+        boolean isLastPage = false;
+        if(searchResult.getStartIndex() + resultsSize >= totalRecords) {
+            isLastPage = true;
+        }
         List<Hit> hits = searchResult.getHits();
         if (hits != null) {
             for (Hit hit : hits) {
@@ -213,7 +253,11 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                 }
             }
         }
-        return results;
+        resultsMap.put("data", results);
+        resultsMap.put("totalRecords", totalRecords);
+        resultsMap.put("hasMore", searchResult.hasMore());
+        resultsMap.put("isLastPage", isLastPage);
+        return resultsMap;
     }
 
     private String getSearchRootPagePath(String searchRoot, Page currentPage) {

@@ -191,12 +191,6 @@ public class SearchResultServletTest {
         
         @Nullable
         @Override
-        public String getAuthor() {
-            return author;
-        }
-        
-        @Nullable
-        @Override
         public String getFormattedLastModifiedDate() {
             return formattedLastModifiedDate;
         }

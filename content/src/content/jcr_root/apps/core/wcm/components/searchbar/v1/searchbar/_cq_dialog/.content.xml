@@ -22,12 +22,6 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <placeholder
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                        fieldDescription="Placeholder to display in search field."
-                                        fieldLabel="Placeholder Text"
-                                        name="./placeholder"/>
                                     <hidebutton
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
@@ -35,12 +29,6 @@
                                         name="./hideButton"
                                         text="Hide the Search Button"
                                         value="true"/>
-                                    <buttonlabel
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                        fieldDescription="Text value to display on the button."
-                                        fieldLabel="Button Label"
-                                        name="./buttonLabel"/>
                                     <resultpage
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"

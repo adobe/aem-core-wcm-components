@@ -16,11 +16,11 @@
 <sly class="cmp-search-bar"
 	data-sly-use.searchbar="com.adobe.cq.wcm.core.components.models.Searchbar"
 	data-sly-use.template="core/wcm/components/commons/v1/templates.html" />
-<form action="${searchbar.resultpage}" class="cmp-search-bar__field" />
+<form action="${searchbar.resultpage}" class="cmp-search-bar__field" >
 	<input type="text" id="js-search-results" class="cmp-search-bar__field--text"
-		placeholder="${searchbar.placeHolder || 'Search' @ i18n}" name="fulltext">
+		placeholder="${'Search' @ i18n}" name="fulltext">
 	<button data-sly-test="${!searchbar.hideButton}" type="submit" id="js-search-btn" class="cmp-search-bar__field--btn">
 		<span class="cmp-search-bar__action-icon"></span>
-        <span class="cmp-search-bar__action-text">${searchbar.buttonLabel || 'Search' @ i18n}</span>
+        <span class="cmp-search-bar__action-text">${'Search' @ i18n}</span>
 	</button>
 </form>

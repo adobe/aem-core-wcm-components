@@ -32,6 +32,16 @@
 										fieldDescription="Display result count on page" text="Show Result Count"
 										checked="true" uncheckedValue="false" value="{Boolean}true"
 										name="./showResultCount" />
+									<guess-total
+                                       jcr:primaryType="nt:unstructured"
+                                       sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                       defaultValue="10"
+                                       fieldDescription="Describe Guess total; Set to 0 to set to true."
+                                       fieldLabel="Guess Total"
+                                       min="10"
+                                       name="./guessTotal"
+                                       text="Display help message as placeholder"
+                                       value="10"/>
 									<resultCountFormat jcr:primaryType="nt:unstructured"
 										sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
 										emptyText="Displaying {count} of {total} results" fieldLabel="Result Count Text Format"

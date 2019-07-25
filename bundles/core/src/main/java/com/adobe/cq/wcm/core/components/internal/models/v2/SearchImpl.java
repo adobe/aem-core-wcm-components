@@ -84,6 +84,7 @@ public class SearchImpl implements Search {
     private String relativePath;
     private int resultsSize;
     private int searchTermMinimumLength;
+    private int guessTotal;
     
     protected java.util.List<ListItem> tags;
     
@@ -125,6 +126,10 @@ public class SearchImpl implements Search {
 	@Named("descendingLabel")
 	@Default(values = "DESC")
 	private String descLabel;
+	
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Named("showResultCount")
+    private boolean showResultCount;
 
     @PostConstruct
     private void initModel() {
@@ -270,6 +275,17 @@ public class SearchImpl implements Search {
     @Override
     public boolean isFacetEnabled() {
         return enableFacet;
+    }
+    
+    @NotNull
+    @Override
+    public boolean getShowResultCount() {
+        return showResultCount;
+    }
+    @NotNull
+    @Override
+    public int getGuessTotal() {
+        return guessTotal;
     }
 
 }

@@ -26,6 +26,8 @@
     var sortTitleSelector = '.coral-Form-fieldwrapper:has(input[name="./sortTitle"])';
     var sortHiddenCheckboxSelector = 'coral-checkbox[name="./enableSort"]';
     var sortMultifieldSelector = '.coral-Form-fieldwrapper:has(coral-multifield[data-granite-coral-multifield-name="./sortItems"])';
+    var resultCountHiddenCheckboxSelector = 'coral-checkbox[name="./showResultCount"]';
+    var guessTotalSelector = '.coral-Form-fieldwrapper:has(input[name="./guessTotal"])';
 
     $(document).on("dialog-loaded", function(e) {
         var $dialog = e.dialog;
@@ -35,6 +37,7 @@
         if (dialogContent) {
             var $facetHiddenCheckbox = $dialogContent.find(facetHiddenCheckboxSelector);
             var $sortHiddenCheckbox = $dialogContent.find(sortHiddenCheckboxSelector);
+            var $resultCountHiddenCheckbox = $dialogContent.find(resultCountHiddenCheckboxSelector);
             if ($facetHiddenCheckbox.size() > 0) {
                 var facetTitleHidden = $facetHiddenCheckbox.adaptTo("foundation-field").getValue() !== "true";
                 toggle($dialogContent, facetTitleSelector, !facetTitleHidden);
@@ -58,6 +61,16 @@
                     toggle($dialogContent, sortTitleSelector, !sortMultifieldHidden);
                     toggle($dialogContent, sortMultifieldSelector, !sortMultifieldHidden);
                 });
+            }
+            if ($resultCountHiddenCheckbox.size() > 0) {
+                var guessTotalHidden = $resultCountHiddenCheckbox.adaptTo("foundation-field").getValue() !== "true";
+                toggle($dialogContent, guessTotalSelector, !guessTotalHidden);
+                $resultCountHiddenCheckbox.on("change", function(event) {
+                    var guessTotalHidden = $resultCountHiddenCheckbox.adaptTo("foundation-field").getValue() !== "true";
+                    toggle($dialogContent, guessTotalSelector, !guessTotalHidden);
+
+                });
+
             }
         }
     });

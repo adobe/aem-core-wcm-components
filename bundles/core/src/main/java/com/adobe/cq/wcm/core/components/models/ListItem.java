@@ -106,17 +106,6 @@ public interface ListItem {
     }
     
     /**
-     * Returns the author of this {@code ListItem}.
-     *
-     * @return the list item author or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
-     */
-    @Nullable
-    default String getAuthor() {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
      * Returns the formatted date of this {@code ListItem}.
      *
      * @return the list item formatted date or {@code null}

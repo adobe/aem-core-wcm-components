@@ -51,16 +51,11 @@ public class SearchBarImpl implements Searchbar {
 
     @SlingObject
     private Resource resource;
-
-    private String buttonLabel;
     private boolean hidebutton = false;
-    private String placeHolderText;
     private String resultPage;
 
     @PostConstruct
     private void initModel() {
-	placeHolderText = properties.get(PN_PLACE_HOLDER, String.class);
-	buttonLabel = properties.get(PN_BUTTON_LABEL, String.class);
 	resultPage = properties.get(PN_RESULT_PAGE, String.class);
 
 	if (StringUtils.isNotEmpty(resultPage)) {
@@ -73,18 +68,8 @@ public class SearchBarImpl implements Searchbar {
     }
 
     @Override
-    public String getPlaceHolder() {
-	return placeHolderText;
-    }
-
-    @Override
     public boolean getHideButton() {
 	return hidebutton;
-    }
-
-    @Override
-    public String getButtonLabel() {
-	return buttonLabel;
     }
 
     @Override

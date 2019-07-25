@@ -80,6 +80,10 @@ public interface Search extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     String PN_DEFAULT_SORT_DIRECTION = "defaultSortDirection";
+    
+    String PN_SHOW_RESULT_COUNT = "showResultCount";
+
+    String PN_GUESS_TOTAL = "guessTotal";
 
     /**
      * The maximal number of results fetched by a search request.
@@ -222,4 +226,12 @@ public interface Search extends ComponentExporter {
    default String getLoadMoreText() {
        throw new UnsupportedOperationException();
    }
+   
+    default boolean getShowResultCount() {
+        throw new UnsupportedOperationException();
+    }
+
+    default int getGuessTotal() {
+        throw new UnsupportedOperationException();
+    }
 }
