@@ -1,27 +1,27 @@
 {
-  "dateFormatString": "yyyy-MM-dd",
-  "items": [
-    {
-      "path": "/content/list/pages/page_1",
-      "url": "/context/content/list/pages/page_1.html",
-      "lastModified": 1474672365000,
-      "title": "Page 1",
-      "tags": "",
-      "formattedLastModifiedDate": "September 23, 2016",
-      "description": null
-    },
-    {
-      "path": "/content/list/pages/page_2",
-      "url": "/context/content/list/pages/page_2.html",
-      "lastModified": 1474499565000,
-      "title": "Page 2",
-      "tags": "",
-      "formattedLastModifiedDate": "September 21, 2016",
-      "description": null
-    }
-  ],
-  "showDescription": true,
-  "showModificationDate": true,
-  "linkItems": true,
-  ":type": "core/wcm/components/list/v2/list"
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
+        {
+            "url": "/context/content/list/pages/page_1.html",
+            "path": "/content/list/pages/page_1",
+            "title": "Page 1",
+            "description": null,
+            "lastModified": 1474672365000,            
+            "formattedLastModifiedDate":"September 24, 2016",
+            "tags":""
+        },
+        {
+            "url": "/context/content/list/pages/page_2.html",
+            "path": "/content/list/pages/page_2",
+            "title": "Page 2",
+            "description": null,
+            "lastModified": 1474499565000,
+            "formattedLastModifiedDate":"September 22, 2016",
+            "tags":""
+        }
+    ],
+    "showDescription": true,
+    "showModificationDate": true,
+    "linkItems": true,
+    ":type": "core/wcm/components/list/v2/list"
 }
