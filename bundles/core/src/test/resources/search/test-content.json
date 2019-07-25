@@ -71,7 +71,20 @@
                     "jcr:title"      : "Page",
                     "cq:template"    : "/conf/test/settings/wcm/templates/search-template",
                     "jcr:description": "Yoda is back!",
-                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200"
+                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
+                    "search2"         : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:createdBy"     : "admin",
+                        "placeholder"       : "Start Search",
+                        "sortTitle"       : "Start Search",
+                        "tagProperty"       : "Start Search",
+                        "facetTitle"       : "Start Search",
+                        "searchRoot"        : "/content/de/search",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
+                        "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
+                        "sling:resourceType": "core/wcm/components/search/v2/search"
+                    }
                 }
             }
         }

@@ -31,8 +31,7 @@
                   "level": 3,
                   "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
                   "formattedLastModifiedDate":"",
-                  "tags":"",
-                  "author":null
+                  "tags":""
                 },
                 {
                   "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
@@ -51,8 +50,7 @@
                       "level": 4,
                       "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
                       "formattedLastModifiedDate":"",
-                      "tags":"",
-                      "author":null
+                      "tags":""
                     },
                     {
                       "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
@@ -64,29 +62,25 @@
                       "level": 4,
                       "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
                       "formattedLastModifiedDate":"",
-                      "tags":"",
-                      "author":null
+                      "tags":""
                     }
                   ],
                   "level": 3,
                   "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
                   "formattedLastModifiedDate":"",
-                  "tags":"",
-                  "author":null
+                  "tags":""
                 }
               ],
               "level": 2,
               "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
               "formattedLastModifiedDate":"",
-              "tags":"",
-              "author":null
+              "tags":""
             }
           ],
           "level": 1,
           "url": "/core/navigation-1-vanity",
           "formattedLastModifiedDate":"",
-          "tags":"",
-          "author":null
+          "tags":""
         },
         {
           "path": "/content/navigation/navigation-2",
@@ -98,15 +92,13 @@
           "level": 1,
           "url": "/core/content/navigation/navigation-2.html",
           "formattedLastModifiedDate":"",
-          "tags":"",
-          "author":null
+          "tags":""
         }
       ],
       "level": 0,
       "url": "/core/content/navigation.html",
       "formattedLastModifiedDate":"",
-      "tags":"",
-      "author":null
+      "tags":""
     }
   ],
   ":type": "core/wcm/components/navigation/v1/navigation"

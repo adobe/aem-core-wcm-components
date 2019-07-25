@@ -1,0 +1,15 @@
+{
+	"modal": {
+		"jcr:primaryType": "sling:Folder",
+		"v1": {
+			"jcr:primaryType": "nt:unstructured",
+			"modal": {
+				"cq:icon": "mbox",
+				"jcr:description": "Searchbar Component",
+				"jcr:primaryType": "cq:Component",
+				"jcr:title": "Searchbar (v1)",
+				"componentGroup": ".core-wcm"
+			}
+		}
+	}
+}

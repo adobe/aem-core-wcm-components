@@ -50,12 +50,14 @@
                 "jcr:content"    : {
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title"      : "Page",
+                    "cq:tags":["we-retail:activity/biking","we-retail:activity/running"],
                     "jcr:description": "Yoda is back!",
                     "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
                     "searchresult"         : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "jcr:createdBy"     : "admin",
                         "placeholder"       : "Start searchresult",
+                        "name":"s",
                         "searchresultRoot"        : "/content/de/searchresult",
                         "jcr:lastModifiedBy": "admin",
                         "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
@@ -69,11 +71,50 @@
                 "jcr:content"    : {
                     "jcr:primaryType": "cq:PageContent",
                     "jcr:title"      : "Page",
-                    "cq:template"    : "/conf/test/settings/wcm/templates/searchresult-template",
+                    "cq:template"    : "/conf/test/settings/wcm/templates/search-template",
                     "jcr:description": "Yoda is back!",
-                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200"
+                    "cq:lastModified": "Thu Aug 03 2017 22:42:00 GMT+0200",
+                    "searchfine"         : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:createdBy"     : "admin",
+                        "placeholder"       : "Start Search",
+                        "sortOptions"       : [],
+                        "sortTitle"         : "Start Search",
+                        "tagProperty"       : "Start Search",
+                        "cq:tags"              : ["searchresult:test_category/test_tag"],
+                        "tagsSearchRoot"    : "/content/searchresult/pages/page_1",
+                        "guessTotal"        : 10,
+                        "showResultCount"   : true,
+                        "facetTitle"        : "Start Search",
+                        "searchRoot"        : "/content/de/search",
+                        "jcr:lastModifiedBy": "admin",
+                        "jcr:created"       : "Thu Aug 03 2017 20:50:40 GMT+0200",
+                        "jcr:lastModified"  : "Thu Aug 03 2017 22:42:00 GMT+0200",
+                        "sling:resourceType": "core/wcm/components/searchresult/v1/searchresult"
+                    }
+                }
+            },
+            "pages"          : {
+        "page_1": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "Page 1",
+                "cq:lastModified": "2016-09-23T16:12:45.000-07:00"
+            },
+            "page_1_3"       : {
+                "jcr:primaryType": "cq:Page",
+                "jcr:content"    : {
+                    "jcr:primaryType": "cq:PageContent",
+                    "jcr:title"      : "Page 1.3",
+                    "cq:tags"        : [
+                        "list:test_category/test_tag"
+                    ]
                 }
             }
         }
     }
+        }
+    }
+    
 }

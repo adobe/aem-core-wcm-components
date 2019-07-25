@@ -1,0 +1,9 @@
+{
+    "jcr:primaryType": "cq:Tag",
+    "test_category": {
+        "jcr:primaryType": "cq:Tag",
+        "test_tag": {
+            "jcr:primaryType": "cq:Tag"
+        }
+    }
+}

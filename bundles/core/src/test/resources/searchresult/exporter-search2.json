@@ -1,6 +1,23 @@
 {
+  "sortOptions": [],
+  "relativePath": "/jcr:content/searchfine",
   "resultsSize": 10,
   "searchTermMinimumLength": 3,
-  "results":[],
-  ":type": "core/wcm/components/search/v1/search"
+  "guessTotal": 0,
+  "tags": [
+    {
+      "name": "searchresult:test_category/test_tag",
+      "title": "test_tag"
+    }
+  ],
+  "loadMoreText": "Load More",
+  "facetTitle": "Start Search",
+  "sortTitle": "Start Search",
+  "tagProperty": "Start Search",
+  "noResultText": "No more results",
+  "ascLabel": "ASC",
+  "descLabel": "DESC",
+  "showResultCount": true,
+  "facetEnabled": false,
+  "sortEnabled": false
 }

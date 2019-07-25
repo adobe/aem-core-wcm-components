@@ -13,7 +13,6 @@
       "country": "US",
       "language": "en-US",
       "tags":"",
-      "author":null,
       "formattedLastModifiedDate":""
     },
     {
@@ -29,7 +28,6 @@
       "country": "CA",
       "language": "en-CA",
       "tags":"",
-      "author":null,
       "formattedLastModifiedDate":""
     },
     {
@@ -45,7 +43,6 @@
       "country": "CH",
       "language": "de-CH",
       "tags":"",
-      "author":null,
       "formattedLastModifiedDate":""
     },
     {
@@ -61,7 +58,6 @@
       "country": "DE",
       "language": "de-DE",
       "tags":"",
-      "author":null,
       "formattedLastModifiedDate":""
     }
   ],

@@ -103,6 +103,9 @@ public class ImageListImplTest {
             assertEquals("The image item's path is not what was expected: " + item.getImagePath(), expectedimageList[index][0], item.getImagePath());
             assertEquals("The image item's url is not what was expected: " + item.getLinkURL(), expectedimageList[index][1], item.getLinkURL());
             assertEquals("The image item's text is not what was expected: " + item.getLinkText(), expectedimageList[index][2], item.getLinkText());
+            item.setImagePath(expectedimageList[index][0].toString());
+            item.setLinkURL(expectedimageList[index][1].toString());
+            item.setLinkText(expectedimageList[index][2].toString());
     }
     
     private void verifyNullImageListItems(ImageListItem item) {
