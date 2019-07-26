@@ -47,77 +47,74 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Search.class, ComponentExporter.class},
-       resourceType = {SearchImpl.RESOURCE_TYPE})
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = { Search.class,
+		ComponentExporter.class }, resourceType = { SearchImpl.RESOURCE_TYPE })
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class SearchImpl implements Search {
 
 	protected static final String RESOURCE_TYPE = "core/wcm/components/searchresult/v1/searchresult";
-    
 
-    public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
-    public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
-    public static final String PROP_SEARCH_ROOT_DEFAULT = "/content";
-    public static final String PN_TEXT = "text";
-    public static final String PN_VALUE = "value";
-    public static final String NN_ITEMS = "sortItems";
-    public static final String PN_LOAD_MORE_TEXT = "loadMoreText";
-    public static final String LOAD_MORE_TEXT_DEFAULT_VALUE = "Load More";
-    public static final String PN_NO_RESULT_TEXT = "noResultText";
-    public static final String NO_RESULT_TEXT_DEFAULT_VALUE = "No more results";
-    
-    @Self
-    private SlingHttpServletRequest request;
+	public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
+	public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
+	public static final String PROP_SEARCH_ROOT_DEFAULT = "/content";
+	public static final String PN_TEXT = "text";
+	public static final String PN_VALUE = "value";
+	public static final String NN_ITEMS = "sortItems";
+	public static final String PN_LOAD_MORE_TEXT = "loadMoreText";
+	public static final String LOAD_MORE_TEXT_DEFAULT_VALUE = "Load More";
+	public static final String PN_NO_RESULT_TEXT = "noResultText";
+	public static final String NO_RESULT_TEXT_DEFAULT_VALUE = "No more results";
 
-    @ScriptVariable
-    private Page currentPage;
+	@Self
+	private SlingHttpServletRequest request;
 
-    @ScriptVariable
-    private ValueMap properties;
-    protected java.util.List<OptionItem> sortOptions;
+	@ScriptVariable
+	private Page currentPage;
 
-    @ScriptVariable
-    private Style currentStyle;
+	@ScriptVariable
+	private ValueMap properties;
+	protected java.util.List<OptionItem> sortOptions;
 
-    private String relativePath;
-    private int resultsSize;
-    private int searchTermMinimumLength;
-    private int guessTotal;
-    
-    protected java.util.List<ListItem> tags;
-    
+	@ScriptVariable
+	private Style currentStyle;
+
+	private String relativePath;
+	private int resultsSize;
+	private int searchTermMinimumLength;
+	private int guessTotal;
+
+	protected java.util.List<ListItem> tags;
+
 	@SlingObject
 	private Resource resource;
-	
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Named("loadMoreText")
-    private String loadMoreText;
-    
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Named("facetTitle")
-    private String facetTitle;
-    
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Named("sortTitle")
-    private String sortTitle;
-    
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Named("enableSort")
-    private boolean enableSort;
-    
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Named("enableFacet")
-    private boolean enableFacet;
-    
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String tagProperty;
-    
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String noResultText;
-    
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	@Named("loadMoreText")
+	private String loadMoreText;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	@Named("facetTitle")
+	private String facetTitle;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	@Named("sortTitle")
+	private String sortTitle;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	@Named("enableSort")
+	private boolean enableSort;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	@Named("enableFacet")
+	private boolean enableFacet;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	private String tagProperty;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	private String noResultText;
+
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
 	@Named("ascendingLabel")
 	@Default(values = "ASC")
 	private String ascLabel;
@@ -126,72 +123,76 @@ public class SearchImpl implements Search {
 	@Named("descendingLabel")
 	@Default(values = "DESC")
 	private String descLabel;
-	
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Named("showResultCount")
-    private boolean showResultCount;
 
-    @PostConstruct
-    private void initModel() {
-        resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
-        searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH, PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
-        loadMoreText = properties.get(PN_LOAD_MORE_TEXT, LOAD_MORE_TEXT_DEFAULT_VALUE);
-        noResultText = properties.get(PN_NO_RESULT_TEXT, NO_RESULT_TEXT_DEFAULT_VALUE);
-        PageManager pageManager = currentPage.getPageManager();
-        Resource currentResource = request.getResource();
-        if (pageManager != null) {
-            Page containingPage = pageManager.getContainingPage(currentResource);
-            if(containingPage != null) {
-                relativePath = StringUtils.substringAfter(currentResource.getPath(), containingPage.getPath());
-            }
-        }
-    }
-    
-    public void populateTags() {
-        final TagManager tagManager = resource.getResourceResolver().adaptTo(TagManager.class);
-        tags = new ArrayList<>();
-        if(tagManager!=null) {
-            final Tag[] tagList = tagManager.getTags(resource);
-            if (tagList != null) {
-                for (final Tag tag : tagList) {
-                    tags.add(new ListItem() {
-                        private String tagName = tag.getTagID();
-                        private String tagTitle = tag.getTitle();
-                        @Nullable
-                        @Override
-                        public String getName() {
-                            return tagName;
-                        }
-                        @Nullable
-                        @Override
-                        public String getTitle() {
-                            return tagTitle;
-                        }
-                    });
-                }
-            }
-        }
-    }
-    
-    public void populateItems() {
+	@ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+	@Named("showResultCount")
+	private boolean showResultCount;
+
+	@PostConstruct
+	private void initModel() {
+		resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
+		searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH,
+				PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
+		loadMoreText = properties.get(PN_LOAD_MORE_TEXT, LOAD_MORE_TEXT_DEFAULT_VALUE);
+		noResultText = properties.get(PN_NO_RESULT_TEXT, NO_RESULT_TEXT_DEFAULT_VALUE);
+		PageManager pageManager = currentPage.getPageManager();
+		Resource currentResource = request.getResource();
+		if (pageManager != null) {
+			Page containingPage = pageManager.getContainingPage(currentResource);
+			if (containingPage != null) {
+				relativePath = StringUtils.substringAfter(currentResource.getPath(), containingPage.getPath());
+			}
+		}
+	}
+
+	public void populateTags() {
+		final TagManager tagManager = resource.getResourceResolver().adaptTo(TagManager.class);
+		tags = new ArrayList<>();
+		if (tagManager != null) {
+			final Tag[] tagList = tagManager.getTags(resource);
+			if (tagList != null) {
+				for (final Tag tag : tagList) {
+					tags.add(new ListItem() {
+						private String tagName = tag.getTagID();
+						private String tagTitle = tag.getTitle();
+
+						@Nullable
+						@Override
+						public String getName() {
+							return tagName;
+						}
+
+						@Nullable
+						@Override
+						public String getTitle() {
+							return tagTitle;
+						}
+					});
+				}
+			}
+		}
+	}
+
+	public void populateItems() {
 		sortOptions = new ArrayList<>();
 		Resource childItem = resource.getChild(NN_ITEMS);
-	       if (childItem != null) {
-	         childItem.getChildren().forEach(this::addItems);
-	       }
+		if (childItem != null) {
+			childItem.getChildren().forEach(this::addItems);
+		}
 	}
 
 	private void addItems(Resource res) {
 		ValueMap childProperties = res.getValueMap();
 		sortOptions.add(new OptionItem() {
-			private String text = childProperties.get(PN_TEXT,String.class);
-			private String value = childProperties.get(PN_VALUE,String.class);
-	
+			private String text = childProperties.get(PN_TEXT, String.class);
+			private String value = childProperties.get(PN_VALUE, String.class);
+
 			@Nullable
 			@Override
 			public String getText() {
 				return text;
 			}
+
 			@Nullable
 			@Override
 			public String getValue() {
@@ -217,75 +218,78 @@ public class SearchImpl implements Search {
 	public String getDescLabel() {
 		return descLabel;
 	}
-    @Override
-    public List<ListItem> getTags() {
-        if (tags == null) {
-            populateTags();
-        }
-        return tags;
-    }
-    @Override
-    public String getFacetTitle() {
-        return facetTitle;
-    }
-    
-    @Override
-    public String getSortTitle() {
-        return sortTitle;
-    }
-    
-    @Override
-    public String getTagProperty() {
-        return tagProperty;
-    }
 
-    @Override
-    public int getResultsSize() {
-        return resultsSize;
-    }
-    
-    @Override
-    public String getLoadMoreText() {
-        return loadMoreText;
-    }
+	@Override
+	public List<ListItem> getTags() {
+		if (tags == null) {
+			populateTags();
+		}
+		return tags;
+	}
 
-    @Override
-    public int getSearchTermMinimumLength() {
-        return searchTermMinimumLength;
-    }
-    
-    @Override
-    public String getNoResultText() {
-        return noResultText;
-    }
+	@Override
+	public String getFacetTitle() {
+		return facetTitle;
+	}
 
-    @NotNull
-    @Override
-    public String getRelativePath() {
-        return relativePath;
-    }
+	@Override
+	public String getSortTitle() {
+		return sortTitle;
+	}
 
-    @NotNull
-    @Override
-    public boolean isSortEnabled() {
-        return enableSort;
-    }
-    
-    @NotNull
-    @Override
-    public boolean isFacetEnabled() {
-        return enableFacet;
-    }
-    
-    @NotNull
-    @Override
-    public boolean getShowResultCount() {
-        return showResultCount;
-    }
-    @NotNull
-    @Override
-    public int getGuessTotal() {
-        return guessTotal;
-    }
+	@Override
+	public String getTagProperty() {
+		return tagProperty;
+	}
+
+	@Override
+	public int getResultsSize() {
+		return resultsSize;
+	}
+
+	@Override
+	public String getLoadMoreText() {
+		return loadMoreText;
+	}
+
+	@Override
+	public int getSearchTermMinimumLength() {
+		return searchTermMinimumLength;
+	}
+
+	@Override
+	public String getNoResultText() {
+		return noResultText;
+	}
+
+	@NotNull
+	@Override
+	public String getRelativePath() {
+		return relativePath;
+	}
+
+	@NotNull
+	@Override
+	public boolean isSortEnabled() {
+		return enableSort;
+	}
+
+	@NotNull
+	@Override
+	public boolean isFacetEnabled() {
+		return enableFacet;
+	}
+
+	@NotNull
+	@Override
+	public boolean getShowResultCount() {
+		return showResultCount;
+	}
+
+	@NotNull
+	@Override
+	public int getGuessTotal() {
+		return guessTotal;
+	}
 
 }

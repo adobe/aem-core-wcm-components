@@ -81,8 +81,18 @@ public interface Search extends ComponentExporter {
      */
     String PN_DEFAULT_SORT_DIRECTION = "defaultSortDirection";
     
+    /**
+     * Name of the configuration policy property that defines whether to enable guessTotal or not
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
     String PN_SHOW_RESULT_COUNT = "showResultCount";
-
+    
+    /**
+     * Name of the configuration policy property that defines guessTotal.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
     String PN_GUESS_TOTAL = "guessTotal";
 
     /**
@@ -223,15 +233,25 @@ public interface Search extends ComponentExporter {
     * @since com.adobe.cq.wcm.core.components.models 12.8.0
     */
    
-   default String getLoadMoreText() {
-       throw new UnsupportedOperationException();
-   }
-   
-    default boolean getShowResultCount() {
-        throw new UnsupportedOperationException();
-    }
+	default String getLoadMoreText() {
+		throw new UnsupportedOperationException();
+	}
 
-    default int getGuessTotal() {
-        throw new UnsupportedOperationException();
+	/**
+	 * @see ComponentExporter#getShowResultCount()
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
+
+	default boolean getShowResultCount() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see ComponentExporter#getGuessTotal()
+	 * @since com.adobe.cq.wcm.core.components.models 12.8.0
+	 */
+
+	default int getGuessTotal() {
+		throw new UnsupportedOperationException();
     }
 }

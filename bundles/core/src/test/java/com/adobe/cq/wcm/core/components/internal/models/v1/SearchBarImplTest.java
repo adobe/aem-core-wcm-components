@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
@@ -53,9 +52,9 @@ public class SearchBarImplTest {
 	@Test
 	public void testSearchbarProperties() {
 		Searchbar searchbar = getSearchbarUnderTest(SEARCHBAR_1);
-		assertEquals("The modal showModalByDefault value is what was expected", new Boolean(false),
+		assertEquals("The searchbar hideButton value is what was expected", new Boolean(false),
 				searchbar.getHideButton());
-		assertEquals("The modal title is what was expected", new String("/content/dam/modalcontentfragment"),
+		assertEquals("The searchbar resultpage value is what was expected", new String("/content/dam/modalcontentfragment"),
 				searchbar.getResultpage());
 		Utils.testJSONExport(searchbar, Utils.getTestExporterJSONPath(TEST_BASE, "searchbar1"));
 

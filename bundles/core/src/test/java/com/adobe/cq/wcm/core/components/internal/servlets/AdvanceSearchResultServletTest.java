@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -161,7 +160,6 @@ public class AdvanceSearchResultServletTest {
             assertEquals(expectedMap.get("path"), listItem.getPath());
             assertEquals("", listItem.getTags());
             assertEquals(expectedMap.get("description"), listItem.getDescription());
-            //assertEquals("page-template", listItem.getName());
 
         }
     }

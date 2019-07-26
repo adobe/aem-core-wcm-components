@@ -1,16 +1,6 @@
 {
-  "sortOptions": [],
-  "relativePath": "/jcr:content/search2",
   "resultsSize": 10,
   "searchTermMinimumLength": 3,
-  "tags": [],
-  "loadMoreText": "Load More",
-  "facetTitle": "Start Search",
-  "sortTitle": "Start Search",
-  "tagProperty": "Start Search",
-  "noResultText": "No more results",
-  "ascLabel": "ASC",
-  "descLabel": "DESC",
-  "facetEnabled": false,
-  "sortEnabled": false
+  "results":[],
+  ":type": "core/wcm/components/search/v1/search"
 }

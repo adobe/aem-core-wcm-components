@@ -33,54 +33,48 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-
 @RunWith(MockitoJUnitRunner.class)
 public class SearchImplTest {
 
-    private static final String TEST_BASE = "/searchresult";
+	private static final String TEST_BASE = "/searchresult";
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
+	@Rule
+	public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
 
-    private static final String TEST_ROOT = "/content/en/searchresult/page-template";
+	private static final String TEST_ROOT = "/content/en/searchresult/page-template";
 
-    private SlingBindings slingBindings;
+	private SlingBindings slingBindings;
 
-    @Before
-    public void setUp() {
-        slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.CURRENT_STYLE, slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class
-                .getName()));
-        slingBindings.put(WCMBindings.CURRENT_PAGE, context.currentPage("/content/en/searchresult/page-template"));
-        context.load().json("/searchresult/test-etc.json", "/etc/tags/searchresult");
-    }
+	@Before
+	public void setUp() {
+		slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
+		slingBindings.put(WCMBindings.CURRENT_STYLE,
+				slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName()));
+		slingBindings.put(WCMBindings.CURRENT_PAGE, context.currentPage("/content/en/searchresult/page-template"));
+		context.load().json("/searchresult/test-etc.json", "/etc/tags/searchresult");
+	}
 
-    @Test
-    public void testSearchProperties() throws Exception {
-        Resource resource = context.currentResource(TEST_ROOT + "/jcr:content/searchfine");
-        slingBindings.put(WCMBindings.CURRENT_STYLE, new MockStyle(resource));
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        Search search = context.request().adaptTo(Search.class);
-        assertEquals(10, search.getResultsSize());
-        assertEquals(3, search.getSearchTermMinimumLength());
-        assertEquals("/jcr:content/searchfine", search.getRelativePath());
-        assertEquals("ASC", search.getAscLabel());
-        assertEquals("DESC", search.getDescLabel());
-        assertEquals(false, search.isFacetEnabled());
-        assertEquals(false, search.isSortEnabled());
-        assertEquals("Load More", search.getLoadMoreText());
-        assertEquals("No more results", search.getNoResultText());
-        assertEquals("Start Search", search.getSortTitle());
-        assertEquals("Start Search", search.getTagProperty());
-        //assertEquals(1, search.getTags().size());
-        assertEquals(0, search.getGuessTotal());
-        assertEquals(true, search.getShowResultCount());
-        Utils.testJSONExport(search, Utils.getTestExporterJSONPath(TEST_BASE, "search2"));
-        assertEquals("Start Search", search.getFacetTitle());
-        //assertEquals("", search.getTags());
-        //assertEquals(new ArrayList<String>(), search.getSortOptions());
-        //Utils.testJSONExport(search, Utils.getTestExporterJSONPath(TEST_BASE, "search2"));
-    }
+	@Test
+	public void testSearchProperties() throws Exception {
+		Resource resource = context.currentResource(TEST_ROOT + "/jcr:content/searchfine");
+		slingBindings.put(WCMBindings.CURRENT_STYLE, new MockStyle(resource));
+		slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
+		Search search = context.request().adaptTo(Search.class);
+		assertEquals(10, search.getResultsSize());
+		assertEquals(3, search.getSearchTermMinimumLength());
+		assertEquals("/jcr:content/searchfine", search.getRelativePath());
+		assertEquals("ASC", search.getAscLabel());
+		assertEquals("DESC", search.getDescLabel());
+		assertEquals(false, search.isFacetEnabled());
+		assertEquals(false, search.isSortEnabled());
+		assertEquals("Load More", search.getLoadMoreText());
+		assertEquals("No more results", search.getNoResultText());
+		assertEquals("Start Search", search.getSortTitle());
+		assertEquals("Start Search", search.getTagProperty());
+		assertEquals(0, search.getGuessTotal());
+		assertEquals(true, search.getShowResultCount());
+		assertEquals("Start Search", search.getFacetTitle());
+		Utils.testJSONExport(search, Utils.getTestExporterJSONPath(TEST_BASE, "search2"));
+	}
 
 }
