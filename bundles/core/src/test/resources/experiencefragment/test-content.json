@@ -1,6 +1,6 @@
 {
 	"mysite": {
-		"jcr:primaryType": "cq:Page",
+        "jcr:primaryType": "sling:Folder",
 		"jcr:content": {
 			"jcr:primaryType": "cq:PageContent",
 			"jcr:title": "Language Structure",
@@ -262,7 +262,7 @@
 	"experience-fragments": {
 		"jcr:primaryType": "sling:Folder",
 		"mysite": {
-            "jcr:primaryType": "cq:Page",
+            "jcr:primaryType": "sling:Folder",
             "page": {
                 "jcr:primaryType": "cq:Page"
             },

@@ -20,6 +20,8 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import com.day.text.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -72,12 +74,14 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     private int localizationDepth;
     private String localizationRoot;
+    private ResourceResolver resolver;
     private PageManager pageManager;
 
     @PostConstruct
     private void initModel() {
         localizationRoot = properties.get(ExperienceFragment.PN_LOCALIZATION_ROOT, currentStyle.get(ExperienceFragment.PN_LOCALIZATION_ROOT, String.class));
         localizationDepth = properties.get(ExperienceFragment.PN_LOCALIZATION_DEPTH, currentStyle.get(ExperienceFragment.PN_LOCALIZATION_DEPTH, 1));
+        resolver = request.getResourceResolver();
         pageManager = currentPage.getPageManager();
     }
 
@@ -116,12 +120,12 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @return
      */
     private Page getXfLocalizedPage(@NotNull Page xfPage, @NotNull Page sitePage) {
-        Page siteRoot = pageManager.getPage(localizationRoot);
+        Resource siteRoot = resolver.getResource(localizationRoot);
         if (siteRoot == null) {
             return null;
         }
         String xfLocalizationRoot = StringUtils.replace(localizationRoot, CONTENT_ROOT, EXPERIENCE_FRAGMENTS_ROOT, 1);
-        Page xfRoot = pageManager.getPage(xfLocalizationRoot);
+        Resource xfRoot = resolver.getResource(xfLocalizationRoot);
         if (xfRoot == null) {
             return null;
         }
@@ -150,13 +154,14 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * 1. No localization                        | /content/my-site/my-page          | empty string      | 0                 | empty string
      * 2. Language localization                  | /content/my-site/en/my-page       | /content/my-site  | 1                 | en
      * 3. Country-language localization          | /content/my-site/us/en/my-page    | /content/my-site  | 2                 | us/en
+     * 4. Country-language localization (variant)| /content/us/my-site/en/my-page    | /content          | 3                 | us/my-site/en
      *
      * @param page the page that contains the localization string
-     * @param root the localization root page
+     * @param root the localization root resource
      * @param depth the localization depth
      * @return the localization string
      */
-    private String getLocalizationString(@NotNull Page page, @NotNull Page root, int depth) {
+    private String getLocalizationString(@NotNull Page page, @NotNull Resource root, int depth) {
         if (depth < 1) {
             return null;
         }
