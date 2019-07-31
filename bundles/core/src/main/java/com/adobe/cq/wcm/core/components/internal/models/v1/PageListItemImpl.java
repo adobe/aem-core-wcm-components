@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -137,6 +138,7 @@ public class PageListItemImpl implements ListItem {
           return StringUtils.EMPTY;
         }
         SimpleDateFormat formatter = new SimpleDateFormat(format);
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         return formatter.format(date.getTime());
       }
 
