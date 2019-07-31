@@ -1,5 +1,5 @@
 {
-  "sortOptions": [],
+  "sortOptions": [{"text":"Ttle","value":"@jcr:content/jcr:title"}],
   "relativePath": "/jcr:content/searchfine",
   "resultsSize": 10,
   "searchTermMinimumLength": 3,

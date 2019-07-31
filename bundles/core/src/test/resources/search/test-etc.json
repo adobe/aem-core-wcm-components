@@ -1,0 +1,12 @@
+{
+    "jcr:primaryType": "cq:Tag",
+    "activity": {
+        "jcr:primaryType": "cq:Tag",
+        "biking": {
+            "jcr:primaryType": "cq:Tag"
+        },
+        "running": {
+            "jcr:primaryType": "cq:Tag"
+        }
+    }
+}

@@ -86,6 +86,7 @@ public class AdvanceSearchResultServletTest {
     @Before
     public void setUp() throws Exception {
         context.load().json(TEST_BASE + "/test-conf.json", "/conf/test/settings/wcm/templates");
+        context.load().json(TEST_BASE + "/test-etc.json", "/etc/tags/we-retail");
         underTest = new AdvanceSearchResultServlet();
         when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
         when(mockQuery.getResult()).thenReturn(mockSearchResult);
@@ -105,16 +106,29 @@ public class AdvanceSearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-                ImmutableMap.of(
-                        "url", "null/content/en/search/page.html",
-                        "title", "Page",
-                        "description","Yoda is back!",
-                        "formattedLastModifiedDate","August 04, 2017",
-                        "path","/content/en/search/page"
-                )
+                ImmutableMap.<String, String>builder()
+                .put("url", "null/content/en/search/page.html") 
+                .put("title", "Page") 
+                .put("description","Yoda is back!") 
+                .put("formattedLastModifiedDate","August 04, 2017") 
+                .put("path","/content/en/search/page") 
+                .put("tags","[running, biking]") 
+                .build()
         );
 
         validateResponse(context.response(), expected);
+    }
+    
+    @Test
+    public void testWhenFullTextLengthIsLessThanThree() throws Exception {
+        Resource resource = context.currentResource(TEST_ROOT_EN);
+        MockSlingHttpServletRequest request = context.request();
+        request.setQueryString(AdvanceSearchResultServlet.PARAM_FULLTEXT + "=x");
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setSuffix("jcr:content/search");
+        underTest.doGet(request, context.response());
+
+        assertEquals(context.response().getOutputAsString(), new JSONObject().toString());
     }
 
     @Test
@@ -127,13 +141,14 @@ public class AdvanceSearchResultServletTest {
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
-                ImmutableMap.of(
-                        "url", "null/content/en/search/page-template.html",
-                        "title", "Page",
-                        "description","Yoda is back!",
-                        "formattedLastModifiedDate","August 04, 2017",
-                        "path","/content/en/search/page-template"
-                )
+                ImmutableMap.<String, String>builder()
+                .put("url", "null/content/en/search/page-template.html") 
+                .put("title", "Page") 
+                .put("description","Yoda is back!") 
+                .put("formattedLastModifiedDate","August 04, 2017") 
+                .put("path","/content/en/search/page-template") 
+                .put("tags","") 
+                .build()
         );
 
         validateResponse(context.response(), expected);
@@ -158,7 +173,7 @@ public class AdvanceSearchResultServletTest {
             assertEquals(expectedMap.get("description"), listItem.getDescription());
             assertEquals(expectedMap.get("formattedLastModifiedDate"), listItem.getFormattedLastModifiedDate());
             assertEquals(expectedMap.get("path"), listItem.getPath());
-            assertEquals("", listItem.getTags());
+            assertEquals(expectedMap.get("tags"), listItem.getTags());
             assertEquals(expectedMap.get("description"), listItem.getDescription());
 
         }

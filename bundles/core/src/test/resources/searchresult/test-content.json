@@ -79,6 +79,14 @@
                         "jcr:createdBy"     : "admin",
                         "placeholder"       : "Start Search",
                         "sortOptions"       : [],
+                        "sortItems"			: {
+                        	"jcr:primaryType"   : "nt:unstructured",
+                        	"item0"			: {
+                        		"jcr:primaryType"   : "nt:unstructured",
+                        		"text"				: "Ttle",
+                        		"value"				: "@jcr:content/jcr:title"
+                        	}
+                        },
                         "sortTitle"         : "Start Search",
                         "tagProperty"       : "Start Search",
                         "cq:tags"              : ["searchresult:test_category/test_tag"],
