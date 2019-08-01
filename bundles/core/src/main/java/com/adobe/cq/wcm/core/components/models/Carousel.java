@@ -77,12 +77,22 @@ public interface Carousel extends Container {
     }
 
     /**
-     * Returns the value of label
+     * Returns the value of label for Carousel component
      *
-     * @return The value of label
+     * @return The value of label for Carousel component
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
-    default String getLabel() {
+    default String getCarouselLabel() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the value of label for indicators wrapper
+     *
+     * @return The value of label for indicators wrapper
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getIndicatorsLabel() {
         throw new UnsupportedOperationException();
     }
 

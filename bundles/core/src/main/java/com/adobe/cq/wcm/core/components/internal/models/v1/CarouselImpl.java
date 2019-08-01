@@ -41,7 +41,10 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     protected ValueMap properties;
 
     @ValueMapValue(optional = true)
-    protected String label;
+    protected String carouselLabel;
+
+    @ValueMapValue(optional = true)
+    protected String indicatorsLabel;
 
     protected boolean autoplay;
     protected Long delay;
@@ -70,8 +73,13 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     }
 
     @Override
-    public String getLabel() {
-        return label;
+    public String getCarouselLabel() {
+        return carouselLabel;
+    }
+
+    @Override
+    public String getIndicatorsLabel() {
+        return indicatorsLabel;
     }
 
 }
