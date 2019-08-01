@@ -19,41 +19,45 @@
 @color2: #f9f9f9; // Appears 2 times
 
 .cmp-search-bar__field {
-	margin-left: 145px;
-	position: relative;
-	&::after {
-		content: "";
-		clear: both;
-		display: table;
-	}
+    margin-left: 145px;
+    position: relative;
+
+    &:after {
+        content: "";
+        clear: both;
+        display: table;
+    }
 }
+
 .cmp-search-bar__field--btn {
-	float: left;
-	width: 10%;
-	padding: 10px;
-	background: #2196F3;
-	color: white;
-	border: 1px solid grey;
-	border-left: none; /* Prevent double borders */
-	cursor: pointer;
-	&:hover {
-		background: #0b7dda;
-	}
+    float: left;
+    width: 10%;
+    padding: 10px;
+    background: #2196f3;
+    color: white;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+
+    &:hover {
+        background: #0b7dda;
+    }
 }
+
 .cmp-search-bar__field--text {
-	float: left;
-	width: calc(100% - 20%);
-	background: #f1f1f1;
-	-moz-appearance: none;
-	-webkit-appearance: none;
-	appearance: none;
-	border-top-left-radius: 0.25rem;
-	border-bottom-left-radius: 0.25rem;
-	border: 0.0625rem solid #d3d3d3;
-	font-size: 0.875rem;
-	padding: 10px;
-	
-	&:hover {
-		border-color: @color0;
-	}
+    float: left;
+    width: calc(100% - 20%);
+    background: #f1f1f1;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+    border: .0625rem solid #d3d3d3;
+    font-size: .875rem;
+    padding: 10px;
+
+    &:hover {
+        border-color: @color0;
+    }
 }
