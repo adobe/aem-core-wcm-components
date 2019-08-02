@@ -72,15 +72,6 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <label
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Value of aria-label attribute, which describes purpose of the carousel indicators."
-                                                fieldLabel="Indicators Label"
-                                                name="./label"
-                                                value=""
-                                                emptyText="Enter value of label."
-                                                required="{Boolean}false"/>
                                             <autoplay
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
