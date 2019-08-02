@@ -45,7 +45,8 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.TabsImpl;
     service = Servlet.class,
     property = {
         "sling.servlet.methods=" + HttpConstants.METHOD_POST,
-        "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE_V1,
+        "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE_V2,
         "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
         "sling.servlet.resourceTypes=" + AccordionImpl.RESOURCE_TYPE,
         "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
