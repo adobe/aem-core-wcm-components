@@ -20,13 +20,33 @@
      data-cmp-autoplay="${(wcmmode.edit || wcmmode.preview) ? '' : carousel.autoplay}"
      data-cmp-delay="${carousel.delay}"
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}">
-    <div class="cmp-carousel__content" data-sly-test="${carousel.items && carousel.items.size > 0}" >
+    <sly data-sly-test.hasItems="${carousel.items && carousel.items.size > 0}"></sly>
+    <div class="cmp-carousel__actions cmp-carousel__actions--rotation-control"
+         data-sly-test="${hasItems}">
+        <button data-sly-test="${carousel.autoplay}"
+                role="button"
+                class="cmp-carousel__action cmp-carousel__action--pause"
+                data-cmp-hook-carousel="pause" aria-label="${'Pause' @ i18n}">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${'Pause' @ i18n}</span>
+        </button>
+        <button data-sly-test="${carousel.autoplay}"
+                role="button"
+                class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
+                data-cmp-hook-carousel="play" aria-label="${'Play' @ i18n}">
+            <span class="cmp-carousel__action-icon"></span>
+            <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
+        </button>
+    </div>
+    <div class="cmp-carousel__content"
+         data-sly-test="${hasItems}"
+         data-cmp-hook-carousel="content">
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
              role="tabpanel"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              data-cmp-hook-carousel="item"></div>
-        <div class="cmp-carousel__actions">
+        <div class="cmp-carousel__actions cmp-carousel__actions--slide-control">
             <button role="button"
                     class="cmp-carousel__action cmp-carousel__action--previous"
                     data-cmp-hook-carousel="previous" aria-label="${'Previous' @ i18n}">
@@ -39,20 +59,6 @@
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Next' @ i18n}</span>
             </button>
-            <button data-sly-test="${carousel.autoplay}"
-                    role="button"
-                    class="cmp-carousel__action cmp-carousel__action--pause"
-                    data-cmp-hook-carousel="pause" aria-label="${'Pause' @ i18n}">
-                <span class="cmp-carousel__action-icon"></span>
-                <span class="cmp-carousel__action-text">${'Pause' @ i18n}</span>
-            </button>
-            <button data-sly-test="${carousel.autoplay}"
-                    role="button"
-                    class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
-                    data-cmp-hook-carousel="play" aria-label="${'Play' @ i18n}">
-                <span class="cmp-carousel__action-icon"></span>
-                <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
-            </button>
         </div>
         <ol role="tablist" class="cmp-carousel__indicators" data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
@@ -62,5 +68,5 @@
         </ol>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
-         data-sly-test="${(wcmmode.edit || wcmmode.preview) && carousel.items.size < 1}"></sly>
+         data-sly-test="${(wcmmode.edit || wcmmode.preview) && !hasItems}"></sly>
 </div>

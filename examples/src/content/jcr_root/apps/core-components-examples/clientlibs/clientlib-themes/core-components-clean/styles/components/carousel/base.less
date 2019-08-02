@@ -34,9 +34,16 @@
     }
 
     .cmp-carousel__actions {
+        display: block;
         position: absolute;
         bottom: 0;
         right: 0;
+        font-size: 0;
+        z-index: 1;
+
+        &--rotation-control {
+            right: 60px;
+        }
     }
 
     .cmp-carousel__action {
@@ -102,8 +109,6 @@
         }
 
         &--previous {
-            order: 1;
-
             .cmp-carousel__action-icon {
                 &:before {
                     content: 'chevron_left';
@@ -112,8 +117,6 @@
         }
 
         &--next {
-            order: 4;
-
             .cmp-carousel__action-icon {
                 &:before {
                     content: 'chevron_right';
@@ -122,8 +125,6 @@
         }
 
         &--pause {
-            order: 2;
-
             .cmp-carousel__action-icon {
                 &:before {
                     content: 'pause';
@@ -132,8 +133,6 @@
         }
 
         &--play {
-            order: 3;
-
             .cmp-carousel__action-icon {
                 &:before {
                     content: 'play_arrow';

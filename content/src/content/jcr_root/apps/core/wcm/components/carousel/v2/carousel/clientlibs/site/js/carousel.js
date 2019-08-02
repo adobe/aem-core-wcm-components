@@ -113,6 +113,7 @@
 
             that._active = 0;
             that._paused = false;
+            that._hasFocusInside = false;
 
             if (that._elements.item) {
                 refreshActive();
@@ -228,16 +229,16 @@
                 }
             }
 
-            if (that._elements["pause"]) {
-                if (that._properties.autoplay) {
+            if (that._properties.autoplay) {
+                if (that._elements["pause"]) {
                     that._elements["pause"].addEventListener("click", onPauseClick);
                 }
-            }
 
-            if (that._elements["play"]) {
-                if (that._properties.autoplay) {
+                if (that._elements["play"]) {
                     that._elements["play"].addEventListener("click", onPlayClick);
                 }
+
+                window.addEventListener("focus", onFocusChange, true);
             }
 
             that._elements.self.addEventListener("keydown", onKeyDown);
@@ -299,6 +300,27 @@
                     break;
                 default:
                     return;
+            }
+        }
+
+        /**
+         * Handles focus event on window to check if focus is inside the carousel.
+         * Pauses if focus is within carousel.
+         * Sets {@code Carousel#_hasFocusInside} marker.
+         *
+         * @private
+         * @param {Object} event The focus event
+         */
+
+        function onFocusChange(event) {
+            if (event instanceof FocusEvent) {
+                that._hasFocusInside = that._elements["content"].contains(document.activeElement);
+            } else {
+                that._hasFocusInside = false;
+            }
+
+            if (!that._paused && that._hasFocusInside) {
+                pause();
             }
         }
 
