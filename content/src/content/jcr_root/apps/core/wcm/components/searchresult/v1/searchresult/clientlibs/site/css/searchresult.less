@@ -13,23 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@color0: #0080ff;
-@color1: #ffffff;
-@color2: #f9f9f9;
+@color-blue: #0080ff;
+@color-white: #ffffff;
+@color-light-white: #f9f9f9;
 
-.list--view {
+.list__view {
     background: none;
     font-size: 1rem;
     height: auto;
-    padding: 0 .833em 0 0;
+    padding-right: .833em;
     text-align: left;
     vertical-align: middle;
 
     &:hover {
-        color: @color0;
+        color: @color-blue;
     }
 
-    i {
+    .fa {
         font-size: 1.55rem;
     }
 }
@@ -38,15 +38,15 @@
     background: none;
     font-size: 1rem;
     height: auto;
-    padding: 0 .833em 0 0;
+    padding-right: .833em;
     text-align: left;
     vertical-align: middle;
 
     &:hover {
-        color: @color0;
+        color: @color-blue;
     }
 
-    i {
+    .fa {
         font-size: 1.55rem;
     }
 }
@@ -60,17 +60,17 @@
     width: 80%;
     padding: 10px 20px;
 
-    ul {
+    .cmp-search-list__item-group {
         list-style: none;
         display: grid;
-    }
 
-    li {
-        margin-bottom: 40px;
-    }
+        .cmp-searchresult-item {
+            margin-bottom: 40px;
+        }
 
-    p {
-        margin: .75em 0 0 0;
+        .cmp-searchresult-description {
+            margin-top: .75em;
+        }
     }
 }
 
@@ -89,54 +89,54 @@
 }
 
 .search__results--footer {
-    button {
+    .load-more-Btn {
         display: block;
         width: 100%;
     }
 }
 
 @media (max-width: 400px) {
-    .search__field--results { 
+    .search__field--results {
         display: block;
     }
 }
 
 .search--viewchange {
-    img {
+    .search__img--card {
         height: 11.25rem;
-        margin: 0 0 10px 0;
+        margin-bottom: 10px;
         width: 100%;
     }
 
-    ul {
+    .cmp-search-list__item-group {
         list-style: none;
         display: grid;
         grid-gap: 50px;
         grid-template-columns: auto auto auto;
-    }
 
-    li {
-        background: @color2;
-        border-radius: .25rem;
-        border-radius: .28571429rem;
-        border: .2em solid @color2;
-        box-shadow: none, 0px 0px 0px 1px #d4d4d5;
-        margin-bottom: 2.5rem;
-        overflow: hidden;
-        position: relative;
-        transition: box-shadow 0.1s ease, transform 0.1s ease;
-    }
+        .cmp-searchresult-item {
+            background: @color-light-white;
+            border-radius: .25rem;
+            border-radius: .28571429rem;
+            border: .2em solid @color-light-white;
+            box-shadow: none, 0 0 0 1px #d4d4d5;
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+            position: relative;
+            transition: box-shadow .1s ease, transform .1s ease;
 
-    h3 {
-        margin: 0 0 0 0;
-        padding: .75rem 1rem 1rem;
-    }
+            .cmp-searchresult-title {
+                margin: 0;
+                padding: .75rem 1rem 1rem;
+            }
 
-    span {
-        display: none;
-    }
+            .cmp-searchresult-date {
+                display: none;
+            }
 
-    p {
-        display: none;
+            .cmp-searchresult-description {
+                display: none;
+            }
+        }
     }
 }
