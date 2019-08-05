@@ -15,8 +15,8 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.carousel="com.adobe.cq.wcm.core.components.models.Carousel"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     role="group"
      class="cmp-carousel"
+     role="group"
      aria-label="${carousel.carouselLabel}"
      aria-roledescription="carousel"
      data-cmp-is="carousel"
@@ -27,45 +27,49 @@
          class="cmp-carousel__content">
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
-             role="tabpanel"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
+             role="tabpanel"
              aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
              data-cmp-hook-carousel="item"></div>
         <div class="cmp-carousel__actions">
-            <button role="button"
-                    class="cmp-carousel__action cmp-carousel__action--previous"
-                    data-cmp-hook-carousel="previous" aria-label="${'Previous' @ i18n}">
+            <button class="cmp-carousel__action cmp-carousel__action--previous"
+                    role="button"
+                    aria-label="${'Previous' @ i18n}"
+                    data-cmp-hook-carousel="previous">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Previous' @ i18n}</span>
             </button>
-            <button role="button"
-                    class="cmp-carousel__action cmp-carousel__action--next"
-                    data-cmp-hook-carousel="next" aria-label="${'Next' @ i18n}">
+            <button class="cmp-carousel__action cmp-carousel__action--next"
+                    role="button"
+                    aria-label="${'Next' @ i18n}"
+                    data-cmp-hook-carousel="next">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Next' @ i18n}</span>
             </button>
             <button data-sly-test="${carousel.autoplay}"
-                    role="button"
                     class="cmp-carousel__action cmp-carousel__action--pause"
-                    data-cmp-hook-carousel="pause" aria-label="${'Pause' @ i18n}">
+                    role="button"
+                    aria-label="${'Pause' @ i18n}"
+                    data-cmp-hook-carousel="pause">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Pause' @ i18n}</span>
             </button>
             <button data-sly-test="${carousel.autoplay}"
-                    role="button"
                     class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
-                    data-cmp-hook-carousel="play" aria-label="${'Play' @ i18n}">
+                    role="button"
+                    aria-label="${'Play' @ i18n}"
+                    data-cmp-hook-carousel="play">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
             </button>
         </div>
-        <ol role="tablist"
-            class="cmp-carousel__indicators"
+        <ol class="cmp-carousel__indicators"
+            role="tablist"
             aria-label="${carousel.indicatorsLabel}"
             data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
-                role="tab"
                 class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
+                role="tab"
                 aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"
                 data-cmp-hook-carousel="indicator">${item.title}</li>
         </ol>
