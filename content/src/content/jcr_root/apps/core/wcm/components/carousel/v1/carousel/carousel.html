@@ -17,7 +17,7 @@
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      class="cmp-carousel"
      role="group"
-     aria-label="${carousel.carouselLabel}"
+     aria-label="${carousel.label}"
      aria-roledescription="carousel"
      data-cmp-is="carousel"
      data-cmp-autoplay="${(wcmmode.edit || wcmmode.preview) ? '' : carousel.autoplay}"
@@ -65,7 +65,7 @@
         </div>
         <ol class="cmp-carousel__indicators"
             role="tablist"
-            aria-label="${carousel.indicatorsLabel}"
+            aria-label="${'Choose a slide to display' @ i18n}"
             data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
                 class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"

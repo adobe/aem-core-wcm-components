@@ -34,7 +34,7 @@ public interface Tabs extends Container {
     default String getActiveItem() {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * Returns an accessible label that describes the tabs.
      *

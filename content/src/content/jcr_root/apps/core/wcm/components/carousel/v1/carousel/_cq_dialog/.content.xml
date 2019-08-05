@@ -153,15 +153,8 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="Value of an aria-label attribute for carousel wrapper which describes content inside carousel."
-                                                fieldLabel="Carousel label"
-                                                name="./carouselLabel"
-                                                value=""/>
-                                            <indicatorsLabel
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Value of an aria-label attribute for carousel indicators which will be read by screen readers e.g 'Choose slide to display'"
-                                                fieldLabel="Indicators label"
-                                                name="./indicatorsLabel"
+                                                fieldLabel="Label"
+                                                name="./label"
                                                 value=""/>
                                         </items>
                                     </column>

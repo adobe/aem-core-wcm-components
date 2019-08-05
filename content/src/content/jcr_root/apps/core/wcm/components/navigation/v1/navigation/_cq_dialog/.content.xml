@@ -110,7 +110,7 @@
                                             <label
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Value of an aria-label attribute for the navigation. Should be added if there is more than one naviagtion on the page."
+                                                fieldDescription="Value of an aria-label attribute for the navigation. Should be added if there is more than one navigation on the page."
                                                 fieldLabel="Label"
                                                 name="./label"
                                                 value=""/>
