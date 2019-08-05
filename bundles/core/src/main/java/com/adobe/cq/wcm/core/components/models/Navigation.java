@@ -83,8 +83,7 @@ public interface Navigation extends ComponentExporter {
     }
 
     /**
-     * Retrieves the value of aria-label for navigation.
-     * Improves accessibility of component.
+     * Retrieves an accessible label that describes the navigation.
      *
      * @return the value of label for navigation
      * @since com.adobe.cq.wcm.core.components.models 12.9.0

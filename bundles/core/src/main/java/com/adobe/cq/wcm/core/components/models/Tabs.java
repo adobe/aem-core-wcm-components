@@ -36,8 +36,7 @@ public interface Tabs extends Container {
     }
     
     /**
-     * Returns the value of aria-label for tabs.
-     * Improves accessibility of component.
+     * Returns an accessible label that describes the tabs.
      *
      * @return The value of label
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
