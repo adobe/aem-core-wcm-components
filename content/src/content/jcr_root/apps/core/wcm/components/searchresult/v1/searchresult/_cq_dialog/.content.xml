@@ -95,7 +95,7 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 fieldDescription="Sort by publish date"
                                                 text="Last modified date"
-                                                value="@jcr:content/jcr:lastModified"/>
+                                                value="@jcr:content/cq:lastModified"/>
                                             <jcrscore
                                                 jcr:primaryType="nt:unstructured"
                                                 fieldDescription="Sort by relevance"
@@ -244,7 +244,7 @@
                                                                 <lastmodified
                                                                     jcr:primaryType="nt:unstructured"
                                                                     text="Last modified date"
-                                                                    value="@jcr:content/jcr:lastModified"/>
+                                                                    value="@jcr:content/cq:lastModified"/>
                                                                 <jcrscore
                                                                     jcr:primaryType="nt:unstructured"
                                                                     text="Relevance"
