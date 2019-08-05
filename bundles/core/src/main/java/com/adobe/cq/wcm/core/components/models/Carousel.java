@@ -77,7 +77,8 @@ public interface Carousel extends Container {
     }
 
     /**
-     * Returns the value of label for Carousel component
+     * Returns the value of aria-label for Carousel component.
+     * Improves accessibility of component.
      *
      * @return The value of label for Carousel component
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
@@ -87,7 +88,8 @@ public interface Carousel extends Container {
     }
 
     /**
-     * Returns the value of label for indicators wrapper
+     * Returns the value of aria-label for Carousel indicators.
+     * Improves accessibility of component.
      *
      * @return The value of label for indicators wrapper
      * @since com.adobe.cq.wcm.core.components.models 12.9.0

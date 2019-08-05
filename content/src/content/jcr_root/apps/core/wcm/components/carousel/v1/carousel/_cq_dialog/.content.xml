@@ -152,21 +152,17 @@
                                             <carouselLabel
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Label for carousel wrapper which describes content inside carousel."
-                                                fieldLabel="Carousel Label"
+                                                fieldDescription="Value of an aria-label attribute for carousel wrapper which describes content inside carousel."
+                                                fieldLabel="Carousel label"
                                                 name="./carouselLabel"
-                                                value=""
-                                                emptyText="Enter value of carousel label."
-                                                required="{Boolean}false"/>
+                                                value=""/>
                                             <indicatorsLabel
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="Label for carousel indicators which will be read by screen readers e.g 'Choose slide to display'"
-                                                fieldLabel="Indicators Label"
+                                                fieldDescription="Value of an aria-label attribute for carousel indicators which will be read by screen readers e.g 'Choose slide to display'"
+                                                fieldLabel="Indicators label"
                                                 name="./indicatorsLabel"
-                                                value=""
-                                                emptyText="Enter value of indicators label"
-                                                required="{Boolean}false"/>
+                                                value=""/>
                                         </items>
                                     </column>
                                 </items>

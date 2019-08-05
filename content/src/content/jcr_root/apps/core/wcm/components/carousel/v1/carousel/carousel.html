@@ -15,10 +15,10 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.carousel="com.adobe.cq.wcm.core.components.models.Carousel"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     role="group"
+     class="cmp-carousel"
      aria-label="${carousel.carouselLabel}"
      aria-roledescription="carousel"
-     class="cmp-carousel"
-     role="group"
      data-cmp-is="carousel"
      data-cmp-autoplay="${(wcmmode.edit || wcmmode.preview) ? '' : carousel.autoplay}"
      data-cmp-delay="${carousel.delay}"
@@ -27,9 +27,9 @@
          class="cmp-carousel__content">
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
-             aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
              role="tabpanel"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
+             aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
              data-cmp-hook-carousel="item"></div>
         <div class="cmp-carousel__actions">
             <button role="button"
@@ -61,12 +61,12 @@
         </div>
         <ol role="tablist"
             class="cmp-carousel__indicators"
-            data-cmp-hook-carousel="indicators"
-            aria-label="${carousel.indicatorsLabel}">
+            aria-label="${carousel.indicatorsLabel}"
+            data-cmp-hook-carousel="indicators">
             <li data-sly-repeat.item="${carousel.items}"
-                aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"
                 role="tab"
                 class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
+                aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"
                 data-cmp-hook-carousel="indicator">${item.title}</li>
         </ol>
     </div>
