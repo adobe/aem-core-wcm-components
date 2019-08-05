@@ -38,7 +38,7 @@ public interface Tabs extends Container {
     /**
      * Returns an accessible label that describes the tabs.
      *
-     * @return The value of label
+     * @return an accessible label for tabs
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     default String getLabel() {
