@@ -76,4 +76,14 @@ public interface Carousel extends Container {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Returns an accessible label that describes the carousel.
+     *
+     * @return an accessible label for carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getLabel() {
+        throw new UnsupportedOperationException();
+    }
+
 }
