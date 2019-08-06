@@ -36,12 +36,12 @@ public interface Tabs extends Container {
     }
 
     /**
-     * Returns an accessible label that describes the tabs.
+     * Returns an accessibility label that describes the tabs.
      *
-     * @return an accessible label for tabs
+     * @return an accessibility label for tabs
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
-    default String getLabel() {
+    default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
 }

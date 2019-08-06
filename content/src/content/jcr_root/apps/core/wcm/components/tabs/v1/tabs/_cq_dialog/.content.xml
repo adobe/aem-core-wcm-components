@@ -116,12 +116,12 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <label
+                                            <accessibilityLabel
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="Value of an aria-label attribute, which describes the purpose of the set of tabs."
                                                 fieldLabel="Label"
-                                                name="./label"
+                                                name="./accessibilityLabel"
                                                 value=""/>
                                         </items>
                                     </column>
