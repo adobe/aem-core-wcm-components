@@ -34,6 +34,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,6 +80,9 @@ public class NavigationImpl implements Navigation {
 
     @OSGiService
     private LiveRelationshipManager relationshipManager;
+
+    @ValueMapValue(optional = true)
+    private String label;
 
     private int structureDepth;
     private String navigationRootPage;
@@ -149,6 +153,11 @@ public class NavigationImpl implements Navigation {
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 
     /**

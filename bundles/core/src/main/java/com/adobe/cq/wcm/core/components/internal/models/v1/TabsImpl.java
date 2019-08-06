@@ -35,6 +35,9 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     @ValueMapValue(optional = true)
     private String activeItem;
 
+    @ValueMapValue(optional = true)
+    private String label;
+
     private String activeItemName;
 
     @Override
@@ -46,5 +49,10 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
             }
         }
         return activeItemName;
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }
