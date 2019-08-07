@@ -36,7 +36,7 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     private String activeItem;
 
     @ValueMapValue(optional = true)
-    private String label;
+    private String accessibilityLabel;
 
     private String activeItemName;
 
@@ -52,7 +52,7 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     }
 
     @Override
-    public String getLabel() {
-        return label;
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
     }
 }
