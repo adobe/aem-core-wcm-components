@@ -82,7 +82,7 @@ public class NavigationImpl implements Navigation {
     private LiveRelationshipManager relationshipManager;
 
     @ValueMapValue(optional = true)
-    private String label;
+    private String accessibilityLabel;
 
     private int structureDepth;
     private String navigationRootPage;
@@ -149,15 +149,15 @@ public class NavigationImpl implements Navigation {
         return items;
     }
 
+    @Override
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
+    }
+
     @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
     }
 
     /**

@@ -149,12 +149,12 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <label
+                                            <accessibilityLabel
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="Value of an aria-label attribute for the carousel, which describes the carousel content."
                                                 fieldLabel="Label"
-                                                name="./label"
+                                                name="./accessibilityLabel"
                                                 value=""/>
                                         </items>
                                     </column>

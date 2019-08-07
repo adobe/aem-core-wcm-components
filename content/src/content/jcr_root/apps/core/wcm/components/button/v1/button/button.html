@@ -17,7 +17,8 @@
         data-sly-use.iconTemplate="icon.html"
         data-sly-element="${button.link ? 'a' : 'button'}"
         class="cmp-button"
-        href="${button.link}">
+        href="${button.link}"
+        aria-label="${button.accessibilityLabel}">
     <sly data-sly-call="${iconTemplate.icon @ icon=button.icon}"></sly>
     <span data-sly-test="${button.text}" class="cmp-button__text">${button.text}</span>
 </button>

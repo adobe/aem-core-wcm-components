@@ -64,6 +64,9 @@ public class ButtonImpl implements Button {
     @ValueMapValue(optional = true)
     private String icon;
 
+    @ValueMapValue(optional = true)
+    protected String accessibilityLabel;
+
     @Override
     public String getText() {
         return text;
@@ -85,6 +88,11 @@ public class ButtonImpl implements Button {
     @Override
     public String getIcon() {
         return icon;
+    }
+
+    @Override
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
     }
 
     @NotNull

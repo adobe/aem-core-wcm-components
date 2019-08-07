@@ -59,6 +59,16 @@ public interface Button extends ComponentExporter {
     }
 
     /**
+     * Returns an accessibility label for the button.
+     *
+     * @return an accessibility label for the button
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
