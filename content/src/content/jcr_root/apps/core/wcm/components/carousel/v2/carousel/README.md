@@ -61,6 +61,8 @@ BLOCK cmp-carousel
     ELEMENT cmp-carousel__items-container
     ELEMENT cmp-carousel__item
     ELEMENT cmp-carousel__actions
+        MOD cmp-carousel__actions--rotation-control
+        MOD cmp-carousel__actions--slide-control
     ELEMENT cmp-carousel__action
         MOD cmp-carousel__action--disabled
         MOD cmp-carousel__action--previous

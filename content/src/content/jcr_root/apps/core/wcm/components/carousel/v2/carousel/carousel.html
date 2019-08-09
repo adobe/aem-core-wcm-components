@@ -60,12 +60,14 @@
                 <span class="cmp-carousel__action-text">${'Next' @ i18n}</span>
             </button>
         </div>
-        <div data-sly-repeat.item="${carousel.items}"
-             data-sly-resource="${item.name @ decorationTagName='div'}"
-             class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
-             role="tabpanel"
-             aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
-             data-cmp-hook-carousel="item"></div>
+        <div class="cmp-carousel__items-container">
+            <div data-sly-repeat.item="${carousel.items}"
+                 data-sly-resource="${item.name @ decorationTagName='div'}"
+                 class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
+                 role="tabpanel"
+                 aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
+                 data-cmp-hook-carousel="item"></div>
+        </div>
         <ol class="cmp-carousel__indicators"
             role="tablist"
             aria-label="${'Choose a slide to display' @ i18n}"
