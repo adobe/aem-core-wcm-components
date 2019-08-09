@@ -18,7 +18,7 @@
     "use strict";
 
     var c = window.CQ.CoreComponentsIT.commons;
-    var carousel = window.CQ.CoreComponentsIT.Carousel.v2;
+    var carouselV1 = window.CQ.CoreComponentsIT.Carousel.v1;
     var selectors = {
         editDialog: {
             childrenEditor: {
@@ -74,23 +74,23 @@
         }
     };
 
-    var tcExecuteBeforeTest = carousel.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtCarousel_v2,
+    var tcExecuteBeforeTest = carouselV1.tcExecuteBeforeTest(c.tcExecuteBeforeTest, c.rtCarousel_v2,
         "core/wcm/tests/components/test-page-v2", "core.wcm.components.carousel.v2");
-    var tcExecuteAfterTest  = carousel.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath, c.policyAssignmentPath);
+    var tcExecuteAfterTest = carouselV1.tcExecuteAfterTest(c.tcExecuteAfterTest, c.policyPath, c.policyAssignmentPath);
 
     new h.TestSuite("Carousel v2", {
-        path: "/apps/core/wcm/tests/core-components-it/v2/Carousel.js",
+        path: "/apps/core/wcm/tests/test-suites/Carousel/v2/Carousel.js",
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     })
-        .addTestCase(carousel.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcAutoplayGroup(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcPanelSelect(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/carousel", "core-component/components",
+        .addTestCase(carouselV1.tcAddItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carouselV1.tcRemoveItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carouselV1.tcReorderItems(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carouselV1.tcAutoplayGroup(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carouselV1.tcPanelSelect(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carouselV1.tcAllowedComponents(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/carousel", "core-component/components",
             c.policyPath, c.policyAssignmentPath, "core/wcm/tests/components/test-page-v2", c.rtCarousel_v2))
-        .addTestCase(carousel.tcAccessibilityNavigateRight(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcAccessibilityNavigateLeft(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
-        .addTestCase(carousel.tcAccessibilityNavigateEndStart(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
+        .addTestCase(carouselV1.tcAccessibilityNavigateRight(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carouselV1.tcAccessibilityNavigateLeft(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(carouselV1.tcAccessibilityNavigateEndStart(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
 }(hobs, jQuery));

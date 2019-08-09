@@ -63,6 +63,7 @@
     c.rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
     // carousel component
     c.rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
+    c.rtCarousel_v2 = "core/wcm/components/carousel/v2/carousel";
     // tabs component
     c.rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
     // content fragment component

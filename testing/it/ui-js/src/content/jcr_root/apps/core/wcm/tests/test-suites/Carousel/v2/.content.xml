@@ -20,4 +20,6 @@
         aem.core-components.testsuite,
         aem.core-components.testsuite.carousel,
         aem.core-components.testsuite.carousel.v2]"
-    dependencies="[aem.core-components.tests.carousel.v2]"/>
+    dependencies="[aem.core-components.tests.commons,
+        aem.core-components.tests.carousel.v1,
+        aem.core-components.tests.carousel.v2]"/>
