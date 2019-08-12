@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,23 +17,22 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 
-import org.apache.sling.api.resource.Resource;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CarouselImplTest {
+@ExtendWith(AemContextExtension.class)
+class CarouselImplTest {
 
     private static final String TEST_BASE = "/carousel";
     private static final String CONTENT_ROOT = "/content";
@@ -43,50 +42,45 @@ public class CarouselImplTest {
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    @Rule
-    public final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Before
-    public void init() {
-        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
-        AEM_CONTEXT.registerService(SlingModelFilter.class, new MockSlingModelFilter());
+    @BeforeEach
+    void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
     }
 
     @Test
-    public void testEmptyCarousel() {
+    void testEmptyCarousel() {
         Carousel carousel = new CarouselImpl();
         List<ListItem> items = carousel.getItems();
-        assertTrue("", items == null || items.size() == 0);
+        assertEquals("", 0, items.size());
     }
 
     @Test
-    public void testCarouselWithItems() {
-        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
+    void testCarouselWithItems() {
+        Carousel carousel = getCarouselUnderTest();
         Object[][] expectedItems = {
-            {"item_1", "Teaser 1"},
-            {"item_2", "Teaser 2"},
-            {"item_3", "Carousel Panel 3"},
+                {"item_1", "Teaser 1"},
+                {"item_2", "Teaser 2"},
+                {"item_3", "Carousel Panel 3"},
         };
         verifyCarouselItems(expectedItems, carousel.getItems());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
 
     @Test
-    public void testCarouselProperties() {
-        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
+    void testCarouselProperties() {
+        Carousel carousel = getCarouselUnderTest();
         assertTrue(carousel.getAutoplay());
-        assertEquals(new Long(7000), carousel.getDelay());
+        assertEquals(Long.valueOf(7000), carousel.getDelay());
         assertTrue(carousel.getAutopauseDisabled());
     }
 
-    private Carousel getCarouselUnderTest(String resourcePath) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
-        if (resource == null) {
-            throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
-        }
-        AEM_CONTEXT.currentResource(resource);
-        AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
-        return AEM_CONTEXT.request().adaptTo(Carousel.class);
+    private Carousel getCarouselUnderTest() {
+        context.currentResource(CarouselImplTest.CAROUSEL_1);
+        context.request().setContextPath(CONTEXT_PATH);
+        return context.request().adaptTo(Carousel.class);
     }
 
     private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items) {
@@ -94,9 +88,9 @@ public class CarouselImplTest {
         int index = 0;
         for (ListItem item : items) {
             assertEquals("The carousel item's name is not what was expected.",
-                expectedItems[index][0], item.getName());
+                    expectedItems[index][0], item.getName());
             assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
-                expectedItems[index][1], item.getTitle());
+                    expectedItems[index][1], item.getTitle());
             index++;
         }
     }

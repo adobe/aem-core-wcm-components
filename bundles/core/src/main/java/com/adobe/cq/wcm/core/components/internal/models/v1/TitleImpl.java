@@ -88,7 +88,7 @@ public class TitleImpl implements Title {
 
         if (heading == null) {
             heading = Utils.Heading.getHeading(type);
-            if (heading == null) {
+            if (heading == null && currentStyle != null) {
                 heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
             }
         }

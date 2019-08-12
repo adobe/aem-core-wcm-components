@@ -20,9 +20,13 @@ import org.apache.sling.models.impl.ResourceTypeBasedResourcePicker;
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 
+import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
+import com.adobe.cq.wcm.core.components.testing.MockResponsiveGrid;
+import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.aem.junit.AemContextCallback;
+import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 
 /**
  * Provides a context for unit tests.
@@ -65,5 +69,16 @@ public final class CoreComponentTestContext {
                 },
                 ResourceResolverType.JCR_MOCK
         );
+    }
+
+    public static io.wcm.testing.mock.aem.junit5.AemContext newAemContext() {
+        return new AemContextBuilder()
+                .<io.wcm.testing.mock.aem.junit5.AemContext>afterSetUp(context -> {
+                            context.addModelsForClasses(MockResponsiveGrid.class);
+                            context.addModelsForPackage("com.adobe.cq.wcm.core.components.models");
+                            context.registerService(SlingModelFilter.class, new MockSlingModelFilter());
+                        }
+                )
+                .build();
     }
 }
