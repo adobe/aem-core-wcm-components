@@ -1,4 +1,6 @@
 (function($document, author) {
+    'use strict'
+
     var openContentFragment = {
         icon: 'browse',
         text: 'Open content fragment',
@@ -8,8 +10,8 @@
             $.getJSON(currentContentFragmentUrl, function(result) {
                 var fragmentUrl = window.location.protocol + "//" + hostName,
                     resultFragmentPath = editable.type === "api/components/content/contentfragment" ? "/editor.html" + result.fragmentPath : "/assets.html" + result.parentPath;
-                if(result.fragmentPath || result.parentPath){
-                	fragmentUrl = fragmentUrl + resultFragmentPath;
+                if (result.fragmentPath || result.parentPath) {
+                    fragmentUrl = fragmentUrl + resultFragmentPath;
                     window.open(fragmentUrl, "_blank");
                 }
             });
