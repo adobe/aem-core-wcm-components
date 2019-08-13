@@ -202,10 +202,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
      * @return {@code true} if the resource exists, {@code false} otherwise.
      */
     private boolean resourceExists(String path) {
-        if (StringUtils.isEmpty(path)) {
-            return false;
-        }
-        return (resolver.getResource(path) != null);
+        return (StringUtils.isNotEmpty(path) && resolver.getResource(path) != null);
     }
 
     /**
