@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -38,22 +38,6 @@ public interface ExperienceFragment extends ComponentExporter {
     String PN_FRAGMENT_PATH = "fragmentPath";
 
     /**
-     * Name of the configuration policy property that defines the depth of the global localization structure in the
-     * content tree relative to the localization root. The property should provide a Long value.
-     *
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
-     */
-    String PN_LOCALIZATION_ROOT = "localizationRoot";
-
-    /**
-     * Name of the configuration policy property that defines the localization root from which to build the global
-     * localization structure. The property should provide a String value.
-     *
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
-     */
-    String PN_LOCALIZATION_DEPTH = "localizationDepth";
-
-    /**
      * Returns the configured path of the experience fragment variation.
      *
      * @return Configured experience fragment variation path
@@ -64,11 +48,13 @@ public interface ExperienceFragment extends ComponentExporter {
     }
 
     /**
-     * Returns the localized path of the experience fragment variation.
+     * Returns the localized path of the experience fragment variation if the experience fragment resource is defined
+     * in the template. If not, it returns the configured fragment path if it exists, null otherwise.
      *
-     * If the localization properties (localization root and depth) are not defined, it returns the fragment path.
-     * Otherwise it computes the localization string in the fragment path from the the localization properties (e.g. us/en)
-     * and replaces it with the one from the page.
+     * If both the content page and the experience fragment have a localized root (language, live copy or blueprint),
+     * - it is then assumed that the content pages and the experience fragments follow the same structure patterns -
+     * this method returns the localized path of the experience fragment based on the localization of the content page
+     * if it exists, otherwise it returns the fragment path that is configured, suffixed with "/jcr:content".
      *
      * @return Localized experience fragment variation path
      * @since com.adobe.cq.wcm.core.components.models 12.9.0

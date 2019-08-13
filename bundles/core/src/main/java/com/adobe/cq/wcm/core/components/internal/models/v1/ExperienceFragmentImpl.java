@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,29 +16,29 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.jcr.RangeIterator;
 
 import org.apache.commons.lang3.StringUtils;
-import com.day.text.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.WCMException;
+import com.day.cq.wcm.msm.api.LiveCopy;
+import com.day.cq.wcm.msm.api.LiveRelationship;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.day.text.Text;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {ExperienceFragment.class, ComponentExporter.class },
@@ -47,42 +47,53 @@ import com.day.cq.wcm.api.designer.Style;
     extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ExperienceFragmentImpl implements ExperienceFragment {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceFragmentImpl.class);
-
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/experiencefragment/v1/experiencefragment";
 
-    public static final String PATH_DELIMITER = "/";
-    public static final char PATH_DELIMITER_CHAR = '/';
-
+    private static final String PATH_DELIMITER = "/";
+    private static final char PATH_DELIMITER_CHAR = '/';
     private static final String CONTENT_ROOT = "/content";
     private static final String EXPERIENCE_FRAGMENTS_ROOT = "/content/experience-fragments";
+    private static final String JCR_CONTENT_ROOT = "/jcr:content";
 
     @Self
     private SlingHttpServletRequest request;
 
+    @Inject
+    protected Resource resource;
+
+    @SlingObject
+    private ResourceResolver resolver;
+
     @ScriptVariable
     private Page currentPage;
-
-    @ScriptVariable
-    private ValueMap properties;
-
-    @ScriptVariable
-    private Style currentStyle;
 
     @ValueMapValue(name = ExperienceFragment.PN_FRAGMENT_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
     private String fragmentPath;
 
-    private int localizationDepth;
-    private String localizationRoot;
-    private ResourceResolver resolver;
-    private PageManager pageManager;
+    @OSGiService
+    private LanguageManager languageManager;
+
+    @OSGiService
+    private LiveRelationshipManager relationshipManager;
+
+    private String localizedFragmentPath;
 
     @PostConstruct
-    private void initModel() {
-        localizationRoot = properties.get(ExperienceFragment.PN_LOCALIZATION_ROOT, currentStyle.get(ExperienceFragment.PN_LOCALIZATION_ROOT, String.class));
-        localizationDepth = properties.get(ExperienceFragment.PN_LOCALIZATION_DEPTH, currentStyle.get(ExperienceFragment.PN_LOCALIZATION_DEPTH, 1));
-        resolver = request.getResourceResolver();
-        pageManager = currentPage.getPageManager();
+    protected void initModel() {
+        if (inTemplate()) {
+            String currentPageRootPath = getRoot(currentPage.getPath());
+            // we should use getRoot instead of getXfRoot once the XF UI supports creating Live and Language Copies
+            String xfRootPath = getXfRoot(fragmentPath, currentPageRootPath);
+            if (!StringUtils.isEmpty(currentPageRootPath) && !StringUtils.isEmpty(xfRootPath)) {
+                String xfRelativePath = StringUtils.substring(fragmentPath, xfRootPath.length());
+                String localizedXfRootPath = StringUtils.replace(currentPageRootPath, CONTENT_ROOT, EXPERIENCE_FRAGMENTS_ROOT, 1);
+                localizedFragmentPath = StringUtils.join(localizedXfRootPath, xfRelativePath, JCR_CONTENT_ROOT);
+            }
+        }
+        String xfContentPath = StringUtils.join(fragmentPath, JCR_CONTENT_ROOT);
+        if (!resourceExists(localizedFragmentPath) && resourceExists(xfContentPath)) {
+            localizedFragmentPath = xfContentPath;
+        }
     }
 
     @Override
@@ -92,18 +103,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
     @Override
     public String getLocalizedFragmentPath() {
-        String localizedFragmentPath = null;
-        Page xfPage = pageManager.getPage(fragmentPath);
-        if (xfPage != null) {
-            Page xfLocalizedPage = getXfLocalizedPage(xfPage, currentPage);
-            if (xfLocalizedPage != null) {
-                localizedFragmentPath = xfLocalizedPage.getContentResource().getPath();
-            } else {
-                localizedFragmentPath = xfPage.getContentResource().getPath();
-            }
-        } else {
-            LOGGER.debug("Experience Fragment variation not found at path:{}", fragmentPath);
-        }
         return localizedFragmentPath;
     }
 
@@ -113,71 +112,110 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     }
 
     /**
-     * Returns the localized page of the experience fragment page, based on the content page and the localization properties.
+     * Returns the localization root of the resource defined at the given path
      *
-     * @param xfPage the experience fragment page
-     * @param sitePage the content page
-     * @return
+     * Use case                                  | Path                                 | Root
+     * ----------------------------------------  |--------------------------------------|------------------
+     * 1. No localization                        | /content/mysite/mypage               | null
+     * 2. Language localization                  | /content/mysite/en/mypage            | /content/mysite/en
+     * 3. Country-language localization          | /content/mysite/us/en/mypage         | /content/mysite/us/en
+     * 4. Country-language localization (variant)| /content/us/mysite/en/mypage         | /content/us/mysite/en
+     * 5. Blueprint                              | /content/mysite/blueprint/mypage     | /content/us/mysite/blueprint
+     * 4. Livecopy                               | /content/mysite/livecopy/mypage      | /content/us/mysite/livecopy
+     *
+     * @param path the resource path.
+     * @return the localization root of the resource at the given path if it exists, {@code null} otherwise.
      */
-    private Page getXfLocalizedPage(@NotNull Page xfPage, @NotNull Page sitePage) {
-        Resource siteRoot = resolver.getResource(localizationRoot);
-        if (siteRoot == null) {
-            return null;
+    private String getRoot(String path) {
+        String root = null;
+        if (!StringUtils.isEmpty(path)) {
+            Resource resource = resolver.getResource(path);
+            if (resource != null) {
+                Page rootPage = languageManager.getLanguageRoot(resource);
+                if (rootPage != null) {
+                    // language root
+                    root = rootPage.getPath();
+                }
+                if (StringUtils.isEmpty(root)) {
+                    // no language root
+                    try {
+                        if (relationshipManager.isSource(resource)) {
+                            // the resource is a blueprint
+                            RangeIterator liveCopiesIterator = relationshipManager.getLiveRelationships(resource, null, null);
+                            if (liveCopiesIterator != null) {
+                                LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
+                                LiveCopy liveCopy = relationship.getLiveCopy();
+                                if (liveCopy != null) {
+                                    root = liveCopy.getBlueprintPath();
+                                }
+                            }
+                        } else if (relationshipManager.hasLiveRelationship(resource)) {
+                            // the resource is a live copy
+                            LiveRelationship liveRelationship = relationshipManager.getLiveRelationship(resource, false);
+                            if (liveRelationship != null) {
+                                LiveCopy liveCopy = liveRelationship.getLiveCopy();
+                                if (liveCopy != null) {
+                                    root = liveCopy.getPath();
+                                }
+                            }
+                        }
+                    } catch (WCMException e) {
+                        // ignore
+                    }
+                }
+            }
         }
-        String xfLocalizationRoot = StringUtils.replace(localizationRoot, CONTENT_ROOT, EXPERIENCE_FRAGMENTS_ROOT, 1);
-        Resource xfRoot = resolver.getResource(xfLocalizationRoot);
-        if (xfRoot == null) {
-            return null;
-        }
-
-        String xfPageLocalizationString = getLocalizationString(xfPage, xfRoot, localizationDepth); // e.g. us/en
-        String sitePageLocalizationString = getLocalizationString(sitePage, siteRoot, localizationDepth); // e.g. us/es
-        if (StringUtils.isEmpty(xfPageLocalizationString)) {
-            return null;
-        }
-        if (StringUtils.isEmpty(sitePageLocalizationString)) {
-            return null;
-        }
-
-        String xfLocalizationSrcPath = StringUtils.joinWith(PATH_DELIMITER, xfLocalizationRoot, xfPageLocalizationString); // e.g. /content/experience-fragments/my-site/us/en
-        String xfLocalizationDestPath = StringUtils.joinWith(PATH_DELIMITER, xfLocalizationRoot, sitePageLocalizationString); // e.g. /content/experience-fragments/my-site/us/es
-
-        String xfLocalizedPagePath = StringUtils.replace(xfPage.getPath(), xfLocalizationSrcPath, xfLocalizationDestPath, 1);
-        return pageManager.getPage(xfLocalizedPagePath);
+        return root;
     }
 
     /**
-     * Returns the localization string of the given page based on the localization root and depth.
+     * Returns the localization root of the experience fragment path based on the localization root of the current page.
      *
-     * Use case                                  | Page path                         | localizationRoot  | localizationDepth | localizationString (output)
-     * ----------------------------------------  |-----------------------------------|-------------------|-------------------|----------------------------
-     * 1. No localization                        | /content/my-site/my-page          | empty string      | 0                 | empty string
-     * 2. Language localization                  | /content/my-site/en/my-page       | /content/my-site  | 1                 | en
-     * 3. Country-language localization          | /content/my-site/us/en/my-page    | /content/my-site  | 2                 | us/en
-     * 4. Country-language localization (variant)| /content/us/my-site/en/my-page    | /content          | 3                 | us/my-site/en
+     * As of today (08/aug/2019) the XF UI does not support creating Live and Language Copies, which prevents getRoot
+     * to be used with XF.
+     * This method works around this issue by deducting the XF root from the XF path and the root of the current page.
      *
-     * @param page the page that contains the localization string
-     * @param root the localization root resource
-     * @param depth the localization depth
-     * @return the localization string
+     * @param xfPath The experience fragment path.
+     * @param currentPageRoot The localization root of the current page.
+     * @return The localization root of the experience fragment path if it exists, {@code null} otherwise.
      */
-    private String getLocalizationString(@NotNull Page page, @NotNull Resource root, int depth) {
-        if (depth < 1) {
-            return null;
+    private String getXfRoot(String xfPath, String currentPageRoot) {
+        String xfRoot = null;
+        if (!StringUtils.isEmpty(xfPath) && !StringUtils.isEmpty(currentPageRoot)
+            && resolver.getResource(xfPath) != null && resolver.getResource(currentPageRoot) != null) {
+            String[] xfPathTokens = Text.explode(xfPath, PATH_DELIMITER_CHAR);
+            String[] referenceRootTokens = Text.explode(currentPageRoot, PATH_DELIMITER_CHAR);
+            int xfRootDepth = referenceRootTokens.length + 1;
+            if (xfPathTokens.length >= xfRootDepth) {
+                String[] xfRootTokens = new String[xfRootDepth];
+                System.arraycopy(xfPathTokens, 0, xfRootTokens, 0, xfRootDepth);
+                xfRoot = StringUtils.join(PATH_DELIMITER, Text.implode(xfRootTokens, PATH_DELIMITER));
+            }
         }
-        String localizationRootPath = root.getPath();
-        String pagePath = page.getPath();
-        if (!Text.isDescendant(localizationRootPath, pagePath)) {
-            return null;
+        return xfRoot;
+    }
+
+    /**
+     * Checks if the resource exists at the given path.
+     *
+     * @param path The resource path.
+     * @return {@code true} if the resource exists, {@code false} otherwise.
+     */
+    private boolean resourceExists(String path) {
+        if (StringUtils.isEmpty(path)) {
+            return false;
         }
-        String[] pageTokens = Text.explode(pagePath, PATH_DELIMITER_CHAR);
-        String[] rootTokens = Text.explode(localizationRootPath, PATH_DELIMITER_CHAR);
-        if (pageTokens.length < rootTokens.length + depth) {
-            return null;
-        }
-        String[] localizationTokens = new String[depth];
-        System.arraycopy(pageTokens, rootTokens.length, localizationTokens, 0, depth);
-        return Text.implode(localizationTokens, PATH_DELIMITER);
+        return (resolver.getResource(path) != null);
+    }
+
+    /**
+     * Checks if the resource is defined in the template.
+     *
+     * @return {@code true} if the resource is defined in the template, {@code false} otherwise.
+     */
+    private boolean inTemplate () {
+        Template template = currentPage.getTemplate();
+        return template != null && StringUtils.startsWith(resource.getPath(), template.getPath());
     }
 
 }

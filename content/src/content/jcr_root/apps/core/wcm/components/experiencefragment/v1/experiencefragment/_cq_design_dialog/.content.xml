@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2019 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -30,32 +30,6 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <properties
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Properties"
-                        sling:resourceType="granite/ui/components/coral/foundation/container"
-                        margin="{Boolean}true">
-                        <items jcr:primaryType="nt:unstructured">
-                            <localizationRoot
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                fieldDescription="Root page of the global localization structure."
-                                fieldLabel="Localization Root"
-                                rootPath="/content"
-                                forceSelection="{Boolean}true"
-                                name="./localizationRoot"/>
-                            <localizationDepth
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                fieldDescription="Depth of the localization structure, relative to the localization root."
-                                fieldLabel="Localization Structure Depth"
-                                max="100"
-                                min="1"
-                                name="./localizationDepth"
-                                step="1"
-                                value="1"/>
-                        </items>
-                    </properties>
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
