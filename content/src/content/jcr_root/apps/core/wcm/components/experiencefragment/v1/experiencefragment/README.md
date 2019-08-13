@@ -1,5 +1,5 @@
 <!--
-Copyright 2019 Adobe Systems Incorporated
+Copyright 2019 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,18 +26,10 @@ Experience fragment component written in HTL that renders an experience fragment
 ### Use Object
 The Experience fragment component uses the `com.adobe.cq.wcm.core.components.models.ExperienceFragment` Sling model as its Use-object.
 
-### Component Policy Configuration Properties
-The following configuration properties are used:
-
-1. `./localizationRoot` - the root page of the global localization structure.
-2. `./localizationDepth` - the depth of the global localization structure relative to the localization root.
-
 ### Edit Dialog Properties
-The following properties are written to JCR for the Experience Fragment component and are expected to be available as `Resource` properties:
+The following property is written to JCR for the Experience Fragment component and is expected to be available as a `Resource` property:
 
 1. `./fragmentPath` - defines the path to the Experience Fragment to be rendered
-2. `./localizationRoot` - the root page of the global localization structure.
-3. `./localizationDepth` - the depth of the global localization structure relative to the localization root.
 
 ## BEM Description
 ```
