@@ -21,7 +21,7 @@ Experience fragment component written in HTL that renders an experience fragment
 ## Features
 * Can be used on both templates and pages
 * Defines a configurable experience fragment variation to be displayed
-* Supports references for localized content: if the component is defined in a template and if the fragment is part of a localized structure below /content/experience-fragments that follows the same patterns as the site below /content, the fragment that has the same language or live copy localization as the current page will be rendered.
+* Supports references for localized content: if the component is defined in a template and if the fragment is part of a localized structure below `/content/experience-fragments` that follows the same patterns as the site below `/content`, the fragment with the same language or live copy localization as the current page will be rendered.
 
 ### Use Object
 The Experience fragment component uses the `com.adobe.cq.wcm.core.components.models.ExperienceFragment` Sling model as its Use-object.
