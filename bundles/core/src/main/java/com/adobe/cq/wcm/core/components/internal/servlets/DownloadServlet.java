@@ -163,7 +163,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
     }
 
     private String getLastModifiedDate(long lastModifiedDate) {
-        SimpleDateFormat df = new SimpleDateFormat(RFC_DATE_FORMAT);
+        SimpleDateFormat df = new SimpleDateFormat(RFC_DATE_FORMAT, Locale.US);
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         return df.format(lastModifiedDate);
     }
@@ -173,7 +173,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         if (Collections.list(request.getHeaderNames()).contains(HttpConstants.HEADER_IF_MODIFIED_SINCE)) {
             String headerDate = request.getHeader(HttpConstants.HEADER_IF_MODIFIED_SINCE);
             if (StringUtils.isNotEmpty(headerDate)) {
-                SimpleDateFormat df = new SimpleDateFormat(RFC_DATE_FORMAT);
+                SimpleDateFormat df = new SimpleDateFormat(RFC_DATE_FORMAT, Locale.US);
                 df.setTimeZone(TimeZone.getTimeZone("GMT"));
                 try {
                     long headerTime = df.parse(headerDate).getTime();
