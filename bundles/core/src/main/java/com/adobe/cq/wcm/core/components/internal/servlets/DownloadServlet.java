@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import static com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet.SELECTOR;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -23,8 +25,14 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.TimeZone;
+
 import javax.annotation.Nonnull;
+import javax.jcr.Binary;
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -38,11 +46,11 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.osgi.service.component.annotations.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.dam.api.Asset;
-
-import static com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet.SELECTOR;
 
 @Component(
         service = Servlet.class,
@@ -56,6 +64,8 @@ import static com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet
 public class DownloadServlet extends SlingAllMethodsServlet {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadServlet.class);
 
 
     public static final String SELECTOR = "coredownload";
@@ -72,86 +82,120 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         if (asset == null) {
             String filename = request.getRequestPathInfo().getSuffix();
             Resource downloadDataResource = request.getResource().getChild(JcrConstants.JCR_CONTENT);
+            
             if (StringUtils.isNotEmpty(filename) && downloadDataResource != null) {
-                byte[] bytes = getByteArray(downloadDataResource);
-                if (bytes.length == 0) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                    return;
-                }
-
-                ValueMap valueMap = downloadDataResource.adaptTo(ValueMap.class);
-                if (valueMap != null) {
-                    Calendar calendar = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
-                    if (calendar != null) {
-                        if (checkLastModifiedAfter(calendar.getTimeInMillis(), request)) {
-                            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                            return;
-                        }
-
-                        String mimeType = valueMap.get(JcrConstants.JCR_MIMETYPE, String.class);
-                        if (StringUtils.isNotEmpty(mimeType)) {
-                            sendResponse(bytes, mimeType, filename, calendar.getTimeInMillis(), response, checkForInlineSelector(request));
-                        } else {
-                            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                        }
-
-                    } else {
-                        response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                    }
-                }
+                sendResource(request, response, filename, downloadDataResource);
             }
         } else {
-            byte[] bytes = getByteArray(asset);
-            if (bytes.length == 0) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-
+            
             if (checkLastModifiedAfter(asset.getLastModified(), request)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            sendResponse(bytes, asset.getMimeType(), asset.getName(), asset.getLastModified(), response, checkForInlineSelector(request));
+            Optional<InputStream> inputStream = null;
+            try {
+                inputStream = getInputStream(asset);
+                if (!inputStream.isPresent()) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                sendResponse(inputStream.get(), asset.getOriginal().getSize(), asset.getMimeType(), asset.getName(), asset.getLastModified(), response, checkForInlineSelector(request));
+            } finally {
+                if (inputStream != null && inputStream.isPresent()) {
+                    inputStream.get().close();
+                }
+            }
         }
     }
 
+
+    private void sendResource(SlingHttpServletRequest request, SlingHttpServletResponse response, String filename,
+            Resource downloadDataResource) throws IOException {
+
+        ValueMap valueMap = downloadDataResource.adaptTo(ValueMap.class);
+        if (valueMap != null) {
+
+            Calendar calendar = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+            if (calendar != null) {
+                if (checkLastModifiedAfter(calendar.getTimeInMillis(), request)) {
+                    response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    return;
+                }
+            }
+            Optional<InputStream> inputStream = null;
+            try {
+                inputStream = getInputStream(downloadDataResource);
+                if (!inputStream.isPresent()) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                long size = getResourceSize(downloadDataResource);
+                String mimeType = valueMap.get(JcrConstants.JCR_MIMETYPE, String.class);
+                if (StringUtils.isNotEmpty(mimeType)) {
+                    sendResponse(inputStream.get(), size, mimeType, filename, calendar.getTimeInMillis(), response, checkForInlineSelector(request));
+                } else {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } finally {
+                if (inputStream != null && inputStream.isPresent()) {
+                    inputStream.get().close();
+                } 
+            }
+            
+        }
+    }
+
+    
+    /**
+     * Determine the size of a binary resource just by using the JCR API; this hopefully avoids to read
+     * the complete InputStream to determine the actual size of the binary.
+     * @param resource
+     * @return
+     */
+    private long getResourceSize (Resource resource) {
+        
+        Node node = resource.adaptTo(Node.class);
+        if (node != null) {
+            Property jcrData;
+            try {
+                jcrData = node.getProperty(JcrConstants.JCR_DATA);
+                if (jcrData != null) {
+                    Binary binary = jcrData.getBinary();
+                    if (binary != null) {
+                        return binary.getSize();
+                    }
+                }
+            } catch (RepositoryException e) {
+                LOG.info ("Cannot determine size of binary at {}", resource.getPath(),e);
+            }
+        }
+        return -1;
+    }
+        
     private boolean checkForInlineSelector(SlingHttpServletRequest request) {
         return Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(INLINE_SELECTOR);
     }
 
-    private byte[] getByteArray(Asset asset) throws IOException {
-        byte[] bytes = new byte[]{};
-        Resource resource = asset.getOriginal();
-        if (resource != null) {
-            InputStream stream = resource.adaptTo(InputStream.class);
-            if (stream != null) {
-                try {
-                    bytes = IOUtils.toByteArray(stream);
-                } finally {
-                    stream.close();
-                }
-            }
-        }
-        return bytes;
+    
+    
+    private Optional<InputStream> getInputStream (Asset asset) {
+        return Optional.ofNullable(asset.getOriginal())
+                .map(r -> r.adaptTo(InputStream.class));
     }
-
-    private byte[] getByteArray(Resource fileResource) throws IOException {
-        byte[] bytes = new byte[]{};
-        InputStream stream = fileResource.getValueMap().get(JcrConstants.JCR_DATA, InputStream.class);
-        if (stream != null) {
-            try {
-                bytes = IOUtils.toByteArray(stream);
-            } finally {
-                stream.close();
-            }
-        }
-        return bytes;
+    
+    private Optional<InputStream> getInputStream (Resource fileResource) {
+        return Optional.ofNullable(fileResource.getValueMap().get(JcrConstants.JCR_DATA, InputStream.class));
     }
-
-    private void sendResponse(byte[] bytes, String mimeType, String filename, long lastModifiedDate, SlingHttpServletResponse response,
-                              boolean inline) throws IOException {
+    
+    
+    private void sendResponse(InputStream stream, long size, String mimeType, String filename, long lastModifiedDate, SlingHttpServletResponse response,
+            boolean inline) throws IOException {
         response.setContentType(mimeType);
-        response.setContentLength(bytes.length);
+        
+        // only set the size contentLength header if we have valid data
+        if (size != -1) {
+            response.setContentLength((int) size);
+        }
         if (inline) {
             response.setHeader(CONTENT_DISPOSITION_HEADER, "inline");
         } else {
@@ -159,7 +203,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         }
         response.setHeader(HttpConstants.HEADER_LAST_MODIFIED, getLastModifiedDate(lastModifiedDate));
         ServletOutputStream outputStream = response.getOutputStream();
-        outputStream.write(bytes);
+        IOUtils.copy(stream, outputStream);
         outputStream.close();
     }
 
