@@ -30,7 +30,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 public interface ExperienceFragment extends ComponentExporter {
 
     /**
-     * Name of the configuration policy property that specifies the experience fragment variation path. . The property
+     * Name of the configuration policy property that specifies the experience fragment variation path. The property
      * should provide a String value.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
