@@ -130,6 +130,9 @@ public class ContentFragmentListImpl implements ContentFragmentList {
         queryParameterMap.put("p.limit", Integer.toString(maxItems));
         queryParameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/data/cq:model");
         queryParameterMap.put("1_property.value", modelPath);
+        queryParameterMap.put("orderby", "@jcr:created");
+        queryParameterMap.put("orderby.sort", "asc");
+        
 
         ArrayList<String> allTags = new ArrayList<>();
         if (tagNames != null && tagNames.length > 0) {

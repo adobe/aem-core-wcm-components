@@ -210,7 +210,7 @@ public class ContentFragmentUtilsTest {
                 new String[]{"foo", "bar"});
 
         // THEN
-        Assert.assertThat(expectedJsonOutput.replaceAll("[\n\t ]", ""), CoreMatchers.is(json));
+        Assert.assertThat(expectedJsonOutput.replaceAll("[\n\t\r ]", ""), CoreMatchers.is(json));
     }
 
     @Test

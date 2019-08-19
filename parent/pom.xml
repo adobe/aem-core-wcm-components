@@ -154,6 +154,9 @@
                     <version>2.21.0</version>
                     <configuration>
                         <useSystemClassLoader>false</useSystemClassLoader>
+                        <skipTests>false</skipTests>
+		                <testFailureIgnore>true</testFailureIgnore>
+		                <forkMode>once</forkMode>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -351,6 +354,8 @@
                             <exclude>**/node_modules/**</exclude>
                             <!-- Ignore github templates -->
                             <exclude>**/.github/**</exclude>
+                            <!-- Ignore jacoco.exec file -->
+                            <exclude>**/jacoco.exec/**</exclude>
                         </excludes>
                     </configuration>
                     <executions>
