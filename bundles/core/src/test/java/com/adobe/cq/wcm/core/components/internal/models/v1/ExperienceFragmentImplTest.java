@@ -161,7 +161,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is valid
      */
     @Test
-    public void testExperienceFragment1() {
+    public void testValidXFInPageWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
             + "/jcr:content/root/xf-component-1");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1"));
@@ -173,7 +173,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is valid
      */
     @Test
-    public void testExperienceFragment1a() {
+    public void testValidXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-1a", NO_LOC_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1"));
@@ -185,7 +185,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment2() {
+    public void testUndefinedXFInPageWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
             + "/jcr:content/root/xf-component-2");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf2"));
@@ -197,7 +197,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment2a() {
+    public void testUndefinedXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-2a", NO_LOC_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf2"));
@@ -209,7 +209,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testExperienceFragment3() {
+    public void testEmptyXFInPageWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
             + "/jcr:content/root/xf-component-3");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf3"));
@@ -221,7 +221,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testExperienceFragment3a() {
+    public void testEmptyXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-3a", NO_LOC_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf3"));
@@ -237,7 +237,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same language branch as the page
      */
     @Test
-    public void testExperienceFragment10() {
+    public void testValidXFInPageWithLocalizationWithSameLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
             + "/jcr:content/root/xf-component-10");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf10"));
@@ -249,7 +249,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same language branch as the page
      */
     @Test
-    public void testExperienceFragment10a() {
+    public void testValidXFInTemplateWithLocalizationWithSameLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-10a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf10"));
@@ -261,7 +261,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different language branch as the page
      */
     @Test
-    public void testExperienceFragment11() {
+    public void testValidXFInPageWithLocalizationWithDifferentLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
             + "/jcr:content/root/xf-component-11");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf11"));
@@ -273,7 +273,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different language branch as the page
      */
     @Test
-    public void testExperienceFragment11a() {
+    public void testValidXFInTemplateWithLocalizationWithDifferentLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-11a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf11a"));
@@ -285,7 +285,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment12() {
+    public void testUndefinedXFInPageWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
             + "/jcr:content/root/xf-component-12");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf12"));
@@ -297,7 +297,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment12a() {
+    public void testUndefinedXFInTemplateWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-12a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf12"));
@@ -309,7 +309,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testExperienceFragment13() {
+    public void testEmptyXFInPageWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
             + "/jcr:content/root/xf-component-13");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13"));
@@ -321,7 +321,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testExperienceFragment13a() {
+    public void testEmptyXFInTemplateWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-13a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13"));
@@ -337,7 +337,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testExperienceFragment20() {
+    public void testValidXFInPageWithLocalizationWithSameCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(US_EN_PAGE
             + "/jcr:content/root/xf-component-20");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf20"));
@@ -349,7 +349,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testExperienceFragment20a() {
+    public void testValidXFInTemplateWithLocalizationWithSameCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-20a", US_EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf20"));
@@ -361,7 +361,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testExperienceFragment21() {
+    public void testValidXFInPageWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(US_EN_PAGE
             + "/jcr:content/root/xf-component-21");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf21"));
@@ -373,7 +373,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testExperienceFragment21a() {
+    public void testValidXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-21a", US_EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf21a"));
@@ -385,7 +385,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment22() {
+    public void testUndefinedXFInPageWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(US_EN_PAGE
             + "/jcr:content/root/xf-component-22");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf22"));
@@ -397,7 +397,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment22a() {
+    public void testUndefinedXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-22a", US_EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf22"));
@@ -413,7 +413,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testExperienceFragment30() {
+    public void testValidXFInPageWithLocalizationWithSameCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_MYSITE_FR_PAGE
             + "/jcr:content/root/xf-component-30");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf30"));
@@ -425,7 +425,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testExperienceFragment30a() {
+    public void testValidXFInTemplateWithLocalizationWithSameCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-30a", CH_MYSITE_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf30"));
@@ -437,7 +437,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testExperienceFragment31() {
+    public void testValidXFInPageWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_MYSITE_FR_PAGE
             + "/jcr:content/root/xf-component-31");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf31"));
@@ -449,7 +449,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testExperienceFragment31a() {
+    public void testValidXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-31a", CH_MYSITE_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf31a"));
@@ -461,7 +461,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment32() {
+    public void testUndefinedXFInPageWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_MYSITE_FR_PAGE
             + "/jcr:content/root/xf-component-32");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf32"));
@@ -473,7 +473,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment32a() {
+    public void testUndefinedXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-32a", CH_MYSITE_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf32"));
@@ -489,7 +489,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country_language branch as the page
      */
     @Test
-    public void testExperienceFragment40() {
+    public void testValidXFInPageWithLocalizationWithSameCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_FR_PAGE
             + "/jcr:content/root/xf-component-40");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf40"));
@@ -501,7 +501,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country_language branch as the page
      */
     @Test
-    public void testExperienceFragment40a() {
+    public void testValidXFInTemplateWithLocalizationWithSameCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-40a", CH_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf40"));
@@ -513,7 +513,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country_language branch as the page
      */
     @Test
-    public void testExperienceFragment41() {
+    public void testValidXFInPageWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_FR_PAGE
             + "/jcr:content/root/xf-component-41");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf41"));
@@ -525,7 +525,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country_language branch as the page
      */
     @Test
-    public void testExperienceFragment41a() {
+    public void testValidXFInTemplateWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-41a", CH_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf41a"));
@@ -537,7 +537,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment42() {
+    public void testUndefinedXFInPageWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_FR_PAGE
             + "/jcr:content/root/xf-component-42");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf42"));
@@ -549,7 +549,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testExperienceFragment42a() {
+    public void testUndefinedXFInTemplateWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-42a", CH_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf42"));
@@ -565,7 +565,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testExperienceFragment50() {
+    public void testValidXFInPageWithLocalizationWithSameBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(BLUEPRINT_PAGE
             + "/jcr:content/root/xf-component-50");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf50"));
@@ -577,7 +577,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testExperienceFragment50a() {
+    public void testValidXFInTemplateWithLocalizationWithSameBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-50a", BLUEPRINT_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf50"));
@@ -589,7 +589,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testExperienceFragment51() {
+    public void testValidXFInPageWithLocalizationWithDifferentBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(BLUEPRINT_PAGE
             + "/jcr:content/root/xf-component-51");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf51"));
@@ -601,7 +601,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testExperienceFragment51a() {
+    public void testValidXFInTemplateWithLocalizationWithDifferentBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-51a", BLUEPRINT_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf51a"));
@@ -613,7 +613,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testExperienceFragment60() {
+    public void testValidXFInPageWithLocalizationWithSameLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(LIVECOPY_PAGE
             + "/jcr:content/root/xf-component-60");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf60"));
@@ -625,7 +625,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testExperienceFragment60a() {
+    public void testValidXFInTemplateLocalizationWithSameLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-60a", LIVECOPY_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf60"));
@@ -637,7 +637,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testExperienceFragment61() {
+    public void testValidXFInPageWithLocalizationWithDifferentLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(LIVECOPY_PAGE
             + "/jcr:content/root/xf-component-61");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf61"));
@@ -649,7 +649,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testExperienceFragment61a() {
+    public void testValidXFInTemplateWithLocalizationWithDifferentLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-61a", LIVECOPY_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf61a"));
