@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2018 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,11 +14,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<workspaceFilter version="1.0">
-    <filter root="/apps/core-components-examples"/>
-    <filter root="/conf/core-components-examples"/>
-    <filter root="/content/core-components-examples"/>
-    <filter root="/content/cq:tags/core-components-examples"/>
-    <filter root="/content/dam/core-components-examples"/>
-    <filter root="/content/experience-fragments/core-components-examples"/>
-</workspaceFilter>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="experience"
+    jcr:description="Displays an experience fragment or its specified variation"
+    jcr:primaryType="cq:Component"
+    jcr:title="Experience Fragment (v1)"
+    componentGroup=".core-wcm"/>
