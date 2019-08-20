@@ -101,11 +101,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     }
 
     @Override
-    public String getFragmentPath() {
-        return fragmentPath;
-    }
-
-    @Override
     public String getLocalizedFragmentPath() {
         return localizedFragmentPath;
     }

@@ -1,5 +1,4 @@
 {
-    "fragmentPath":"/content/experience-fragments/mysite/blueprint/footer/master",
     "localizedFragmentPath":"/content/experience-fragments/mysite/livecopy/footer/master/jcr:content",
    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment"
 }

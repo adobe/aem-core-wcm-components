@@ -38,16 +38,6 @@ public interface ExperienceFragment extends ComponentExporter {
     String PN_FRAGMENT_PATH = "fragmentPath";
 
     /**
-     * Returns the configured path of the experience fragment variation.
-     *
-     * @return Configured experience fragment variation path
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
-     */
-    default String getFragmentPath() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * Returns the localized path of the experience fragment variation if the experience fragment resource is defined
      * in the template. If not, it returns the configured fragment path if it exists, null otherwise.
      *
