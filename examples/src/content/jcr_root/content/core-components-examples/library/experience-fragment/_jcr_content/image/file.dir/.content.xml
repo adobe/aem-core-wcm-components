@@ -3,7 +3,7 @@
     jcr:primaryType="nt:file">
     <jcr:content
         jcr:lastModifiedBy="admin"
-        jcr:mimeType="image/png"
+        jcr:mimeType="image/jpeg"
         jcr:mixinTypes="[dam:Thumbnails]"
         jcr:primaryType="nt:resource"/>
 </jcr:root>

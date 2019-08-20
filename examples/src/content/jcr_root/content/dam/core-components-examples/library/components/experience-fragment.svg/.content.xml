@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="3458e88d-fe9c-428a-bf56-e0e254ff47c9">
+    jcr:uuid="b5b400f2-1ce1-47a6-9f7a-102d20ce4d61">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-24T12:27:26.649+02:00"
+        jcr:lastModified="{Date}2019-08-20T11:24:57.258+02:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-05-24T12:27:24.004+02:00"
-            dam:sha1="7cf81292752c2f1fbb37f5bf5046c6808425d5af"
-            dam:size="{Long}3311"
+            dam:extracted="{Date}2019-08-20T11:23:38.529+02:00"
+            dam:sha1="b407c1c03d78e0aa1ffdacdb4a9880192979d296"
+            dam:size="{Long}590"
             dc:format="image/svg+xml"
-            dc:modified="{Date}2019-05-24T12:27:26.650+02:00"
-            dc:title="Content Fragment"
-            jcr:lastModified="{Date}2019-05-24T12:27:26.649+02:00"
+            dc:modified="{Date}2019-08-20T11:24:57.258+02:00"
+            dc:title="Experience Fragment"
+            jcr:lastModified="{Date}2019-08-20T11:24:57.257+02:00"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
-            jcr:primaryType="nt:unstructured"/>
+            jcr:primaryType="nt:unstructured">
+            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
+        </metadata>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>
