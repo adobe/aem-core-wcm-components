@@ -15,24 +15,22 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.embed;
 
-import java.util.Arrays;
+import org.junit.Test;
 
 import com.adobe.cq.wcm.core.components.models.Embed;
-import com.adobe.cq.wcm.core.components.models.oembed.OembedResponse.Format;
-import org.osgi.service.component.annotations.Component;
 
-@Component(service = Embed.Provider.class)
-public class VimeoProvider extends AbstractOembedProvider {
+import static org.junit.Assert.*;
 
-    public VimeoProvider() {
-        super("http://vimeo.com/api/oembed.%{format}", Arrays.asList(
-            "https?://vimeo.com/groups/.+/videos/\\d+",
-            "https?://vimeo.com/channels/.+/\\d+",
-            "https?://vimeo.com/\\d+"), Format.JSON);
-    }
+public class YoutubeProcessorTest {
 
-    @Override
-    public String getName() {
-        return "vimeo";
+    @Test
+    public void test() {
+        YoutubeProcessor processor = new YoutubeProcessor();
+        Embed.Processor.Result result = processor.process("https://www.youtube.com/watch?v=vpdcMZnYCko");
+        assertNotNull(result);
+        assertEquals(YoutubeProcessor.NAME, result.getProcessor());
+        assertEquals("vpdcMZnYCko", result.getOptions().get(YoutubeProcessor.VIDEO_ID));
+
+        assertNull(processor.process("blah-blah"));
     }
 }

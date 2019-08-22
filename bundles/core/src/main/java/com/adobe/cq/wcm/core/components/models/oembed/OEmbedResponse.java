@@ -22,10 +22,10 @@ import org.osgi.annotation.versioning.ConsumerType;
 /**
  *
  *
- * @since com.adobe.cq.wcm.core.components.models 12.9.0
+ * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
  */
 @ConsumerType
-public interface OembedResponse {
+public interface OEmbedResponse {
 
     /**
      * Enumeration of oEmbed response formats
@@ -34,14 +34,14 @@ public interface OembedResponse {
         /**
          * JSON response format.
          *
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
          */
         JSON("json"),
 
         /**
          * XML response format.
          *
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
          */
         XML("xml");
 
@@ -68,34 +68,34 @@ public interface OembedResponse {
     /**
      * Enumeration of oEmbed response types
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     enum Type {
         /**
          * oEmbed type for photos.
          *
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
          */
         PHOTO("photo"),
 
         /**
          * oEmbed type for video players.
          *
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
          */
         VIDEO("video"),
 
         /**
          * oEmbed type for generic embed data (such as title or author name), does not provide url or html parameters.
          *
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
          */
         LINK("link"),
 
         /**
          * oEmbed type for rich HTML content that does not fall under any other type.
          *
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
          */
         RICH("rich");
 
@@ -105,13 +105,22 @@ public interface OembedResponse {
             this.value = value;
         }
 
+        public static Type fromString(String value) {
+            for (Type type : values()) {
+                if (type.value.equals(value)) {
+                    return type;
+                }
+            }
+            return RICH;
+        }
+
         public String getValue() {
             return value;
         }
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @NotNull
     default String getType() {
@@ -119,7 +128,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @NotNull
     default String getVersion() {
@@ -127,7 +136,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getTitle() {
@@ -135,7 +144,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getAuthorName() {
@@ -143,7 +152,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getAuthorUrl() {
@@ -151,7 +160,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getProviderName() {
@@ -159,7 +168,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getProviderUrl() {
@@ -167,7 +176,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default Long getCacheAge() {
@@ -175,7 +184,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getThumbnailUrl() {
@@ -183,7 +192,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default Integer getThumbnailWidth() {
@@ -191,7 +200,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default Integer getThumbnailHeight() {
@@ -199,7 +208,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default Integer getWidth() {
@@ -207,7 +216,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default Integer getHeight() {
@@ -215,7 +224,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getHtml() {
@@ -223,7 +232,7 @@ public interface OembedResponse {
     }
 
     /**
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
     default String getUrl() {

@@ -13,15 +13,17 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1.oembed;
+package com.adobe.cq.wcm.core.components.internal.services.oembed;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.models.oembed.OembedResponse;
+import com.adobe.cq.wcm.core.components.models.oembed.OEmbedResponse;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class OembedResponseImpl implements OembedResponse {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OEmbedResponseImpl implements OEmbedResponse {
 
     protected String type;
     protected String version;
@@ -38,24 +40,6 @@ public class OembedResponseImpl implements OembedResponse {
     protected Integer height;
     protected String html;
     protected String url;
-
-    public OembedResponseImpl() {
-        type = "video";
-        version = "1.0";
-        title = "Video Title";
-        authorName = "Author Name";
-        authorUrl = "https://adobe.com";
-        providerName = "provider";
-        providerUrl = "https://adobe.com";
-        cacheAge = 50000L;
-        thumbnailUrl = "https://adobe.com";
-        thumbnailWidth = 500;
-        thumbnailHeight = 300;
-        width = 500;
-        height = 300;
-        html = "<div>html</div>";
-        url = "https://adobe.com";
-    }
 
     @Override
     @NotNull

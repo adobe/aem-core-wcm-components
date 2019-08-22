@@ -80,7 +80,7 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 emptyText="Paste a URL to embeddable content"
-                                                fieldDescription="The URL of the content to embed. The URL will be checked against supported providers for a match."
+                                                fieldDescription="The URL of the content to embed. The URL will be checked against supported processors for a match."
                                                 fieldLabel="URL"
                                                 name="./url"
                                                 wrapperClass="foundation-toggleable">

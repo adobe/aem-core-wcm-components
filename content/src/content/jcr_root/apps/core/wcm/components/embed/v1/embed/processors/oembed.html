@@ -14,5 +14,9 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-template.render="${@ options}">
-    ${options['html'] @ context='unsafe'}
+    <img data-sly-test="${options.response.type == 'photo'}"
+         src="${options.response.url}" width="${options.response.width}" height="${options.response.height}" alt="${options.response.title}" title="${options.response.title}"/>
+    <a data-sly-test="${options.response.type == 'link'}"
+       href="${options.response.url}">${options.response.title}</a>
+    <sly data-sly-test="${options.response.type == 'video' || options.response.type == 'rich'}">${options.response.html @ context = 'html'}</sly>
 </sly>

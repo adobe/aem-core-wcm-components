@@ -19,7 +19,7 @@ Embed component written in HTL that allows third-party widgets (e.g. chatbot, le
 
 ## Features
 * The following input types are supported:
-    * url - an author is able to paste a URL of a widget to embed. URLs are checked against registered providers for a match.
+    * url - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match.
     * embeddable - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
     * html - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
 * Each type can be disabled by a template editor.

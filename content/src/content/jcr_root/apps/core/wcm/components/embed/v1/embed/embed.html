@@ -15,11 +15,11 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.embed="com.adobe.cq.wcm.core.components.models.Embed"
      data-sly-use.commonsTemplates="core/wcm/components/commons/v1/templates.html"
-     data-sly-test.hasContent="${(embed.provider && embed.provider.name) || embed.html || embed.embeddableResourceType}"
+     data-sly-test.hasContent="${(embed.result && embed.result.processor) || embed.html || embed.embeddableResourceType}"
      class="cmp-embed">
-    <sly data-sly-test="${embed.provider && embed.provider.name}"
-         data-sly-use.providerTemplate="providers/${embed.provider.name}.html"
-         data-sly-call="${providerTemplate.render @ options=embed.provider.options}"></sly>
+    <sly data-sly-test="${embed.result && embed.result.processor}"
+         data-sly-use.processorTemplate="processors/${embed.result.processor}.html"
+         data-sly-call="${processorTemplate.render @ options=embed.result.options}"></sly>
     <sly data-sly-test="${embed.html}">${embed.html @context = 'html'}</sly>
     <sly data-sly-test="${embed.embeddableResourceType}"
          data-sly-resource="${resource.path @ resourceType=embed.embeddableResourceType, wcmmode='disabled'}"></sly>

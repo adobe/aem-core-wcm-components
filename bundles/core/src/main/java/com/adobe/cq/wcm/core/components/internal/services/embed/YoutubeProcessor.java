@@ -20,39 +20,32 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.osgi.service.component.annotations.Component;
+
 import com.adobe.cq.wcm.core.components.models.Embed;
 
-public class AbstractRegexMatchProvider implements Embed.Provider {
+@Component(service = Embed.Processor.class)
+public class YoutubeProcessor implements Embed.Processor {
 
-    protected String regex;
+    protected static final String NAME = "youtube";
 
-    protected Pattern pattern;
+    protected static final String VIDEO_ID = "videoId";
 
-    protected Matcher matcher;
+    protected static final String SCHEME = "https?:\\/\\/.*\\.youtube\\.com\\/watch\\?v\\=(.*)";
 
-    protected String url;
+    private Pattern pattern = Pattern.compile(SCHEME);
 
-    protected Map<String, Object> options = new HashMap<>();
-
-    protected AbstractRegexMatchProvider(String regex) {
-        this.regex = regex;
-    }
-
-    public boolean accepts(String url) {
-        if (url == null) {
-            return false;
-        }
-        pattern = Pattern.compile(regex);
-        matcher = pattern.matcher(url);
+    @Override
+    public Result process(String url) {
+        Matcher matcher = pattern.matcher(url);
         if (matcher.matches()) {
-            this.url = url;
-            options.put("url", this.url);
-            return true;
+            return new ProcessorResultImpl(
+                    NAME,
+                    new HashMap<String, Object>() {{
+                        put(VIDEO_ID, matcher.group(1));
+                    }});
         }
-        return false;
+        return null;
     }
 
-    public Map<String, Object> getOptions() {
-        return options;
-    }
 }

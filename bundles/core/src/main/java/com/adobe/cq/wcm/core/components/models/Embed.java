@@ -65,7 +65,7 @@ public interface Embed extends ComponentExporter {
         }
 
         /**
-         * Given a {@link String} <code>value</code>, this method returns the enum's value that corresponds to
+         * Given a {@link String} {@code value}, this method returns the enum's value that corresponds to
          * the provided string representation. If no representation is found, {@code null} will be returned.
          *
          * @param value the string representation for which an enum value should be returned
@@ -170,13 +170,13 @@ public interface Embed extends ComponentExporter {
     }
 
     /**
-     * Returns the provider that matches the given URL.
+     * Returns the result from the processor that can process the given URL.
      *
-     * @return The provider that matches the given URL, {@code null} otherwise
+     * @return The result from the processor that can process the given URL, {@code null} if processing is not possible
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     @Nullable
-    default Provider getProvider() {
+    default Embed.Processor.Result getResult() {
         throw new UnsupportedOperationException();
     }
 
@@ -214,18 +214,47 @@ public interface Embed extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
-    interface Provider {
+    /**
+     * Interface that defines a generic processor for a given URL
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    interface Processor {
 
-        default boolean accepts(String url) {
+        /**
+         * Returns the result of processing the given URL, {@code null} if processing is not possible or failed.
+         *
+         * @param url The URL to process
+         * @return The {@link Result} of processing, {@code null} if processing is not possible or failed.
+         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         */
+        default Result process(String url) {
             throw new UnsupportedOperationException();
         }
 
-        default String getName() {
-            throw new UnsupportedOperationException();
-        }
+        /**
+         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         */
+        interface Result {
 
-        default Map<String, Object> getOptions() {
-            throw new UnsupportedOperationException();
+            /**
+             * Returns the name of the processor that was able to process the URL.
+             *
+             * @return Name of the processor.
+             * @since com.adobe.cq.wcm.core.components.models 12.9.0
+             */
+            default String getProcessor() {
+                throw new UnsupportedOperationException();
+            }
+
+            /**
+             * Returns the data from the processor that was able to process the URL.
+             *
+             * @return Data from the processor that was able to process the URL.
+             * @since com.adobe.cq.wcm.core.components.models 12.9.0
+             */
+            default Map<String, Object> getOptions() {
+                throw new UnsupportedOperationException();
+            }
         }
 
     }

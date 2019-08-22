@@ -15,32 +15,27 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.embed;
 
-import org.osgi.service.component.annotations.Component;
+import java.util.Map;
 
 import com.adobe.cq.wcm.core.components.models.Embed;
 
-@Component(service = Embed.Provider.class)
-public class YoutubeProvider extends AbstractRegexMatchProvider {
+public class ProcessorResultImpl implements Embed.Processor.Result {
 
-    public YoutubeProvider() {
-        super("https?:\\/\\/.*\\.youtube\\.com\\/watch\\?v\\=(.*)");
-    }
+    String processor;
+    Map<String, Object> options;
 
-    private String videoId;
-
-    @Override
-    public boolean accepts(String url) {
-        if (super.accepts(url)) {
-            videoId = matcher.group(1);
-            options.put("videoId", videoId);
-            return true;
-        }
-        return false;
+    public ProcessorResultImpl(String processor, Map<String, Object> options) {
+        this.processor = processor;
+        this.options = options;
     }
 
     @Override
-    public String getName() {
-        return "youtube";
+    public String getProcessor() {
+        return processor;
     }
 
+    @Override
+    public Map<String, Object> getOptions() {
+        return options;
+    }
 }

@@ -89,7 +89,7 @@ public class AbstractModelTest {
                     Throwable t = null;
                     try {
                         if (m.getParameterCount() > 0) {
-                            m.invoke(instance, new Object[] { null });
+                            m.invoke(instance, new Object[m.getParameterCount()]);
                         } else {
                             m.invoke(instance);
                         }
