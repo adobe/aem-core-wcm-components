@@ -351,6 +351,8 @@
                             <exclude>**/node_modules/**</exclude>
                             <!-- Ignore github templates -->
                             <exclude>**/.github/**</exclude>
+                            <!-- Ignore mockito extensions config -->
+                            <exclude>**/test/resources/mockito-extensions/*</exclude>
                         </excludes>
                     </configuration>
                     <executions>
@@ -712,6 +714,12 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j.version}</version>
@@ -750,13 +758,13 @@
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit5</artifactId>
-                <version>2.6.1-SNAPSHOT</version>
+                <version>2.7.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>io.wcm</groupId>
                 <artifactId>io.wcm.testing.aem-mock.junit4</artifactId>
-                <version>2.6.1-SNAPSHOT</version>
+                <version>2.7.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

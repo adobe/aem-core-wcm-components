@@ -35,6 +35,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -54,20 +55,26 @@ import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Model(adaptables = SlingHttpServletRequest.class,
+       adapters = {Page.class, ContainerExporter.class},
+       resourceType = PageImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v1/page";
 
     @ScriptVariable
+    @Optional
     protected com.day.cq.wcm.api.Page currentPage;
 
     @ScriptVariable
+    @Optional
     protected ValueMap pageProperties;
 
     @ScriptVariable
     @JsonIgnore
+    @Optional
     protected Design currentDesign;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -76,15 +83,19 @@ public class PageImpl implements Page {
 
     @ScriptVariable
     @JsonIgnore
+    @Optional
     protected ResourceResolver resolver;
 
     @Inject
+    @Optional
     private ModelFactory modelFactory;
 
     @Inject
+    @Optional
     private SlingModelFilter slingModelFilter;
 
     @Self
+    @Optional
     private SlingHttpServletRequest request;
 
     protected String[] keywords = new String[0];
@@ -232,7 +243,7 @@ public class PageImpl implements Page {
      * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
      *
      * @param slingRequest The current request.
-     * @param modelClass  The Sling Model class to be adapted to.
+     * @param modelClass   The Sling Model class to be adapted to.
      * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
      */
     @NotNull
@@ -244,7 +255,7 @@ public class PageImpl implements Page {
             itemWrappers.put(child.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass));
         }
 
-        return  itemWrappers;
+        return itemWrappers;
     }
 
     protected void loadFavicons(String designPath) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017 Adobe Systems Incorporated
+ * Copyright 2017 Adobe
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.osgi.framework.Version;
 
@@ -33,36 +34,40 @@ import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
 import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
+@ExtendWith(AemContextExtension.class)
+class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
 
     private static final String TEST_BASE = "/page/v2";
-    private static final String REDIRECT_PAGE = ROOT + "/redirect-page";
-
-    private static ClientLibrary mockClientLibrary;
+    private static final String REDIRECT_PAGE = CONTENT_ROOT + "/redirect-page";
+    private static final String PN_CLIENT_LIBS = "clientlibs";
 
     private static MockProductInfoProvider mockProductInfoProvider = new MockProductInfoProvider();
 
-    @BeforeClass
-    public static void setUp() {
-
-        internalSetUp(CONTEXT, TEST_BASE, ROOT);
-        mockClientLibrary = Mockito.mock(ClientLibrary.class);
-
+    @BeforeEach
+    protected void setUp() {
+        internalSetup(TEST_BASE);
+        ClientLibrary mockClientLibrary = Mockito.mock(ClientLibrary.class);
         when(mockClientLibrary.getPath()).thenReturn("/apps/wcm/core/page/clientlibs/favicon");
         when(mockClientLibrary.allowProxy()).thenReturn(true);
-        CONTEXT.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
-        CONTEXT.registerInjectActivateService(mockProductInfoProvider);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(mockClientLibrary));
+        context.registerInjectActivateService(mockProductInfoProvider);
     }
 
     @Test
-    public void testPage() throws ParseException {
-        Page page = getPageUnderTest(PAGE);
+    void testPage() throws ParseException {
+        Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH, PageImpl.PN_CLIENTLIBS_JS_HEAD,
+                new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
+                new String[]{"coretest.product-page","coretest.product-page-js-head"}, Page.PN_APP_RESOURCES_CLIENTLIB,
+                "coretest.product-page.appResources",
+                CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
@@ -83,22 +88,23 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         testJSONExport(page, getTestExporterJSONPath(TEST_BASE, PAGE));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    @Override
-    public void testFavicons() {
+    @Test
+    void testFavicons() {
         Page page = getPageUnderTest(PAGE);
-        page.getFavicons();
+            assertThrows(UnsupportedOperationException.class, () -> { page.getFavicons();
+        });
     }
 
     @Test
-    public void testGetFaviconClientLibPath() throws Exception {
-        Page page = getPageUnderTest(PAGE);
+    void testGetFaviconClientLibPath() throws Exception {
+        Page page = getPageUnderTest(PAGE, Page.PN_APP_RESOURCES_CLIENTLIB,
+                "coretest.product-page.appResources");
         String faviconClientLibPath = page.getAppResourcesPath();
         assertEquals(CONTEXT_PATH + "/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources", faviconClientLibPath);
     }
 
     @Test
-    public void testRedirectTarget() throws Exception {
+    void testRedirectTarget() throws Exception {
         Page page = getPageUnderTest(REDIRECT_PAGE);
         NavigationItem redirectTarget = page.getRedirectTarget();
         assertNotNull(redirectTarget);
@@ -107,14 +113,14 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
     }
 
     @Test
-    public void testGetCssClasses() throws Exception {
-        Page page = getPageUnderTest(PAGE);
+    void testGetCssClasses() throws Exception {
+        Page page = getPageUnderTest(PAGE, CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
         String cssClasses = page.getCssClassNames();
         assertEquals("The CSS classes of the page are not expected: " + PAGE, "class1 class2", cssClasses);
     }
 
     @Test
-    public void testHasCloudconfigSupport() {
+    void testHasCloudconfigSupport() {
         Page page = new PageImpl();
         assertFalse("Expected no cloudconfig support if product info provider missing", page.hasCloudconfigSupport());
 
@@ -128,7 +134,7 @@ public class PageImplTest extends com.adobe.cq.wcm.core.components.internal.mode
         assertTrue("Expected cloudconfig support if product version >= 6.4.0", page.hasCloudconfigSupport());
     }
 
-    private Page getPageUnderTest(String pagePath) {
-        return super.getPageUnderTest(Page.class, pagePath);
-    }
+//    private Page getPageUnderTest(String pagePath) {
+//        return super.getPageUnderTest(Page.class, pagePath);
+//    }
 }

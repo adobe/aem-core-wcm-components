@@ -15,53 +15,43 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Search;
-import com.adobe.cq.wcm.core.components.testing.MockStyle;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SearchImplTest {
+@ExtendWith(AemContextExtension.class)
+class SearchImplTest {
 
     private static final String TEST_BASE = "/search";
+    private static final String CONTENT_ROOT = "/content";
+    private static final String SEARCH_PAGE = "/content/en/search/page";
 
-    @Rule
-    public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private static final String TEST_ROOT = "/content/en/search/page";
-
-    private SlingBindings slingBindings;
-
-    @Before
-    public void setUp() {
-        slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class.getName());
-        slingBindings.put(WCMBindings.CURRENT_STYLE, slingBindings = (SlingBindings) context.request().getAttribute(SlingBindings.class
-                .getName()));
-        slingBindings.put(WCMBindings.CURRENT_PAGE, context.currentPage("/content/en/search/page"));
+    @BeforeEach
+    void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
     }
 
     @Test
-    public void testSearchProperties() throws Exception {
-        Resource resource = context.currentResource(TEST_ROOT + "/jcr:content/search");
-        slingBindings.put(WCMBindings.CURRENT_STYLE, new MockStyle(resource));
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        Search search = context.request().adaptTo(Search.class);
+    void testSearchProperties() {
+        Search search = getSearchUnderTest(SEARCH_PAGE + "/jcr:content/search");
         assertEquals(10, search.getResultsSize());
         assertEquals(3, search.getSearchTermMinimumLength());
         assertEquals("/jcr:content/search", search.getRelativePath());
         assertEquals("core/wcm/components/search/v1/search", search.getExportedType());
+    }
+
+    private Search getSearchUnderTest(String contentPath) {
+        context.currentResource(contentPath);
+        return context.request().adaptTo(Search.class);
     }
 
 }

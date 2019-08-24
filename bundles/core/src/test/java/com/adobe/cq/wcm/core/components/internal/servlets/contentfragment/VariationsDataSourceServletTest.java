@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,19 +16,18 @@
 package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.components.ds.DataSource;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class VariationsDataSourceServletTest extends AbstractContentFragmentDataSourceServletTest {
+@ExtendWith(AemContextExtension.class)
+class VariationsDataSourceServletTest extends AbstractContentFragmentDataSourceServletTest {
 
     /* names of the datasource instances to test */
 
@@ -51,85 +50,86 @@ public class VariationsDataSourceServletTest extends AbstractContentFragmentData
 
     private VariationsDataSourceServlet servlet;
 
-    @Before
-    public void before() throws Exception {
+    @BeforeEach
+    void setUp() {
+        super.setUp();
         // create the servlet to test
         servlet = new VariationsDataSourceServlet();
         Utils.setInternalState(servlet, "expressionResolver", expressionResolver);
     }
 
     @Test
-    public void testNoConfig()
+    void testNoConfig()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_NO_CONFIG);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
-    public void testFragmentPathNonExisting()
+    void testFragmentPathNonExisting()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_NON_EXISTING);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
-    public void testComponentPathNonExisting()
+    void testComponentPathNonExisting()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH__NON_EXISTING);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
-    public void testFragmentPathInvalid()
+    void testFragmentPathInvalid()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_INVALID);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
-    public void testComponentPathInvalid()
+    void testComponentPathInvalid()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_INVALID);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
-    public void testComponentPathInvalidFragmentPath()
+    void testComponentPathInvalidFragmentPath()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_INVALID_FRAGMENT_PATH);
         assertDataSource(dataSource, new String[0], new String[0]);
     }
 
     @Test
-    public void testFragmentPathTextOnly()
+    void testFragmentPathTextOnly()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_TEXT_ONLY);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
-    public void testComponentPathTextOnly()
+    void testComponentPathTextOnly()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_TEXT_ONLY);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
-    public void testFragmentPathStructured()
+    void testFragmentPathStructured()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_STRUCTURED);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
-    public void testComponentPathStructured()
+    void testComponentPathStructured()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_COMPONENT_PATH_STRUCTURED);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);
     }
 
     @Test
-    public void testFragmentPathOverride()
+    void testFragmentPathOverride()
             throws ServletException, IOException {
         DataSource dataSource = getDataSource(servlet, DS_FRAGMENT_PATH_OVERRIDE);
         assertDataSource(dataSource, VARIATION_NAMES, VARIATION_TITLES);

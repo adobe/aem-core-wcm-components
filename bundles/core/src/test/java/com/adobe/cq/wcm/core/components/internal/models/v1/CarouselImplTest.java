@@ -36,7 +36,6 @@ class CarouselImplTest {
 
     private static final String TEST_BASE = "/carousel";
     private static final String CONTENT_ROOT = "/content";
-    private static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT_PAGE = "/content/carousel";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
@@ -79,7 +78,6 @@ class CarouselImplTest {
 
     private Carousel getCarouselUnderTest() {
         context.currentResource(CarouselImplTest.CAROUSEL_1);
-        context.request().setContextPath(CONTEXT_PATH);
         return context.request().adaptTo(Carousel.class);
     }
 

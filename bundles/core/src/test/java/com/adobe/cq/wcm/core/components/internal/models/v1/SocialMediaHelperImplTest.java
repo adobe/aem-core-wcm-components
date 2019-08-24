@@ -25,9 +25,9 @@ import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.jetbrains.annotations.NotNull;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
@@ -37,12 +37,14 @@ import com.adobe.cq.wcm.core.components.testing.MockExternalizerFactory;
 import com.adobe.cq.wcm.core.components.testing.MockXFFactory;
 import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class SocialMediaHelperImplTest {
+@ExtendWith(AemContextExtension.class)
+class SocialMediaHelperImplTest {
 
     private static final String CLASS_RESOURCE = "org.apache.sling.api.resource.Resource";
     private static final String CLASS_PRODUCT = "com.adobe.cq.commerce.api.Product";
@@ -51,6 +53,8 @@ public class SocialMediaHelperImplTest {
     private static final String CLASS_PAGE = "com.day.cq.wcm.api.Page";
 
     private static final String TESTS_CONTENT_ROOT = "/content/sharing-tests";
+    private static final String TEST_BASE = "/sharing";
+    private static final String CONTENT_ROOT = "/content";
     private static final String CONTEXT_PATH = "/context";
     private static final String BASIC_SHARING_PAGE_1 = TESTS_CONTENT_ROOT + "/" + "basic-sharing-page-1";
     private static final String BASIC_SHARING_PAGE_2 = TESTS_CONTENT_ROOT + "/" + "basic-sharing-page-2";
@@ -60,15 +64,15 @@ public class SocialMediaHelperImplTest {
     private static final String XF_PRODUCT_SHARING_PAGE = TESTS_CONTENT_ROOT + "/" + "xf-product-page";
     private static final String EXTENSION = "html";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext("/sharing", "/content");
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-
-    @BeforeClass
-    public static void setUp() {
-        CONTEXT.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
-        CONTEXT.registerService(AdapterFactory.class, new AdapterFactory() {
+    @BeforeEach
+    void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
+        context.registerService(AdapterFactory.class, new AdapterFactory() {
                     @Override
+                    @SuppressWarnings("unchecked")
                     public <AdapterType> AdapterType getAdapter(@NotNull Object o, @NotNull Class<AdapterType> clazz) {
                         Object result = null;
                         switch (clazz.getName()) {
@@ -106,7 +110,7 @@ public class SocialMediaHelperImplTest {
     }
 
     @Test
-    public void testWebsiteProvider() {
+    void testWebsiteProvider() {
         SocialMediaHelper socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_1);
         assertTrue(socialMediaHelper.isSocialMediaEnabled());
         assertTrue(socialMediaHelper.isFacebookEnabled());
@@ -135,7 +139,7 @@ public class SocialMediaHelperImplTest {
     }
 
     @Test
-    public void testCommerceProvider() {
+    void testCommerceProvider() {
         SocialMediaHelper socialMediaHelper = getSocialMediaHelperUnderTest(PRODUCT_SHARING_PAGE);
         assertTrue(socialMediaHelper.isSocialMediaEnabled());
         assertTrue(socialMediaHelper.isFacebookEnabled());
@@ -158,7 +162,7 @@ public class SocialMediaHelperImplTest {
     }
 
     @Test
-    public void testXFWebsiteProvider() {
+    void testXFWebsiteProvider() {
         SocialMediaHelper socialMediaHelper = getSocialMediaHelperUnderTest(XF_SHARING_PAGE);
         assertTrue(socialMediaHelper.isSocialMediaEnabled());
         assertTrue(socialMediaHelper.isFacebookEnabled());
@@ -177,7 +181,7 @@ public class SocialMediaHelperImplTest {
     }
 
     @Test
-    public void testXFProductProvider() {
+    void testXFProductProvider() {
         SocialMediaHelper socialMediaHelper = getSocialMediaHelperUnderTest(XF_PRODUCT_SHARING_PAGE);
         assertTrue(socialMediaHelper.isSocialMediaEnabled());
         assertTrue(socialMediaHelper.isFacebookEnabled());
@@ -196,9 +200,9 @@ public class SocialMediaHelperImplTest {
     }
 
     private SocialMediaHelper getSocialMediaHelperUnderTest(String pagePath) {
-        Resource currentResource = CONTEXT.resourceResolver().getResource(pagePath);
+        Resource currentResource = context.resourceResolver().getResource(pagePath);
         Page currentPage = currentResource.adaptTo(Page.class);
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
         MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
         request.setContextPath(CONTEXT_PATH);
         request.setResource(currentResource);
@@ -207,7 +211,7 @@ public class SocialMediaHelperImplTest {
         requestPathInfo.setResourcePath(currentResource.getPath());
         SlingBindings slingBindings = new SlingBindings();
         slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
-        slingBindings.put(SlingBindings.RESOLVER, CONTEXT.resourceResolver());
+        slingBindings.put(SlingBindings.RESOLVER, context.resourceResolver());
         slingBindings.put(SlingBindings.RESPONSE, response);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(SocialMediaHelper.class);
