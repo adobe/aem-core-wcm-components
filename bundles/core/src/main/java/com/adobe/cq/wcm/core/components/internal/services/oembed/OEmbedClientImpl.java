@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -51,10 +52,12 @@ public class OEmbedClientImpl implements OEmbedClient {
 
     @Override
     public String getProvider(String url) {
-        for (Map.Entry<String, OEmbedClientImplConfiguration> entry : configs.entrySet()) {
-            for (String scheme : entry.getValue().scheme()) {
-                if (Pattern.matches(scheme, url)) {
-                    return entry.getKey();
+        if (StringUtils.isNotEmpty(url)) {
+            for (Map.Entry<String, OEmbedClientImplConfiguration> entry : configs.entrySet()) {
+                for (String scheme : entry.getValue().scheme()) {
+                    if (Pattern.matches(scheme, url)) {
+                        return entry.getKey();
+                    }
                 }
             }
         }
@@ -63,6 +66,9 @@ public class OEmbedClientImpl implements OEmbedClient {
 
     @Override
     public OEmbedResponse getResponse(String provider, String url) {
+        if (StringUtils.isEmpty(provider) || StringUtils.isEmpty(url)) {
+            return null;
+        }
         OEmbedClientImplConfiguration configuration = configs.get(provider);
         if (configuration == null) {
             return null;
@@ -90,7 +96,7 @@ public class OEmbedClientImpl implements OEmbedClient {
     }
 
     protected void addURLParameter(StringBuilder sb, String separator, String name, Object value) {
-        if (name != null) {
+        if (sb != null && StringUtils.isNotEmpty(separator) && StringUtils.isNotEmpty(name) && value != null) {
             sb.append(separator).append(name).append("=").append(value);
         }
     }

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class OEmbedProcessor implements Embed.Processor {
 
     @Override
     public Result process(String url) {
-        if (oEmbedClient == null) {
+        if (oEmbedClient == null || StringUtils.isEmpty(url)) {
             return null;
         }
         String provider = oEmbedClient.getProvider(url);
