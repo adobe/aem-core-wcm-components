@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.embed;
+package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 
 import java.util.HashMap;
 
@@ -21,9 +21,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
+import com.adobe.cq.wcm.core.components.internal.services.embed.ProcessorResultImpl;
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
-import com.adobe.cq.wcm.core.components.models.embed.OEmbedClient;
-import com.adobe.cq.wcm.core.components.models.embed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
 
 @Component(service = Embed.UrlProcessor.class)
 public class OEmbedUrlProcessor implements Embed.UrlProcessor {

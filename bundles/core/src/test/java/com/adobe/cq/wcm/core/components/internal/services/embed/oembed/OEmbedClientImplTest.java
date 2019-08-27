@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.embed;
+package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -25,7 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.osgi.framework.BundleContext;
 
-import com.adobe.cq.wcm.core.components.models.embed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OEmbedClientImplTest {

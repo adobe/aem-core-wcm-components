@@ -13,13 +13,13 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.embed;
+package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
-import com.adobe.cq.wcm.core.components.models.embed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedClient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
