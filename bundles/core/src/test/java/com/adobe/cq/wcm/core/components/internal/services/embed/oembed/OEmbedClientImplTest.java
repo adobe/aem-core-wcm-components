@@ -18,23 +18,26 @@ package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.URL;
+import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
-import org.osgi.framework.BundleContext;
 
 import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class OEmbedClientImplTest {
 
     @Test
     public void test() throws NoSuchFieldException, IOException {
         OEmbedClientImpl client = new OEmbedClientImpl();
-        client.activate(
-                new OEmbedClientImplConfiguration() {
+        OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
+        configurationFactory.configure(
+                new OEmbedClientImplConfigurationFactory.Config() {
 
                     @Override
                     public Class<? extends Annotation> annotationType() {
@@ -58,12 +61,12 @@ public class OEmbedClientImplTest {
 
                     @Override
                     public String[] scheme() {
-                        return new String[] {
+                        return new String[]{
                                 ".*"
                         };
                     }
-                },
-                Mockito.mock(BundleContext.class));
+                });
+        client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
         Mockito.when(mapper.readValue(Mockito.any(URL.class), Mockito.any(Class.class))).thenReturn(new OEmbedResponseImpl());
         FieldSetter.setField(client, client.getClass().getDeclaredField("mapper"), mapper);

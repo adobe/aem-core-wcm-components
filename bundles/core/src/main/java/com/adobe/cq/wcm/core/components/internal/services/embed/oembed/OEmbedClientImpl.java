@@ -18,16 +18,16 @@ package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,25 +38,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component(
         service = OEmbedClient.class
 )
-@Designate(
-        ocd = OEmbedClientImplConfiguration.class,
-        factory = true
-)
 public class OEmbedClientImpl implements OEmbedClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OEmbedClientImpl.class);
 
-    private Map<String, OEmbedClientImplConfiguration> configs = new HashMap<>();
+    private List<OEmbedClientImplConfigurationFactory.Config> configs = new ArrayList<>();
 
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public String getProvider(String url) {
         if (StringUtils.isNotEmpty(url)) {
-            for (Map.Entry<String, OEmbedClientImplConfiguration> entry : configs.entrySet()) {
-                for (String scheme : entry.getValue().scheme()) {
+            for (OEmbedClientImplConfigurationFactory.Config config : configs) {
+                for (String scheme : config.scheme()) {
                     if (Pattern.matches(scheme, url)) {
-                        return entry.getKey();
+                        return config.provider();
                     }
                 }
             }
@@ -69,16 +65,27 @@ public class OEmbedClientImpl implements OEmbedClient {
         if (StringUtils.isEmpty(provider) || StringUtils.isEmpty(url)) {
             return null;
         }
-        OEmbedClientImplConfiguration configuration = configs.get(provider);
-        if (configuration == null) {
+        OEmbedClientImplConfigurationFactory.Config config = getConfiguration(provider);
+        if (config == null) {
             return null;
         }
-        if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(configuration.format())) {
+        if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
             try {
-                URL jsonURL = buildURL(configuration.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
+                URL jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
                 return mapper.readValue(jsonURL, OEmbedResponseImpl.class);
             } catch (IOException ioex) {
                 LOGGER.error(ioex.getMessage(), ioex);
+            }
+        }
+        return null;
+    }
+
+    protected OEmbedClientImplConfigurationFactory.Config getConfiguration(String provider) {
+        if (!StringUtils.isEmpty(provider)) {
+           for (OEmbedClientImplConfigurationFactory.Config config : configs) {
+                if (provider.equals(config.provider())) {
+                    return config;
+                }
             }
         }
         return null;
@@ -101,13 +108,14 @@ public class OEmbedClientImpl implements OEmbedClient {
         }
     }
 
-    @Activate
-    protected void activate(OEmbedClientImplConfiguration configuration, BundleContext bundleCtx) {
-        configs.put(configuration.provider(), configuration);
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, updated = "bindOEmbedClientImplConfigurationFactory")
+    protected synchronized void bindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
+        LOGGER.warn("bindConfigurationFactory: " + configurationFactory.getConfig().provider());
+        configs.add(configurationFactory.getConfig());
     }
 
-    @Deactivate
-    protected void deactivate() {
-        configs.clear();
+    protected synchronized void unbindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
+        LOGGER.warn("unbindConfigurationFactory: " + configurationFactory.getConfig().provider());
+        configs.remove(configurationFactory.getConfig());
     }
 }
