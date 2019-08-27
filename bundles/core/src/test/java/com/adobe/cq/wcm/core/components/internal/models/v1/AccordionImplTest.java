@@ -35,8 +35,8 @@ import static org.junit.Assert.*;
 class AccordionImplTest {
 
     private static final String TEST_BASE = "/accordion";
-    private static final String TEST_ROOT_PAGE = "/content/accordion";
-    private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
+    private static final String TEST_ROOT_PAGE = "/content";
+    private static final String TEST_ROOT_PAGE_GRID = "/accordion/jcr:content/root/responsivegrid";
     private static final String ACCORDION_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-1";
     private static final String ACCORDION_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-2";
     private static final String ACCORDION_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-3";

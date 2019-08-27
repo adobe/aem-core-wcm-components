@@ -33,8 +33,8 @@ import static org.junit.Assert.assertEquals;
 class ButtonImplTest {
 
     private static final String TEST_BASE = "/button";
-    private static final String TEST_ROOT_PAGE = "/content/button";
-    private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
+    private static final String TEST_ROOT_PAGE = "/content";
+    private static final String TEST_ROOT_PAGE_GRID = "/button/jcr:content/root/responsivegrid";
     private static final String BUTTON_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/button-1";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
