@@ -34,7 +34,7 @@ shared: &shared
         key: aem-core-wcm-components
 
     # run tests!
-    - run: mvn clean verify -B -U -e -x
+    - run: mvn clean verify -B -U -e -X
 
     - save_cache: # saves the project dependencies
         paths:
