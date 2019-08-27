@@ -78,6 +78,9 @@ public class NavigationImplTest {
     private static final String NAV_COMPONENT_9 = TEST_ROOT + "/jcr:content/root/navigation-component-9";
     // points to the nav component used for invalidRedirectTest()
     private static final String NAV_COMPONENT_10 = TEST_ROOT + "/jcr:content/root/navigation-component-10";
+    // points to the nav component used for when the nav root has no jcr:content child
+    private static final String NAV_COMPONENT_11 = TEST_ROOT + "/jcr:content/root/navigation-component-11";
+
 
     private static final ContentPolicyManager contentPolicyManager = mock(ContentPolicyManager.class);
 
@@ -162,6 +165,20 @@ public class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_2);
         assertEquals("Didn't expect any navigation items.", 0, navigation.getItems().size());
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation4"));
+    }
+
+    /**
+     * Demonstrates the ability to construct a {@link NavigationImpl} where the navigation root page does not have a
+     * jcr:content node, but does have legitimate sub-pages.
+     */
+    @Test
+    public void testNavigationRootMissingJCRContent() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_11);
+        Object[][] expectedPages = {
+            {"/content/navigation-missing-jcr-content/navigation-1", 0, false, "/content/navigation-missing-jcr-content/navigation-1.html"},
+            {"/content/navigation-missing-jcr-content/navigation-2", 0, false, "/content/navigation-missing-jcr-content/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, navigation.getItems());
     }
 
     @Test

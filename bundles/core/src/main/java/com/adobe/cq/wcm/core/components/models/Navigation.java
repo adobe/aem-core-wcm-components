@@ -82,4 +82,14 @@ public interface Navigation extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Retrieves an accessibility label that describes the navigation.
+     *
+     * @return an accessibility label for the navigation
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
+        throw new UnsupportedOperationException();
+    }
+
 }

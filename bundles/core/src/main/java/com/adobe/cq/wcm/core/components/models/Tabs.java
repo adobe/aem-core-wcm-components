@@ -34,4 +34,14 @@ public interface Tabs extends Container {
     default String getActiveItem() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Returns an accessibility label that describes the tabs.
+     *
+     * @return an accessibility label for tabs
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
+        throw new UnsupportedOperationException();
+    }
 }
