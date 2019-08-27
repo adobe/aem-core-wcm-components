@@ -37,28 +37,29 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 7. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
 9. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
-10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
-11. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
-16. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
+10. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
+11. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
+12. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
+13. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
 14. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
 15. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
-12. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
-13. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+16. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
+17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
 
 ### Container components
 
-17. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
-18. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-19. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
-20. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+18. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
+19. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
+20. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
+21. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
 
 ### Form components
 
-21. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
-22. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
-23. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
-24. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
-25. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
+22. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+23. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+24. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+25. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+26. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for main upcoming components and features.
 
