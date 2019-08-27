@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Adobe Systems Incorporated
+ * Copyright 2019 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,15 @@
 (function(document, $, Coral) {
     "use strict";
 
+    var URL_VALIDATION_GET_SUFFIX = ".urlProcessor.json";
+    var DATA_ATTR_EMBED_RESOURCE_PATH = "cmpEmbedDialogEditResourcePath";
+
     var selectors = {
         dialogContent: ".cmp-embed__editor",
         embeddable: "[data-cmp-embed-dialog-edit-hook='embeddable']",
         type: "[data-cmp-embed-dialog-edit-hook='type']",
-        typeRadio: "[data-cmp-embed-dialog-edit-hook='type'] coral-radio"
+        typeRadio: "[data-cmp-embed-dialog-edit-hook='type'] coral-radio",
+        urlField: "[data-cmp-embed-dialog-edit-hook='url']"
     };
 
     var registry = $(window).adaptTo("foundation-registry");
@@ -30,6 +34,76 @@
     var type;
     var typeRadios;
     var foundationFieldSelectors;
+
+    // URL field validation object
+    var urlValidation = new function() {
+
+        var validation = {};
+
+        this.getElement = function() {
+            return validation.el;
+        };
+
+        this.getUrl = function() {
+            return validation.url;
+        };
+
+        this.isValidUrl = function() {
+            return validation.isValid;
+        };
+
+        this.getErrorMessage = function() {
+            return validation.errorMessage;
+        };
+
+        this.setElement = function(el) {
+            validation.el = el;
+            this.setUrl(el.value);
+        };
+
+        this.setUrl = function(url) {
+            validation.url = url;
+        };
+
+        this.setValid = function(isValid) {
+            validation.isValid = isValid;
+        };
+
+        this.setErrorMessage = function(errorMessage) {
+            validation.errorMessage = errorMessage;
+        };
+
+        this.reset = function() {
+            validation = {};
+        };
+
+        this.isDone = function() {
+            return !isEmpty(validation);
+        };
+
+        // Performs the server-side validation and executes the callback
+        this.perform = function(callback) {
+            var that = this;
+            var embedResourcePath = that.getElement().dataset[DATA_ATTR_EMBED_RESOURCE_PATH];
+            var requestUrl = embedResourcePath + URL_VALIDATION_GET_SUFFIX + "?url=" + that.getUrl();
+            var request = new XMLHttpRequest();
+            request.open("GET", requestUrl, true);
+            request.onload = function() {
+                if (request.status === 200) {
+                    that.setValid(true);
+                } else if (request.status === 404) {
+                    that.setValid(false);
+                    that.setErrorMessage("There is no provider to process this url");
+                } else {
+                    that.setValid(false);
+                    that.setErrorMessage("An error occured while validating the url");
+                }
+                callback(that.getElement());
+            };
+            request.send();
+        };
+
+    };
 
     $(document).on("dialog-loaded", function(event) {
         var $dialog = event.dialog;
@@ -72,6 +146,31 @@
                     }
                 }
             }
+        }
+    });
+
+    // Registers a validator for the URL field
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: selectors.urlField,
+        validate: function(el) {
+            var errorMessage;
+            if (urlValidation.isDone()) {
+                if (el.value === urlValidation.getUrl()) {
+                    if (!urlValidation.isValidUrl()) {
+                        errorMessage = urlValidation.getErrorMessage();
+                    }
+                } else {
+                    errorMessage = "An error occured while validating the url";
+                }
+                urlValidation.reset();
+            } else {
+                urlValidation.setElement(el);
+                urlValidation.perform(validateUIElement);
+            }
+            if (errorMessage) {
+                return Granite.I18n.get(errorMessage);
+            }
+            return null;
         }
     });
 
@@ -179,6 +278,28 @@
             return adapter.selector;
         });
         return fieldSelectors.join(",");
+    }
+
+    /**
+     * Checks whether the object is empty.
+     * @param obj
+     * @returns {boolean} true if the object is empty, false otherwise
+     */
+    function isEmpty(obj) {
+        for(var key in obj) {
+            if(obj.hasOwnProperty(key))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Triggers the client-side element validation.
+     */
+    function validateUIElement(el) {
+        var api = $(el).adaptTo("foundation-validation");
+        api.checkValidity();
+        api.updateUI();
     }
 
 })(document, Granite.$, Coral);
