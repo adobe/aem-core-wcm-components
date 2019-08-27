@@ -282,19 +282,21 @@
 
     /**
      * Checks whether the object is empty.
-     * @param obj
-     * @returns {boolean} true if the object is empty, false otherwise
+     * @param {Object} obj
+     * @returns {Boolean} true if the object is empty, false otherwise
      */
     function isEmpty(obj) {
-        for(var key in obj) {
-            if(obj.hasOwnProperty(key))
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
                 return false;
+            }
         }
         return true;
     }
 
     /**
      * Triggers the client-side element validation.
+     * @param {String} el
      */
     function validateUIElement(el) {
         var api = $(el).adaptTo("foundation-validation");
