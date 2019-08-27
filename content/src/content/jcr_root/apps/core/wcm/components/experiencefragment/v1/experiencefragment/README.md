@@ -42,8 +42,12 @@ those classes are private and should not be used in custom code (e.g. to style t
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
-* **Compatibility**: AEM 6.4
+* **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_experiencefragment\_v1](https://www.adobe.com/go/aem_cmp_experiencefragment_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_xf](https://www.adobe.com/go/aem_cmp_library_xf)
+* **Author**: [Abhishek Aggarwal](https://github.com/abhishekagg19)
+* **Co-authors**: [Jean-Christophe Kautzmann](https://github.com/jckautzmann)
+
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
 

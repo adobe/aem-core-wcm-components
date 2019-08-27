@@ -77,4 +77,4 @@ BLOCK cmp-download
 * **Author**: [bkheadwire](https://github.com/bkheadwire)
 * **Co-authors**: [Burkhard Pauli](https://github.com/bpauli)
 
-_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components)._
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._

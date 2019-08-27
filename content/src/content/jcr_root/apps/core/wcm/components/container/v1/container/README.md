@@ -67,4 +67,4 @@ BLOCK cmp-container
 * **Author**: [Ankur Ahlawat](https://github.com/aahlawat)
 * **Co-authors**: [Vlad Bailescu](https://github.com/bailescu), Shailesh Bassi
 
-_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components)._
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
