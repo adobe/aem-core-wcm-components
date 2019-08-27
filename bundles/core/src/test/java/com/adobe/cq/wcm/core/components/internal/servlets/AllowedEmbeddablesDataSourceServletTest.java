@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public class AllowedEmbeddablesDataSourceServletTest {
     }
 
     @Test
-    public void testAllowedEmbeddablesDataSourceServlet() throws Exception {
+    public void testAllowedEmbeddablesDataSourceServlet() {
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);

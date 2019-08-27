@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -181,9 +181,9 @@ public interface Embed extends ComponentExporter {
     }
 
     /**
-     * Returns the resource type of an embeddable.
+     * Returns the resource type of the embeddable.
      *
-     * @return The resource type of an embeddable, if type is {@link Type#EMBEDDABLE}
+     * @return The resource type of the embeddable, if type is {@link Type#EMBEDDABLE}
      *         and the embeddable type is not disabled via policy configuration, {@code null} otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
