@@ -65,13 +65,13 @@ public class EmbedImpl implements Embed {
     private Style currentStyle;
 
     @Inject @Optional
-    private List<Processor> processors;
+    private List<UrlProcessor> urlProcessors;
 
     @Inject
     private Resource resource;
 
     private Type embedType;
-    private Processor.Result result;
+    private UrlProcessor.Result result;
 
     @PostConstruct
     private void initModel() {
@@ -100,9 +100,9 @@ public class EmbedImpl implements Embed {
             }
         }
 
-        if (url != null && processors != null) {
-            for (Processor processor : processors) {
-                Processor.Result result = processor.process(this.url);
+        if (url != null && urlProcessors != null) {
+            for (UrlProcessor urlProcessor : urlProcessors) {
+                UrlProcessor.Result result = urlProcessor.process(this.url);
                 if (result != null) {
                     this.result = result;
                     break;
@@ -125,7 +125,7 @@ public class EmbedImpl implements Embed {
 
     @Nullable
     @Override
-    public Embed.Processor.Result getResult() {
+    public Embed.UrlProcessor.Result getResult() {
         return result;
     }
 

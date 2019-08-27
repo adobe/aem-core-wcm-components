@@ -21,15 +21,15 @@ import com.adobe.cq.wcm.core.components.models.Embed;
 
 import static org.junit.Assert.*;
 
-public class YoutubeProcessorTest {
+public class YoutubeUrlProcessorTest {
 
     @Test
     public void test() {
-        YoutubeProcessor processor = new YoutubeProcessor();
-        Embed.Processor.Result result = processor.process("https://www.youtube.com/watch?v=vpdcMZnYCko");
+        YoutubeUrlProcessor processor = new YoutubeUrlProcessor();
+        Embed.UrlProcessor.Result result = processor.process("https://www.youtube.com/watch?v=vpdcMZnYCko");
         assertNotNull(result);
-        assertEquals(YoutubeProcessor.NAME, result.getProcessor());
-        assertEquals("vpdcMZnYCko", result.getOptions().get(YoutubeProcessor.VIDEO_ID));
+        assertEquals(YoutubeUrlProcessor.NAME, result.getProcessor());
+        assertEquals("vpdcMZnYCko", result.getOptions().get(YoutubeUrlProcessor.VIDEO_ID));
 
         assertNull(processor.process("blah-blah"));
     }

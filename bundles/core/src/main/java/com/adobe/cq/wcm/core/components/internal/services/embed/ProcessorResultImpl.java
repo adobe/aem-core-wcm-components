@@ -19,7 +19,7 @@ import java.util.Map;
 
 import com.adobe.cq.wcm.core.components.models.Embed;
 
-public class ProcessorResultImpl implements Embed.Processor.Result {
+public class ProcessorResultImpl implements Embed.UrlProcessor.Result {
 
     String processor;
     Map<String, Object> options;

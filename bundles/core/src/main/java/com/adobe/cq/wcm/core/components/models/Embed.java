@@ -176,7 +176,7 @@ public interface Embed extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     @Nullable
-    default Embed.Processor.Result getResult() {
+    default Embed.UrlProcessor.Result getResult() {
         throw new UnsupportedOperationException();
     }
 
@@ -218,7 +218,7 @@ public interface Embed extends ComponentExporter {
      * Interface that defines a generic processor for a given URL
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
-    interface Processor {
+    interface UrlProcessor {
 
         /**
          * Returns the result of processing the given URL, {@code null} if processing is not possible or failed.

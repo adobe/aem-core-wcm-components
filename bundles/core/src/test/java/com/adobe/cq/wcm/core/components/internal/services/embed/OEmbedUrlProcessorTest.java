@@ -26,20 +26,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class OEmbedProcessorTest {
+public class OEmbedUrlProcessorTest {
 
     @Test
     public void test() {
-        OEmbedProcessor processor = new OEmbedProcessor();
+        OEmbedUrlProcessor processor = new OEmbedUrlProcessor();
 
         OEmbedClient mockClient = Mockito.mock(OEmbedClient.class);
         Mockito.when(mockClient.getProvider("something")).thenReturn("Test");
         Mockito.when(mockClient.getResponse("Test", "something")).thenReturn(new OEmbedResponseImpl());
         processor.oEmbedClient = mockClient;
 
-        Embed.Processor.Result result = processor.process("something");
+        Embed.UrlProcessor.Result result = processor.process("something");
         assertNotNull(result);
-        assertEquals(OEmbedProcessor.NAME, result.getProcessor());
+        assertEquals(OEmbedUrlProcessor.NAME, result.getProcessor());
         assertEquals("Test", result.getOptions().get("provider"));
         assertNotNull(result.getOptions().get("response"));
 

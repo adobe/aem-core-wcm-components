@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.services.embed.YoutubeProcessor;
+import com.adobe.cq.wcm.core.components.internal.services.embed.YoutubeUrlProcessor;
 import com.adobe.cq.wcm.core.components.models.Embed;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -38,20 +38,20 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmbedProcessorServletTest {
+public class EmbedUrlProcessorServletTest {
 
     private static final String TEST_BASE = "/embed";
 
-    private EmbedProcessorServlet servlet;
+    private EmbedUrlProcessorServlet servlet;
 
     @Rule
     public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
 
     @Before
     public void setUp() {
-        servlet = new EmbedProcessorServlet();
-        Embed.Processor youtubeUrlProcessor = new YoutubeProcessor();
-        List<Embed.Processor> urlProcessors = new ArrayList<>();
+        servlet = new EmbedUrlProcessorServlet();
+        Embed.UrlProcessor youtubeUrlProcessor = new YoutubeUrlProcessor();
+        List<Embed.UrlProcessor> urlProcessors = new ArrayList<>();
         urlProcessors.add(youtubeUrlProcessor);
         Utils.setInternalState(servlet, "urlProcessors", urlProcessors);
     }

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,43 +16,38 @@
 package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.cq.wcm.core.components.models.Embed;
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedClient;
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedResponse;
 
-@Component(service = Embed.Processor.class)
-public class OEmbedProcessor implements Embed.Processor {
+@Component(service = Embed.UrlProcessor.class)
+public class YoutubeUrlProcessor implements Embed.UrlProcessor {
 
-    protected static final String NAME = "oembed";
+    protected static final String NAME = "youtube";
 
-    @Reference
-    protected OEmbedClient oEmbedClient;
+    protected static final String VIDEO_ID = "videoId";
+
+    protected static final String SCHEME = "https?:\\/\\/.*\\.youtube\\.com\\/watch\\?v\\=(.*)";
+
+    private Pattern pattern = Pattern.compile(SCHEME);
 
     @Override
     public Result process(String url) {
-        if (oEmbedClient == null || StringUtils.isEmpty(url)) {
-            return null;
+        if (StringUtils.isNotEmpty(url)) {
+            Matcher matcher = pattern.matcher(url);
+            if (matcher.matches()) {
+                return new ProcessorResultImpl(
+                    NAME,
+                    new HashMap<String, Object>() {{
+                        put(VIDEO_ID, matcher.group(1));
+                    }});
+            }
         }
-        String provider = oEmbedClient.getProvider(url);
-        if (StringUtils.isEmpty(provider)) {
-            return null;
-        }
-
-        OEmbedResponse oEmbedResponse = oEmbedClient.getResponse(provider, url);
-        if (oEmbedResponse == null) {
-            return null;
-        }
-        return new ProcessorResultImpl(
-                NAME,
-                new HashMap<String, Object>() {{
-                    put("provider", provider);
-                    put("response", oEmbedResponse);
-                }});
+        return null;
     }
 
 }
