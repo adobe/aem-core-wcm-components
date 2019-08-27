@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.oembed;
+package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,8 +31,8 @@ import org.osgi.service.metatype.annotations.Designate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedClient;
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.models.embed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.models.embed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component(

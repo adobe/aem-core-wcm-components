@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.oembed;
+package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,7 @@ import java.io.InputStream;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.models.embed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OEmbedResponseImplTest {

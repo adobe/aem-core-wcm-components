@@ -18,9 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.adobe.cq.wcm.core.components.internal.services.oembed.OEmbedResponseImpl;
-import com.adobe.cq.wcm.core.components.models.Embed;
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.models.embed.Embed;
+import com.adobe.cq.wcm.core.components.models.embed.OEmbedClient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

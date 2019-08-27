@@ -21,9 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.adobe.cq.wcm.core.components.models.Embed;
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedClient;
-import com.adobe.cq.wcm.core.components.models.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.models.embed.Embed;
+import com.adobe.cq.wcm.core.components.models.embed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.models.embed.OEmbedResponse;
 
 @Component(service = Embed.UrlProcessor.class)
 public class OEmbedUrlProcessor implements Embed.UrlProcessor {

@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.models.embed.Embed;
 
 @Component(service = Embed.UrlProcessor.class)
 public class YoutubeUrlProcessor implements Embed.UrlProcessor {

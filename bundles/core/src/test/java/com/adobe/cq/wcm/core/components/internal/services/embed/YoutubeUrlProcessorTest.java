@@ -17,7 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import org.junit.Test;
 
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.models.embed.Embed;
 
 import static org.junit.Assert.*;
 

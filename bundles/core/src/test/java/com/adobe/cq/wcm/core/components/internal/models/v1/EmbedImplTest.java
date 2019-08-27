@@ -30,7 +30,7 @@ import org.mockito.Mockito;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.models.embed.Embed;
 import com.day.cq.wcm.api.designer.Style;
 
 public class EmbedImplTest {
