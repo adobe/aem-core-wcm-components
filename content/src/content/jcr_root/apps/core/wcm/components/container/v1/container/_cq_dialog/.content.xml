@@ -103,7 +103,7 @@
                                                 fieldLabel="Background Image"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./backgroundImageReference"
-                                                mimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+                                                mimeTypes="[image/gif,image/jpeg,image/png,image/tiff]"
                                                 multiple="{Boolean}false"
                                                 name="./file"
                                                 title="Upload Image Asset"
