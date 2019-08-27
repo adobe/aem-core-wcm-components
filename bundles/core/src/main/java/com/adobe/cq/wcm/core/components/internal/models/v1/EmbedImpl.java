@@ -20,6 +20,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -100,9 +101,9 @@ public class EmbedImpl implements Embed {
             }
         }
 
-        if (url != null && urlProcessors != null) {
+        if (StringUtils.isNotEmpty(url) && urlProcessors != null) {
             for (UrlProcessor urlProcessor : urlProcessors) {
-                UrlProcessor.Result result = urlProcessor.process(this.url);
+                UrlProcessor.Result result = urlProcessor.process(url);
                 if (result != null) {
                     this.result = result;
                     break;
