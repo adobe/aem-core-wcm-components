@@ -40,7 +40,7 @@ public class YoutubeUrlProcessor implements Embed.UrlProcessor {
         if (StringUtils.isNotEmpty(url)) {
             Matcher matcher = pattern.matcher(url);
             if (matcher.matches()) {
-                return new ProcessorResultImpl(
+                return new UrlProcessorResultImpl(
                     NAME,
                     new HashMap<String, Object>() {{
                         put(VIDEO_ID, matcher.group(1));

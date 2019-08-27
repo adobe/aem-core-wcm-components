@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.adobe.cq.wcm.core.components.internal.services.embed.ProcessorResultImpl;
+import com.adobe.cq.wcm.core.components.internal.services.embed.UrlProcessorResultImpl;
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
 import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
@@ -48,7 +48,7 @@ public class OEmbedUrlProcessor implements Embed.UrlProcessor {
         if (oEmbedResponse == null) {
             return null;
         }
-        return new ProcessorResultImpl(
+        return new UrlProcessorResultImpl(
                 NAME,
                 new HashMap<String, Object>() {{
                     put("provider", provider);
