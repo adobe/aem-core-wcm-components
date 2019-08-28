@@ -62,18 +62,6 @@
                         ":jcr:data": 82835
                     }
                 },
-                "original": {
-                    "jcr:primaryType": "nt:file",
-                    "jcr:createdBy": "admin",
-                    "jcr:created": "Thu Oct 18 2018 12:00:37 GMT-0700",
-                    "jcr:content": {
-                        "jcr:primaryType": "oak:Resource",
-                        "jcr:lastModifiedBy": "admin",
-                        "jcr:mimeType": "application/pdf",
-                        "jcr:lastModified": "Thu Oct 18 2018 16:50:44 GMT-0700",
-                        ":jcr:data": 157228
-                    }
-                },
                 "cq5dam.thumbnail.319.319.png": {
                     "jcr:primaryType": "nt:file",
                     "jcr:createdBy": "workflow-process-service",
