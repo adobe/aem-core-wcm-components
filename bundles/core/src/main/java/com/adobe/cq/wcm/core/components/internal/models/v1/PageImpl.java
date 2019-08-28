@@ -35,7 +35,6 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -65,16 +64,13 @@ public class PageImpl implements Page {
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v1/page";
 
     @ScriptVariable
-    @Optional
     protected com.day.cq.wcm.api.Page currentPage;
 
     @ScriptVariable
-    @Optional
     protected ValueMap pageProperties;
 
     @ScriptVariable
     @JsonIgnore
-    @Optional
     protected Design currentDesign;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -83,19 +79,15 @@ public class PageImpl implements Page {
 
     @ScriptVariable
     @JsonIgnore
-    @Optional
     protected ResourceResolver resolver;
 
     @Inject
-    @Optional
     private ModelFactory modelFactory;
 
     @Inject
-    @Optional
     private SlingModelFilter slingModelFilter;
 
     @Self
-    @Optional
     private SlingHttpServletRequest request;
 
     protected String[] keywords = new String[0];
