@@ -1,13 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #b3b3b3;
-      }
-    </style>
-  </defs>
-  <title>S_IlluExperienceFragment_180</title>
-  <g id="I_C_O_N_S" data-name="I C O N S">
-    <path class="cls-1" d="M130.353,44H49.647a4,4,0,0,0-4,4v79a4,4,0,0,0,4,4h80.706a4,4,0,0,0,4-4V48A4,4,0,0,0,130.353,44ZM49.647,47h80.706a1,1,0,0,1,1,1V86H48.647V48A1,1,0,0,1,49.647,47ZM73,89h58.353v18H73ZM48.647,127V89H70v39H49.647A1,1,0,0,1,48.647,127Zm81.706,1H73V110h58.353v17A1,1,0,0,1,130.353,128Z"/>
-  </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path id="I_C_O_N_S" d="M130.353,44L49.647,44C47.453,44 45.647,45.806 45.647,48L45.647,127C45.647,129.194 47.453,131 49.647,131L130.353,131C132.547,131 134.353,129.194 134.353,127L134.353,48C134.353,45.806 132.547,44 130.353,44ZM49.647,47L130.353,47C130.902,47 131.353,47.451 131.353,48L131.353,86L48.647,86L48.647,48C48.647,47.451 49.098,47 49.647,47ZM73,89L131.353,89L131.353,107L73,107L73,89ZM48.647,127L48.647,89L70,89L70,128L49.647,128C49.098,128 48.647,127.549 48.647,127ZM130.353,128L73,128L73,110L131.353,110L131.353,127C131.353,127.549 130.902,128 130.353,128Z" style="fill:rgb(179,179,179);fill-rule:nonzero;"/>
 </svg>
