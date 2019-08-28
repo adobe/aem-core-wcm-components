@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.servlets.contentfragment;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Locale;
-
 import javax.servlet.ServletException;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -29,9 +28,8 @@ import org.apache.sling.i18n.ResourceBundleProvider;
 import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.apache.sling.servlethelpers.MockSlingHttpServletResponse;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
@@ -41,71 +39,69 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment.Abstr
 import com.adobe.granite.ui.components.Config;
 import com.adobe.granite.ui.components.ExpressionResolver;
 import com.adobe.granite.ui.components.ds.DataSource;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
+import static org.mockito.Mockito.*;
 
-public abstract class AbstractContentFragmentDataSourceServletTest {
+@ExtendWith(AemContextExtension.class)
+abstract class AbstractContentFragmentDataSourceServletTest {
 
+    private static final String TEST_BASE = "/contentfragment";
     private static final String DATASOURCES_PATH = "/content/datasources";
     private static final String CONTENT_FRAGMENTS_PATH = "/content/dam/contentfragments";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext("/contentfragment", "/content");
+
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
     private static final RootResourceBundle RESOURCE_BUNDLE = new RootResourceBundle();
 
-    @BeforeClass
-    public static void setUpSuper() throws Exception {
+    @BeforeEach
+    @SuppressWarnings("unchecked")
+    void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
         // load the content fragments
-        CONTEXT.load().json("/contentfragment/test-content-dam-contentfragments.json", CONTENT_FRAGMENTS_PATH);
+        context.load().json("/contentfragment/test-content-dam-contentfragments.json", CONTENT_FRAGMENTS_PATH);
         // load the data sources
-        CONTEXT.load().json("/contentfragment/test-content-datasources.json", DATASOURCES_PATH);
+        context.load().json("/contentfragment/test-content-datasources.json", DATASOURCES_PATH);
         // load the content fragment models
-        CONTEXT.load().json("/contentfragment/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
+        context.load().json("/contentfragment/test-content-conf.json", "/conf/global/settings/dam/cfm/models");
         // register an adapter that adapts resources to (mocks of) content fragments
-        CONTEXT.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, AbstractContentFragmentTest.ADAPTER);
+        context.registerAdapter(Resource.class, com.adobe.cq.dam.cfm.ContentFragment.class, AbstractContentFragmentTest.ADAPTER);
 
         // mock resource bundle provider to enable constructing i18n instances
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class, withSettings().lenient());
-        CONTEXT.registerService(ResourceBundleProvider.class, resourceBundleProvider);
-        CONTEXT.registerService(FragmentRenderService.class, mock(FragmentRenderService.class));
-        CONTEXT.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
+        context.registerService(ResourceBundleProvider.class, resourceBundleProvider);
+        context.registerService(FragmentRenderService.class, mock(FragmentRenderService.class));
+        context.registerService(ContentTypeConverter.class, mock(ContentTypeConverter.class));
         Mockito.when(resourceBundleProvider.getResourceBundle(null)).thenReturn(RESOURCE_BUNDLE);
         Mockito.when(resourceBundleProvider.getResourceBundle(null, null)).thenReturn(RESOURCE_BUNDLE);
-    }
 
-    protected ExpressionResolver expressionResolver;
-
-    @Before
-    public void beforeSuper() throws Exception {
         // mock the expression resolver
         expressionResolver = mock(ExpressionResolver.class);
         when(expressionResolver.resolve(any(String.class), any(Locale.class), any(Class.class),
                 any(SlingHttpServletRequest.class))).then(returnsFirstArg());
     }
 
+    ExpressionResolver expressionResolver;
+
     /**
      * Calls the servlet with the specified datasource resource and returns the resulting datasource.
      */
-    protected DataSource getDataSource(AbstractContentFragmentDataSourceServlet servlet, String name)
+    DataSource getDataSource(AbstractContentFragmentDataSourceServlet servlet, String name)
             throws ServletException, IOException {
 
         // get datasource resource
-        ResourceResolver resolver = CONTEXT.resourceResolver();
+        ResourceResolver resolver = context.resourceResolver();
         Resource dataSource = resolver.getResource(DATASOURCES_PATH + "/" + name);
 
         // mock the request and request resource
         Resource resource = mock(Resource.class);
         when(resource.getChild(Config.DATASOURCE)).thenReturn(dataSource);
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(resolver, CONTEXT.bundleContext());
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(resolver, context.bundleContext());
         request.setResource(resource);
 
         // call the servlet
@@ -118,7 +114,7 @@ public abstract class AbstractContentFragmentDataSourceServletTest {
     /**
      * Asserts that the specified {@code dataSource} contains the expected items.
      */
-    protected void assertDataSource(DataSource dataSource, String[] names, String[] titles) {
+    void assertDataSource(DataSource dataSource, String[] names, String[] titles) {
         assertNotNull("Datasource was null", dataSource);
         Iterator<Resource> iterator = dataSource.iterator();
         for (int i = 0; i < names.length; i++) {

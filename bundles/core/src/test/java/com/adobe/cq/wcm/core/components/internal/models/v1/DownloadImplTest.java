@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,31 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.HashMap;
-
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.resourceresolver.MockValueMap;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet;
 import com.adobe.cq.wcm.core.components.models.Download;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
-import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-public class DownloadImplTest {
+@ExtendWith(AemContextExtension.class)
+class DownloadImplTest {
 
     private static final String TEST_BASE = "/download";
     private static final String CONTENT_ROOT = "/content";
@@ -70,18 +65,17 @@ public class DownloadImplTest {
     private static final String DOWNLOAD_FULLY_CONFIGURED_FILE = "download-fully-configured-file";
     private static final String DOWNLOAD_WITH_TITLE_TYPE = "download-with-title-type";
 
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
-
-    @BeforeClass
-    public static void setUp() throws Exception {
-        AEM_CONTEXT.load().json(TEST_BASE + TEST_CONTENT_DAM_JSON, "/content/dam/core/documents");
-        AEM_CONTEXT.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_PATH + "/jcr:content/renditions/original");
+    @BeforeEach
+    void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + TEST_CONTENT_DAM_JSON, "/content/dam/core/documents");
+        context.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_PATH + "/jcr:content/renditions/original");
     }
 
     @Test
-    public void testFullyConfiguredDownload() {
+    void testFullyConfiguredDownload() {
         Download download = getDownloadUnderTest(DOWNLOAD_1);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
@@ -95,7 +89,7 @@ public class DownloadImplTest {
     }
 
     @Test
-    public void testFullyConfiguredFileDownload() {
+    void testFullyConfiguredFileDownload() {
         Download download = getDownloadUnderTest(DOWNLOAD_3);
         assertEquals(TITLE, download.getTitle());
         assertEquals(DESCRIPTION, download.getDescription());
@@ -108,7 +102,7 @@ public class DownloadImplTest {
     }
 
     @Test
-    public void testDownloadWithDamProperties() {
+    void testDownloadWithDamProperties() {
         Download download = getDownloadUnderTest(DOWNLOAD_2);
         assertEquals(DAM_TITLE, download.getTitle());
         assertEquals(DAM_DESCRIPTION, download.getDescription());
@@ -121,95 +115,56 @@ public class DownloadImplTest {
     }
 
     @Test
-    public void testDisplayAllFileMetadata() throws Exception
-    {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Download.PN_DISPLAY_FILENAME, "true");
-            put(Download.PN_DISPLAY_FORMAT, "true");
-            put(Download.PN_DISPLAY_SIZE, "true");
-        }}));
-        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
-        assertEquals("Display of filename is not enabled", true, download.displayFilename());
-        assertEquals("Display of file size is not enabled", true, download.displaySize());
-        assertEquals("Display of file format is not enabled", true, download.displayFormat());
+    void testDisplayAllFileMetadata() {
+        Download download = getDownloadUnderTest(DOWNLOAD_1,
+                Download.PN_DISPLAY_FILENAME, true,
+                Download.PN_DISPLAY_FORMAT, true,
+                Download.PN_DISPLAY_SIZE, true);
+        assertTrue("Display of filename is not enabled", download.displayFilename());
+        assertTrue("Display of file size is not enabled", download.displaySize());
+        assertTrue("Display of file format is not enabled", download.displayFormat());
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
 
     @Test
-    public void testDownloadWithTitleType() throws Exception
-    {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Download.PN_TITLE_TYPE, "h5");
-        }}));
-
-        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+    void testDownloadWithTitleType() {
+        Download download = getDownloadUnderTest(DOWNLOAD_1,
+                Download.PN_TITLE_TYPE, "h5");
         assertEquals("Expected title type is not correct", "h5", download.getTitleType());
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_TITLE_TYPE));
     }
 
     @Test
-    public void testDownloadWithDefaultTitleType() throws Exception
-    {
+    void testDownloadWithDefaultTitleType() {
         Resource mockResource = mock(Resource.class);
         Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource));
 
         Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
-        assertEquals("Expected title type is not correct", null, download.getTitleType());
+        assertNull("Expected title type is not correct", download.getTitleType());
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
 
     @Test
-    public void testDownloadWithCustomActionText() throws Exception
-    {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
-        }}));
-
-        Download download = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
+    void testDownloadWithCustomActionText() {
+        Download download = getDownloadUnderTest(DOWNLOAD_1,
+                Download.PN_ACTION_TEXT, STYLE_ACTION_TEST);
         assertEquals("Expected action text is not correct", COMPONENT_ACTION_TEXT, download.getActionText());
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
     }
 
     @Test
-    public void testDownloadWithoutActionText() throws Exception
-    {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource));
-
-        Download downloadWithActionText = getDownloadUnderTest(DOWNLOAD_1, mockStyle);
-        assertEquals("Expected action text is not correct", COMPONENT_ACTION_TEXT, downloadWithActionText.getActionText());
-
-        Download downloadWithoutActionText = getDownloadUnderTest(DOWNLOAD_2, mockStyle);
-        assertEquals("Expected action text is not correct", null, downloadWithoutActionText.getActionText());
-        Utils.testJSONExport(downloadWithActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
+    void testDownloadWithoutActionText() {
+        Download downloadWithoutActionText = getDownloadUnderTest(DOWNLOAD_2);
+        assertNull("Expected action text is not correct", downloadWithoutActionText.getActionText());
+        Utils.testJSONExport(downloadWithoutActionText, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_WITH_DAM_PROPERTIES));
     }
 
-    private Download getDownloadUnderTest(String resourcePath) {
-        return getDownloadUnderTest(resourcePath, null);
-    }
-
-    private Download getDownloadUnderTest(String resourcePath, Style currentStyle) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
-        if (resource == null) {
-            throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
+    private Download getDownloadUnderTest(String resourcePath, Object ... properties) {
+        Resource resource = context.currentResource(resourcePath);
+        if (resource != null && properties != null) {
+            context.contentPolicyMapping(resource.getResourceType(), properties);
         }
-        final MockSlingHttpServletRequest request =
-                new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        SlingBindings slingBindings = new SlingBindings();
-        slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
-        if (currentStyle != null) {
-            slingBindings.put(WCMBindings.CURRENT_STYLE, currentStyle);
-        }
-        Component component = mock(Component.class);
-        slingBindings.put(WCMBindings.COMPONENT, component);
-        request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(Download.class);
+        context.request().setContextPath(CONTEXT_PATH);
+        return context.request().adaptTo(Download.class);
     }
 }

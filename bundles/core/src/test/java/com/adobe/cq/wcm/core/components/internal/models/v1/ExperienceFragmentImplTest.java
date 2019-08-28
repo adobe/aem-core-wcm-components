@@ -17,40 +17,35 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.mockito.Matchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
-import com.adobe.cq.wcm.core.components.testing.MockContentPolicyStyle;
 import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMException;
-import com.day.cq.wcm.api.designer.Style;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.day.cq.wcm.api.policies.ContentPolicyMapping;
 import com.day.cq.wcm.msm.api.LiveCopy;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ExperienceFragmentImplTest {
+@ExtendWith(AemContextExtension.class)
+class ExperienceFragmentImplTest {
 
     private static final String TEST_BASE = "/experiencefragment";
     private static final String CONTEXT_PATH = "/core";
@@ -66,89 +61,89 @@ public class ExperienceFragmentImplTest {
     private static final String LIVECOPY_ROOT = "/content/mysite/livecopy";
     private static final String LIVECOPY_PAGE = LIVECOPY_ROOT + "/page";
 
-    @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content");
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @BeforeClass
-    public static void init() throws WCMException {
-        AEM_CONTEXT.load().json(TEST_BASE + "/test-conf.json", "/conf/coretest/settings");
-        AEM_CONTEXT.registerService(LanguageManager.class, new MockLanguageManager());
+    @BeforeEach
+    void setUp() throws WCMException {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
+        context.load().json(TEST_BASE + "/test-conf.json", "/conf/coretest/settings");
+        context.registerService(LanguageManager.class, new MockLanguageManager());
         LiveRelationshipManager relationshipManager = mock(LiveRelationshipManager.class);
         when(relationshipManager.isSource(any(Resource.class))).then(
-            invocation -> {
-                Object[] arguments = invocation.getArguments();
-                Resource resource = (Resource) arguments[0];
-                return BLUEPRINT_PAGE.equals(resource.getPath());
-            }
+                invocation -> {
+                    Object[] arguments = invocation.getArguments();
+                    Resource resource = (Resource) arguments[0];
+                    return BLUEPRINT_PAGE.equals(resource.getPath());
+                }
         );
         when(relationshipManager.getLiveRelationships(any(Resource.class), isNull(), isNull())).then(
-            invocation -> {
-                Object[] arguments = invocation.getArguments();
-                Resource resource = (Resource) arguments[0];
-                if (BLUEPRINT_PAGE.equals(resource.getPath())) {
-                    LiveRelationship liveRelationship = mock(LiveRelationship.class);
-                    LiveCopy liveCopy = mock(LiveCopy.class);
-                    when(liveCopy.getBlueprintPath()).thenReturn(BLUEPRINT_ROOT);
-                    when(liveRelationship.getLiveCopy()).thenReturn(liveCopy);
-                    final ArrayList<LiveRelationship> relationships = new ArrayList<>();
-                    relationships.add(liveRelationship);
-                    final Iterator iterator = relationships.iterator();
-                    return new RangeIterator() {
+                invocation -> {
+                    Object[] arguments = invocation.getArguments();
+                    Resource resource = (Resource) arguments[0];
+                    if (BLUEPRINT_PAGE.equals(resource.getPath())) {
+                        LiveRelationship liveRelationship = mock(LiveRelationship.class);
+                        LiveCopy liveCopy = mock(LiveCopy.class);
+                        when(liveCopy.getBlueprintPath()).thenReturn(BLUEPRINT_ROOT);
+                        when(liveRelationship.getLiveCopy()).thenReturn(liveCopy);
+                        final ArrayList<LiveRelationship> relationships = new ArrayList<>();
+                        relationships.add(liveRelationship);
+                        final Iterator iterator = relationships.iterator();
+                        return new RangeIterator() {
 
-                        int index = 0;
+                            int index = 0;
 
-                        @Override
-                        public void skip(long skipNum) {
+                            @Override
+                            public void skip(long skipNum) {
 
-                        }
+                            }
 
-                        @Override
-                        public long getSize() {
-                            return relationships.size();
-                        }
+                            @Override
+                            public long getSize() {
+                                return relationships.size();
+                            }
 
-                        @Override
-                        public long getPosition() {
-                            return index;
-                        }
+                            @Override
+                            public long getPosition() {
+                                return index;
+                            }
 
-                        @Override
-                        public boolean hasNext() {
-                            return iterator.hasNext();
-                        }
+                            @Override
+                            public boolean hasNext() {
+                                return iterator.hasNext();
+                            }
 
-                        @Override
-                        public Object next() {
-                            index++;
-                            return iterator.next();
-                        }
-                    };
+                            @Override
+                            public Object next() {
+                                index++;
+                                return iterator.next();
+                            }
+                        };
+                    }
+                    return null;
                 }
-                return null;
-            }
         );
         when(relationshipManager.hasLiveRelationship(any(Resource.class))).then(
-            invocation -> {
-                Object[] arguments = invocation.getArguments();
-                Resource resource = (Resource) arguments[0];
-                return LIVECOPY_PAGE.equals(resource.getPath());
-            }
+                invocation -> {
+                    Object[] arguments = invocation.getArguments();
+                    Resource resource = (Resource) arguments[0];
+                    return LIVECOPY_PAGE.equals(resource.getPath());
+                }
         );
         when(relationshipManager.getLiveRelationship(any(Resource.class), anyBoolean())).then(
-            invocation -> {
-                Object[] arguments = invocation.getArguments();
-                Resource resource = (Resource) arguments[0];
-                if (LIVECOPY_PAGE.equals(resource.getPath())) {
-                    LiveRelationship liveRelationship = mock(LiveRelationship.class);
-                    LiveCopy liveCopy = mock(LiveCopy.class);
-                    when(liveCopy.getPath()).thenReturn(LIVECOPY_ROOT);
-                    when(liveRelationship.getLiveCopy()).thenReturn(liveCopy);
-                    return liveRelationship;
+                invocation -> {
+                    Object[] arguments = invocation.getArguments();
+                    Resource resource = (Resource) arguments[0];
+                    if (LIVECOPY_PAGE.equals(resource.getPath())) {
+                        LiveRelationship liveRelationship = mock(LiveRelationship.class);
+                        LiveCopy liveCopy = mock(LiveCopy.class);
+                        when(liveCopy.getPath()).thenReturn(LIVECOPY_ROOT);
+                        when(liveRelationship.getLiveCopy()).thenReturn(liveCopy);
+                        return liveRelationship;
+                    }
+                    return null;
                 }
-                return null;
-            }
         );
-        AEM_CONTEXT.registerService(LiveRelationshipManager.class, relationshipManager);
+        context.registerService(LiveRelationshipManager.class, relationshipManager);
     }
 
 
@@ -161,9 +156,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is valid
      */
     @Test
-    public void testValidXFInPageWithoutLocalization() {
+    void testValidXFInPageWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
-            + "/jcr:content/root/xf-component-1");
+                + "/jcr:content/root/xf-component-1");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1"));
     }
 
@@ -173,9 +168,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is valid
      */
     @Test
-    public void testValidXFInTemplateWithoutLocalization() {
+    void testValidXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-1a", NO_LOC_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-1a", NO_LOC_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf1"));
     }
 
@@ -185,9 +180,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInPageWithoutLocalization() {
+    void testUndefinedXFInPageWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
-            + "/jcr:content/root/xf-component-2");
+                + "/jcr:content/root/xf-component-2");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf2"));
     }
 
@@ -197,9 +192,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInTemplateWithoutLocalization() {
+    void testUndefinedXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-2a", NO_LOC_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-2a", NO_LOC_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf2"));
     }
 
@@ -209,9 +204,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testEmptyXFInPageWithoutLocalization() {
+    void testEmptyXFInPageWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(NO_LOC_PAGE
-            + "/jcr:content/root/xf-component-3");
+                + "/jcr:content/root/xf-component-3");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf3"));
     }
 
@@ -221,9 +216,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testEmptyXFInTemplateWithoutLocalization() {
+    void testEmptyXFInTemplateWithoutLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-3a", NO_LOC_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-3a", NO_LOC_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf3"));
     }
 
@@ -237,9 +232,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithSameLanguage() {
+    void testValidXFInPageWithLocalizationWithSameLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
-            + "/jcr:content/root/xf-component-10");
+                + "/jcr:content/root/xf-component-10");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf10"));
     }
 
@@ -249,9 +244,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithSameLanguage() {
+    void testValidXFInTemplateWithLocalizationWithSameLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-10a", EN_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-10a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf10"));
     }
 
@@ -261,9 +256,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithDifferentLanguage() {
+    void testValidXFInPageWithLocalizationWithDifferentLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
-            + "/jcr:content/root/xf-component-11");
+                + "/jcr:content/root/xf-component-11");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf11"));
     }
 
@@ -273,9 +268,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithDifferentLanguage() {
+    void testValidXFInTemplateWithLocalizationWithDifferentLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-11a", EN_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-11a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf11a"));
     }
 
@@ -285,9 +280,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInPageWithLocalization() {
+    void testUndefinedXFInPageWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
-            + "/jcr:content/root/xf-component-12");
+                + "/jcr:content/root/xf-component-12");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf12"));
     }
 
@@ -297,9 +292,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInTemplateWithLocalization() {
+    void testUndefinedXFInTemplateWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-12a", EN_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-12a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf12"));
     }
 
@@ -309,9 +304,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testEmptyXFInPageWithLocalization() {
+    void testEmptyXFInPageWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(EN_PAGE
-            + "/jcr:content/root/xf-component-13");
+                + "/jcr:content/root/xf-component-13");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13"));
     }
 
@@ -321,9 +316,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is empty
      */
     @Test
-    public void testEmptyXFInTemplateWithLocalization() {
+    void testEmptyXFInTemplateWithLocalization() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-13a", EN_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-13a", EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf13"));
     }
 
@@ -337,9 +332,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithSameCountryLanguage() {
+    void testValidXFInPageWithLocalizationWithSameCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(US_EN_PAGE
-            + "/jcr:content/root/xf-component-20");
+                + "/jcr:content/root/xf-component-20");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf20"));
     }
 
@@ -349,9 +344,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithSameCountryLanguage() {
+    void testValidXFInTemplateWithLocalizationWithSameCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-20a", US_EN_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-20a", US_EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf20"));
     }
 
@@ -361,9 +356,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithDifferentCountryLanguage() {
+    void testValidXFInPageWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(US_EN_PAGE
-            + "/jcr:content/root/xf-component-21");
+                + "/jcr:content/root/xf-component-21");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf21"));
     }
 
@@ -373,9 +368,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
+    void testValidXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-21a", US_EN_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-21a", US_EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf21a"));
     }
 
@@ -385,9 +380,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInPageWithLocalizationWithDifferentCountryLanguage() {
+    void testUndefinedXFInPageWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(US_EN_PAGE
-            + "/jcr:content/root/xf-component-22");
+                + "/jcr:content/root/xf-component-22");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf22"));
     }
 
@@ -397,9 +392,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
+    void testUndefinedXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-22a", US_EN_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-22a", US_EN_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf22"));
     }
 
@@ -413,9 +408,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithSameCountrySiteLanguage() {
+    void testValidXFInPageWithLocalizationWithSameCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_MYSITE_FR_PAGE
-            + "/jcr:content/root/xf-component-30");
+                + "/jcr:content/root/xf-component-30");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf30"));
     }
 
@@ -425,9 +420,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country-language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithSameCountrySiteLanguage() {
+    void testValidXFInTemplateWithLocalizationWithSameCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-30a", CH_MYSITE_FR_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-30a", CH_MYSITE_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf30"));
     }
 
@@ -437,9 +432,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithDifferentCountrySiteLanguage() {
+    void testValidXFInPageWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_MYSITE_FR_PAGE
-            + "/jcr:content/root/xf-component-31");
+                + "/jcr:content/root/xf-component-31");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf31"));
     }
 
@@ -449,9 +444,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country-language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
+    void testValidXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-31a", CH_MYSITE_FR_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-31a", CH_MYSITE_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf31a"));
     }
 
@@ -461,9 +456,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInPageWithLocalizationWithDifferentCountrySiteLanguage() {
+    void testUndefinedXFInPageWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_MYSITE_FR_PAGE
-            + "/jcr:content/root/xf-component-32");
+                + "/jcr:content/root/xf-component-32");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf32"));
     }
 
@@ -473,9 +468,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
+    void testUndefinedXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-32a", CH_MYSITE_FR_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-32a", CH_MYSITE_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf32"));
     }
 
@@ -489,9 +484,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country_language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithSameCountry_Language() {
+    void testValidXFInPageWithLocalizationWithSameCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_FR_PAGE
-            + "/jcr:content/root/xf-component-40");
+                + "/jcr:content/root/xf-component-40");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf40"));
     }
 
@@ -501,7 +496,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same country_language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithSameCountry_Language() {
+    void testValidXFInTemplateWithLocalizationWithSameCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-40a", CH_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf40"));
@@ -513,7 +508,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country_language branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithDifferentCountry_Language() {
+    void testValidXFInPageWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_FR_PAGE
             + "/jcr:content/root/xf-component-41");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf41"));
@@ -525,9 +520,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different country_language branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithDifferentCountry_Language() {
+    void testValidXFInTemplateWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-41a", CH_FR_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-41a", CH_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf41a"));
     }
 
@@ -537,9 +532,9 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInPageWithLocalizationWithDifferentCountry_Language() {
+    void testUndefinedXFInPageWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(CH_FR_PAGE
-            + "/jcr:content/root/xf-component-42");
+                + "/jcr:content/root/xf-component-42");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf42"));
     }
 
@@ -549,7 +544,7 @@ public class ExperienceFragmentImplTest {
      * fragmentPath is undefined
      */
     @Test
-    public void testUndefinedXFInTemplateWithLocalizationWithDifferentCountry_Language() {
+    void testUndefinedXFInTemplateWithLocalizationWithDifferentCountry_Language() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-42a", CH_FR_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf42"));
@@ -565,9 +560,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithSameBlueprint() {
+    void testValidXFInPageWithLocalizationWithSameBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(BLUEPRINT_PAGE
-            + "/jcr:content/root/xf-component-50");
+                + "/jcr:content/root/xf-component-50");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf50"));
     }
 
@@ -577,9 +572,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithSameBlueprint() {
+    void testValidXFInTemplateWithLocalizationWithSameBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-50a", BLUEPRINT_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-50a", BLUEPRINT_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf50"));
     }
 
@@ -589,9 +584,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithDifferentBlueprint() {
+    void testValidXFInPageWithLocalizationWithDifferentBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(BLUEPRINT_PAGE
-            + "/jcr:content/root/xf-component-51");
+                + "/jcr:content/root/xf-component-51");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf51"));
     }
 
@@ -601,9 +596,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithDifferentBlueprint() {
+    void testValidXFInTemplateWithLocalizationWithDifferentBlueprint() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-51a", BLUEPRINT_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-51a", BLUEPRINT_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf51a"));
     }
 
@@ -613,9 +608,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithSameLivecopy() {
+    void testValidXFInPageWithLocalizationWithSameLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(LIVECOPY_PAGE
-            + "/jcr:content/root/xf-component-60");
+                + "/jcr:content/root/xf-component-60");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf60"));
     }
 
@@ -625,9 +620,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to the same region branch as the page
      */
     @Test
-    public void testValidXFInTemplateLocalizationWithSameLivecopy() {
+    void testValidXFInTemplateLocalizationWithSameLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
-            PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-60a", LIVECOPY_PAGE);
+                PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-60a", LIVECOPY_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf60"));
     }
 
@@ -637,9 +632,9 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testValidXFInPageWithLocalizationWithDifferentLivecopy() {
+    void testValidXFInPageWithLocalizationWithDifferentLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(LIVECOPY_PAGE
-            + "/jcr:content/root/xf-component-61");
+                + "/jcr:content/root/xf-component-61");
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf61"));
     }
 
@@ -649,7 +644,7 @@ public class ExperienceFragmentImplTest {
      * XF component points to a different region branch as the page
      */
     @Test
-    public void testValidXFInTemplateWithLocalizationWithDifferentLivecopy() {
+    void testValidXFInTemplateWithLocalizationWithDifferentLivecopy() {
         ExperienceFragment experienceFragment = getExperienceFragmentUnderTest(
             PRODUCT_PAGE_TEMPLATE + "/structure/jcr:content/xf-component-61a", LIVECOPY_PAGE);
         Utils.testJSONExport(experienceFragment, Utils.getTestExporterJSONPath(TEST_BASE, "xf61a"));
@@ -660,48 +655,30 @@ public class ExperienceFragmentImplTest {
 
 
     private ExperienceFragment getExperienceFragmentUnderTest(String resourcePath) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        String currentPagePath = AEM_CONTEXT.pageManager().getContainingPage(resource).getPath();
+        String currentPagePath = context.pageManager().getContainingPage(resource).getPath();
         return getExperienceFragmentUnderTest(resourcePath, currentPagePath);
     }
 
     private ExperienceFragment getExperienceFragmentUnderTest(String resourcePath, String currentPagePath) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        ContentPolicyMapping mapping = resource.adaptTo(ContentPolicyMapping.class);
-        ContentPolicy contentPolicy = null;
-        if (mapping != null) {
-            contentPolicy = mapping.getPolicy();
-        }
         final MockSlingHttpServletRequest request =
-            new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
+            new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
         request.setContextPath(CONTEXT_PATH);
         request.setResource(resource);
         SlingBindings slingBindings = new SlingBindings();
-        Style currentStyle;
-        if (contentPolicy != null) {
-            ContentPolicyManager policyManager = mock(ContentPolicyManager.class);
-            when(policyManager.getPolicy(resource)).thenReturn(contentPolicy);
-            currentStyle = new MockContentPolicyStyle(contentPolicy);
-        } else {
-            currentStyle = mock(Style.class);
-            when(currentStyle.get(anyString(), (Object) Matchers.anyObject())).thenAnswer(
-                invocation -> invocation.getArguments()[1]
-            );
-        }
-        Page currentPage = AEM_CONTEXT.pageManager().getPage(currentPagePath);
+        Page currentPage = context.pageManager().getPage(currentPagePath);
         slingBindings.put(SlingBindings.RESOURCE, resource);
         slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
-        slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
+        slingBindings.put(WCMBindings.PAGE_MANAGER, context.pageManager());
         slingBindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        slingBindings.put(WCMBindings.CURRENT_STYLE, currentStyle);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         return request.adaptTo(ExperienceFragment.class);
     }
-
 }
