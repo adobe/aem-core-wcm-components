@@ -93,10 +93,10 @@
                     that.setValid(true);
                 } else if (request.status === 404) {
                     that.setValid(false);
-                    that.setErrorMessage("There is no provider to process this url");
+                    that.setErrorMessage("This embed URL is not supported");
                 } else {
                     that.setValid(false);
-                    that.setErrorMessage("An error occured while validating the url");
+                    that.setErrorMessage("A problem occurred when validating the URL");
                 }
                 callback(that.getElement());
             };
@@ -160,7 +160,7 @@
                         errorMessage = urlValidation.getErrorMessage();
                     }
                 } else {
-                    errorMessage = "An error occured while validating the url";
+                    errorMessage = "A problem occurred when validating the URL";
                 }
                 urlValidation.reset();
             } else {
