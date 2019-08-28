@@ -1,5 +1,5 @@
 #
-# Copyright 2018 Adobe Systems Incorporated
+# Copyright 2018 Adobe
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,6 +35,34 @@ shared: &shared
 
     # run tests!
     - run: mvn clean verify -B -U
+
+    # store any dumps
+    - run:
+        name: save any dumps
+        command: |
+            mkdir -p ~/dumps
+            find . -type f -regex ".*/.*\.dump" -exec cp {} ~/dumps \;
+            find . -type f -regex ".*/.*\.dumpstream" -exec cp {} ~/dumps \;
+        when:
+            on_fail
+
+    - store_artifacts:
+        path: ~/dumps
+
+    # save test results
+    - run:
+        name: Save test results
+        command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/surefire-reports/.*" -exec cp {} ~/test-results/junit/ \;
+        when: always
+
+    - store_artifacts:
+        path: ~/test-results/junit
+
+    # generate test summary
+    - store_test_results:
+        path: ~/test-results
 
     - save_cache: # saves the project dependencies
         paths:
