@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-08-21T17:15:55.138+03:00"
+        cq:lastModified="{Date}2019-08-29T18:28:39.658+03:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/reference]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
@@ -109,10 +109,12 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <embed_616254787
+                            jcr:lastModified="{Date}2019-08-29T18:24:36.178+03:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/embed/v1/embed"
                             type="url"
-                            url="https://www.youtube.com/watch?v=vpdcMZnYCko"/>
+                            url="https://www.pinterest.com/pin/99360735500167749/"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -146,11 +148,11 @@
                 <text_462863792
                     jcr:created="{Date}2019-08-21T17:13:17.442+03:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-08-21T17:15:02.474+03:00"
+                    jcr:lastModified="{Date}2019-08-29T18:27:11.484+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>URL to embeddable objects using oEmbed to retrieve the embedding information. This uses the sample bundled Vimeo configuration. Other configurations can be easily added.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>URL to embeddable objects using oEmbed to retrieve the embedding information. This uses the sample bundled Twitter configuration. Other configurations can be easily added.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
                     jcr:created="{Date}2019-08-21T17:15:15.538+03:00"
@@ -163,10 +165,12 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
                         <embed
+                            jcr:lastModified="{Date}2019-08-29T18:28:39.652+03:00"
+                            jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/embed/v1/embed"
                             type="url"
-                            url="https://vimeo.com/1840925"/>
+                            url="https://twitter.com/GabrielWalt/status/1159514156074196992"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

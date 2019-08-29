@@ -14,8 +14,21 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-template.render="${@ options}">
-    <iframe width="560" height="315" frameborder="0"
-            src="${'https://www.youtube.com/embed/' @ appendPath=options['videoId']}"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+    <a data-pin-do="embedPin" href="${'https://www.pinterest.com/pin/{0}/' @ format=options['pinId']}"></a>
+    <script>
+        var pinterestScript = "//assets.pinterest.com/js/pinit.js";
+        var scripts = document.getElementsByTagName("script");
+        var exists = false;
+        for(var i = 0; i < scripts.length; i++) {
+            if (scripts[i].src.includes(pinterestScript)) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            var script = document.createElement("script");
+            script.src = pinterestScript;
+            document.getElementsByTagName("body")[0].appendChild(script);
+        }
+    </script>
 </sly>

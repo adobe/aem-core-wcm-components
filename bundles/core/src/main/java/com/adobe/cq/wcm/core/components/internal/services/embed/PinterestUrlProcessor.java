@@ -25,13 +25,13 @@ import org.osgi.service.component.annotations.Component;
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
 
 @Component(service = Embed.UrlProcessor.class)
-public class YoutubeUrlProcessor implements Embed.UrlProcessor {
+public class PinterestUrlProcessor implements Embed.UrlProcessor {
 
-    protected static final String NAME = "youtube";
+    protected static final String NAME = "pinterest";
 
-    protected static final String VIDEO_ID = "videoId";
+    protected static final String PIN_ID = "pinId";
 
-    protected static final String SCHEME = "https?:\\/\\/.*\\.youtube\\.com\\/watch\\?v\\=(.*)";
+    protected static final String SCHEME = "https?://www\\.pinterest\\.com/pin/(\\d+)/";
 
     private Pattern pattern = Pattern.compile(SCHEME);
 
@@ -43,7 +43,7 @@ public class YoutubeUrlProcessor implements Embed.UrlProcessor {
                 return new UrlProcessorResultImpl(
                     NAME,
                     new HashMap<String, Object>() {{
-                        put(VIDEO_ID, matcher.group(1));
+                        put(PIN_ID, matcher.group(1));
                     }});
             }
         }

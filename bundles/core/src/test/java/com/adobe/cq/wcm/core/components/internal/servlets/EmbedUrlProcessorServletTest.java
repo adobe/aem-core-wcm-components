@@ -30,8 +30,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.services.embed.YoutubeUrlProcessor;
-import com.adobe.cq.wcm.core.components.internal.servlets.EmbedUrlProcessorServlet;
+import com.adobe.cq.wcm.core.components.internal.services.embed.PinterestUrlProcessor;
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -51,9 +50,9 @@ public class EmbedUrlProcessorServletTest {
     @Before
     public void setUp() {
         servlet = new EmbedUrlProcessorServlet();
-        Embed.UrlProcessor youtubeUrlProcessor = new YoutubeUrlProcessor();
+        Embed.UrlProcessor pinterestUrlProcessor = new PinterestUrlProcessor();
         List<Embed.UrlProcessor> urlProcessors = new ArrayList<>();
-        urlProcessors.add(youtubeUrlProcessor);
+        urlProcessors.add(pinterestUrlProcessor);
         Utils.setInternalState(servlet, "urlProcessors", urlProcessors);
     }
 
@@ -84,9 +83,9 @@ public class EmbedUrlProcessorServletTest {
     public void testUrlWithRegisteredProvider() throws Exception {
         MockSlingHttpServletRequest request = context.request();
         MockSlingHttpServletResponse response = context.response();
-        request.setQueryString("url=https://www.youtube.com/watch?v=vpdcMZnYCko");
+        request.setQueryString("url=https://www.pinterest.com/pin/99360735500167749/");
         servlet.doGet(request, response);
-        String expectedOutput = "{\"processor\":\"youtube\",\"options\":{\"videoId\":\"vpdcMZnYCko\"}}";
+        String expectedOutput = "{\"processor\":\"pinterest\",\"options\":{\"pinId\":\"99360735500167749\"}}";
         assertEquals("Expected the 200 status code.", HttpServletResponse.SC_OK, response.getStatus());
         assertEquals("Expected the JSON content type.", "application/json;charset=utf-8", response.getContentType());
         assertEquals("Does not match the expected response output.", expectedOutput, response.getOutputAsString());

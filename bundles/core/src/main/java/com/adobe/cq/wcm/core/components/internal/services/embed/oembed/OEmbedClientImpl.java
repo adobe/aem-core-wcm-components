@@ -110,12 +110,10 @@ public class OEmbedClientImpl implements OEmbedClient {
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, updated = "bindOEmbedClientImplConfigurationFactory")
     protected synchronized void bindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
-        LOGGER.warn("bindConfigurationFactory: " + configurationFactory.getConfig().provider());
         configs.add(configurationFactory.getConfig());
     }
 
     protected synchronized void unbindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
-        LOGGER.warn("unbindConfigurationFactory: " + configurationFactory.getConfig().provider());
         configs.remove(configurationFactory.getConfig());
     }
 }

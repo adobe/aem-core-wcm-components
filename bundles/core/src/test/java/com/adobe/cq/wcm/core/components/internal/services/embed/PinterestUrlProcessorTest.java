@@ -21,15 +21,15 @@ import com.adobe.cq.wcm.core.components.models.embed.Embed;
 
 import static org.junit.Assert.*;
 
-public class YoutubeUrlProcessorTest {
+public class PinterestUrlProcessorTest {
 
     @Test
     public void test() {
-        YoutubeUrlProcessor processor = new YoutubeUrlProcessor();
-        Embed.UrlProcessor.Result result = processor.process("https://www.youtube.com/watch?v=vpdcMZnYCko");
+        PinterestUrlProcessor processor = new PinterestUrlProcessor();
+        Embed.UrlProcessor.Result result = processor.process("https://www.pinterest.com/pin/99360735500167749/");
         assertNotNull(result);
-        assertEquals(YoutubeUrlProcessor.NAME, result.getProcessor());
-        assertEquals("vpdcMZnYCko", result.getOptions().get(YoutubeUrlProcessor.VIDEO_ID));
+        assertEquals(PinterestUrlProcessor.NAME, result.getProcessor());
+        assertEquals("99360735500167749", result.getOptions().get(PinterestUrlProcessor.PIN_ID));
 
         assertNull(processor.process("blah-blah"));
     }
