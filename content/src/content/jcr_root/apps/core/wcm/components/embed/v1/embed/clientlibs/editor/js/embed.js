@@ -40,10 +40,6 @@
 
         var validation = {};
 
-        this.getElement = function() {
-            return validation.el;
-        };
-
         this.getUrl = function() {
             return validation.url;
         };
@@ -56,49 +52,24 @@
             return validation.errorMessage;
         };
 
-        this.setElement = function(el) {
-            validation.el = el;
-            this.setUrl(el.value);
-        };
-
-        this.setUrl = function(url) {
-            validation.url = url;
-        };
-
-        this.setValid = function(isValid) {
-            validation.isValid = isValid;
-        };
-
-        this.setErrorMessage = function(errorMessage) {
-            validation.errorMessage = errorMessage;
-        };
-
-        this.reset = function() {
-            validation = {};
-        };
-
-        this.isDone = function() {
-            return !isEmpty(validation);
-        };
-
         // Performs the server-side validation and executes the callback
-        this.perform = function(callback) {
-            var that = this;
-            var embedResourcePath = that.getElement().dataset[DATA_ATTR_EMBED_RESOURCE_PATH];
-            var requestUrl = embedResourcePath + URL_VALIDATION_GET_SUFFIX + "?url=" + that.getUrl();
+        this.perform = function(el, callback) {
+            validation.url = el.value;
+            var embedResourcePath = el.dataset[DATA_ATTR_EMBED_RESOURCE_PATH];
+            var requestUrl = embedResourcePath + URL_VALIDATION_GET_SUFFIX + "?url=" + validation.url;
             var request = new XMLHttpRequest();
             request.open("GET", requestUrl, true);
             request.onload = function() {
                 if (request.status === 200) {
-                    that.setValid(true);
+                    validation.isValid = true;
                 } else if (request.status === 404) {
-                    that.setValid(false);
-                    that.setErrorMessage("This embed URL is not supported");
+                    validation.isValid = false;
+                    validation.errorMessage = "This embed URL is not supported";
                 } else {
-                    that.setValid(false);
-                    that.setErrorMessage("A problem occurred when validating the URL");
+                    validation.isValid = false;
+                    validation.errorMessage = "A problem occurred when validating the URL";
                 }
-                callback(that.getElement());
+                callback(el);
             };
             request.send();
         };
@@ -154,23 +125,17 @@
         selector: selectors.urlField,
         validate: function(el) {
             var errorMessage;
-            if (urlValidation.isDone()) {
-                if (el.value === urlValidation.getUrl()) {
-                    if (!urlValidation.isValidUrl()) {
-                        errorMessage = urlValidation.getErrorMessage();
-                    }
-                } else {
-                    errorMessage = "A problem occurred when validating the URL";
-                }
-                urlValidation.reset();
+            var url = el.value;
+            if (!isUrl(url)) {
+                errorMessage = "Please enter a valid URL";
+            } else if (url && url === urlValidation.getUrl() && !urlValidation.isValidUrl()) {
+                errorMessage = urlValidation.getErrorMessage();
             } else {
-                urlValidation.setElement(el);
-                urlValidation.perform(validateUIElement);
+                urlValidation.perform(el, validateUIElement);
             }
             if (errorMessage) {
                 return Granite.I18n.get(errorMessage);
             }
-            return null;
         }
     });
 
@@ -281,27 +246,24 @@
     }
 
     /**
-     * Checks whether the object is empty.
-     * @param {Object} obj
-     * @returns {Boolean} true if the object is empty, false otherwise
-     */
-    function isEmpty(obj) {
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Triggers the client-side element validation.
-     * @param {String} el
+     * @param {String} el The URL input field element
      */
     function validateUIElement(el) {
         var api = $(el).adaptTo("foundation-validation");
         api.checkValidity();
         api.updateUI();
+    }
+
+    /**
+     * Checks whether the URL is valid.
+     * @param {String} url The url to validate
+     * @returns {Boolean} true if the URL is valid, false otherwise
+     */
+    function isUrl(url) {
+        // Matches all strings that seem to have a proper URL scheme - e.g. starting with http://, https://, mailto:, tel:
+        var pattern = /^([^/]+:|\/\/).*$/;
+        return pattern.test(url);
     }
 
 })(document, Granite.$, Coral);
