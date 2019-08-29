@@ -48,6 +48,34 @@ BLOCK cmp-embed
         MOD cmp-embed__embeddable--<name>
 ```
 
+## Extending the Embed Component
+
+Extension of the Embed component is possible by providing any of the following:
+
+### Custom URL Processor
+
+By implementing the [Embed.UrlProcessor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/models/embed/Embed.java) interface you can create your own URL processor.
+
+You will also need to create an HTL template file, with the same name as the `processor` field return in the `Result`.
+
+Example:
+* [Pinterest processor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/services/embed/PinterestUrlProcessor.java)
+* [Pinterest HTL template](processors/pinterest.html)
+
+### Custom oEmbed Configuration
+
+By adding an OSGi configuration you can embed an URL from an oEmbed provider.
+
+Example:
+* [YouTube configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.services.embed.oembed.OEmbedClientImplConfigurationFactory-youtube.config) 
+
+### Custom embeddable fragment
+
+By creating a hidden component with `core/wcm/components/embed/embeddable` super-type, you can define an embeddable that also supports edit configuration options. 
+
+Example:
+* [YouTube embeddable](../../embeddables/youtube)
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
