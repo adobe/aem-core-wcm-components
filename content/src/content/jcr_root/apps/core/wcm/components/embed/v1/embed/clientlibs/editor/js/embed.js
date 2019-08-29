@@ -282,7 +282,9 @@
     function setUrlStatusMessage() {
         if (urlStatus) {
             if (urlValidation.isValidUrl()) {
-                urlStatus.innerText = Granite.I18n.get("This URL will be processed by a " + urlValidation.getProvider() + " provider.");
+                var provider = urlValidation.getProvider();
+                var capitalized = provider.charAt(0).toUpperCase() + provider.slice(1);
+                urlStatus.innerText = Granite.I18n.get(capitalized + " URL can be processed.");
             } else {
                 urlStatus.innerText = "";
             }
