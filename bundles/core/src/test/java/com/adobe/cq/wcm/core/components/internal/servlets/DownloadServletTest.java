@@ -110,4 +110,12 @@ public class DownloadServletTest {
         downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
         assertEquals(304, AEM_CONTEXT.response().getStatus());
     }
+
+    @Test
+    public void tesNotModifiedResponseForResource() throws Exception {
+        AEM_CONTEXT.currentResource(PDF_FILE_PATH + "/file");
+        AEM_CONTEXT.request().setHeader("If-Modified-Since", "Fri, 19 Oct 2018 19:24:07 GMT");
+        downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
+        assertEquals(304, AEM_CONTEXT.response().getStatus());
+    }
 }
