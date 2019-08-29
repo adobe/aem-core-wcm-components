@@ -19,26 +19,24 @@
 
     var URL_VALIDATION_GET_SUFFIX = ".urlProcessor.json";
     var DATA_ATTR_EMBED_RESOURCE_PATH = "cmpEmbedDialogEditResourcePath";
-    var HTML_CLASS_URL_PROVIDER_MESSAGE = "cmp-embed-dialog-edit-url-provider-message";
-    var HTML_CLASS_CORAL_FIELD_LABEL = "coral-Form-fieldlabel";
-    var HTML_TAG_LABEL = "label";
 
     var selectors = {
         dialogContent: ".cmp-embed__editor",
-        embeddable: "[data-cmp-embed-dialog-edit-hook='embeddable']",
-        type: "[data-cmp-embed-dialog-edit-hook='type']",
-        typeRadio: "[data-cmp-embed-dialog-edit-hook='type'] coral-radio",
-        urlField: "[data-cmp-embed-dialog-edit-hook='url']",
-        urlProviderMessage: "." + HTML_CLASS_URL_PROVIDER_MESSAGE
+        embeddableField: "[data-cmp-embed-dialog-edit-hook='embeddableField']",
+        typeField: "[data-cmp-embed-dialog-edit-hook='typeField']",
+        typeRadio: "[data-cmp-embed-dialog-edit-hook='typeField'] coral-radio",
+        urlField: "[data-cmp-embed-dialog-edit-hook='urlField']",
+        urlStatus: "[data-cmp-embed-dialog-edit-hook='urlStatus']"
     };
 
     var registry = $(window).adaptTo("foundation-registry");
 
-    var embeddable;
-    var type;
+    var embeddableField;
+    var typeField;
     var typeRadios;
     var foundationFieldSelectors;
     var urlField;
+    var urlStatus;
 
     // URL field validation object
     var urlValidation = new function() {
@@ -105,7 +103,7 @@
             if (url !== urlValidation.getUrl()) {
                 urlValidation.perform(el, validateUrlField);
             }
-            displayUrlProviderInfo();
+            setUrlStatusMessage();
             if (!urlValidation.isValidUrl()) {
                 return Granite.I18n.get(urlValidation.getErrorMessage());
             }
@@ -119,11 +117,12 @@
             var dialogContent = $dialog[0].querySelector(selectors.dialogContent);
 
             if (dialogContent) {
-                embeddable = dialogContent.querySelector(selectors.embeddable);
-                type = dialogContent.querySelector(selectors.type);
-                typeRadios = type.querySelectorAll(selectors.typeRadio);
+                embeddableField = dialogContent.querySelector(selectors.embeddableField);
+                typeField = dialogContent.querySelector(selectors.typeField);
+                typeRadios = typeField.querySelectorAll(selectors.typeRadio);
                 foundationFieldSelectors = getFoundationFieldSelectors();
                 urlField = dialogContent.querySelector(selectors.urlField);
+                urlStatus = dialogContent.querySelector(selectors.urlStatus);
 
                 if (typeRadios.length) {
                     for (var i = 0; i < typeRadios.length; i++) {
@@ -131,7 +130,7 @@
 
                         Coral.commons.ready(typeRadio, function(element) {
                             var value = element.value;
-                            var showHideTarget = getShowHideTarget(type);
+                            var showHideTarget = getShowHideTarget(typeField);
 
                             if (element.checked) {
                                 toggleShowHideTargets(showHideTarget, value);
@@ -142,7 +141,7 @@
                             });
                         });
 
-                        Coral.commons.ready(embeddable, function(element) {
+                        Coral.commons.ready(embeddableField, function(element) {
                             var showHideTarget = getShowHideTarget(element);
 
                             toggleShowHideTargets(showHideTarget, element.value);
@@ -274,29 +273,25 @@
         var api = $(urlField).adaptTo("foundation-validation");
         api.checkValidity();
         api.updateUI();
-        displayUrlProviderInfo();
+        setUrlStatusMessage();
     }
 
     /**
-     * Displays a message below the URL field informing about the URL provider name.
+     * Sets the URL status message, indicating a match for a processor.
      */
-    function displayUrlProviderInfo() {
-        var div = urlField.parentNode.querySelector(selectors.urlProviderMessage);
-        if (!div) {
-            div = document.createElement(HTML_TAG_LABEL);
-            div.classList.add(HTML_CLASS_CORAL_FIELD_LABEL);
-            div.classList.add(HTML_CLASS_URL_PROVIDER_MESSAGE);
-            urlField.parentNode.insertBefore(div, urlField.nextSibling);
-        }
-        if (urlValidation.isValidUrl()) {
-            div.innerHTML = Granite.I18n.get("This URL will be processed by a " + urlValidation.getProvider() + " provider.");
-        } else {
-            div.innerHTML = "";
+    function setUrlStatusMessage() {
+        if (urlStatus) {
+            if (urlValidation.isValidUrl()) {
+                urlStatus.innerText = Granite.I18n.get("This URL will be processed by a " + urlValidation.getProvider() + " provider.");
+            } else {
+                urlStatus.innerText = "";
+            }
         }
     }
 
     /**
      * Checks whether the URL is valid.
+     *
      * @param {String} url The url to validate
      * @returns {Boolean} true if the URL is valid, false otherwise
      */

@@ -57,7 +57,7 @@
                                                 vertical="{Boolean}false">
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-hook="type"
+                                                    cmp-embed-dialog-edit-hook="typeField"
                                                     cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-type\]"/>
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <url
@@ -76,20 +76,37 @@
                                                 </items>
                                             </type>
                                             <url
+                                                granite:class="foundation-toggleable"
                                                 granite:hide="${cqDesign.urlDisabled}"
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                emptyText="Paste a URL to embeddable content"
-                                                fieldDescription="The URL of the content to embed. The URL will be checked against supported processors for a match."
-                                                fieldLabel="URL"
-                                                name="./url"
-                                                wrapperClass="foundation-toggleable">
+                                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <field
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        emptyText="Paste a URL to embeddable content"
+                                                        fieldDescription="The URL of the content to embed. The URL will be checked against supported processors for a match."
+                                                        fieldLabel="URL"
+                                                        name="./url">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cmp-embed-dialog-edit-hook="urlField"
+                                                            cmp-embed-dialog-edit-resource-path="${requestPathInfo.suffix}"/>
+                                                    </field>
+                                                    <status
+                                                        granite:class="coral-Form-fieldlabel"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/text"
+                                                        text="">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cmp-embed-dialog-edit-hook="urlStatus"/>
+                                                    </status>
+                                                </items>
                                                 <granite:data
                                                     jcr:primaryType="nt:unstructured"
-                                                    cmp-embed-dialog-edit-hook="url"
                                                     cmp-embed-dialog-edit-type="true"
-                                                    cmp-embed-dialog-edit-showhidetargetvalue="url"
-                                                    cmp-embed-dialog-edit-resource-path="${requestPathInfo.suffix}"/>
+                                                    cmp-embed-dialog-edit-showhidetargetvalue="url"/>
                                             </url>
                                             <embeddable
                                                 granite:class="foundation-toggleable"
@@ -110,7 +127,7 @@
                                                             sling:resourceType="core/wcm/components/embed/v1/datasources/allowedembeddables"/>
                                                         <granite:data
                                                             jcr:primaryType="nt:unstructured"
-                                                            cmp-embed-dialog-edit-hook="embeddable"
+                                                            cmp-embed-dialog-edit-hook="embeddableField"
                                                             cmp-embed-dialog-edit-showhidetarget="\[data-cmp-embed-dialog-edit-embeddableoptions\]"/>
                                                     </field>
                                                     <options
