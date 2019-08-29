@@ -128,8 +128,12 @@
             var url = el.value;
             if (!isUrl(url)) {
                 errorMessage = "Please enter a valid URL";
-            } else if (url && url === urlValidation.getUrl() && !urlValidation.isValidUrl()) {
-                errorMessage = urlValidation.getErrorMessage();
+            } else if (url && url === urlValidation.getUrl()) {
+                if (!urlValidation.isValidUrl()) {
+                    errorMessage = urlValidation.getErrorMessage();
+                } else {
+                    return;
+                }
             } else {
                 urlValidation.perform(el, validateUIElement);
             }
