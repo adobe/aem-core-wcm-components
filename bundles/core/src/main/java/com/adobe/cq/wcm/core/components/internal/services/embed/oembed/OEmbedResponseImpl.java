@@ -34,10 +34,10 @@ public class OEmbedResponseImpl implements OEmbedResponse {
     protected String providerUrl;
     protected Long cacheAge;
     protected String thumbnailUrl;
-    protected Integer thumbnailWidth;
-    protected Integer thumbnailHeight;
-    protected Integer width;
-    protected Integer height;
+    protected String thumbnailWidth;
+    protected String thumbnailHeight;
+    protected String width;
+    protected String height;
     protected String html;
     protected String url;
 
@@ -104,26 +104,26 @@ public class OEmbedResponseImpl implements OEmbedResponse {
     @Override
     @Nullable
     @JsonAlias("thumbnail_width")
-    public Integer getThumbnailWidth() {
+    public String getThumbnailWidth() {
         return thumbnailWidth;
     }
 
     @Override
     @Nullable
     @JsonAlias("thumbnail_height")
-    public Integer getThumbnailHeight() {
+    public String getThumbnailHeight() {
         return thumbnailHeight;
     }
 
     @Override
     @Nullable
-    public Integer getWidth() {
+    public String getWidth() {
         return width;
     }
 
     @Override
     @Nullable
-    public Integer getHeight() {
+    public String getHeight() {
         return height;
     }
 

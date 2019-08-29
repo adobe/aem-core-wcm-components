@@ -195,7 +195,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
-    default Integer getThumbnailWidth() {
+    default String getThumbnailWidth() {
         throw new UnsupportedOperationException();
     }
 
@@ -203,7 +203,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
-    default Integer getThumbnailHeight() {
+    default String getThumbnailHeight() {
         throw new UnsupportedOperationException();
     }
 
@@ -211,7 +211,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
-    default Integer getWidth() {
+    default String getWidth() {
         throw new UnsupportedOperationException();
     }
 
@@ -219,7 +219,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
      */
     @Nullable
-    default Integer getHeight() {
+    default String getHeight() {
         throw new UnsupportedOperationException();
     }
 

@@ -34,8 +34,8 @@ public class OEmbedResponseImplTest {
         assertEquals(OEmbedResponse.Type.VIDEO, OEmbedResponse.Type.fromString(response.getType()));
         assertEquals("YouTube", response.getProviderName());
         assertEquals("http://youtube.com/", response.getProviderUrl());
-        assertEquals(Integer.valueOf(425), response.getWidth());
-        assertEquals(Integer.valueOf(344), response.getHeight());
+        assertEquals("425", response.getWidth());
+        assertEquals("344", response.getHeight());
         assertEquals("Amazing Nintendo Facts", response.getTitle());
         assertEquals("ZackScott", response.getAuthorName());
         assertEquals("http://www.youtube.com/user/ZackScott", response.getAuthorUrl());
