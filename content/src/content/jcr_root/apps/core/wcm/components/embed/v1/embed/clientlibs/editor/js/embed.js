@@ -19,13 +19,17 @@
 
     var URL_VALIDATION_GET_SUFFIX = ".urlProcessor.json";
     var DATA_ATTR_EMBED_RESOURCE_PATH = "cmpEmbedDialogEditResourcePath";
+    var HTML_CLASS_URL_PROVIDER_MESSAGE = "cmp-embed-dialog-edit-url-provider-message";
+    var HTML_CLASS_CORAL_FIELD_LABEL = "coral-Form-fieldlabel";
+    var HTML_TAG_LABEL = "label";
 
     var selectors = {
         dialogContent: ".cmp-embed__editor",
         embeddable: "[data-cmp-embed-dialog-edit-hook='embeddable']",
         type: "[data-cmp-embed-dialog-edit-hook='type']",
         typeRadio: "[data-cmp-embed-dialog-edit-hook='type'] coral-radio",
-        urlField: "[data-cmp-embed-dialog-edit-hook='url']"
+        urlField: "[data-cmp-embed-dialog-edit-hook='url']",
+        urlProviderMessage: "." + HTML_CLASS_URL_PROVIDER_MESSAGE
     };
 
     var registry = $(window).adaptTo("foundation-registry");
@@ -34,6 +38,7 @@
     var type;
     var typeRadios;
     var foundationFieldSelectors;
+    var urlField;
 
     // URL field validation object
     var urlValidation = new function() {
@@ -52,29 +57,60 @@
             return validation.errorMessage;
         };
 
-        // Performs the server-side validation and executes the callback
+        this.getProvider = function() {
+            return validation.provider;
+        };
+
+        // Performs the URL field validation
         this.perform = function(el, callback) {
             validation.url = el.value;
-            var embedResourcePath = el.dataset[DATA_ATTR_EMBED_RESOURCE_PATH];
-            var requestUrl = embedResourcePath + URL_VALIDATION_GET_SUFFIX + "?url=" + validation.url;
-            var request = new XMLHttpRequest();
-            request.open("GET", requestUrl, true);
-            request.onload = function() {
-                if (request.status === 200) {
-                    validation.isValid = true;
-                } else if (request.status === 404) {
-                    validation.isValid = false;
-                    validation.errorMessage = "This embed URL is not supported";
-                } else {
-                    validation.isValid = false;
-                    validation.errorMessage = "A problem occurred when validating the URL";
-                }
-                callback(el);
-            };
-            request.send();
+            if (!isUrl(validation.url)) {
+                validation.isValid = false;
+                validation.errorMessage = "Please enter a valid URL";
+            } else {
+                // Performs the server-side validation and executes the callback
+                var embedResourcePath = el.dataset[DATA_ATTR_EMBED_RESOURCE_PATH];
+                var requestUrl = embedResourcePath + URL_VALIDATION_GET_SUFFIX + "?url=" + validation.url;
+                var request = new XMLHttpRequest();
+                request.open("GET", requestUrl, true);
+                request.onload = function() {
+                    if (request.status === 200) {
+                        var result = JSON.parse(request.responseText);
+                        if (result && result.options && result.options.provider) {
+                            validation.provider = result.options.provider;
+                        } else if (result && result.processor) {
+                            validation.provider = result.processor;
+                        }
+                        validation.isValid = true;
+                    } else if (request.status === 404) {
+                        validation.isValid = false;
+                        validation.errorMessage = "This embed URL is not supported";
+                    } else {
+                        validation.isValid = false;
+                        validation.errorMessage = "A problem occurred when validating the URL";
+                    }
+                    callback(el);
+                };
+                request.send();
+            }
         };
 
     };
+
+    // Registers a validator for the URL field
+    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
+        selector: selectors.urlField,
+        validate: function(el) {
+            var url = el.value;
+            if (url !== urlValidation.getUrl()) {
+                urlValidation.perform(el, validateUrlField);
+            }
+            displayUrlProviderInfo();
+            if (!urlValidation.isValidUrl()) {
+                return Granite.I18n.get(urlValidation.getErrorMessage());
+            }
+        }
+    });
 
     $(document).on("dialog-loaded", function(event) {
         var $dialog = event.dialog;
@@ -87,6 +123,7 @@
                 type = dialogContent.querySelector(selectors.type);
                 typeRadios = type.querySelectorAll(selectors.typeRadio);
                 foundationFieldSelectors = getFoundationFieldSelectors();
+                urlField = dialogContent.querySelector(selectors.urlField);
 
                 if (typeRadios.length) {
                     for (var i = 0; i < typeRadios.length; i++) {
@@ -114,31 +151,12 @@
                                 toggleShowHideTargets(showHideTarget, element.value);
                             });
                         });
+
+                        Coral.commons.ready(urlField, function(element) {
+                            validateUrlField();
+                        });
                     }
                 }
-            }
-        }
-    });
-
-    // Registers a validator for the URL field
-    $(window).adaptTo("foundation-registry").register("foundation.validation.validator", {
-        selector: selectors.urlField,
-        validate: function(el) {
-            var errorMessage;
-            var url = el.value;
-            if (!isUrl(url)) {
-                errorMessage = "Please enter a valid URL";
-            } else if (url && url === urlValidation.getUrl()) {
-                if (!urlValidation.isValidUrl()) {
-                    errorMessage = urlValidation.getErrorMessage();
-                } else {
-                    return;
-                }
-            } else {
-                urlValidation.perform(el, validateUIElement);
-            }
-            if (errorMessage) {
-                return Granite.I18n.get(errorMessage);
             }
         }
     });
@@ -250,13 +268,31 @@
     }
 
     /**
-     * Triggers the client-side element validation.
-     * @param {String} el The URL input field element
+     * Validates the URL field (on the client-side).
      */
-    function validateUIElement(el) {
-        var api = $(el).adaptTo("foundation-validation");
+    function validateUrlField() {
+        var api = $(urlField).adaptTo("foundation-validation");
         api.checkValidity();
         api.updateUI();
+        displayUrlProviderInfo();
+    }
+
+    /**
+     * Displays a message below the URL field informing about the URL provider name.
+     */
+    function displayUrlProviderInfo() {
+        var div = urlField.parentNode.querySelector(selectors.urlProviderMessage);
+        if (!div) {
+            div = document.createElement(HTML_TAG_LABEL);
+            div.classList.add(HTML_CLASS_CORAL_FIELD_LABEL);
+            div.classList.add(HTML_CLASS_URL_PROVIDER_MESSAGE);
+            urlField.parentNode.insertBefore(div, urlField.nextSibling);
+        }
+        if (urlValidation.isValidUrl()) {
+            div.innerHTML = Granite.I18n.get("This URL will be processed by a " + urlValidation.getProvider() + " provider.");
+        } else {
+            div.innerHTML = "";
+        }
     }
 
     /**
