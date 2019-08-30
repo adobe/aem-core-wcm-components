@@ -20,8 +20,8 @@ Embed component written in HTL that allows third-party widgets (e.g. chatbots, l
 ## Features
 * The following input types are supported:
     * **URL** - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match. The following URL processors are provided:
-        * **OEmbed** - Generic OEmbed URL processor with out-of-the-box configurations for Facebook Post, Instagram, SoundCloud, Twitter and YouTube.
-        * **Pinterest** - Processes Pinterest URLs. 
+        * **OEmbed** - generic OEmbed URL processor with out-of-the-box configurations for Facebook Post, Instagram, SoundCloud, Twitter and YouTube.
+        * **Pinterest** - processes Pinterest URLs. 
     * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
     * **HTML** - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
 * Each type can be disabled by a template author.
@@ -32,13 +32,13 @@ The following configuration properties are used:
 
 1. `./urlDisabled` - defines whether or not URL input is disabled in the edit dialog.
 2. `./embeddablesDisabled` - defines whether or not embeddables are disabled in the edit dialog.
-1. `./htmlDisabled` - defines whether or not free-form html input disabled in the edit dialog.
+1. `./htmlDisabled` - defines whether or not free-form HTML input is disabled in the edit dialog.
 3. `./allowedEmbeddables` - defines the embeddables that are allowed to be selected by an author when embeddables are not disabled.
 
 ### Edit Dialog Properties
 The following JCR properties are used:
 
-1. `./type` - defines the input type to use. Types include URL, embeddable and html.
+1. `./type` - defines the input type to use. Types include URL, embeddable and HTML.
 2. `./url` - defines the URL of the widget to embed.
 3. `./embeddableResourceType` - defines the resource type of an embeddable.
 4. `./html` - defines a HTML string to embed.
@@ -56,7 +56,7 @@ Extension of the Embed component is possible by providing any of the following:
 
 By implementing the [Embed.UrlProcessor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/models/embed/Embed.java) interface you can create your own URL processor.
 
-You will also need to create an HTL template file, with the same name as the `processor` field return in the `Result`.
+You will also need to create an HTL template file, with the same name as the `processor` field returned in the `Result`.
 
 Example:
 * [Pinterest processor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/services/embed/PinterestUrlProcessor.java)
@@ -73,6 +73,12 @@ Example:
 
 By creating a hidden component with `core/wcm/components/embed/embeddable` super-type, you can define an embeddable that also supports edit configuration options. 
 
+To enable show/hide of the edit configuration options, the embeddable dialog snippet wrapper _must_ have the following data attributes applied:
+```
+cmp-embed-dialog-edit-embeddableoptions="true"
+cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"/>
+```
+
 Example:
 * [YouTube embeddable](../../embeddables/youtube)
 
@@ -83,6 +89,7 @@ Example:
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_embed\_v1](https://www.adobe.com/go/aem_cmp_embed_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_embed](https://www.adobe.com/go/aem_cmp_library_embed)
-* **Author**: Vivekanand Mishra
+* **Author**: [Vivekanand Mishra](https://github.com/vivekanand-mishra)
+* **Co-authors**: [Jean-Christophe Kautzmann](https://github.com/jckautzmann), [Richard Hand](https://github.com/richardhand), [Vlad Bailescu](https://github.com/vladbailescu)
 
 _If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
