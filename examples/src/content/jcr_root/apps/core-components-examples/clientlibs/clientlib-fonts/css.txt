@@ -18,3 +18,5 @@
 
 vendor/font-awesome/fontawesome.css
 vendor/font-awesome/solid.css
+vendor/adobe-fonts/source-code-pro.css
+vendor/adobe-fonts/source-sans-pro.css
