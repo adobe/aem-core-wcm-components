@@ -59,13 +59,8 @@
             return validation.provider;
         };
 
-        this.getProviderHtml = function() {
-            return validation.providerHtml;
-        };
-
         // Performs the URL field validation
         this.perform = function(el, callback) {
-            validation = {};
             validation.url = el.value;
             if (!isUrl(validation.url)) {
                 validation.isValid = false;
@@ -81,11 +76,8 @@
                         var result = JSON.parse(request.responseText);
                         if (result && result.options && result.options.provider) {
                             validation.provider = result.options.provider;
-                        } else {
+                        } else if (result && result.processor) {
                             validation.provider = result.processor;
-                        }
-                        if (result && result.options && result.options.response) {
-                            validation.providerHtml = result.options.response.html;
                         }
                         validation.isValid = true;
                     } else if (request.status === 404) {
@@ -296,15 +288,9 @@
             var provider = urlValidation.getProvider();
             if (provider && urlValidation.isValidUrl()) {
                 var capitalized = provider.charAt(0).toUpperCase() + provider.slice(1);
-                var message = Granite.I18n.get(capitalized + " URL can be processed.");
-                if (urlValidation.getProviderHtml()) {
-                    // display the embed
-                    urlStatus.innerHTML = "<div>" + message + "</div>" + urlValidation.getProviderHtml();
-                } else {
-                    urlStatus.innerHTML = message;
-                }
+                urlStatus.innerText = Granite.I18n.get(capitalized + " URL can be processed.");
             } else {
-                urlStatus.innerHTML = "";
+                urlStatus.innerText = "";
             }
         }
     }
