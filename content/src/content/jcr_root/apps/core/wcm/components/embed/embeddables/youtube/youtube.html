@@ -17,5 +17,4 @@
         width="${properties.youtubeWidth || '100%' @ context='scriptString'}"
         height="${properties.youtubeHeight || 390 @ context='scriptString'}"
         src="${'https://www.youtube.com/embed/{0}?origin={1}://{2}' @ format=[properties.youtubeVideoId, request.scheme, request.serverName]}"
-        class="cmp-embed__embeddable cmp-embed__embeddable--youtube"
         frameborder="0"></iframe>

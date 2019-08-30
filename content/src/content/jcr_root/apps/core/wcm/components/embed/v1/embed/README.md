@@ -19,10 +19,10 @@ Embed component written in HTL that allows third-party widgets (e.g. chatbot, le
 
 ## Features
 * The following input types are supported:
-    * url - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match.
-    * embeddable - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
-    * html - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
-* Each type can be disabled by a template editor.
+    * **URL** - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match.
+    * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
+    * **HTML** - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
+* Each type can be disabled by a template author.
 * For the embeddable type, the embeddables that are allowed to be selected in the edit dialog can be configured by a template author.
 
 ### Component Policy Configuration Properties
@@ -44,8 +44,6 @@ The following JCR properties are used:
 ## BEM Description
 ```
 BLOCK cmp-embed
-    ELEMENT cmp-embed__embeddable
-        MOD cmp-embed__embeddable--<name>
 ```
 
 ## Extending the Embed Component
