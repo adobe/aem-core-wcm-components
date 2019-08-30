@@ -229,6 +229,8 @@
                     field.setDisabled(false);
                 } else {
                     field.setDisabled(true);
+                    field.setInvalid(false);
+                    validateUrlField();
                 }
             }
         });
