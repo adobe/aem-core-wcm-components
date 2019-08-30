@@ -15,11 +15,13 @@ limitations under the License.
 -->
 Embed (v1)
 ====
-Embed component written in HTL that allows third-party widgets (e.g. chatbot, lead generation form, social pixels, videos) to be added to a page.
+Embed component written in HTL that allows third-party widgets (e.g. chatbots, lead generation forms, social media posts, social pixels, videos etc.) to be added to a page.
 
 ## Features
 * The following input types are supported:
-    * **URL** - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match.
+    * **URL** - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match. The following URL processors are provided:
+        * **OEmbed** - Generic OEmbed URL processor with out-of-the-box configurations for Facebook Post, Instagram, SoundCloud, Twitter and YouTube.
+        * **Pinterest** - Processes Pinterest URLs. 
     * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
     * **HTML** - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
 * Each type can be disabled by a template author.
