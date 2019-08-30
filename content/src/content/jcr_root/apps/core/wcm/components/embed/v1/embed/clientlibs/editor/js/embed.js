@@ -207,6 +207,8 @@
             }
             if (field) {
                 field.setDisabled(true);
+                field.setInvalid(false);
+                validateUrlField();
             }
         }
         toggleTargetChildren($element, show);
