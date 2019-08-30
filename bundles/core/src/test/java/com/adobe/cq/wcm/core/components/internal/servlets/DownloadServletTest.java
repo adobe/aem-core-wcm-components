@@ -104,7 +104,7 @@ public class DownloadServletTest {
     }
 
     @Test
-    public void tesNotModifiedResponse() throws Exception {
+    public void testNotModifiedResponse() throws Exception {
         AEM_CONTEXT.currentResource(PDF_ASSET_PATH);
         AEM_CONTEXT.request().setHeader("If-Modified-Since", "Fri, 19 Oct 2018 19:24:07 GMT");
         downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
