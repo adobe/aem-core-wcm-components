@@ -294,10 +294,10 @@
     }
 
     /**
-     * Checks whether the URL is valid.
+     * Checks whether the URL has a valid format.
      *
      * @param {String} url The url to validate
-     * @returns {Boolean} true if the URL is valid, false otherwise
+     * @returns {Boolean} true if the URL has a valid format, false otherwise
      */
     function isUrl(url) {
         // Matches all strings that seem to have a proper URL scheme - e.g. starting with http://, https://, mailto:, tel:
