@@ -62,7 +62,7 @@ Example:
 * [Pinterest processor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/internal/services/embed/PinterestUrlProcessor.java)
 * [Pinterest HTL template](processors/pinterest.html)
 
-### Custom oEmbed Configuration
+### Custom OEmbed Configuration
 
 By adding an OSGi configuration you can embed an URL from an oEmbed provider.
 
