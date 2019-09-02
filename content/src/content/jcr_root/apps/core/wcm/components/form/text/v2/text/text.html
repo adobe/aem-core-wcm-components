@@ -17,7 +17,15 @@
      data-sly-use.text="com.adobe.cq.wcm.core.components.models.form.Text"
      data-cmp-is="formText"
      data-cmp-constraint-message="${text.constraintMessage}"
-     data-cmp-required-message="${text.requiredMessage}">
+     data-cmp-required-message="${text.requiredMessage}"
+     data-sly-test.lastModified="${properties['cq:lastModified'].getTime.toGMTString || properties['jcr:lastModified'].getTime.toGMTString || properties['jcr:created'].getTime.toGMTString}"
+     ceddl-observe="entity"
+     data-id="${resource.path}"
+     data-name="${text.title}"
+     data-type="Form Text (V2)"
+     data-last-modified="${lastModified}"
+     data-text="${text.value}"
+>
     <label for="${text.id}" data-sly-test="${text.title && !text.hideTitle}">${text.title}</label>
     <p data-sly-test="${!text.placeholder && text.helpMessage}" class="cmp-form-text__help-block">${text.helpMessage}</p>
     <textarea data-sly-test.useTextarea="${text.type == 'textarea'}"

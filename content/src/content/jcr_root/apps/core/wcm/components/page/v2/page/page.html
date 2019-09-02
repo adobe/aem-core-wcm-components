@@ -17,9 +17,19 @@
 <html data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page" lang="${page.language}"
       data-sly-use.head="head.html"
       data-sly-use.footer="footer.html"
-      data-sly-use.redirect="redirect.html">
+      data-sly-use.redirect="redirect.html"
+      data-sly-test.template="${pageProperties['cq:template']}"
+      data-sly-test.lastModified="${properties['cq:lastModified'].getTime.toGMTString || properties['jcr:lastModified'].getTime.toGMTString || properties['jcr:created'].getTime.toGMTString}"
+>
     <head data-sly-call="${head.head @ page = page}"></head>
-    <body class="${page.cssClassNames}">
+    <body class="${page.cssClassNames}"
+          ceddl-observe="page"
+          data-id="${resource.path}"
+          data-name="${page.title}"
+          data-type="Page (V2)"
+          data-last-modified="${lastModified}"
+          data-template="${template}"
+    >
         <sly data-sly-test.isRedirectPage="${page.redirectTarget && (wcmmode.edit || wcmmode.preview)}"
              data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>
         <sly data-sly-test="${!isRedirectPage}">

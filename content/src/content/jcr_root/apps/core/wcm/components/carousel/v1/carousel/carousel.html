@@ -24,7 +24,13 @@
      data-cmp-delay="${carousel.delay}"
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}">
     <div data-sly-test="${carousel.items && carousel.items.size > 0}"
-         class="cmp-carousel__content">
+		 class="cmp-carousel__content"
+         data-sly-test.lastModified="${properties['cq:lastModified'].getTime.toGMTString || properties['jcr:lastModified'].getTime.toGMTString || properties['jcr:created'].getTime.toGMTString}"
+         ceddl-observe="entity"
+         data-id="${resource.path}"
+         data-type="Carousel (V1)"
+         data-last-modified="${lastModified}"
+    >
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"

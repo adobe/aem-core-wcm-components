@@ -22,12 +22,26 @@
         role="tablist"
         class="cmp-tabs__tablist"
         aria-label="${tabs.accessibilityLabel}"
-        aria-multiselectable="false">
+        aria-multiselectable="false"
+        data-sly-test.lastModified="${properties['cq:lastModified'].getTime.toGMTString || properties['jcr:lastModified'].getTime.toGMTString || properties['jcr:created'].getTime.toGMTString}"
+        ceddl-observe="entity"
+        data-id="${resource.path}"
+        data-type="Tabs (V1)"
+        data-last-modified="${lastModified}"
+        data-items-number="${tabs.items.size}"
+    >
         <sly data-sly-test.isActive="${tab.name == tabs.activeItem}"/>
         <li role="tab"
             class="cmp-tabs__tab${isActive ? ' cmp-tabs__tab--active' : ''}"
             tabindex="${isActive ? '0' : '-1'}"
-            data-cmp-hook-tabs="tab">${tab.title}</li>
+            data-cmp-hook-tabs="tab"
+            ceddl-observe="entity"
+            ceddl-click="tabsItemClick"
+            data-id="${item.path}"
+            data-name="${item.title}"
+            data-type="Tabs Item (V1)"
+            data-last-modified="${item.lastModified}"
+ 		>${tab.title}</li>
     </ol>
     <div data-sly-repeat.item="${tabs.items}"
          data-sly-resource="${item.name @ decorationTagName='div'}"

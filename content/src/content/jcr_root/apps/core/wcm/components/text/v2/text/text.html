@@ -16,7 +16,15 @@
 <div data-sly-use.textModel="com.adobe.cq.wcm.core.components.models.Text"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test.text="${textModel.text}"
-     class="cmp-text">
+     class="cmp-text"
+     data-sly-test.lastModified="${properties['cq:lastModified'].getTime.toGMTString || properties['jcr:lastModified'].getTime.toGMTString || properties['jcr:created'].getTime.toGMTString}"
+     ceddl-observe="entity"
+     data-id="${resource.path}"
+     data-type="Text (V2)"
+     data-name="${text.title}"
+     data-last-modified="${lastModified}"
+     data-text="${text.value}"
+>
     <p class="cmp-text__paragraph"
        data-sly-unwrap="${textModel.isRichText}">${text @ context = textModel.isRichText ? 'html' : 'text'}</p>
 </div>
