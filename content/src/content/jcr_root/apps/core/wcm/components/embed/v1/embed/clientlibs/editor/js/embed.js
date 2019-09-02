@@ -18,7 +18,6 @@
     "use strict";
 
     var URL_VALIDATION_GET_SUFFIX = ".urlProcessor.json";
-    var DATA_ATTR_EMBED_RESOURCE_PATH = "cmpEmbedDialogEditResourcePath";
 
     var selectors = {
         dialogContent: ".cmp-embed__editor",
@@ -29,8 +28,18 @@
         urlStatus: "[data-cmp-embed-dialog-edit-hook='urlStatus']"
     };
 
+    /**
+     * Enumeration of embed types.
+     */
+    var type = {
+        URL: "url",
+        EMBEDDABLE: "embeddable",
+        HTML: "html"
+    };
+
     var registry = $(window).adaptTo("foundation-registry");
 
+    var embedResourcePath;
     var embeddableField;
     var typeField;
     var typeRadios;
@@ -67,7 +76,6 @@
                 validation.errorMessage = "Please enter a valid URL";
             } else {
                 // Performs the server-side validation and executes the callback
-                var embedResourcePath = el.dataset[DATA_ATTR_EMBED_RESOURCE_PATH];
                 var requestUrl = embedResourcePath + URL_VALIDATION_GET_SUFFIX + "?url=" + validation.url;
                 var request = new XMLHttpRequest();
                 request.open("GET", requestUrl, true);
@@ -103,7 +111,7 @@
             if (url !== urlValidation.getUrl()) {
                 urlValidation.perform(el, validateUrlField);
             }
-            setUrlStatusMessage();
+            updateUrlStatus();
             if (!urlValidation.isValidUrl()) {
                 return Granite.I18n.get(urlValidation.getErrorMessage());
             }
@@ -114,6 +122,7 @@
         var $dialog = event.dialog;
 
         if ($dialog.length) {
+            embedResourcePath = $dialog[0].getAttribute("action");
             var dialogContent = $dialog[0].querySelector(selectors.dialogContent);
 
             if (dialogContent) {
@@ -138,6 +147,9 @@
 
                             element.on("change", function() {
                                 toggleShowHideTargets(showHideTarget, value);
+                                if (value === type.EMBEDDABLE) {
+                                    embeddableField.trigger("change");
+                                }
                             });
                         });
 
@@ -152,7 +164,9 @@
                         });
 
                         Coral.commons.ready(urlField, function(element) {
-                            validateUrlField();
+                            if (element.value !== "") {
+                                validateUrlField();
+                            }
                         });
                     }
                 }
@@ -182,7 +196,7 @@
     }
 
     /**
-     * Toggles a dialog toggle target, setting its disabled state and visibility.
+     * Toggles a dialog toggle target, setting its disabled state, validity and visibility.
      *
      * @param {jQuery} $element The target
      * @param {Boolean} show true to disable and hide the target, false otherwise
@@ -207,15 +221,14 @@
             }
             if (field) {
                 field.setDisabled(true);
-                field.setInvalid(false);
-                validateUrlField();
+                setFieldValid($element);
             }
         }
         toggleTargetChildren($element, show);
     }
 
     /**
-     * Toggles child fields of a dialog toggle target, setting their disabled states.
+     * Toggles child fields of a dialog toggle target, setting their disabled and valid states.
      *
      * @param {jQuery} $element The target
      * @param {Boolean} show true to disable and hide the target, false otherwise
@@ -229,8 +242,7 @@
                     field.setDisabled(false);
                 } else {
                     field.setDisabled(true);
-                    field.setInvalid(false);
-                    validateUrlField();
+                    setFieldValid($(element));
                 }
             }
         });
@@ -277,20 +289,38 @@
         var api = $(urlField).adaptTo("foundation-validation");
         api.checkValidity();
         api.updateUI();
-        setUrlStatusMessage();
+        updateUrlStatus();
     }
 
     /**
-     * Sets the URL status message, indicating a match for a processor.
+     * Sets a field as valid and updates the validation UI.
+     *
+     * @param {jQuery} $element The field to set as valid
      */
-    function setUrlStatusMessage() {
+    function setFieldValid($element) {
+        var field = $element.adaptTo("foundation-field");
+        var validation = $element.adaptTo("foundation-validation");
+        if (field && validation) {
+            field.setInvalid(false);
+            validation.checkValidity();
+            validation.updateUI();
+        }
+    }
+
+    /**
+     * Updates the URL status message and toggles it, indicating a match for a processor.
+     */
+    function updateUrlStatus() {
         if (urlStatus) {
             var provider = urlValidation.getProvider();
+            var toggleable = $(urlStatus).adaptTo("foundation-toggleable");
             if (provider && urlValidation.isValidUrl()) {
                 var capitalized = provider.charAt(0).toUpperCase() + provider.slice(1);
                 urlStatus.innerText = Granite.I18n.get(capitalized + " URL can be processed.");
+                toggleable.show();
             } else {
                 urlStatus.innerText = "";
+                toggleable.hide();
             }
         }
     }
