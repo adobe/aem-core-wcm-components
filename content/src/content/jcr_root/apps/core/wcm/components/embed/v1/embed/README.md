@@ -71,7 +71,7 @@ Example:
 
 ### Custom embeddable fragment
 
-By creating a hidden component with `core/wcm/components/embed/embeddable` super-type, you can define an embeddable that also supports edit configuration options. 
+By creating a hidden component with `core/wcm/components/embed/v1/embed/embeddable` super-type, you can define an embeddable that also supports edit configuration options. 
 
 To enable show/hide of the edit configuration options, the embeddable dialog snippet wrapper _must_ have the following data attributes applied:
 ```

@@ -42,5 +42,5 @@
     <granite:data
         jcr:primaryType="nt:unstructured"
         cmp-embed-dialog-edit-embeddableoptions="true"
-        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/embeddables/youtube"/>
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable/youtube"/>
 </jcr:root>

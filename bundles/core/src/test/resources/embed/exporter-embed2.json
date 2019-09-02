@@ -1,5 +1,5 @@
 {
     "type": "EMBEDDABLE",
-    "embeddableResourceType": "core/wcm/components/embed/embeddables/youtube",
+    "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
     ":type": "core/wcm/components/embed/v1/embed"
 }

@@ -29,5 +29,5 @@
     <granite:data
         jcr:primaryType="nt:unstructured"
         cmp-embed-dialog-edit-embeddableoptions="true"
-        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/embeddables/embeddable"/>
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embed/v1/embed/embeddable"/>
 </jcr:root>

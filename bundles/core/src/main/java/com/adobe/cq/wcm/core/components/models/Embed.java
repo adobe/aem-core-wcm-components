@@ -144,7 +144,7 @@ public interface Embed extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
-    String RT_EMBEDDABLE = "core/wcm/components/embed/embeddable";
+    String RT_EMBEDDABLE = "core/wcm/components/embed/v1/embed/embeddable";
 
     /**
      * Returns the embed input {@link Type}.

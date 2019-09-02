@@ -8,7 +8,7 @@
         "youtube": {
             "jcr:primaryType": "cq:Component",
             "jcr:title": "YouTube",
-            "sling:resourceSuperType": "core/wcm/components/embed/embeddable",
+            "sling:resourceSuperType": "core/wcm/components/embed/v1/embed/embeddable",
             "order": 1,
             "componentGroup": ".hidden",
             "youtube.html": {
@@ -60,7 +60,7 @@
         "chatbot": {
             "jcr:primaryType": "cq:Component",
             "jcr:title": "Chatbot",
-            "sling:resourceSuperType": "core/wcm/components/embed/embeddable",
+            "sling:resourceSuperType": "core/wcm/components/embed/v1/embed/embeddable",
             "order": 2,
             "componentGroup": ".hidden",
             "chatbot.html": {
@@ -104,7 +104,7 @@
         "social": {
             "jcr:primaryType": "cq:Component",
             "jcr:title": "Social",
-            "sling:resourceSuperType": "core/wcm/components/embed/embeddable",
+            "sling:resourceSuperType": "core/wcm/components/embed/v1/embed/embeddable",
             "order": 2,
             "componentGroup": ".hidden",
             "social.html": {
