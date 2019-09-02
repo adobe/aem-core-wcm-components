@@ -142,14 +142,85 @@
     /**
      * URL Validation
      *
-     * 1. verify all test URLs
+     * 1. open the edit dialog
+     * 2. verify no URL status is currently showing
+     * 3. enter a valid url
+     * 4. verify the status message
+     * 5. save the edit dialog
+     * 6. open the edit dialog
+     * 7. verify the status message
+     * 8. enter an invalid URL
+     * 9. verify field is marked invalid and the status message is not shown
+     * 10. enter a malformed URL
+     * 11. verify field is marked invalid and the status message is not shown
+     * 12. enter an empty URL
+     * 13. verify field is marked invalid and the status message is not shown
+     * 14. verify that the properties tab is marked invalid
+     * 15. switch type to embeddable
+     * 16. verify that the properties tab is no longer marked invalid
      */
-    embed.tcUrlPinterest = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
+    embed.tcUrlValidation = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors) {
         return new h.TestCase("URL Validation", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // 2.
+            .assert.visible(selectors.editDialog.properties.urlStatus, false)
+
+            // 3.
+            .fillInput(selectors.editDialog.properties.urlField, urlValidation.valid)
+            .wait(200)
+
+            // 4.
+            .assert.visible(selectors.editDialog.properties.urlStatus)
+            .assert.exists(selectors.editDialog.properties.urlStatus + ":contains(YouTube)")
+
+            // 5.
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200)
+
+            // 6.
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            .wait(200)
+
+            // 7.
+            .assert.visible(selectors.editDialog.properties.urlStatus)
+            .assert.exists(selectors.editDialog.properties.urlStatus + ":contains(YouTube)")
+
+            // 8.
+            .fillInput(selectors.editDialog.properties.urlField, urlValidation.invalid)
+            .wait(200)
+
+            // 9.
+            .assert.visible(selectors.editDialog.properties.urlStatus, false)
+            .assert.exists(selectors.editDialog.properties.urlField + ".is-invalid")
+
+            // 10.
+            .fillInput(selectors.editDialog.properties.urlField, urlValidation.malformed)
+            .wait(200)
+
+            // 11.
+            .assert.visible(selectors.editDialog.properties.urlStatus, false)
+            .assert.exists(selectors.editDialog.properties.urlField + ".is-invalid")
+
+            // 12.
+            .fillInput(selectors.editDialog.properties.urlField, urlValidation.blank)
+            .wait(200)
+
+            // 13.
+            .assert.visible(selectors.editDialog.properties.urlStatus, false)
+            .assert.exists(selectors.editDialog.properties.urlField + ".is-invalid")
+
+            // 14.
+            .assert.exists(selectors.editDialog.properties.self + ".is-invalid")
+
+            // 15.
+            .click(selectors.editDialog.properties.typeRadio + "[value='embeddable']")
+
+            // 16.
+            .assert.exists(selectors.editDialog.properties.self + ".is-invalid", false);
     };
 
     /**

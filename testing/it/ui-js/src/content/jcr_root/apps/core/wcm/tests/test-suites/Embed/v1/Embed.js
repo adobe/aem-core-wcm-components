@@ -23,6 +23,7 @@
         editDialog: {
             self: ".cmp-embed__editor",
             properties: {
+                self: "coral-tab:contains('Properties')",
                 typeField: "[data-cmp-embed-dialog-edit-hook='typeField']",
                 typeRadio: "[data-cmp-embed-dialog-edit-hook='typeField'] coral-radio",
                 urlField: "[data-cmp-embed-dialog-edit-hook='urlField']",
@@ -52,6 +53,12 @@
             twitter: ".cmp-embed .twitter-tweet",
             youtube: ".cmp-embed [src^='https://www.youtube.com/embed']"
         }
+    };
+    var urlValidation = {
+        valid: "https://www.youtube.com/watch?v=5vOOa3-fifY",
+        invalid: "https://www.youtube.com/watch?v=5vOOa3-fifYinvalid",
+        malformed: "malformed",
+        blank: ""
     };
     var urlProcessors = {};
     urlProcessors.pinterest = {
@@ -111,6 +118,7 @@
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     })
+        .addTestCase(embed.tcUrlValidation(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors))
         .addTestCase(embed.tcUrlPinterest(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.pinterest, selectors))
         .addTestCase(embed.tcUrlOEmbedFacebookPost(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.facebookPost, selectors))
         .addTestCase(embed.tcUrlOEmbedInstagram(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.instagram, selectors))
