@@ -18,13 +18,13 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import com.adobe.cq.sightly.WCMBindings;
@@ -32,8 +32,11 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
 import com.day.cq.wcm.api.designer.Style;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-public class EmbedImplTest {
+@ExtendWith(AemContextExtension.class)
+class EmbedImplTest {
 
     private static final String BASE = "/embed";
     private static final String CONTENT_ROOT = "/content";
@@ -46,13 +49,17 @@ public class EmbedImplTest {
     private static final String PATH_EMBED_2 = GRID + EMBED_2;
     private static final String PATH_EMBED_3 = GRID + EMBED_3;
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(BASE, CONTENT_ROOT);
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    Style style;
+    private Style style;
+
+    @BeforeEach
+    void setUp() {
+        context.load().json(BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+    }
 
     @Test
-    public void testUrl() {
+    void testUrl() {
         style = mock(Style.class);
         Mockito.when(style.get(Embed.PN_DESIGN_URL_DISABLED, false)).thenReturn(false);
         Mockito.when(style.get(Embed.PN_DESIGN_HTML_DISABLED, false)).thenReturn(true);
@@ -66,7 +73,7 @@ public class EmbedImplTest {
     }
 
     @Test
-    public void testEmbeddable() {
+    void testEmbeddable() {
         style = mock(Style.class);
         Mockito.when(style.get(Embed.PN_DESIGN_URL_DISABLED, false)).thenReturn(true);
         Mockito.when(style.get(Embed.PN_DESIGN_HTML_DISABLED, false)).thenReturn(true);
@@ -80,7 +87,7 @@ public class EmbedImplTest {
     }
 
     @Test
-    public void testHtml() {
+    void testHtml() {
         style = mock(Style.class);
         Mockito.when(style.get(Embed.PN_DESIGN_URL_DISABLED, false)).thenReturn(true);
         Mockito.when(style.get(Embed.PN_DESIGN_HTML_DISABLED, false)).thenReturn(false);
@@ -93,13 +100,13 @@ public class EmbedImplTest {
         Utils.testJSONExport(embed, Utils.getTestExporterJSONPath(BASE, EMBED_3));
     }
 
-    protected Embed getEmbedUnderTest(String resourcePath) {
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+    private Embed getEmbedUnderTest(String resourcePath) {
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to define test resource " + resourcePath + "?");
         }
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(),
-            CONTEXT.bundleContext());
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(),
+            context.bundleContext());
         SlingBindings bindings = new SlingBindings();
         bindings.put(SlingBindings.RESOURCE, resource);
         bindings.put(SlingBindings.REQUEST, request);

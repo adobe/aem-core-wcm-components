@@ -28,7 +28,12 @@
         if (!exists) {
             var script = document.createElement("script");
             script.src = pinterestScript;
+            script.setAttribute("data-pin-build", "doBuild");
             document.getElementsByTagName("body")[0].appendChild(script);
+
+        }
+        if (typeof window.doBuild === "function") {
+            window.doBuild();
         }
     </script>
 </sly>

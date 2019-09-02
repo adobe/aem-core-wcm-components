@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
@@ -25,10 +25,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class OEmbedUrlProcessorTest {
+class OEmbedUrlProcessorTest {
 
     @Test
-    public void test() {
+    void test() {
         OEmbedUrlProcessor processor = new OEmbedUrlProcessor();
 
         OEmbedClient mockClient = Mockito.mock(OEmbedClient.class);

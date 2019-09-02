@@ -15,16 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.embed;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
 
 import static org.junit.Assert.*;
 
-public class PinterestUrlProcessorTest {
+class PinterestUrlProcessorTest {
 
     @Test
-    public void test() {
+    void test() {
         PinterestUrlProcessor processor = new PinterestUrlProcessor();
         Embed.UrlProcessor.Result result = processor.process("https://www.pinterest.com/pin/99360735500167749/");
         assertNotNull(result);

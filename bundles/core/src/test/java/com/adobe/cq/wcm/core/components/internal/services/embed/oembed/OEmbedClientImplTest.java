@@ -20,7 +20,7 @@ import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
@@ -30,10 +30,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class OEmbedClientImplTest {
+class OEmbedClientImplTest {
 
     @Test
-    public void test() throws NoSuchFieldException, IOException {
+    void test() throws NoSuchFieldException, IOException {
         OEmbedClientImpl client = new OEmbedClientImpl();
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(

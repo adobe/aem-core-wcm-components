@@ -18,17 +18,18 @@ package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.Assert.*;
-import org.junit.Test;
 
 import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class OEmbedResponseImplTest {
+class OEmbedResponseImplTest {
 
     @Test
-    public void testFromJSONFile() throws IOException {
-        OEmbedResponse response = getResponseFromJSONFile("embed/oembed/response.json");
+    void testFromJSONFile() throws IOException {
+        OEmbedResponse response = getResponseFromJSONFile();
         assertNotNull(response);
         assertEquals("1.0", response.getVersion());
         assertEquals(OEmbedResponse.Type.VIDEO, OEmbedResponse.Type.fromString(response.getType()));
@@ -47,9 +48,9 @@ public class OEmbedResponseImplTest {
         assertNull(response.getUrl());
     }
 
-    protected OEmbedResponse getResponseFromJSONFile(String file) throws IOException {
+    private OEmbedResponse getResponseFromJSONFile() throws IOException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream(file);
+        InputStream is = classloader.getResourceAsStream("embed/oembed/response.json");
         return new ObjectMapper().readValue(is, OEmbedResponseImpl.class);
     }
 }
