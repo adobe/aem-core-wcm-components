@@ -31,7 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.embed.PinterestUrlProcessor;
-import com.adobe.cq.wcm.core.components.models.embed.Embed;
+import com.adobe.cq.wcm.core.components.models.Embed;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import io.wcm.testing.mock.aem.junit.AemContext;
 

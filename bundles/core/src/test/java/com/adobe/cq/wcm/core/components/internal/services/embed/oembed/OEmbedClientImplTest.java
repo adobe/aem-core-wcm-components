@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
-import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.services.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.Assert.assertEquals;

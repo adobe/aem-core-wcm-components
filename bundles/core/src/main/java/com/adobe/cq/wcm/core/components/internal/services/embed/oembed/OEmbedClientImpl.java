@@ -31,8 +31,8 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedClient;
-import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.services.oembed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.services.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component(

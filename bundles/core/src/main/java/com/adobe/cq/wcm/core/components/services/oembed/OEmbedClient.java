@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.models.embed.oembed;
+package com.adobe.cq.wcm.core.components.services.oembed;
 
 /**
  * A service that allows finding out providers and embedding information for URLs.
@@ -28,9 +28,7 @@ public interface OEmbedClient {
      *
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
-    default String getProvider(String url) {
-        throw new UnsupportedOperationException();
-    }
+    String getProvider(String url);
 
     /**
      * Gets the embedding information from the oEmbed provider.
@@ -40,8 +38,5 @@ public interface OEmbedClient {
      *
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
-    default OEmbedResponse getResponse(String url) {
-        throw new UnsupportedOperationException();
-    }
-
+    OEmbedResponse getResponse(String url);
 }

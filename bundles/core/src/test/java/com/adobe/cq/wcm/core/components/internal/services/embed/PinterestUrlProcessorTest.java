@@ -17,7 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import org.junit.jupiter.api.Test;
 
-import com.adobe.cq.wcm.core.components.models.embed.Embed;
+import com.adobe.cq.wcm.core.components.models.Embed;
 
 import static org.junit.Assert.*;
 

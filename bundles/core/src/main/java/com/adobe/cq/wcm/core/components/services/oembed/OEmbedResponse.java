@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.models.embed.oembed;
+package com.adobe.cq.wcm.core.components.services.oembed;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -125,9 +125,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @NotNull
-    default String getType() {
-        throw new UnsupportedOperationException();
-    }
+    String getType();
 
     /**
      * The oEmbed version number.
@@ -135,9 +133,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @NotNull
-    default String getVersion() {
-        throw new UnsupportedOperationException();
-    }
+    String getVersion();
 
     /**
      * A text title, describing the resource.
@@ -145,9 +141,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getTitle() {
-        throw new UnsupportedOperationException();
-    }
+    String getTitle();
 
     /**
      * The name of the author/owner of the resource.
@@ -155,9 +149,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getAuthorName() {
-        throw new UnsupportedOperationException();
-    }
+    String getAuthorName();
 
     /**
      * A URL for the author/owner of the resource.
@@ -165,9 +157,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getAuthorUrl() {
-        throw new UnsupportedOperationException();
-    }
+    String getAuthorUrl();
 
     /**
      * The name of the resource provider.
@@ -175,9 +165,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getProviderName() {
-        throw new UnsupportedOperationException();
-    }
+    String getProviderName();
 
     /**
      * The url of the resource provider.
@@ -185,9 +173,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getProviderUrl() {
-        throw new UnsupportedOperationException();
-    }
+    String getProviderUrl();
 
     /**
      * The suggested cache lifetime for this resource, in seconds.
@@ -195,9 +181,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default Long getCacheAge() {
-        throw new UnsupportedOperationException();
-    }
+    Long getCacheAge();
 
     /**
      * A URL to a thumbnail image representing the resource.
@@ -205,9 +189,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getThumbnailUrl() {
-        throw new UnsupportedOperationException();
-    }
+    String getThumbnailUrl();
 
     /**
      * The width of the optional thumbnail.
@@ -215,9 +197,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getThumbnailWidth() {
-        throw new UnsupportedOperationException();
-    }
+    String getThumbnailWidth();
 
     /**
      * The height of the optional thumbnail.
@@ -225,9 +205,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getThumbnailHeight() {
-        throw new UnsupportedOperationException();
-    }
+    String getThumbnailHeight();
 
     /**
      * The width in pixels required to display the HTML.
@@ -235,9 +213,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getWidth() {
-        throw new UnsupportedOperationException();
-    }
+    String getWidth();
 
     /**
      * The height in pixels required to display the HTML.
@@ -245,9 +221,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getHeight() {
-        throw new UnsupportedOperationException();
-    }
+    String getHeight();
 
     /**
      * The HTML required to display the resource.
@@ -255,9 +229,7 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getHtml() {
-        throw new UnsupportedOperationException();
-    }
+    String getHtml();
 
     /**
      * The source URL of the image.
@@ -265,7 +237,5 @@ public interface OEmbedResponse {
      * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     @Nullable
-    default String getUrl() {
-        throw new UnsupportedOperationException();
-    }
+    String getUrl();
 }

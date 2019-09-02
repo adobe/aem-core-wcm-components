@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
-import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.services.oembed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 class OEmbedResponseImplTest {

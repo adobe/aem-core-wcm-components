@@ -18,8 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.adobe.cq.wcm.core.components.models.embed.Embed;
-import com.adobe.cq.wcm.core.components.models.embed.oembed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.services.oembed.OEmbedClient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
