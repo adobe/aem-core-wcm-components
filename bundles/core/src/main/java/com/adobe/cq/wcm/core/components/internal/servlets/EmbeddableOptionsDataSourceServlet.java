@@ -29,7 +29,6 @@ import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
-import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.models.embed.Embed;
 import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -37,6 +36,9 @@ import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
+/**
+ * Data source that returns the dialog options for all allowed embeddables.
+ */
 @Component(
     service = { Servlet.class },
     property = {
@@ -50,6 +52,7 @@ public class EmbeddableOptionsDataSourceServlet extends SlingSafeMethodsServlet 
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/datasources/embeddableoptions";
 
     private static final long serialVersionUID = 7672484310019288602L;
+    private static final String NN_DIALOG = "cq:dialog";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) {
@@ -70,7 +73,7 @@ public class EmbeddableOptionsDataSourceServlet extends SlingSafeMethodsServlet 
                     String[] allowedEmbeddables = properties.get(Embed.PN_DESIGN_ALLOWED_EMBEDDABLES, String[].class);
                     if (allowedEmbeddables != null && allowedEmbeddables.length > 0) {
                         for (String allowedEmbeddable : allowedEmbeddables) {
-                            Resource dialogResource = resolver.getResource(allowedEmbeddable + "/" + FormConstants.NN_DIALOG);
+                            Resource dialogResource = resolver.getResource(allowedEmbeddable + "/" + NN_DIALOG);
                             if (dialogResource != null) {
                                 embeddableOptionsResources.add(dialogResource);
                             }

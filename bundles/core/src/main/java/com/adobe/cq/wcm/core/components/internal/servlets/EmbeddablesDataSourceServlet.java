@@ -34,6 +34,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.apache.sling.jcr.resource.api.JcrResourceConstants;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
@@ -41,8 +42,10 @@ import com.adobe.cq.wcm.core.components.models.embed.Embed;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.foundation.forms.FormsConstants;
 
+/**
+ * Data source that returns all enabled embeddables.
+ */
 @Component(
     service = { Servlet.class },
     property = {
@@ -56,6 +59,8 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
     public static final String RESOURCE_TYPE_V1 = "core/wcm/components/embed/v1/datasources/embeddables";
 
     private static final long serialVersionUID = 1L;
+    private static final String COMPONENT_PROPERTY_ENABLED = "enabled";
+    private static final String COMPONENT_PROPERTY_ORDER = "order";
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) {
@@ -85,7 +90,7 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
             final StringBuilder queryStringBuilder = new StringBuilder("/jcr:root");
             queryStringBuilder.append(path);
             queryStringBuilder.append("//* [@");
-            queryStringBuilder.append(FormsConstants.PROPERTY_RST);
+            queryStringBuilder.append(JcrResourceConstants.SLING_RESOURCE_SUPER_TYPE_PROPERTY);
             queryStringBuilder.append("='");
             queryStringBuilder.append(Embed.RT_EMBEDDABLE);
             queryStringBuilder.append("']");
@@ -95,7 +100,7 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
                 final Resource embeddableResource = resourceIterator.next();
                 final ValueMap properties = ResourceUtil.getValueMap(embeddableResource);
                 final String resourceType = embeddableResource.getPath().substring(path.length() + 1);
-                if (properties.get(FormsConstants.COMPONENT_PROPERTY_ENABLED, Boolean.TRUE)) {
+                if (properties.get(COMPONENT_PROPERTY_ENABLED, Boolean.TRUE)) {
                     if (!map.containsKey(resourceType) && !disabledComponents.contains(resourceType)) {
                         map.put(resourceType, new EmbeddableDescription(resourceType, embeddableResource.getName(),
                             properties));
@@ -139,7 +144,7 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
         public EmbeddableDescription(final String rt, final String defaultName, final ValueMap properties) {
             this.resourceType = rt;
             this.title = properties.get(JcrConstants.JCR_TITLE, defaultName);
-            this.order = properties.get(FormsConstants.COMPONENT_PROPERTY_ORDER, 0);
+            this.order = properties.get(COMPONENT_PROPERTY_ORDER, 0);
         }
 
         public String getResourceType() {
