@@ -132,6 +132,7 @@
                 foundationFieldSelectors = getFoundationFieldSelectors();
                 urlField = dialogContent.querySelector(selectors.urlField);
                 urlStatus = dialogContent.querySelector(selectors.urlStatus);
+                var hasCheckedTypeRadio = false;
 
                 if (typeRadios.length) {
                     for (var i = 0; i < typeRadios.length; i++) {
@@ -143,6 +144,7 @@
 
                             if (element.checked) {
                                 toggleShowHideTargets(showHideTarget, value);
+                                hasCheckedTypeRadio = true;
                             }
 
                             element.on("change", function() {
@@ -152,26 +154,32 @@
                                 }
                             });
                         });
+                    }
 
-                        if (embeddableField) {
-                            Coral.commons.ready(embeddableField, function(element) {
-                                var showHideTarget = getShowHideTarget(element);
+                    Coral.commons.nextFrame(function() {
+                        if (!hasCheckedTypeRadio) {
+                            typeRadios[0].checked = true;
+                        }
+                    });
 
+                    if (embeddableField) {
+                        Coral.commons.ready(embeddableField, function(element) {
+                            var showHideTarget = getShowHideTarget(element);
+
+                            toggleShowHideTargets(showHideTarget, element.value);
+
+                            element.on("change", function() {
                                 toggleShowHideTargets(showHideTarget, element.value);
-
-                                element.on("change", function() {
-                                    toggleShowHideTargets(showHideTarget, element.value);
-                                });
                             });
-                        }
+                        });
+                    }
 
-                        if (urlField) {
-                            Coral.commons.ready(urlField, function(element) {
-                                if (element.value !== "") {
-                                    validateUrlField();
-                                }
-                            });
-                        }
+                    if (urlField) {
+                        Coral.commons.ready(urlField, function(element) {
+                            if (element.value !== "") {
+                                validateUrlField();
+                            }
+                        });
                     }
                 }
             }
