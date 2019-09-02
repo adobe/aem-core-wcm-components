@@ -21,32 +21,42 @@
     var embed = window.CQ.CoreComponentsIT.Embed.v1;
     var selectors = {
         editDialog: {
+            self: ".cmp-embed__editor",
             properties: {
-                embeddableField: "[data-cmp-embed-dialog-edit-hook='embeddableField']",
                 typeField: "[data-cmp-embed-dialog-edit-hook='typeField']",
                 typeRadio: "[data-cmp-embed-dialog-edit-hook='typeField'] coral-radio",
                 urlField: "[data-cmp-embed-dialog-edit-hook='urlField']",
-                urlStatus: "[data-cmp-embed-dialog-edit-hook='urlStatus']"
+                urlStatus: "[data-cmp-embed-dialog-edit-hook='urlStatus']",
+                embeddableField: {
+                    self: "[data-cmp-embed-dialog-edit-hook='embeddableField']",
+                    button: "[data-cmp-embed-dialog-edit-hook='embeddableField'] button",
+                    selectList: "[data-cmp-embed-dialog-edit-hook='embeddableField'] coral-selectlist",
+                    items: {
+                        youtube: "[data-cmp-embed-dialog-edit-hook='embeddableField'] coral-selectlist-item[value='core/wcm/components/embed/v1/embed/embeddable/youtube']"
+                    }
+                },
+                htmlField: "[data-cmp-embed-dialog-edit-showhidetargetvalue='html']",
+                embeddables: {
+                    youtube: {
+                        videoId: "[name='./youtubeVideoId']"
+                    }
+                }
             }
         },
         embed: {
             self: ".cmp-embed",
-            processors: {
-                pinterest: ".cmp-embed [class^='PIN_']",
-                oEmbed: {
-                    facebookPost: ".cmp-embed .fb-post",
-                    instagram: ".cmp-embed .instagram-media",
-                    soundcloud: ".cmp-embed [src^='https://w.soundcloud.com/player']",
-                    twitter: ".cmp-embed .twitter-tweet",
-                    youtube: ".cmp-embed [src^='https://www.youtube.com/embed']"
-                }
-            }
+            pinterest: ".cmp-embed [class^='PIN_']",
+            facebookPost: ".cmp-embed .fb-post",
+            instagram: ".cmp-embed .instagram-media",
+            soundcloud: ".cmp-embed [src^='https://w.soundcloud.com/player']",
+            twitter: ".cmp-embed .twitter-tweet",
+            youtube: ".cmp-embed [src^='https://www.youtube.com/embed']"
         }
     };
     var urlProcessors = {};
     urlProcessors.pinterest = {
         name: "Pinterest",
-        selector: selectors.embed.processors.pinterest,
+        selector: selectors.embed.pinterest,
         urls: [
             "https://www.pinterest.com/pin/146859637829777606/"
         ]
@@ -54,7 +64,7 @@
     urlProcessors.oEmbed = {
         facebookPost: {
             name: "Facebook Post",
-            selector: selectors.embed.processors.oEmbed.facebookPost,
+            selector: selectors.embed.facebookPost,
             urls: [
                 "https://www.facebook.com/Adobe/posts/10156804081233871",
                 "https://www.facebook.com/Adobe/photos/rpp.305115773870/10156804081143871"
@@ -62,7 +72,7 @@
         },
         instagram: {
             name: "Instagram",
-            selector: selectors.embed.processors.oEmbed.instagram,
+            selector: selectors.embed.instagram,
             urls: [
                 "https://www.instagram.com/p/B1wkr19Jq3H/",
                 "https://www.instagr.am/p/B1wkr19Jq3H/"
@@ -70,21 +80,21 @@
         },
         soundcloud: {
             name: "SoundCloud",
-            selector: selectors.embed.processors.oEmbed.soundcloud,
+            selector: selectors.embed.soundcloud,
             urls: [
                 "https://soundcloud.com/adobeexperiencecloud/sets/think-tank-audio-experience"
             ]
         },
         twitter: {
             name: "Twitter",
-            selector: selectors.embed.processors.oEmbed.twitter,
+            selector: selectors.embed.twitter,
             urls: [
                 "https://twitter.com/Adobe/status/1168253464675307525"
             ]
         },
         youtube: {
             name: "YouTube",
-            selector: selectors.embed.processors.oEmbed.youtube,
+            selector: selectors.embed.youtube,
             urls: [
                 "https://www.youtube.com/watch?v=5vOOa3-fifY",
                 "https://youtu.be/5vOOa3-fifY"
@@ -106,5 +116,7 @@
         .addTestCase(embed.tcUrlOEmbedInstagram(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.instagram, selectors))
         .addTestCase(embed.tcUrlOEmbedSoundcloud(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.soundcloud, selectors))
         .addTestCase(embed.tcUrlOEmbedTwitter(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.twitter, selectors))
-        .addTestCase(embed.tcUrlOEmbedYoutube(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.youtube, selectors));
+        .addTestCase(embed.tcUrlOEmbedYoutube(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.youtube, selectors))
+        .addTestCase(embed.tcEmbeddableYoutube(tcExecuteBeforeTest, tcExecuteAfterTest, selectors))
+        .addTestCase(embed.tcHtml(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
 }(hobs, jQuery));

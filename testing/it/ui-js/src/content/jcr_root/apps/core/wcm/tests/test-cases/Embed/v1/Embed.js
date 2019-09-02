@@ -25,9 +25,11 @@
      * Before Test Case
      *
      * 1. create test page
-     * 2. create proxy component
-     * 3. add the component to the page
-     * 4. open the new page in the editor
+     * 2. create the policy
+     * 3. assign the policy
+     * 4. create proxy component
+     * 5. add the component to the page
+     * 6. open the new page in the editor
      */
     embed.tcExecuteBeforeTest = function(tcExecuteBeforeTest, embedRT, pageRT) {
         return new h.TestCase("Create sample content", {
@@ -37,15 +39,38 @@
             .execFct(function(opts, done) {
                 c.createPage(c.template, c.rootPage, "page_" + Date.now(), "testPagePath", done, pageRT);
             })
+
             // 2.
             .execFct(function(opts, done) {
-                c.createProxyComponent(embedRT, c.proxyPath, "compPath", done);
+                var data = {
+                    "jcr:title": "New Policy",
+                    "sling:resourceType": "wcm/core/components/policy/policy",
+                    "allowedEmbeddables": "core/wcm/components/embed/v1/embed/embeddable/youtube"
+                };
+
+                c.createPolicy("/embed" + "/new_policy", data, "policyPath", done, c.policyPath);
             })
+
             // 3.
             .execFct(function(opts, done) {
-                c.addComponent(h.param("compPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
+                var data = {
+                    "cq:policy": "core-component/components/embed/new_policy",
+                    "sling:resourceType": "wcm/core/components/policies/mappings"
+                };
+
+                c.assignPolicy("/embed", data, done, c.policyAssignmentPath);
             })
+
             // 4.
+            .execFct(function(opts, done) {
+                c.createProxyComponent(embedRT, c.proxyPath, "proxyPath", done);
+            })
+
+            // 5.
+            .execFct(function(opts, done) {
+                c.addComponent(h.param("proxyPath")(opts), h.param("testPagePath")(opts) + c.relParentCompPath, "cmpPath", done);
+            })
+            // 6.
             .navigateTo("/editor.html%testPagePath%.html");
     };
 
@@ -54,6 +79,8 @@
      *
      * 1. delete the test page
      * 2. delete the proxy component
+     * 3. delete the policy
+     * 4. delete the policy assignment
      */
     embed.tcExecuteAfterTest = function(tcExecuteAfterTest) {
         return new h.TestCase("Clean up after test", {
@@ -63,9 +90,20 @@
             .execFct(function(opts, done) {
                 c.deletePage(h.param("testPagePath")(opts), done);
             })
+
             // 2.
             .execFct(function(opts, done) {
-                c.deleteProxyComponent(h.param("compPath")(opts), done);
+                c.deleteProxyComponent(h.param("proxyPath")(opts), done);
+            })
+
+            // 3.
+            .execFct(function(opts, done) {
+                c.deletePolicy("/embed", done, c.policyPath);
+            })
+
+            // 4.
+            .execFct(function(opts, done) {
+                c.deletePolicyAssignment("/embed", done, c.policyAssignmentPath);
             });
     };
 
@@ -104,78 +142,39 @@
     /**
      * URL Validation
      *
-     * 1. open the edit dialog
-     * 2. verify there's initially no URL status message
-     * 3. close the edit dialog
-     * 4. verify all test URLs
+     * 1. verify all test URLs
      */
     embed.tcUrlPinterest = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
         return new h.TestCase("URL Validation", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-
-            // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus, false)
-
-            // 3.
-            .execTestCase(c.tcCloseConfigureDialog)
-            .wait(1000)
-
-            // 4.
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
     };
 
     /**
      * URL : Pinterest
      *
-     * 1. open the edit dialog
-     * 2. verify there's initially no URL status message
-     * 3. close the edit dialog
-     * 4. verify all test URLs
+     * 1. verify all test URLs
      */
     embed.tcUrlPinterest = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
         return new h.TestCase("URL : Pinterest", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-
-            // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus, false)
-
-            // 3.
-            .execTestCase(c.tcCloseConfigureDialog)
-            .wait(1000)
-
-            // 4.
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
     };
 
     /**
      * URL : oEmbed : Facebook Post
      *
-     * 1. open the edit dialog
-     * 2. verify there's initially no URL status message
-     * 3. close the edit dialog
-     * 4. verify all test URLs
+     * 1. verify all test URLs
      */
     embed.tcUrlOEmbedFacebookPost = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
         return new h.TestCase("URL : oEmbed : Facebook Post", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-
-            // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus, false)
-
-            // 3.
-            .execTestCase(c.tcCloseConfigureDialog)
-            .wait(1000)
-
-            // 4.
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors))
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[1], urlProcessor, selectors));
     };
@@ -183,26 +182,13 @@
     /**
      * URL : oEmbed : Instagram
      *
-     * 1. open the edit dialog
-     * 2. verify there's initially no URL status message
-     * 3. close the edit dialog
-     * 4. verify all test URLs
+     * 1. verify all test URLs
      */
     embed.tcUrlOEmbedInstagram = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
         return new h.TestCase("URL : oEmbed : Instagram", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-
-            // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus, false)
-
-            // 3.
-            .execTestCase(c.tcCloseConfigureDialog)
-            .wait(1000)
-
-            // 4.
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors))
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[1], urlProcessor, selectors));
     };
@@ -210,80 +196,144 @@
     /**
      * URL : oEmbed : SoundCloud
      *
-     * 1. open the edit dialog
-     * 2. verify there's initially no URL status message
-     * 3. close the edit dialog
-     * 4. verify all test URLs
+     * 1. verify all test URLs
      */
     embed.tcUrlOEmbedSoundcloud = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
         return new h.TestCase("URL : oEmbed : SoundCloud", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-
-            // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus, false)
-
-            // 3.
-            .execTestCase(c.tcCloseConfigureDialog)
-            .wait(1000)
-
-            // 4.
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
     };
 
     /**
      * URL : oEmbed : Twitter
      *
-     * 1. open the edit dialog
-     * 2. verify there's initially no URL status message
-     * 3. close the edit dialog
-     * 4. verify all test URLs
+     * 1. verify all test URLs
      */
     embed.tcUrlOEmbedTwitter = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
         return new h.TestCase("URL : oEmbed : Twitter", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
-            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
-
-            // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus, false)
-
-            // 3.
-            .execTestCase(c.tcCloseConfigureDialog)
-            .wait(1000)
-
-            // 4.
             .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
     };
 
     /**
      * URL : oEmbed : YouTube
      *
-     * 1. open the edit dialog
-     * 2. verify there's initially no URL status message
-     * 3. close the edit dialog
-     * 4. verify all test URLs
+     * 1. verify all test URLs
      */
     embed.tcUrlOEmbedYoutube = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
         return new h.TestCase("URL : oEmbed : YouTube", {
             execBefore: tcExecuteBeforeTest,
             execAfter: tcExecuteAfterTest })
             // 1.
+            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors))
+            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[1], urlProcessor, selectors));
+    };
+
+    /**
+     * Embeddable : YouTube
+     *
+     * 1. open the edit dialog
+     * 2. switch type to embeddable
+     * 3. save the edit dialog, verifying it's possible to submit when no embeddable is selected
+     * 4. open the edit dialog
+     * 5. switch type to embeddable
+     * 6. select the YouTube embeddable
+     * 7. save the edit dialog
+     * 8. verify the dialog did not submit, as the Video ID field is required
+     * 9. add a Video ID
+     * 10. save the edit dialog
+     * 11. verify the YouTube video on the page
+     */
+    embed.tcEmbeddableYoutube = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Embeddable : YouTube", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+            // 1.
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
             // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus, false)
+            .click(selectors.editDialog.properties.typeRadio + "[value='embeddable']")
 
             // 3.
-            .execTestCase(c.tcCloseConfigureDialog)
-            .wait(1000)
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200)
 
             // 4.
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors))
-            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[1], urlProcessor, selectors));
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // 5.
+            .click(selectors.editDialog.properties.typeRadio + "[value='embeddable']")
+
+            // 6.
+            .click(selectors.editDialog.properties.embeddableField.button)
+            .assert.visible(selectors.editDialog.properties.embeddableField.selectList)
+            .click(selectors.editDialog.properties.embeddableField.items.youtube)
+
+            // 7.
+            .click(c.selSaveConfDialogButton, { expectNav: false })
+            .wait(200)
+
+            // 8.
+            .assert.visible(selectors.editDialog.self)
+
+            // 9.
+            .fillInput(selectors.editDialog.properties.embeddables.youtube.videoId, "5vOOa3-fifY")
+            .wait(200)
+
+            // 10.
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200)
+
+            // 11.
+            .config.changeContext(c.getContentFrame)
+            .assert.exists(selectors.embed.youtube)
+            .config.resetContext();
+    };
+
+    /**
+     * HTML
+     *
+     * 1. open the edit dialog
+     * 2. switch type to html
+     * 3. save the edit dialog
+     * 4. verify the dialog did not submit, as the HTML field is required
+     * 5. add an HTML embed code
+     * 6. save the edit dialog
+     * 7. verify the HTML embed code is present on the page
+     */
+    embed.tcHtml = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("HTML", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+            // 1.
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // 2.
+            .click(selectors.editDialog.properties.typeRadio + "[value='html']")
+
+            // 3.
+            .click(c.selSaveConfDialogButton, { expectNav: false })
+            .wait(200)
+
+            // 4.
+            .assert.visible(selectors.editDialog.self)
+
+            // 5.
+            .fillInput(selectors.editDialog.properties.htmlField, "<div id='CmpEmbedHtml'>HTML</div>")
+            .wait(200)
+
+            // 6.
+            .execTestCase(c.tcSaveConfigureDialog)
+            .wait(200)
+
+            // 7.
+            .config.changeContext(c.getContentFrame)
+            .assert.exists("#CmpEmbedHtml")
+            .config.resetContext();
     };
 
 })(hobs, jQuery);
