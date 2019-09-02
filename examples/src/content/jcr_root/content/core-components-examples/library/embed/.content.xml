@@ -114,7 +114,7 @@
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/embed/v1/embed"
                             type="url"
-                            url="https://www.pinterest.com/pin/99360735500167749/"/>
+                            url="https://www.pinterest.com/pin/146859637829777606/"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -227,7 +227,7 @@
                             sling:resourceType="core/wcm/components/embed/v1/embed"
                             embeddableResourceType="core/wcm/components/embed/embeddables/youtube"
                             type="embeddable"
-                            youtubeVideoId="2R2gb0MKJlo"/>
+                            youtubeVideoId="f7hbWvHKns0"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
