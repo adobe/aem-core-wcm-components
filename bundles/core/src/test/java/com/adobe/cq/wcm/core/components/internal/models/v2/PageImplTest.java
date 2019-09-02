@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -69,7 +70,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
                 "coretest.product-page.appResources",
                 CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
         assertEquals(page.getLastModifiedDate().getTime(), calendar.getTime());
         assertEquals("en-GB", page.getLanguage());
