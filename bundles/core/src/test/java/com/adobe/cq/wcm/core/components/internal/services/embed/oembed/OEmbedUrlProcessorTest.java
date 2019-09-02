@@ -33,7 +33,7 @@ public class OEmbedUrlProcessorTest {
 
         OEmbedClient mockClient = Mockito.mock(OEmbedClient.class);
         Mockito.when(mockClient.getProvider("something")).thenReturn("Test");
-        Mockito.when(mockClient.getResponse("Test", "something")).thenReturn(new OEmbedResponseImpl());
+        Mockito.when(mockClient.getResponse("something")).thenReturn(new OEmbedResponseImpl());
         processor.oEmbedClient = mockClient;
 
         Embed.UrlProcessor.Result result = processor.process("something");

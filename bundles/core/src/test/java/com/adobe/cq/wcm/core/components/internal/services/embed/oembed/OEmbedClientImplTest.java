@@ -72,7 +72,7 @@ public class OEmbedClientImplTest {
         FieldSetter.setField(client, client.getClass().getDeclaredField("mapper"), mapper);
         String provider = client.getProvider("http://test.com/mytest");
         assertEquals("Test", provider);
-        OEmbedResponse response = client.getResponse(provider, "http://test.com/mytest");
+        OEmbedResponse response = client.getResponse("http://test.com/mytest");
         assertNotNull(response);
     }
 

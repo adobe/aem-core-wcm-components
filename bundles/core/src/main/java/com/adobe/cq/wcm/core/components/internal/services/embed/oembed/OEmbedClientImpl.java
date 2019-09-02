@@ -49,27 +49,18 @@ public class OEmbedClientImpl implements OEmbedClient {
     @Override
     public String getProvider(String url) {
         if (StringUtils.isNotEmpty(url)) {
-            for (OEmbedClientImplConfigurationFactory.Config config : configs) {
-                for (String scheme : config.scheme()) {
-                    if (Pattern.matches(scheme, url)) {
-                        return config.provider();
-                    }
-                }
+            OEmbedClientImplConfigurationFactory.Config config = getConfiguration(url);
+            if (config != null) {
+                return config.provider();
             }
         }
         return null;
     }
 
     @Override
-    public OEmbedResponse getResponse(String provider, String url) {
-        if (StringUtils.isEmpty(provider) || StringUtils.isEmpty(url)) {
-            return null;
-        }
-        OEmbedClientImplConfigurationFactory.Config config = getConfiguration(provider);
-        if (config == null) {
-            return null;
-        }
-        if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
+    public OEmbedResponse getResponse(String url) {
+        OEmbedClientImplConfigurationFactory.Config config = getConfiguration(url);
+        if (config != null && OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 URL jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
                 return mapper.readValue(jsonURL, OEmbedResponseImpl.class);
@@ -80,12 +71,14 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    protected OEmbedClientImplConfigurationFactory.Config getConfiguration(String provider) {
-        if (!StringUtils.isEmpty(provider)) {
+    protected OEmbedClientImplConfigurationFactory.Config getConfiguration(String url) {
+        if (!StringUtils.isEmpty(url)) {
            for (OEmbedClientImplConfigurationFactory.Config config : configs) {
-                if (provider.equals(config.provider())) {
-                    return config;
-                }
+               for (String scheme : config.scheme()) {
+                   if (Pattern.matches(scheme, url)) {
+                       return config;
+                   }
+               }
             }
         }
         return null;

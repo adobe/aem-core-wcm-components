@@ -21,27 +21,26 @@ package com.adobe.cq.wcm.core.components.models.embed.oembed;
 public interface OEmbedClient {
 
     /**
-     * Find a suitable oEmbed provider for the given URL.
+     * Gets a suitable oEmbed provider for the given URL.
      *
      * @param url The URL.
      * @return The name of the oEmbed provider, as defined in configuration. <code>null</code> if no provider is found.
      *
-     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
     default String getProvider(String url) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Get the embedding information from the oEmbed provider.
+     * Gets the embedding information from the oEmbed provider.
      *
-     * @param provider The name of the oEmbed provider that should be used, as defined in the configuration.
      * @param url The URL to retrieve embedding information for.
      * @return The oEmbed response, <code>null</code> otherwise.
      *
-     * @since com.adobe.cq.wcm.core.components.models.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
      */
-    default OEmbedResponse getResponse(String provider, String url) {
+    default OEmbedResponse getResponse(String url) {
         throw new UnsupportedOperationException();
     }
 

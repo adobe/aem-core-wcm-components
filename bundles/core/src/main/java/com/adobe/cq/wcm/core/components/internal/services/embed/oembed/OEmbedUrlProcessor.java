@@ -44,7 +44,7 @@ public class OEmbedUrlProcessor implements Embed.UrlProcessor {
             return null;
         }
 
-        OEmbedResponse oEmbedResponse = oEmbedClient.getResponse(provider, url);
+        OEmbedResponse oEmbedResponse = oEmbedClient.getResponse(url);
         if (oEmbedResponse == null) {
             return null;
         }
