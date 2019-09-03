@@ -19,13 +19,13 @@
         'cq.pagetypes.html5page',
         'cq.authoring.page',
         'cq.wcm.foundation-main',
-        'cq.shared',
-        'cq.telemetry.tracking'
+        'cq.shared'
         ]
     }"></sly>
     <sly data-sly-include="/libs/cq/cloudserviceconfigs/components/servicelibs/servicelibs.jsp"></sly>
     <sly data-sly-test="${hasCloudconfigSupport}" data-sly-resource="${'cloudconfig-header' @ resourceType='cq/cloudconfig/components/scripttags/header'}"></sly>
     <sly data-sly-test="${clientLibCategoriesJsHead}" data-sly-call="${clientlib.js @ categories=clientLibCategoriesJsHead}"></sly>
     <sly data-sly-test="${clientLibCategories}" data-sly-call="${clientlib.css @ categories=clientLibCategories}"></sly>
+    <sly data-sly-call="${clientlib.all @ categories=['cq.telemetry.tracking']}" />
     <link data-sly-test="${staticDesignPath}" href="${staticDesignPath}" rel="stylesheet" type="text/css" />
 </template>
