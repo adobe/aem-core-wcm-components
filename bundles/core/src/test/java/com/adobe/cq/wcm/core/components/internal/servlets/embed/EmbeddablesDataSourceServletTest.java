@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.servlets.EmbeddablesDataSourceServlet.EmbeddableDescription;
-import com.adobe.cq.wcm.core.components.internal.servlets.EmbeddablesDataSourceServlet.EmbeddableDataResourceSource;
+import com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource;
+import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet;
+import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDescription;
+import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddablesDataSourceServlet.EmbeddableDataResourceSource;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import io.wcm.testing.mock.aem.junit.AemContext;

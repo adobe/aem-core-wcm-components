@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,7 @@ import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
+import com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource;
 import com.adobe.cq.wcm.core.components.models.Embed;
 import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -101,12 +102,12 @@ public class AllowedEmbeddablesDataSourceServlet extends SlingSafeMethodsServlet
         }
 
         @Override
-        protected String getText() {
+        public String getText() {
             return title;
         }
 
         @Override
-        protected String getValue() {
+        public String getValue() {
             return resourceType;
         }
     }

@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.servlets;
+package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.servlets.embed.EmbeddableOptionsDataSourceServlet;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
@@ -35,17 +36,16 @@ import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AllowedEmbeddablesDataSourceServletTest {
+public class EmbeddableOptionsDataSourceServletTest {
 
     @Rule
     public AemContext context = CoreComponentTestContext.createContext("/embed/v1/datasources/allowedembeddables",
         "/apps");
 
-    private AllowedEmbeddablesDataSourceServlet dataSourceServlet;
+    private EmbeddableOptionsDataSourceServlet dataSourceServlet;
 
     @Mock
     private ContentPolicyManager contentPolicyManager;
@@ -57,23 +57,19 @@ public class AllowedEmbeddablesDataSourceServletTest {
     public void setUp() {
         Resource policyResource = context.resourceResolver().getResource("/apps/conf/policy_1558011912823");
         ValueMap properties = ResourceUtil.getValueMap(policyResource);
-        dataSourceServlet = new AllowedEmbeddablesDataSourceServlet();
+        dataSourceServlet = new EmbeddableOptionsDataSourceServlet();
         registerContentPolicyManager();
         when(contentPolicyManager.getPolicy(context.currentResource())).thenReturn(contentPolicy);
         when(contentPolicy.getProperties()).thenReturn(properties);
     }
 
     @Test
-    public void testAllowedEmbeddablesDataSourceServlet() {
+    public void testEmbeddableOptionsDataSourceServlet() {
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
         dataSource.iterator().forEachRemaining(resource -> {
             assertNotNull(resource);
-            assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
-            TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertTrue(textValueDataResourceSource.getText().matches("Select|Chatbot|Social"));
-            assertTrue(textValueDataResourceSource.getValue().matches("^$|.*\\b(my-app)\\b.*"));
         });
     }
 

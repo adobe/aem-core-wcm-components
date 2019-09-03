@@ -24,8 +24,8 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 
 public abstract class TextValueDataResourceSource extends SyntheticResource {
 
-    protected static final String PN_VALUE = "value";
-    protected static final String PN_TEXT = "text";
+    public static final String PN_VALUE = "value";
+    public static final String PN_TEXT = "text";
     protected static final String PN_SELECTED = "selected";
 
     private ValueMap valueMap;
@@ -55,9 +55,9 @@ public abstract class TextValueDataResourceSource extends SyntheticResource {
         valueMap.put(PN_SELECTED, getSelected());
     }
 
-    protected abstract String getText();
+    public abstract String getText();
 
-    protected abstract String getValue();
+    public abstract String getValue();
 
     protected boolean getSelected() {
         return false;
