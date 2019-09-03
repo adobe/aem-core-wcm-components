@@ -19,8 +19,8 @@
         var pinterestScript = "//assets.pinterest.com/js/pinit.js";
         var scripts = document.getElementsByTagName("script");
         var exists = false;
-        for(var i = 0; i < scripts.length; i++) {
-            if (scripts[i].src.includes(pinterestScript)) {
+        for (var i = 0; i < scripts.length; i++) {
+            if (scripts[i].src.indexOf(pinterestScript) >= 0) {
                 exists = true;
                 break;
             }
