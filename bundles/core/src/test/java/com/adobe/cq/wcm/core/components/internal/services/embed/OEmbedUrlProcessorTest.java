@@ -13,11 +13,13 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
+package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedResponseImpl;
+import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedUrlProcessor;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
