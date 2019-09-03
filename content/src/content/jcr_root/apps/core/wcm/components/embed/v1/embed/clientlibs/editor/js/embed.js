@@ -159,6 +159,7 @@
                     Coral.commons.nextFrame(function() {
                         if (!hasCheckedTypeRadio) {
                             typeRadios[0].checked = true;
+                            typeRadios[0].trigger("change");
                         }
                     });
 

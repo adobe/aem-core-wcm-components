@@ -118,7 +118,6 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <field
-                                                        granite:hide="${cqDesign.embeddablesDisabled}"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                         deleteHint="{Boolean}true"
