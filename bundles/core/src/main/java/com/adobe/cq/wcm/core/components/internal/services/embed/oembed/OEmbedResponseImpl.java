@@ -22,7 +22,9 @@ import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(
+    ignoreUnknown = true
+)
 public class OEmbedResponseImpl implements OEmbedResponse {
 
     protected String type;

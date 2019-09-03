@@ -24,7 +24,9 @@ import org.osgi.service.component.annotations.Component;
 
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
-@Component(service = UrlProcessor.class)
+@Component(
+    service = UrlProcessor.class
+)
 public class PinterestUrlProcessor implements UrlProcessor {
 
     protected static final String NAME = "pinterest";
@@ -49,5 +51,4 @@ public class PinterestUrlProcessor implements UrlProcessor {
         }
         return null;
     }
-
 }

@@ -16,7 +16,7 @@
 package com.adobe.cq.wcm.core.components.services.embed;
 
 /**
- * A service that allows finding out providers and embedding information for URLs.
+ * A service that allows finding providers and embedding information for URLs.
  *
  * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
  */
@@ -25,8 +25,8 @@ public interface OEmbedClient {
     /**
      * Gets a suitable oEmbed provider for the given URL.
      *
-     * @param url The URL.
-     * @return The name of the oEmbed provider, as defined in configuration. <code>null</code> if no provider is found.
+     * @param url The URL
+     * @return The name of the oEmbed provider, as defined in configuration. {@code null} if no provider is found
      *
      * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
      */
@@ -35,8 +35,8 @@ public interface OEmbedClient {
     /**
      * Gets the embedding information from the oEmbed provider.
      *
-     * @param url The URL to retrieve embedding information for.
-     * @return The oEmbed response, <code>null</code> otherwise.
+     * @param url The URL to retrieve embedding information for
+     * @return The oEmbed response, {@code null} otherwise
      *
      * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
      */

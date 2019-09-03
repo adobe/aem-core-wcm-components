@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component(
-        service = OEmbedClient.class
+    service = OEmbedClient.class
 )
 public class OEmbedClientImpl implements OEmbedClient {
 

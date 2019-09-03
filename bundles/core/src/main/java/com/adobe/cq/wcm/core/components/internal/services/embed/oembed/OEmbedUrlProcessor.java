@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -26,7 +26,9 @@ import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
-@Component(service = UrlProcessor.class)
+@Component(
+    service = UrlProcessor.class
+)
 public class OEmbedUrlProcessor implements UrlProcessor {
 
     protected static final String NAME = "embed";
@@ -43,7 +45,6 @@ public class OEmbedUrlProcessor implements UrlProcessor {
         if (StringUtils.isEmpty(provider)) {
             return null;
         }
-
         OEmbedResponse oEmbedResponse = oEmbedClient.getResponse(url);
         if (oEmbedResponse == null) {
             return null;
@@ -55,5 +56,4 @@ public class OEmbedUrlProcessor implements UrlProcessor {
                     put("response", oEmbedResponse);
                 }});
     }
-
 }

@@ -94,7 +94,6 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
             queryStringBuilder.append("='");
             queryStringBuilder.append(Embed.RT_EMBEDDABLE_V1);
             queryStringBuilder.append("']");
-
             final Iterator<Resource> resourceIterator = resourceResolver.findResources(queryStringBuilder.toString(), "xpath");
             while (resourceIterator.hasNext()) {
                 final Resource embeddableResource = resourceIterator.next();
@@ -176,11 +175,9 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
             if (obj == null) {
                 return false;
             }
-
             if (this.getClass() != obj.getClass()) {
                 return false;
             }
-
             return compareTo((EmbeddableDescription) obj) == 0;
         }
 

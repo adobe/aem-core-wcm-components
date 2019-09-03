@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.osgi.service.metatype.annotations.Option;
 
 @Component(
-        service = OEmbedClientImplConfigurationFactory.class
+    service = OEmbedClientImplConfigurationFactory.class
 )
 @Designate(
-        ocd = OEmbedClientImplConfigurationFactory.Config.class,
-        factory = true
+    ocd = OEmbedClientImplConfigurationFactory.Config.class,
+    factory = true
 )
 public class OEmbedClientImplConfigurationFactory {
 

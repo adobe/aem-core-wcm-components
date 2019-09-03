@@ -39,7 +39,6 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
-
 /**
  * Data source that returns the allowed embeddables.
  */

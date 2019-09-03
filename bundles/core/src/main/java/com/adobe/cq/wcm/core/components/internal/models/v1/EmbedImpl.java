@@ -101,7 +101,6 @@ public class EmbedImpl implements Embed {
                 embeddableResourceType = null;
             }
         }
-
         if (StringUtils.isNotEmpty(url) && urlProcessors != null) {
             for (UrlProcessor urlProcessor : urlProcessors) {
                 UrlProcessor.Result result = urlProcessor.process(url);
