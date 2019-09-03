@@ -78,5 +78,4 @@ class OEmbedClientImplTest {
         OEmbedResponse response = client.getResponse("http://test.com/mytest");
         assertNotNull(response);
     }
-
 }

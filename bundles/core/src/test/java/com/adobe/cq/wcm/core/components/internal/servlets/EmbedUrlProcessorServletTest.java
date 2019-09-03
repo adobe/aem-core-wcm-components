@@ -90,5 +90,4 @@ public class EmbedUrlProcessorServletTest {
         assertEquals("Expected the JSON content type.", "application/json;charset=utf-8", response.getContentType());
         assertEquals("Does not match the expected response output.", expectedOutput, response.getOutputAsString());
     }
-
 }

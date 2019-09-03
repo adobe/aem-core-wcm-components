@@ -28,7 +28,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface OEmbedResponse {
 
     /**
-     * Enumeration of oEmbed response formats
+     * Enumeration of oEmbed response formats.
      */
     enum Format {
         /**
@@ -66,7 +66,7 @@ public interface OEmbedResponse {
     }
 
     /**
-     * Enumeration of oEmbed response types
+     * Enumeration of oEmbed response types.
      *
      * @since com.adobe.cq.wcm.core.components.models.embed 1.0.0
      */

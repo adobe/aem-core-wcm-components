@@ -24,7 +24,7 @@ Embed component written in HTL that allows third-party widgets (e.g. chatbots, l
         * **Pinterest** - processes Pinterest URLs. 
     * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
     * **HTML** - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
-* Each type can be disabled by a template author.
+* Each input type can be disabled by a template author.
 * For the embeddable type, the embeddables that are allowed to be selected in the edit dialog can be configured by a template author.
 
 ### Component Policy Configuration Properties
@@ -78,6 +78,11 @@ To enable show/hide of the edit configuration options, the embeddable dialog sni
 cmp-embed-dialog-edit-embeddableoptions="true"
 cmp-embed-dialog-edit-showhidetargetvalue="<embeddableResourceType>"/>
 ```
+
+The JCR properties for the edit configuration options of an embeddable _must_ be namespaced to prevent clashes. The following JCR properties are used for the provided YouTube embeddable:
+1. `./youtubeVideoId` - defines the YouTube video ID.
+2. `./youtubeWidth` - defines the YouTube video player width.
+3. `./youtubeHeight` - defines the YouTube video player height.
 
 Example:
 * [YouTube embeddable](../../embeddables/youtube)

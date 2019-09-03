@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.services.embed;
 import java.util.Map;
 
 /**
- * Interface that defines a generic processor for a given URL
+ * Interface that defines a generic processor for a given URL.
  *
  * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
  */
@@ -50,7 +50,7 @@ public interface UrlProcessor {
          * Returns the data from the processor that was able to process the URL.
          *
          * @return Data from the processor that was able to process the URL.
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
+         * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
          */
         Map<String, Object> getOptions();
     }
