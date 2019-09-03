@@ -14,6 +14,6 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 @Version("1.0.0")
-package com.adobe.cq.wcm.core.components.services.oembed;
+package com.adobe.cq.wcm.core.components.services.embed;
 
 import org.osgi.annotation.versioning.Version;

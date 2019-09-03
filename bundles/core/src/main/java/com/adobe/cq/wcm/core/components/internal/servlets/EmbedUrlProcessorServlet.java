@@ -33,7 +33,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -59,12 +59,12 @@ public class EmbedUrlProcessorServlet extends SlingSafeMethodsServlet {
     private static final String PARAM_URL = "url";
     private static final long serialVersionUID = 2187626333327104828L;
 
-    private List<Embed.UrlProcessor> urlProcessors = new ArrayList<>();
+    private List<UrlProcessor> urlProcessors = new ArrayList<>();
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
         String url = request.getParameter(PARAM_URL);
-        Embed.UrlProcessor.Result result = getResult(url);
+        UrlProcessor.Result result = getResult(url);
         if (result != null) {
             writeJson(result, response);
         } else {
@@ -72,17 +72,17 @@ public class EmbedUrlProcessorServlet extends SlingSafeMethodsServlet {
         }
     }
 
-    private void writeJson(Embed.UrlProcessor.Result result, SlingHttpServletResponse response) throws IOException {
+    private void writeJson(UrlProcessor.Result result, SlingHttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getWriter(), result);
     }
 
-    private Embed.UrlProcessor.Result getResult(String url) {
+    private UrlProcessor.Result getResult(String url) {
         if (StringUtils.isNotEmpty(url)) {
-            for (Embed.UrlProcessor urlProcessor : urlProcessors) {
-                Embed.UrlProcessor.Result result = urlProcessor.process(url);
+            for (UrlProcessor urlProcessor : urlProcessors) {
+                UrlProcessor.Result result = urlProcessor.process(url);
                 if (result != null) {
                     return result;
                 }
@@ -92,17 +92,17 @@ public class EmbedUrlProcessorServlet extends SlingSafeMethodsServlet {
     }
 
     @Reference(
-        service = Embed.UrlProcessor.class,
+        service = UrlProcessor.class,
         policy = ReferencePolicy.DYNAMIC,
         cardinality = ReferenceCardinality.MULTIPLE,
         bind = "bindEmbedUrlProcessor",
         unbind = "unbindEmbedUrlProcessor"
     )
-    protected void bindEmbedUrlProcessor(Embed.UrlProcessor urlProcessor, Map<?, ?> props) {
+    protected void bindEmbedUrlProcessor(UrlProcessor urlProcessor, Map<?, ?> props) {
         urlProcessors.add(urlProcessor);
     }
 
-    protected void unbindEmbedUrlProcessor(Embed.UrlProcessor urlProcessor, Map<?, ?> props) {
+    protected void unbindEmbedUrlProcessor(UrlProcessor urlProcessor, Map<?, ?> props) {
         urlProcessors.remove(urlProcessor);
     }
 

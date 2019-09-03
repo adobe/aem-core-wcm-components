@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.services.oembed;
+package com.adobe.cq.wcm.core.components.services.embed;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +22,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 /**
  * Defines the oEmbed HTTP response object.
  *
- * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+ * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
  */
 @ConsumerType
 public interface OEmbedResponse {
@@ -34,14 +34,14 @@ public interface OEmbedResponse {
         /**
          * JSON response format.
          *
-         * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+         * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
          */
         JSON("json"),
 
         /**
          * XML response format.
          *
-         * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+         * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
          */
         XML("xml");
 
@@ -68,34 +68,34 @@ public interface OEmbedResponse {
     /**
      * Enumeration of oEmbed response types
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     enum Type {
         /**
          * oEmbed type for photos.
          *
-         * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
          */
         PHOTO("photo"),
 
         /**
          * oEmbed type for video players.
          *
-         * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
          */
         VIDEO("video"),
 
         /**
          * oEmbed type for generic embed data (such as title or author name), does not provide url or html parameters.
          *
-         * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
          */
         LINK("link"),
 
         /**
          * oEmbed type for rich HTML content that does not fall under any other type.
          *
-         * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+         * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
          */
         RICH("rich");
 
@@ -122,7 +122,7 @@ public interface OEmbedResponse {
     /**
      * The resource type.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @NotNull
     String getType();
@@ -130,7 +130,7 @@ public interface OEmbedResponse {
     /**
      * The oEmbed version number.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @NotNull
     String getVersion();
@@ -138,7 +138,7 @@ public interface OEmbedResponse {
     /**
      * A text title, describing the resource.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getTitle();
@@ -146,7 +146,7 @@ public interface OEmbedResponse {
     /**
      * The name of the author/owner of the resource.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getAuthorName();
@@ -154,7 +154,7 @@ public interface OEmbedResponse {
     /**
      * A URL for the author/owner of the resource.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getAuthorUrl();
@@ -162,7 +162,7 @@ public interface OEmbedResponse {
     /**
      * The name of the resource provider.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getProviderName();
@@ -170,7 +170,7 @@ public interface OEmbedResponse {
     /**
      * The url of the resource provider.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getProviderUrl();
@@ -178,7 +178,7 @@ public interface OEmbedResponse {
     /**
      * The suggested cache lifetime for this resource, in seconds.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     Long getCacheAge();
@@ -186,7 +186,7 @@ public interface OEmbedResponse {
     /**
      * A URL to a thumbnail image representing the resource.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getThumbnailUrl();
@@ -194,7 +194,7 @@ public interface OEmbedResponse {
     /**
      * The width of the optional thumbnail.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getThumbnailWidth();
@@ -202,7 +202,7 @@ public interface OEmbedResponse {
     /**
      * The height of the optional thumbnail.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getThumbnailHeight();
@@ -210,7 +210,7 @@ public interface OEmbedResponse {
     /**
      * The width in pixels required to display the HTML.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getWidth();
@@ -218,7 +218,7 @@ public interface OEmbedResponse {
     /**
      * The height in pixels required to display the HTML.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getHeight();
@@ -226,7 +226,7 @@ public interface OEmbedResponse {
     /**
      * The HTML required to display the resource.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getHtml();
@@ -234,7 +234,7 @@ public interface OEmbedResponse {
     /**
      * The source URL of the image.
      *
-     * @since com.adobe.cq.wcm.core.components.models.embed.oembed 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models.embed.embed 1.0.0
      */
     @Nullable
     String getUrl();

@@ -17,7 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import org.junit.jupiter.api.Test;
 
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
 import static org.junit.Assert.*;
 
@@ -26,7 +26,7 @@ class PinterestUrlProcessorTest {
     @Test
     void test() {
         PinterestUrlProcessor processor = new PinterestUrlProcessor();
-        Embed.UrlProcessor.Result result = processor.process("https://www.pinterest.com/pin/99360735500167749/");
+        UrlProcessor.Result result = processor.process("https://www.pinterest.com/pin/99360735500167749/");
         assertNotNull(result);
         assertEquals(PinterestUrlProcessor.NAME, result.getProcessor());
         assertEquals("99360735500167749", result.getOptions().get(PinterestUrlProcessor.PIN_ID));

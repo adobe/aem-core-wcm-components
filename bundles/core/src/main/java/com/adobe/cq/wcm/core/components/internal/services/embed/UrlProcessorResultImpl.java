@@ -17,9 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import java.util.Map;
 
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
-public class UrlProcessorResultImpl implements Embed.UrlProcessor.Result {
+public class UrlProcessorResultImpl implements UrlProcessor.Result {
 
     String processor;
     Map<String, Object> options;

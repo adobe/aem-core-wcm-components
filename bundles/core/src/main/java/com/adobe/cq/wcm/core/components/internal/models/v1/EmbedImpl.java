@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(
@@ -126,7 +127,7 @@ public class EmbedImpl implements Embed {
 
     @Nullable
     @Override
-    public Embed.UrlProcessor.Result getResult() {
+    public UrlProcessor.Result getResult() {
         return result;
     }
 

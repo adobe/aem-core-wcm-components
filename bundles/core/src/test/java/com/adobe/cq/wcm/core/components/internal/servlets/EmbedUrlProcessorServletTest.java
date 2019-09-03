@@ -31,7 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.embed.PinterestUrlProcessor;
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -50,8 +50,8 @@ public class EmbedUrlProcessorServletTest {
     @Before
     public void setUp() {
         servlet = new EmbedUrlProcessorServlet();
-        Embed.UrlProcessor pinterestUrlProcessor = new PinterestUrlProcessor();
-        List<Embed.UrlProcessor> urlProcessors = new ArrayList<>();
+        UrlProcessor pinterestUrlProcessor = new PinterestUrlProcessor();
+        List<UrlProcessor> urlProcessors = new ArrayList<>();
         urlProcessors.add(pinterestUrlProcessor);
         Utils.setInternalState(servlet, "urlProcessors", urlProcessors);
     }

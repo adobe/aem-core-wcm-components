@@ -15,13 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.util.Map;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
 /**
  * Defines the {@code Embed} Sling Model used for the {@code /apps/core/wcm/components/embed} component.
@@ -176,7 +175,7 @@ public interface Embed extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
     @Nullable
-    default Embed.UrlProcessor.Result getResult() {
+    default UrlProcessor.Result getResult() {
         throw new UnsupportedOperationException();
     }
 
@@ -214,48 +213,4 @@ public interface Embed extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Interface that defines a generic processor for a given URL
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
-     */
-    interface UrlProcessor {
-
-        /**
-         * Returns the result of processing the given URL, {@code null} if processing is not possible or failed.
-         *
-         * @param url The URL to process
-         * @return The {@link Result} of processing, {@code null} if processing is not possible or failed.
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
-         */
-        default Result process(String url) {
-            throw new UnsupportedOperationException();
-        }
-
-        /**
-         * @since com.adobe.cq.wcm.core.components.models 12.9.0
-         */
-        interface Result {
-
-            /**
-             * Returns the name of the processor that was able to process the URL.
-             *
-             * @return Name of the processor.
-             * @since com.adobe.cq.wcm.core.components.models 12.9.0
-             */
-            default String getProcessor() {
-                throw new UnsupportedOperationException();
-            }
-
-            /**
-             * Returns the data from the processor that was able to process the URL.
-             *
-             * @return Data from the processor that was able to process the URL.
-             * @since com.adobe.cq.wcm.core.components.models 12.9.0
-             */
-            default Map<String, Object> getOptions() {
-                throw new UnsupportedOperationException();
-            }
-        }
-
-    }
 }

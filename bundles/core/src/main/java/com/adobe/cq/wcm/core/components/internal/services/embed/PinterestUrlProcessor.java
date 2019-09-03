@@ -22,10 +22,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 
-import com.adobe.cq.wcm.core.components.models.Embed;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
-@Component(service = Embed.UrlProcessor.class)
-public class PinterestUrlProcessor implements Embed.UrlProcessor {
+@Component(service = UrlProcessor.class)
+public class PinterestUrlProcessor implements UrlProcessor {
 
     protected static final String NAME = "pinterest";
 

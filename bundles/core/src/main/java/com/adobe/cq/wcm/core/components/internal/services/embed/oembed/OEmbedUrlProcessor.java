@@ -22,14 +22,14 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.cq.wcm.core.components.internal.services.embed.UrlProcessorResultImpl;
-import com.adobe.cq.wcm.core.components.models.Embed;
-import com.adobe.cq.wcm.core.components.services.oembed.OEmbedClient;
-import com.adobe.cq.wcm.core.components.services.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
+import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
-@Component(service = Embed.UrlProcessor.class)
-public class OEmbedUrlProcessor implements Embed.UrlProcessor {
+@Component(service = UrlProcessor.class)
+public class OEmbedUrlProcessor implements UrlProcessor {
 
-    protected static final String NAME = "oembed";
+    protected static final String NAME = "embed";
 
     @Reference
     protected OEmbedClient oEmbedClient;

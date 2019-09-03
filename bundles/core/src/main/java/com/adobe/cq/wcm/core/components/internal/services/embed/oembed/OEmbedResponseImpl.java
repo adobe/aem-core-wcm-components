@@ -18,7 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.services.embed.oembed;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.services.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
-import com.adobe.cq.wcm.core.components.services.oembed.OEmbedResponse;
+import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.Assert.assertEquals;
@@ -56,7 +56,7 @@ class OEmbedClientImplTest {
 
                     @Override
                     public String endpoint() {
-                        return "http://test.com/oembed";
+                        return "http://test.com/embed";
                     }
 
                     @Override
