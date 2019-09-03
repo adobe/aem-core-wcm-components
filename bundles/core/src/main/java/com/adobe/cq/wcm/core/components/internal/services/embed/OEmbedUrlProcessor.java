@@ -31,7 +31,7 @@ import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 )
 public class OEmbedUrlProcessor implements UrlProcessor {
 
-    protected static final String NAME = "embed";
+    protected static final String NAME = "oembed";
 
     @Reference
     protected OEmbedClient oEmbedClient;
