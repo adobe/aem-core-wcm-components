@@ -92,7 +92,7 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
             queryStringBuilder.append("//* [@");
             queryStringBuilder.append(JcrResourceConstants.SLING_RESOURCE_SUPER_TYPE_PROPERTY);
             queryStringBuilder.append("='");
-            queryStringBuilder.append(Embed.RT_EMBEDDABLE);
+            queryStringBuilder.append(Embed.RT_EMBEDDABLE_V1);
             queryStringBuilder.append("']");
 
             final Iterator<Resource> resourceIterator = resourceResolver.findResources(queryStringBuilder.toString(), "xpath");
