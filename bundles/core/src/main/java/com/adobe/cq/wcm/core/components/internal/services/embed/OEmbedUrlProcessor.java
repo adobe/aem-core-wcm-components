@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.adobe.cq.wcm.core.components.internal.services.embed.UrlProcessorResultImpl;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
