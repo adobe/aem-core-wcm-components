@@ -158,6 +158,8 @@
      * 14. verify that the properties tab is marked invalid
      * 15. switch type to embeddable
      * 16. verify that the properties tab is no longer marked invalid
+     * 17. switch type to URL
+     * 18. verify field is marked invalid and the status message is not shown
      */
     embed.tcUrlValidation = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors) {
         return new h.TestCase("URL Validation", {
@@ -218,9 +220,17 @@
 
             // 15.
             .click(selectors.editDialog.properties.typeRadio + "[value='embeddable']")
+            .wait(400)
 
             // 16.
-            .assert.exists(selectors.editDialog.properties.self + ".is-invalid", false);
+            .assert.exists(selectors.editDialog.properties.self + ".is-invalid", false)
+
+            // 17.
+            .click(selectors.editDialog.properties.typeRadio + "[value='url']")
+
+            // 18.
+            .assert.visible(selectors.editDialog.properties.urlStatus, false)
+            .assert.exists(selectors.editDialog.properties.urlField + ".is-invalid");
     };
 
     /**

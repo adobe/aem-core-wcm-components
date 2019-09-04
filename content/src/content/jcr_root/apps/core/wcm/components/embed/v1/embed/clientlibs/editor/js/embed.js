@@ -152,6 +152,9 @@
                                 if (embeddableField && (value === type.EMBEDDABLE)) {
                                     embeddableField.trigger("change");
                                 }
+                                if (urlField && (value === type.URL)) {
+                                    urlField.trigger("change");
+                                }
                             });
                         });
                     }
