@@ -18,12 +18,12 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -42,7 +42,7 @@ public class OEmbedClientImpl implements OEmbedClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OEmbedClientImpl.class);
 
-    private List<OEmbedClientImplConfigurationFactory.Config> configs = new ArrayList<>();
+    private Map<String, OEmbedClientImplConfigurationFactory.Config> configs = new HashMap<>();
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -73,7 +73,7 @@ public class OEmbedClientImpl implements OEmbedClient {
 
     protected OEmbedClientImplConfigurationFactory.Config getConfiguration(String url) {
         if (!StringUtils.isEmpty(url)) {
-           for (OEmbedClientImplConfigurationFactory.Config config : configs) {
+           for (OEmbedClientImplConfigurationFactory.Config config : configs.values()) {
                for (String scheme : config.scheme()) {
                    if (Pattern.matches(scheme, url)) {
                        return config;
@@ -103,10 +103,12 @@ public class OEmbedClientImpl implements OEmbedClient {
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, updated = "bindOEmbedClientImplConfigurationFactory")
     protected synchronized void bindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
-        configs.add(configurationFactory.getConfig());
+        String key = (String) properties.get(Constants.SERVICE_PID);
+        configs.put(key, configurationFactory.getConfig());
     }
 
     protected synchronized void unbindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
-        configs.remove(configurationFactory.getConfig());
+        String key = (String) properties.get(Constants.SERVICE_PID);
+        configs.remove(key, configurationFactory.getConfig());
     }
 }
