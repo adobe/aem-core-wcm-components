@@ -631,6 +631,13 @@
                 <scope>provided</scope>
             </dependency>
 
+            <dependency>
+                <artifactId>org.apache.servicemix.specs.jaxb-api-2.2</artifactId>
+                <version>2.9.0</version>
+                <groupId>org.apache.servicemix.specs</groupId>
+                <scope>provided</scope>
+            </dependency>
+
             <!-- Content fragment API -->
             <dependency>
                 <groupId>com.adobe.cq.dam</groupId>

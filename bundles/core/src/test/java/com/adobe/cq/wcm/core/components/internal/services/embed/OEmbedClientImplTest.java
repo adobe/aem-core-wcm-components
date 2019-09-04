@@ -24,9 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
-import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedClientImpl;
-import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedClientImplConfigurationFactory;
-import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedResponseImpl;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -71,7 +68,7 @@ class OEmbedClientImplTest {
                 });
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
-        Mockito.when(mapper.readValue(Mockito.any(URL.class), Mockito.any(Class.class))).thenReturn(new OEmbedResponseImpl());
+        Mockito.when(mapper.readValue(Mockito.any(URL.class), Mockito.any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
         FieldSetter.setField(client, client.getClass().getDeclaredField("mapper"), mapper);
         String provider = client.getProvider("http://test.com/mytest");
         assertEquals("Test", provider);

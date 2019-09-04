@@ -22,11 +22,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
-import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedResponseImpl;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-class OEmbedResponseImplTest {
+class OEmbedJSONResponseImplTest {
 
     @Test
     void testFromJSONFile() throws IOException {
@@ -52,6 +51,6 @@ class OEmbedResponseImplTest {
     private OEmbedResponse getResponseFromJSONFile() throws IOException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream is = classloader.getResourceAsStream("embed/oembed/response.json");
-        return new ObjectMapper().readValue(is, OEmbedResponseImpl.class);
+        return new ObjectMapper().readValue(is, OEmbedJSONResponseImpl.class);
     }
 }

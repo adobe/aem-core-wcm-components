@@ -22,6 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.apache.commons.lang3.StringUtils;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
@@ -63,9 +67,18 @@ public class OEmbedClientImpl implements OEmbedClient {
         if (config != null && OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 URL jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
-                return mapper.readValue(jsonURL, OEmbedResponseImpl.class);
+                return mapper.readValue(jsonURL, OEmbedJSONResponseImpl.class);
             } catch (IOException ioex) {
                 LOGGER.error(ioex.getMessage(), ioex);
+            }
+        } else if (config != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
+            try {
+                URL xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
+                JAXBContext jaxbContext = JAXBContext.newInstance(OEmbedXMLResponseImpl.class);
+                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+                return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlURL);
+            } catch (JAXBException | IOException e) {
+                LOGGER.error(e.getMessage());
             }
         }
         return null;

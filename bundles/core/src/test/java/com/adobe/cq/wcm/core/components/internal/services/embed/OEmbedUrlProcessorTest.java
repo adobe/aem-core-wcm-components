@@ -18,8 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.services.embed;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedResponseImpl;
-import com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedUrlProcessor;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
 
@@ -35,7 +33,7 @@ class OEmbedUrlProcessorTest {
 
         OEmbedClient mockClient = Mockito.mock(OEmbedClient.class);
         Mockito.when(mockClient.getProvider("something")).thenReturn("Test");
-        Mockito.when(mockClient.getResponse("something")).thenReturn(new OEmbedResponseImpl());
+        Mockito.when(mockClient.getResponse("something")).thenReturn(new OEmbedJSONResponseImpl());
         processor.oEmbedClient = mockClient;
 
         UrlProcessor.Result result = processor.process("something");

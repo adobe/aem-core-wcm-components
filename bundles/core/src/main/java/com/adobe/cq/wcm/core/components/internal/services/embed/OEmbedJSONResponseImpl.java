@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(
     ignoreUnknown = true
 )
-public class OEmbedResponseImpl implements OEmbedResponse {
+public class OEmbedJSONResponseImpl implements OEmbedResponse {
 
     protected String type;
     protected String version;
