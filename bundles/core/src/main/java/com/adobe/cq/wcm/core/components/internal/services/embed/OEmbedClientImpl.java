@@ -49,6 +49,16 @@ public class OEmbedClientImpl implements OEmbedClient {
     private Map<String, OEmbedClientImplConfigurationFactory.Config> configs = new HashMap<>();
 
     private ObjectMapper mapper = new ObjectMapper();
+    private static JAXBContext jaxbContext;
+
+    static {
+        try {
+            jaxbContext = JAXBContext.newInstance(OEmbedXMLResponseImpl.class);
+        } catch (JAXBException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
 
     @Override
     public String getProvider(String url) {
@@ -74,7 +84,6 @@ public class OEmbedClientImpl implements OEmbedClient {
         } else if (config != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 URL xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
-                JAXBContext jaxbContext = JAXBContext.newInstance(OEmbedXMLResponseImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlURL);
             } catch (JAXBException | IOException e) {

@@ -20,20 +20,25 @@ import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.HashMap;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
+import com.drew.lang.annotations.SuppressWarnings;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 class OEmbedClientImplTest {
 
     @Test
-    void test() throws NoSuchFieldException, IOException {
+    void testJSON() throws NoSuchFieldException, IOException {
         OEmbedClientImpl client = new OEmbedClientImpl();
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(
@@ -46,7 +51,7 @@ class OEmbedClientImplTest {
 
                     @Override
                     public String provider() {
-                        return "Test";
+                        return "Test JSON";
                     }
 
                     @Override
@@ -62,17 +67,63 @@ class OEmbedClientImplTest {
                     @Override
                     public String[] scheme() {
                         return new String[]{
-                                ".*"
+                                "http://test\\.com/json.*"
                         };
                     }
                 });
+
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
-        Mockito.when(mapper.readValue(Mockito.any(URL.class), Mockito.any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
+        when(mapper.readValue(Mockito.any(URL.class), Mockito.any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
         FieldSetter.setField(client, client.getClass().getDeclaredField("mapper"), mapper);
-        String provider = client.getProvider("http://test.com/mytest");
-        assertEquals("Test", provider);
-        OEmbedResponse response = client.getResponse("http://test.com/mytest");
+        String provider = client.getProvider("http://test.com/json");
+        assertEquals("Test JSON", provider);
+        OEmbedResponse response = client.getResponse("http://test.com/json");
         assertNotNull(response);
+    }
+
+    @Test
+    void testXML() throws NoSuchFieldException, JAXBException {
+        OEmbedClientImpl client = new OEmbedClientImpl();
+        OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
+        configurationFactory.configure(new OEmbedClientImplConfigurationFactory.Config() {
+
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return null;
+            }
+
+            @Override
+            public String provider() {
+                return "Test XML";
+            }
+
+            @Override
+            public String format() {
+                return OEmbedResponse.Format.XML.getValue();
+            }
+
+            @Override
+            public String endpoint() {
+                return "http://test.com/embed";
+            }
+
+            @Override
+            public String[] scheme() {
+                return new String[]{
+                        "http://test\\.com/xml.*"
+                };
+            }
+        });
+
+        client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
+        JAXBContext jaxbContext = Mockito.mock(JAXBContext.class);
+        FieldSetter.setField(client, client.getClass().getDeclaredField("jaxbContext"), jaxbContext);
+        Unmarshaller unmarshaller = Mockito.mock(Unmarshaller.class);
+        when(jaxbContext.createUnmarshaller()).thenReturn(unmarshaller);
+        when(unmarshaller.unmarshal(Mockito.any(URL.class))).thenReturn(new OEmbedXMLResponseImpl());
+        String provider = client.getProvider("http://test.com/xml");
+        assertEquals("Test XML", provider);
+        assertNotNull(client.getResponse("http://test.com/xml"));
     }
 }
