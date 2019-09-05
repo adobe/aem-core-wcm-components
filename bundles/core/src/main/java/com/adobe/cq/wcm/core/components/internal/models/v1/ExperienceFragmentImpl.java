@@ -259,7 +259,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     /**
      * Checks if the resource at the given path is an Experience Fragment variation.
      *
-     * @return {@code true} if the resource is an XF variation, {@code false} otherwise.
+     * @return {@code true} if the resource is an XF variation, {@code false} otherwise
      */
     private boolean isExperienceFragmentVariation(String path) {
         if (StringUtils.isNotEmpty(path)) {
