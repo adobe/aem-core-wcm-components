@@ -10,5 +10,4 @@
         jcr:title="Simple Experience Fragment"
         sling:resourceType="cq/experience-fragments/components/experiencefragment"/>
     <master/>
-    <variation1/>
 </jcr:root>

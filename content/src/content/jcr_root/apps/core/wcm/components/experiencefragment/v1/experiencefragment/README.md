@@ -19,31 +19,34 @@ Experience Fragment (v1)
 Experience fragment component written in HTL that renders an experience fragment variation.
 
 ## Features
-* Can be used on both templates and pages
-* Defines a configurable experience fragment variation to be displayed
-* Supports references for localized content: if the component is defined in a template and if the fragment is part of a localized structure below `/content/experience-fragments` that follows the same patterns as the site below `/content, the fragment with the same localization (language, blueprint or live copy) as the current page will be rendered.
+* Can be used on both templates and pages.
+* Defines a configurable experience fragment variation to be displayed.
+* Supports references for localized content: if the component is defined in a template and if the fragment is part of a localized structure below `/content/experience-fragments` that follows the same patterns as the site below `/content`, the fragment with the same localization (language, blueprint or live copy) as the current page will be rendered.
 
 ### Use Object
-The Experience fragment component uses the `com.adobe.cq.wcm.core.components.models.ExperienceFragment` Sling model as its Use-object.
+The experience fragment component uses the `com.adobe.cq.wcm.core.components.models.ExperienceFragment` Sling model as its Use-object.
 
 ### Edit Dialog Properties
-The following property is written to JCR for the Experience Fragment component and is expected to be available as a `Resource` property:
+The following property is written to JCR for the experience fragment component and is expected to be available as a `Resource` property:
 
-1. `./fragmentPath` - defines the path to the Experience Fragment to be rendered
+1. `./fragmentVariationPath` - defines the path to the experience fragment variation to be rendered.
 
 ## BEM Description
 ```
 BLOCK cmp-experiencefragment
 ```
 
-Note: the rendered HTML markup of the Experience Component contains CSS classes that start with `xf-` (e.g. `xf-content-height` or `xf-master-building-block`):
+Note: the rendered HTML markup of the experience fragment component may contain CSS classes that start with `xf-` (e.g. `xf-content-height` or `xf-master-building-block`) -
 those classes are private and should not be used in custom code (e.g. to style the markup).
 
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
-* **Compatibility**: AEM 6.4
+* **Compatibility**: AEM 6.3
 * **Status**: production-ready
-* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_experiencefragment\_v1](https://www.adobe.com/go/aem_cmp_experiencefragment_v1)
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_xf\_v1](https://www.adobe.com/go/aem_cmp_xf_v1)
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_xf](https://www.adobe.com/go/aem_cmp_library_xf)
+* **Author**: [Abhishek Aggarwal](https://github.com/abhishekagg19)
+* **Co-authors**: [Jean-Christophe Kautzmann](https://github.com/jckautzmann)
 
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._

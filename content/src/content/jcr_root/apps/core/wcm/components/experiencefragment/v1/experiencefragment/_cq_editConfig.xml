@@ -22,7 +22,7 @@
         <experiencefragment
             jcr:primaryType="cq:DropTargetConfig"
             accept="[text/html]"
-            propertyName="./fragmentPath"
+            propertyName="./fragmentVariationPath"
             groups="[content]"/>
     </cq:dropTargets>
     <cq:listeners

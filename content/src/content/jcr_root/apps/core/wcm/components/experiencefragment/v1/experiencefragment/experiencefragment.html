@@ -16,7 +16,7 @@
 <div class="cmp-experiencefragment"
      data-sly-use.fragment="com.adobe.cq.wcm.core.components.models.ExperienceFragment"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-test.localizedFragmentPath=${fragment.localizedFragmentPath}
-     data-sly-resource="${@path=localizedFragmentPath, selectors='content', wcmmode='disabled'}">
+     data-sly-test.localizedFragmentVariationPath=${fragment.localizedFragmentVariationPath}
+     data-sly-resource="${@path=localizedFragmentVariationPath, selectors='content', wcmmode='disabled'}">
 </div>
-<sly data-sly-call="${template.placeholder @ isEmpty=!localizedFragmentPath, classAppend='cmp-dd-experiencefragment'}"></sly>
+<sly data-sly-call="${template.placeholder @ isEmpty=!localizedFragmentVariationPath, classAppend='cmp-dd-experiencefragment'}"></sly>
