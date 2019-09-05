@@ -65,13 +65,13 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component(
-        service = Servlet.class,
-        property = {
-                "sling.servlet.selectors=" + SearchResultServlet.DEFAULT_SELECTOR,
-                "sling.servlet.resourceTypes=cq/Page",
-                "sling.servlet.extensions=json",
-                "sling.servlet.methods=GET"
-        }
+    service = Servlet.class,
+    property = {
+        "sling.servlet.selectors=" + SearchResultServlet.DEFAULT_SELECTOR,
+        "sling.servlet.resourceTypes=cq/Page",
+        "sling.servlet.extensions=json",
+        "sling.servlet.methods=GET"
+    }
 )
 public class SearchResultServlet extends SlingSafeMethodsServlet {
 
@@ -83,6 +83,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     private static final String PREDICATE_TYPE = "type";
     private static final String PREDICATE_PATH = "path";
     private static final String NN_STRUCTURE = "structure";
+    private static final String JCR_CONTENT = "jcr:content";
+    private static final String FRAGMENT_PATH = "fragmentPath";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
 
@@ -97,7 +99,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
-            throws IOException {
+        throws IOException {
         Page currentPage = getCurrentPage(request);
         if (currentPage != null) {
             Resource searchResource = getSearchContentResource(request, currentPage);
@@ -138,22 +140,54 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         }
         if (StringUtils.isNotEmpty(relativeContentResource)) {
             searchContentResource = resource.getChild(relativeContentResource);
-            if (searchContentResource == null) {
-                PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Template template = currentPage.getTemplate();
-                    if (template != null) {
-                        Resource templateResource = request.getResourceResolver().getResource(template.getPath());
-                        if (templateResource != null) {
-                            searchContentResource = templateResource.getChild(NN_STRUCTURE + "/" + relativeContentResource);
+            if(searchContentResource == null) {
+                searchContentResource = getSearchContentResourceFromFragments(resource.getChild(JCR_CONTENT),relativeContentResource);
+                if(searchContentResource == null) {
+                    PageManager pageManager = resource.getResourceResolver().adaptTo(PageManager.class);
+                    if (pageManager != null) {
+                        Template template = currentPage.getTemplate();
+                        if (template != null) {
+                            Resource templateResource = request.getResourceResolver().getResource(template.getPath());
+                            if (templateResource != null) {
+                                searchContentResource = templateResource.getChild(NN_STRUCTURE + "/" + relativeContentResource);
+                            }
                         }
                     }
+                }
+            }
+        }
+
+        return searchContentResource;
+    }
+
+    private Resource getSearchContentResourceFromFragments(Resource pageResource, String relativeContentResource) {
+        Resource searchContentResource = findFragmentProperties(pageResource, relativeContentResource);
+        if(searchContentResource == null) {
+            for (Resource resource : pageResource.getChildren()) {
+                searchContentResource = getSearchContentResourceFromFragments(resource, relativeContentResource);
+                if(searchContentResource != null){
+                    return searchContentResource;
                 }
             }
         }
         return searchContentResource;
     }
 
+    private Resource findFragmentProperties(Resource parentResource, String relativeContentResource) {
+        ValueMap contentProperties;
+        Resource searchContentResource = null;
+        if (parentResource != null) {
+            contentProperties = parentResource.getValueMap();
+            if(contentProperties.containsKey(FRAGMENT_PATH)){
+                String searchResourcePath = contentProperties.get(FRAGMENT_PATH,String.class);
+                searchContentResource =  parentResource.getChild(searchResourcePath+ "/" +relativeContentResource);
+                if(searchContentResource != null){
+                    return searchContentResource;
+                }
+            }
+        }
+        return searchContentResource;
+    }
 
     private List<ListItem> getResults(SlingHttpServletRequest request, Resource searchResource, Page currentPage) {
         int searchTermMinimumLength = SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT;
@@ -163,9 +197,9 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             ValueMap valueMap = searchResource.getValueMap();
             ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
             searchTermMinimumLength = valueMap.get(Search.PN_SEARCH_TERM_MINIMUM_LENGTH, contentPolicyMap.get(Search
-                        .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
+                .PN_SEARCH_TERM_MINIMUM_LENGTH, SearchImpl.PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT));
             resultsSize = valueMap.get(Search.PN_RESULTS_SIZE, contentPolicyMap.get(Search.PN_RESULTS_SIZE,
-                        SearchImpl.PROP_RESULTS_SIZE_DEFAULT));
+                SearchImpl.PROP_RESULTS_SIZE_DEFAULT));
             String searchRoot = valueMap.get(Search.PN_SEARCH_ROOT, contentPolicyMap.get(Search.PN_SEARCH_ROOT, SearchImpl.PROP_SEARCH_ROOT_DEFAULT));
             searchRootPagePath = getSearchRootPagePath(searchRoot, currentPage);
         } else {
@@ -231,10 +265,10 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                     // ignore it
                 }
                 if (searchRootLanguageRoot != null && currentPageLanguageRoot != null && !searchRootLanguageRoot.equals
-                        (currentPageLanguageRoot)) {
+                    (currentPageLanguageRoot)) {
                     // check if there's a language copy of the search root
                     Page languageCopySearchRoot = pageManager.getPage(ResourceUtil.normalize(currentPageLanguageRoot.getPath() + "/" +
-                            getRelativePath(searchRootLanguageRoot, rootPage)));
+                        getRelativePath(searchRootLanguageRoot, rootPage)));
                     if (languageCopySearchRoot != null) {
                         rootPage = languageCopySearchRoot;
                     }
