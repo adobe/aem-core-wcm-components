@@ -465,7 +465,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- Only required for junit 4 -->
         <dependency>
             <groupId>io.wcm</groupId>

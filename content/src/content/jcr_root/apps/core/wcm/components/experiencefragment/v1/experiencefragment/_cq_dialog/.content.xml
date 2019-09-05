@@ -41,17 +41,17 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <fragmentpath
+                                    <fragmentVariationPath
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="cq/experience-fragments/editor/components/xffield"
                                         granite:id="xfPicker"
-                                        name="./fragmentPath"
+                                        name="./fragmentVariationPath"
                                         fieldLabel="Variation"
                                         filter="folderOrVariant"
                                         propertyFilter="cq:xfShowInEditor"
                                         variant="web"
-                                        fieldDescription="Choose the variant to be displayed by this experience fragment">
-                                    </fragmentpath>
+                                        fieldDescription="Choose the experience fragment variation to display.">
+                                    </fragmentVariationPath>
                                 </items>
                             </column>
                         </items>

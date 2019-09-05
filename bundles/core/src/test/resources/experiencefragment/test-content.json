@@ -1,11 +1,11 @@
 {
-	"mysite": {
-        "jcr:primaryType": "sling:Folder",
-		"jcr:content": {
-			"jcr:primaryType": "cq:PageContent",
-			"jcr:title": "Language Structure",
-			"jcr:created": "Mon Apr 08 2019 20:21:55 GMT+0200"
-		},
+    "mysite": {
+        "jcr:primaryType": "sling:Folder", 
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent", 
+            "jcr:title": "Language Structure", 
+            "jcr:created": "Mon Apr 08 2019 20:21:55 GMT+0200"
+        },
         "page": {
             "jcr:primaryType": "cq:Page",
             "jcr:content": {
@@ -18,12 +18,12 @@
                     "xf-component-1": {
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                        "fragmentPath": "/content/experience-fragments/mysite/en/footer/master"
+                        "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master"
                     },
                     "xf-component-2": {
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                        "fragmentPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
+                        "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
                     },
                     "xf-component-3": {
                         "jcr:primaryType": "nt:unstructured",
@@ -51,17 +51,17 @@
                         "xf-component-10": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/en/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master"
                         },
                         "xf-component-11": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/es/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/es/footer/master"
                         },
                         "xf-component-12": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/en/footer/master/undefined"
                         },
                         "xf-component-13": {
                             "jcr:primaryType": "nt:unstructured",
@@ -97,17 +97,17 @@
                             "xf-component-20": {
                                 "jcr:primaryType": "nt:unstructured",
                                 "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                                "fragmentPath": "/content/experience-fragments/mysite/us/en/footer/master"
+                                "fragmentVariationPath": "/content/experience-fragments/mysite/us/en/footer/master"
                             },
                             "xf-component-21": {
                                 "jcr:primaryType": "nt:unstructured",
                                 "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                                "fragmentPath": "/content/experience-fragments/mysite/us/es/footer/master"
+                                "fragmentVariationPath": "/content/experience-fragments/mysite/us/es/footer/master"
                             },
                             "xf-component-22": {
                                 "jcr:primaryType": "nt:unstructured",
                                 "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                                "fragmentPath": "/content/experience-fragments/mysite/us/en/footer/master/undefined"
+                                "fragmentVariationPath": "/content/experience-fragments/mysite/us/en/footer/master/undefined"
                             }
                         }
                     }
@@ -147,17 +147,17 @@
                                 "xf-component-30": {
                                     "jcr:primaryType": "nt:unstructured",
                                     "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                                    "fragmentPath": "/content/experience-fragments/mysite/ch/mysite/fr/footer/master"
+                                    "fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/fr/footer/master"
                                 },
                                 "xf-component-31": {
                                     "jcr:primaryType": "nt:unstructured",
                                     "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                                    "fragmentPath": "/content/experience-fragments/mysite/ch/mysite/de/footer/master"
+                                    "fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/de/footer/master"
                                 },
                                 "xf-component-32": {
                                     "jcr:primaryType": "nt:unstructured",
                                     "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                                    "fragmentPath": "/content/experience-fragments/mysite/ch/mysite/en/footer/master/undefined"
+                                    "fragmentVariationPath": "/content/experience-fragments/mysite/ch/mysite/en/footer/master/undefined"
                                 }
                             }
                         }
@@ -184,17 +184,17 @@
                         "xf-component-40": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/ch_fr/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch_fr/footer/master"
                         },
                         "xf-component-41": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/ch_de/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch_de/footer/master"
                         },
                         "xf-component-42": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/ch_fr/footer/master/undefined"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/ch_fr/footer/master/undefined"
                         }
                     }
                 }
@@ -219,12 +219,12 @@
                         "xf-component-50": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/blueprint/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master"
                         },
                         "xf-component-51": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/livecopy/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/livecopy/footer/master"
                         }
                     }
                 }
@@ -249,21 +249,21 @@
                         "xf-component-60": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/livecopy/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/livecopy/footer/master"
                         },
                         "xf-component-61": {
                             "jcr:primaryType": "nt:unstructured",
                             "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment",
-                            "fragmentPath": "/content/experience-fragments/mysite/blueprint/footer/master"
+                            "fragmentVariationPath": "/content/experience-fragments/mysite/blueprint/footer/master"
                         }
                     }
                 }
             }
         }
     },
-	"experience-fragments": {
-		"jcr:primaryType": "sling:Folder",
-		"mysite": {
+    "experience-fragments": {
+        "jcr:primaryType": "sling:Folder",
+        "mysite": {
             "jcr:primaryType": "sling:Folder",
             "page": {
                 "jcr:primaryType": "cq:Page",
@@ -519,5 +519,5 @@
                 }
             }
         }
-	}
+    }
 }
