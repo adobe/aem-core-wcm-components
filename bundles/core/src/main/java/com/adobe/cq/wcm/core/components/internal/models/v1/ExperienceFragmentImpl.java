@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.*;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.xf.ExperienceFragmentsConstants;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.Template;
@@ -97,6 +99,9 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         String xfContentPath = StringUtils.join(fragmentVariationPath, JCR_CONTENT_ROOT);
         if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
             localizedFragmentVariationPath = xfContentPath;
+        }
+        if (!isExperienceFragmentVariation(localizedFragmentVariationPath)) {
+            localizedFragmentVariationPath = null;
         }
     }
 
@@ -249,6 +254,23 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private boolean inTemplate () {
         Template template = currentPage.getTemplate();
         return template != null && StringUtils.startsWith(resource.getPath(), template.getPath());
+    }
+
+    /**
+     * Checks if the resource at the given path is an Experience Fragment variation.
+     *
+     * @return {@code true} if the resource is an XF variation, {@code false} otherwise.
+     */
+    private boolean isExperienceFragmentVariation(String path) {
+        if (StringUtils.isNotEmpty(path)) {
+            Resource resource = resolver.getResource(path);
+            if (resource != null) {
+                ValueMap properties = resource.getValueMap();
+                String xfVariantType = properties.get(ExperienceFragmentsConstants.PN_XF_VARIANT_TYPE, String.class);
+                return xfVariantType != null;
+            }
+        }
+        return false;
     }
 
 }

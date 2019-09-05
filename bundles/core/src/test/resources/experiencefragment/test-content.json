@@ -291,12 +291,14 @@
                             "jcr:content": {
                                 "jcr:primaryType": "cq:PageContent",
                                 "jcr:title": "English Test Footer Master",
+                                "cq:xfVariantType": "web",
                                 "cq:xfMasterVariation": "true"
                             }
                         },
                         "variation": {
                             "jcr:primaryType": "cq:Page",
                             "jcr:content": {
+                                "cq:xfVariantType": "web",
                                 "jcr:primaryType": "cq:PageContent",
                                 "jcr:title": "English Test Footer Variation"}
 
@@ -318,6 +320,7 @@
                             "jcr:content": {
                                 "jcr:primaryType": "cq:PageContent",
                                 "jcr:title": "Spanish Test Footer Master",
+                                "cq:xfVariantType": "web",
                                 "cq:xfMasterVariation": "true"
                             }
                         }
@@ -343,12 +346,14 @@
                                 "jcr:content": {
                                     "jcr:primaryType": "cq:PageContent",
                                     "jcr:title": "English Test Footer Master",
+                                    "cq:xfVariantType": "web",
                                     "cq:xfMasterVariation": "true"
                                 }
                             },
                             "variation": {
                                 "jcr:primaryType": "cq:Page",
                                 "jcr:content": {
+                                    "cq:xfVariantType": "web",
                                     "jcr:primaryType": "cq:PageContent",
                                     "jcr:title": "English Test Footer Variation"}
 
@@ -368,6 +373,7 @@
                             "master": {
                                 "jcr:primaryType": "cq:Page",
                                 "jcr:content": {
+                                    "cq:xfVariantType": "web",
                                     "jcr:primaryType": "cq:PageContent",
                                     "jcr:title": "Spanish Test Footer Master",
                                     "cq:xfMasterVariation": "true"
@@ -392,12 +398,14 @@
                         "jcr:content": {
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "English Test Footer Master",
+                            "cq:xfVariantType": "web",
                             "cq:xfMasterVariation": "true"
                         }
                     },
                     "variation": {
                         "jcr:primaryType": "cq:Page",
                         "jcr:content": {
+                            "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "English Test Footer Variation"}
 
@@ -419,6 +427,7 @@
                         "jcr:content": {
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "Spanish Test Footer Master",
+                            "cq:xfVariantType": "web",
                             "cq:xfMasterVariation": "true"
                         }
                     }
@@ -439,12 +448,14 @@
                         "jcr:content": {
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "English Test Footer Master",
+                            "cq:xfVariantType": "web",
                             "cq:xfMasterVariation": "true"
                         }
                     },
                     "variation": {
                         "jcr:primaryType": "cq:Page",
                         "jcr:content": {
+                            "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "English Test Footer Variation"}
 
@@ -466,6 +477,7 @@
                         "jcr:content": {
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "Spanish Test Footer Master",
+                            "cq:xfVariantType": "web",
                             "cq:xfMasterVariation": "true"
                         }
                     }
@@ -486,12 +498,14 @@
                         "jcr:content": {
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "English Test Footer Master",
+                            "cq:xfVariantType": "web",
                             "cq:xfMasterVariation": "true"
                         }
                     },
                     "variation": {
                         "jcr:primaryType": "cq:Page",
                         "jcr:content": {
+                            "cq:xfVariantType": "web",
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "English Test Footer Variation"}
 
@@ -513,6 +527,7 @@
                         "jcr:content": {
                             "jcr:primaryType": "cq:PageContent",
                             "jcr:title": "Spanish Test Footer Master",
+                            "cq:xfVariantType": "web",
                             "cq:xfMasterVariation": "true"
                         }
                     }
