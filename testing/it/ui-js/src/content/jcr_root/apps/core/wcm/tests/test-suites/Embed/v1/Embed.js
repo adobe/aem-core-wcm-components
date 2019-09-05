@@ -48,6 +48,7 @@
             self: ".cmp-embed",
             pinterest: ".cmp-embed [class^='PIN_']",
             facebookPost: ".cmp-embed .fb-post",
+            flickr: ".cmp-embed [src^='https://live.staticflickr.com']",
             instagram: ".cmp-embed .instagram-media",
             soundcloud: ".cmp-embed [src^='https://w.soundcloud.com/player']",
             twitter: ".cmp-embed .twitter-tweet",
@@ -75,6 +76,13 @@
             urls: [
                 "https://www.facebook.com/Adobe/posts/10156804081233871",
                 "https://www.facebook.com/Adobe/photos/rpp.305115773870/10156804081143871"
+            ]
+        },
+        flickr: {
+            name: "Flickr",
+            selector: selectors.embed.flickr,
+            urls: [
+                "https://www.flickr.com/photos/adobe/6951486964/in/album-72157629498635308/"
             ]
         },
         instagram: {
@@ -121,6 +129,7 @@
         .addTestCase(embed.tcUrlValidation(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors))
         .addTestCase(embed.tcUrlPinterest(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.pinterest, selectors))
         .addTestCase(embed.tcUrlOEmbedFacebookPost(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.facebookPost, selectors))
+        .addTestCase(embed.tcUrlOEmbedFlickr(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.flickr, selectors))
         .addTestCase(embed.tcUrlOEmbedInstagram(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.instagram, selectors))
         .addTestCase(embed.tcUrlOEmbedSoundcloud(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.soundcloud, selectors))
         .addTestCase(embed.tcUrlOEmbedTwitter(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.twitter, selectors))

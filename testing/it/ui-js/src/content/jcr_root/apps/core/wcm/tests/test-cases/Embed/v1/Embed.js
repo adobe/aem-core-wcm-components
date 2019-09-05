@@ -261,6 +261,19 @@
     };
 
     /**
+     * URL : oEmbed : Flickr
+     *
+     * 1. verify all test URLs
+     */
+    embed.tcUrlOEmbedFlickr = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
+        return new h.TestCase("URL : oEmbed : Flickr", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+            // 1.
+            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
+    };
+
+    /**
      * URL : oEmbed : Instagram
      *
      * 1. verify all test URLs
