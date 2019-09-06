@@ -96,7 +96,7 @@ class DownloadServletTest {
         downloadServlet.doGet(context.request(), context.response());
         assertEquals(304, context.response().getStatus());
     }
-    
+
     @Test
     void tesNotModifiedResponseForResource() throws Exception {
         MockSlingHttpServletRequest request = context.request();
@@ -106,13 +106,5 @@ class DownloadServletTest {
         request.setHeader("If-Modified-Since", "Fri, 19 Oct 2018 19:24:07 GMT");
         downloadServlet.doGet(request, context.response());
         assertEquals(304, context.response().getStatus());
-    }
-
-    @Test
-    public void tesNotModifiedResponseForResource() throws Exception {
-        AEM_CONTEXT.currentResource(PDF_FILE_PATH + "/file");
-        AEM_CONTEXT.request().setHeader("If-Modified-Since", "Fri, 19 Oct 2018 19:24:07 GMT");
-        downloadServlet.doGet(AEM_CONTEXT.request(), AEM_CONTEXT.response());
-        assertEquals(304, AEM_CONTEXT.response().getStatus());
     }
 }
