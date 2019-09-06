@@ -64,15 +64,12 @@ import com.day.cq.dam.api.Asset;
 public class DownloadServlet extends SlingAllMethodsServlet {
 
     private static final long serialVersionUID = 1L;
-    
     private static final Logger LOG = LoggerFactory.getLogger(DownloadServlet.class);
-
-
     public static final String SELECTOR = "coredownload";
     public static final String INLINE_SELECTOR = "inline";
 
     private static final String CONTENT_DISPOSITION_HEADER = "Content-Disposition";
-    protected static final String RFC_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    private static final String RFC_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     @Override
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
@@ -82,12 +79,12 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         if (asset == null) {
             String filename = request.getRequestPathInfo().getSuffix();
             Resource downloadDataResource = request.getResource().getChild(JcrConstants.JCR_CONTENT);
-            
+
             if (StringUtils.isNotEmpty(filename) && downloadDataResource != null) {
                 sendResource(request, response, filename, downloadDataResource);
             }
         } else {
-            
+
             if (isUnchanged(asset.getLastModified(), request)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
@@ -138,21 +135,19 @@ public class DownloadServlet extends SlingAllMethodsServlet {
                 }
                 String mimeType = valueMap.get(JcrConstants.JCR_MIMETYPE, String.class);
                 if (StringUtils.isNotEmpty(mimeType)) {
-                    response.sendError(HttpServletResponse.SC_OK);
                     sendResponse(inputStream.get(), size, mimeType, filename, timestamp, response, checkForInlineSelector(request));
+                    response.setStatus(HttpServletResponse.SC_OK);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
             } finally {
                 if (inputStream.isPresent()) {
                     inputStream.get().close();
-                } 
+                }
             }
-            
         }
     }
 
-    
     /**
      * Determine the size of a binary resource just by using the JCR API; this hopefully avoids to read
      * the complete InputStream to determine the actual size of the binary.
@@ -160,7 +155,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
      * @return the size in byte, -1 if an error occurs, the resource is not backed by a JCR node, or if there is not JCR_DATA property
      */
     private long getResourceSize (Resource resource) {
-        
+
         Node node = resource.adaptTo(Node.class);
         if (node != null) {
             Property jcrData;
@@ -178,27 +173,27 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         }
         return -1;
     }
-        
+
     private boolean checkForInlineSelector(SlingHttpServletRequest request) {
         return Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(INLINE_SELECTOR);
     }
 
-    
-    
+
+
     private Optional<InputStream> getInputStream (Asset asset) {
         return Optional.ofNullable(asset.getOriginal())
                 .map(r -> r.adaptTo(InputStream.class));
     }
-    
+
     private Optional<InputStream> getInputStream (Resource fileResource) {
         return Optional.ofNullable(fileResource.getValueMap().get(JcrConstants.JCR_DATA, InputStream.class));
     }
-    
-    
+
+
     private void sendResponse(InputStream stream, long size, String mimeType, String filename, long lastModifiedDate, SlingHttpServletResponse response,
             boolean inline) throws IOException {
         response.setContentType(mimeType);
-        
+
         // only set the size contentLength header if we have valid data
         if (size != -1) {
             response.setContentLength((int) size);
