@@ -122,7 +122,7 @@
     };
 
     /**
-     * Seeds a value in the {@link #ATTR_SEEDED_VALUE} data attribute of the checkbox. If the value is empty then the data attribute is
+     * Seeds a value in the {@link #ATTR_SEEDED_VALUE} data attribute of the textfield. If the value is empty then the data attribute is
      * removed.
      *
      * @param {String} [value] The value to seed.
@@ -134,6 +134,15 @@
             } else {
                 this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
             }
+        }
+    };
+
+    /**
+     * Update the value in the {@link #ATTR_PREVIOUS_VALUE} data attribute of the textfield with the current text value
+     */
+    CheckboxTextfieldTuple.prototype.updatePreviousTextValue = function() {
+        if (this._textfield) {
+            this._textfield.setAttribute(this.ATTR_PREVIOUS_VALUE, this._getTextfieldValue());
         }
     };
 
