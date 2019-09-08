@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -26,7 +28,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -38,6 +39,8 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
@@ -59,7 +62,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     private String title;
     private String description;
-    private String linkURL;
     private String titleType;
     private boolean actionsEnabled = false;
     private boolean titleHidden = false;
@@ -90,6 +92,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Self
     private SlingHttpServletRequest request;
 
+    @Self
+    private LinkHandler linkHandler;
+    private Link link;
+    
     private Page targetPage;
 
     @PostConstruct
@@ -101,20 +107,24 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
-        linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
 
         if (actionsEnabled) {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            linkURL = null;
+            link = linkHandler.getInvalid();
             populateActions();
             if (actions.size() > 0) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
                     targetPage = pageManager.getPage(firstAction.getPath());
+                    link = linkHandler.getLink(targetPage);
                 }
             }
         } else {
-            targetPage = pageManager.getPage(linkURL);
+            link = linkHandler.getLink(resource);
+            targetPage = link.getTargetPage();
+        }
+        if (link == null) {
+            link = linkHandler.getInvalid();
         }
 
         if (titleHidden) {
@@ -143,7 +153,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
-        if (StringUtils.isEmpty(linkURL)) {
+        if (!link.isLinkValid()) {
             LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
         }
         if (StringUtils.isEmpty(fileReference)) {
@@ -161,9 +171,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         if (hasImage) {
             setImageResource(component, request.getResource(), hiddenImageResourceProperties);
-        }
-        if (targetPage != null) {
-            linkURL = Utils.getURL(request, targetPage);
         }
     }
 
@@ -191,13 +198,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
                     private ValueMap properties = action.getValueMap();
                     private String title = properties.get(PN_ACTION_TEXT, String.class);
-                    private String url = properties.get(PN_ACTION_LINK, String.class);
-                    private Page page = null;
-                    {
-                        if (url != null && url.startsWith("/")) {
-                            page = pageManager.getPage(url);
-                        }
-                    }
+                    private Link link = linkHandler.getLink(action, PN_ACTION_LINK);
 
                     @Nullable
                     @Override
@@ -209,17 +210,35 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                     @Override
                     @JsonIgnore
                     public String getPath() {
-                        return url;
+                        Page page = link.getTargetPage();
+                        if (page != null) {
+                            return page.getPath();
+                        }
+                        else {
+                            // probably would make more sense to return null when not page is target, but we keep this for backward compatibility 
+                            return link.getLinkURL();
+                        }
+                    }
+
+                    @Override
+                    public @Nullable String getLinkURL() {
+                        return link.getLinkURL();
+                    }
+
+                    @Override
+                    public boolean isLinkValid() {
+                        return link.isLinkValid();
+                    }
+
+                    @Override
+                    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+                        return link.getLinkHtmlAttributes();
                     }
 
                     @Nullable
                     @Override
                     public String getURL() {
-                        if (page != null) {
-                            return Utils.getURL(request, page);
-                        } else {
-                            return url;
-                        }
+                        return getLinkURL();
                     }
                 });
             }
@@ -237,8 +256,18 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public String getLinkURL() {
-        return linkURL;
+    public @Nullable String getLinkURL() {
+        return link.getLinkURL();
+    }
+
+    @Override
+    public boolean isLinkValid() {
+        return link.isLinkValid();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+        return link.getLinkHtmlAttributes();
     }
 
     public String getImagePath() {

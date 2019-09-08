@@ -20,20 +20,36 @@ import java.util.Calendar;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Interface for a generic list item, used by the {@link List} and {@link Search} models.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
 @ConsumerType
-public interface ListItem {
+public interface ListItem extends LinkMixin {
+
+    /**
+     * @see LinkMixin#getLinkURL()
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    @JsonIgnore  // avoid duplicate URL in JSON, keep old property for backward compatibility
+    @Override
+    default @Nullable String getLinkURL() {
+        // fallback to old method name for backwards compatibility
+        return getURL();
+    }
 
     /**
      * Returns the URL of this {@code ListItem}.
      *
      * @return the URL of this list item or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @deprecated Please use {@link #getLinkURL()}
      */
+    @Deprecated
     @Nullable
     default String getURL() {
         throw new UnsupportedOperationException();

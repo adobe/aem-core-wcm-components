@@ -41,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -64,6 +65,9 @@ public class NavigationImpl implements Navigation {
     @Self
     private SlingHttpServletRequest request;
 
+    @Self
+    private LinkHandler linkHandler;
+    
     @SlingObject
     private ResourceResolver resourceResolver;
 
@@ -139,7 +143,7 @@ public class NavigationImpl implements Navigation {
                 items = getItems(navigationRoot, navigationRoot.page);
                 if (!skipNavigationRoot) {
                     boolean isSelected = checkSelected(navigationRoot.page);
-                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, items);
+                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, linkHandler, 0, items);
                     items = new ArrayList<>();
                     items.add(root);
                 }
@@ -181,7 +185,7 @@ public class NavigationImpl implements Navigation {
                 if (skipNavigationRoot) {
                     level = level - 1;
                 }
-                pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
+                pages.add(new NavigationItemImpl(page, isSelected, linkHandler, level, children));
             }
         }
         return pages;

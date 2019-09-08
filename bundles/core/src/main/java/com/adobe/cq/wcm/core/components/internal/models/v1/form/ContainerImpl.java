@@ -47,6 +47,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
@@ -96,6 +97,9 @@ public class ContainerImpl implements Container {
 
     @ValueMapValue(optional = true)
     private String redirect;
+    
+    @Self
+    private LinkHandler linkHandler;
 
     private String name;
     private String action;
@@ -118,7 +122,7 @@ public class ContainerImpl implements Container {
     private void initModel() {
         FormStructureHelper formStructureHelper = formStructureHelperFactory.getFormStructureHelper(resource);
         request.setAttribute(FormsHelper.REQ_ATTR_FORM_STRUCTURE_HELPER, formStructureHelper);
-        this.action = Utils.getURL(request, currentPage);
+        this.action = linkHandler.getLink(currentPage).getLinkURL();
         if (StringUtils.isBlank(id)) {
             id = FormsHelper.getFormId(request);
         }

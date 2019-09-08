@@ -16,9 +16,12 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Defines the {@code Button} Sling Model used for the {@code /apps/core/wcm/components/button} component.
@@ -26,7 +29,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
 @ConsumerType
-public interface Button extends ComponentExporter {
+public interface Button extends ComponentExporter, LinkMixin {
 
     /**
      * Returns the button text.
@@ -39,11 +42,24 @@ public interface Button extends ComponentExporter {
     }
 
     /**
+     * @see LinkMixin#getLinkURL()
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    @JsonIgnore  // avoid duplicate URL in JSON, keep old property for backward compatibility
+    @Override
+    default @Nullable String getLinkURL() {
+        // fallback to old method name for backwards compatibility
+        return getLink();
+    }
+
+    /**
      * Returns the button link.
      *
      * @return the button link
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     * @deprecated Please use {@link #getLinkURL()}
      */
+    @Deprecated
     default String getLink() {
         throw new UnsupportedOperationException();
     }

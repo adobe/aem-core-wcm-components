@@ -15,6 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -38,11 +48,9 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(AemContextExtension.class)
@@ -99,7 +107,7 @@ class TeaserImplTest {
         }
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
-        assertEquals(LINK, teaser.getLinkURL());
+        assertValidLink(teaser, LINK);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
 
@@ -114,7 +122,7 @@ class TeaserImplTest {
         }
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
-        assertEquals(CONTEXT_PATH + "/content/teasers.html", teaser.getLinkURL());
+        assertValidLink(teaser, CONTEXT_PATH + "/content/teasers.html");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser5"));
     }
 
@@ -146,7 +154,7 @@ class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
         verify(teaserLogger)
                 .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.");
-        assertNull(teaser.getLinkURL());
+        assertInvalidLink(teaser);
     }
 
     @Test
@@ -179,6 +187,7 @@ class TeaserImplTest {
         ListItem action = teaser.getActions().get(0);
         assertEquals("Action link does not match", "http://www.adobe.com", action.getPath());
         assertEquals("Action text does not match", "Adobe", action.getTitle());
+        assertValidLink(action, "http://www.adobe.com");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser9"));
     }
 

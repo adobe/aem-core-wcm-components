@@ -14,9 +14,10 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.itemContent="${@ item='The language navigation item'}">
-    <span data-sly-test.hasChildren="${item.children.size > 0}"
+    <span data-sly-test.hasChildren="${item.children.size > 0 || !item.linkValid}"
           class="cmp-languagenavigation__item-title" lang="${item.language}">${item.title}</span>
     <a data-sly-test="${!hasChildren}"
-       class="cmp-languagenavigation__item-link" href="${item.URL}"
+       class="cmp-languagenavigation__item-link"
+       data-sly-attribute="${item.linkHtmlAttributes}"
        hreflang="${item.language}" lang="${item.language}" rel="alternate" title="${item.title}">${item.title}</a>
 </template>

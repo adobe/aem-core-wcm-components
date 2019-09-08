@@ -15,39 +15,36 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
-import com.day.cq.wcm.api.designer.Style;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.Page;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class ListImplTest {
 
     protected static final String TEST_BASE = "/list/v2";
-    private static final String CURRENT_PAGE = "/content/list";
     private static final String CONTEXT_PATH = "/context";
     private static final String LIST_1 = "/content/list/listTypes/staticListType";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
+    @Rule
+    public final AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        CONTEXT.load().json("/list/test-etc.json", "/etc/tags/list");
+    @Before
+    public void setUp() throws Exception {
+        context.load().json("/list/test-etc.json", "/etc/tags/list");
+        context.request().setContextPath(CONTEXT_PATH);
     }
 
     @Test
@@ -56,31 +53,32 @@ public class ListImplTest {
         assertTrue(list.showDescription());
         assertTrue(list.showModificationDate());
         assertTrue(list.linkItems());
-        assertTrue(list.linkItems());
         assertEquals(2, list.getListItems().size());
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_1));
+        
+        checkListConsistencyByPaths(list, "/content/list/pages/page_1", "/content/list/pages/page_2");
     }
 
     private List getListUnderTest(String resourcePath) {
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
         }
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
-        request.setResource(resource);
-        request.setContextPath(CONTEXT_PATH);
-        SlingBindings bindings = new SlingBindings();
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(SlingBindings.REQUEST, request);
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        Style style = mock(Style.class);
-        when(style.get(any(), any(Object.class))).thenAnswer(
-                invocation -> invocation.getArguments()[1]
-        );
-        bindings.put(WCMBindings.CURRENT_STYLE, style);
-        bindings.put(WCMBindings.CURRENT_PAGE, CONTEXT.pageManager().getPage(CURRENT_PAGE));
-        request.setAttribute(SlingBindings.class.getName(), bindings);
-        return request.adaptTo(List.class);
+        context.currentResource(resource);
+        return context.request().adaptTo(List.class);
+    }
+
+    private void checkListConsistencyByPaths(List list, String... expectedPagePaths) {
+        assertTrue("Expected that the returned list will contain " + expectedPagePaths.length + " items",
+                list.getListItems().size() == expectedPagePaths.length);
+        int index = 0;
+        for (Page item : list.getItems()) {
+            assertEquals(expectedPagePaths[index++], item.getPath());
+        }
+        index = 0;
+        for (ListItem item : list.getListItems()) {
+            assertValidLink(item, CONTEXT_PATH + expectedPagePaths[index++] + ".html");
+        }
     }
 
 }

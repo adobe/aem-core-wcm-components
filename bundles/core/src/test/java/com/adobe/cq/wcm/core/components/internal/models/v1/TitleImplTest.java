@@ -16,6 +16,11 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +30,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Title;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(AemContextExtension.class)
 class TitleImplTest {
@@ -60,6 +63,7 @@ class TitleImplTest {
     void testGetTitleFromResource() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
         assertNull(title.getType());
+        assertInvalidLink(title);
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
     }
 
@@ -68,6 +72,7 @@ class TitleImplTest {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_TYPE);
         assertEquals("Hello World", title.getText());
         assertEquals("h2", title.getType());
+        assertInvalidLink(title);
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_TYPE));
     }
 
@@ -76,6 +81,7 @@ class TitleImplTest {
         Title title = getTitleUnderTest(TITLE_NOPROPS,
                 Title.PN_DESIGN_DEFAULT_TYPE, "h2");
         assertEquals("h2", title.getType());
+        assertInvalidLink(title);
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_NOPROPS));
     }
 
@@ -83,6 +89,7 @@ class TitleImplTest {
     void testGetTitleFromCurrentPageWithWrongElementInfo() {
         Title title = getTitleUnderTest(TITLE_WRONGTYPE);
         assertNull(title.getType());
+        assertInvalidLink(title);
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_WRONGTYPE));
     }
 
@@ -96,7 +103,7 @@ class TitleImplTest {
     @Test
     void testGetLink() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
-        assertEquals("https://www.adobe.com", title.getLinkURL());
+        assertValidLink(title, "https://www.adobe.com");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
     }
 
@@ -104,6 +111,7 @@ class TitleImplTest {
     void testTitleWithLinksDisabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2,
                 Title.PN_TITLE_LINK_DISABLED, true);
+        assertValidLink(title, "https://www.adobe.com");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, "title-linkdisabled"));
     }
 

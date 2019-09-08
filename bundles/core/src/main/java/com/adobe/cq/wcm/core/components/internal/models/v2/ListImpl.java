@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -40,6 +41,8 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Self
     private SlingHttpServletRequest request;
+    @Self
+    private LinkHandler linkHandler;
 
     @Override
     @NotNull
@@ -49,7 +52,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         Collection<Page> pages = getPages();
         for (Page page : pages) {
             if (page != null) {
-                listItems.add(new PageListItemImpl(request, page));
+                listItems.add(new PageListItemImpl(linkHandler, page));
             }
         }
         return listItems;

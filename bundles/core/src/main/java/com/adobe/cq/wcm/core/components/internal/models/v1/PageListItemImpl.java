@@ -17,15 +17,17 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
@@ -36,21 +38,37 @@ public class PageListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
 
-    protected SlingHttpServletRequest request;
     protected Page page;
+    private final Link link;
 
-    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
-        this.request = request;
+    public PageListItemImpl(@NotNull LinkHandler linkHandler, @NotNull Page page) {
         this.page = page;
         Page redirectTarget = getRedirectTarget(page);
         if (redirectTarget != null && !redirectTarget.equals(page)) {
             this.page = redirectTarget;
         }
+        
+        this.link = linkHandler.getLink(this.page);
+    }
+
+    @Override
+    public @Nullable String getLinkURL() {
+        return link.getLinkURL();
+    }
+
+    @Override
+    public boolean isLinkValid() {
+        return link.isLinkValid();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+        return link.getLinkHtmlAttributes();
     }
 
     @Override
     public String getURL() {
-        return Utils.getURL(request, page);
+        return getLinkURL();
     }
 
     @Override

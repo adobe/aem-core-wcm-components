@@ -16,6 +16,9 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.Assert.assertEquals;
+
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,10 +27,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Button;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import static org.junit.Assert.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
 class ButtonImplTest {
@@ -58,8 +60,10 @@ class ButtonImplTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void testGetLink() {
         Button button = getButtonUnderTest();
+        assertValidLink(button, "https://www.adobe.com");
         assertEquals("https://www.adobe.com", button.getLink());
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, "button1"));
     }

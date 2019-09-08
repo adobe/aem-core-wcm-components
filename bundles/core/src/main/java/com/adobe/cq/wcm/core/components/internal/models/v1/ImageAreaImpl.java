@@ -15,6 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.adobe.cq.wcm.core.components.internal.link.Link;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 
 public class ImageAreaImpl implements ImageArea {
@@ -22,16 +29,14 @@ public class ImageAreaImpl implements ImageArea {
     private String shape;
     private String coordinates;
     private String relativeCoordinates;
-    private String href;
-    private String target;
+    private Link link;
     private String alt;
 
-    public ImageAreaImpl(String shape, String coordinates, String relativeCoordinates, String href, String target, String alt) {
+    public ImageAreaImpl(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt) {
         this.shape = shape;
         this.coordinates = coordinates;
         this.relativeCoordinates = relativeCoordinates;
-        this.href = href;
-        this.target = target;
+        this.link = link;
         this.alt = alt;
     }
 
@@ -51,13 +56,35 @@ public class ImageAreaImpl implements ImageArea {
     }
 
     @Override
+    public @Nullable String getLinkURL() {
+        return link.getLinkURL();
+    }
+
+    @Override
+    public boolean isLinkValid() {
+        return link.isLinkValid();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+        return link.getLinkHtmlAttributes();
+    }
+
+    @Override
     public String getHref() {
-        return href;
+        // fallback for old method for keeping backward compatibility
+        return StringUtils.defaultString(getLinkURL());
     }
 
     @Override
     public String getTarget() {
-        return target;
+        // fallback for old method for keeping backward compatibility
+        String target = null;
+        Map<String, String> attrs = getLinkHtmlAttributes();
+        if (attrs != null) {
+            target = attrs.get("target");
+        }
+        return StringUtils.defaultString(target);
     }
 
     @Override

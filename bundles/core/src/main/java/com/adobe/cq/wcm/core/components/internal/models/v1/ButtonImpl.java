@@ -15,22 +15,27 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Button;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 @Model(
@@ -46,11 +51,12 @@ public class ButtonImpl implements Button {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/button/v1/button";
 
-    private String linkURL;
-
     @Self
     private SlingHttpServletRequest request;
 
+    @ScriptVariable
+    private Resource resource;
+    
     @ScriptVariable
     private PageManager pageManager;
 
@@ -59,13 +65,19 @@ public class ButtonImpl implements Button {
     private String text;
 
     @ValueMapValue(optional = true)
-    private String link;
-
-    @ValueMapValue(optional = true)
     private String icon;
 
     @ValueMapValue(optional = true)
     protected String accessibilityLabel;
+
+    @Self
+    private LinkHandler linkHandler;
+    private Link link;
+
+    @PostConstruct
+    private void initModel() {
+        link = linkHandler.getLink(resource, "link");
+    }
 
     @Override
     public String getText() {
@@ -73,16 +85,23 @@ public class ButtonImpl implements Button {
     }
 
     @Override
+    public @Nullable String getLinkURL() {
+        return link.getLinkURL();
+    }
+
+    @Override
+    public boolean isLinkValid() {
+        return link.isLinkValid();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+        return link.getLinkHtmlAttributes();
+    }
+
+    @Override
     public String getLink() {
-        if (linkURL == null) {
-            Page targetPage = pageManager.getPage(link);
-            if (targetPage != null) {
-                linkURL = Utils.getURL(request, targetPage);
-            } else {
-                linkURL = link;
-            }
-        }
-        return linkURL;
+        return getLinkURL();
     }
 
     @Override

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
-public class Utils {
+public final class Utils {
 
     private Utils() {
     }
@@ -36,7 +36,9 @@ public class Utils {
      * @param path        the page path
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a
      * {@link Page}
+     * @deprecated Please use {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler}
      */
+    @Deprecated
     @NotNull
     public static String getURL(@NotNull SlingHttpServletRequest request, @NotNull PageManager pageManager, @NotNull String path) {
         Page page = pageManager.getPage(path);
@@ -54,11 +56,13 @@ public class Utils {
      * @param page    the page
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a
      * {@link Page}
+     * @deprecated Please use {@link com.adobe.cq.wcm.core.components.internal.link.LinkHandler}
      */
+    @Deprecated
     @NotNull
     public static String getURL(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
         String vanityURL = page.getVanityUrl();
-        return StringUtils.isEmpty(vanityURL) ? request.getContextPath() + page.getPath() + ".html" : request.getContextPath() + vanityURL;
+        return StringUtils.isEmpty(vanityURL) ? StringUtils.defaultString(request.getContextPath()) + page.getPath() + ".html" : request.getContextPath() + vanityURL;
     }
 
     public enum Heading {

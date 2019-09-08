@@ -18,8 +18,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -44,12 +46,14 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
@@ -107,8 +111,9 @@ public class ImageImpl implements Image {
     @ValueMapValue(name = JcrConstants.JCR_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
     protected String title;
 
-    @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String linkURL;
+    @Self
+    protected LinkHandler linkHandler;
+    private Link link;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -235,11 +240,9 @@ public class ImageImpl implements Image {
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
                 (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
             if (!isDecorative) {
-                if (StringUtils.isNotEmpty(linkURL)) {
-                    linkURL = Utils.getURL(request, pageManager, linkURL);
-                }
+                link = linkHandler.getLink(resource);
             } else {
-                linkURL = null;
+                link = linkHandler.getInvalid();
                 alt = null;
             }
             buildJson();
@@ -305,8 +308,23 @@ public class ImageImpl implements Image {
     }
 
     @Override
+    public @Nullable String getLinkURL() {
+        return link.getLinkURL();
+    }
+
+    @Override
+    public boolean isLinkValid() {
+        return link.isLinkValid();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+        return link.getLinkHtmlAttributes();
+    }
+
+    @Override
     public String getLink() {
-        return linkURL;
+        return getLinkURL();
     }
 
     @Override

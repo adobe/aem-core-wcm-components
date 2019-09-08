@@ -15,19 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 
 import javax.jcr.Session;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
@@ -35,19 +37,12 @@ import com.day.cq.search.SimpleSearch;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.designer.Style;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class ListImplTest {
 
     private static final String TEST_BASE = "/list";
-    private static final String CURRENT_PAGE = "/content/list";
     private static final String LIST_1 = "/content/list/listTypes/staticListType";
     private static final String LIST_2 = "/content/list/listTypes/staticListType";
     private static final String LIST_3 = "/content/list/listTypes/childrenListType";
@@ -64,12 +59,12 @@ public class ListImplTest {
     private static final String LIST_14 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitle";
     private static final String LIST_15 = "/content/list/listTypes/staticOrderByTitleListTypeWithNoTitleForOneItem";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
+    @Rule
+    public final AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        CONTEXT.load().json("/list/test-etc.json", "/etc/tags/list");
+    @Before
+    public void setUp() throws Exception {
+        context.load().json("/list/test-etc.json", "/etc/tags/list");
     }
 
     @Test
@@ -113,14 +108,14 @@ public class ListImplTest {
     public void testSearchListType() throws Exception {
         Session mockSession = mock(Session.class);
         SimpleSearch mockSimpleSearch = mock(SimpleSearch.class);
-        CONTEXT.registerAdapter(ResourceResolver.class, Session.class, mockSession);
-        CONTEXT.registerAdapter(Resource.class, SimpleSearch.class, mockSimpleSearch);
+        context.registerAdapter(ResourceResolver.class, Session.class, mockSession);
+        context.registerAdapter(Resource.class, SimpleSearch.class, mockSimpleSearch);
         SearchResult searchResult = mock(SearchResult.class);
         Hit hit = mock(Hit.class);
 
         when(mockSimpleSearch.getResult()).thenReturn(searchResult);
         when(searchResult.getHits()).thenReturn(Collections.singletonList(hit));
-        Resource contentResource = CONTEXT.resourceResolver().getResource("/content/list/pages/page_1/jcr:content");
+        Resource contentResource = context.resourceResolver().getResource("/content/list/pages/page_1/jcr:content");
         when(hit.getResource()).thenReturn(contentResource);
 
         List list = getListUnderTest(LIST_6);
@@ -188,24 +183,12 @@ public class ListImplTest {
     }
 
     private List getListUnderTest(String resourcePath) {
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
         }
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
-        request.setResource(resource);
-        SlingBindings bindings = new SlingBindings();
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(SlingBindings.REQUEST, request);
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        Style style = mock(Style.class);
-        when(style.get(any(), any(Object.class))).thenAnswer(
-                invocation -> invocation.getArguments()[1]
-        );
-        bindings.put(WCMBindings.CURRENT_STYLE, style);
-        bindings.put(WCMBindings.CURRENT_PAGE, CONTEXT.pageManager().getPage(CURRENT_PAGE));
-        request.setAttribute(SlingBindings.class.getName(), bindings);
-        return request.adaptTo(List.class);
+        context.currentResource(resource);
+        return context.request().adaptTo(List.class);
     }
 
     private void checkListConsistency(List list, String[] expectedPages) {

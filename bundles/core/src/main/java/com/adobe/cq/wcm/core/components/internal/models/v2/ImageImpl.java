@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -169,17 +171,17 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 }
                 if (remainingTokens.length > 0) {
                     String href = StringUtils.removeAll(remainingTokens[0], "\"");
-                    if (StringUtils.isBlank(href)) {
+                    String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
+
+                    Link link = linkHandler.getLink(href, target);
+                    if (!link.isLinkValid()) {
                         break;
                     }
-                    String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
+
                     String alt = remainingTokens.length > 2 ? StringUtils.removeAll(remainingTokens[2], "\"") : "";
                     String relativeCoordinates = remainingTokens.length > 3 ? remainingTokens[3] : "";
                     relativeCoordinates = StringUtils.substringBetween(relativeCoordinates, "(", ")");
-                    if (href.startsWith("/")) {
-                        href = Utils.getURL(request, pageManager, href);
-                    }
-                    areas.add(new ImageAreaImpl(shape, coordinates, relativeCoordinates, href, target, alt));
+                    areas.add(new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt));
                 }
             }
         }

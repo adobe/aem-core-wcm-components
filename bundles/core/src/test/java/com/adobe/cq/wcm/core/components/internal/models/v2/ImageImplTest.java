@@ -15,8 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,9 +36,8 @@ import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.google.common.collect.ImmutableMap;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.*;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 @ExtendWith(AemContextExtension.class)
 class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImplTest {
@@ -137,6 +144,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         assertEquals("Adobe Systems Logo and Wordmark", image.getTitle());
         assertTrue("Image should display a caption popup.", image.displayPopupTitle());
         assertNull("Did not expect a link for this image, since it's marked as decorative.", image.getLink());
+        assertInvalidLink(image);
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/" + ASSET_NAME + ".png", image.getSrc());
         compareJSON(
                 "{\"" + com.adobe.cq.wcm.core.components.models.Image.JSON_SMART_IMAGES + "\":[], \"" + com.adobe.cq.wcm.core.components.models.Image.JSON_SMART_SIZES + "\":[], \"" + com.adobe.cq.wcm.core.components.models.Image.JSON_LAZY_ENABLED +
@@ -164,6 +172,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         compareJSON(expectedJson, image.getJson());
         assertTrue(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
+        assertValidLink(image, CONTEXT_PATH + "/content/test-image.html");
         assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, AbstractImageTest.IMAGE0_PATH));
     }
@@ -187,6 +196,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
             assertEquals("The image area's relative coordinates are not as expected.", expectedAreas[index][2], area.getRelativeCoordinates());
             assertEquals("The image area's href is not as expected.", expectedAreas[index][3], area.getHref());
             assertEquals("The image area's target is not as expected.", expectedAreas[index][4], area.getTarget());
+            assertValidLink(area, (String)expectedAreas[index][3], StringUtils.trimToNull((String)expectedAreas[index][4]));
             assertEquals("The image area's alt text is not as expected.", expectedAreas[index][5], area.getAlt());
             index++;
         }
@@ -218,6 +228,7 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         compareJSON(expectedJson, image.getJson());
         assertTrue(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
+        assertValidLink(image, CONTEXT_PATH + "/content/test-image.html");
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, TEMPLATE_IMAGE_PATH));
     }
 

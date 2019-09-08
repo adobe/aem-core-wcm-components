@@ -15,6 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.redirect="${ @ redirectTarget}">
     <p class="cmp-page__redirect">${'This page redirects to' @ i18n}
-        <a href="${redirectTarget.getURL}">${redirectTarget.page.title || redirectTarget.getURL}</a>
+        <a data-sly-attribute="${redirectTarget.linkHtmlAttributes}" data-sly-unwrap="${!redirectTarget.linkValid}">${redirectTarget.page.title || redirectTarget.linkURL}</a>
     </p>
 </template>

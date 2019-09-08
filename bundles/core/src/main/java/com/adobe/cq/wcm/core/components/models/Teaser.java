@@ -21,13 +21,14 @@ import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
 
 /**
  * Defines the {@code Teaser} Sling Model for the {@code /apps/core/wcm/components/teaser} component.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.4.0
  */
-public interface Teaser extends ComponentExporter {
+public interface Teaser extends ComponentExporter, LinkMixin {
 
     /**
      * Name of the resource property that defines whether or not the teaser has Call-to-Action elements
@@ -131,16 +132,6 @@ public interface Teaser extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     default List<ListItem> getActions() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the URL to which this teaser links, if one was defined.
-     *
-     * @return the URL to which teaser links or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     */
-    default String getLinkURL() {
         throw new UnsupportedOperationException();
     }
 

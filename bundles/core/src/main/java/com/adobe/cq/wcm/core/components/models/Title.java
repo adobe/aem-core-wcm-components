@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
 
 /**
  * Defines the {@code Title} Sling Model used for the {@code /apps/core/wcm/components/title} component.
@@ -27,7 +28,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Title extends ComponentExporter {
+public interface Title extends ComponentExporter, LinkMixin {
 
     /**
      * Name of the configuration policy property that will store the default value for this title's HTML element type.
@@ -61,16 +62,6 @@ public interface Title extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getType() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns the Title's link URL, if one was set.
-     *
-     * @return the title's link URL, if one was set, or {@code null}
-     * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     */
-    default String getLinkURL() {
         throw new UnsupportedOperationException();
     }
 

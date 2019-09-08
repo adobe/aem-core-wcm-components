@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,10 +30,13 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -72,8 +77,9 @@ public class TitleImpl implements Title {
     @ValueMapValue(optional = true)
     private String type;
 
-    @ValueMapValue(optional = true)
-    private String linkURL;
+    @Self
+    private LinkHandler linkHandler;
+    private Link link;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
@@ -93,11 +99,7 @@ public class TitleImpl implements Title {
             }
         }
 
-        if (StringUtils.isNotEmpty(linkURL)) {
-            linkURL = Utils.getURL(request, pageManager, linkURL);
-        } else {
-            linkURL = null;
-        }
+        link = linkHandler.getLink(resource);
 
         if(currentStyle != null) {
             linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);
@@ -119,7 +121,17 @@ public class TitleImpl implements Title {
 
     @Override
     public String getLinkURL() {
-        return linkURL;
+        return link.getLinkURL();
+    }
+
+    @Override
+    public boolean isLinkValid() {
+        return link.isLinkValid();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+        return link.getLinkHtmlAttributes();
     }
 
     @Override

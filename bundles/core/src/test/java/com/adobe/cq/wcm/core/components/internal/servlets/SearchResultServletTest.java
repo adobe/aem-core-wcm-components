@@ -104,7 +104,7 @@ public class SearchResultServletTest {
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
-                        "url", "null/content/en/search/page.html",
+                        "url", "/content/en/search/page.html",
                         "title", "Page"
                 )
         );
@@ -123,7 +123,7 @@ public class SearchResultServletTest {
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
-                        "url", "null/content/en/search/page-template.html",
+                        "url", "/content/en/search/page-template.html",
                         "title", "Page"
                 )
         );
@@ -151,6 +151,9 @@ public class SearchResultServletTest {
     }
 
     private static class Item implements ListItem {
+        private String linkURL;
+        private boolean linkValid;
+        private Map<String,String> linkHtmlAttributes;
         private String url;
         private String title;
         private String path;

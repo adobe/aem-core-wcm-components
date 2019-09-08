@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -60,6 +61,9 @@ public class LanguageNavigationImpl implements LanguageNavigation {
     @ScriptVariable
     private Style currentStyle;
 
+    @Self
+    private LinkHandler linkHandler;
+    
     private String navigationRoot;
     private int structureDepth;
     private Page rootPage;
@@ -112,7 +116,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title));
+                pages.add(new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title));
             }
         }
 

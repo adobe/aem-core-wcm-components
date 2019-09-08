@@ -40,6 +40,7 @@ import org.osgi.framework.Version;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
@@ -76,6 +77,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
                    name = PN_REDIRECT_TARGET)
     private String redirectTargetValue;
+    
+    @Self
+    private LinkHandler linkHandler;
 
     private String appResourcesPath;
     private NavigationItem redirectTarget;
@@ -101,7 +105,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     private void setRedirect() {
         if (StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = new RedirectItemImpl(redirectTargetValue, request);
+            redirectTarget = new RedirectItemImpl(redirectTargetValue, request, linkHandler);
         }
     }
 

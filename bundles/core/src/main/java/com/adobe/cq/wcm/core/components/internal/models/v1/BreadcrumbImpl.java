@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
@@ -60,6 +61,9 @@ public class BreadcrumbImpl implements Breadcrumb {
 
     @Self
     private SlingHttpServletRequest request;
+
+    @Self
+    private LinkHandler linkHandler;
 
     private boolean showHidden;
     private boolean hideCurrent;
@@ -98,7 +102,7 @@ public class BreadcrumbImpl implements Breadcrumb {
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList());
+                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, linkHandler, currentLevel, Collections.emptyList());
                     items.add(navigationItem);
                 }
             }

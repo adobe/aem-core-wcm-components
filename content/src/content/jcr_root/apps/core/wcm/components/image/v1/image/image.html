@@ -18,9 +18,9 @@
      data-sly-test="${image.src}"
      data-sly-unwrap="${wcmmode.disabled}"
      class="cq-dd-image">
-    <a data-sly-unwrap="${!image.link}"
+    <a data-sly-unwrap="${!image.linkValid}"
        class="cmp-image--link"
-       href="${image.link}"
+       data-sly-attribute="${image.linkHtmlAttributes}"
        data-title="${image.title || image.alt}" data-asset="${image.fileReference}">
         <noscript data-sly-unwrap="${!image.json}" data-cmp-image="${image.json}">
             <img src="${image.src}"

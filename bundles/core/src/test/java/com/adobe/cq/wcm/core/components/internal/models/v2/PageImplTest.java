@@ -15,12 +15,24 @@
  ******************************************************************************/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
+import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
+import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
+import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -35,13 +47,8 @@ import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.components.testing.MockProductInfoProvider;
 import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static com.adobe.cq.wcm.core.components.Utils.getTestExporterJSONPath;
-import static com.adobe.cq.wcm.core.components.Utils.testJSONExport;
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 @ExtendWith(AemContextExtension.class)
 class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImplTest {
@@ -111,6 +118,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         assertNotNull(redirectTarget);
         assertEquals("Templated Page", redirectTarget.getPage().getTitle());
         assertEquals("/core/content/page/templated-page.html", redirectTarget.getURL());
+        assertValidLink(redirectTarget, "/core/content/page/templated-page.html");
     }
 
     @Test

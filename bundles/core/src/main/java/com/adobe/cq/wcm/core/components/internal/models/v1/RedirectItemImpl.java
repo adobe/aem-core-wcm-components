@@ -15,13 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Map;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -30,16 +33,15 @@ public class RedirectItemImpl implements NavigationItem {
 
     private String redirectTarget;
     private Page page;
-    private String url;
-    private SlingHttpServletRequest request;
+    private Link link;
 
-    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request) {
+    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request, @NotNull LinkHandler linkHandler) {
         this.redirectTarget = redirectTarget;
-        this.request = request;
-        this.page = getRedirectPage();
+        this.page = getRedirectPage(request);
+        this.link = linkHandler.getLink(this.page);
     }
 
-    private Page getRedirectPage() {
+    private Page getRedirectPage(@NotNull SlingHttpServletRequest request) {
         Page page = null;
         ResourceResolver resourceResolver = request.getResourceResolver();
         Resource targetResource = resourceResolver.getResource(redirectTarget);
@@ -50,23 +52,30 @@ public class RedirectItemImpl implements NavigationItem {
         return page;
     }
 
-
     @Override
     @Nullable
     public Page getPage() {
         return page;
     }
+    
+    @Override
+    public @Nullable String getLinkURL() {
+        return link.getLinkURL();
+    }
+
+    @Override
+    public boolean isLinkValid() {
+        return link.isLinkValid();
+    }
+
+    @Override
+    public @Nullable Map<String, String> getLinkHtmlAttributes() {
+        return link.getLinkHtmlAttributes();
+    }
 
     @Override
     @NotNull
     public String getURL() {
-        if(url == null) {
-            if(page != null) {
-                url = Utils.getURL(request, page);
-            } else {
-                url = redirectTarget;
-            }
-        }
-        return url;
+        return getLinkURL();
     }
 }

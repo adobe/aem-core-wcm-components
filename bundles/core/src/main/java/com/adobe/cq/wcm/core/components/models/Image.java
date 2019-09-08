@@ -18,9 +18,11 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -29,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Image extends ComponentExporter {
+public interface Image extends ComponentExporter, LinkMixin {
 
     /**
      * Name of the configuration policy property that will store the allowed rendition widths for an image.
@@ -187,11 +189,24 @@ public interface Image extends ComponentExporter {
     }
 
     /**
+     * @see LinkMixin#getLinkURL()
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    @JsonIgnore  // avoid duplicate URL in JSON, keep old property for backward compatibility
+    @Override
+    default @Nullable String getLinkURL() {
+        // fallback to old method name for backwards compatibility
+        return getLink();
+    }
+
+    /**
      * Returns the image's link URL, if one was set.
      *
      * @return the image's link URL, if one was set, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     * @deprecated Please use {@link #getLinkURL()}
      */
+    @Deprecated
     default String getLink() {
         throw new UnsupportedOperationException();
     }
