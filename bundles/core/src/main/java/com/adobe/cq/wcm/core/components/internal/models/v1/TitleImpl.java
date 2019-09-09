@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Link;
 import com.adobe.cq.wcm.core.components.models.Title;
@@ -81,7 +81,7 @@ public class TitleImpl implements Title {
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
      */
-    private Utils.Heading heading;
+    private Heading heading;
 
     @PostConstruct
     private void initModel() {
@@ -90,9 +90,9 @@ public class TitleImpl implements Title {
         }
 
         if (heading == null) {
-            heading = Utils.Heading.getHeading(type);
+            heading = Heading.getHeading(type);
             if (heading == null && currentStyle != null) {
-                heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
+                heading = Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
             }
         }
 

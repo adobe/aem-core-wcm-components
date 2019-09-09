@@ -29,7 +29,6 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Link;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -73,12 +72,11 @@ public class LinkHandler {
      * @param page Target page
      * @return Link may be invalid, but is never null
      */
-    @SuppressWarnings("deprecation")
     public @NotNull Link getLink(@Nullable Page page) {
         if (page == null) {
             return getInvalid();
         }
-        String linkURL = Utils.getURL(request, page);
+        String linkURL = getPageLinkURL(page);
         return new LinkImpl(linkURL, null, page);
     }
 
@@ -105,10 +103,9 @@ public class LinkHandler {
         return new LinkImpl(null, null, null);
     }
 
-    @SuppressWarnings("deprecation")
     private String validateAndResolveLinkURL(String linkURL) {
         if (!StringUtils.isEmpty(linkURL)) {
-            return Utils.getURL(request, pageManager, linkURL);
+            return getLinkURL(linkURL);
         }
         else {
             return null;
@@ -122,6 +119,38 @@ public class LinkHandler {
         }
         else {
             return null;
+        }
+    }
+
+    /**
+     * If the provided {@code path} identifies a {@link Page}, this method will generate the correct URL for the page. Otherwise the
+     * original {@code String} is returned.
+     * @param path the page path
+     * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
+     */
+    @NotNull
+    private String getLinkURL(@NotNull String path) {
+        Page page = pageManager.getPage(path);
+        if (page != null) {
+            return getPageLinkURL( page);
+        }
+        return path;
+    }
+
+    /**
+     * Given a {@link Page}, this method returns the correct URL, taking into account that the provided {@code page} might provide a
+     * vanity URL.
+     * @param page the page
+     * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a {@link Page}
+     */
+    @NotNull
+    private String getPageLinkURL(@NotNull Page page) {
+        String vanityURL = page.getVanityUrl();
+        if (StringUtils.isEmpty(vanityURL)) {
+            return StringUtils.defaultString(request.getContextPath()) + page.getPath() + ".html";
+        }
+        else {
+            return StringUtils.defaultString(request.getContextPath()) + vanityURL;
         }
     }
 

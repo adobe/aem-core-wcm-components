@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Link;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -284,7 +284,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getTitleType() {
-        Utils.Heading heading = Utils.Heading.getHeading(titleType);
+        Heading heading = Heading.getHeading(titleType);
         if (heading != null) {
             return heading.getElement();
         }

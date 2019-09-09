@@ -30,7 +30,7 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.Heading;
 import com.adobe.cq.wcm.core.components.models.Accordion;
 import com.day.cq.wcm.api.designer.Style;
 
@@ -68,7 +68,7 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the HTML element
      * to use for accordion headers.
      */
-    private Utils.Heading heading;
+    private Heading heading;
 
     @Override
     public boolean isSingleExpansion() {
@@ -99,9 +99,9 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
     @Override
     public String getHeadingElement() {
         if (heading == null) {
-            heading = Utils.Heading.getHeading(headingElement);
+            heading = Heading.getHeading(headingElement);
             if (heading == null) {
-                heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_HEADING_ELEMENT, String.class));
+                heading = Heading.getHeading(currentStyle.get(PN_DESIGN_HEADING_ELEMENT, String.class));
             }
         }
         if (heading != null) {
