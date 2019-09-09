@@ -69,7 +69,29 @@ class LinkHandlerTest {
     }
 
     @Test
-    void testResourceExternalLinkWithTarget() {
+    void testResourceExternalLinkWithTarget_Blank() {
+        Resource linkResource = context.create().resource(page, "link",
+                PN_LINK_URL, "http://myhost",
+                PN_LINK_TARGET, "_top");
+        Link link = underTest.getLink(linkResource);
+        
+        assertValidLink(link, "http://myhost", "_top");
+        assertNull(link.getTargetPage());
+    }
+
+    @Test
+    void testResourceExternalLinkWithTarget_Top() {
+        Resource linkResource = context.create().resource(page, "link",
+                PN_LINK_URL, "http://myhost",
+                PN_LINK_TARGET, "_parent");
+        Link link = underTest.getLink(linkResource);
+        
+        assertValidLink(link, "http://myhost", "_parent");
+        assertNull(link.getTargetPage());
+    }
+
+    @Test
+    void testResourceExternalLinkWithTarget_Parent() {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost",
                 PN_LINK_TARGET, "_blank");
@@ -77,7 +99,7 @@ class LinkHandlerTest {
         
         assertValidLink(link, "http://myhost", "_blank");
         assertNull(link.getTargetPage());
-}
+    }
 
     @Test
     void testResourceExternalLinkWithInvalidTarget() {

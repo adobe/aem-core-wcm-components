@@ -40,7 +40,7 @@ public final class LinkNameConstants {
      * <code>_self</code> is used in the edit dialog but not listed as allowed here as we do not
      * want to render a target attribute at all when <code>_self</code> is selected.
      */
-    public static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank");
+    public static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank", "_parent", "_top");
 
     private LinkNameConstants() {
         // constants only
