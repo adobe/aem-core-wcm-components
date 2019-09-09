@@ -114,7 +114,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
             Calendar calendar = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
             if (calendar != null) {
                 if (isUnchanged(calendar.getTimeInMillis(), request)) {
-                    LOG.info("sending SC_NOT_MODIFIED for {}", request.getResource().getPath());
+                    LOG.debug("sending SC_NOT_MODIFIED for {}", request.getResource().getPath());
                     response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                     return;
                 }
