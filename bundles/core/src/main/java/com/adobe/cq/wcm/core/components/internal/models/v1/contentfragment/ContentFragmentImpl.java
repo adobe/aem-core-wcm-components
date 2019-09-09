@@ -15,9 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -57,7 +57,8 @@ import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragmen
         },
         resourceType = ContentFragmentImpl.RESOURCE_TYPE
 )
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ContentFragmentImpl implements ContentFragment {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContentFragmentImpl.class);
@@ -85,16 +86,20 @@ public class ContentFragmentImpl implements ContentFragment {
     @ScriptVariable
     private Resource resource;
 
-    @ValueMapValue(name = ContentFragment.PN_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_PATH,
+                   injectionStrategy = InjectionStrategy.OPTIONAL)
     private String fragmentPath;
 
-    @ValueMapValue(name = ContentFragment.PN_ELEMENT_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_ELEMENT_NAMES,
+                   injectionStrategy = InjectionStrategy.OPTIONAL)
     private String[] elementNames;
 
-    @ValueMapValue(name = ContentFragment.PN_VARIATION_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_VARIATION_NAME,
+                   injectionStrategy = InjectionStrategy.OPTIONAL)
     private String variationName;
 
-    @ValueMapValue(name = ContentFragment.PN_DISPLAY_MODE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_DISPLAY_MODE,
+                   injectionStrategy = InjectionStrategy.OPTIONAL)
     private String displayMode;
 
     private DAMContentFragment damContentFragment;
@@ -190,10 +195,46 @@ public class ContentFragmentImpl implements ContentFragment {
      * Returns the delegate, i.e. the {@link DAMContentFragment content fragment}.
      */
     private DAMContentFragment getDAMContentFragment() {
-        if (damContentFragment == null) {
-            throw new IllegalStateException("There is no content fragment available to delegate to");
+        if (damContentFragment != null) {
+            return damContentFragment;
+        } else {
+            return new DAMContentFragment() {
+                @Override
+                public @Nullable String getTitle() {
+                    return null;
+                }
+
+                @Override
+                public @Nullable String getDescription() {
+                    return null;
+                }
+
+                @Override
+                public @Nullable String getType() {
+                    return null;
+                }
+
+                @Override
+                public @Nullable List<DAMContentElement> getElements() {
+                    return null;
+                }
+
+                @Override
+                public @NotNull Map<String, DAMContentElement> getExportedElements() {
+                    return new HashMap<>();
+                }
+
+                @Override
+                public @NotNull String[] getExportedElementsOrder() {
+                    return new String[0];
+                }
+
+                @Override
+                public @Nullable List<Resource> getAssociatedContent() {
+                    return null;
+                }
+            };
         }
-        return damContentFragment;
     }
 
     @Nullable

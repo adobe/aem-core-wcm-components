@@ -135,6 +135,14 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     void structuredNonExistingPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_PATH);
         assertNotNull("Model shouldn't be null when the path does not exist", fragment);
+        assertNull(fragment.getTitle());
+        assertNull(fragment.getDescription());
+        assertNull(fragment.getType());
+        assertNull(fragment.getElements());
+        assertNull(fragment.getAssociatedContent());
+        assertTrue(fragment.getExportedElements().isEmpty());
+        assertEquals(0, fragment.getExportedElementsOrder().length);
+
     }
 
     @Test
