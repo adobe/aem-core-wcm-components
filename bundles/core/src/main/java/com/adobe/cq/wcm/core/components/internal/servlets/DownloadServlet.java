@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
-import static com.adobe.cq.wcm.core.components.internal.servlets.DownloadServlet.SELECTOR;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -58,7 +56,7 @@ import com.day.cq.dam.api.Asset;
                 "sling.servlet.methods=" + HttpConstants.METHOD_GET,
                 "sling.servlet.resourceTypes=dam:Asset",
                 "sling.servlet.resourceTypes=nt:file",
-                "sling.servlet.selectors=" + SELECTOR
+                "sling.servlet.selectors=" + DownloadServlet.SELECTOR
         }
 )
 public class DownloadServlet extends SlingAllMethodsServlet {
