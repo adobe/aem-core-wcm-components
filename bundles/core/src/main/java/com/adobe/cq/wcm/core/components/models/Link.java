@@ -13,7 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.models.mixin;
+package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Map;
 
@@ -21,34 +21,33 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.ImmutableMap;
 
 /**
- * Mixin interface that describes a link target.
+ * Describes a link target.
  *
- * @since com.adobe.cq.wcm.core.components.models.mixin 1.0.0
+ * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface LinkMixin {
-
-    /**
-     * Externalized link URL.
-     * @return Link URL or null if link is invalid.
-     * @since com.adobe.cq.wcm.core.components.models.mixin 1.0.0
-     */
-    @Nullable
-    default String getLinkURL() {
-        throw new UnsupportedOperationException();
-    }
+public interface Link {
 
     /**
      * Check if the link defined for the component is valid.
      * @return true if component has a valid link defined
-     * @since com.adobe.cq.wcm.core.components.models.mixin 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     @JsonIgnore
-    default boolean isLinkValid() {
-        return getLinkURL() != null;
+    default boolean isValid() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Externalized link URL.
+     * @return Link URL or null if link is invalid.
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
+     */
+    @Nullable
+    default String getURL() {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -56,18 +55,23 @@ public interface LinkMixin {
      * This usually also contains the Link URL as <code>href</code> attribute,
      * but may contain additional attributes like <code>target</code> and others.
      * @return Map with HTML-specific anchor attributes, or null if link is invalid
-     * @since com.adobe.cq.wcm.core.components.models.mixin 1.0.0
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     @JsonIgnore
     @Nullable
-    default Map<String, String> getLinkHtmlAttributes() {
-        String linkURL = getLinkURL();
-        if (linkURL != null) {
-            return ImmutableMap.of("href", linkURL);
-        }
-        else {
-            return null;
-        }
+    default Map<String, String> getHtmlAttributes() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the references target page if the links points to an internal page.
+     * @return Target page or null
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0
+     */
+    @JsonIgnore
+    @Nullable
+    default com.day.cq.wcm.api.Page getTargetPage() {
+        throw new UnsupportedOperationException();
     }
 
 }

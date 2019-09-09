@@ -15,6 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-template.title="${@ teaser}">
     <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}" data-sly-element="${teaser.titleType}">
-        <a class="cmp-teaser__title-link" data-sly-attribute="${teaser.linkHtmlAttributes}" data-sly-unwrap="${!teaser.linkValid || teaser.titleLinkHidden}">${title}</a>
+        <a class="cmp-teaser__title-link" data-sly-attribute="${teaser.link.htmlAttributes}" data-sly-unwrap="${!teaser.link.valid || teaser.titleLinkHidden}">${title}</a>
     </h2>
 </sly>

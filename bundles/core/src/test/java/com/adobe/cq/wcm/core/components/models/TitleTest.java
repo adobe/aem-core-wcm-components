@@ -13,45 +13,45 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.link;
+package com.adobe.cq.wcm.core.components.models;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
 
-import com.day.cq.wcm.api.Page;
-
-class LinkTest {
+/**
+ * Test default method implementations of {@link Title}.
+ */
+class TitleTest {
 
     private static final String URL = "/url.html";
 
     @Test
     void testValidLink() {
-        Link link = new Link(URL, null, null);
-
-        assertValidLink(link, URL);
-        assertNull(link.getTargetPage());
-    }
-
-    @Test
-    void testValidLinkWithTargetAndTargetPage() {
-        Page page = mock(Page.class);
-        Link link = new Link(URL, "_blank", page);
-
-        assertValidLink(link, URL, "_blank");
-        assertSame(page, link.getTargetPage());
+        Title underTest = new TitleImpl(URL);
+        assertValidLink(underTest.getLink(), URL);
     }
 
     @Test
     void testInvalidLink() {
-        Link link = new Link(null, null, null);
+        Title underTest = new TitleImpl(null);
+        assertInvalidLink(underTest.getLink());
+    }
 
-        assertInvalidLink(link);
-        assertNull(link.getTargetPage());
+    private static class TitleImpl implements Title {
+        
+        private final String url;
+        
+        public TitleImpl(String url) {
+            this.url = url;
+        }
+        
+        @Override
+        public String getLinkURL() {
+            return url;
+        }
+
     }
 
 }

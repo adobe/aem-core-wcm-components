@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -31,13 +32,11 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.link.Link;
-import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 
@@ -174,7 +173,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
 
                     Link link = linkHandler.getLink(href, target);
-                    if (!link.isLinkValid()) {
+                    if (!link.isValid()) {
                         break;
                     }
 

@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
@@ -78,12 +79,13 @@ public class LinkHandler {
             return getInvalid();
         }
         String linkURL = Utils.getURL(request, page);
-        return new Link(linkURL, null, page);
+        return new LinkImpl(linkURL, null, page);
     }
 
     /**
-     * Build a link pointing to the given target page.
-     * @param page Target page
+     * Build a link with the given Link URL and target.
+     * @param linkURL Link URL
+     * @param target Target
      * @return Link may be invalid, but is never null
      */
     public @NotNull Link getLink(@Nullable String linkURL, @Nullable String target) {
@@ -92,7 +94,7 @@ public class LinkHandler {
 
         Page targetPage = pageManager.getPage(linkURL);
 
-        return new Link(resolvedLinkURL, resolvedLinkTarget, targetPage);
+        return new LinkImpl(resolvedLinkURL, resolvedLinkTarget, targetPage);
     }
 
     /**
@@ -100,7 +102,7 @@ public class LinkHandler {
      * @return Invalid link, never null
      */
     public @NotNull Link getInvalid() {
-        return new Link(null, null, null);
+        return new LinkImpl(null, null, null);
     }
 
     @SuppressWarnings("deprecation")

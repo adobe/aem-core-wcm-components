@@ -23,31 +23,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.google.common.collect.ImmutableMap;
 
 public final class LinkTestUtils {
 
-    public static void assertValidLink(@NotNull LinkMixin link, @NotNull String linkURL) {
-        assertTrue(link.isLinkValid(), "linkValid");
-        assertEquals(linkURL, link.getLinkURL(), "linkURL");
-        assertEquals(ImmutableMap.of("href", linkURL), link.getLinkHtmlAttributes(), "linkHtmlAttributes");
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL) {
+        assertTrue(link.isValid(), "linkValid");
+        assertEquals(linkURL, link.getURL(), "linkURL");
+        assertEquals(ImmutableMap.of("href", linkURL), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
-    public static void assertValidLink(@NotNull LinkMixin link, @NotNull String linkURL, @Nullable String linkTarget) {
+    public static void assertValidLink(@NotNull Link link, @NotNull String linkURL, @Nullable String linkTarget) {
         if (linkTarget == null) {
             assertValidLink(link,  linkURL);
             return;
         }
-        assertTrue(link.isLinkValid(), "linkValid");
-        assertEquals(linkURL, link.getLinkURL(), "linkURL");
-        assertEquals(ImmutableMap.of("href", linkURL, "target", linkTarget), link.getLinkHtmlAttributes(), "linkHtmlAttributes");
+        assertTrue(link.isValid(), "linkValid");
+        assertEquals(linkURL, link.getURL(), "linkURL");
+        assertEquals(ImmutableMap.of("href", linkURL, "target", linkTarget), link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
-    public static void assertInvalidLink(@NotNull LinkMixin link) {
-        assertFalse(link.isLinkValid(), "linkValid");
-        assertNull(link.getLinkURL(), "linkURL");
-        assertNull(link.getLinkHtmlAttributes(), "linkHtmlAttributes");
+    public static void assertInvalidLink(@NotNull Link link) {
+        assertFalse(link.isValid(), "linkValid");
+        assertNull(link.getURL(), "linkURL");
+        assertNull(link.getHtmlAttributes(), "linkHtmlAttributes");
     }
 
 }

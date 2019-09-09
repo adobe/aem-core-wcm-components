@@ -63,7 +63,7 @@ class ButtonImplTest {
     @SuppressWarnings("deprecation")
     void testGetLink() {
         Button button = getButtonUnderTest();
-        assertValidLink(button, "https://www.adobe.com");
+        assertValidLink(button.getButtonLink(), "https://www.adobe.com");
         assertEquals("https://www.adobe.com", button.getLink());
         Utils.testJSONExport(button, Utils.getTestExporterJSONPath(TEST_BASE, "button1"));
     }

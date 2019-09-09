@@ -20,7 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
+import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Defines the {@code Title} Sling Model used for the {@code /apps/core/wcm/components/title} component.
@@ -28,7 +29,7 @@ import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Title extends ComponentExporter, LinkMixin {
+public interface Title extends ComponentExporter {
 
     /**
      * Name of the configuration policy property that will store the default value for this title's HTML element type.
@@ -62,6 +63,30 @@ public interface Title extends ComponentExporter, LinkMixin {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the Title's link.
+     *
+     * @return the title's link
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    @JsonIgnore  // avoid duplicate URL in JSON, keep old property for backward compatibility
+    @NotNull
+    default Link getLink() {
+        return new LinkImpl(getLinkURL());
+    }
+
+    /**
+     * Returns the Title's link URL, if one was set.
+     *
+     * @return the title's link URL, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     * @deprecated Please use {@link #getLink()}
+     */
+    @Deprecated
+    default String getLinkURL() {
         throw new UnsupportedOperationException();
     }
 

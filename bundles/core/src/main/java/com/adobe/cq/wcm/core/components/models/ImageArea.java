@@ -15,14 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
+import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * Interface for an image map area, used by the {@link Image} model.
@@ -30,7 +27,7 @@ import com.google.common.collect.ImmutableMap;
  * @since com.adobe.cq.wcm.core.components.models 12.4.0
  */
 @ConsumerType
-public interface ImageArea extends LinkMixin {
+public interface ImageArea {
 
     /**
      * Returns the value for the {@code shape} attribute of the image map area.
@@ -63,34 +60,15 @@ public interface ImageArea extends LinkMixin {
     }
 
     /**
-     * @see LinkMixin#getLinkURL()
+     * Returns the link of the image area.
+     * 
+     * @see Link of the image area.
      * @since com.adobe.cq.wcm.core.components.models 12.10.0
      */
     @JsonIgnore  // avoid duplicate URL in JSON, keep old property for backward compatibility
-    @Override
-    default @Nullable String getLinkURL() {
+    default @NotNull Link getLink() {
         // fallback to old method name for backwards compatibility
-        return getHref();
-    }
-
-    /**
-     * @see LinkMixin#getLinkHtmlAttributes()
-     * @since com.adobe.cq.wcm.core.components.models 12.10.0
-     */
-    @JsonIgnore
-    @Nullable
-    default Map<String, String> getLinkHtmlAttributes() {
-        String linkURL = getLinkURL();
-        if (linkURL != null) {
-            String target = getTarget();
-            if (target != null) {
-                return ImmutableMap.of("href", linkURL, "target", target);
-            }
-            else {
-                return ImmutableMap.of("href", linkURL);
-            }
-        }
-        return null;
+        return new LinkImpl(getHref(), getTarget());
     }
 
     /**
@@ -98,7 +76,7 @@ public interface ImageArea extends LinkMixin {
      *
      * @return the image map area link href
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     * @deprecated Please use {@link #getLinkURL()}
+     * @deprecated Please use {@link #getLink()}
      */
     @Deprecated
     default String getHref() {
@@ -110,7 +88,7 @@ public interface ImageArea extends LinkMixin {
      *
      * @return the image map area link target
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
-     * @deprecated Please use {@link #getLinkHtmlAttributes()}
+     * @deprecated Please use {@link #getLink()}
      */
     @Deprecated
     default String getTarget() {

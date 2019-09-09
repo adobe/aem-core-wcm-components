@@ -20,48 +20,66 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 
 /**
  * Wraps link information to be used in models.
  */
-public final class Link implements LinkMixin {
+public final class LinkImpl implements Link {
 
-    private final String linkURL;
-    private final Map<String, String> linkHtmlAttributes;
+    private final String url;
+    private final Map<String, String> htmlAttributes;
     private final Page targetPage;
 
-    Link(String linkURL, String linkTarget, Page targetPage) {
-        this.linkURL = linkURL;
-        this.linkHtmlAttributes = buildAttributes(linkURL, linkTarget);
+    /**
+     * @param url Link URL
+     */
+    public LinkImpl(String url) {
+        this(url, null, null);
+    }
+
+    /**
+     * @param url Link URL
+     * @param target Target
+     */
+    public LinkImpl(String url, String target) {
+        this(url, target, null);
+    }
+
+    /**
+     * @param url Link URL
+     * @param target Target
+     * @param targetPage Target page
+     */
+    LinkImpl(String url, String target, Page targetPage) {
+        this.url = url;
+        this.htmlAttributes = buildHtmlAttributes(url, target);
         this.targetPage = targetPage;
     }
 
     @Override
-    public boolean isLinkValid() {
-        return linkURL != null;
+    public boolean isValid() {
+        return url != null;
     }
 
     @Override
-    public @Nullable String getLinkURL() {
-        return linkURL;
+    public @Nullable String getURL() {
+        return url;
     }
 
     @Override
-    public @Nullable Map<String, String> getLinkHtmlAttributes() {
-        return linkHtmlAttributes;
+    public @Nullable Map<String, String> getHtmlAttributes() {
+        return htmlAttributes;
     }
 
-    /**
-     * @return Target page if the link URL pointed to an internal page.
-     */
-    public Page getTargetPage() {
+    @Override
+    public @Nullable Page getTargetPage() {
         return targetPage;
     }
 
-    private static Map<String, String> buildAttributes(String linkURL, String linkTarget) {
+    private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget) {
         if (linkURL == null) {
             return null;
         }

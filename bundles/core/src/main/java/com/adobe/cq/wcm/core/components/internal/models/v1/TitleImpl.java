@@ -16,8 +16,6 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,13 +28,12 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -120,18 +117,13 @@ public class TitleImpl implements Title {
     }
 
     @Override
+    public @NotNull Link getLink() {
+        return link;
+    }
+    
+    @Override
     public String getLinkURL() {
-        return link.getLinkURL();
-    }
-
-    @Override
-    public boolean isLinkValid() {
-        return link.isLinkValid();
-    }
-
-    @Override
-    public @Nullable Map<String, String> getLinkHtmlAttributes() {
-        return link.getLinkHtmlAttributes();
+        return link.getURL();
     }
 
     @Override

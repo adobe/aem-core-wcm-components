@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -39,8 +38,8 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
@@ -153,7 +152,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
-        if (!link.isLinkValid()) {
+        if (!link.isValid()) {
             LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
         }
         if (StringUtils.isEmpty(fileReference)) {
@@ -198,7 +197,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
                     private ValueMap properties = action.getValueMap();
                     private String title = properties.get(PN_ACTION_TEXT, String.class);
-                    private Link link = linkHandler.getLink(action, PN_ACTION_LINK);
+                    private Link actionLink = linkHandler.getLink(action, PN_ACTION_LINK);
 
                     @Nullable
                     @Override
@@ -210,35 +209,25 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                     @Override
                     @JsonIgnore
                     public String getPath() {
-                        Page page = link.getTargetPage();
+                        Page page = actionLink.getTargetPage();
                         if (page != null) {
                             return page.getPath();
                         }
                         else {
                             // probably would make more sense to return null when not page is target, but we keep this for backward compatibility 
-                            return link.getLinkURL();
+                            return actionLink.getURL();
                         }
                     }
 
                     @Override
-                    public @Nullable String getLinkURL() {
-                        return link.getLinkURL();
-                    }
-
-                    @Override
-                    public boolean isLinkValid() {
-                        return link.isLinkValid();
-                    }
-
-                    @Override
-                    public @Nullable Map<String, String> getLinkHtmlAttributes() {
-                        return link.getLinkHtmlAttributes();
+                    public @NotNull Link getLink() {
+                        return actionLink;
                     }
 
                     @Nullable
                     @Override
                     public String getURL() {
-                        return getLinkURL();
+                        return actionLink.getURL();
                     }
                 });
             }
@@ -256,18 +245,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public @Nullable String getLinkURL() {
-        return link.getLinkURL();
+    public @NotNull Link getLink() {
+        return link;
     }
 
     @Override
-    public boolean isLinkValid() {
-        return link.isLinkValid();
-    }
-
-    @Override
-    public @Nullable Map<String, String> getLinkHtmlAttributes() {
-        return link.getLinkHtmlAttributes();
+    public String getLinkURL() {
+        return link.getURL();
     }
 
     public String getImagePath() {

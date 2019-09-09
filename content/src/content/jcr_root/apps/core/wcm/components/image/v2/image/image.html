@@ -25,9 +25,9 @@
      data-title="${image.title || image.alt}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
-    <a data-sly-unwrap="${!image.linkValid}"
+    <a data-sly-unwrap="${!image.imageLink.valid}"
        class="cmp-image__link"
-       data-sly-attribute="${image.linkHtmlAttributes}"
+       data-sly-attribute="${image.imageLink.htmlAttributes}"
        data-cmp-hook-image="link">
         <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1 && !image.areas}" data-cmp-hook-image="noscript">
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
@@ -38,7 +38,7 @@
                  data-sly-list.area="${image.areas}"
                  name="${resource.path}"
                  data-cmp-hook-image="map">
-                <area shape="${area.shape}" coords="${area.coordinates}" data-sly-attribute="${area.linkHtmlAttributes}" alt="${area.alt}"
+                <area shape="${area.shape}" coords="${area.coordinates}" data-sly-attribute="${area.link.htmlAttributes}" alt="${area.alt}"
                       data-cmp-hook-image="area" data-cmp-relcoords="${area.relativeCoordinates}">
             </map>
         </noscript>

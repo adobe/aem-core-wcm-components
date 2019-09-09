@@ -23,10 +23,10 @@
         data-sly-list.navItem="${breadcrumb.items}">
         <li class="cmp-breadcrumb__item${navItem.active ? ' cmp-breadcrumb__item--active' : ''}"
             itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-            <a data-sly-attribute="${navItem.linkHtmlAttributes}"
+            <a data-sly-attribute="${navItem.link.htmlAttributes}"
                class="cmp-breadcrumb__item-link"
                itemprop="item"
-               data-sly-unwrap="${navItem.active || !navItem.linkValid}">
+               data-sly-unwrap="${navItem.active || !navItem.link.valid}">
                 <span itemprop="name">${navItem.title}</span>
             </a>
             <meta itemprop="position" content="${navItemList.count}" />

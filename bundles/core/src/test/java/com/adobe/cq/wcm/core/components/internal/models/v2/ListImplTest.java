@@ -77,7 +77,7 @@ public class ListImplTest {
         }
         index = 0;
         for (ListItem item : list.getListItems()) {
-            assertValidLink(item, CONTEXT_PATH + expectedPagePaths[index++] + ".html");
+            assertValidLink(item.getLink(), CONTEXT_PATH + expectedPagePaths[index++] + ".html");
         }
     }
 

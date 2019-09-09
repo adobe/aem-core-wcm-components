@@ -63,7 +63,7 @@ class TitleImplTest {
     void testGetTitleFromResource() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
         assertNull(title.getType());
-        assertInvalidLink(title);
+        assertInvalidLink(title.getLink());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
     }
 
@@ -72,7 +72,7 @@ class TitleImplTest {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_TYPE);
         assertEquals("Hello World", title.getText());
         assertEquals("h2", title.getType());
-        assertInvalidLink(title);
+        assertInvalidLink(title.getLink());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_TYPE));
     }
 
@@ -81,7 +81,7 @@ class TitleImplTest {
         Title title = getTitleUnderTest(TITLE_NOPROPS,
                 Title.PN_DESIGN_DEFAULT_TYPE, "h2");
         assertEquals("h2", title.getType());
-        assertInvalidLink(title);
+        assertInvalidLink(title.getLink());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_NOPROPS));
     }
 
@@ -89,7 +89,7 @@ class TitleImplTest {
     void testGetTitleFromCurrentPageWithWrongElementInfo() {
         Title title = getTitleUnderTest(TITLE_WRONGTYPE);
         assertNull(title.getType());
-        assertInvalidLink(title);
+        assertInvalidLink(title.getLink());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_WRONGTYPE));
     }
 
@@ -103,7 +103,7 @@ class TitleImplTest {
     @Test
     void testGetLink() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
-        assertValidLink(title, "https://www.adobe.com");
+        assertValidLink(title.getLink(), "https://www.adobe.com");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
     }
 
@@ -111,7 +111,7 @@ class TitleImplTest {
     void testTitleWithLinksDisabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2,
                 Title.PN_TITLE_LINK_DISABLED, true);
-        assertValidLink(title, "https://www.adobe.com");
+        assertValidLink(title.getLink(), "https://www.adobe.com");
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, "title-linkdisabled"));
     }
 

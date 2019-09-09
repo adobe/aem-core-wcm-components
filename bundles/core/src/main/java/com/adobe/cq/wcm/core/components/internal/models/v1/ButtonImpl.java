@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
@@ -28,13 +26,12 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Button;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.PageManager;
 
@@ -85,23 +82,13 @@ public class ButtonImpl implements Button {
     }
 
     @Override
-    public @Nullable String getLinkURL() {
-        return link.getLinkURL();
-    }
-
-    @Override
-    public boolean isLinkValid() {
-        return link.isLinkValid();
-    }
-
-    @Override
-    public @Nullable Map<String, String> getLinkHtmlAttributes() {
-        return link.getLinkHtmlAttributes();
+    public @NotNull Link getButtonLink() {
+        return link;
     }
 
     @Override
     public String getLink() {
-        return getLinkURL();
+        return link.getURL();
     }
 
     @Override

@@ -17,10 +17,11 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.Calendar;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.wcm.core.components.models.mixin.LinkMixin;
+import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -29,17 +30,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
 @ConsumerType
-public interface ListItem extends LinkMixin {
+public interface ListItem {
 
     /**
-     * @see LinkMixin#getLinkURL()
+     * Returns the link of this {@code ListItem}.
+     *
+     * @return the link of this list item.
      * @since com.adobe.cq.wcm.core.components.models 12.10.0
      */
     @JsonIgnore  // avoid duplicate URL in JSON, keep old property for backward compatibility
-    @Override
-    default @Nullable String getLinkURL() {
+    default @NotNull Link getLink() {
         // fallback to old method name for backwards compatibility
-        return getURL();
+        return new LinkImpl(getURL());
     }
 
     /**
@@ -47,7 +49,7 @@ public interface ListItem extends LinkMixin {
      *
      * @return the URL of this list item or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     * @deprecated Please use {@link #getLinkURL()}
+     * @deprecated Please use {@link #getLink()}
      */
     @Deprecated
     @Nullable

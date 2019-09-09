@@ -15,16 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Map;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.internal.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
+import com.adobe.cq.wcm.core.components.models.Link;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -59,23 +57,13 @@ public class RedirectItemImpl implements NavigationItem {
     }
     
     @Override
-    public @Nullable String getLinkURL() {
-        return link.getLinkURL();
-    }
-
-    @Override
-    public boolean isLinkValid() {
-        return link.isLinkValid();
-    }
-
-    @Override
-    public @Nullable Map<String, String> getLinkHtmlAttributes() {
-        return link.getLinkHtmlAttributes();
+    public @NotNull Link getLink() {
+        return link;
     }
 
     @Override
     @NotNull
     public String getURL() {
-        return getLinkURL();
+        return link.getURL();
     }
 }

@@ -18,7 +18,7 @@
     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
     data-sly-list.navItem="${breadcrumb.items}">
     <li class="breadcrumb-item ${navItem.active ? 'active' : ''}">
-        <a data-sly-attribute="${navItem.linkHtmlAttributes}" data-sly-unwrap="${navItem.active || !navItem.linkValid}">${navItem.title}</a>
+        <a data-sly-attribute="${navItem.link.htmlAttributes}" data-sly-unwrap="${navItem.active || !navItem.link.valid}">${navItem.title}</a>
     </li>
 </ol>
 <sly data-sly-call="${template.placeholder @ isEmpty=breadcrumb.items.size == 0}"></sly>

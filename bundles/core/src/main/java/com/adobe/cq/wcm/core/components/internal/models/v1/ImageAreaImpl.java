@@ -19,10 +19,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.internal.link.Link;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
+import com.adobe.cq.wcm.core.components.models.Link;
 
 public class ImageAreaImpl implements ImageArea {
 
@@ -56,31 +55,21 @@ public class ImageAreaImpl implements ImageArea {
     }
 
     @Override
-    public @Nullable String getLinkURL() {
-        return link.getLinkURL();
-    }
-
-    @Override
-    public boolean isLinkValid() {
-        return link.isLinkValid();
-    }
-
-    @Override
-    public @Nullable Map<String, String> getLinkHtmlAttributes() {
-        return link.getLinkHtmlAttributes();
+    public @NotNull Link getLink() {
+        return link;
     }
 
     @Override
     public String getHref() {
         // fallback for old method for keeping backward compatibility
-        return StringUtils.defaultString(getLinkURL());
+        return StringUtils.defaultString(link.getURL());
     }
 
     @Override
     public String getTarget() {
         // fallback for old method for keeping backward compatibility
         String target = null;
-        Map<String, String> attrs = getLinkHtmlAttributes();
+        Map<String, String> attrs = link.getHtmlAttributes();
         if (attrs != null) {
             target = attrs.get("target");
         }

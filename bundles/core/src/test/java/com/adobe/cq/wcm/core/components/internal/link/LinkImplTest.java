@@ -13,46 +13,46 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.models.mixin;
+package com.adobe.cq.wcm.core.components.internal.link;
 
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.mock;
 
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
-/**
- * Test default method implementations of {@link LinkMixin}.
- */
-class LinkMixinTest {
+import com.adobe.cq.wcm.core.components.models.Link;
+import com.day.cq.wcm.api.Page;
+
+class LinkImplTest {
 
     private static final String URL = "/url.html";
 
     @Test
     void testValidLink() {
-        LinkMixin underTest = new LinkMixinImpl(URL);
-        assertValidLink(underTest, URL);
+        Link link = new LinkImpl(URL, null, null);
+
+        assertValidLink(link, URL);
+        assertNull(link.getTargetPage());
+    }
+
+    @Test
+    void testValidLinkWithTargetAndTargetPage() {
+        Page page = mock(Page.class);
+        Link link = new LinkImpl(URL, "_blank", page);
+
+        assertValidLink(link, URL, "_blank");
+        assertSame(page, link.getTargetPage());
     }
 
     @Test
     void testInvalidLink() {
-        LinkMixin underTest = new LinkMixinImpl(null);
-        assertInvalidLink(underTest);
-    }
+        Link link = new LinkImpl(null, null, null);
 
-    private static class LinkMixinImpl implements LinkMixin {
-        
-        private final String linkURL;
-        
-        public LinkMixinImpl(String linkURL) {
-            this.linkURL = linkURL;
-        }
-
-        @Override
-        public @Nullable String getLinkURL() {
-            return linkURL;
-        }
-
+        assertInvalidLink(link);
+        assertNull(link.getTargetPage());
     }
 
 }

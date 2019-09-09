@@ -52,7 +52,6 @@ import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-
 @ExtendWith(AemContextExtension.class)
 class TeaserImplTest {
 
@@ -107,7 +106,7 @@ class TeaserImplTest {
         }
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
-        assertValidLink(teaser, LINK);
+        assertValidLink(teaser.getLink(), LINK);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
 
@@ -122,7 +121,7 @@ class TeaserImplTest {
         }
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
-        assertValidLink(teaser, CONTEXT_PATH + "/content/teasers.html");
+        assertValidLink(teaser.getLink(), CONTEXT_PATH + "/content/teasers.html");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser5"));
     }
 
@@ -154,7 +153,7 @@ class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
         verify(teaserLogger)
                 .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.");
-        assertInvalidLink(teaser);
+        assertInvalidLink(teaser.getLink());
     }
 
     @Test
@@ -187,7 +186,7 @@ class TeaserImplTest {
         ListItem action = teaser.getActions().get(0);
         assertEquals("Action link does not match", "http://www.adobe.com", action.getPath());
         assertEquals("Action text does not match", "Adobe", action.getTitle());
-        assertValidLink(action, "http://www.adobe.com");
+        assertValidLink(action.getLink(), "http://www.adobe.com");
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser9"));
     }
 

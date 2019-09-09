@@ -21,48 +21,35 @@ import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.asser
 import org.junit.jupiter.api.Test;
 
 /**
- * Test default method implementations of {@link ImageArea}.
+ * Test default method implementations of {@link Teaser}.
  */
-class ImageAreaTest {
+class TeaserTest {
 
     private static final String URL = "/url.html";
 
     @Test
     void testValidLink() {
-        ImageArea underTest = new ImageAreaImpl(URL, null);
+        Teaser underTest = new TeaserImpl(URL);
         assertValidLink(underTest.getLink(), URL);
     }
 
     @Test
-    void testValidLinkWithTarget() {
-        ImageArea underTest = new ImageAreaImpl(URL, "_blank");
-        assertValidLink(underTest.getLink(), URL, "_blank");
-    }
-
-    @Test
     void testInvalidLink() {
-        ImageArea underTest = new ImageAreaImpl(null, null);
+        Teaser underTest = new TeaserImpl(null);
         assertInvalidLink(underTest.getLink());
     }
 
-    private static class ImageAreaImpl implements ImageArea {
+    private static class TeaserImpl implements Teaser {
         
         private final String url;
-        private final String target;
         
-        public ImageAreaImpl(String url, String target) {
+        public TeaserImpl(String url) {
             this.url = url;
-            this.target = target;
         }
-
+        
         @Override
-        public String getHref() {
+        public String getLinkURL() {
             return url;
-        }
-
-        @Override
-        public String getTarget() {
-            return target;
         }
 
     }
