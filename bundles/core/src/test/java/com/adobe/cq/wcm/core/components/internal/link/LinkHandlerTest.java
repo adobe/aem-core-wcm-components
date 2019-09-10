@@ -15,12 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import static com.adobe.cq.wcm.core.components.internal.link.LinkNameConstants.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkNameConstants.PN_LINK_URL;
+import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_TARGET;
+import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_URL;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertInvalidLink;
 import static com.adobe.cq.wcm.core.components.internal.link.LinkTestUtils.assertValidLink;
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +29,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.Link;
 import com.day.cq.wcm.api.Page;
 
 import io.wcm.testing.mock.aem.junit5.AemContext;

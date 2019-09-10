@@ -13,13 +13,15 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.models;
+package com.adobe.cq.wcm.core.components.commons.link;
 
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -35,10 +37,7 @@ public interface Link {
      * @return true if component has a valid link defined
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
-    @JsonIgnore
-    default boolean isValid() {
-        throw new UnsupportedOperationException();
-    }
+    boolean isValid();
 
     /**
      * Externalized link URL.
@@ -46,9 +45,7 @@ public interface Link {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     @Nullable
-    default String getURL() {
-        throw new UnsupportedOperationException();
-    }
+    String getURL();
 
     /**
      * Map with Attributes for HTML Anchor tag for this links.
@@ -58,10 +55,8 @@ public interface Link {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     @JsonIgnore
-    @Nullable
-    default Map<String, String> getHtmlAttributes() {
-        throw new UnsupportedOperationException();
-    }
+    @NotNull
+    Map<String, String> getHtmlAttributes();
 
     /**
      * Returns the references target page if the links points to an internal page.
@@ -70,8 +65,6 @@ public interface Link {
      */
     @JsonIgnore
     @Nullable
-    default com.day.cq.wcm.api.Page getTargetPage() {
-        throw new UnsupportedOperationException();
-    }
+    Page getTargetPage();
 
 }

@@ -18,9 +18,10 @@ package com.adobe.cq.wcm.core.components.internal.link;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.models.Link;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 
@@ -70,7 +71,7 @@ public final class LinkImpl implements Link {
     }
 
     @Override
-    public @Nullable Map<String, String> getHtmlAttributes() {
+    public @NotNull Map<String, String> getHtmlAttributes() {
         return htmlAttributes;
     }
 
@@ -80,11 +81,10 @@ public final class LinkImpl implements Link {
     }
 
     private static Map<String, String> buildHtmlAttributes(String linkURL, String linkTarget) {
-        if (linkURL == null) {
-            return null;
-        }
         Map<String,String> attributes = new HashMap<>();
-        attributes.put("href", linkURL);
+        if (linkURL != null) {
+            attributes.put("href", linkURL);
+        }
         if (linkTarget != null) {
             attributes.put("target", linkTarget);
         }

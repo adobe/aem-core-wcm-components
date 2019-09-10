@@ -17,13 +17,14 @@ package com.adobe.cq.wcm.core.components.internal.link;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.models.Link;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.google.common.collect.ImmutableMap;
 
 public final class LinkTestUtils {
@@ -47,7 +48,8 @@ public final class LinkTestUtils {
     public static void assertInvalidLink(@NotNull Link link) {
         assertFalse(link.isValid(), "linkValid");
         assertNull(link.getURL(), "linkURL");
-        assertNull(link.getHtmlAttributes(), "linkHtmlAttributes");
+        assertNotNull(link.getHtmlAttributes(), "linkHtmlAttributes not null");
+        assertTrue(link.getHtmlAttributes().isEmpty(), "linkHtmlAttributes empty");
     }
 
 }

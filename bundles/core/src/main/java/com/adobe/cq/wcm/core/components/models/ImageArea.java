@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.models;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.link.LinkImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -15,9 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.link;
 
-import static com.adobe.cq.wcm.core.components.internal.link.LinkNameConstants.PN_LINK_TARGET;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkNameConstants.PN_LINK_URL;
-import static com.adobe.cq.wcm.core.components.internal.link.LinkNameConstants.VALID_LINK_TARGETS;
+import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_TARGET;
+import static com.adobe.cq.wcm.core.components.commons.link.LinkConstants.PN_LINK_URL;
+
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -29,9 +30,10 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.models.Link;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Simple implementation for resolving and validating links from model's resources.
@@ -40,13 +42,21 @@ import com.day.cq.wcm.api.PageManager;
 @Model(adaptables=SlingHttpServletRequest.class)
 public class LinkHandler {
 
+    /**
+     * List of allowed/supported values for link target.
+     * <code>_self</code> is used in the edit dialog but not listed as allowed here as we do not
+     * want to render a target attribute at all when <code>_self</code> is selected.
+     */
+    private static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank", "_parent", "_top");
+
+    
     @Self
     private SlingHttpServletRequest request;
     @ScriptVariable
     private PageManager pageManager;
-
+    
     /**
-     * Resolve a link from the properties of the given resource.
+     * Resolves a link from the properties of the given resource.
      * @param resource Resource
      * @return Link may be invalid, but is never null
      */
@@ -55,7 +65,7 @@ public class LinkHandler {
     }
 
     /**
-     * Resolve a link from the properties of the given resource.
+     * Resolves a link from the properties of the given resource.
      * @param resource Resource
      * @param linkURLPropertyName Property name to read link URL from.
      * @return Link may be invalid, but is never null
@@ -68,7 +78,7 @@ public class LinkHandler {
     }
 
     /**
-     * Build a link pointing to the given target page.
+     * Builds a link pointing to the given target page.
      * @param page Target page
      * @return Link may be invalid, but is never null
      */
@@ -81,7 +91,7 @@ public class LinkHandler {
     }
 
     /**
-     * Build a link with the given Link URL and target.
+     * Builds a link with the given Link URL and target.
      * @param linkURL Link URL
      * @param target Target
      * @return Link may be invalid, but is never null

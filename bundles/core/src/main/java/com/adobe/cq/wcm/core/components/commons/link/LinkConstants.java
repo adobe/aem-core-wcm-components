@@ -13,20 +13,19 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.link;
+package com.adobe.cq.wcm.core.components.commons.link;
 
-import java.util.Set;
-
-import com.google.common.collect.ImmutableSet;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Constants for link handling.
  */
-public final class LinkNameConstants {
+@ProviderType
+public final class LinkConstants {
 
     /**
      * Default property name for storing link URL.
-     * Please not that the property name for this is not consistently use across all model implementations.
+     * All new model implementation should use this name, some of the existing models use other names to store the link URL.
      */
     public static final String PN_LINK_URL = "linkURL";
 
@@ -35,14 +34,7 @@ public final class LinkNameConstants {
      */
     public static final String PN_LINK_TARGET = "linkTarget";
 
-    /**
-     * List of allowed/supported values for link target.
-     * <code>_self</code> is used in the edit dialog but not listed as allowed here as we do not
-     * want to render a target attribute at all when <code>_self</code> is selected.
-     */
-    public static final Set<String> VALID_LINK_TARGETS = ImmutableSet.of("_blank", "_parent", "_top");
-
-    private LinkNameConstants() {
+    private LinkConstants() {
         // constants only
     }
 

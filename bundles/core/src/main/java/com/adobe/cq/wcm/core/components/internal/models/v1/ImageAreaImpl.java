@@ -20,8 +20,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
-import com.adobe.cq.wcm.core.components.models.Link;
 
 public class ImageAreaImpl implements ImageArea {
 
