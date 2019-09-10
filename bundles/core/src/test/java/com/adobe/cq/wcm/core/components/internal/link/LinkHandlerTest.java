@@ -26,6 +26,8 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Link;
@@ -68,46 +70,27 @@ class LinkHandlerTest {
         assertNull(link.getTargetPage());
     }
 
-    @Test
-    void testResourceExternalLinkWithTarget_Blank() {
+    @ParameterizedTest
+    @ValueSource(strings = {"_blank", "_parent", "_top"})
+    void testResourceExternalLinkWithAllowedTargets(String target) {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost",
-                PN_LINK_TARGET, "_top");
+                PN_LINK_TARGET, target);
         Link link = underTest.getLink(linkResource);
-        
-        assertValidLink(link, "http://myhost", "_top");
+
+        assertValidLink(link, "http://myhost", target);
         assertNull(link.getTargetPage());
     }
 
-    @Test
-    void testResourceExternalLinkWithTarget_Top() {
+    @ParameterizedTest
+    @ValueSource(strings = {"_self","_invalid"})
+    void testResourceExternalLinkWithInvalidTargets(String target) {
         Resource linkResource = context.create().resource(page, "link",
                 PN_LINK_URL, "http://myhost",
-                PN_LINK_TARGET, "_parent");
+                PN_LINK_TARGET, target);
         Link link = underTest.getLink(linkResource);
-        
-        assertValidLink(link, "http://myhost", "_parent");
-        assertNull(link.getTargetPage());
-    }
 
-    @Test
-    void testResourceExternalLinkWithTarget_Parent() {
-        Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, "http://myhost",
-                PN_LINK_TARGET, "_blank");
-        Link link = underTest.getLink(linkResource);
-        
-        assertValidLink(link, "http://myhost", "_blank");
-        assertNull(link.getTargetPage());
-    }
-
-    @Test
-    void testResourceExternalLinkWithInvalidTarget() {
-        Resource linkResource = context.create().resource(page, "link",
-                PN_LINK_URL, "http://myhost",
-                PN_LINK_TARGET, "_invalid");
-        Link link = underTest.getLink(linkResource);
-        
+        // invalid target or _self target should be stripped away 
         assertValidLink(link, "http://myhost");
         assertNull(link.getTargetPage());
     }
