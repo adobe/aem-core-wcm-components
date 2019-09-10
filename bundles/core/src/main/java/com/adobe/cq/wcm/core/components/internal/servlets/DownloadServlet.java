@@ -147,7 +147,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
     }
 
     /**
-     * Determine the size of a binary resource just by using the JCR API; this hopefully avoids to read
+     * Determines the size of a binary resource just by using the JCR API; this hopefully avoids to read
      * the complete InputStream to determine the actual size of the binary.
      * @param resource the actual resource
      * @return the size in byte, -1 if an error occurs, the resource is not backed by a JCR node, or if there is not JCR_DATA property
