@@ -116,7 +116,6 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         assertNull(fragment.getAssociatedContent());
         assertTrue(fragment.getExportedElements().isEmpty());
         assertEquals(0, fragment.getExportedElementsOrder().length);
-
     }
 
     @Test

@@ -182,13 +182,6 @@ public class ContentFragmentImpl implements ContentFragment {
         return ContentFragmentUtils.getItemsOrder(getExportedItems());
     }
 
-    /**
-     * Returns the delegate, i.e. the {@link DAMContentFragment content fragment}.
-     */
-    private DAMContentFragment getDAMContentFragment() {
-        return damContentFragment;
-    }
-
     @Nullable
     @Override
     public String[] getParagraphs() {
@@ -196,11 +189,11 @@ public class ContentFragmentImpl implements ContentFragment {
             return null;
         }
 
-        if (getDAMContentFragment().getElements() == null || getDAMContentFragment().getElements().isEmpty()) {
+        if (damContentFragment.getElements() == null || damContentFragment.getElements().isEmpty()) {
             return null;
         }
 
-        DAMContentElement damContentElement = getDAMContentFragment().getElements().get(0);
+        DAMContentElement damContentElement = damContentFragment.getElements().get(0);
 
         // restrict this method to text elements
         if (!damContentElement.isMultiLine()) {
@@ -221,7 +214,7 @@ public class ContentFragmentImpl implements ContentFragment {
     /**
      * Empty placeholder content fragment.
      */
-    public static class EmptyContentFragment implements DAMContentFragment {
+    private static class EmptyContentFragment implements DAMContentFragment {
         @Override
         public @Nullable String getTitle() {
             return null;
