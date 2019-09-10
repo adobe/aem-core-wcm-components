@@ -24,8 +24,6 @@ import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.Utils;
@@ -36,7 +34,6 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(AemContextExtension.class)
@@ -44,9 +41,6 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
 
     private static final String MAIN_CONTENT = "<p>Main content</p>";
     private static final String TEST_BASE = "/contentfragment";
-
-    private Logger cfmLogger;
-    private Logger modelLogger;
 
     @Override
     protected String getTestResourcesParentPath() {
@@ -61,31 +55,11 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
         super.setUp();
-        cfmLogger = spy(LoggerFactory.getLogger("FakeLoggerCFM"));
-        setFakeLoggerOnClass(DAMContentFragmentImpl.class, cfmLogger);
-
-        modelLogger = spy(LoggerFactory.getLogger("FakeLoggerModel"));
-        setFakeLoggerOnClass(ContentFragmentImpl.class, modelLogger);
-    }
-
-    @Test
-    void textOnlyNoPath() {
-        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NO_PATH);
-        verify(modelLogger).warn("Please provide a path for the content fragment component.");
-        assertNotNull("Model shouldn't be null when no path is set", fragment);
-    }
-
-    @Test
-    void textOnlyNonExistingPath() {
-        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NON_EXISTING_PATH);
-        verify(modelLogger).error("Content Fragment can not be initialized because the '{}' does not exist.", "/content/dam/contentfragments/non-existing");
-        assertNotNull("Model shouldn't be null when the path does not exist", fragment);
     }
 
     @Test
     void textOnlyInvalidPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_INVALID_PATH);
-        verify(cfmLogger).error("Content Fragment can not be initialized because '{}' is not a content fragment.", "/content/dam/contentfragments");
         assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
     }
 
@@ -219,8 +193,8 @@ class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragmen
         final Map<String, DAMContentFragment.DAMContentElement> elements = fragment.getExportedElements();
         assertNotNull(elements);
         assertEquals(2, elements.size());
-        assertEquals(true, elements.containsKey("main"));
-        assertEquals(true, elements.containsKey("second"));
+        assertTrue(elements.containsKey("main"));
+        assertTrue(elements.containsKey("second"));
     }
 
     @Test

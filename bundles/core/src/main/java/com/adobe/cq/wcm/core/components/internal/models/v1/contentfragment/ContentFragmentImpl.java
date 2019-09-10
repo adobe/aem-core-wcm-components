@@ -35,8 +35,6 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.dam.cfm.content.FragmentRenderService;
 import com.adobe.cq.dam.cfm.converter.ContentTypeConverter;
@@ -60,8 +58,6 @@ import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragmen
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ContentFragmentImpl implements ContentFragment {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ContentFragmentImpl.class);
 
     /**
      * The resource type of the component associated with this Sling model.
@@ -102,39 +98,34 @@ public class ContentFragmentImpl implements ContentFragment {
                    injectionStrategy = InjectionStrategy.OPTIONAL)
     private String displayMode;
 
-    private DAMContentFragment damContentFragment;
+    private DAMContentFragment damContentFragment = new EmptyContentFragment();
 
     @PostConstruct
     private void initModel() {
         if (StringUtils.isNotEmpty(fragmentPath)) {
-            // get fragment resource
             Resource fragmentResource = resourceResolver.getResource(fragmentPath);
-            if (fragmentResource == null) {
-                LOG.error("Content Fragment can not be initialized because the '{}' does not exist.", fragmentPath);
-            } else {
-                this.damContentFragment = new DAMContentFragmentImpl(fragmentResource, contentTypeConverter, variationName, elementNames);
+            if (fragmentResource != null) {
+                damContentFragment = new DAMContentFragmentImpl(fragmentResource, contentTypeConverter, variationName, elementNames);
             }
-        } else {
-            LOG.warn("Please provide a path for the content fragment component.");
         }
     }
 
     @Nullable
     @Override
     public String getTitle() {
-        return getDAMContentFragment().getTitle();
+        return damContentFragment.getTitle();
     }
 
     @Nullable
     @Override
     public String getDescription() {
-        return getDAMContentFragment().getDescription();
+        return damContentFragment.getDescription();
     }
 
     @Nullable
     @Override
     public String getType() {
-        return getDAMContentFragment().getType();
+        return damContentFragment.getType();
     }
 
     @NotNull
@@ -146,31 +137,31 @@ public class ContentFragmentImpl implements ContentFragment {
     @NotNull
     @Override
     public String getEditorJSON() {
-        return getDAMContentFragment().getEditorJSON();
+        return damContentFragment.getEditorJSON();
     }
 
     @NotNull
     @Override
     public Map<String, DAMContentElement> getExportedElements() {
-        return getDAMContentFragment().getExportedElements();
+        return damContentFragment.getExportedElements();
     }
 
     @NotNull
     @Override
     public String[] getExportedElementsOrder() {
-        return getDAMContentFragment().getExportedElementsOrder();
+        return damContentFragment.getExportedElementsOrder();
     }
 
     @Nullable
     @Override
     public List<DAMContentElement> getElements() {
-        return getDAMContentFragment().getElements();
+        return damContentFragment.getElements();
     }
 
     @Nullable
     @Override
     public List<Resource> getAssociatedContent() {
-        return getDAMContentFragment().getAssociatedContent();
+        return damContentFragment.getAssociatedContent();
     }
 
     @NotNull
@@ -195,46 +186,7 @@ public class ContentFragmentImpl implements ContentFragment {
      * Returns the delegate, i.e. the {@link DAMContentFragment content fragment}.
      */
     private DAMContentFragment getDAMContentFragment() {
-        if (damContentFragment != null) {
-            return damContentFragment;
-        } else {
-            return new DAMContentFragment() {
-                @Override
-                public @Nullable String getTitle() {
-                    return null;
-                }
-
-                @Override
-                public @Nullable String getDescription() {
-                    return null;
-                }
-
-                @Override
-                public @Nullable String getType() {
-                    return null;
-                }
-
-                @Override
-                public @Nullable List<DAMContentElement> getElements() {
-                    return null;
-                }
-
-                @Override
-                public @NotNull Map<String, DAMContentElement> getExportedElements() {
-                    return new HashMap<>();
-                }
-
-                @Override
-                public @NotNull String[] getExportedElementsOrder() {
-                    return new String[0];
-                }
-
-                @Override
-                public @Nullable List<Resource> getAssociatedContent() {
-                    return null;
-                }
-            };
-        }
+        return damContentFragment;
     }
 
     @Nullable
@@ -263,5 +215,46 @@ public class ContentFragmentImpl implements ContentFragment {
 
         // split into paragraphs
         return content.split("(?=(<p>|<h1>|<h2>|<h3>|<h4>|<h5>|<h6>))");
+    }
+
+
+    /**
+     * Empty placeholder content fragment.
+     */
+    public static class EmptyContentFragment implements DAMContentFragment {
+        @Override
+        public @Nullable String getTitle() {
+            return null;
+        }
+
+        @Override
+        public @Nullable String getDescription() {
+            return null;
+        }
+
+        @Override
+        public @Nullable String getType() {
+            return null;
+        }
+
+        @Override
+        public @Nullable List<DAMContentElement> getElements() {
+            return null;
+        }
+
+        @Override
+        public @NotNull Map<String, DAMContentElement> getExportedElements() {
+            return new HashMap<>();
+        }
+
+        @Override
+        public @NotNull String[] getExportedElementsOrder() {
+            return new String[0];
+        }
+
+        @Override
+        public @Nullable List<Resource> getAssociatedContent() {
+            return null;
+        }
     }
 }
