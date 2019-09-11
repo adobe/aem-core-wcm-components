@@ -47,16 +47,6 @@
                 retrievePageInfo($dialogContent);
             });
 
-            var $titleTextfield = $dialogContent.find(titleTextfieldSelector);
-            $titleTextfield.on("change", function() {
-                titleTuple.updatePreviousTextValue();
-            });
-
-            var $descriptionTextfield = $dialogContent.find(descriptionTextfieldSelector);
-            $descriptionTextfield.on("change", function() {
-                descriptionTuple.updatePreviousTextValue();
-            });
-
             var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
             if ($actionsEnabledCheckbox.size() > 0) {
                 actionsEnabled = $actionsEnabledCheckbox.adaptTo("foundation-field").getValue() === "true";

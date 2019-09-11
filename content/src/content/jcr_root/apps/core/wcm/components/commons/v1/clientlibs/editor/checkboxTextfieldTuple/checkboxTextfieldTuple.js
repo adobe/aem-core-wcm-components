@@ -74,6 +74,9 @@
         }
         if (self._textfield) {
             self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+            self._textfield.addEventListener("change", function() {
+                self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+            });
             $(window).adaptTo("foundation-registry").register("foundation.adapters", {
                 type: "foundation-toggleable",
                 selector: self._textfieldSelector,
@@ -134,15 +137,6 @@
             } else {
                 this._textfield.removeAttribute(this.ATTR_SEEDED_VALUE);
             }
-        }
-    };
-
-    /**
-     * Update the value in the {@link #ATTR_PREVIOUS_VALUE} data attribute of the textfield with the current text value
-     */
-    CheckboxTextfieldTuple.prototype.updatePreviousTextValue = function() {
-        if (this._textfield) {
-            this._textfield.setAttribute(this.ATTR_PREVIOUS_VALUE, this._getTextfieldValue());
         }
     };
 
