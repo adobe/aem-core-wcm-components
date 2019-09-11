@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe Systems Incorporated
+  ~ Copyright 2017 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
      data-sly-use.navigation="com.adobe.cq.wcm.core.components.models.Navigation"
      data-sly-test.hasContent="${navigation.items.size > 0}"
      data-sly-use.groupTemplate="group.html"
-     data-sly-call="${groupTemplate.group @ items=navigation.items}">
+     data-sly-call="${groupTemplate.group @ items=navigation.items}"
+     aria-label="${navigation.accessibilityLabel}">
 </nav>
 <sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-navigation'}"></sly>

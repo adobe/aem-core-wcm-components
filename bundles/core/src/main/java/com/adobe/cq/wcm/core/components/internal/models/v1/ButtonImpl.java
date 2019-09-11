@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -64,6 +64,9 @@ public class ButtonImpl implements Button {
     @ValueMapValue(optional = true)
     private String icon;
 
+    @ValueMapValue(optional = true)
+    protected String accessibilityLabel;
+
     @Override
     public String getText() {
         return text;
@@ -85,6 +88,11 @@ public class ButtonImpl implements Button {
     @Override
     public String getIcon() {
         return icon;
+    }
+
+    @Override
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
     }
 
     @NotNull

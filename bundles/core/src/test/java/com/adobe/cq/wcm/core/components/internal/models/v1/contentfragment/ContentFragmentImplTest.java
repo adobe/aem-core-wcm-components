@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe Systems Incorporated
+ ~ Copyright 2019 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,33 +21,26 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragment;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-public class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragment> {
+@ExtendWith(AemContextExtension.class)
+class ContentFragmentImplTest extends AbstractContentFragmentTest<ContentFragment> {
 
+    private static final String MAIN_CONTENT = "<p>Main content</p>";
     private static final String TEST_BASE = "/contentfragment";
-
-    private Logger cfmLogger;
-    private Logger modelLogger;
 
     @Override
     protected String getTestResourcesParentPath() {
@@ -59,45 +52,26 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
         return ContentFragment.class;
     }
 
-    @Before
-    public void setUp() throws Exception {
-        cfmLogger = spy(LoggerFactory.getLogger("FakeLoggerCFM"));
-        setFakeLoggerOnClass(DAMContentFragmentImpl.class, cfmLogger);
-
-        modelLogger = spy(LoggerFactory.getLogger("FakeLoggerModel"));
-        setFakeLoggerOnClass(ContentFragmentImpl.class, modelLogger);
+    @BeforeEach
+    void setUp() throws NoSuchFieldException, IllegalAccessException {
+        super.setUp();
     }
 
     @Test
-    public void textOnlyNoPath() {
-        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NO_PATH);
-        verify(modelLogger).warn("Please provide a path for the content fragment component.");
-        assertNotNull("Model shouldn't be null when no path is set", fragment);
-    }
-
-    @Test
-    public void textOnlyNonExistingPath() {
-        ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NON_EXISTING_PATH);
-        verify(modelLogger).error("Content Fragment can not be initialized because the '{}' does not exist.", "/content/dam/contentfragments/non-existing");
-        assertNotNull("Model shouldn't be null when the path does not exist", fragment);
-    }
-
-    @Test
-    public void textOnlyInvalidPath() {
+    void textOnlyInvalidPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_INVALID_PATH);
-        verify(cfmLogger).error("Content Fragment can not be initialized because '{}' is not a content fragment.", "/content/dam/contentfragments");
         assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
     }
 
     @Test
-    public void textOnly() {
+    void textOnly() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
         Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY));
     }
 
     @Test
-    public void textOnlyVariation() {
+    void textOnlyVariation() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_TEXT_ONLY);
@@ -105,46 +79,53 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void textOnlyNonExistingVariation() {
+    void textOnlyNonExistingVariation() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_NON_EXISTING_VARIATION);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, MAIN, SECOND_TEXT_ONLY);
         Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_NON_EXISTING_VARIATION));
     }
 
     @Test
-    public void textOnlySingleElement() {
+    void textOnlySingleElement() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_SINGLE_ELEMENT);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY);
         Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_SINGLE_ELEMENT));
     }
 
     @Test
-    public void textOnlyMultipleElements() {
+    void textOnlyMultipleElements() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
         assertContentFragment(fragment, TITLE, DESCRIPTION, TEXT_ONLY_TYPE, ASSOCIATED_CONTENT, SECOND_TEXT_ONLY, MAIN);
         Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_TEXT_ONLY_MULTIPLE_ELEMENTS));
     }
 
     @Test
-    public void structuredNoPath() {
+    void structuredNoPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NO_PATH);
         assertNotNull("Model shouldn't be null when no path is set", fragment);
     }
 
     @Test
-    public void structuredNonExistingPath() {
+    void structuredNonExistingPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_PATH);
         assertNotNull("Model shouldn't be null when the path does not exist", fragment);
+        assertNull(fragment.getTitle());
+        assertNull(fragment.getDescription());
+        assertNull(fragment.getType());
+        assertNull(fragment.getElements());
+        assertNull(fragment.getAssociatedContent());
+        assertTrue(fragment.getExportedElements().isEmpty());
+        assertEquals(0, fragment.getExportedElementsOrder().length);
     }
 
     @Test
-    public void structuredOnlyInvalidPath() {
+    void structuredOnlyInvalidPath() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_INVALID_PATH);
         assertNotNull("Model shouldn't be null when the path is not a content fragment", fragment);
     }
 
     @Test
-    public void structured() {
+    void structured() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
@@ -152,7 +133,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void structuredVariation() {
+    void structuredVariation() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_VARIATION);
         assertContentFragment(fragment, VARIATION_NAME, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
@@ -160,7 +141,8 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void structuredNonExistingVariation() {
+    void structuredNonExistingVariation() {
+        when(fragmentRenderService.render(any(Resource.class))).thenReturn(MAIN_CONTENT);
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NON_EXISTING_VARIATION);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
@@ -168,7 +150,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void structuredNestedModel() {
+    void structuredNestedModel() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_NESTED_MODEL);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE_NESTED, ASSOCIATED_CONTENT, MAIN,
             SECOND_STRUCTURED);
@@ -176,14 +158,14 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void structuredSingleElement() {
+    void structuredSingleElement() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED);
         Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_SINGLE_ELEMENT));
     }
 
     @Test
-    public void structuredMultipleElements() {
+    void structuredMultipleElements() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_MULTIPLE_ELEMENTS);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, SECOND_STRUCTURED,
             MAIN);
@@ -191,30 +173,31 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void structuredSingleElementMain() {
+    void structuredSingleElementMain() {
+        when(fragmentRenderService.render(any(Resource.class))).thenReturn(MAIN_CONTENT);
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN);
         assertContentFragment(fragment, TITLE, DESCRIPTION, STRUCTURED_TYPE, ASSOCIATED_CONTENT, MAIN);
         Utils.testJSONExport(fragment, Utils.getTestExporterJSONPath(TEST_BASE, CF_STRUCTURED_SINGLE_ELEMENT_MAIN));
     }
 
     @Test
-    public void getExportedType() {
+    void getExportedType() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         assertEquals(ContentFragmentImpl.RESOURCE_TYPE, fragment.getExportedType());
     }
 
     @Test
-    public void getElements() {
+    void getElements() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         final Map<String, DAMContentFragment.DAMContentElement> elements = fragment.getExportedElements();
         assertNotNull(elements);
         assertEquals(2, elements.size());
-        assertEquals(true, elements.containsKey("main"));
-        assertEquals(true, elements.containsKey("second"));
+        assertTrue(elements.containsKey("main"));
+        assertTrue(elements.containsKey("second"));
     }
 
     @Test
-    public void getElementsType() {
+    void getElementsType() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY);
         final Map<String, ? extends ComponentExporter> elements = fragment.getExportedElements();
         assertNotNull(elements);
@@ -223,7 +206,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void structuredGetEditorJSON() {
+    void structuredGetEditorJSON() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_MULTIPLE_ELEMENTS);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
             "\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
@@ -232,7 +215,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void structuredWithVariationGetEditorJSON() {
+    void structuredWithVariationGetEditorJSON() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED_VARIATION);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/structured\"," +
             "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
@@ -241,7 +224,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void textOnlyGetEditorJSON() {
+    void textOnlyGetEditorJSON() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_MULTIPLE_ELEMENTS);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"" +
             ",\"elements\":[\"second\",\"non-existing\",\"main\"],\"associatedContent\":[{\"title\":\"Test Collection\"" +
@@ -250,7 +233,7 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void textOnlyWithVariationGetEditorJSON() {
+    void textOnlyWithVariationGetEditorJSON() {
         ContentFragment fragment = getModelInstanceUnderTest(CF_TEXT_ONLY_VARIATION);
         String expectedJSON = "{\"title\":\"Test Content Fragment\",\"path\":\"/content/dam/contentfragments/text-only\"," +
             "\"variation\":\"teaser\",\"associatedContent\":[{\"title\":\"Test Collection\"" +
@@ -259,21 +242,19 @@ public class ContentFragmentImplTest extends AbstractContentFragmentTest<Content
     }
 
     @Test
-    public void getParagraphsOfMultiDisplayModeIsNull() {
+    void getParagraphsOfMultiDisplayModeIsNull() {
         // Structure CF has displayMode=multi which should not return paragraphs
         ContentFragment fragment = getModelInstanceUnderTest(CF_STRUCTURED);
         assertThat(fragment.getParagraphs(), is(nullValue()));
     }
 
     @Test
-    public void getParagraphOfSingleTextDisplayMode() {
-        final String value = "<p>Main content</p>";
-
-        when(fragmentRenderService.render(any(Resource.class))).thenReturn(value);
+    void getParagraphOfSingleTextDisplayMode() {
+        when(fragmentRenderService.render(any(Resource.class))).thenReturn(MAIN_CONTENT);
 
         ContentFragment contentFragment = getModelInstanceUnderTest(CF_STRUCTURED_SINGLE_ELEMENT_MAIN);
 
-        assertThat(contentFragment.getParagraphs(), is(new String[]{value}));
+        assertThat(contentFragment.getParagraphs(), is(new String[]{MAIN_CONTENT}));
     }
 
     /**

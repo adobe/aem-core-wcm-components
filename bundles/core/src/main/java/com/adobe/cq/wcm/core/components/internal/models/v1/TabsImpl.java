@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -35,6 +35,9 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     @ValueMapValue(optional = true)
     private String activeItem;
 
+    @ValueMapValue(optional = true)
+    private String accessibilityLabel;
+
     private String activeItemName;
 
     @Override
@@ -46,5 +49,10 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
             }
         }
         return activeItemName;
+    }
+
+    @Override
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
     }
 }

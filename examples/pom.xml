@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2018 Adobe Systems Incorporated
+  ~ Copyright 2018 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.5.1-SNAPSHOT</version>
+        <version>2.6.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.examples</artifactId>
-    <version>2.5.1-SNAPSHOT</version>
+    <version>2.6.1-SNAPSHOT</version>
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components Examples Package</name>
 

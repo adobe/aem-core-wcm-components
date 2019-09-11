@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe Systems Incorporated
+  ~ Copyright 2017 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@
                                                 class="cq-droptarget"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./fileReference"
-                                                mimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff,image/svg+xml]"
+                                                mimeTypes="[image/gif,image/jpeg,image/png,image/tiff,image/svg+xml]"
                                                 multiple="{Boolean}false"
                                                 name="./file"
                                                 title="Upload Image Asset"

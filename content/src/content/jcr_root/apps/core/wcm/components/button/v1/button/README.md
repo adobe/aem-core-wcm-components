@@ -1,5 +1,5 @@
 <!--
-Copyright 2019 Adobe Systems Incorporated
+Copyright 2019 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ The following properties are written to JCR for the Button component and are exp
 1. `./jcr:title` - defines the button text
 2. `./link` - defines the button link
 3. `./icon` - defines an icon identifier for rendering an icon
+4. `./accessibilityLabel` - defines an accessibility label for the button
 
 ## BEM Description
 ```

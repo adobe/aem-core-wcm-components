@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2019 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -103,7 +103,7 @@
                                                 fieldLabel="Background Image"
                                                 fileNameParameter="./fileName"
                                                 fileReferenceParameter="./backgroundImageReference"
-                                                mimeTypes="[image/gif,image/jpeg,image/png,image/webp,image/tiff]"
+                                                mimeTypes="[image/gif,image/jpeg,image/png,image/tiff]"
                                                 multiple="{Boolean}false"
                                                 name="./file"
                                                 title="Upload Image Asset"

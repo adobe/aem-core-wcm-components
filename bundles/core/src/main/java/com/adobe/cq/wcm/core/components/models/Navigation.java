@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -79,6 +79,16 @@ public interface Navigation extends ComponentExporter {
     @NotNull
     @Override
     default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Retrieves an accessibility label that describes the navigation.
+     *
+     * @return an accessibility label for the navigation
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
 

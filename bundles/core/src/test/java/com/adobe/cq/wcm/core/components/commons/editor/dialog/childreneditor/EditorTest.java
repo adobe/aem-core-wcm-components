@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -26,22 +26,21 @@ import org.apache.sling.i18n.ResourceBundleProvider;
 import org.apache.sling.i18n.impl.RootResourceBundle;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class EditorTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EditorTest.class);
+@ExtendWith(AemContextExtension.class)
+class EditorTest {
     // root folder in resources
     private static final String TEST_BASE = "/commons/editor/dialog/childreneditor";
     // apps root folder
@@ -54,14 +53,14 @@ public class EditorTest {
 
     private static final RootResourceBundle RESOURCE_BUNDLE = new RootResourceBundle();
 
-    @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @BeforeClass
-    public static void init() {
-        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+    @BeforeEach
+    void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
         ResourceBundleProvider resourceBundleProvider = Mockito.mock(ResourceBundleProvider.class);
-        AEM_CONTEXT.registerService(ResourceBundleProvider.class, resourceBundleProvider);
+        context.registerService(ResourceBundleProvider.class, resourceBundleProvider);
         Mockito.when(resourceBundleProvider.getResourceBundle(null)).thenReturn(RESOURCE_BUNDLE);
         Mockito.when(resourceBundleProvider.getResourceBundle(null, null)).thenReturn(RESOURCE_BUNDLE);
     }
@@ -70,7 +69,7 @@ public class EditorTest {
      * Test getItems() method.
      */
     @Test
-    public void testGetItems() {
+    void testGetItems() {
         Editor childrenEditor = getItemsEditor(CAROUSEL_PATH);
         List<Item> items = childrenEditor.getItems();
         assertEquals("Number of items is not the same.", 5, items.size());
@@ -82,8 +81,7 @@ public class EditorTest {
             {"item_5", "Teaser 5", "Teaser Icon PNG", null, "/apps/core/wcm/components/teaserIconPNG/cq:icon.png", null}
         };
         int index = 0;
-        for (Iterator<Item> it1 = items.iterator(); it1.hasNext(); ) {
-            Item item = it1.next();
+        for (Item item : items) {
             assertEquals("Item name does not match the expected.", expectedItems[index][0], item.getName());
             assertEquals("Item value does not match the expected.", expectedItems[index][1], item.getValue());
             assertEquals("Item title does not match the expected.", expectedItems[index][2], item.getTitle());
@@ -98,7 +96,7 @@ public class EditorTest {
      * Test getContainer() method.
      */
     @Test
-    public void testGetContainer() {
+    void testGetContainer() {
         Editor childrenEditor = getItemsEditor(CAROUSEL_PATH);
         Resource r = childrenEditor.getContainer();
         Iterator<String> it = Arrays.asList("item_1", "item_2", "item_3", "item_4", "item_5", "item_6").iterator();
@@ -111,7 +109,7 @@ public class EditorTest {
      * Test with an empty suffix
      */
     @Test
-    public void testEmptySuffix() {
+    void testEmptySuffix() {
         Editor childrenEditor = getItemsEditor("");
         Resource resource = childrenEditor.getContainer();
         assertNull("For an empty suffix, expected container resource to be null.", resource);
@@ -121,7 +119,7 @@ public class EditorTest {
      * Test with an invalid suffix
      */
     @Test
-    public void testInvalidSuffix() {
+    void testInvalidSuffix() {
         Editor childrenEditor = getItemsEditor("/asdf/adf/asdf");
         Resource resource = childrenEditor.getContainer();
         assertNull("For an invalid suffix, expected container resource to be null.", resource);
@@ -129,17 +127,19 @@ public class EditorTest {
 
     private Editor getItemsEditor(String suffix) {
         // get the carousel component node resource
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(CAROUSEL_PATH);
+        Resource resource = context.resourceResolver().getResource(CAROUSEL_PATH);
         // prepare the request object
-        final MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
+        final MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
         // set the suffix
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix(suffix);
         // define the bindings
         SlingBindings slingBindings = new SlingBindings();
         slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
+        if (resource != null) {
+            slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
+        }
+        slingBindings.put(WCMBindings.PAGE_MANAGER, context.pageManager());
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
         // adapt to the class to test
         return request.adaptTo(Editor.class);

@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2018 Adobe Systems Incorporated
+  ~ Copyright 2018 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,17 +18,21 @@
      class="cmp-tabs"
      data-cmp-is="tabs">
     <ol data-sly-test="${tabs.items && tabs.items.size > 0}"
+        data-sly-list.tab="${tabs.items}"
         role="tablist"
         class="cmp-tabs__tablist"
+        aria-label="${tabs.accessibilityLabel}"
         aria-multiselectable="false">
-        <li data-sly-repeat.item="${tabs.items}"
-            role="tab"
-            class="cmp-tabs__tab${item.name == tabs.activeItem ? ' cmp-tabs__tab--active' : ''}"
-            data-cmp-hook-tabs="tab">${item.title}</li>
+        <sly data-sly-test.isActive="${tab.name == tabs.activeItem}"/>
+        <li role="tab"
+            class="cmp-tabs__tab${isActive ? ' cmp-tabs__tab--active' : ''}"
+            tabindex="${isActive ? '0' : '-1'}"
+            data-cmp-hook-tabs="tab">${tab.title}</li>
     </ol>
     <div data-sly-repeat.item="${tabs.items}"
          data-sly-resource="${item.name @ decorationTagName='div'}"
          role="tabpanel"
+         tabindex="0"
          class="cmp-tabs__tabpanel${item.name == tabs.activeItem ? ' cmp-tabs__tabpanel--active' : ''}"
          data-cmp-hook-tabs="tabpanel"></div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"

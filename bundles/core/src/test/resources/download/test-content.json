@@ -36,8 +36,8 @@
                         "inline": "true",
                         "fileName": "Download_Test_PDF.pdf",
                         "jcr:title": "Download",
-                        "jcr:created": "Mon May 27 2019 15:44:52 GMT+0200",
-                        "jcr:lastModified": "Mon May 27 2019 16:37:12 GMT+0200",
+                        "jcr:created": "Thu Oct 18 2018 16:50:44 GMT-0700",
+                        "jcr:lastModified": "Thu Oct 18 2018 16:50:44 GMT-0700",
                         "sling:resourceType": "core/wcm/components/download/v1/download",
                         "titleFromAsset": "true",
                         "textIsRich": "true",
@@ -47,12 +47,12 @@
                         "file": {
                             "jcr:primaryType": "nt:file",
                             "jcr:createdBy": "admin",
-                            "jcr:created": "Mon May 27 2019 16:37:11 GMT+0200",
+                            "jcr:created": "Thu Oct 18 2018 16:50:44 GMT-0700",
                             "jcr:content": {
                                 "jcr:primaryType": "nt:resource",
                                 "jcr:lastModifiedBy": "admin",
                                 "jcr:mimeType": "application/pdf",
-                                "jcr:lastModified": "Mon May 27 2019 16:37:11 GMT+0200",
+                                "jcr:lastModified": "Thu Oct 18 2018 16:50:44 GMT-0700",
                                 ":jcr:data": 150654,
                                 "jcr:uuid": "1927d32d-fc6c-4046-85d1-d0c3c87d4449"
                             }
