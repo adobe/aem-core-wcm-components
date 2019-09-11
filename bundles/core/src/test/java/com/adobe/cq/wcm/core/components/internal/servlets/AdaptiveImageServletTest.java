@@ -21,8 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,8 +36,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageTest;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl;
@@ -49,9 +45,13 @@ import com.day.cq.dam.api.handler.store.AssetStore;
 import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.image.Layer;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import uk.org.lidalia.slf4jtest.TestLogger;
+import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.warn;
 
 @ExtendWith(AemContextExtension.class)
 class AdaptiveImageServletTest extends AbstractImageTest {
@@ -60,6 +60,7 @@ class AdaptiveImageServletTest extends AbstractImageTest {
 
     private AdaptiveImageServlet servlet;
     private static final int ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH = 1280;
+    private TestLogger testLogger;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -73,12 +74,14 @@ class AdaptiveImageServletTest extends AbstractImageTest {
             return ImageIO.read(rendition.getStream());
         });
         servlet = new AdaptiveImageServlet(mockedMimeTypeService, assetStore, ADAPTIVE_IMAGE_SERVLET_DEFAULT_RESIZE_WIDTH);
+        testLogger = TestLoggerFactory.getTestLogger(AdaptiveImageServlet.class);
     }
 
     @AfterEach
     void tearDown() {
         resourceResolver = null;
         servlet = null;
+        TestLoggerFactory.clear();
     }
 
     @Test
@@ -180,8 +183,6 @@ class AdaptiveImageServletTest extends AbstractImageTest {
 
     @Test
     void testWithInvalidDesignWidth() throws Exception {
-        Logger logger = spy(LoggerFactory.getLogger("FakeLogger"));
-        setFinalStatic(AdaptiveImageServlet.class.getDeclaredField("LOGGER"), logger);
         Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> requestResponsePair =
                 prepareRequestResponsePair(IMAGE1_PATH, "img.700", "png");
         MockSlingHttpServletRequest request = requestResponsePair.getLeft();
@@ -194,11 +195,8 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         Dimension actualDimension = new Dimension(image.getWidth(), image.getHeight());
         assertEquals("Expected image rendered at requested size.", expectedDimension, actualDimension);
         assertEquals("Expected a PNG image.", "image/png", response.getContentType());
-        verify(logger).warn(
-                "One of the configured widths ({}) from the {} content policy is not a valid Integer.",
-                "invalid",
-                "/conf/$aem-mock$/settings/wcm/policies/core/wcm/components/image/v1/image/$mock-policy"
-        );
+        assertThat(testLogger.getLoggingEvents(), hasItem(warn("One of the configured widths ({}) from the {} content policy is not a " +
+                "valid Integer.", "invalid", "/conf/$aem-mock$/settings/wcm/policies/core/wcm/components/image/v1/image/$mock-policy")));
     }
 
     @Test
@@ -629,15 +627,6 @@ class AdaptiveImageServletTest extends AbstractImageTest {
         bindings.put(SlingBindings.RESOLVER, resourceResolver);
         request.setAttribute(SlingBindings.class.getName(), bindings);
         return new RequestResponsePair(request, response);
-    }
-
-    private void setFinalStatic(Field field, Object newValue) throws Exception {
-        field.setAccessible(true);
-        // remove final modifier from field
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, newValue);
     }
 
     private static class RequestResponsePair extends Pair<MockSlingHttpServletRequest, MockSlingHttpServletResponse> {
