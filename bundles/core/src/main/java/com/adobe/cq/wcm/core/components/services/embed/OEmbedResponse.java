@@ -20,8 +20,9 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Defines the oEmbed HTTP response object.
+ * Defines the oEmbed HTTP response object. All standard oEmbed response parameters are supported.
  *
+ * @see <a href="https://oembed.com/#section2.3">https://oembed.com/#section2.3</a>
  * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
  */
 @ConsumerType

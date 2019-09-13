@@ -69,6 +69,10 @@ By adding an OSGi configuration you can embed an URL from an oEmbed provider.
 Example:
 * [YouTube configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.services.embed.oembed.OEmbedClientImplConfigurationFactory-youtube.config) 
 
+See also:
+* [oEmbed specification](https://oembed.com)
+* [oEmbed providers](https://oembed.com/providers.json)
+
 ### Custom embeddable fragment
 
 By creating a hidden component with `core/wcm/components/embed/v1/embed/embeddable` super-type, you can define an embeddable that also supports edit configuration options. 
