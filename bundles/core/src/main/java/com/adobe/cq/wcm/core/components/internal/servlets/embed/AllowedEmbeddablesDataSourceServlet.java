@@ -68,22 +68,25 @@ public class AllowedEmbeddablesDataSourceServlet extends SlingSafeMethodsServlet
         ResourceResolver resolver = request.getResourceResolver();
         Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
         ContentPolicyManager policyManager = resolver.adaptTo(ContentPolicyManager.class);
-        if (policyManager != null) {
-            ContentPolicy policy = policyManager.getPolicy(contentResource);
-            if (policy != null) {
-                ValueMap properties = policy.getProperties();
-                if (properties != null) {
-                    String[] allowedEmbeddableResourceTypes = properties.get(Embed.PN_DESIGN_ALLOWED_EMBEDDABLES, String[].class);
-                    if (allowedEmbeddableResourceTypes != null && allowedEmbeddableResourceTypes.length > 0) {
-                        allowedEmbeddableResources.add(new AllowedEmbeddableResource("Select", "", resolver));
-                        for (String embeddableResourceType : allowedEmbeddableResourceTypes) {
-                            Resource componentResource = resolver.getResource(embeddableResourceType);
-                            if (componentResource != null) {
-                                allowedEmbeddableResources.add(new AllowedEmbeddableResource(componentResource.getValueMap().get(
-                                    JcrConstants.JCR_TITLE, componentResource.getName()), embeddableResourceType, resolver));
-                            }
-                        }
-                    }
+        if (policyManager == null) {
+            return allowedEmbeddableResources;
+        }
+        ContentPolicy policy = policyManager.getPolicy(contentResource);
+        if (policy == null) {
+            return allowedEmbeddableResources;
+        }
+        ValueMap properties = policy.getProperties();
+        if (properties == null) {
+            return allowedEmbeddableResources;
+        }
+        String[] allowedEmbeddableResourceTypes = properties.get(Embed.PN_DESIGN_ALLOWED_EMBEDDABLES, String[].class);
+        if (allowedEmbeddableResourceTypes != null && allowedEmbeddableResourceTypes.length > 0) {
+            allowedEmbeddableResources.add(new AllowedEmbeddableResource("Select", "", resolver));
+            for (String embeddableResourceType : allowedEmbeddableResourceTypes) {
+                Resource componentResource = resolver.getResource(embeddableResourceType);
+                if (componentResource != null) {
+                    allowedEmbeddableResources.add(new AllowedEmbeddableResource(componentResource.getValueMap().get(
+                        JcrConstants.JCR_TITLE, componentResource.getName()), embeddableResourceType, resolver));
                 }
             }
         }
