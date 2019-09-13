@@ -84,7 +84,7 @@ public class OEmbedClientImpl implements OEmbedClient {
             } catch (IOException ioex) {
                 LOGGER.error(ioex.getMessage(), ioex);
             }
-        } else if (OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
+        } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 URL xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
