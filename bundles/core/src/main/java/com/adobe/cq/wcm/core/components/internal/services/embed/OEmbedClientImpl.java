@@ -74,14 +74,17 @@ public class OEmbedClientImpl implements OEmbedClient {
     @Override
     public OEmbedResponse getResponse(String url) {
         OEmbedClientImplConfigurationFactory.Config config = getConfiguration(url);
-        if (config != null && OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
+        if (config == null) {
+            return null;
+        }
+        if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 URL jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
                 return mapper.readValue(jsonURL, OEmbedJSONResponseImpl.class);
             } catch (IOException ioex) {
                 LOGGER.error(ioex.getMessage(), ioex);
             }
-        } else if (config != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
+        } else if (OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
                 URL xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
