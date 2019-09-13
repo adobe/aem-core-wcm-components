@@ -33,7 +33,7 @@ public class PinterestUrlProcessor implements UrlProcessor {
 
     protected static final String PIN_ID = "pinId";
 
-    protected static final String SCHEME = "https?://www\\.pinterest\\.com/pin/(\\d+)/";
+    protected static final String SCHEME = "https://www\\.pinterest\\.com/pin/(\\d+)/";
 
     private Pattern pattern = Pattern.compile(SCHEME);
 
