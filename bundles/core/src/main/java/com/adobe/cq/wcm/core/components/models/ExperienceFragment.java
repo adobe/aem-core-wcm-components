@@ -31,15 +31,15 @@ public interface ExperienceFragment extends ComponentExporter {
 
     /**
      * Name of the configuration policy property that specifies the experience fragment variation path. The property
-     * should provide a String value.
+     * should provide a {@code String} value.
      *
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
-    String PN_FRAGMENT_PATH = "fragmentPath";
+    String PN_FRAGMENT_VARIATION_PATH = "fragmentVariationPath";
 
     /**
      * Returns the localized path of the experience fragment variation if the experience fragment resource is defined
-     * in the template. If not, it returns the configured fragment path if it exists, null otherwise.
+     * in the template. If not, it returns the configured fragment path if it exists, {@code null} otherwise.
      *
      * If both the content page and the experience fragment have a localized root (language, live copy or blueprint),
      * - it is then assumed that the content pages and the experience fragments follow the same structure patterns -
@@ -49,7 +49,7 @@ public interface ExperienceFragment extends ComponentExporter {
      * @return Localized experience fragment variation path
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */
-    default String getLocalizedFragmentPath() {
+    default String getLocalizedFragmentVariationPath() {
         throw new UnsupportedOperationException();
     }
 

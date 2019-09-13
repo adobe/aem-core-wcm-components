@@ -242,7 +242,7 @@ public class NavigationImpl implements Navigation {
         /**
          * Gets the resource representation of the navigation root page.
          *
-         * @return The resource for the navigation root, empty if the resource could not be resolved.
+         * @return the resource for the navigation root, empty if the resource could not be resolved
          */
         @NotNull
         final Optional<Resource> getPageResource() {

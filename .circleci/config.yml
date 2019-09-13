@@ -36,7 +36,7 @@ shared: &shared
     # run tests!
     - run: mvn clean verify -B -U
 
-    # store any dumps
+    # save any dumps
     - run:
         name: save any dumps
         command: |
@@ -51,7 +51,7 @@ shared: &shared
 
     # save test results
     - run:
-        name: Save test results
+        name: save test results
         command: |
             mkdir -p ~/test-results/junit/
             find . -type f -regex ".*/surefire-reports/.*" -exec cp {} ~/test-results/junit/ \;

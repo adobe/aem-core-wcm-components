@@ -234,9 +234,9 @@ public class PageImpl implements Page {
     /**
      * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
      *
-     * @param slingRequest The current request.
-     * @param modelClass   The Sling Model class to be adapted to.
-     * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
+     * @param slingRequest the current request
+     * @param modelClass the Sling Model class to be adapted to
+     * @return a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}
      */
     @NotNull
     private <T> Map<String, T> getChildModels(@NotNull SlingHttpServletRequest slingRequest,
