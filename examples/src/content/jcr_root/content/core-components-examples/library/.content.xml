@@ -252,7 +252,6 @@
                     <cq:responsive jcr:primaryType="nt:unstructured">
                         <default
                             jcr:primaryType="nt:unstructured"
-                            offset="0"
                             width="4"/>
                         <small
                             jcr:primaryType="nt:unstructured"
@@ -279,7 +278,6 @@
                     <cq:responsive jcr:primaryType="nt:unstructured">
                         <default
                             jcr:primaryType="nt:unstructured"
-                            offset="0"
                             width="4"/>
                         <small
                             jcr:primaryType="nt:unstructured"
