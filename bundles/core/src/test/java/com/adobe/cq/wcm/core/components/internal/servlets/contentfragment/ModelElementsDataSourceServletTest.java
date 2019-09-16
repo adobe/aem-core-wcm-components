@@ -19,10 +19,12 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.collections4.IteratorUtils;
+import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
+import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -68,6 +70,32 @@ public class ModelElementsDataSourceServletTest {
 
         // THEN
         assertThat(request.getAttribute(DataSource.class.getName()), instanceOf(EmptyDataSource.class));
+    }
+
+    @Test
+    public void verifyDataSourceWhenOrderByIsGiven() throws Exception {
+        // GIVEN
+        InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
+        slingContext.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.resourceResolver(),
+                slingContext.bundleContext());
+        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
+        requestPathInfo.setResourcePath("/foobar/orderBy");
+        request.setParameterMap(ImmutableMap.of(
+                PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
+
+        // WHEN
+        modelElementsDataSourceServlet.doGet(request, slingContext.response());
+
+        // THEN
+        SimpleDataSource simpleDataSource = (SimpleDataSource) request.getAttribute(DataSource.class.getName());
+        List<Resource> resourceList = IteratorUtils.toList(simpleDataSource.iterator());
+        assertThat(resourceList, not(empty()));
+        assertThat(resourceList, allOf(
+                hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
+                hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
+                hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
+                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField"))));
     }
 
     @Test
