@@ -71,6 +71,12 @@ public class OEmbedClientImplConfigurationFactory {
                 description = "Describes which URLs provided by the service may have an embedded representation."
         )
         String[] scheme();
+
+        @AttributeDefinition(
+            name = "Unsafe Context",
+            description = "Describes whether the provider response HTML is allowed to be displayed in an unsafe context."
+        )
+        boolean unsafeContext() default false;
     }
 
     @Activate

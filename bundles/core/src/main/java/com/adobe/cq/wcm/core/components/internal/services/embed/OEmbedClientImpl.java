@@ -59,7 +59,6 @@ public class OEmbedClientImpl implements OEmbedClient {
         }
     }
 
-
     @Override
     public String getProvider(String url) {
         if (StringUtils.isNotEmpty(url)) {
@@ -94,6 +93,17 @@ public class OEmbedClientImpl implements OEmbedClient {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean isUnsafeContext(String url) {
+        if (StringUtils.isNotEmpty(url)) {
+            OEmbedClientImplConfigurationFactory.Config config = getConfiguration(url);
+            if (config != null) {
+                return config.unsafeContext();
+            }
+        }
+        return false;
     }
 
     protected OEmbedClientImplConfigurationFactory.Config getConfiguration(String url) {

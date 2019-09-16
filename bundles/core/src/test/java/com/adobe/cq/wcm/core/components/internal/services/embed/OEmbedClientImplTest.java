@@ -70,6 +70,11 @@ class OEmbedClientImplTest {
                                 "http://test\\.com/json.*"
                         };
                     }
+
+                    @Override
+                    public boolean unsafeContext() {
+                        return false;
+                    }
                 });
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
@@ -80,6 +85,8 @@ class OEmbedClientImplTest {
         assertEquals("Test JSON", provider);
         OEmbedResponse response = client.getResponse("http://test.com/json");
         assertNotNull(response);
+        boolean unsafeContext = client.isUnsafeContext("https://test.com/json");
+        assertFalse(unsafeContext);
     }
 
     @Test
@@ -114,6 +121,11 @@ class OEmbedClientImplTest {
                         "http://test\\.com/xml.*"
                 };
             }
+
+            @Override
+            public boolean unsafeContext() {
+                return false;
+            }
         });
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
@@ -125,5 +137,7 @@ class OEmbedClientImplTest {
         String provider = client.getProvider("http://test.com/xml");
         assertEquals("Test XML", provider);
         assertNotNull(client.getResponse("http://test.com/xml"));
+        boolean unsafeContext = client.isUnsafeContext("https://test.com/json");
+        assertFalse(unsafeContext);
     }
 }

@@ -48,11 +48,13 @@ public class OEmbedUrlProcessor implements UrlProcessor {
         if (oEmbedResponse == null) {
             return null;
         }
+        boolean unsafeContext = oEmbedClient.isUnsafeContext(url);
         return new UrlProcessorResultImpl(
                 NAME,
                 new HashMap<String, Object>() {{
                     put("provider", provider);
                     put("response", oEmbedResponse);
+                    put("unsafeContext", unsafeContext);
                 }});
     }
 }
