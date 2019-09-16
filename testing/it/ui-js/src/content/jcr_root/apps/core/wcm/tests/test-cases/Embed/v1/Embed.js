@@ -261,6 +261,19 @@
     };
 
     /**
+     * URL : oEmbed : Facebook Video
+     *
+     * 1. verify all test URLs
+     */
+    embed.tcUrlOEmbedFacebookVideo = function(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessor, selectors) {
+        return new h.TestCase("URL : oEmbed : Facebook Video", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+            // 1.
+            .execTestCase(embed.tcVerifyUrl(urlProcessor.urls[0], urlProcessor, selectors));
+    };
+
+    /**
      * URL : oEmbed : Flickr
      *
      * 1. verify all test URLs
