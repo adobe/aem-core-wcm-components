@@ -52,6 +52,7 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
     private static final String NON_EXISTING_MODEL = "non-existing-model";
     private static final String NON_EXISTING_MODEL_WITH_PATH_AND_TAGS = "non-existing-model-path-tags";
     private static final String MODEL_MAX_LIMIT = "model-max-limit";
+    private static final String MODEL_ORDER_BY = "model-order-by";
     private static final String DEFAULT_NO_MAX_LIMIT_SET = "-1";
 
     private ResourceResolver leakingResourceResolverMock;
@@ -152,6 +153,28 @@ public class ContentFragmentListImplTest extends AbstractContentFragmentTest<Con
 
         // WHEN
         getModelInstanceUnderTest(NON_EXISTING_MODEL);
+
+        // THEN
+        verifyPredicateGroup(expectedPredicates, DEFAULT_NO_MAX_LIMIT_SET);
+    }
+
+    @Test
+    void verifyQueryBuilderInteractionWhenOrderByIsGiven() {
+        // GIVEN
+        // Expected predicate parameters
+        Map<String, Map<String, String>> expectedPredicates = new HashMap<>();
+        expectedPredicates.put("path", ImmutableMap.of("path", ContentFragmentListImpl.DEFAULT_DAM_PARENT_PATH));
+        expectedPredicates.put("type", ImmutableMap.of("type", "dam:Asset"));
+        expectedPredicates.put("1_property", ImmutableMap.of(
+                "property", "jcr:content/data/cq:model",
+                "value", "foobar"));
+        expectedPredicates.put("orderby", ImmutableMap.of(
+                "orderby", "@main",
+                "sort", "desc"));
+
+
+        // WHEN
+        getModelInstanceUnderTest(MODEL_ORDER_BY);
 
         // THEN
         verifyPredicateGroup(expectedPredicates, DEFAULT_NO_MAX_LIMIT_SET);
