@@ -16,7 +16,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     cq:icon="experience"
-    jcr:description="Displays an experience fragment or its specified variation"
+    jcr:description="Displays an experience fragment variation"
     jcr:primaryType="cq:Component"
     jcr:title="Experience Fragment (v1)"
     componentGroup=".core-wcm"/>

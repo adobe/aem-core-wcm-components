@@ -153,7 +153,7 @@ class ExperienceFragmentImplTest {
     /**
      * No localization structure
      * XF component is defined in the page
-     * fragmentPath is valid
+     * fragmentVariationPath is valid
      */
     @Test
     void testValidXFInPageWithoutLocalization() {
@@ -165,7 +165,7 @@ class ExperienceFragmentImplTest {
     /**
      * No localization structure
      * XF component is defined in the template
-     * fragmentPath is valid
+     * fragmentVariationPath is valid
      */
     @Test
     void testValidXFInTemplateWithoutLocalization() {
@@ -177,7 +177,7 @@ class ExperienceFragmentImplTest {
     /**
      * No localization structure
      * XF component is defined in the page
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInPageWithoutLocalization() {
@@ -189,7 +189,7 @@ class ExperienceFragmentImplTest {
     /**
      * No localization structure
      * XF component is defined in the template
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInTemplateWithoutLocalization() {
@@ -201,7 +201,7 @@ class ExperienceFragmentImplTest {
     /**
      * No localization structure
      * XF component is defined in the page
-     * fragmentPath is empty
+     * fragmentVariationPath is empty
      */
     @Test
     void testEmptyXFInPageWithoutLocalization() {
@@ -213,7 +213,7 @@ class ExperienceFragmentImplTest {
     /**
      * No localization structure
      * XF component is defined in the template
-     * fragmentPath is empty
+     * fragmentVariationPath is empty
      */
     @Test
     void testEmptyXFInTemplateWithoutLocalization() {
@@ -277,7 +277,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with language localization
      * XF component is defined in the page
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInPageWithLocalization() {
@@ -289,7 +289,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with language localization
      * XF component is defined in the template
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInTemplateWithLocalization() {
@@ -301,7 +301,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with language localization
      * XF component is defined in the page
-     * fragmentPath is empty
+     * fragmentVariationPath is empty
      */
     @Test
     void testEmptyXFInPageWithLocalization() {
@@ -313,7 +313,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with language localization
      * XF component is defined in the template
-     * fragmentPath is empty
+     * fragmentVariationPath is empty
      */
     @Test
     void testEmptyXFInTemplateWithLocalization() {
@@ -377,7 +377,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with country-language localization
      * XF component is defined in the page
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInPageWithLocalizationWithDifferentCountryLanguage() {
@@ -389,7 +389,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with country-language localization
      * XF component is defined in the template
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInTemplateWithLocalizationWithDifferentCountryLanguage() {
@@ -453,7 +453,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with country-language localization (optional): eu/mysite/en
      * XF component is defined in the page
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInPageWithLocalizationWithDifferentCountrySiteLanguage() {
@@ -465,7 +465,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with country-language localization (optional): eu/mysite/en
      * XF component is defined in the template
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInTemplateWithLocalizationWithDifferentCountrySiteLanguage() {
@@ -529,7 +529,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with country_language localization
      * XF component is defined in the page
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInPageWithLocalizationWithDifferentCountry_Language() {
@@ -541,7 +541,7 @@ class ExperienceFragmentImplTest {
     /**
      * Site with country_language localization
      * XF component is defined in the template
-     * fragmentPath is undefined
+     * fragmentVariationPath is undefined
      */
     @Test
     void testUndefinedXFInTemplateWithLocalizationWithDifferentCountry_Language() {
