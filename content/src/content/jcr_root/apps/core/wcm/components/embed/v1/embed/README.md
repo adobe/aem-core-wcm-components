@@ -50,6 +50,8 @@ BLOCK cmp-embed
 
 ## Extending the Embed Component
 
+Please read the [Security Recommendations](#security-recommendations) before defining an extension.
+
 Extension of the Embed component is possible by providing any of the following:
 
 ### Custom URL Processor
