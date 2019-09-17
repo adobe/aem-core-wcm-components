@@ -57,7 +57,6 @@
                                     <orderBy
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/select"
-                                        emptyOption="{Boolean}true"
                                         fieldDescription="Select an element or property to order the list by."
                                         fieldLabel="Order By"
                                         name="./orderBy">

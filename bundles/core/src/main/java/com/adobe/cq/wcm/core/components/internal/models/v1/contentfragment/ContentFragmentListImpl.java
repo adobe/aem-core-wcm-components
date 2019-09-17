@@ -48,6 +48,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.search.Predicate;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
@@ -99,10 +100,10 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     private int maxItems;
 
     @ValueMapValue(name = ContentFragmentList.PN_ORDER_BY, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String orderBy;
+    private String orderBy = JcrConstants.JCR_CREATED;
 
     @ValueMapValue(name = ContentFragmentList.PN_SORT_ORDER, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String sortOrder;
+    private String sortOrder = Predicate.SORT_ASCENDING;
 
     private List<DAMContentFragment> items = new ArrayList<>();
 
