@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="asset"
+    jcr:description="Embed a third-party widget or safe free-form HTML."
+    jcr:primaryType="cq:Component"
+    jcr:title="Embed (v1)"
+    componentGroup=".core-wcm"/>

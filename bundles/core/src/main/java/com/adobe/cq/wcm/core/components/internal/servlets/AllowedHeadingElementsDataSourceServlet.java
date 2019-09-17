@@ -102,7 +102,7 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
         }
 
         @Override
-        protected String getText() {
+        public String getText() {
             Heading heading = Heading.getHeading(elementName);
             if (heading != null) {
                 return heading.getElement();
@@ -111,12 +111,12 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
         }
 
         @Override
-        protected String getValue() {
+        public String getValue() {
             return elementName;
         }
 
         @Override
-        protected boolean getSelected() {
+        public boolean getSelected() {
             return selected;
         }
     }

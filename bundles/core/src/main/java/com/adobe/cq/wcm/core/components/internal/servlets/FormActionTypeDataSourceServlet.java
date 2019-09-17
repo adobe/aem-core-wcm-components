@@ -85,12 +85,12 @@ public class FormActionTypeDataSourceServlet extends SlingSafeMethodsServlet {
         }
 
         @Override
-        protected String getText() {
+        public String getText() {
             return description.getTitle();
         }
 
         @Override
-        protected String getValue() {
+        public String getValue() {
             return description.getResourceType();
         }
     }

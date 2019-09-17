@@ -79,12 +79,12 @@ public class WorkflowModelDataSourceServlet extends SlingSafeMethodsServlet {
         }
 
         @Override
-        protected String getText() {
+        public String getText() {
             return model.getTitle();
         }
 
         @Override
-        protected String getValue() {
+        public String getValue() {
             return model.getId();
         }
     }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<oembed>
+    <type>photo</type>
+    <flickr_type>photo</flickr_type>
+    <title>ZB8T0193</title>
+    <author_name>‮‭‬bees‬</author_name>
+    <author_url>https://www.flickr.com/photos/bees/</author_url>
+    <width>1024</width>
+    <height>683</height>
+    <url>https://live.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg</url>
+    <web_page>https://www.flickr.com/photos/bees/2341623661/</web_page>
+    <thumbnail_url>https://live.staticflickr.com/3123/2341623661_7c99f48bbf_q.jpg</thumbnail_url>
+    <thumbnail_width>150</thumbnail_width>
+    <thumbnail_height>150</thumbnail_height>
+    <web_page_short_url>https://flic.kr/p/4yVr8K</web_page_short_url>
+    <license>All Rights Reserved</license>
+    <license_id>0</license_id>
+    <html>&lt;a data-flickr-embed=&quot;true&quot; href=&quot;https://www.flickr.com/photos/bees/2341623661/&quot; title=&quot;ZB8T0193 by ‮‭‬bees‬, on Flickr&quot;&gt;&lt;img src=&quot;https://live.staticflickr.com/3123/2341623661_7c99f48bbf_b.jpg&quot; width=&quot;1024&quot; height=&quot;683&quot; alt=&quot;ZB8T0193&quot;&gt;&lt;/a&gt;&lt;script async src=&quot;https://embedr.flickr.com/assets/client-code.js&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;</html>
+    <version>1.0</version>
+    <cache_age>3600</cache_age>
+    <provider_name>Flickr</provider_name>
+    <provider_url>https://www.flickr.com/</provider_url>
+</oembed>
