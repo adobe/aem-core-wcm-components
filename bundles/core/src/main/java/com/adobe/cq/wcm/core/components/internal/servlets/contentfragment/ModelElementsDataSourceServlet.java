@@ -57,7 +57,7 @@ import com.day.cq.commons.jcr.JcrConstants;
 public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/datasource/elements";
-    public static final String RESOURCE_TYPE_ORDER_BY = "core/wcm/components/contentfragmentlist/v1/datasource/elements";
+    public static final String RESOURCE_TYPE_ORDER_BY = "core/wcm/components/contentfragmentlist/v1/datasource/orderby";
 
     protected static final String PARAMETER_AND_PN_MODEL_PATH = ContentFragmentList.PN_MODEL_PATH;
 
