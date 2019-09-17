@@ -36,6 +36,8 @@
     // core component resource types
     // accordion component
     c.rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
+    // embed component
+    c.rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
     // text component
     c.rtText_v1 = "core/wcm/components/text/v1/text";
     c.rtText_v2 = "core/wcm/components/text/v2/text";

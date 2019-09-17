@@ -112,12 +112,12 @@ public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsSe
         }
 
         @Override
-        protected String getText() {
+        public String getText() {
             return category;
         }
 
         @Override
-        protected String getValue() {
+        public String getValue() {
             return category;
         }
     }

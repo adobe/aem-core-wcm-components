@@ -119,4 +119,4 @@ that the UI component is updated when the active item is switched in the editor 
 * **Author**: [Brandon M. Maynard](https://github.com/brandonmaynard)
 * **Co-authors**: [Richard Hand](https://github.com/richardhand)
 
-_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components)._
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._
