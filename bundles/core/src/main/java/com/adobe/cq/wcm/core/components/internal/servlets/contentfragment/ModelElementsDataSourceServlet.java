@@ -49,6 +49,7 @@ import com.day.cq.commons.jcr.JcrConstants;
         service = {Servlet.class},
         property = {
                 "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY,
                 "sling.servlet.methods=GET",
                 "sling.servlet.extensions=html"
         }
@@ -56,6 +57,7 @@ import com.day.cq.commons.jcr.JcrConstants;
 public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/datasource/elements";
+    public static final String RESOURCE_TYPE_ORDER_BY = "core/wcm/components/contentfragmentlist/v1/datasource/elements";
 
     protected static final String PARAMETER_AND_PN_MODEL_PATH = ContentFragmentList.PN_MODEL_PATH;
 
@@ -74,8 +76,7 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
         // First try to get the model path from request parameters
         // otherwise determine model path from component resource.
         RequestParameter modelPathRequestParameter = request.getRequestParameter(PARAMETER_AND_PN_MODEL_PATH);
-        String resourcePath = request.getRequestPathInfo().getResourcePath();
-        boolean isOrderBy = StringUtils.endsWith(resourcePath, "/orderBy");
+        boolean isOrderBy = request.getResource().isResourceType(RESOURCE_TYPE_ORDER_BY);
 
         String modelPath;
         if (modelPathRequestParameter != null) {

@@ -19,12 +19,10 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.commons.collections4.IteratorUtils;
-import org.apache.sling.api.request.RequestPathInfo;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.apache.sling.testing.mock.sling.junit.SlingContext;
-import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -46,6 +44,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 public class ModelElementsDataSourceServletTest {
 
@@ -60,7 +59,7 @@ public class ModelElementsDataSourceServletTest {
     }
 
     @Test
-    public void verifyDataSourceWhenNoParameterIsGiven() throws Exception {
+    public void verifyDataSourceWhenNoParameterIsGiven() {
         // GIVEN
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.bundleContext());
         request.setResource(Mockito.mock(Resource.class));
@@ -73,14 +72,15 @@ public class ModelElementsDataSourceServletTest {
     }
 
     @Test
-    public void verifyDataSourceWhenOrderByIsGiven() throws Exception {
+    public void verifyDataSourceWhenOrderByIsGiven() {
         // GIVEN
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
         slingContext.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.resourceResolver(),
                 slingContext.bundleContext());
-        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
-        requestPathInfo.setResourcePath("/foobar/orderBy");
+        Resource mockResource = Mockito.mock(Resource.class);
+        when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY)).thenReturn(true);
+        request.setResource(mockResource);
         request.setParameterMap(ImmutableMap.of(
                 PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
 
@@ -99,12 +99,13 @@ public class ModelElementsDataSourceServletTest {
     }
 
     @Test
-    public void verifyDataSourceWhenModelParameterIsGiven() throws Exception {
+    public void verifyDataSourceWhenModelParameterIsGiven() {
         // GIVEN
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
         slingContext.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.resourceResolver(),
                 slingContext.bundleContext());
+        request.setResource(Mockito.mock(Resource.class));
         request.setParameterMap(ImmutableMap.of(
                 PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
 
@@ -146,16 +147,8 @@ public class ModelElementsDataSourceServletTest {
                     return false;
                 }
                 ValueMap resourceValueMap = item.getValueMap();
-                if (resourceValueMap == null ||
-                        resourceValueMap.get("text") == null ||
-                        resourceValueMap.get("value") == null) {
-                    return false;
-                }
-                if (resourceValueMap.get("text").equals(textValue) &&
-                        resourceValueMap.get("value").equals(valueValue)) {
-                    return true;
-                }
-                return false;
+                return resourceValueMap.get("text").equals(textValue) &&
+                        resourceValueMap.get("value").equals(valueValue);
             }
         };
     }
