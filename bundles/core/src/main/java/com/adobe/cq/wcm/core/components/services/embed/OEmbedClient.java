@@ -46,8 +46,8 @@ public interface OEmbedClient {
      * Determines whether the provider response HTML is allowed to be displayed in an unsafe context.
      *
      * @param url The URL to retrieve the unsafe context flag for
-     * @return {@code false} if the provider response HTML is allowed to be displayed in an unsafe context,
-     * {@code true} otherwise
+     * @return {@code true} if the provider response HTML is allowed to be displayed in an unsafe context,
+     * {@code false} otherwise
      *
      * @since com.adobe.cq.wcm.core.components.services.embed 1.0.0
      */
