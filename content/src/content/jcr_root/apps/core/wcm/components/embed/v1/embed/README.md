@@ -91,6 +91,12 @@ The JCR properties for the edit configuration options of an embeddable _must_ be
 Example:
 * [YouTube embeddable](../../embeddables/youtube)
 
+### Security Recommendations
+
+* Only implement URL processors and embeddables for trusted sources, as the payload returned by an endpoint may contain JavaScript.
+* Always fetch resources over HTTPS, without `sslRelax` set to `true`.
+* Do not use the HTL `unsafe` display context unless necessary.
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
