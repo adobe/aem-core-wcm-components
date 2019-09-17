@@ -97,7 +97,7 @@ Example:
 
 * Only implement URL processors and embeddables for trusted sources, as the payload returned by an endpoint may contain JavaScript.
 * Always fetch resources over HTTPS, without `sslRelax` set to `true`.
-* Do not use the HTL `unsafe` display context unless the payload is trusted.
+* Do not use the `unsafe` [HTL display context](https://docs.adobe.com/content/help/en/experience-manager-htl/using/htl/expression-language.html#display-context) unless the payload is trusted.
 
 ## Information
 * **Vendor**: Adobe
