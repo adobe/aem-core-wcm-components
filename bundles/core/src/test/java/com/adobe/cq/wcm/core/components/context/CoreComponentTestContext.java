@@ -42,6 +42,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 public final class CoreComponentTestContext {
 
     public static final String TEST_CONTENT_JSON = "/test-content.json";
+    public static final String TEST_CONTENT_DAM_JSON = "/test-content-dam.json";
     public static final String TEST_APPS_JSON = "/test-apps.json";
 
 
