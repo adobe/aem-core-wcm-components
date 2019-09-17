@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.servlet.Servlet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestParameter;
@@ -48,6 +49,7 @@ import com.day.cq.commons.jcr.JcrConstants;
         service = {Servlet.class},
         property = {
                 "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE,
+                "sling.servlet.resourceTypes=" + ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY,
                 "sling.servlet.methods=GET",
                 "sling.servlet.extensions=html"
         }
@@ -55,6 +57,7 @@ import com.day.cq.commons.jcr.JcrConstants;
 public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/datasource/elements";
+    public static final String RESOURCE_TYPE_ORDER_BY = "core/wcm/components/contentfragmentlist/v1/datasource/orderby";
 
     protected static final String PARAMETER_AND_PN_MODEL_PATH = ContentFragmentList.PN_MODEL_PATH;
 
@@ -73,6 +76,7 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
         // First try to get the model path from request parameters
         // otherwise determine model path from component resource.
         RequestParameter modelPathRequestParameter = request.getRequestParameter(PARAMETER_AND_PN_MODEL_PATH);
+        boolean isOrderBy = request.getResource().isResourceType(RESOURCE_TYPE_ORDER_BY);
 
         String modelPath;
         if (modelPathRequestParameter != null) {
@@ -97,13 +101,24 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
             if (cfModelElementRoot != null) {
                 Iterator<Resource> resourceIterator = cfModelElementRoot.listChildren();
                 List<Resource> resourceList = new LinkedList<>();
+                if (isOrderBy) {
+                    resourceList.add(createResource(resourceResolver, "Created", JcrConstants.JCR_CREATED));
+                    resourceList.add(createResource(resourceResolver, "Last Modified", JcrConstants.JCR_CONTENT + "/" +
+                            JcrConstants.JCR_LASTMODIFIED));
+                }
                 while (resourceIterator.hasNext()) {
                     Resource elementResource = resourceIterator.next();
                     ValueMap valueMap = elementResource.getValueMap();
                     String valueValue = valueMap.get("name", "");
                     String textValue = valueMap.get("fieldLabel", valueValue);
-                    Resource syntheticResource = createResource(resourceResolver, textValue, valueValue);
-                    resourceList.add(syntheticResource);
+                    if (isOrderBy && StringUtils.isNotEmpty(valueValue)) {
+                        valueValue = "jcr:content/data/master/" + valueValue;
+                    }
+                    String metaType = valueMap.get("metaType", StringUtils.EMPTY);
+                    if (!isOrderBy || StringUtils.startsWith(metaType, "text-")) {
+                        Resource syntheticResource = createResource(resourceResolver, textValue, valueValue);
+                        resourceList.add(syntheticResource);
+                    }
                 }
                 dataSource = new SimpleDataSource(resourceList.iterator());
             }

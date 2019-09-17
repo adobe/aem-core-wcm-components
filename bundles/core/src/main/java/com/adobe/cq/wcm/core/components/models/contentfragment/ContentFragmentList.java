@@ -75,6 +75,20 @@ public interface ContentFragmentList extends ComponentExporter {
     String PN_MAX_ITEMS= "maxItems";
 
     /**
+     * Name of the optional resource property that stores the model element the list is sorted by.
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.2.0
+     */
+    String PN_ORDER_BY = "orderBy";
+
+    /**
+     * Name of the optional resource property that sets the sort order of the list (ascending / descending).
+     *
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.2.0
+     */
+    String PN_SORT_ORDER = "sortOrder";
+
+    /**
      * Returns a list of {@link DAMContentFragment content fragments}.
      *
      * @return the list of content fragments
