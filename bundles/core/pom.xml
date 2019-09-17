@@ -391,6 +391,11 @@
             <artifactId>cq-dam-cfm-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient-osgi</artifactId>
+        </dependency>
+
         <!-- Testing dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>

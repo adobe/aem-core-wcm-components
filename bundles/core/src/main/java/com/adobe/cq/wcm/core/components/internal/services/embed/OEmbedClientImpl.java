@@ -16,8 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -27,6 +27,13 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.config.SocketConfig;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -43,6 +50,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
     service = OEmbedClient.class
 )
 public class OEmbedClientImpl implements OEmbedClient {
+
+    @Reference
+    private HttpClientBuilderFactory httpClientBuilderFactory;
+
+    /**
+     * Socket timeout.
+     */
+    private int soTimeout = 60000;
+
+    /**
+     * Connection timeout.
+     */
+    private int connectionTimeout = 5000;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OEmbedClientImpl.class);
 
@@ -78,16 +98,16 @@ public class OEmbedClientImpl implements OEmbedClient {
         }
         if (OEmbedResponse.Format.JSON == OEmbedResponse.Format.fromString(config.format())) {
             try {
-                URL jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
-                return mapper.readValue(jsonURL, OEmbedJSONResponseImpl.class);
+                String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
+                return mapper.readValue(getData(jsonURL), OEmbedJSONResponseImpl.class);
             } catch (IOException ioex) {
                 LOGGER.error(ioex.getMessage(), ioex);
             }
         } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
-                URL xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
+                String xmlURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.XML.getValue(), null, null);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                return (OEmbedResponse) jaxbUnmarshaller.unmarshal(xmlURL);
+                return (OEmbedResponse) jaxbUnmarshaller.unmarshal(getData(xmlURL));
             } catch (JAXBException | IOException e) {
                 LOGGER.error(e.getMessage());
             }
@@ -119,7 +139,29 @@ public class OEmbedClientImpl implements OEmbedClient {
         return null;
     }
 
-    protected URL buildURL(String endpoint, String url, String format, Integer maxWidth, Integer maxHeight) throws MalformedURLException {
+    protected InputStream getData(String url) throws IOException {
+        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout)
+                .build();
+        SocketConfig sc = SocketConfig.custom().setSoTimeout(soTimeout)
+                .build();
+        HttpClient httpClient;
+        if (httpClientBuilderFactory != null
+                && httpClientBuilderFactory.newBuilder() != null) {
+            httpClient = httpClientBuilderFactory.newBuilder()
+                    .setDefaultRequestConfig(rc)
+                    .setDefaultSocketConfig(sc)
+                    .build();
+        } else {
+            httpClient = HttpClients.custom()
+                    .setDefaultRequestConfig(rc)
+                    .setDefaultSocketConfig(sc)
+                    .build();
+        }
+        HttpResponse response = httpClient.execute(new HttpGet(url));
+        return response.getEntity().getContent();
+    }
+
+    protected String buildURL(String endpoint, String url, String format, Integer maxWidth, Integer maxHeight) throws MalformedURLException {
         StringBuilder sb = new StringBuilder(endpoint);
         String separator = endpoint.contains("?") ? "&" : "?";
         addURLParameter(sb, separator, "url", url);
@@ -127,7 +169,7 @@ public class OEmbedClientImpl implements OEmbedClient {
         addURLParameter(sb, separator, "format", format);
         addURLParameter(sb, separator, "maxwidth", maxWidth);
         addURLParameter(sb, separator, "maxheight", maxHeight);
-        return new URL(sb.toString());
+        return sb.toString();
     }
 
     protected void addURLParameter(StringBuilder sb, String separator, String name, Object value) {

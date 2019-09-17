@@ -16,8 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.services.embed;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
-import java.net.URL;
 import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
@@ -29,10 +29,11 @@ import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
-import com.drew.lang.annotations.SuppressWarnings;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 class OEmbedClientImplTest {
@@ -79,7 +80,7 @@ class OEmbedClientImplTest {
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
         ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
-        when(mapper.readValue(Mockito.any(URL.class), Mockito.any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
+        when(mapper.readValue(Mockito.any(InputStream.class), Mockito.any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
         FieldSetter.setField(client, client.getClass().getDeclaredField("mapper"), mapper);
         String provider = client.getProvider("http://test.com/json");
         assertEquals("Test JSON", provider);
@@ -133,7 +134,7 @@ class OEmbedClientImplTest {
         FieldSetter.setField(client, client.getClass().getDeclaredField("jaxbContext"), jaxbContext);
         Unmarshaller unmarshaller = Mockito.mock(Unmarshaller.class);
         when(jaxbContext.createUnmarshaller()).thenReturn(unmarshaller);
-        when(unmarshaller.unmarshal(Mockito.any(URL.class))).thenReturn(new OEmbedXMLResponseImpl());
+        when(unmarshaller.unmarshal(Mockito.any(InputStream.class))).thenReturn(new OEmbedXMLResponseImpl());
         String provider = client.getProvider("http://test.com/xml");
         assertEquals("Test XML", provider);
         assertNotNull(client.getResponse("http://test.com/xml"));
