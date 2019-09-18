@@ -347,4 +347,14 @@ public interface Page extends ContainerExporter {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     *
+     * Returns the canonical URL of page in the <head></head> section of HTML markup
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    default String getCanonicalURLOfPage()  {
+        throw new UnsupportedOperationException();
+    }
+
 }

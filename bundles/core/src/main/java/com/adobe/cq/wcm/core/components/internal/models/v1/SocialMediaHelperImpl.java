@@ -109,7 +109,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     @OSGiService
     private Externalizer externalizer = null;
 
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ScriptVariable
     protected Style currentStyle;
 
     /**

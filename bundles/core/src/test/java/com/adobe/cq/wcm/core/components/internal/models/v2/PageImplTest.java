@@ -65,10 +65,10 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @Test
     void testPage() throws ParseException {
         Page page = getPageUnderTest(PAGE, DESIGN_PATH_KEY, DESIGN_PATH, PageImpl.PN_CLIENTLIBS_JS_HEAD,
-                new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
-                new String[]{"coretest.product-page","coretest.product-page-js-head"}, Page.PN_APP_RESOURCES_CLIENTLIB,
-                "coretest.product-page.appResources",
-                CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
+            new String[]{"coretest.product-page-js-head"}, PN_CLIENT_LIBS,
+            new String[]{"coretest.product-page", "coretest.product-page-js-head"}, Page.PN_APP_RESOURCES_CLIENTLIB,
+            "coretest.product-page.appResources",
+            CSS_CLASS_NAMES_KEY, new String[]{"class1", "class2"});
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
         calendar.setTime(sdf.parse("2016-01-20T10:33:36.000+0100"));
@@ -82,9 +82,9 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         Set<String> keywords = new HashSet<>(keywordsArray.length);
         keywords.addAll(Arrays.asList(keywordsArray));
         assertTrue(keywords.contains("one") && keywords.contains("two") && keywords.contains("three"));
-        assertArrayEquals(new String[] {"coretest.product-page", "coretest.product-page-js-head"}, page.getClientLibCategories());
-        assertArrayEquals(new String[] {"coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
-        assertArrayEquals(new String[] {"coretest.product-page"}, page.getClientLibCategoriesJsBody());
+        assertArrayEquals(new String[]{"coretest.product-page", "coretest.product-page-js-head"}, page.getClientLibCategories());
+        assertArrayEquals(new String[]{"coretest.product-page-js-head"}, page.getClientLibCategoriesJsHead());
+        assertArrayEquals(new String[]{"coretest.product-page"}, page.getClientLibCategoriesJsBody());
         assertEquals("product-page", page.getTemplateName());
         testJSONExport(page, getTestExporterJSONPath(TEST_BASE, PAGE));
     }
@@ -92,14 +92,15 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     @Test
     void testFavicons() {
         Page page = getPageUnderTest(PAGE);
-            assertThrows(UnsupportedOperationException.class, () -> { page.getFavicons();
+        assertThrows(UnsupportedOperationException.class, () -> {
+            page.getFavicons();
         });
     }
 
     @Test
     void testGetFaviconClientLibPath() throws Exception {
         Page page = getPageUnderTest(PAGE, Page.PN_APP_RESOURCES_CLIENTLIB,
-                "coretest.product-page.appResources");
+            "coretest.product-page.appResources");
         String faviconClientLibPath = page.getAppResourcesPath();
         assertEquals(CONTEXT_PATH + "/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources", faviconClientLibPath);
     }
@@ -130,9 +131,91 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         assertFalse("Expected no cloudconfig support if product version < 6.4.0", page.hasCloudconfigSupport());
 
         // reset cached value
-        Utils.setInternalState(page, "hasCloudconfigSupport", (Boolean)null);
+        Utils.setInternalState(page, "hasCloudconfigSupport", (Boolean) null);
         mockProductInfoProvider.setVersion(new Version("6.4.0"));
         assertTrue("Expected cloudconfig support if product version >= 6.4.0", page.hasCloudconfigSupport());
+    }
+
+    @Test
+    void testIPv4AddressPage_withoutSelectorsAndSuffixes() {
+        Page page = new PageImpl();
+        page = getPageUnderTest(PAGE);
+        context.request().setServerName("192.168.1.1");
+        context.request().setServerPort(4503);
+
+        assertEquals("http://192.168.1.1:4503/content/page/templated-page.html", context.request().getRequestURL().toString());
+        assertEquals("/content/page/templated-page.html", page.getCanonicalURLOfPage());
+    }
+
+    @Test
+    void testLocalhostPage_withoutSelectorsAndSuffixes() {
+        Page page = new PageImpl();
+        page = getPageUnderTest(PAGE);
+        context.request().setServerName("localhost");
+        context.request().setServerPort(4503);
+
+        assertEquals("http://localhost:4503/content/page/templated-page.html", context.request().getRequestURL().toString());
+        assertEquals("/content/page/templated-page.html", page.getCanonicalURLOfPage());
+    }
+
+    @Test
+    void testExternalPage_withoutSelectorsAndSuffixes() {
+        Page page = new PageImpl();
+        page = getPageUnderTest(PAGE);
+        context.request().setServerName("adobe.com");
+
+        assertEquals("http://adobe.com/content/page/templated-page.html", page.getCanonicalURLOfPage());
+    }
+
+    @Test
+    void testIPAddressPage_withSelectorsAndSuffixes() {
+        Page page = new PageImpl();
+        page = getPageUnderTest(PAGE);
+        context.request().setServerName("192.168.1.1");
+        context.request().setServerPort(4503);
+        context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
+        context.requestPathInfo().setSuffix("/a/b/3/a/2");
+
+        assertEquals("http://192.168.1.1:4503/content/page/templated-page.s1.s2.s3.s4.html/a/b/3/a/2",
+            context.request().getRequestURL().toString());
+        assertEquals("/content/page/templated-page.html", page.getCanonicalURLOfPage());
+    }
+
+    @Test
+    void testLocalhostPage_withSelectorsAndSuffixes() {
+        Page page = new PageImpl();
+        page = getPageUnderTest(PAGE);
+        context.request().setServerName("localhost");
+        context.request().setServerPort(4503);
+        context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
+        context.requestPathInfo().setSuffix("/a/b/3/a/2");
+
+        assertEquals("http://localhost:4503/content/page/templated-page.s1.s2.s3.s4.html/a/b/3/a/2",
+            context.request().getRequestURL().toString());
+        assertEquals("/content/page/templated-page.html", page.getCanonicalURLOfPage());
+    }
+
+    @Test
+    void testExternalPage_withSelectorsAndSuffixes() {
+        Page page = new PageImpl();
+        page = getPageUnderTest(PAGE);
+        context.request().setServerName("adobe.com");
+        context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
+        context.requestPathInfo().setSuffix("/a/b/3/a/2");
+
+        assertEquals("http://adobe.com/content/page/templated-page.html", page.getCanonicalURLOfPage());
+    }
+
+    @Test
+    void testExternalPageSubdomain_withSelectorsAndSuffixes() {
+        Page page = new PageImpl();
+        page = getPageUnderTest(PAGE);
+        context.request().setServerName("subdomain.adobe.com");
+        context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
+        context.requestPathInfo().setSuffix("/a/b/3/a/2");
+
+        assertEquals("http://subdomain.adobe.com/content/page/templated-page.html",
+            page.getCanonicalURLOfPage());
     }
 
 //    private Page getPageUnderTest(String pagePath) {

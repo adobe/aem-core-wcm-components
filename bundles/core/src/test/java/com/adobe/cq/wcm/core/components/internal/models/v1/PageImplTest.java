@@ -143,6 +143,8 @@ public class PageImplTest {
         Resource resource = context.currentResource(pagePath + "/" + JcrConstants.JCR_CONTENT);
         MockSlingHttpServletRequest request = context.request();
         context.request().setContextPath("/core");
+        context.requestPathInfo().setResourcePath(pagePath);
+        context.requestPathInfo().setExtension("html");
 
         if (resource != null && !propertyMap.isEmpty()) {
             if (propertyMap.containsKey(DESIGN_PATH_KEY)) {

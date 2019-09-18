@@ -15,21 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.apache.sling.api.adapter.AdapterFactory;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.SocialMediaHelper;
 import com.adobe.cq.wcm.core.components.testing.MockCommerceFactory;
@@ -39,9 +27,14 @@ import com.day.cq.commons.Externalizer;
 import com.day.cq.wcm.api.Page;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.sling.api.adapter.AdapterFactory;
+import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(AemContextExtension.class)
 class SocialMediaHelperImplTest {
@@ -71,72 +64,86 @@ class SocialMediaHelperImplTest {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.registerService(Externalizer.class, MockExternalizerFactory.getExternalizerService());
         context.registerService(AdapterFactory.class, new AdapterFactory() {
-                    @Override
-                    @SuppressWarnings("unchecked")
-                    public <AdapterType> AdapterType getAdapter(@NotNull Object o, @NotNull Class<AdapterType> clazz) {
-                        Object result = null;
-                        switch (clazz.getName()) {
-                            case CLASS_PRODUCT:
-                                if (o instanceof Resource) {
-                                    result = MockCommerceFactory.getProduct((Resource) o);
-                                }
-                                break;
-                            case CLASS_COMMERCE_SERVICE:
-                                if (o instanceof Resource) {
-                                    result = MockCommerceFactory.getCommerceService((Resource) o);
-                                }
-                                break;
-                            case CLASS_XF_SOCIAL_VARIATION:
-                                if (o instanceof Page) {
-                                    result = MockXFFactory.getExperienceFragmentSocialVariation((Page) o);
-                                }
-                        }
-
-                        return (AdapterType) result;
+                @Override
+                @SuppressWarnings("unchecked")
+                public <AdapterType> AdapterType getAdapter(@NotNull Object o, @NotNull Class<AdapterType> clazz) {
+                    Object result = null;
+                    switch (clazz.getName()) {
+                        case CLASS_PRODUCT:
+                            if (o instanceof Resource) {
+                                result = MockCommerceFactory.getProduct((Resource) o);
+                            }
+                            break;
+                        case CLASS_COMMERCE_SERVICE:
+                            if (o instanceof Resource) {
+                                result = MockCommerceFactory.getCommerceService((Resource) o);
+                            }
+                            break;
+                        case CLASS_XF_SOCIAL_VARIATION:
+                            if (o instanceof Page) {
+                                result = MockXFFactory.getExperienceFragmentSocialVariation((Page) o);
+                            }
                     }
-                },
-            new HashMap<String, Object>(){{
-                put(AdapterFactory.ADAPTABLE_CLASSES, new String[] {
-                        CLASS_RESOURCE,
-                        CLASS_PAGE
+
+                    return (AdapterType) result;
+                }
+            },
+            new HashMap<String, Object>() {{
+                put(AdapterFactory.ADAPTABLE_CLASSES, new String[]{
+                    CLASS_RESOURCE,
+                    CLASS_PAGE
                 });
-                put(AdapterFactory.ADAPTER_CLASSES, new String[] {
-                        CLASS_PRODUCT,
-                        CLASS_COMMERCE_SERVICE,
-                        CLASS_XF_SOCIAL_VARIATION
+                put(AdapterFactory.ADAPTER_CLASSES, new String[]{
+                    CLASS_PRODUCT,
+                    CLASS_COMMERCE_SERVICE,
+                    CLASS_XF_SOCIAL_VARIATION
                 });
             }}
         );
     }
 
     @Test
-    void testWebsiteProvider() {
+    void testWebsiteProvider_BasicSharingPage_1() {
         SocialMediaHelper socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_1);
         assertTrue(socialMediaHelper.isSocialMediaEnabled());
         assertTrue(socialMediaHelper.isFacebookEnabled());
         assertTrue(socialMediaHelper.isPinterestEnabled());
         assertTrue(socialMediaHelper.hasFacebookSharing());
         assertTrue(socialMediaHelper.hasPinterestSharing());
-        Map<String, String> metadata = socialMediaHelper.getMetadata();
-        assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_TITLE));
-        assertEquals("About Us Page", metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_1 + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
-                .OG_URL));
-        assertEquals("website", metadata.get(SocialMediaHelperImpl.OG_TYPE));
-        assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
+        Map<String, String> metadataProperties = socialMediaHelper.getMetadataProperties();
+        assertEquals("About Us", metadataProperties.get(SocialMediaHelperImpl.OG_TITLE));
+        assertEquals("About Us Page", metadataProperties.get(SocialMediaHelperImpl.OG_DESCRIPTION));
+        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_1 + "." + EXTENSION, metadataProperties.get(SocialMediaHelperImpl
+            .OG_URL));
+        assertEquals("website", metadataProperties.get(SocialMediaHelperImpl.OG_TYPE));
+        assertEquals("About Us", metadataProperties.get(SocialMediaHelperImpl.OG_SITE_NAME));
         assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_1 + ".thumb.800.480.png?ck=1495097346",
-                metadata.get(SocialMediaHelperImpl.OG_IMAGE));
-
-        socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_2);
-        metadata = socialMediaHelper.getMetadata();
-        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_2 + ".thumb.800.480.png?ck=1495097341",
-                metadata.get(SocialMediaHelperImpl.OG_IMAGE));
-
-        socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_3);
-        metadata = socialMediaHelper.getMetadata();
-        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_3 + ".thumb.800.480.png?ck=1495097341",
-                metadata.get(SocialMediaHelperImpl.OG_IMAGE));
+            metadataProperties.get(SocialMediaHelperImpl.OG_IMAGE));
     }
+
+    @Test
+    void testWebsiteProvider_BasicSharingPage_2() {
+        SocialMediaHelper socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_2);
+        Map<String, String> metadataProperties = socialMediaHelper.getMetadataProperties();
+        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_2 + ".thumb.800.480.png?ck=1495097341",
+            metadataProperties.get(SocialMediaHelperImpl.OG_IMAGE));
+        assertEquals("PAGE_ID", metadataProperties.get(SocialMediaHelperImpl.FB_PAGE_ID));
+        assertEquals("TWITTER_ACC_ID", metadataProperties.get(SocialMediaHelperImpl.TWITTER_ACCOUNT_ID));
+
+        Map<String, String> metadataNames = socialMediaHelper.getMetadataNames();
+        assertEquals("About Us", metadataNames.get(SocialMediaHelperImpl.TWITTER_TITLE));
+        assertEquals("summary", metadataNames.get(SocialMediaHelperImpl.TWITTER_CARD));
+        assertEquals("TWITTER_USERNAME", metadataNames.get(SocialMediaHelperImpl.TWITTER_SITE));
+    }
+
+    @Test
+    void testWebsiteProvider_BasicSharingPage_3() {
+        SocialMediaHelper socialMediaHelper = getSocialMediaHelperUnderTest(BASIC_SHARING_PAGE_3);
+        Map<String, String> metadataProperties = socialMediaHelper.getMetadataProperties();
+        assertEquals(MockExternalizerFactory.ROOT + BASIC_SHARING_PAGE_3 + ".thumb.800.480.png?ck=1495097341",
+            metadataProperties.get(SocialMediaHelperImpl.OG_IMAGE));
+    }
+
 
     @Test
     void testCommerceProvider() {
@@ -146,19 +153,19 @@ class SocialMediaHelperImplTest {
         assertTrue(socialMediaHelper.isPinterestEnabled());
         assertTrue(socialMediaHelper.hasFacebookSharing());
         assertTrue(socialMediaHelper.hasPinterestSharing());
-        Map<String, String> metadata = socialMediaHelper.getMetadata();
-        assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_TITLE));
+        Map<String, String> metadataProperties = socialMediaHelper.getMetadataProperties();
+        assertEquals("Eton Short-Sleeve Shirt", metadataProperties.get(SocialMediaHelperImpl.OG_TITLE));
         assertEquals("Express yourself around town or at play with our rugby-inspired Eton shirt.",
-                metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + PRODUCT_SHARING_PAGE +"." + EXTENSION, metadata.get(SocialMediaHelperImpl
-                .OG_URL));
-        assertEquals("product", metadata.get(SocialMediaHelperImpl.OG_TYPE));
-        assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
-        assertEquals(MockExternalizerFactory.ROOT + "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg", metadata.get
-                (SocialMediaHelperImpl.OG_IMAGE));
+            metadataProperties.get(SocialMediaHelperImpl.OG_DESCRIPTION));
+        assertEquals(MockExternalizerFactory.ROOT + PRODUCT_SHARING_PAGE + "." + EXTENSION, metadataProperties.get(SocialMediaHelperImpl
+            .OG_URL));
+        assertEquals("product", metadataProperties.get(SocialMediaHelperImpl.OG_TYPE));
+        assertEquals("Eton Short-Sleeve Shirt", metadataProperties.get(SocialMediaHelperImpl.OG_SITE_NAME));
+        assertEquals(MockExternalizerFactory.ROOT + "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg", metadataProperties.get
+            (SocialMediaHelperImpl.OG_IMAGE));
         assertEquals(MockCommerceFactory.UNIVERSAL_PRICE.toBigInteger().toString(),
-                metadata.get(SocialMediaHelperImpl.OG_PRODUCT_PRICE_AMOUNT));
-        assertEquals("USD", metadata.get(SocialMediaHelperImpl.OG_PRODUCT_PRICE_CURRENCY));
+            metadataProperties.get(SocialMediaHelperImpl.OG_PRODUCT_PRICE_AMOUNT));
+        assertEquals("USD", metadataProperties.get(SocialMediaHelperImpl.OG_PRODUCT_PRICE_CURRENCY));
     }
 
     @Test
@@ -169,15 +176,15 @@ class SocialMediaHelperImplTest {
         assertTrue(socialMediaHelper.isPinterestEnabled());
         assertTrue(socialMediaHelper.hasFacebookSharing());
         assertTrue(socialMediaHelper.hasPinterestSharing());
-        Map<String, String> metadata = socialMediaHelper.getMetadata();
-        assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_TITLE));
-        assertEquals("<p>About Us XF description</p>", metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + XF_SHARING_PAGE + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
-                .OG_URL));
-        assertEquals("website", metadata.get(SocialMediaHelperImpl.OG_TYPE));
-        assertEquals("About Us", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
+        Map<String, String> metadataProperties = socialMediaHelper.getMetadataProperties();
+        assertEquals("About Us", metadataProperties.get(SocialMediaHelperImpl.OG_TITLE));
+        assertEquals("<p>About Us XF description</p>", metadataProperties.get(SocialMediaHelperImpl.OG_DESCRIPTION));
+        assertEquals(MockExternalizerFactory.ROOT + XF_SHARING_PAGE + "." + EXTENSION, metadataProperties.get(SocialMediaHelperImpl
+            .OG_URL));
+        assertEquals("website", metadataProperties.get(SocialMediaHelperImpl.OG_TYPE));
+        assertEquals("About Us", metadataProperties.get(SocialMediaHelperImpl.OG_SITE_NAME));
         assertEquals(MockExternalizerFactory.ROOT + "/content/dam/we-retail/en/activities/hiking-camping/trekker-khumbu-valley.jpg",
-                metadata.get(SocialMediaHelperImpl.OG_IMAGE));
+            metadataProperties.get(SocialMediaHelperImpl.OG_IMAGE));
     }
 
     @Test
@@ -188,33 +195,27 @@ class SocialMediaHelperImplTest {
         assertTrue(socialMediaHelper.isPinterestEnabled());
         assertTrue(socialMediaHelper.hasFacebookSharing());
         assertTrue(socialMediaHelper.hasPinterestSharing());
-        Map<String, String> metadata = socialMediaHelper.getMetadata();
-        assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_TITLE));
-        assertEquals("<p>Blue Polo T-Shirt</p>", metadata.get(SocialMediaHelperImpl.OG_DESCRIPTION));
-        assertEquals(MockExternalizerFactory.ROOT + XF_PRODUCT_SHARING_PAGE + "." + EXTENSION, metadata.get(SocialMediaHelperImpl
-                .OG_URL));
-        assertEquals("product", metadata.get(SocialMediaHelperImpl.OG_TYPE));
-        assertEquals("Eton Short-Sleeve Shirt", metadata.get(SocialMediaHelperImpl.OG_SITE_NAME));
+        Map<String, String> metadataProperties = socialMediaHelper.getMetadataProperties();
+        assertEquals("Eton Short-Sleeve Shirt", metadataProperties.get(SocialMediaHelperImpl.OG_TITLE));
+        assertEquals("<p>Blue Polo T-Shirt</p>", metadataProperties.get(SocialMediaHelperImpl.OG_DESCRIPTION));
+        assertEquals(MockExternalizerFactory.ROOT + XF_PRODUCT_SHARING_PAGE + "." + EXTENSION, metadataProperties.get(SocialMediaHelperImpl
+            .OG_URL));
+        assertEquals("product", metadataProperties.get(SocialMediaHelperImpl.OG_TYPE));
+        assertEquals("Eton Short-Sleeve Shirt", metadataProperties.get(SocialMediaHelperImpl.OG_SITE_NAME));
         assertEquals(MockExternalizerFactory.ROOT + "/content/dam/we-retail/en/products/apparel/shirts/Eton.jpg",
-                metadata.get(SocialMediaHelperImpl.OG_IMAGE));
+            metadataProperties.get(SocialMediaHelperImpl.OG_IMAGE));
     }
 
     private SocialMediaHelper getSocialMediaHelperUnderTest(String pagePath) {
-        Resource currentResource = context.resourceResolver().getResource(pagePath);
-        Page currentPage = currentResource.adaptTo(Page.class);
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(), context.bundleContext());
-        MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(currentResource);
-        MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
-        requestPathInfo.setExtension(EXTENSION);
-        requestPathInfo.setResourcePath(currentResource.getPath());
-        SlingBindings slingBindings = new SlingBindings();
-        slingBindings.put(WCMBindings.CURRENT_PAGE, currentPage);
-        slingBindings.put(SlingBindings.RESOLVER, context.resourceResolver());
-        slingBindings.put(SlingBindings.RESPONSE, response);
-        request.setAttribute(SlingBindings.class.getName(), slingBindings);
-        return request.adaptTo(SocialMediaHelper.class);
-    }
+        Resource resource = context.currentResource(pagePath);
+        context.request().setContextPath(CONTEXT_PATH);
+        context.requestPathInfo().setExtension(EXTENSION);
+        context.requestPathInfo().setResourcePath(resource.getPath());
+        context.contentPolicyMapping(resource.getResourceType(),
+            "fb_page_id", "PAGE_ID",
+            "twitter_account_id", "TWITTER_ACC_ID",
+            "twitter_site", "TWITTER_USERNAME");
 
+        return context.request().adaptTo(SocialMediaHelper.class);
+    }
 }
