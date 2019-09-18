@@ -24,12 +24,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -38,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
 import com.day.cq.commons.DownloadResource;
@@ -90,7 +93,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Self
     private SlingHttpServletRequest request;
 
+    @OSGiService
+    private ModelFactory modelFactory;
+
     private Page targetPage;
+    private Image image;
 
     @PostConstruct
     private void initModel() {
@@ -186,7 +193,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private void populateActions() {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
-            for(Resource action : actionsNode.getChildren()) {
+            for (Resource action : actionsNode.getChildren()) {
                 actions.add(new ListItem() {
 
                     private ValueMap properties = action.getValueMap();
@@ -242,11 +249,24 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     public String getImagePath() {
-        Resource image = getImageResource();
-        if (image == null) {
-            return null;
+        if (image != null) {
+            return image.getSrc();
         }
-        return image.getPath();
+        Resource imageResource = getImageResource();
+        if (imageResource != null) {
+            SlingHttpServletRequestWrapper wrappedRequest = new SlingHttpServletRequestWrapper(request) {
+                @NotNull
+                @Override
+                public Resource getResource() {
+                    return imageResource;
+                }
+            };
+            image = (Image) modelFactory.getModelFromRequest(wrappedRequest);
+            if (image != null) {
+                return image.getSrc();
+            }
+        }
+        return null;
     }
 
     @Override
