@@ -5,6 +5,7 @@
     "templateName"    : "product-page",
     "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
     "cssClassNames"   : "class1 class2",
+    "canonicalURLOfPage":"/content/page/templated-page.html",
     "language"        : "en-GB",
     ":itemsOrder"     : [
         "root"
