@@ -53,6 +53,9 @@ The following configuration properties are used:
 2. `./clientlibsJsHead` - allows definition of client libraries for which JavaScript is specifically intended to be loaded
 in the document head (JavaScript only) of pages associated with this policy configuration
 3. `./appResourcesClientlib` - allows definition of the client library that is used to serve web resources such as favicons
+4. `./fb_page_id` - allows definition of Facebook page ID that is used to generate OG meta tags
+5. `./twitter_account_id` - allows definition of Twitter account ID that is used to generate Twitter meta tag
+6. `./twitter_site` - allows definition of Twitter username that is used to generate Twitter meta tag
 
 ## Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:

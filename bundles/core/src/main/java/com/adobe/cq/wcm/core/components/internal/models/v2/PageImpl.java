@@ -198,6 +198,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return hasCloudconfigSupport;
     }
 
+    @Override
     public String getCanonicalURLOfPage() {
         String serverName = request.getServerName();
         String requestSelectors = request.getRequestPathInfo().getSelectorString();

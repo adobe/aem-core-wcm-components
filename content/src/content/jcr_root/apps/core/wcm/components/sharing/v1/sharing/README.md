@@ -19,6 +19,7 @@ Social media sharing component, written in HTL.
 
 ## Features
 * Social media sharing for pages, currently via Facebook and Pinterest
+* Facebook and Twitter meta tags generation
 
 ### Use Object
 The Social Media Sharing component uses the `com.adobe.cq.wcm.core.components.models.SocialMediaHelper` Sling Model for its
