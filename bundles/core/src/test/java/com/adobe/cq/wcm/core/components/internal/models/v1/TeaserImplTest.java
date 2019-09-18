@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -25,11 +23,10 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
@@ -40,9 +37,15 @@ import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import uk.org.lidalia.slf4jtest.TestLogger;
+import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
 
 
 @ExtendWith(AemContextExtension.class)
@@ -67,25 +70,21 @@ class TeaserImplTest {
     private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
     private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
     private static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
-    private Logger teaserLogger;
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
+    private TestLogger testLogger;
 
     @BeforeEach
-    void setUp() throws IllegalAccessException, NoSuchFieldException {
+    void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_DAM_JSON, "/content/dam/core/images");
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
+        testLogger = TestLoggerFactory.getTestLogger(TeaserImpl.class);
+    }
 
-        teaserLogger = Mockito.mock(Logger.class);
-        Field field = TeaserImpl.class.getDeclaredField("LOGGER");
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        field.setAccessible(true);
-        // remove final modifier from field
-
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, teaserLogger);
+    @AfterEach
+    void tearDown() {
+        TestLoggerFactory.clear();
     }
 
     @Test
@@ -128,29 +127,29 @@ class TeaserImplTest {
     @Test
     void testInvalidFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_2);
-        verify(teaserLogger)
-                .error("Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.");
+        assertThat(testLogger.getLoggingEvents(), hasItem(error(
+                "Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.")));
         assertNull(teaser.getImageResource());
     }
 
     @Test
     void testEmptyFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_3);
-        verify(teaserLogger)
-                .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.");
+        assertThat(testLogger.getLoggingEvents(), hasItem(debug(
+                "Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.")));
         assertNull(teaser.getImageResource());
     }
 
     @Test
     void testTeaserWithoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
-        verify(teaserLogger)
-                .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.");
+        assertThat(testLogger.getLoggingEvents(),
+                hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
         assertNull(teaser.getLinkURL());
     }
 
     @Test
-    public void testTeaserWithHiddenLinks() {
+    void testTeaserWithHiddenLinks() {
         Teaser teaser = getTeaserUnderTest(TEASER_5,
                 Teaser.PN_TITLE_LINK_HIDDEN, true,
                 Teaser.PN_IMAGE_LINK_HIDDEN, true);
