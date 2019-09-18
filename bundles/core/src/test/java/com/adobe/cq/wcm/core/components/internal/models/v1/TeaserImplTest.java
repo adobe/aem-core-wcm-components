@@ -77,7 +77,7 @@ class TeaserImplTest {
     @BeforeEach
     void setUp() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content/dam/core/images");
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_DAM_JSON, "/content/dam/core/images");
         context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
         testLogger = TestLoggerFactory.getTestLogger(TeaserImpl.class);
     }
