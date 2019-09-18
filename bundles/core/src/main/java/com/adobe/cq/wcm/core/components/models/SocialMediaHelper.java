@@ -61,6 +61,14 @@ public interface SocialMediaHelper extends ComponentExporter {
     String PV_PINTEREST = "pinterest";
 
     /**
+     * Possible value of the {@link #PN_SOCIAL_MEDIA} resource property.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    String PV_TWITTER = "twitter";
+
+
+    /**
      * Returns {@code true} if Facebook sharing is enabled in page configuration, {@code false} otherwise.
      *
      * @return {@code true} if Facebook sharing is enabled in page configuration, {@code false} otherwise
@@ -77,6 +85,16 @@ public interface SocialMediaHelper extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean isPinterestEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns {@code true} if Twitter sharing is enabled in page configuration, {@code false} otherwise.
+     *
+     * @return {@code true} if Twitter sharing is enabled in page configuration, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    default boolean isTwitterEnabled() {
         throw new UnsupportedOperationException();
     }
 
@@ -115,12 +133,34 @@ public interface SocialMediaHelper extends ComponentExporter {
     }
 
     /**
+     * Returns {@code true} if Twitter sharing is enabled in page configuration and the page contains the sharing component, {@code
+     * false} otherwise
+     *
+     * @return {@code true} if Twitter sharing is enabled in page configuration and the page contains the sharing component, {@code
+     * false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    default boolean hasTwitterSharing() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the social media metadata for the current page.
      *
      * @return the social media metadata for the current page; the {@link Map} can be empty if there's no social media configuration
-     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
      */
-    default Map<String, String> getMetadata() {
+    default Map<String, String> getMetadataProperties() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the social media metadata for the current page.
+     *
+     * @return the social media metadata for the current page; the {@link Map} can be empty if there's no social media configuration
+     * @since com.adobe.cq.wcm.core.components.models 12.10.0
+     */
+    default Map<String, String> getMetadataNames() {
         throw new UnsupportedOperationException();
     }
 
