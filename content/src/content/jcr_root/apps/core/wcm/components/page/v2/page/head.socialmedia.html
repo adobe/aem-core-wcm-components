@@ -13,6 +13,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<meta property="${key}" data-sly-use.socialMedia="com.adobe.cq.wcm.core.components.models.SocialMediaHelper"
-      data-sly-repeat.key="${socialMedia.metadata.keySet}"
-      content="${socialMedia.metadata[key]}"/>
+<sly data-sly-use.socialMedia="com.adobe.cq.wcm.core.components.models.SocialMediaHelper"/>
+    <meta property="${key}"
+          data-sly-repeat.key="${socialMedia.metadataProperties.keySet}"
+          content="${socialMedia.metadataProperties[key]}"/>
+
+    <meta name="${key}"
+          data-sly-repeat.key="${socialMedia.metadataNames.keySet}"
+          content="${socialMedia.metadataNames[key]}"/>

@@ -15,29 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.adobe.cq.commerce.api.CommerceException;
 import com.adobe.cq.commerce.api.CommerceService;
 import com.adobe.cq.commerce.api.CommerceSession;
@@ -53,13 +30,38 @@ import com.day.cq.commons.Externalizer;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.DefaultInjectionStrategy;
+import org.apache.sling.models.annotations.Exporter;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class for page functionality related to page sharing by user on social media platforms.
  */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {SocialMediaHelper.class, ComponentExporter.class}, resourceType =
-        SocialMediaHelperImpl.RESOURCE_TYPE)
+    SocialMediaHelperImpl.RESOURCE_TYPE,
+    defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class SocialMediaHelperImpl implements SocialMediaHelper {
 
@@ -77,6 +79,21 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     static final String OG_PRODUCT_PRICE_AMOUNT = "product:price:amount";
     static final String OG_PRODUCT_PRICE_CURRENCY = "product:price:currency";
 
+    //Facebook Page ID property name
+    static final String FB_PAGE_ID = "fb:page_id";
+
+    //Twitter metadata names
+    static final String TWITTER_ACCOUNT_ID = "twitter:account_id";
+    static final String TWITTER_TITLE = "twitter:title";
+    static final String TWITTER_SITE = "twitter:site";
+    static final String TWITTER_CARD = "twitter:card";
+    static final String TWITTER_DESCRIPTION = "twitter:description";
+
+    // Policy JCR name properties
+    static final String TWITTER_ACCOUNT_ID_PROPERTY = "twitter_account_id";
+    static final String TWITTER_SITE_PROPERTY = "twitter_site";
+    static final String FB_PAGE_ID_PROPERTY = "fb_page_id";
+
     @ScriptVariable
     private Page currentPage = null;
 
@@ -92,19 +109,24 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     @OSGiService
     private Externalizer externalizer = null;
 
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    protected Style currentStyle;
+
     /**
      * lazy variable, use hasSharingComponent() method for accessing it
      */
     private Boolean hasSharingComponent;
     private boolean facebookEnabled;
     private boolean pinterestEnabled;
+    private boolean twitterEnabled;
     private boolean socialMediaEnabled;
     private String variantPath;
 
     /**
      * Holds the metadata for a page.
      */
-    private Map<String, String> metadata;
+    private Map<String, String> metadataProperties;
+    private Map<String, String> metadataNames;
 
     //*************** WEB INTERFACE METHODS *******************
 
@@ -116,6 +138,11 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     @Override
     public boolean isPinterestEnabled() {
         return pinterestEnabled;
+    }
+
+    @Override
+    public boolean isTwitterEnabled() {
+        return twitterEnabled;
     }
 
     @Override
@@ -136,11 +163,25 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     }
 
     @Override
-    public Map<String, String> getMetadata() {
-        if (metadata == null) {
-            initMetadata();
+    @JsonProperty("hasTwitterSharing")
+    public boolean hasTwitterSharing() {
+        return twitterEnabled && hasSharingComponent();
+    }
+
+    @Override
+    public Map<String, String> getMetadataProperties() {
+        if (metadataProperties == null) {
+            initMetadataProperties();
         }
-        return metadata;
+        return metadataProperties;
+    }
+
+    @Override
+    public Map<String, String> getMetadataNames() {
+        if (metadataNames == null) {
+            initMetadataNames();
+        }
+        return metadataNames;
     }
 
     @NotNull
@@ -151,12 +192,13 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
 
     //*************** IMPLEMENTATION *******************
     @PostConstruct
-    private void initModel() throws Exception {
+    private void initModel() {
         ValueMap pageProperties = currentPage.getProperties();
         String[] socialMedia = pageProperties.get(PN_SOCIAL_MEDIA, String[].class);
         facebookEnabled = ArrayUtils.contains(socialMedia, PV_FACEBOOK);
         pinterestEnabled = ArrayUtils.contains(socialMedia, PV_PINTEREST);
-        socialMediaEnabled = facebookEnabled || pinterestEnabled;
+        twitterEnabled = ArrayUtils.contains(socialMedia, PV_TWITTER);
+        socialMediaEnabled = facebookEnabled || pinterestEnabled || twitterEnabled;
         variantPath = pageProperties.get(PN_VARIANT_PATH, String.class);
     }
 
@@ -175,44 +217,69 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
      * @return {@code true} if the sharing vomponent was found, {@code false} otherwise
      */
     private boolean hasSharingComponent(final Resource resource) {
-        if (resource.isResourceType(RESOURCE_TYPE))
+        if (resource.isResourceType(RESOURCE_TYPE)) {
             return true;
+        }
 
-        for (Resource child : resource.getChildren())
-            if (hasSharingComponent(child))
+        for (Resource child : resource.getChildren()) {
+            if (hasSharingComponent(child)) {
                 return true;
+            }
+        }
 
         return false;
     }
 
     /**
-     * Prepares Open Graph metadata for a page to be shared on social media services.
+     * Prepares Open Graph, Facebook, Twitter metadata properties for a page to be shared on social media services.
      */
-    private void initMetadata() {
-        metadata = new LinkedHashMap<>();
+    private void initMetadataProperties() {
+        metadataProperties = new LinkedHashMap<>();
         if (socialMediaEnabled) {
             WebsiteMetadata websiteMetadata = createMetadataProvider();
-            put(OG_TITLE, websiteMetadata.getTitle());
-            put(OG_URL, websiteMetadata.getURL());
-            put(OG_TYPE, websiteMetadata.getTypeName());
-            put(OG_SITE_NAME, websiteMetadata.getSiteName());
-            put(OG_IMAGE, websiteMetadata.getImage());
-            put(OG_DESCRIPTION, websiteMetadata.getDescription());
+            putNotEmptyProperty(metadataProperties, OG_TITLE, websiteMetadata.getTitle());
+            putNotEmptyProperty(metadataProperties, OG_URL, websiteMetadata.getURL());
+            putNotEmptyProperty(metadataProperties, OG_TYPE, websiteMetadata.getTypeName());
+            putNotEmptyProperty(metadataProperties, OG_SITE_NAME, websiteMetadata.getSiteName());
+            putNotEmptyProperty(metadataProperties, OG_IMAGE, websiteMetadata.getImage());
+            putNotEmptyProperty(metadataProperties, OG_DESCRIPTION, websiteMetadata.getDescription());
+
+            if (facebookEnabled) {
+                putNotEmptyProperty(metadataProperties, FB_PAGE_ID, currentStyle.get(FB_PAGE_ID_PROPERTY, String.class));
+            }
+
+            if (twitterEnabled) {
+                putNotEmptyProperty(metadataProperties, TWITTER_ACCOUNT_ID, currentStyle.get(TWITTER_ACCOUNT_ID_PROPERTY, String.class));
+            }
 
             if (pinterestEnabled && websiteMetadata instanceof ProductMetadata) {
                 ProductMetadata productMetadata = (ProductMetadata) websiteMetadata;
-                put(OG_PRODUCT_PRICE_AMOUNT, productMetadata.getProductPriceAmount());
-                put(OG_PRODUCT_PRICE_CURRENCY, productMetadata.getProductPriceCurrency());
+                putNotEmptyProperty(metadataProperties, OG_PRODUCT_PRICE_AMOUNT, productMetadata.getProductPriceAmount());
+                putNotEmptyProperty(metadataProperties, OG_PRODUCT_PRICE_CURRENCY, productMetadata.getProductPriceCurrency());
             }
+        }
+    }
+
+    /**
+     * Prepares Twitter metadata names for a page to be shared on social media services.
+     */
+    private void initMetadataNames() {
+        metadataNames = new LinkedHashMap<>();
+        if (socialMediaEnabled && twitterEnabled) {
+            WebsiteMetadata websiteMetadata = createMetadataProvider();
+            putNotEmptyProperty(metadataNames, TWITTER_TITLE, websiteMetadata.getTitle());
+            putNotEmptyProperty(metadataNames, TWITTER_SITE, currentStyle.get(TWITTER_SITE_PROPERTY, String.class));
+            putNotEmptyProperty(metadataNames, TWITTER_CARD, "summary");
+            putNotEmptyProperty(metadataNames, TWITTER_DESCRIPTION, websiteMetadata.getDescription());
         }
     }
 
     /**
      * Put non-blank named values in metadata map.
      */
-    private void put(String name, String value) {
-        if (StringUtils.isNotBlank(value)) {
-            metadata.put(name, value);
+    private void putNotEmptyProperty(Map<String, String> metaMap, String propertyName, String propertyValue) {
+        if (StringUtils.isNotBlank(propertyValue)) {
+            metaMap.put(propertyName, propertyValue);
         }
     }
 
@@ -243,8 +310,9 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
 
     private ExperienceFragmentSocialVariation findExperienceFragmentSocialVariation() {
         Page variantPage = currentPage.getPageManager().getPage(variantPath);
-        if (variantPage == null)
+        if (variantPage == null) {
             return null;
+        }
 
         ExperienceFragmentSocialVariation socialVariant = variantPage.adaptTo(ExperienceFragmentSocialVariation.class);
         return socialVariant;
@@ -254,6 +322,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
      * Provides metadata based on the content of a generic webpage.
      */
     private interface WebsiteMetadata {
+
         enum Type {website, product}
 
         String getTitle();
@@ -275,12 +344,14 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
      * Provides metadata based on the content of a product page.
      */
     private interface ProductMetadata extends WebsiteMetadata {
+
         String getProductPriceAmount();
 
         String getProductPriceCurrency();
     }
 
     private class WebsiteMetadataProvider implements WebsiteMetadata {
+
         private static final String PN_IMAGE_FILE_JCR_CONTENT = "image/file/" + JcrConstants.JCR_CONTENT;
 
         @Override
@@ -376,6 +447,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     }
 
     private class ProductMetadataProvider extends WebsiteMetadataProvider implements ProductMetadata {
+
         private Product product;
         private PriceInfo priceInfo;
 
@@ -400,8 +472,9 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         @Override
         public String getImage() {
             final ImageResource imageResource = product.getImage();
-            if (imageResource == null)
+            if (imageResource == null) {
                 return super.getImage();
+            }
 
             String image = imageResource.getFileReference();
             if (StringUtils.isBlank(image)) {
@@ -465,6 +538,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     }
 
     private class ExperienceFragmentMetadataProvider {
+
         private ExperienceFragmentSocialVariation variation;
 
         public ExperienceFragmentMetadataProvider(ExperienceFragmentSocialVariation variation) {
@@ -472,8 +546,9 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         public String getDescription(String defaultDescription) {
-            if (variation == null)
+            if (variation == null) {
                 return defaultDescription;
+            }
 
             String description = variation.getText();
             if (StringUtils.isNotBlank(description)) {
@@ -484,8 +559,9 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
 
         public String getImage(String defaultImage) {
-            if (variation == null)
+            if (variation == null) {
                 return defaultImage;
+            }
 
             String image = variation.getImagePath();
             if (StringUtils.isNotBlank(image)) {
@@ -498,6 +574,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     }
 
     private class ExperienceFragmentWebsiteMetadataProvider extends WebsiteMetadataProvider {
+
         private final ExperienceFragmentMetadataProvider xfMetadata;
 
         public ExperienceFragmentWebsiteMetadataProvider(ExperienceFragmentSocialVariation variation) {
@@ -516,6 +593,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     }
 
     private class ExperienceFragmentProductMetadataProvider extends ProductMetadataProvider {
+
         private final ExperienceFragmentMetadataProvider xfMetadata;
 
         public ExperienceFragmentProductMetadataProvider(Product product, ExperienceFragmentSocialVariation variation) {

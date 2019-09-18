@@ -118,6 +118,34 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
                         path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                <social_media
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Social Media"
+                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                    margin="{Boolean}true">
+                    <items
+                        jcr:primaryType="nt:unstructured"
+                        sling:hideChildren="[heading,well]">
+                        <facebook_page_id
+                            cq:showOnCreate="{Boolean}true"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Facebook Page ID"
+                            name="./fb_page_id"/>
+                        <twitter_account_id
+                            cq:showOnCreate="{Boolean}true"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Twitter Account ID"
+                            name="./twitter_account_id"/>
+                        <twitter_username
+                            cq:showOnCreate="{Boolean}true"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                            fieldLabel="Twitter Username"
+                            name="./twitter_site"/>
+                    </items>
+                </social_media>
                 </items>
             </tabs>
         </items>

@@ -72,6 +72,30 @@
                                                             jcr:primaryType="nt:unstructured"
                                                             cq-msm-lockable="socialMedia"/>
                                                     </facebook>
+                                                    <facebook
+                                                        cq:showOnCreate="{Boolean}true"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        name="./socialMedia"
+                                                        renderReadOnly="{Boolean}true"
+                                                        text="Facebook"
+                                                        value="facebook">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cq-msm-lockable="socialMedia"/>
+                                                    </facebook>
+                                                    <twitter
+                                                        cq:showOnCreate="{Boolean}true"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        name="./socialMedia"
+                                                        renderReadOnly="{Boolean}true"
+                                                        text="Twitter"
+                                                        value="twitter">
+                                                        <granite:data
+                                                            jcr:primaryType="nt:unstructured"
+                                                            cq-msm-lockable="socialMedia"/>
+                                                    </twitter>
                                                     <pinterest
                                                         cq:showOnCreate="{Boolean}true"
                                                         jcr:primaryType="nt:unstructured"

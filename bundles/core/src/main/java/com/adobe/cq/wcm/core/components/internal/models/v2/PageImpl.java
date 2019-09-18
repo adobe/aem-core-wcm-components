@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Version;
 
+import com.adobe.cq.wcm.core.components.internal.PageUtils;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -74,7 +75,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private ComponentContext componentContext;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
-                   name = PN_REDIRECT_TARGET)
+        name = PN_REDIRECT_TARGET)
     private String redirectTargetValue;
 
     private String appResourcesPath;
@@ -89,7 +90,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         String resourcesClientLibrary = currentStyle.get(PN_APP_RESOURCES_CLIENTLIB, String.class);
         if (resourcesClientLibrary != null) {
             Collection<ClientLibrary> clientLibraries =
-                    htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, true);
+                htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, true);
             ArrayList<ClientLibrary> clientLibraryList = Lists.newArrayList(clientLibraries.iterator());
             if (!clientLibraryList.isEmpty()) {
                 appResourcesPath = getProxyPath(clientLibraryList.get(0));
@@ -188,7 +189,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public boolean hasCloudconfigSupport() {
         if (hasCloudconfigSupport == null) {
             if (productInfoProvider == null || productInfoProvider.getProductInfo() == null ||
-                    productInfoProvider.getProductInfo().getVersion() == null) {
+                productInfoProvider.getProductInfo().getVersion() == null) {
                 hasCloudconfigSupport = false;
             } else {
                 hasCloudconfigSupport = productInfoProvider.getProductInfo().getVersion().compareTo(new Version("6.4.0")) >= 0;
@@ -196,4 +197,19 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return hasCloudconfigSupport;
     }
+
+    public String getCanonicalURLOfPage() {
+        String serverName = request.getServerName();
+        String requestSelectors = request.getRequestPathInfo().getSelectorString();
+        String requestSuffixes = request.getRequestPathInfo().getSuffix();
+        String url;
+
+        if (PageUtils.isServerNameAnIpAddress(serverName) || PageUtils.isServerNameLocalhost(serverName)) {
+            url = request.getRequestURI();
+        } else {
+            url = request.getRequestURL().toString();
+        }
+        return PageUtils.removeSelectorsAndSuffixesFromURL(url, requestSelectors, requestSuffixes);
+    }
+
 }

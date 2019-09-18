@@ -203,7 +203,8 @@
                 "jcr:createdBy"         : "admin",
                 "socialMedia"           : [
                     "facebook",
-                    "pinterest"
+                    "pinterest",
+                    "twitter"
                 ],
                 "jcr:title"             : "About Us",
                 "jcr:description"       : "About Us Page",
@@ -293,6 +294,7 @@
                 "jcr:createdBy"         : "admin",
                 "socialMedia"           : [
                     "facebook",
+                    "twitter",
                     "pinterest"
                 ],
                 "jcr:title"             : "About Us",
