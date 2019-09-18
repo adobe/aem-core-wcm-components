@@ -17,3 +17,5 @@
 #base=js
 
 datalayer.js
+consumer.js
+provider.js
