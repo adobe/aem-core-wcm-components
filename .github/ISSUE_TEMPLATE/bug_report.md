@@ -23,7 +23,7 @@ A clear and concise description of what you expected to happen.
 - JRE version (e.g. `Java(TM) SE Runtime Environment (build 1.8.0_152-b16)`)
 
 **Possible Solution**
-<!--- if you have suggestions for the bug fix. Please also consider creating a Pull Request 🤘. -->
+<!--- If you have suggestions for the bug fix. Please also consider creating a Pull Request 🤘. -->
 
 **Additional context / Screenshots**
 Add any other context about the problem here. If applicable, add screenshots to help explain.
