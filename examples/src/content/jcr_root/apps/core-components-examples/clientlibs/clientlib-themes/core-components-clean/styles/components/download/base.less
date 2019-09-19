@@ -19,18 +19,26 @@
         position: relative;
 
         display: inline-block;
+    }
+
+    .cmp-download__link {
+        display: inline-block;
+        padding: 18*@px;
         border: 1*@px solid;
         border-radius: 3*@px;
-        padding: 18*@px;
+
+        color: @cmp-clean-light-color-text;
         overflow: hidden;
+        text-decoration: none;
     }
 
     .cmp-download__title {
         margin: 0 0 8*@px 0;
-    }
+        color: @cmp-clean-color-link;
 
-    .cmp-download__title-link {
-        text-decoration: none;
+        &:hover {
+            color: @cmp-clean-color-link-hover;
+        }
     }
 
     .cmp-download__description {
@@ -73,10 +81,6 @@
         text-decoration: none;
         cursor: pointer;
         background: none;
-    }
-
-    .cmp-button__action-text {
-        display: inline-block;
         vertical-align: top;
         line-height: @cmp-clean-line-height;
     }

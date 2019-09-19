@@ -24,10 +24,6 @@
 
 
 .t-cmp-clean--light {
-    .cmp-download {
-        border-color: @cmp-clean-light-download-border-color;
-    }
-
     .cmp-download__property {
         color: @cmp-clean-light-download-property-color;
         background-color: @cmp-clean-light-download-property-background-color;
@@ -36,8 +32,12 @@
     .cmp-download__action {
         border-color: @cmp-clean-light-download-action-border-color;
         color: @cmp-clean-light-download-action-color;
+    }
+    
+    .cmp-download__link {
+        border-color: @cmp-clean-light-download-border-color;
 
-        &:hover {
+        &:hover .cmp-download__action {
             border-color: @cmp-clean-light-download-action-hover-border-color;
             color: @cmp-clean-light-download-action-hover-color;
         }

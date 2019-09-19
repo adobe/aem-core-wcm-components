@@ -55,8 +55,8 @@ The following JCR properties are used:
 ## BEM Description
 ```
 BLOCK cmp-download
+    ELEMENT cmp-download__link
     ELEMENT cmp-download__title
-    ELEMENT cmp-download__title-link
     ELEMENT cmp-download__description
     ELEMENT cmp-download__properties
     ELEMENT cmp-download__property
@@ -64,7 +64,6 @@ BLOCK cmp-download
     ELEMENT cmp-download__property-label
     ELEMENT cmp-download__property-content
     ELEMENT cmp-download__action
-    ELEMENT cmp-download__action-text
 ```
 
 ## Information
