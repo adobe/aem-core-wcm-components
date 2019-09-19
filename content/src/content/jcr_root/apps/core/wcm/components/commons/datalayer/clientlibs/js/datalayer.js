@@ -38,19 +38,32 @@
     }
 
 
-    // Augments the push function (only for the data layer object) to also update the data layer state
+    // Augments the push function (only for the data layer object) to also handle the event
     function overridePush() {
         window.dataLayer.push = function() {
             var event = arguments[0];
-            updateState(window.dataLayer.state, event);
+            handleEvent(event);
             return Array.prototype.push.apply(this, arguments);
         };
     }
 
-    function updateState(state, event) {
-        if (event && event.type === "updated") {
-            deepMerge(state, event.object);
+    function handleEvent(event) {
+        if (!event) {
+            return;
         }
+        if (event.type === "updated") {
+            updateState(window.dataLayer.state, event.object);
+        } else if (event.type === "listenerdefined") {
+            registerListener(event);
+        }
+    }
+
+    function registerListener(event) {
+        
+    }
+
+    function updateState(state, event) {
+        deepMerge(state, event.object);
     }
 
     function deepMerge(target, source) {
