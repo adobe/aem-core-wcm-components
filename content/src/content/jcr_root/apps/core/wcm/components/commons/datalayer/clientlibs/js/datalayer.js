@@ -16,6 +16,153 @@
 (function() {
     "use strict";
 
-    window.dataLayer = window.dataLayer || [];
+    // Initialize the data layer
+    function init() {
+        window.dataLayer = window.dataLayer || [];
+        populateDataLayer();
+        window.dataLayer.state = getComputeState(window.dataLayer);
+        overridePush();
+        populateDataLayerAfterOverride();
+        console.log("data layer script initialized");
+    }
+
+    // Returns the computed state by iterating over all the events stored in the data layer array
+    function getComputeState(dataLayer) {
+        var state = {};
+        dataLayer.forEach(function(event) {
+            updateState(state, event);
+        });
+        return state;
+    }
+
+
+    // Augment the push function (only for the data layer object) to also update the data layer state
+    function overridePush() {
+        window.dataLayer.push = function(){
+            var event = arguments[0];
+            updateState(window.dataLayer.state, event);
+            return Array.prototype.push.apply(this, arguments);
+        };
+    }
+
+    function updateState(state, event) {
+        if (event && event.type === "updated") {
+            deepMerge(state, event.object);
+        }
+    }
+
+    function deepMerge(target, source) {
+        var tmpSource = {};
+        if (isObject(target) && isObject(source)) {
+            Object.keys(source).forEach(function(key) {
+                if (isObject(source[key])) {
+                    if (!target[key]) {
+                        tmpSource[key] = {};
+                        Object.assign(target, tmpSource);
+                    }
+                    deepMerge(target[key], source[key]);
+                } else {
+                    tmpSource[key] = source[key];
+                    Object.assign(target, tmpSource);
+                }
+            });
+        }
+    }
+
+    function isObject(item) {
+        return (item && typeof item === 'object' && !Array.isArray(item));
+    }
+
+    function populateDataLayer() {
+        window.dataLayer.push({
+            "type": "updated",
+            "object": {
+                "component": {
+                    "carousel": {
+                        "carousel3": {
+                            "id": "/content/mysite/en/home/jcr:content/root/carousel3",
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "type": "updated",
+            "object": {
+                "component": {
+                    "tab": {
+                        "tab2": {
+                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "type": "updated",
+            "object": {
+                "page": {
+                    "id": "/content/mysite/en/products/crossfit",
+                    "siteLanguage": "en-us",
+                    "siteCountry": "US",
+                    "pageType": "product detail",
+                    "pageName": "pdp - crossfit zoom",
+                    "pageCategory": "womens > shoes > athletic"
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "type": "listenerdefined",
+            "object": {
+                "listener": {
+                    "type": "clicked",
+                    "target": {},
+                    "handler": function (component) {
+                        console.log('clicked on component: ' + component);
+                    }
+                }
+            }
+        });
+    }
+
+    function populateDataLayerAfterOverride() {
+        window.dataLayer.push({
+            "type": "updated",
+            "object": {
+                "page": {
+                    "new prop": "I'm new",
+                    "id": "NEW/content/mysite/en/products/crossfit",
+                    "siteLanguage": "en-us",
+                    "siteCountry": "US",
+                    "pageType": "product detail",
+                    "pageName": "pdp - crossfit zoom",
+                    "pageCategory": "womens > shoes > athletic"
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "type": "updated",
+            "object": {
+                "component": {
+                    "image": {
+                        "image4": {
+                            "id": "/content/mysite/en/home/jcr:content/root/image4",
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    init();
 
 })();
+
