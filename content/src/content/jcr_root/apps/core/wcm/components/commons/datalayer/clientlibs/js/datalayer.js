@@ -16,7 +16,9 @@
 (function() {
     "use strict";
 
-    // Initialize the data layer
+    /* eslint no-console: "off" */
+
+    // Initializes the data layer
     function init() {
         window.dataLayer = window.dataLayer || [];
         populateDataLayer();
@@ -36,9 +38,9 @@
     }
 
 
-    // Augment the push function (only for the data layer object) to also update the data layer state
+    // Augments the push function (only for the data layer object) to also update the data layer state
     function overridePush() {
-        window.dataLayer.push = function(){
+        window.dataLayer.push = function() {
             var event = arguments[0];
             updateState(window.dataLayer.state, event);
             return Array.prototype.push.apply(this, arguments);
@@ -70,7 +72,7 @@
     }
 
     function isObject(item) {
-        return (item && typeof item === 'object' && !Array.isArray(item));
+        return (item && typeof item === "object" && !Array.isArray(item));
     }
 
     function populateDataLayer() {
@@ -122,8 +124,8 @@
                 "listener": {
                     "type": "clicked",
                     "target": {},
-                    "handler": function (component) {
-                        console.log('clicked on component: ' + component);
+                    "handler": function(component) {
+                        console.log("clicked on component: " + component);
                     }
                 }
             }
