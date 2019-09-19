@@ -1,6 +1,6 @@
 ---
 name: 🚀 Feature Request
-about: I have a suggestion (and I could even submit a PR 🤘🏼)!
+about: I have a suggestion (and I could even submit a Pull Request 🤘🏼)!
 
 ---
 
