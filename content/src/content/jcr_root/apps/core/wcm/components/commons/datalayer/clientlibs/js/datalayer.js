@@ -21,22 +21,13 @@
     // Initializes the data layer
     function init() {
         window.dataLayer = window.dataLayer || [];
+        window.dataLayer.state = {};
         populateDataLayer();
-        window.dataLayer.state = getComputeState(window.dataLayer);
+        handleEvents(window.dataLayer);
         overridePush();
         populateDataLayerAfterOverride();
         console.log("data layer script initialized");
     }
-
-    // Returns the computed state by iterating over all the events stored in the data layer array
-    function getComputeState(dataLayer) {
-        var state = {};
-        dataLayer.forEach(function(event) {
-            updateState(state, event);
-        });
-        return state;
-    }
-
 
     // Augments the push function (only for the data layer object) to also handle the event
     function overridePush() {
@@ -45,6 +36,12 @@
             handleEvent(event);
             return Array.prototype.push.apply(this, arguments);
         };
+    }
+
+    function handleEvents(dataLayer) {
+        dataLayer.forEach(function(event) {
+            handleEvent(event);
+        });
     }
 
     function handleEvent(event) {
@@ -58,12 +55,12 @@
         }
     }
 
-    function registerListener(event) {
-        console.log("register an event listener: " + event);
+    function updateState(state, object) {
+        deepMerge(state, object);
     }
 
-    function updateState(state, event) {
-        deepMerge(state, event.object);
+    function registerListener(event) {
+        console.log("register an event listener: " + event);
     }
 
     function deepMerge(target, source) {
