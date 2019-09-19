@@ -59,7 +59,7 @@
     }
 
     function registerListener(event) {
-        
+        console.log("register an event listener: " + event);
     }
 
     function updateState(state, event) {
