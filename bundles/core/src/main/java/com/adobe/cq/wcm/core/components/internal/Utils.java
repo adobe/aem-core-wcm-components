@@ -15,12 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 public class Utils {
 
@@ -90,5 +97,32 @@ public class Utils {
         }
     }
 
-
+    /**
+     * Given a {@link SlingHttpServletRequest}, this method returns the containing selector as a {@link Map} of key / value pairs after
+     * the first selector, which is used to identify the servlet handler.
+     *
+     * @param request the {@link SlingHttpServletRequest}, used to get the selector from
+     * @return a {@link Map} of key / value pairs
+     * @throws IllegalArgumentException in case the provided selector doesn't contain an even number of key / value pairs in addition to
+     * the handler selector.
+     */
+    @NotNull
+    public static Map<String, String> selectorToMap(SlingHttpServletRequest request) {
+        String selectorString = request.getRequestPathInfo().getSelectorString();
+        Map<String, String> selectorsMap = Collections.emptyMap();
+        if (StringUtils.isNotEmpty(selectorString)) {
+            List<String> selectorList = Lists.newArrayList(Splitter.on('.').omitEmptyStrings().trimResults().split(selectorString));
+            // remove handler from selectorList
+            selectorList.remove(0);
+            if (selectorList.size() % 2 != 0) {
+                throw new IllegalArgumentException("Selector must contain even key / value pairs like kex.value " + selectorString);
+            } else {
+                selectorsMap = new HashMap<>();
+                for (int i = 0; i < selectorList.size(); i += 2) {
+                    selectorsMap.put(selectorList.get(i), selectorList.get(i + 1));
+                }
+            }
+        }
+        return selectorsMap;
+    }
 }

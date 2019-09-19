@@ -39,6 +39,8 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 
+import static com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet.QUALITY_SELECTOR_KEY;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl implements Image {
@@ -102,11 +104,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         if (hasContent) {
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, true);
 
-            String staticSelectors = selector;
-            if (smartSizes.length > 0) {
-                // only include the quality selector in the URL, if there are sizes configured
-                staticSelectors += DOT + jpegQuality;
-            } 
+            String staticSelectors = selector + DOT + QUALITY_SELECTOR_KEY + DOT + jpegQuality;
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                 SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                 (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +

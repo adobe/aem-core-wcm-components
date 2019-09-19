@@ -25,9 +25,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.Utils;
+import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet.*;
 import static org.junit.Assert.*;
 
 @ExtendWith(AemContextExtension.class)
@@ -59,16 +61,16 @@ public class ImageImplTest extends AbstractImageTest {
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
         assertEquals(IMAGE_TITLE_ALT, image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
-        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0." + selector + "." + jpegQuality +
-                ".600.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + jpegQuality +
-                ".700.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + jpegQuality +
-                ".800.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + "." + jpegQuality +
-                ".2000.png/1490005239000/" + ASSET_NAME + ".png\", \"/core/content/test/_jcr_content/root/image0." + selector + "." + jpegQuality +
-                ".2500.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image0." + selector + ".quality." + jpegQuality +
+                ".width.600.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + ".quality." + jpegQuality +
+                ".width.700.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + ".quality." + jpegQuality +
+                ".width.800.png/1490005239000/" + ASSET_NAME + ".png\",\"/core/content/test/_jcr_content/root/image0." + selector + ".quality." + jpegQuality +
+                ".width.2000.png/1490005239000/" + ASSET_NAME + ".png\", \"/core/content/test/_jcr_content/root/image0." + selector + ".quality." + jpegQuality +
+                ".width.2500.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600,700,800,2000,2500],\"lazyEnabled\":true}";
         compareJSON(expectedJson, image.getJson());
         assertFalse(image.displayPopupTitle());
         assertEquals(CONTEXT_PATH + "/content/test-image.html", image.getLink());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".quality.82.png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE0_PATH));
     }
 
@@ -84,9 +86,10 @@ public class ImageImplTest extends AbstractImageTest {
         assertNull("Did not expect a file reference.", image.getFileReference());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertEquals(IMAGE_LINK, image.getLink());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".82.600.png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
-        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image3." + selector +  "." + jpegQuality +
-        ".600.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".quality.82.width.600.png/1490005239000/" + ASSET_NAME + ".png",
+                image.getSrc());
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image3." + selector +  ".quality." + jpegQuality +
+        ".width.600.png/1490005239000/" + ASSET_NAME + ".png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE3_PATH));
     }
@@ -100,7 +103,9 @@ public class ImageImplTest extends AbstractImageTest {
         assertNull("Did not expect a title for this image.", image.getTitle());
         assertFalse("Image should not display a caption popup.", image.displayPopupTitle());
         assertNull("Did not expect a link for this image, since it's marked as decorative.", image.getLink());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe-systems-logo-and-wordmark.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + "." + QUALITY_SELECTOR_KEY +
+                ".82.png/1494867377756/adobe-systems-logo-and" +
+                "-wordmark.png", image.getSrc());
         compareJSON(
                 "{\"" + Image.JSON_SMART_IMAGES + "\":[], \"" + Image.JSON_SMART_SIZES + "\":[], \"" + Image.JSON_LAZY_ENABLED +
                         "\":true}",
@@ -116,7 +121,7 @@ public class ImageImplTest extends AbstractImageTest {
                 "disableLazyLoading", false);
         String escapedResourcePath = IMAGE18_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE18_PATH);
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + "." + QUALITY_SELECTOR_KEY + ".82.png/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE18_PATH));
     }
 
@@ -126,7 +131,7 @@ public class ImageImplTest extends AbstractImageTest {
                 "uuidDisabled", true);
         String escapedResourcePath = IMAGE15_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE15_PATH);
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".png/1494867377756/adobe-systems-logo-and-wordmark.png", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".quality.82.png/1494867377756/adobe-systems-logo-and-wordmark.png", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE15_PATH));
     }
 
@@ -136,7 +141,7 @@ public class ImageImplTest extends AbstractImageTest {
                 "uuidDisabled", true);
         String escapedResourcePath = IMAGE16_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE16_PATH);
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".jpeg/1500299989000/" + ASSET_NAME + ".jpeg", image.getSrc());
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".quality.82.jpeg/1500299989000/" + ASSET_NAME + ".jpeg", image.getSrc());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE16_PATH));
     }
 
@@ -152,19 +157,22 @@ public class ImageImplTest extends AbstractImageTest {
         context.contentPolicyMapping("core/wcm/components/image",
                 "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
         Image image = getImageUnderTest(TEMPLATE_IMAGE_PATH);
-        assertEquals(CONTEXT_PATH + "/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + ".png/structure/jcr" +
+        assertEquals(CONTEXT_PATH + "/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + ".quality.82.png/structure/jcr" +
                 "%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png", image.getSrc());
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
         assertEquals(IMAGE_TITLE_ALT, image.getTitle());
         assertEquals(IMAGE_FILE_REFERENCE, image.getFileReference());
         String expectedJson = "{" +
-                "\"smartImages\":[\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." + jpegQuality +
-                ".600.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\",\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector + "." +
-                jpegQuality + ".700.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\", \"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." +
-                selector + "." + jpegQuality + ".800.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\"," +
-                    "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." + jpegQuality +
-                ".2000.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\",\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  "." +
-                jpegQuality + ".2500.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\"]," +
+                "\"smartImages\":[\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  ".quality." + jpegQuality +
+                ".width.600.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\",\"/core/conf/coretest" +
+                "/settings/wcm/templates/testtemplate/structure." + selector + ".quality." +
+                jpegQuality + ".width.700.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\", " +
+                "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." +
+                selector + ".quality." + jpegQuality + ".width.800.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\"," +
+                    "\"/core/conf/coretest/settings/wcm/templates/testtemplate/structure." + selector +  ".quality." + jpegQuality +
+                ".width.2000.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\",\"/core/conf/coretest" +
+                "/settings/wcm/templates/testtemplate/structure." + selector +  ".quality." +
+                jpegQuality + ".width.2500.png/structure/jcr%3acontent/root/image_template/1490005239000/" + ASSET_NAME + ".png\"]," +
                 "\"smartSizes\":[600,700,800,2000,2500]," +
                 "\"lazyEnabled\":true" +
         "}";
@@ -182,9 +190,9 @@ public class ImageImplTest extends AbstractImageTest {
         String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE27_PATH);
         assertNull("Did not expect a file reference.", image.getFileReference());
-        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".82.600.png/1490005239000.png", image.getSrc());
-        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image27." + selector +  "." + jpegQuality +
-        ".600.png/1490005239000.png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
+        assertEquals(CONTEXT_PATH + escapedResourcePath + "." + selector + ".quality.82.width.600.png/1490005239000.png", image.getSrc());
+        String expectedJson = "{\"smartImages\":[\"/core/content/test/_jcr_content/root/image27." + selector +  ".quality." + jpegQuality +
+        ".width.600.png/1490005239000.png\"],\"smartSizes\":[600],\"lazyEnabled\":false}";
         compareJSON(expectedJson, image.getJson());
         Utils.testJSONExport(image, Utils.getTestExporterJSONPath(testBase, IMAGE27_PATH));
     }

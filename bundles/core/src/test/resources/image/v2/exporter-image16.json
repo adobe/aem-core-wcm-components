@@ -2,7 +2,7 @@
     "widths": [],
     "areas": [],
     "lazyEnabled"           : false,
-    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image16.coreimg{.width}.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
-    "src"                   : "/core/content/test/_jcr_content/root/image16.coreimg.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
+    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image16.coreimg.quality.82{.width}.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
+    "src"                   : "/core/content/test/_jcr_content/root/image16.coreimg.quality.82.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
     ":type"                 : "core/wcm/components/image/v2/image"
 }

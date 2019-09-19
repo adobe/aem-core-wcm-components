@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
@@ -48,6 +49,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
 import com.adobe.cq.wcm.core.components.internal.resource.ImageResourceWrapper;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -84,13 +86,13 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     public static final String DEFAULT_SELECTOR = "img";
     public static final String CORE_DEFAULT_SELECTOR = "coreimg";
+    public static final String QUALITY_SELECTOR_KEY = "quality";
+    public static final String WIDTH_SELECTOR_KEY = "width";
     private static final String IMAGE_RESOURCE_TYPE = "core/wcm/components/image";
     static final int DEFAULT_RESIZE_WIDTH = 1280;
     public static final int DEFAULT_JPEG_QUALITY = 82; // similar to what is the default in com.day.image.Layer#write(...)
     private static final Logger LOGGER = LoggerFactory.getLogger(AdaptiveImageServlet.class);
     private static final String DEFAULT_MIME = "image/jpeg";
-    private static final String MIME_TYPE_SVG = "image/svg+xml";
-    private static final String PN_MIME_TYPE = "jcr:mimeType";
     private int defaultResizeWidth;
 
     private MimeTypeService mimeTypeService;
@@ -108,9 +110,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         RequestPathInfo requestPathInfo = request.getRequestPathInfo();
         String suffix = requestPathInfo.getSuffix();
         String imageName = StringUtils.isNotEmpty(suffix) ? FilenameUtils.getName(suffix) : "";
-        String[] selectors = requestPathInfo.getSelectors();
-        if (selectors.length < 1 || selectors.length > 3) {
-            LOGGER.error("Expected 1, 2 or 3 selectors, instead got: {}.", Arrays.toString(selectors));
+        Map<String, String> selectorMap = Utils.selectorToMap(request);
+        if (selectorMap.size() > 2) {
+            LOGGER.error("Expected 1 or 2 items in selectorMap, instead got: {}.", selectorMap.size());
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
@@ -207,8 +209,8 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
             Double quality = null;
             Integer jpegQualityInPercentage = null;
-            if (selectors.length > 2) {
-                String qualitySelector = selectors[selectors.length - 2];
+            String qualitySelector = selectorMap.get(QUALITY_SELECTOR_KEY);
+            if (StringUtils.isNotEmpty(qualitySelector)) {
                 try {
                     jpegQualityInPercentage = Integer.parseInt(qualitySelector);
                 } catch (NumberFormatException nfe) {
@@ -240,9 +242,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             quality = jpegQualityInPercentage / 100.0d; 
             
             int resizeWidth = defaultResizeWidth;
-            String widthSelector = selectors[selectors.length - 1];
+            String widthSelector = selectorMap.get(WIDTH_SELECTOR_KEY);
             List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(resourceResolver, component, request);
-            if (selectors.length > 1 || StringUtils.isNumeric(widthSelector)) {
+            if (StringUtils.isNotEmpty(widthSelector) || StringUtils.isNumeric(widthSelector)) {
                 try {
                     Integer width = Integer.parseInt(widthSelector);
                     boolean isRequestedWidthAllowed = false;

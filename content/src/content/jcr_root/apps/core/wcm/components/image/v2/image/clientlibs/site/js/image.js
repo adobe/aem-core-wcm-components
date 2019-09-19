@@ -149,7 +149,7 @@
 
         function loadImage() {
             var hasWidths = that._properties.widths && that._properties.widths.length > 0;
-            var replacement = hasWidths ? "." + getOptimalWidth() : "";
+            var replacement = hasWidths ? ".width." + getOptimalWidth() : "";
             var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
 
             if (that._elements.image.getAttribute("src") !== url) {

@@ -63,6 +63,9 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import static com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet.QUALITY_SELECTOR_KEY;
+import static com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet.WIDTH_SELECTOR_KEY;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl implements Image {
@@ -215,7 +218,7 @@ public class ImageImpl implements Image {
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = baseResourcePath + DOT +
-                        selector + DOT + jpegQuality + DOT + width + DOT + extension +
+                        selector + DOT + QUALITY_SELECTOR_KEY + DOT + jpegQuality + DOT + WIDTH_SELECTOR_KEY + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                         (lastModifiedDate > 0 ? "/" + lastModifiedDate +
                         (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
@@ -226,12 +229,13 @@ public class ImageImpl implements Image {
                 smartImages = new String[0];
                 smartSizes = new int[0];
             }
-            src = baseResourcePath + DOT + selector + DOT;
+            src = baseResourcePath + DOT + selector + DOT + QUALITY_SELECTOR_KEY + DOT + jpegQuality;
+
             if (smartSizes.length == 1) {
-                src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
-            } else {
-                src += extension;
+                src += DOT + WIDTH_SELECTOR_KEY + DOT + smartSizes[0];
             }
+
+            src += DOT + extension;
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
                 (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
             if (!isDecorative) {
