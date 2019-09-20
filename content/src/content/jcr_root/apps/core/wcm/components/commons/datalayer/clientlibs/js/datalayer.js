@@ -45,13 +45,39 @@
     }
 
     function handleEvent(event) {
-        if (!event) {
+        if (!event && !event.type) {
             return;
         }
-        if (event.type === "updated") {
-            updateState(window.dataLayer.state, event.object);
-        } else if (event.type === "listenerdefined") {
-            registerListener(event);
+        switch (event.type) {
+            case "updated":
+                updateState(window.dataLayer.state, event.object);
+                break;
+            case "listenerdefined":
+                registerListener(event);
+                break;
+            case "removed":
+                removeFromState(window.dataLayer.state, event.object);
+                break;
+            default:
+                return;
+        }
+    }
+
+    function removeFromState(state, object) {
+        deepRemove(state, object);
+    }
+
+    function deepRemove(target, source) {
+        if (isObject(target) && isObject(source)) {
+            Object.keys(source).forEach(function(key) {
+                if (target[key]) {
+                    if (isObject(source[key]) && Object.keys(source[key]).length > 0) {
+                        deepRemove(target[key], source[key]);
+                    } else {
+                        delete target[key];
+                    }
+                }
+            });
         }
     }
 
@@ -60,7 +86,7 @@
     }
 
     function registerListener(event) {
-        console.log("register an event listener: " + event);
+        console.log("register an event listener: " + event.object.listener.type);
     }
 
     function deepMerge(target, source) {
@@ -160,6 +186,20 @@
 
         window.dataLayer.push({
             "type": "updated",
+            "object": {
+                "component": {
+                    "image": {
+                        "image4": {
+                            "id": "/content/mysite/en/home/jcr:content/root/image4",
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "type": "removed",
             "object": {
                 "component": {
                     "image": {
