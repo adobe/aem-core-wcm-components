@@ -32,9 +32,11 @@
     // Augments the push function (only for the data layer object) to also handle the event
     function overridePush() {
         window.dataLayer.push = function() {
-            var event = arguments[0];
-            handleEvent(event);
-            return Array.prototype.push.apply(this, arguments);
+            var pushArguments = arguments;
+            Object.keys(pushArguments).forEach(function(key) {
+                handleEvent(pushArguments[key]);
+            });
+            return Array.prototype.push.apply(this, pushArguments);
         };
     }
 
