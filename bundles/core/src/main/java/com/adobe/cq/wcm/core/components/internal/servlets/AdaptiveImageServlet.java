@@ -108,108 +108,110 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response) throws IOException {
-        RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        String suffix = requestPathInfo.getSuffix();
-        String imageName = StringUtils.isNotEmpty(suffix) ? FilenameUtils.getName(suffix) : "";
+        try {
+            RequestPathInfo requestPathInfo = request.getRequestPathInfo();
+            List<String> selectorList = selectorToList(requestPathInfo.getSelectorString());
+            String suffix = requestPathInfo.getSuffix();
+            String imageName = StringUtils.isNotEmpty(suffix) ? FilenameUtils.getName(suffix) : "";
 
-        if (StringUtils.isNotEmpty(suffix)) {
-            String suffixExtension = FilenameUtils.getExtension(suffix);
-            if (StringUtils.isNotEmpty(suffixExtension)) {
-                if (!suffixExtension.equals(requestPathInfo.getExtension())) {
-                    LOGGER.error("The suffix part defines a different extension than the request: {}.", suffix);
+            if (StringUtils.isNotEmpty(suffix)) {
+                String suffixExtension = FilenameUtils.getExtension(suffix);
+                if (StringUtils.isNotEmpty(suffixExtension)) {
+                    if (!suffixExtension.equals(requestPathInfo.getExtension())) {
+                        LOGGER.error("The suffix part defines a different extension than the request: {}.", suffix);
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                        return;
+                    }
+                } else {
+                    LOGGER.error("Invalid suffix: {}.", suffix);
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     return;
                 }
-            } else {
-                LOGGER.error("Invalid suffix: {}.", suffix);
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
             }
-        }
-        Resource component = request.getResource();
-        ResourceResolver resourceResolver = request.getResourceResolver();
-        if (!component.isResourceType(IMAGE_RESOURCE_TYPE)) {
-            // image coming from template; need to switch resource
-            Resource componentCandidate = null;
-            PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-            if (pageManager != null) {
-                Page page = pageManager.getContainingPage(component);
-                if (page != null) {
-                    Template template = page.getTemplate();
-                    if (template != null) {
-                        if (StringUtils.isNotEmpty(suffix)) {
-                            long lastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
-                            String relativeTemplatePath = lastModifiedSuffix == 0 ?
-                                    // no timestamp info, but extension is valid; get resource name
-                                    suffix.substring(0, suffix.lastIndexOf('.')) :
-                                    // timestamp info, get parent path from suffix
-                                    suffix.substring(0, suffix.lastIndexOf("/" + String.valueOf(lastModifiedSuffix)));
-                            String imagePath = ResourceUtil.normalize(template.getPath() + relativeTemplatePath);
-                            if (StringUtils.isNotEmpty(imagePath) && !template.getPath().equals(imagePath)) {
-                                componentCandidate = resourceResolver.getResource(imagePath);
+            Resource component = request.getResource();
+            ResourceResolver resourceResolver = request.getResourceResolver();
+            if (!component.isResourceType(IMAGE_RESOURCE_TYPE)) {
+                // image coming from template; need to switch resource
+                Resource componentCandidate = null;
+                PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
+                if (pageManager != null) {
+                    Page page = pageManager.getContainingPage(component);
+                    if (page != null) {
+                        Template template = page.getTemplate();
+                        if (template != null) {
+                            if (StringUtils.isNotEmpty(suffix)) {
+                                long lastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
+                                String relativeTemplatePath = lastModifiedSuffix == 0 ?
+                                        // no timestamp info, but extension is valid; get resource name
+                                        suffix.substring(0, suffix.lastIndexOf('.')) :
+                                        // timestamp info, get parent path from suffix
+                                        suffix.substring(0, suffix.lastIndexOf("/" + String.valueOf(lastModifiedSuffix)));
+                                String imagePath = ResourceUtil.normalize(template.getPath() + relativeTemplatePath);
+                                if (StringUtils.isNotEmpty(imagePath) && !template.getPath().equals(imagePath)) {
+                                    componentCandidate = resourceResolver.getResource(imagePath);
+                                }
                             }
                         }
                     }
                 }
+                if (componentCandidate == null) {
+                    LOGGER.error("Unable to retrieve an image from this page's template.");
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                component = componentCandidate;
             }
-            if (componentCandidate == null) {
-                LOGGER.error("Unable to retrieve an image from this page's template.");
+
+
+            ImageComponent imageComponent = new ImageComponent(component);
+            if (imageComponent.source == Source.NONEXISTING) {
+                LOGGER.error("The image from {} does not have a valid file reference.", component.getPath());
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
-            component = componentCandidate;
-        }
 
+            ValueMap componentProperties = component.getValueMap();
+            long lastModifiedEpoch = 0;
+            Calendar lastModifiedDate = componentProperties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+            if (lastModifiedDate == null) {
+                lastModifiedDate = componentProperties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
+            }
+            if (lastModifiedDate != null) {
+                lastModifiedEpoch = lastModifiedDate.getTimeInMillis();
+            }
+            Asset asset = null;
+            if (imageComponent.source == Source.ASSET) {
+                asset = imageComponent.imageResource.adaptTo(Asset.class);
+                if (asset == null) {
+                    LOGGER.error("Unable to adapt resource {} used by image {} to an asset.", imageComponent.imageResource.getPath(),
+                            component.getPath());
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                long assetLastModifiedEpoch = asset.getLastModified();
+                if (assetLastModifiedEpoch > lastModifiedEpoch) {
+                    lastModifiedEpoch = assetLastModifiedEpoch;
+                }
+            }
+            long requestLastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
+            if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
+                String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
+                if (StringUtils.isNotEmpty(redirectLocation)) {
+                    LOGGER.info(
+                            "The last modified information present in the request ({}) is different than expected. Redirect request to " +
+                                    "correct suffix ({})", requestLastModifiedSuffix, redirectLocation);
+                    response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+                    response.setHeader("Location", redirectLocation);
+                    return;
+                } else {
+                    LOGGER.error("Unable to determine correct redirect location.");
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+            }
+            if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
 
-        ImageComponent imageComponent = new ImageComponent(component);
-        if (imageComponent.source == Source.NONEXISTING) {
-            LOGGER.error("The image from {} does not have a valid file reference.", component.getPath());
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        ValueMap componentProperties = component.getValueMap();
-        long lastModifiedEpoch = 0;
-        Calendar lastModifiedDate = componentProperties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
-        if (lastModifiedDate == null) {
-            lastModifiedDate = componentProperties.get(NameConstants.PN_PAGE_LAST_MOD, Calendar.class);
-        }
-        if (lastModifiedDate != null) {
-            lastModifiedEpoch = lastModifiedDate.getTimeInMillis();
-        }
-        Asset asset = null;
-        if (imageComponent.source == Source.ASSET) {
-            asset = imageComponent.imageResource.adaptTo(Asset.class);
-            if (asset == null) {
-                LOGGER.error("Unable to adapt resource {} used by image {} to an asset.", imageComponent.imageResource.getPath(),
-                        component.getPath());
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-            long assetLastModifiedEpoch = asset.getLastModified();
-            if (assetLastModifiedEpoch > lastModifiedEpoch) {
-                lastModifiedEpoch = assetLastModifiedEpoch;
-            }
-        }
-        long requestLastModifiedSuffix = getRequestLastModifiedSuffix(suffix);
-        if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
-            String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
-            if (StringUtils.isNotEmpty(redirectLocation)) {
-                LOGGER.info(
-                        "The last modified information present in the request ({}) is different than expected. Redirect request to " +
-                                "correct suffix ({})", requestLastModifiedSuffix, redirectLocation);
-                response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-                response.setHeader("Location", redirectLocation);
-                return;
-            } else {
-                LOGGER.error("Unable to determine correct redirect location.");
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-        }
-        if (!handleIfModifiedSinceHeader(request, response, lastModifiedEpoch)) {
-            try {
-                Map<String, Integer> transformationMap = getTransformationMap(request, component);
+                Map<String, Integer> transformationMap = getTransformationMap(selectorList, component);
                 Integer jpegQualityInPercentage = transformationMap.get(SELECTOR_QUALITY_KEY);
                 double quality = jpegQualityInPercentage / 100.0d;
                 int resizeWidth = transformationMap.get(SELECTOR_WIDTH_KEY);
@@ -222,10 +224,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     transformAndStreamAsset(response, componentProperties, resizeWidth, quality, asset, imageType,
                             imageName);
                 }
-            } catch (IllegalArgumentException e) {
-                LOGGER.error("Invalid argument for image transformation", e.getMessage());
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
+        } catch (IllegalArgumentException e) {
+            LOGGER.error("Invalid image request", e.getMessage());
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
 
     }
@@ -588,11 +590,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the content policy bound to the given component.
      *
      * @param imageResource the resource identifying the accessed image component
-     * @param request       the request from which to read specific attributes and parameters. Allows to resolve delegated policy resources.
      * @return the content policy. May be {@code nulll} in case no content policy can be found.
      */
-    private ContentPolicy getContentPolicy(@NotNull Resource imageResource,
-                                           @NotNull SlingHttpServletRequest request) {
+    private ContentPolicy getContentPolicy(@NotNull Resource imageResource) {
         ResourceResolver resourceResolver = imageResource.getResourceResolver();
         ContentPolicyManager policyManager = resourceResolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
@@ -607,7 +607,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                     }
                 }
             }
-            return policyManager.getPolicy(imageResource, request);
+            return policyManager.getPolicy(imageResource);
         } else {
             LOGGER.warn("Could not get policy manager from resource resolver!");
         }
@@ -615,27 +615,33 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Create a image transformation map from the selector string of the given {@link SlingHttpServletRequest}. A valid selector can be
-     * - handler or
-     * - handler.width or
-     * - handler.quality.width
-     *
-     * @param request the current {@link SlingHttpServletRequest}
-     * @return Map with quality and width transformation parameter
+     * Create a List from the given selector string. A valid selector can be:
+     *      * handler or
+     *      * handler.width or
+     *      * handler.quality.width
+     * @param selector string to create the List from
+     * @return {@link List} of selector items
+     * @throws IllegalArgumentException in case the selector is not valid
      */
-    private Map<String, Integer> getTransformationMap(SlingHttpServletRequest request, Resource component) throws IllegalArgumentException {
-        Map<String, Integer> selectorParameterMap = new HashMap<>();
-        String selectorString = request.getRequestPathInfo().getSelectorString();
-
-        if (StringUtils.isEmpty(selectorString)) {
-            throw new IllegalArgumentException("Expected 1, 2 or 3 selectors instead got no selector");
+    private List<String> selectorToList(String selector) throws IllegalArgumentException {
+        if (StringUtils.isEmpty(selector)) {
+            throw new IllegalArgumentException("Expected 1, 2 or 3 selectors instead got empty selector");
         }
-
-        ArrayList<String> selectorList = Lists.newArrayList(Splitter.on('.').omitEmptyStrings().trimResults().split(selectorString));
+        ArrayList<String> selectorList = Lists.newArrayList(Splitter.on('.').omitEmptyStrings().trimResults().split(selector));
         if (selectorList.size() > 3) {
             throw new IllegalArgumentException("Expected 1, 2 or 3 selectors, instead got: " + selectorList.size());
         }
+        return selectorList;
+    }
 
+    /**
+     * Create a image transformation map from the given selector items.
+     *
+     * @param selectorList to get the parameter from
+     * @return Map with quality and width transformation parameter
+     */
+    private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
+        Map<String, Integer> selectorParameterMap = new HashMap<>();
         int width = this.defaultResizeWidth;
         if (selectorList.size() > 1) {
             String widthString = (selectorList.size() > 2 ? selectorList.get(2) : selectorList.get(1));
@@ -644,7 +650,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (width <= 0) {
                     throw new IllegalArgumentException();
                 }
-                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component, request);
+                List<Integer> allowedRenditionWidths = getAllowedRenditionWidths(component);
                 if (!allowedRenditionWidths.contains(width)) {
                     throw new IllegalArgumentException("The requested width is not allowed in the content policy or no default");
                 }
@@ -662,7 +668,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (qualityPercentage <= 0 || qualityPercentage > 100) {
                     throw new IllegalArgumentException();
                 }
-                Integer allowedJpegQuality = getAllowedJpegQuality(component, request);
+                Integer allowedJpegQuality = getAllowedJpegQuality(component);
                 if (qualityPercentage != allowedJpegQuality) {
                     throw new IllegalArgumentException("The requested quality is not allowed in the content policy or no default");
                 }
@@ -682,13 +688,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * ignored.
      *
      * @param imageResource the resource identifying the accessed image component
-     * @param request       the request from which to read specific attributes and parameters. Allows to resolve delegated policy resources.
      * @return the list of the allowed widths; the list will be <i>empty</i> if the component doesn't have a content policy
      */
-    private List<Integer> getAllowedRenditionWidths(Resource imageResource,
-                                                    @NotNull SlingHttpServletRequest request) {
+    private List<Integer> getAllowedRenditionWidths(@NotNull Resource imageResource) {
         List<Integer> list = new ArrayList<>();
-        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource);
         if (contentPolicy != null) {
             String[] allowedRenditionWidths = contentPolicy.getProperties()
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_ALLOWED_RENDITION_WIDTHS, new String[0]);
@@ -712,13 +716,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Returns the allowed JPEG quality from this component's content policy.
      *
      * @param imageResource the resource identifying the accessed image component
-     * @param request       the request from which to read specific attributes and parameters. Allows to resolve delegated policy resources.
      * @return the JPEG quality in the range 0..100 or {@link #DEFAULT_JPEG_QUALITY} if the component doesn't have a content policy or doesn't have this policy property set to an Integer.
      */
-    private Integer getAllowedJpegQuality(Resource imageResource,
-                                          @NotNull SlingHttpServletRequest request) {
+    private Integer getAllowedJpegQuality(@NotNull Resource imageResource) {
         Integer allowedJpegQuality = DEFAULT_JPEG_QUALITY;
-        ContentPolicy contentPolicy = getContentPolicy(imageResource, request);
+        ContentPolicy contentPolicy = getContentPolicy(imageResource);
         if (contentPolicy != null) {
             allowedJpegQuality = contentPolicy.getProperties()
                     .get(com.adobe.cq.wcm.core.components.models.Image.PN_DESIGN_JPEG_QUALITY, DEFAULT_JPEG_QUALITY);
