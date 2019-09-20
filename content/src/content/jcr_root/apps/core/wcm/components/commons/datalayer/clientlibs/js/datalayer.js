@@ -18,10 +18,13 @@
 
     /* eslint no-console: "off" */
 
+    var CHANGE_EVENT = "datalayer:change";
+
     // Initializes the data layer
     function init() {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.state = {};
+        window.dataLayer._listeners = [];
         populateDataLayer();
         handleEvents(window.dataLayer);
         overridePush();
@@ -47,55 +50,34 @@
     }
 
     function handleEvent(event) {
-        if (!event && !event.type) {
+        if (!event) {
             return;
         }
-        var isListener = false;
-        switch (event.type) {
-            case "updated":
-                updateState(window.dataLayer.state, event.object);
-                break;
-            case "listenerdefined":
-                registerListener(event);
-                isListener = true;
-                break;
-            case "removed":
-                removeFromState(window.dataLayer.state, event.object);
-                break;
-            default:
-                return;
-        }
-        if (!isListener) {
+        if (event.data) {
+            updateState(window.dataLayer.state, event.data);
             triggerListeners(event);
+        } else if (event.handler) {
+            registerListener(event);
         }
     }
 
-    function registerListener(event) {
-        // add the listener to datalayer.listener
-        console.log("register an event listener: " + event.object.listener.type);
+    function registerListener(listener) {
+        // add the listener to datalayer._listeners
+        window.dataLayer._listeners.push(listener);
+        console.log("register an event listener: " + listener.on);
     }
 
     function triggerListeners(event) {
-        // loop through all the listeners
+        // loop over all the listeners
         // when a match is found, execute the handler
-    }
-
-    function removeFromState(state, object) {
-        deepRemove(state, object);
-    }
-
-    function deepRemove(target, source) {
-        if (isObject(target) && isObject(source)) {
-            Object.keys(source).forEach(function(key) {
-                if (target[key]) {
-                    if (isObject(source[key]) && Object.keys(source[key]).length > 0) {
-                        deepRemove(target[key], source[key]);
-                    } else {
-                        delete target[key];
-                    }
-                }
-            });
-        }
+        Object.keys(window.dataLayer._listeners).forEach(function(key) {
+            var listener = window.dataLayer._listeners[key];
+            if (listener.on === CHANGE_EVENT) {
+                listener.handler(event);
+            } else if (listener.on === event.type) {
+                listener.handler(event);
+            }
+        });
     }
 
     function updateState(state, object) {
@@ -113,8 +95,12 @@
                     }
                     deepMerge(target[key], source[key]);
                 } else {
-                    tmpSource[key] = source[key];
-                    Object.assign(target, tmpSource);
+                    if (source[key] === undefined) {
+                        delete target[key];
+                    } else {
+                        tmpSource[key] = source[key];
+                        Object.assign(target, tmpSource);
+                    }
                 }
             });
         }
@@ -126,8 +112,8 @@
 
     function populateDataLayer() {
         window.dataLayer.push({
-            "type": "updated",
-            "object": {
+            "type": "carousel clicked",
+            "data": {
                 "component": {
                     "carousel": {
                         "carousel3": {
@@ -140,8 +126,8 @@
         });
 
         window.dataLayer.push({
-            "type": "updated",
-            "object": {
+            "type": "tab viewed",
+            "data": {
                 "component": {
                     "tab": {
                         "tab2": {
@@ -154,8 +140,8 @@
         });
 
         window.dataLayer.push({
-            "type": "updated",
-            "object": {
+            "type": "page loaded",
+            "data": {
                 "page": {
                     "id": "/content/mysite/en/products/crossfit",
                     "siteLanguage": "en-us",
@@ -168,23 +154,22 @@
         });
 
         window.dataLayer.push({
-            "type": "listenerdefined",
-            "object": {
-                "listener": {
-                    "type": "clicked",
-                    "target": {},
-                    "handler": function(component) {
-                        console.log("clicked on component: " + component);
-                    }
-                }
+            "on": "datalayer:change",
+            "handler": function(event) {
+                // the type
+                console.log(event.type);
+                // the data that changed
+                console.log(event.data);
+                // the state
+                console.log(this.state);
             }
         });
     }
 
     function populateDataLayerAfterOverride() {
         window.dataLayer.push({
-            "type": "updated",
-            "object": {
+            "type": "page updated",
+            "data": {
                 "page": {
                     "new prop": "I'm new",
                     "id": "NEW/content/mysite/en/products/crossfit",
@@ -198,8 +183,8 @@
         });
 
         window.dataLayer.push({
-            "type": "updated",
-            "object": {
+            "type": "component updated",
+            "data": {
                 "component": {
                     "image": {
                         "image4": {
@@ -212,13 +197,13 @@
         });
 
         window.dataLayer.push({
-            "type": "removed",
-            "object": {
+            "type": "updated",
+            "data": {
                 "component": {
                     "image": {
                         "image4": {
                             "id": "/content/mysite/en/home/jcr:content/root/image4",
-                            "items": {}
+                            "items": undefined
                         }
                     }
                 }
