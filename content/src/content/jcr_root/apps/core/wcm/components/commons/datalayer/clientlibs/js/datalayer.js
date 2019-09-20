@@ -50,12 +50,14 @@
         if (!event && !event.type) {
             return;
         }
+        var isListener = false;
         switch (event.type) {
             case "updated":
                 updateState(window.dataLayer.state, event.object);
                 break;
             case "listenerdefined":
                 registerListener(event);
+                isListener = true;
                 break;
             case "removed":
                 removeFromState(window.dataLayer.state, event.object);
@@ -63,6 +65,19 @@
             default:
                 return;
         }
+        if (!isListener) {
+            triggerListeners(event);
+        }
+    }
+
+    function registerListener(event) {
+        // add the listener to datalayer.listener
+        console.log("register an event listener: " + event.object.listener.type);
+    }
+
+    function triggerListeners(event) {
+        // loop through all the listeners
+        // when a match is found, execute the handler
     }
 
     function removeFromState(state, object) {
@@ -85,10 +100,6 @@
 
     function updateState(state, object) {
         deepMerge(state, object);
-    }
-
-    function registerListener(event) {
-        console.log("register an event listener: " + event.object.listener.type);
     }
 
     function deepMerge(target, source) {
