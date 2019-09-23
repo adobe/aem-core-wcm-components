@@ -14,7 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-template.render="${@ options}">
-    <a data-pin-do="embedPin" href="${'https://www.pinterest.com/pin/{0}/' @ format=options['pinId']}"></a>
+    <a data-pin-do="embedPin" href="${'https://www.pinterest.com/pin/{0}/' @ format=options['pinId']}">${'https://www.pinterest.com/pin/{0}/' @ format=options['pinId']}</a>
     <script>
         var pinterestScript = "https://assets.pinterest.com/js/pinit.js";
         var scripts = document.getElementsByTagName("script");
