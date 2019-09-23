@@ -477,7 +477,6 @@
             <artifactId>slf4j-test</artifactId>
         </dependency>
 
-
         <!-- Only required for junit 4 -->
         <dependency>
             <groupId>io.wcm</groupId>
