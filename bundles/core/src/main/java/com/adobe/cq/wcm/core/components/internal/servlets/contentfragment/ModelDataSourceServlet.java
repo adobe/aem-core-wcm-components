@@ -84,7 +84,7 @@ public class ModelDataSourceServlet extends AbstractDataSourceServlet {
 
             parameterMap.put("path", "/conf");
             parameterMap.put("type", "cq:Template");
-
+            parameterMap.put("p.limit", "-1");
             parameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/model/" + ResourceResolver.PROPERTY_RESOURCE_TYPE);
             parameterMap.put("1_property.value", "wcm/scaffolding/components/scaffolding");
 
