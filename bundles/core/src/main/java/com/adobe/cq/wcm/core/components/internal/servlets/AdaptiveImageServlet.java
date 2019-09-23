@@ -615,7 +615,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Create a {@link List} from the given selector string. A valid selector can be:
+     * Creates a {@link List} from the given selector string. A valid selector can be:
      *      * handler or
      *      * handler.width or
      *      * handler.quality.width
@@ -636,7 +636,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Create a image transformation map from the given selector items.
+     * Creates an image transformation map from the given selector items.
      *
      * @param selectorList to get the parameter from
      * @return {@link Map} with quality and width transformation parameter
