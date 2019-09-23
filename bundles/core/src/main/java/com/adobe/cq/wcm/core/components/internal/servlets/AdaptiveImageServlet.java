@@ -615,10 +615,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     }
 
     /**
-     * Create a List from the given selector string. A valid selector can be:
+     * Create a {@link List} from the given selector string. A valid selector can be:
      *      * handler or
      *      * handler.width or
      *      * handler.quality.width
+     *
      * @param selector string to create the List from
      * @return {@link List} of selector items
      * @throws IllegalArgumentException in case the selector is not valid
@@ -638,7 +639,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
      * Create a image transformation map from the given selector items.
      *
      * @param selectorList to get the parameter from
-     * @return Map with quality and width transformation parameter
+     * @return {@link Map} with quality and width transformation parameter
      */
     private Map<String, Integer> getTransformationMap(List<String> selectorList, Resource component) throws IllegalArgumentException {
         Map<String, Integer> selectorParameterMap = new HashMap<>();
