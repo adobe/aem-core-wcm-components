@@ -26,7 +26,7 @@
         window.dataLayer.state = {};
         window.dataLayer._listeners = [];
         populateDataLayer();
-        handleEvents(window.dataLayer);
+        handleEventsBeforeScriptLoad(window.dataLayer);
         overridePush();
         populateDataLayerAfterOverride();
         console.log("data layer script initialized");
@@ -36,15 +36,27 @@
     function overridePush() {
         window.dataLayer.push = function() {
             var pushArguments = arguments;
+            var filteredArguments = arguments;
             Object.keys(pushArguments).forEach(function(key) {
-                handleEvent(pushArguments[key]);
+                var event = pushArguments[key];
+                handleEvent(event);
+                // filter out event listeners
+                if (event.handler) {
+                    delete filteredArguments[key];
+                }
             });
-            return Array.prototype.push.apply(this, pushArguments);
+            if (filteredArguments[0]) {
+                return Array.prototype.push.apply(this, filteredArguments);
+            }
         };
     }
 
-    function handleEvents(dataLayer) {
-        dataLayer.forEach(function(event) {
+    function handleEventsBeforeScriptLoad(dataLayer) {
+        dataLayer.forEach(function(event, idx) {
+            // remove event listeners that were defined before the script load.
+            if (event.handler) {
+                dataLayer.splice(idx, 1);
+            }
             handleEvent(event);
         });
     }
@@ -58,7 +70,17 @@
             triggerListeners(event);
         } else if (event.handler) {
             registerListener(event);
+            triggerListener(event);
         }
+    }
+
+    // trigger the listener on all previous events matching the listener
+    function triggerListener(listener) {
+        window.dataLayer.forEach(function(event) {
+            if (listener.on === CHANGE_EVENT || listener.on === event.type) {
+                listener.handler(event);
+            }
+        });
     }
 
     function registerListener(listener) {
@@ -72,9 +94,7 @@
         // when a match is found, execute the handler
         Object.keys(window.dataLayer._listeners).forEach(function(key) {
             var listener = window.dataLayer._listeners[key];
-            if (listener.on === CHANGE_EVENT) {
-                listener.handler(event);
-            } else if (listener.on === event.type) {
+            if (listener.on === CHANGE_EVENT || listener.on === event.type) {
                 listener.handler(event);
             }
         });
@@ -161,7 +181,7 @@
                 // the data that changed
                 console.log(event.data);
                 // the state
-                console.log(this.state);
+                console.log(window.dataLayer.state);
             }
         });
     }
@@ -197,7 +217,33 @@
         });
 
         window.dataLayer.push({
-            "type": "updated",
+            "type": "removed",
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": {
+                            "id": "/content/mysite/en/home/jcr:content/root/image4",
+                            "items": undefined
+                        }
+                    }
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "on": "removed",
+            "handler": function(event) {
+                // the type
+                console.log(event.type);
+                // the data that changed
+                console.log(event.data);
+                // the state
+                console.log(window.dataLayer.state);
+            }
+        });
+
+        window.dataLayer.push({
+            "type": "removed",
             "data": {
                 "component": {
                     "image": {
