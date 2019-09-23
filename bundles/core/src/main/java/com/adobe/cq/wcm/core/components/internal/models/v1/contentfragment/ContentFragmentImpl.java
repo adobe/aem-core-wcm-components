@@ -210,7 +210,6 @@ public class ContentFragmentImpl implements ContentFragment {
         return content.split("(?=(<p>|<h1>|<h2>|<h3>|<h4>|<h5>|<h6>))");
     }
 
-
     /**
      * Empty placeholder content fragment.
      */

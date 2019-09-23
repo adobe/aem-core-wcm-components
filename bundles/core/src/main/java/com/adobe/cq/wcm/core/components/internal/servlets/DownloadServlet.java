@@ -72,7 +72,6 @@ public class DownloadServlet extends SlingAllMethodsServlet {
     @Override
     protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
             throws IOException {
-
         Asset asset = request.getResource().adaptTo(Asset.class);
         if (asset == null) {
             String filename = request.getRequestPathInfo().getSuffix();
@@ -104,13 +103,10 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         }
     }
 
-
     private void sendResource(SlingHttpServletRequest request, SlingHttpServletResponse response, String filename,
             Resource downloadDataResource) throws IOException {
-
         ValueMap valueMap = downloadDataResource.adaptTo(ValueMap.class);
         if (valueMap != null) {
-
             Calendar calendar = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
             if (calendar != null) {
                 if (isUnchanged(calendar.getTimeInMillis(), request)) {
@@ -147,13 +143,13 @@ public class DownloadServlet extends SlingAllMethodsServlet {
     }
 
     /**
-     * Determines the size of a binary resource just by using the JCR API; this hopefully avoids to read
-     * the complete InputStream to determine the actual size of the binary.
+     * Determines the size of a binary resource just by using the JCR API; this hopefully avoids having to read
+     * the complete {@code InputStream} to determine the actual size of the binary.
+     *
      * @param resource the actual resource
-     * @return the size in byte, -1 if an error occurs, the resource is not backed by a JCR node, or if there is not JCR_DATA property
+     * @return the size in bytes, -1 if an error occurs, the resource is not backed by a JCR node, or if there is not a {@code JCR_DATA} property
      */
     private long getResourceSize (Resource resource) {
-
         Node node = resource.adaptTo(Node.class);
         if (node != null) {
             Property jcrData;
@@ -176,8 +172,6 @@ public class DownloadServlet extends SlingAllMethodsServlet {
         return Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(INLINE_SELECTOR);
     }
 
-
-
     private Optional<InputStream> getInputStream (Asset asset) {
         return Optional.ofNullable(asset.getOriginal())
                 .map(r -> r.adaptTo(InputStream.class));
@@ -186,7 +180,6 @@ public class DownloadServlet extends SlingAllMethodsServlet {
     private Optional<InputStream> getInputStream (Resource fileResource) {
         return Optional.ofNullable(fileResource.getValueMap().get(JcrConstants.JCR_DATA, InputStream.class));
     }
-
 
     private void sendResponse(InputStream stream, long size, String mimeType, String filename, long lastModifiedDate, SlingHttpServletResponse response,
             boolean inline) throws IOException {
