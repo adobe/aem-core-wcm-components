@@ -50,4 +50,4 @@ BLOCK cmp-button
 * **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_button](https://www.adobe.com/go/aem_cmp_library_button)
 * **Author**: [Richard Hand](https://github.com/richardhand)
 
-_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/Adobe-Marketing-Cloud/aem-core-wcm-components)._
+_If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._

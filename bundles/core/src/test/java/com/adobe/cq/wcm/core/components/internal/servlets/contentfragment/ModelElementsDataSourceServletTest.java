@@ -44,6 +44,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 public class ModelElementsDataSourceServletTest {
 
@@ -58,7 +59,7 @@ public class ModelElementsDataSourceServletTest {
     }
 
     @Test
-    public void verifyDataSourceWhenNoParameterIsGiven() throws Exception {
+    public void verifyDataSourceWhenNoParameterIsGiven() {
         // GIVEN
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.bundleContext());
         request.setResource(Mockito.mock(Resource.class));
@@ -71,12 +72,40 @@ public class ModelElementsDataSourceServletTest {
     }
 
     @Test
-    public void verifyDataSourceWhenModelParameterIsGiven() throws Exception {
+    public void verifyDataSourceWhenOrderByIsGiven() {
         // GIVEN
         InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
         slingContext.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
         MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.resourceResolver(),
                 slingContext.bundleContext());
+        Resource mockResource = Mockito.mock(Resource.class);
+        when(mockResource.isResourceType(ModelElementsDataSourceServlet.RESOURCE_TYPE_ORDER_BY)).thenReturn(true);
+        request.setResource(mockResource);
+        request.setParameterMap(ImmutableMap.of(
+                PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
+
+        // WHEN
+        modelElementsDataSourceServlet.doGet(request, slingContext.response());
+
+        // THEN
+        SimpleDataSource simpleDataSource = (SimpleDataSource) request.getAttribute(DataSource.class.getName());
+        List<Resource> resourceList = IteratorUtils.toList(simpleDataSource.iterator());
+        assertThat(resourceList, not(empty()));
+        assertThat(resourceList, allOf(
+                hasItem(resourceWithPropertiesTextAndValue("Created", "jcr:created")),
+                hasItem(resourceWithPropertiesTextAndValue("Last Modified", "jcr:content/jcr:lastModified")),
+                hasItem(resourceWithPropertiesTextAndValue("textFieldLabel", "jcr:content/data/master/textField")),
+                hasItem(resourceWithPropertiesTextAndValue("multiTextField", "jcr:content/data/master/multiTextField"))));
+    }
+
+    @Test
+    public void verifyDataSourceWhenModelParameterIsGiven() {
+        // GIVEN
+        InputStream jsonResourceAsStream = getClass().getResourceAsStream("test-content.json");
+        slingContext.load().json(jsonResourceAsStream, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel");
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(slingContext.resourceResolver(),
+                slingContext.bundleContext());
+        request.setResource(Mockito.mock(Resource.class));
         request.setParameterMap(ImmutableMap.of(
                 PARAMETER_AND_PN_MODEL_PATH, "/conf/foobar/settings/dam/cfm/models/yetanothercfmodel"));
 
@@ -118,16 +147,8 @@ public class ModelElementsDataSourceServletTest {
                     return false;
                 }
                 ValueMap resourceValueMap = item.getValueMap();
-                if (resourceValueMap == null ||
-                        resourceValueMap.get("text") == null ||
-                        resourceValueMap.get("value") == null) {
-                    return false;
-                }
-                if (resourceValueMap.get("text").equals(textValue) &&
-                        resourceValueMap.get("value").equals(valueValue)) {
-                    return true;
-                }
-                return false;
+                return resourceValueMap.get("text").equals(textValue) &&
+                        resourceValueMap.get("value").equals(valueValue);
             }
         };
     }

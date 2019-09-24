@@ -48,6 +48,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList;
 import com.adobe.cq.wcm.core.components.models.contentfragment.DAMContentFragment;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.search.Predicate;
 import com.day.cq.search.PredicateGroup;
 import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
@@ -98,6 +99,12 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     @Default(intValues = DEFAULT_MAX_ITEMS)
     private int maxItems;
 
+    @ValueMapValue(name = ContentFragmentList.PN_ORDER_BY, injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String orderBy = JcrConstants.JCR_CREATED;
+
+    @ValueMapValue(name = ContentFragmentList.PN_SORT_ORDER, injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String sortOrder = Predicate.SORT_ASCENDING;
+
     private List<DAMContentFragment> items = new ArrayList<>();
 
     @PostConstruct
@@ -130,6 +137,13 @@ public class ContentFragmentListImpl implements ContentFragmentList {
         queryParameterMap.put("p.limit", Integer.toString(maxItems));
         queryParameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/data/cq:model");
         queryParameterMap.put("1_property.value", modelPath);
+
+        if (StringUtils.isNotEmpty(orderBy)) {
+            queryParameterMap.put("orderby", "@" + orderBy);
+            if (StringUtils.isNotEmpty(sortOrder)) {
+                queryParameterMap.put("orderby.sort", sortOrder);
+            }
+        }
 
         ArrayList<String> allTags = new ArrayList<>();
         if (tagNames != null && tagNames.length > 0) {
