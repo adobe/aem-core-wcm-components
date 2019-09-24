@@ -630,11 +630,10 @@
                 <version>2.9.5</version>
                 <scope>provided</scope>
             </dependency>
-
             <dependency>
-                <artifactId>org.apache.servicemix.specs.jaxb-api-2.2</artifactId>
-                <version>2.9.0</version>
-                <groupId>org.apache.servicemix.specs</groupId>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.1</version>
                 <scope>provided</scope>
             </dependency>
 

@@ -375,10 +375,9 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
         </dependency>
-
         <dependency>
-            <artifactId>org.apache.servicemix.specs.jaxb-api-2.2</artifactId>
-            <groupId>org.apache.servicemix.specs</groupId>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
         </dependency>
 
         <dependency>
