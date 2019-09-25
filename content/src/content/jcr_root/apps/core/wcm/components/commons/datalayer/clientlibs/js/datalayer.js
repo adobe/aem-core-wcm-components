@@ -33,9 +33,10 @@
         this._overridePush();
     };
 
-    // Augments the push function (only for the data layer object) to also handle the event
+    // Augments the push function to also handle the event
     DataLayerHandler.prototype._overridePush = function() {
         var that = this;
+        // restrict the override to the data layer object
         that.dataLayer.push = function() {
             var pushArguments = arguments;
             var filteredArguments = arguments;
@@ -56,7 +57,7 @@
     DataLayerHandler.prototype._handleEventsBeforeScriptLoad = function() {
         var that = this;
         this.dataLayer.forEach(function(event, idx) {
-            // remove event listeners that were defined before the script load.
+            // remove event listeners defined before the script load
             if (event.handler) {
                 that.dataLayer.splice(idx, 1);
             }
@@ -69,7 +70,7 @@
             return;
         }
         if (event.data) {
-            this._updateState(this.dataLayer.state, event.data);
+            this._updateState(event.data);
             this._triggerListeners(event);
         } else if (event.handler) {
             this._registerListener(event);
@@ -77,19 +78,8 @@
         }
     };
 
-    // trigger the listener on all previous events matching the listener
-    DataLayerHandler.prototype._triggerListener = function(listener) {
-        this.dataLayer.forEach(function(event) {
-            if (listener.on === CHANGE_EVENT || listener.on === event.type) {
-                listener.handler(event);
-            }
-        });
-    };
-
-    DataLayerHandler.prototype._registerListener = function(listener) {
-        // add the listener to datalayer._listeners
-        this._listeners.push(listener);
-        console.log("register an event listener: " + listener.on);
+    DataLayerHandler.prototype._updateState = function(data) {
+        this._deepMerge(this.dataLayer.state, data);
     };
 
     DataLayerHandler.prototype._triggerListeners = function(event) {
@@ -104,8 +94,19 @@
         });
     };
 
-    DataLayerHandler.prototype._updateState = function(state, object) {
-        this._deepMerge(state, object);
+    DataLayerHandler.prototype._registerListener = function(listener) {
+        // add the listener to datalayer._listeners
+        this._listeners.push(listener);
+        console.log("register an event listener: " + listener.on);
+    };
+
+    // trigger the listener on all previous events matching the listener
+    DataLayerHandler.prototype._triggerListener = function(listener) {
+        this.dataLayer.forEach(function(event) {
+            if (listener.on === CHANGE_EVENT || listener.on === event.type) {
+                listener.handler(event);
+            }
+        });
     };
 
     DataLayerHandler.prototype._deepMerge = function(target, source) {
