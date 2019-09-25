@@ -17,6 +17,7 @@
     "use strict";
 
     /* eslint no-console: "off" */
+    /* eslint no-unused-vars: "off" */
 
     var CHANGE_EVENT = "datalayer:change";
 
@@ -253,6 +254,101 @@
                         }
                     }
                 }
+            }
+        });
+
+    }
+
+
+    function useCases() {
+
+        // ====================================  Add data ======================================
+
+        window.dataLayer.push({
+            "data": {
+                "page": {
+                    "id": "/content/my-site/en/about-us",
+                    "pageName": "About Us",
+                    "siteLanguage": "en-us",
+                    "siteCountry": "US"
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "data": {
+                "component": {
+                    "tab": {
+                        "tab2": {
+                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
+                            "title": "the ocean",
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        });
+
+        // ====================================  Add event ======================================
+
+
+        // Add an event (without data)
+        window.dataLayer.push({
+            "event": "page loaded"
+        });
+
+        // Add an event with a reference to the data
+        window.dataLayer.push({
+            "event": "click",
+            "id": ["component", "/content/my-site/en/about-us/jcr:content/root/responsivegrid/teaser"]
+        });
+
+        // ====================================  Add event listener ======================================
+
+        window.dataLayer.push({
+            "on": "page loaded",
+            "handler": function(event) {
+                var pageUrl = window.dataLayer.get("page.id");
+                console.log(pageUrl);
+            }
+        });
+
+        window.dataLayer.push({
+            "on": "click",
+            "listen": "future",
+            "selector": "path='component' && type='my-site/components/teaser'",
+            "handler": function(event) {
+                var clickTarget = event.id;
+                console.log(clickTarget);
+            }
+        });
+
+        window.dataLayer.push({
+            "on": "change",
+            "get": "user.userName",
+            "listen": "once",
+            "handler": function(userName) {
+                console.log(userName);
+            }
+        });
+
+        // Unregister event listener
+        window.dataLayer.push({
+            "off": "change",
+            "get": "user.userName",
+            "listen": "once",
+            "handler": function(userName) {
+                console.log(userName);
+            }
+        });
+
+        // TODO: is it still needed?
+        window.dataLayer.push({
+            "type": "tab viewed",
+            "eventData": {
+                "prop1": "the component id",
+                "prop2": "the component id",
+                "prop3": "the component id"
             }
         });
 
