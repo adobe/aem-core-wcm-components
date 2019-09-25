@@ -22,7 +22,7 @@ Embed component written in HTL that allows third-party widgets (e.g. chatbots, l
     * **URL** - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match. The following URL processors are provided:
         * **oEmbed** - generic oEmbed URL processor with out-of-the-box configurations for Facebook Post, Facebook Video, Flickr, Instagram, SoundCloud, Twitter and YouTube.
         * **Pinterest** - processes Pinterest URLs. 
-    * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
+    * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags. A YouTube embeddable is included out-of-the-box.
     * **HTML** - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
 * Each input type can be disabled by a template author.
 * For the embeddable type, the embeddables that are allowed to be selected in the edit dialog can be configured by a template author.
