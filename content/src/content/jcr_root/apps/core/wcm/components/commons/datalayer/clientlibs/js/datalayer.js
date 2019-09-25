@@ -33,6 +33,17 @@
         this._overridePush();
     };
 
+    DataLayerHandler.prototype._handleEventsBeforeScriptLoad = function() {
+        var that = this;
+        this.dataLayer.forEach(function(event, idx) {
+            // remove event listeners defined before the script load
+            if (event.handler) {
+                that.dataLayer.splice(idx, 1);
+            }
+            that._handleEvent(event);
+        });
+    };
+
     // Augments the push function to also handle the event
     DataLayerHandler.prototype._overridePush = function() {
         var that = this;
@@ -52,17 +63,6 @@
                 return Array.prototype.push.apply(this, filteredArguments);
             }
         };
-    };
-
-    DataLayerHandler.prototype._handleEventsBeforeScriptLoad = function() {
-        var that = this;
-        this.dataLayer.forEach(function(event, idx) {
-            // remove event listeners defined before the script load
-            if (event.handler) {
-                that.dataLayer.splice(idx, 1);
-            }
-            that._handleEvent(event);
-        });
     };
 
     DataLayerHandler.prototype._handleEvent = function(event) {
