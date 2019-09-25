@@ -69,7 +69,7 @@
             return;
         }
         if (event.data) {
-            this._updateState(window.dataLayer.state, event.data);
+            this._updateState(this.dataLayer.state, event.data);
             this._triggerListeners(event);
         } else if (event.handler) {
             this._registerListener(event);
