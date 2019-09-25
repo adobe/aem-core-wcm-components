@@ -210,7 +210,7 @@
 
         // Add an event with its data
         window.dataLayer.push({
-            "type": "image viewed",
+            "event": "image viewed",
             "data": {
                 "component": {
                     "image": {
@@ -225,7 +225,7 @@
 
         // Add an event and remove data
         window.dataLayer.push({
-            "type": "removed",
+            "event": "removed",
             "data": {
                 "component": {
                     "image": {

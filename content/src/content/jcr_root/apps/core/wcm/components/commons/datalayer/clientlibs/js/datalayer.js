@@ -83,6 +83,9 @@
     };
 
     DataLayerHandler.prototype._triggerListeners = function(event) {
+        if (!event.type) {
+            return;
+        }
         // loop over all the listeners
         // when a match is found, execute the handler
         var that = this;
