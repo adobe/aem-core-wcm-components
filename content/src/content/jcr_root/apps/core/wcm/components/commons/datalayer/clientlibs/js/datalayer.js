@@ -135,7 +135,6 @@
         return (item && typeof item === "object" && !Array.isArray(item));
     };
 
-
     window.addEventListener("datalayer:prepopulated", function() {
         console.log("data layer prepopulated - let's initialize the data layer");
         window.dataLayer = window.dataLayer || [];

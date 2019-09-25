@@ -16,6 +16,9 @@
 (function() {
     "use strict";
 
+    /* eslint no-console: "off" */
+    /* eslint no-unused-vars: "off" */
+
     window.dataLayer = window.dataLayer || [];
 
 
