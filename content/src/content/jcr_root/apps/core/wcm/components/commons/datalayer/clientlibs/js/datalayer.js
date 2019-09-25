@@ -21,26 +21,27 @@
 
     var CHANGE_EVENT = "datalayer:change";
 
-    // Initializes the data layer
-    function init() {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.state = {};
-        window.dataLayer._listeners = [];
-        populateDataLayer();
-        handleEventsBeforeScriptLoad(window.dataLayer);
-        overridePush();
-        populateDataLayerAfterOverride();
-        console.log("data layer script initialized");
+    function DataLayerHandler(dataLayer) {
+        this.dataLayer = dataLayer;
+        this.dataLayer.state = {};
+        this._listeners = [];
+        this._init();
     }
 
+    DataLayerHandler.prototype._init = function() {
+        this._handleEventsBeforeScriptLoad(this.dataLayer);
+        this._overridePush();
+    };
+
     // Augments the push function (only for the data layer object) to also handle the event
-    function overridePush() {
-        window.dataLayer.push = function() {
+    DataLayerHandler.prototype._overridePush = function() {
+        var that = this;
+        that.dataLayer.push = function() {
             var pushArguments = arguments;
             var filteredArguments = arguments;
             Object.keys(pushArguments).forEach(function(key) {
                 var event = pushArguments[key];
-                handleEvent(event);
+                that._handleEvent(event);
                 // filter out event listeners
                 if (event.handler) {
                     delete filteredArguments[key];
@@ -50,71 +51,74 @@
                 return Array.prototype.push.apply(this, filteredArguments);
             }
         };
-    }
+    };
 
-    function handleEventsBeforeScriptLoad(dataLayer) {
-        dataLayer.forEach(function(event, idx) {
+    DataLayerHandler.prototype._handleEventsBeforeScriptLoad = function() {
+        var that = this;
+        this.dataLayer.forEach(function(event, idx) {
             // remove event listeners that were defined before the script load.
             if (event.handler) {
-                dataLayer.splice(idx, 1);
+                that.dataLayer.splice(idx, 1);
             }
-            handleEvent(event);
+            that._handleEvent(event);
         });
-    }
+    };
 
-    function handleEvent(event) {
+    DataLayerHandler.prototype._handleEvent = function(event) {
         if (!event) {
             return;
         }
         if (event.data) {
-            updateState(window.dataLayer.state, event.data);
-            triggerListeners(event);
+            this._updateState(window.dataLayer.state, event.data);
+            this._triggerListeners(event);
         } else if (event.handler) {
-            registerListener(event);
-            triggerListener(event);
+            this._registerListener(event);
+            this._triggerListener(event);
         }
-    }
+    };
 
     // trigger the listener on all previous events matching the listener
-    function triggerListener(listener) {
-        window.dataLayer.forEach(function(event) {
+    DataLayerHandler.prototype._triggerListener = function(listener) {
+        this.dataLayer.forEach(function(event) {
             if (listener.on === CHANGE_EVENT || listener.on === event.type) {
                 listener.handler(event);
             }
         });
-    }
+    };
 
-    function registerListener(listener) {
+    DataLayerHandler.prototype._registerListener = function(listener) {
         // add the listener to datalayer._listeners
-        window.dataLayer._listeners.push(listener);
+        this._listeners.push(listener);
         console.log("register an event listener: " + listener.on);
-    }
+    };
 
-    function triggerListeners(event) {
+    DataLayerHandler.prototype._triggerListeners = function(event) {
         // loop over all the listeners
         // when a match is found, execute the handler
-        Object.keys(window.dataLayer._listeners).forEach(function(key) {
-            var listener = window.dataLayer._listeners[key];
+        var that = this;
+        Object.keys(this._listeners).forEach(function(key) {
+            var listener = that._listeners[key];
             if (listener.on === CHANGE_EVENT || listener.on === event.type) {
                 listener.handler(event);
             }
         });
-    }
+    };
 
-    function updateState(state, object) {
-        deepMerge(state, object);
-    }
+    DataLayerHandler.prototype._updateState = function(state, object) {
+        this._deepMerge(state, object);
+    };
 
-    function deepMerge(target, source) {
+    DataLayerHandler.prototype._deepMerge = function(target, source) {
         var tmpSource = {};
-        if (isObject(target) && isObject(source)) {
+        var that = this;
+        if (this._isObject(target) && this._isObject(source)) {
             Object.keys(source).forEach(function(key) {
-                if (isObject(source[key])) {
+                if (that._isObject(source[key])) {
                     if (!target[key]) {
                         tmpSource[key] = {};
                         Object.assign(target, tmpSource);
                     }
-                    deepMerge(target[key], source[key]);
+                    that._deepMerge(target[key], source[key]);
                 } else {
                     if (source[key] === undefined) {
                         delete target[key];
@@ -125,288 +129,21 @@
                 }
             });
         }
-    }
+    };
 
-    function isObject(item) {
+    DataLayerHandler.prototype._isObject = function(item) {
         return (item && typeof item === "object" && !Array.isArray(item));
-    }
-
-    function populateDataLayer() {
-        window.dataLayer.push({
-            "type": "carousel clicked",
-            "data": {
-                "component": {
-                    "carousel": {
-                        "carousel3": {
-                            "id": "/content/mysite/en/home/jcr:content/root/carousel3",
-                            "items": {}
-                        }
-                    }
-                }
-            }
-        });
-
-        window.dataLayer.push({
-            "type": "tab viewed",
-            "data": {
-                "component": {
-                    "tab": {
-                        "tab2": {
-                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
-                            "items": {}
-                        }
-                    }
-                }
-            }
-        });
-
-        window.dataLayer.push({
-            "type": "page loaded",
-            "data": {
-                "page": {
-                    "id": "/content/mysite/en/products/crossfit",
-                    "siteLanguage": "en-us",
-                    "siteCountry": "US",
-                    "pageType": "product detail",
-                    "pageName": "pdp - crossfit zoom",
-                    "pageCategory": "womens > shoes > athletic"
-                }
-            }
-        });
-
-        window.dataLayer.push({
-            "on": "datalayer:change",
-            "handler": function(event) {
-                // the type
-                console.log(event.type);
-                // the data that changed
-                console.log(event.data);
-                // the state
-                console.log(window.dataLayer.state);
-            }
-        });
-    }
-
-    function populateDataLayerAfterOverride() {
-        window.dataLayer.push({
-            "type": "page updated",
-            "data": {
-                "page": {
-                    "new prop": "I'm new",
-                    "id": "NEW/content/mysite/en/products/crossfit",
-                    "siteLanguage": "en-us",
-                    "siteCountry": "US",
-                    "pageType": "product detail",
-                    "pageName": "pdp - crossfit zoom",
-                    "pageCategory": "womens > shoes > athletic"
-                }
-            }
-        });
-
-        window.dataLayer.push({
-            "type": "component updated",
-            "data": {
-                "component": {
-                    "image": {
-                        "image4": {
-                            "id": "/content/mysite/en/home/jcr:content/root/image4",
-                            "items": {}
-                        }
-                    }
-                }
-            }
-        });
-
-        window.dataLayer.push({
-            "type": "removed",
-            "data": {
-                "component": {
-                    "image": {
-                        "image5": {
-                            "id": "/content/mysite/en/home/jcr:content/root/image4",
-                            "items": undefined
-                        }
-                    }
-                }
-            }
-        });
-
-        window.dataLayer.push({
-            "on": "removed",
-            "handler": function(event) {
-                // the type
-                console.log(event.type);
-                // the data that changed
-                console.log(event.data);
-                // the state
-                console.log(window.dataLayer.state);
-            }
-        });
-
-        window.dataLayer.push({
-            "type": "removed",
-            "data": {
-                "component": {
-                    "image": {
-                        "image4": {
-                            "id": "/content/mysite/en/home/jcr:content/root/image4",
-                            "items": undefined
-                        }
-                    }
-                }
-            }
-        });
-
-    }
+    };
 
 
-    function basicUseCases() {
-
-        // ====================================  Add data ======================================
-
-        // Add the page data
-        window.dataLayer.push({
-            "data": {
-                "page": {
-                    "id": "/content/my-site/en/about-us",
-                    "pageName": "About Us",
-                    "siteLanguage": "en-us",
-                    "siteCountry": "US"
-                }
-            }
-        });
-
-        // Add a component
-        window.dataLayer.push({
-            "data": {
-                "component": {
-                    "tab": {
-                        "tab2": {
-                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
-                            "title": "the ocean",
-                            "items": {}
-                        }
-                    }
-                }
-            }
-        });
-
-        // Remove data
-        window.dataLayer.push({
-            "data": {
-                "component": {
-                    "image": {
-                        "image5": undefined
-                    }
-                }
-            }
-        });
-
-        // ====================================  Add event ======================================
-
-
-        // Add an event (without data)
-        window.dataLayer.push({
-            "event": "page loaded"
-        });
-
-        // Add an event with a reference to the data
-        window.dataLayer.push({
-            "event": "click",
-            "id": ["component", "/content/my-site/en/about-us/jcr:content/root/responsivegrid/teaser"]
-        });
-
-        // Add an event with its data
-        window.dataLayer.push({
-            "type": "image viewed",
-            "data": {
-                "component": {
-                    "image": {
-                        "image5": {
-                            "id": "/content/mysite/en/home/jcr:content/root/image5",
-                            "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
-                        }
-                    }
-                }
-            }
-        });
-
-        // Add an event and remove data
-        window.dataLayer.push({
-            "type": "removed",
-            "data": {
-                "component": {
-                    "image": {
-                        "image5": undefined
-                    }
-                }
-            }
-        });
-
-        // ====================================  Add event listener ======================================
-
-        window.dataLayer.push({
-            "on": "page loaded",
-            "handler": function(event) {
-                var pageUrl = window.dataLayer.get("page.id");
-                console.log(pageUrl);
-            }
-        });
-
-        window.dataLayer.push({
-            "on": "click",
-            "listen": "future",
-            "selector": "path='component' && type='my-site/components/teaser'",
-            "handler": function(event) {
-                var clickTarget = event.id;
-                console.log(clickTarget);
-            }
-        });
-
-        window.dataLayer.push({
-            "on": "change",
-            "get": "user.userName",
-            "listen": "once",
-            "handler": function(userName) {
-                console.log(userName);
-            }
-        });
-
-        window.dataLayer.push({
-            "on": "datalayer:change",
-            "handler": function(event) {
-                // the type
-                console.log(event.type);
-                // the data that changed
-                console.log(event.data);
-                // the state
-                console.log(window.dataLayer.state);
-            }
-        });
-
-        // Unregister event listener
-        window.dataLayer.push({
-            "off": "change",
-            "get": "user.userName",
-            "listen": "once",
-            "handler": function(userName) {
-                console.log(userName);
-            }
-        });
-
-        // TODO: is it still needed?
-        window.dataLayer.push({
-            "type": "tab viewed",
-            "eventData": {
-                "prop1": "the component id",
-                "prop2": "the component id",
-                "prop3": "the component id"
-            }
-        });
-
-    }
-
-    init();
+    window.addEventListener("datalayer:prepopulated", function() {
+        console.log("data layer prepopulated - let's initialize the data layer");
+        window.dataLayer = window.dataLayer || [];
+        new DataLayerHandler(window.dataLayer);
+        var readyEvent = new CustomEvent("datalayer:ready");
+        window.dispatchEvent(readyEvent);
+        console.log("data layer script initialized");
+    });
 
 })();
 
