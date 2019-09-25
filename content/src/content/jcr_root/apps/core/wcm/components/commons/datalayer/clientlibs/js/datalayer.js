@@ -260,10 +260,11 @@
     }
 
 
-    function useCases() {
+    function basicUseCases() {
 
         // ====================================  Add data ======================================
 
+        // Add the page data
         window.dataLayer.push({
             "data": {
                 "page": {
@@ -275,6 +276,7 @@
             }
         });
 
+        // Add a component
         window.dataLayer.push({
             "data": {
                 "component": {
@@ -284,6 +286,17 @@
                             "title": "the ocean",
                             "items": {}
                         }
+                    }
+                }
+            }
+        });
+
+        // Remove data
+        window.dataLayer.push({
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": undefined
                     }
                 }
             }
@@ -301,6 +314,33 @@
         window.dataLayer.push({
             "event": "click",
             "id": ["component", "/content/my-site/en/about-us/jcr:content/root/responsivegrid/teaser"]
+        });
+
+        // Add an event with its data
+        window.dataLayer.push({
+            "type": "image viewed",
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": {
+                            "id": "/content/mysite/en/home/jcr:content/root/image5",
+                            "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add an event and remove data
+        window.dataLayer.push({
+            "type": "removed",
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": undefined
+                    }
+                }
+            }
         });
 
         // ====================================  Add event listener ======================================
@@ -329,6 +369,18 @@
             "listen": "once",
             "handler": function(userName) {
                 console.log(userName);
+            }
+        });
+
+        window.dataLayer.push({
+            "on": "datalayer:change",
+            "handler": function(event) {
+                // the type
+                console.log(event.type);
+                // the data that changed
+                console.log(event.data);
+                // the state
+                console.log(window.dataLayer.state);
             }
         });
 
