@@ -169,7 +169,7 @@
             .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
 
             // 2.
-            .assert.visible(selectors.editDialog.properties.urlStatus + ":contains('')")
+            .assert.exists(selectors.editDialog.properties.urlStatus + ":contains('')")
 
             // 3.
             .fillInput(selectors.editDialog.properties.urlField, urlValidation.valid)
