@@ -209,6 +209,7 @@
         });
 
         // Add an event with its data
+        // DONE
         window.dataLayer.push({
             "event": "image viewed",
             "data": {
@@ -224,6 +225,7 @@
         });
 
         // Add an event and remove data
+        // DONE
         window.dataLayer.push({
             "event": "removed",
             "data": {
@@ -237,6 +239,7 @@
 
         // ====================================  Add event listener ======================================
 
+        // DONE
         window.dataLayer.push({
             "on": "page loaded",
             "handler": function(event) {
@@ -264,6 +267,7 @@
             }
         });
 
+        // DONE
         window.dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
@@ -277,12 +281,16 @@
         });
 
         // Unregister event listener
+        // DONE
         window.dataLayer.push({
-            "off": "change",
-            "get": "user.userName",
-            "listen": "once",
-            "handler": function(userName) {
-                console.log(userName);
+            "off": "datalayer:change",
+            "handler": function(event) {
+                // the type
+                console.log(event.type);
+                // the data that changed
+                console.log(event.data);
+                // the state
+                console.log(window.dataLayer.state);
             }
         });
 

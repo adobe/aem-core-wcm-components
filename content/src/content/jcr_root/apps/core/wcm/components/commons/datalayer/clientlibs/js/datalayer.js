@@ -24,7 +24,9 @@
     function DataLayerHandler(dataLayer) {
         this.dataLayer = dataLayer;
         this.dataLayer.state = {};
-        this._listeners = [];
+        // TODO remove _listeners from data layer (this is used for testing): replace this.dataLayer._listeners and that.dataLayer._listeners
+        this.dataLayer._listeners = [];
+        // this._listeners = [];
         this._init();
     }
 
@@ -73,8 +75,12 @@
             this._updateState(event.data);
             this._triggerListeners(event);
         } else if (event.handler) {
-            this._registerListener(event);
-            this._triggerListener(event);
+            if (event.off) {
+                this._removeListener(event);
+            } else {
+                this._registerListener(event);
+                this._triggerListener(event);
+            }
         }
     };
 
@@ -86,21 +92,50 @@
         if (!event.type) {
             return;
         }
-        // loop over all the listeners
-        // when a match is found, execute the handler
-        var that = this;
-        Object.keys(this._listeners).forEach(function(key) {
-            var listener = that._listeners[key];
+        this.dataLayer._listeners.forEach(function(listener) {
             if (listener.on === CHANGE_EVENT || listener.on === event.type) {
                 listener.handler(event);
             }
         });
     };
 
+    DataLayerHandler.prototype._removeListener = function(listener) {
+        var tmp = listener;
+        tmp["on"] = listener["off"];
+        delete tmp["off"];
+        var idx = this._getListenerIndex(tmp);
+        if (idx > -1) {
+            this.dataLayer._listeners.splice(idx, 1);
+        }
+    };
+
     DataLayerHandler.prototype._registerListener = function(listener) {
-        // add the listener to datalayer._listeners
-        this._listeners.push(listener);
-        console.log("register an event listener: " + listener.on);
+        if (this._getListenerIndex(listener) === -1) {
+            this.dataLayer._listeners.push(listener);
+            console.log("event listener registered on: " + listener.on);
+        }
+    };
+
+    DataLayerHandler.prototype._getListenerIndex = function(listener) {
+        var listenerFound = true;
+        for (var i = 0; i <  this.dataLayer._listeners.length; i++) {
+            var existingListener = this.dataLayer._listeners[i];
+            if (Object.keys(existingListener).length !== Object.keys(listener).length) {
+                listenerFound = false;
+                break;
+            }
+            for (var j = 0; j < Object.keys(existingListener).length; j++) {
+                var field = Object.keys(existingListener)[j];
+                if (existingListener[field].toString() !== listener[field].toString()) {
+                    listenerFound = false;
+                    break;
+                }
+            }
+            if (listenerFound) {
+                return i;
+            }
+        }
+        return -1;
     };
 
     // trigger the listener on all previous events matching the listener
