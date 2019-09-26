@@ -20,6 +20,7 @@
     /* eslint no-unused-vars: "off" */
 
     var CHANGE_EVENT = "datalayer:change";
+    var EVENT_NAME_KEY = "event";
 
     function DataLayerHandler(dataLayer) {
         this.dataLayer = dataLayer;
@@ -89,11 +90,8 @@
     };
 
     DataLayerHandler.prototype._triggerListeners = function(event) {
-        if (!event.type) {
-            return;
-        }
         this.dataLayer._listeners.forEach(function(listener) {
-            if (listener.on === CHANGE_EVENT || listener.on === event.type) {
+            if (listener.on === CHANGE_EVENT || listener.on === event[EVENT_NAME_KEY]) {
                 listener.handler(event);
             }
         });
@@ -141,7 +139,7 @@
     // trigger the listener on all previous events matching the listener
     DataLayerHandler.prototype._triggerListener = function(listener) {
         this.dataLayer.forEach(function(event) {
-            if (listener.on === CHANGE_EVENT || listener.on === event.type) {
+            if (listener.on === CHANGE_EVENT || listener.on === event[EVENT_NAME_KEY]) {
                 listener.handler(event);
             }
         });

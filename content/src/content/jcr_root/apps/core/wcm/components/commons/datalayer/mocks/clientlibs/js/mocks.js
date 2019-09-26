@@ -24,7 +24,7 @@
 
     function populateDataLayerBefore() {
         window.dataLayer.push({
-            "type": "carousel clicked",
+            "event": "carousel clicked",
             "data": {
                 "component": {
                     "carousel": {
@@ -38,7 +38,7 @@
         });
 
         window.dataLayer.push({
-            "type": "tab viewed",
+            "event": "tab viewed",
             "data": {
                 "component": {
                     "tab": {
@@ -52,7 +52,7 @@
         });
 
         window.dataLayer.push({
-            "type": "page loaded",
+            "event": "page loaded",
             "data": {
                 "page": {
                     "id": "/content/mysite/en/products/crossfit",
@@ -68,8 +68,8 @@
         window.dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
-                // the type
-                console.log(event.type);
+                // the event name
+                console.log(event.event);
                 // the data that changed
                 console.log(event.data);
                 // the state
@@ -81,7 +81,7 @@
 
     function populateDataLayerAfter() {
         window.dataLayer.push({
-            "type": "page updated",
+            "event": "page updated",
             "data": {
                 "page": {
                     "new prop": "I'm new",
@@ -96,7 +96,7 @@
         });
 
         window.dataLayer.push({
-            "type": "component updated",
+            "event": "component updated",
             "data": {
                 "component": {
                     "image": {
@@ -110,7 +110,7 @@
         });
 
         window.dataLayer.push({
-            "type": "removed",
+            "event": "removed",
             "data": {
                 "component": {
                     "image": {
@@ -126,8 +126,8 @@
         window.dataLayer.push({
             "on": "removed",
             "handler": function(event) {
-                // the type
-                console.log(event.type);
+                // the event name
+                console.log(event.event);
                 // the data that changed
                 console.log(event.data);
                 // the state
@@ -136,7 +136,7 @@
         });
 
         window.dataLayer.push({
-            "type": "removed",
+            "event": "removed",
             "data": {
                 "component": {
                     "image": {
@@ -156,7 +156,8 @@
 
         // ====================================  Add data ======================================
 
-        // Add the page data
+        // DONE
+        // Add the page data (automatically triggers the datalayer:change event)
         window.dataLayer.push({
             "data": {
                 "page": {
@@ -168,6 +169,7 @@
             }
         });
 
+        // DONE
         // Add a component
         window.dataLayer.push({
             "data": {
@@ -183,6 +185,7 @@
             }
         });
 
+        // DONE
         // Remove data
         window.dataLayer.push({
             "data": {
@@ -197,19 +200,21 @@
         // ====================================  Add event ======================================
 
 
+        // TODO
         // Add an event (without data)
         window.dataLayer.push({
             "event": "page loaded"
         });
 
+        // TODO
         // Add an event with a reference to the data
         window.dataLayer.push({
             "event": "click",
             "id": ["component", "/content/my-site/en/about-us/jcr:content/root/responsivegrid/teaser"]
         });
 
-        // Add an event with its data
         // DONE
+        // Add an event with its data
         window.dataLayer.push({
             "event": "image viewed",
             "data": {
@@ -224,8 +229,8 @@
             }
         });
 
-        // Add an event and remove data
         // DONE
+        // Add an event and remove data
         window.dataLayer.push({
             "event": "removed",
             "data": {
@@ -248,6 +253,7 @@
             }
         });
 
+        // TODO
         window.dataLayer.push({
             "on": "click",
             "listen": "future",
@@ -258,6 +264,7 @@
             }
         });
 
+        // TODO
         window.dataLayer.push({
             "on": "change",
             "get": "user.userName",
@@ -271,8 +278,8 @@
         window.dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
-                // the type
-                console.log(event.type);
+                // the event name
+                console.log(event.event);
                 // the data that changed
                 console.log(event.data);
                 // the state
@@ -280,13 +287,13 @@
             }
         });
 
-        // Unregister event listener
         // DONE
+        // Unregister event listener
         window.dataLayer.push({
             "off": "datalayer:change",
             "handler": function(event) {
-                // the type
-                console.log(event.type);
+                // the event name
+                console.log(event.event);
                 // the data that changed
                 console.log(event.data);
                 // the state
@@ -296,7 +303,7 @@
 
         // TODO: is it still needed?
         window.dataLayer.push({
-            "type": "tab viewed",
+            "event": "tab viewed",
             "eventData": {
                 "prop1": "the component id",
                 "prop2": "the component id",
