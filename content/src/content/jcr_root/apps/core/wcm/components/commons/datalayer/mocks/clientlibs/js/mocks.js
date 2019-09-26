@@ -68,12 +68,7 @@
         window.dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
-                // the event name
-                console.log(event.event);
-                // the data that changed
-                console.log(event.data);
-                // the state
-                console.log(window.dataLayer.state);
+                console.log("event listener triggered on: ", event.event);
             }
         });
 
@@ -126,12 +121,7 @@
         window.dataLayer.push({
             "on": "removed",
             "handler": function(event) {
-                // the event name
-                console.log(event.event);
-                // the data that changed
-                console.log(event.data);
-                // the state
-                console.log(window.dataLayer.state);
+                console.log("event listener triggered on: ", event.event);
             }
         });
 
@@ -151,6 +141,11 @@
 
     }
 
+    // =========================================================================================
+
+    //                                     BASIC USE CASES
+
+    // =========================================================================================
 
     function basicUseCases() {
 
@@ -200,7 +195,7 @@
         // ====================================  Add event ======================================
 
 
-        // TODO
+        // DONE
         // Add an event (without data)
         window.dataLayer.push({
             "event": "page loaded"

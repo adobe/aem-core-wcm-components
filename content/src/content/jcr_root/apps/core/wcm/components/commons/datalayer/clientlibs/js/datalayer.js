@@ -75,6 +75,8 @@
         if (event.data) {
             this._updateState(event.data);
             this._triggerListeners(event);
+        } else if (event[EVENT_NAME_KEY]) {
+            this._triggerListeners(event);
         } else if (event.handler) {
             if (event.off) {
                 this._removeListener(event);
