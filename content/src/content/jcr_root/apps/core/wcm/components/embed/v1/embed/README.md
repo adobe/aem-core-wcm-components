@@ -56,7 +56,7 @@ Extension of the Embed component is possible by providing any of the following:
 
 ### Custom URL Processor
 
-By implementing the [Embed.UrlProcessor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/models/embed/Embed.java) interface you can create your own URL processor.
+By implementing the [UrlProcessor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/services/embed/UrlProcessor.java) interface you can create your own URL processor.
 
 You will also need to create an HTL template file, with the same name as the `processor` field returned in the `Result`.
 
@@ -69,7 +69,7 @@ Example:
 By adding an OSGi configuration you can embed an URL from an oEmbed provider.
 
 Example:
-* [YouTube configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.services.embed.oembed.OEmbedClientImplConfigurationFactory-youtube.config) 
+* [YouTube configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedClientImplConfigurationFactory-youtube.config)
 
 See also:
 * [oEmbed specification](https://oembed.com)
@@ -91,7 +91,7 @@ The JCR properties for the edit configuration options of an embeddable _must_ be
 3. `./youtubeHeight` - defines the YouTube video player height.
 
 Example:
-* [YouTube embeddable](../../embeddables/youtube)
+* [YouTube embeddable](embeddable/youtube)
 
 ### Security Recommendations
 
