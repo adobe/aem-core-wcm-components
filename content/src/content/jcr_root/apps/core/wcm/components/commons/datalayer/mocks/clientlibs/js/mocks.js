@@ -251,7 +251,7 @@
         // TODO
         window.dataLayer.push({
             "on": "click",
-            "listen": "future",
+            "listen": "future", // could also be called 'scope'. Possible values: past, future, all, once
             "selector": "path='component' && type='my-site/components/teaser'",
             "handler": function(event) {
                 var clickTarget = event.id;
