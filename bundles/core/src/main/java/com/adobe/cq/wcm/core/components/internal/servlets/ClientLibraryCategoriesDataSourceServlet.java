@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,15 +19,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.annotation.Nonnull;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -36,6 +31,9 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
+import org.jetbrains.annotations.NotNull;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
@@ -61,7 +59,7 @@ public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsSe
     private HtmlLibraryManager htmlLibraryManager;
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws ServletException, IOException {
         LibraryType libraryType = null;
         Resource dataSourceResource = request.getResource().getChild(Config.DATASOURCE);
@@ -79,7 +77,7 @@ public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsSe
         request.setAttribute(DataSource.class.getName(), clientLibraryCategoriesDataSource);
     }
 
-    private List<Resource> getCategoryResourceList(@Nonnull SlingHttpServletRequest request, LibraryType libraryType) {
+    private List<Resource> getCategoryResourceList(@NotNull SlingHttpServletRequest request, LibraryType libraryType) {
         List<Resource> categoryResourceList = new ArrayList<>();
         HashSet<String> clientLibraryCategories = new HashSet<String>();
         for (ClientLibrary library: htmlLibraryManager.getLibraries().values()) {
@@ -114,12 +112,12 @@ public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsSe
         }
 
         @Override
-        protected String getText() {
+        public String getText() {
             return category;
         }
 
         @Override
-        protected String getValue() {
+        public String getValue() {
             return category;
         }
     }

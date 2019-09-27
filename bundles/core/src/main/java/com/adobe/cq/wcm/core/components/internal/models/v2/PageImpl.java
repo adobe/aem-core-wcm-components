@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,9 +21,6 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,6 +33,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -139,6 +138,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     }
 
     @Override
+    @JsonIgnore
     public Map<String, String> getFavicons() {
         throw new UnsupportedOperationException();
     }
@@ -166,13 +166,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return StringUtils.join(cssClassesSet, " ");
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         return super.getExportedItemsOrder();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         return super.getExportedItems();

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ Copyright 2018 Adobe Systems Incorporated
+~ Copyright 2018 Adobe
 ~
 ~ Licensed under the Apache License, Version 2.0 (the "License");
 ~ you may not use this file except in compliance with the License.
@@ -17,32 +17,19 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.Model;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.day.cq.wcm.api.designer.Style;
+import com.adobe.cq.wcm.core.components.testing.Utils;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class AbstractContainerImplTest {
 
@@ -87,8 +74,8 @@ public class AbstractContainerImplTest {
         AEM_CONTEXT.currentResource(resource);
         AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
         Container container = new ContainerImpl();
-        Whitebox.setInternalState(container, "resource", resource);
-        Whitebox.setInternalState(container, "request", AEM_CONTEXT.request());
+        Utils.setInternalState(container, "resource", resource);
+        Utils.setInternalState(container, "request", AEM_CONTEXT.request());
         return container;
     }
 

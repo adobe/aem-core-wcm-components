@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2016 Adobe Systems Incorporated
+ * Copyright 2016 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
     var c = window.CQ.CoreComponentsIT.commons;
     var image = window.CQ.CoreComponentsIT.Image.v1;
 
-    var testImagePath = "/content/dam/core-components/core-comp-test-image.jpg";
+    var testAssetsPath = "/content/dam/core-components";
+    var testImagePath = testAssetsPath + "/core-comp-test-image.jpg";
     var altText = "Return to Arkham";
     var captionText = "The Last Guardian";
 
@@ -93,6 +94,9 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
+            // filter by test assets path
+            .fillInput('foundation-autocomplete[name="assetfilter_image_path"] input[is="coral-textfield"]', testAssetsPath)
+            .click('foundation-autocomplete[name="assetfilter_image_path"] [is="coral-buttonlist-item"][value="' + testAssetsPath + '"]')
             // drag'n'drop the test image
             .cui.dragdrop("coral-card.cq-draggable[data-path='" + testImagePath + "']", "coral-fileupload[name='./file'")
             // set mandatory alt text

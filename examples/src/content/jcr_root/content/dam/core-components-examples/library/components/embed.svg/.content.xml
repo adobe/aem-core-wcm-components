@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
+    jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="91af69fb-ce94-40a6-afd9-0291249ce00d">
+    <jcr:content
+        cq:name="embed.svg"
+        cq:parentPath="/content/dam/core-components-examples/library/components"
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2019-07-30T15:51:22.276+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2019-07-30T15:51:09.847+02:00"
+            dam:sha1="5f0b4154b1649835489da33e607d4853f45e298d"
+            dam:size="{Long}9501"
+            dc:format="image/svg+xml"
+            dc:modified="{Date}2019-07-30T15:51:22.276+02:00"
+            dc:title="Embed"
+            jcr:lastModified="{Date}2019-07-30T15:51:22.276+02:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured">
+            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
+        </metadata>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

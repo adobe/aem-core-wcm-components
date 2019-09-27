@@ -1,5 +1,5 @@
 #
-# Copyright 2018 Adobe Systems Incorporated
+# Copyright 2018 Adobe
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,38 +19,69 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
+
+shared: &shared
+  working_directory: ~/repo
+
+  environment:
+    # Customize the JVM maximum heap limit
+    MAVEN_OPTS: -Xmx1024m -XX:MaxPermSize=512m
+
+  steps:
+    - checkout
+
+    - restore_cache: # restore the saved cache
+        key: aem-core-wcm-components
+
+    # run tests!
+    - run: mvn clean verify -B -U
+
+    # save any dumps
+    - run:
+        name: save any dumps
+        command: |
+            mkdir -p ~/dumps
+            find . -type f -regex ".*/.*\.dump" -exec cp {} ~/dumps \;
+            find . -type f -regex ".*/.*\.dumpstream" -exec cp {} ~/dumps \;
+        when:
+            on_fail
+
+    - store_artifacts:
+        path: ~/dumps
+
+    # save test results
+    - run:
+        name: save test results
+        command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/surefire-reports/.*" -exec cp {} ~/test-results/junit/ \;
+        when: always
+
+    - store_artifacts:
+        path: ~/test-results/junit
+
+    # generate test summary
+    - store_test_results:
+        path: ~/test-results
+
+    - save_cache: # saves the project dependencies
+        paths:
+          - ~/.m2
+        key: aem-core-wcm-components
+
+    # run codecoverage check
+    - run: bash <(curl -s https://codecov.io/bash)
+
 jobs:
-  build:
+  build-java-8:
     docker:
       - image: circleci/openjdk:8-jdk-node
+    <<: *shared
 
-    # Specify service dependencies here if necessary
-    # CircleCI maintains a library of pre-built images
-    # documented at https://circleci.com/docs/2.0/circleci-images/
-    # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      MAVEN_OPTS: -Xmx1024m -XX:MaxPermSize=512m
-
-    steps:
-      - checkout
-
-      - restore_cache: # restore the saved cache
-          key: aem-core-wcm-components
-
-      # run tests!
-      - run: mvn clean verify -B -U
-
-      - save_cache: # saves the project dependencies
-          paths:
-            - ~/.m2
-          key: aem-core-wcm-components
-
-      # run codecoverage check
-      - run: bash <(curl -s https://codecov.io/bash)
+  build-java-11:
+    docker:
+      - image: circleci/openjdk:11-jdk-node
+    <<: *shared
 
   deploy_snapshot:
     docker:
@@ -88,14 +119,19 @@ workflows:
   version: 2
   build-and-release:
     jobs:
-      - build:
+      - build-java-8:
+          filters:
+            tags:
+              only: /.*/
+
+      - build-java-11:
           filters:
             tags:
               only: /.*/
 
       - deploy_snapshot:
           requires:
-            - build
+            - build-java-11
           filters:
             branches:
               ignore: /.*/
@@ -104,7 +140,7 @@ workflows:
 
       - release:
           requires:
-            - build
+            - build-java-11
           filters:
             branches:
               ignore: /.*/

@@ -1,0 +1,38 @@
+{
+    "embed": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Embed Test Page",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description": "Test page with embed component configurations",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "embed1": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/embed/v1/embed",
+                        "type": "url",
+                        "url": "https://www.youtube.com/embed/vpdcMZnYCko"
+                    },
+                    "embed2": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/embed/v1/embed",
+                        "type": "embeddable",
+                        "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
+                        "youtubeId": "2R2gb0MKJlo"
+                    },
+                    "embed3": {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/embed/v1/embed",
+                        "type": "html",
+                        "html": "<div>html</div>"
+                    }
+                }
+            }
+        }
+    }
+}

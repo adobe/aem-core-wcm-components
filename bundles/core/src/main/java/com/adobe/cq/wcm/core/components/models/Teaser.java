@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 
 /**
  * Defines the {@code Teaser} Sling Model for the {@code /apps/core/wcm/components/teaser} component.
@@ -209,7 +207,7 @@ public interface Teaser extends ComponentExporter {
     /**
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();

@@ -2,29 +2,30 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-01-09T20:30:27.177+01:00"
+        cq:lastModified="{Date}2019-03-05T15:49:51.358+01:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/reference]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Group an image, title, description and link them"
+        jcr:description="Link an image and text"
         jcr:primaryType="cq:PageContent"
         jcr:title="Teaser"
-        sling:resourceType="core/wcm/components/page/v2/page">
+        sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <responsivegrid
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
-                <title
-                    cq:styleIds="[1544759629303]"
-                    jcr:created="{Date}2018-12-06T19:11:07.719+01:00"
+                <text_1740702241
+                    cq:styleIds="[1644862132301]"
+                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-06T19:21:37.259+01:00"
+                    jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h1"/>
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;h1>Teaser&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
+                    textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
@@ -34,14 +35,39 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined.&lt;/p>&#xa;"
-                    textIsRich="true">
-                    <cq:responsive jcr:primaryType="nt:unstructured">
-                        <default
-                            jcr:primaryType="nt:unstructured"
-                            offset="0"
-                            width="9"/>
-                    </cq:responsive>
-                </text>
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
+                    jcr:createdBy="admin"
+                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-02-14T16:49:57.290+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_teaser_v1"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
+                    jcr:createdBy="admin"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_teaser_v1"
+                    textIsRich="true"
+                    titleFromPage="false"/>
                 <title_865328580
                     cq:styleIds="[1544759664489]"
                     jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
@@ -77,7 +103,8 @@
                     jcr:lastModified="{Date}2018-12-07T13:36:02.946+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
@@ -155,7 +182,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/skateboarder.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                             textIsRich="true"
                             titleFromPage="false"/>
                     </component>
@@ -219,6 +246,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="false"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
                             linkURL="/content/core-components-examples/library/teaser"
                             textIsRich="true"
                             titleFromPage="false"/>
@@ -283,7 +311,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="true"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/roaster.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
@@ -354,7 +382,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="true"
                             descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/mini.jpg"
+                            fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
                             textIsRich="true"
                             titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
@@ -414,7 +442,8 @@
                     jcr:lastModified="{Date}2018-12-07T13:36:25.562+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
+                    sling:resourceType="core-components-examples/components/demo"
+                    fullWidth="{Boolean}true">
                     <component
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/demo/component">
@@ -453,5 +482,8 @@
                 </demo_1257101605>
             </responsivegrid>
         </root>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
     </jcr:content>
 </jcr:root>

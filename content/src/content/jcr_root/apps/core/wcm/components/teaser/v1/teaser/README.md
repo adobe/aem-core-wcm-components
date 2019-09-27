@@ -1,5 +1,5 @@
 <!--
-Copyright 2018 Adobe Systems Incorporated
+Copyright 2018 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -84,3 +84,4 @@ BLOCK cmp-teaser
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_teaser\_v1](https://www.adobe.com/go/aem_cmp_teaser_v1)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_teaser](https://www.adobe.com/go/aem_cmp_library_teaser)

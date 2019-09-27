@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -74,6 +74,9 @@
         }
         if (self._textfield) {
             self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+            self._textfield.addEventListener("change", function() {
+                self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+            });
             $(window).adaptTo("foundation-registry").register("foundation.adapters", {
                 type: "foundation-toggleable",
                 selector: self._textfieldSelector,
@@ -122,7 +125,7 @@
     };
 
     /**
-     * Seeds a value in the {@link #ATTR_SEEDED_VALUE} data attribute of the checkbox. If the value is empty then the data attribute is
+     * Seeds a value in the {@link #ATTR_SEEDED_VALUE} data attribute of the textfield. If the value is empty then the data attribute is
      * removed.
      *
      * @param {String} [value] The value to seed.

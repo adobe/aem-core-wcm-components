@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -34,11 +34,12 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.AccordionImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.CarouselImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.TabsImpl;
 
 /**
- * Servlet that deletes/reorders the child nodes of a Carousel/Tabs container.
+ * Servlet that deletes/reorders the child nodes of a Accordion/Carousel/Tabs container.
  */
 @Component(
     service = Servlet.class,
@@ -46,6 +47,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.TabsImpl;
         "sling.servlet.methods=" + HttpConstants.METHOD_POST,
         "sling.servlet.resourceTypes=" + CarouselImpl.RESOURCE_TYPE,
         "sling.servlet.resourceTypes=" + TabsImpl.RESOURCE_TYPE,
+        "sling.servlet.resourceTypes=" + AccordionImpl.RESOURCE_TYPE,
         "sling.servlet.selectors=" + ContainerServlet.SELECTOR,
         "sling.servlet.extensions=" + ContainerServlet.EXTENSION
     }

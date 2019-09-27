@@ -1,5 +1,5 @@
 <!--
-Copyright 2018 Adobe Systems Incorporated
+Copyright 2018 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ The component policy dialog allows definition of allowed components for the Tabs
 The following properties are written to JCR for this Tabs component and are expected to be available as `Resource` properties:
 
 1. `./activeItem` - defines the name of the item that is active by default.
+2. `./accessibilityLabel` - defines an accessibility label for the tabs.
 
 The edit dialog also allows editing of Tabs items (adding, removing, naming, re-ordering).
 
@@ -89,3 +90,4 @@ that the UI component is updated when the active item is switched in the editor 
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_tabs\_v1](https://www.adobe.com/go/aem_cmp_tabs_v1)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_tabs](https://www.adobe.com/go/aem_cmp_library_tabs)

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 
-import javax.annotation.Nonnull;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.form.Field;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -91,7 +90,7 @@ public abstract class AbstractFieldImpl implements Field {
         return title;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return resource.getResourceType();

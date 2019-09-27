@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2016 Adobe Systems Incorporated
+  ~ Copyright 2016 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
     <filter root="/content/core-components"/>
     <filter root="/content/campaigns/core_component_brand"/>
     <filter root="/content/dam/core-components"/>
+    <filter root="/content/cq:tags/core-components"/>
     <filter root="/home/users/core-component"/>
     <filter root="/etc/blueprints/corecomp_blueprint"/>
     <!-- Hobbes IT folder -->

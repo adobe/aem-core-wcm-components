@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,15 +21,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
@@ -37,18 +40,20 @@ import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
+import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Abstract class which can be used as base class for {@link Container} implementations.
  */
-public abstract class AbstractContainerImpl implements Container {
-
-    @SlingObject
-    protected Resource resource;
+public abstract class AbstractContainerImpl extends AbstractComponentImpl implements Container {
 
     @Self
     protected SlingHttpServletRequest request;
+
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @JsonIgnore
+    protected Style currentStyle;
 
     @OSGiService
     protected SlingModelFilter slingModelFilter;
@@ -63,12 +68,18 @@ public abstract class AbstractContainerImpl implements Container {
     protected Map<String, ? extends ComponentExporter> itemModels;
     private String[] exportedItemsOrder;
 
+    private boolean backgroundColorEnabled;
+    private boolean backgroundImageEnabled;
+    private String backgroundImageReference;
+    private String backgroundColor;
+    private StringBuilder styleBuilder;
+
     /**
      * Read the list of children resources that are components
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     private List<Resource> readChildren() {
         List<Resource> children = new LinkedList<>();
         if (resource != null) {
@@ -90,7 +101,7 @@ public abstract class AbstractContainerImpl implements Container {
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     protected List<Resource> getChildren() {
         if (childComponents == null) {
             childComponents = readChildren();
@@ -104,7 +115,7 @@ public abstract class AbstractContainerImpl implements Container {
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     protected List<Resource> getFilteredChildren() {
         if (filteredChildComponents == null) {
             filteredChildComponents = new LinkedList<>();
@@ -119,13 +130,33 @@ public abstract class AbstractContainerImpl implements Container {
      *
      * @return
      */
-    @Nonnull
+    @NotNull
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
         getChildren().forEach(res -> {
             items.add(new ResourceListItemImpl(request, res));
         });
         return items;
+    }
+
+    private void populateStyleProperties() {
+        backgroundColorEnabled = currentStyle.get(PN_BACKGROUND_COLOR_ENABLED, false);
+        backgroundImageEnabled = currentStyle.get(PN_BACKGROUND_IMAGE_ENABLED, false);
+        if (resource != null) {
+            ValueMap properties = resource.getValueMap();
+            backgroundColor = properties.get(PN_BACKGROUND_COLOR, String.class);
+            backgroundImageReference = properties.get(PN_BACKGROUND_IMAGE_REFERENCE, String.class);
+        }
+    }
+
+    private void setBackgroundStyleString() {
+        styleBuilder = new StringBuilder();
+        if (backgroundImageEnabled && !StringUtils.isEmpty(backgroundImageReference)) {
+            styleBuilder.append("background-image:url(" + backgroundImageReference + ");background-size:cover;background-repeat:no-repeat;");
+        }
+        if (backgroundColorEnabled && !StringUtils.isEmpty(backgroundColor)) {
+            styleBuilder.append("background-color:" + backgroundColor + ";");
+        }
     }
 
     @Override
@@ -137,13 +168,27 @@ public abstract class AbstractContainerImpl implements Container {
         return items;
     }
 
-    @Nonnull
+    @Nullable
+    @Override
+    public String getBackgroundStyle() {
+        if (styleBuilder == null) {
+            populateStyleProperties();
+            setBackgroundStyleString();
+        }
+        String style = styleBuilder.toString();
+        if (StringUtils.isEmpty(style)) {
+            return null;
+        }
+        return style;
+    }
+
+    @NotNull
     @Override
     public String getExportedType() {
         return resource.getResourceType();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         if (itemModels == null) {
@@ -152,7 +197,7 @@ public abstract class AbstractContainerImpl implements Container {
         return itemModels;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         if (exportedItemsOrder == null) {
@@ -166,8 +211,8 @@ public abstract class AbstractContainerImpl implements Container {
         return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
     }
 
-    protected Map<String, ComponentExporter> getItemModels(@Nonnull SlingHttpServletRequest request,
-                                                           @Nonnull Class<ComponentExporter> modelClass) {
+    protected Map<String, ComponentExporter> getItemModels(@NotNull SlingHttpServletRequest request,
+                                                           @NotNull Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = new LinkedHashMap<>();
         getFilteredChildren().forEach(child -> {
             ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);

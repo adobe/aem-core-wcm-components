@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018 Adobe Systems Incorporated
+ *  Copyright 2018 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,31 +14,208 @@
  *  limitations under the License.
  */
 
-@cmp-examples-teaser-component-description-height: 3 * (@cmp-examples-font-size * @cmp-examples-line-height);
+@cmp-examples-teaser-border-width: 1*@px;
 
-// component variant, e.g. home page teasers
+@cmp-examples-teaser-component-image-height: 180*@px;
+@cmp-examples-teaser-component-image-area-height: 220*@px;
+@cmp-examples-teaser-component-image-margin: (@cmp-examples-teaser-component-image-area-height - @cmp-examples-teaser-component-image-height) / 2;
+
+@cmp-examples-teaser-document-width: 260*@px;
+@cmp-examples-teaser-document-height: 64*@px;
+@cmp-examples-teaser-document-square-width: @cmp-examples-teaser-document-height;
+@cmp-examples-teaser-document-image-size: 24*@px;
+
+// component variant (home page teasers)
 .cmp-examples-teaser--component {
+    &.aem-GridColumn.aem-GridColumn--default--newline {
+        // don't break lines as it causes problems with search results display
+        clear: none !important;
+    }
+
     .cmp-teaser {
-        margin-bottom: @cmp-examples-spacing-xl;
-        text-align: center;
+        position: relative;
+        margin-bottom: @cmp-examples-spacing-8;
+        border: @cmp-examples-teaser-border-width solid @cmp-examples-color-gray-400;
+        border-radius: @cmp-examples-border-radius;
+
+        background-color: @cmp-examples-color-gray-200;
+
+        overflow: hidden;
+
+        &:hover {
+            border-color: @cmp-examples-color-gray-600;
+        }
+
+        &:focus-within,
+        &:active {
+            border-color: @cmp-examples-color-gray-700;
+        }
+    }
+
+    .cmp-teaser__image {
+        position: absolute;
+        top: -@cmp-examples-teaser-border-width;
+        left: -@cmp-examples-teaser-border-width;
+        bottom: -@cmp-examples-teaser-border-width;
+        right: -@cmp-examples-teaser-border-width;
+
+        .cmp-image {
+            width: 100%;
+            height: 100%;
+        }
+
+        .cmp-image__link {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .cmp-image__image {
+            margin-top: @cmp-examples-teaser-component-image-margin;
+            height: @cmp-examples-teaser-component-image-height;
+        }
+    }
+
+    .cmp-teaser__content {
+        margin-top: @cmp-examples-teaser-component-image-area-height;
+        padding: @cmp-examples-spacing-3 @cmp-examples-spacing-4 @cmp-examples-spacing-4;
+        background-color: @cmp-examples-color-white;
     }
 
     .cmp-teaser__title {
-        font-size: 20*@px;
-        line-height: @cmp-examples-line-height-heading;
-        margin: @cmp-examples-spacing-s 0;
-        padding: 0 @cmp-examples-spacing-xxs;
+        margin: 0 0 4*@px;
+        font-size: @cmp-examples-font-size-l;
+
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .cmp-teaser__title-link {
         color: @cmp-examples-color-text;
         text-decoration: none;
+
+        &:focus {
+            outline: none;
+        }
     }
 
     .cmp-teaser__description {
-        height: @cmp-examples-teaser-component-description-height;
-        padding: 0 @cmp-examples-spacing-xxs;
+        font-size: @cmp-examples-font-size-s;
+        line-height: 1.3;
 
+        text-overflow: ellipsis;
+        white-space: nowrap;
         overflow: hidden;
+    }
+}
+
+// document variant (GitHub, helpX document teasers)
+.cmp-examples-teaser--document {
+    width: auto !important;
+
+    .cmp-teaser {
+        position: relative;
+
+        display: inline-block;
+        vertical-align: top;
+        width: @cmp-examples-teaser-document-width;
+        height: @cmp-examples-teaser-document-height;
+        margin-bottom: @cmp-examples-spacing-5;
+        border: @cmp-examples-teaser-border-width solid @cmp-examples-color-gray-400;
+        border-radius: @cmp-examples-border-radius;
+
+        background-color: @cmp-examples-color-gray-100;
+
+        &:hover {
+            border-color: @cmp-examples-color-gray-600;
+        }
+
+        &:focus-within,
+        &:active {
+            border-color: @cmp-examples-color-gray-700;
+        }
+    }
+
+    .cmp-teaser__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        margin-left: @cmp-examples-teaser-document-square-width;
+        padding-left: @cmp-examples-spacing-3;
+        border-top-right-radius: @cmp-examples-border-radius;
+        border-bottom-right-radius: @cmp-examples-border-radius;
+
+        background-color: @cmp-examples-color-white;
+    }
+
+    .cmp-teaser__image {
+        position: absolute;
+        top: -@cmp-examples-teaser-border-width;
+        left: -@cmp-examples-teaser-border-width;
+        bottom: -@cmp-examples-teaser-border-width;
+        right: -@cmp-examples-teaser-border-width;
+
+        .cmp-image {
+            width: 100%;
+            height: 100%;
+        }
+
+        .cmp-image__link {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: (@cmp-examples-teaser-document-square-width - @cmp-examples-teaser-document-image-size) / 2;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .cmp-image__image {
+            width: @cmp-examples-teaser-document-image-size;
+            height: @cmp-examples-teaser-document-image-size;
+        }
+    }
+
+    .cmp-teaser__title {
+        margin: 0;
+        padding: 0;
+
+        font-size: @cmp-examples-font-size-s;
+        font-weight: @cmp-examples-font-weight-bold;
+    }
+
+    .cmp-teaser__title-link {
+        color: @cmp-examples-color-gray-900;
+
+        &:focus {
+            outline: none;
+            text-decoration: none;
+        }
+    }
+
+    .cmp-teaser__description {
+        font-size: @cmp-examples-font-size-xs;
+
+        p {
+            margin-bottom: 0;
+        }
+    }
+}
+
+// no results variant (home search results, no result message)
+.cmp-examples-text--no-results {
+    .cmp-text {
+        padding: 0 0 1.5rem;
+        font-size: 0.875rem;
+        font-style: italic;
     }
 }

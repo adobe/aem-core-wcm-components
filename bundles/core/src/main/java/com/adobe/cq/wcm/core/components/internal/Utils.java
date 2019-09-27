@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -38,8 +37,8 @@ public class Utils {
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a
      * {@link Page}
      */
-    @Nonnull
-    public static String getURL(@Nonnull SlingHttpServletRequest request, @Nonnull PageManager pageManager, @Nonnull String path) {
+    @NotNull
+    public static String getURL(@NotNull SlingHttpServletRequest request, @NotNull PageManager pageManager, @NotNull String path) {
         Page page = pageManager.getPage(path);
         if (page != null) {
             return getURL(request, page);
@@ -56,8 +55,8 @@ public class Utils {
      * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a
      * {@link Page}
      */
-    @Nonnull
-    public static String getURL(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
+    @NotNull
+    public static String getURL(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
         String vanityURL = page.getVanityUrl();
         return StringUtils.isEmpty(vanityURL) ? request.getContextPath() + page.getPath() + ".html" : request.getContextPath() + vanityURL;
     }

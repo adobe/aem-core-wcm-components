@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,30 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import javax.annotation.Nullable;
-
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.commons.mime.MimeTypeService;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
-import com.adobe.cq.wcm.core.components.testing.MockAdapterFactory;
 import com.day.cq.dam.commons.handler.StandardImageHandler;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.google.common.base.Function;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import io.wcm.testing.mock.aem.junit.AemContext;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(AemContextExtension.class)
 public class AbstractImageTest {
 
     protected static String TEST_BASE = "/image";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext();
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     protected static final String MIME_TYPE_SVG = "image/svg+xml";
 
@@ -101,9 +97,9 @@ public class AbstractImageTest {
 
     protected ResourceResolver resourceResolver;
 
-    protected static void internalSetUp(AemContext aemContext, String testBase) {
-        CONTEXT.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_CONTENT_ROOT);
-        CONTEXT.load().json(testBase + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+    protected void internalSetUp(String testBase) {
+        context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_CONTENT_ROOT);
+        context.load().json(testBase + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
         mockedMimeTypeService = mock(MimeTypeService.class);
         when(mockedMimeTypeService.getMimeType("tif")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);
         when(mockedMimeTypeService.getMimeType("tiff")).thenReturn(StandardImageHandler.TIFF_MIMETYPE);
@@ -117,37 +113,27 @@ public class AbstractImageTest {
         when(mockedMimeTypeService.getExtension(StandardImageHandler.PNG1_MIMETYPE)).thenReturn("png");
         when(mockedMimeTypeService.getExtension(StandardImageHandler.GIF_MIMETYPE)).thenReturn("gif");
         when(mockedMimeTypeService.getExtension(MIME_TYPE_SVG)).thenReturn("svg");
-        aemContext.load().json(testBase + "/test-conf.json", "/conf");
-        aemContext.load().json("/image/test-content-dam.json", "/content/dam/core/images");
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
-        aemContext.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
+        context.load().json(testBase + "/test-conf.json", "/conf");
+        context.load().json("/image/test-content-dam.json", "/content/dam/core/images");
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.png");
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION + "/jcr:content/renditions/original");
-        aemContext.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION +
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION + "/jcr:content/renditions/original");
+        context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH_WITHOUT_EXTENSION +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.png");
-        aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH + "/jcr:content/renditions/original");
-        aemContext.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH +
+        context.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile("/image/" + "cq5dam.web.1280.1280_" + GIF_IMAGE_BINARY_NAME, GIF_ASSET_PATH +
                 "/jcr:content/renditions/cq5dam.web.1280.1280.gif");
-        aemContext.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_ASSET_PATH + "/jcr:content/renditions/original");
-        aemContext.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF5_FILE_PATH, StandardImageHandler.GIF_MIMETYPE);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG3_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG10_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG12_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG14_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
-        aemContext.load().binaryFile("/image/" + TIFF_IMAGE_BINARY_NAME, TIFF_ASSET_PATH + "/jcr:content/renditions/original");
-        aemContext.load().binaryFile("/image/" + _1PX_IMAGE_BINARY_NAME, PNG20_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
-        aemContext.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG23_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
-        aemContext.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_FILE_PATH, MIME_TYPE_SVG);
-        aemContext.registerInjectActivateService(new MockAdapterFactory());
-        contentPolicyManager = mock(ContentPolicyManager.class);
-        aemContext.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
-                new Function<ResourceResolver, ContentPolicyManager>() {
-                    @Nullable
-                    @Override
-                    public ContentPolicyManager apply(@Nullable ResourceResolver resolver) {
-                        return contentPolicyManager;
-                    }
-                });
+        context.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_ASSET_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile("/image/" + GIF_IMAGE_BINARY_NAME, GIF5_FILE_PATH, StandardImageHandler.GIF_MIMETYPE);
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG3_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG10_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG12_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG14_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        context.load().binaryFile("/image/" + TIFF_IMAGE_BINARY_NAME, TIFF_ASSET_PATH + "/jcr:content/renditions/original");
+        context.load().binaryFile("/image/" + _1PX_IMAGE_BINARY_NAME, PNG20_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG23_FILE_PATH, StandardImageHandler.PNG1_MIMETYPE);
+        context.load().binaryFile("/image/" + SVG_IMAGE_BINARY_NAME, SVG_FILE_PATH, MIME_TYPE_SVG);
     }
 
 }

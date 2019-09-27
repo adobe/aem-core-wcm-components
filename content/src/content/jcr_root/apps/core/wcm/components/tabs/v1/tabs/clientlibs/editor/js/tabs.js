@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -32,17 +32,19 @@
             var activeSelect = tabsEditor.querySelector(activeSelectSelector);
             var activeItem = tabsEditor.querySelector(activeItemSelector);
 
-            Coral.commons.ready(childrenEditor, function() {
-                updateActiveSelect(childrenEditor, activeSelect, activeItem);
-            });
+            if (childrenEditor && activeSelect && activeItem) {
+                Coral.commons.ready(childrenEditor, function() {
+                    updateActiveSelect(childrenEditor, activeSelect, activeItem);
+                });
 
-            childrenEditor.on("change", function() {
-                updateActiveSelect(childrenEditor, activeSelect, activeItem);
-            });
+                childrenEditor.on("change", function() {
+                    updateActiveSelect(childrenEditor, activeSelect, activeItem);
+                });
 
-            activeSelect.on("change", function() {
-                activeItem.value = activeSelect.value;
-            });
+                activeSelect.on("change", function() {
+                    activeItem.value = activeSelect.value;
+                });
+            }
         }
     });
 
@@ -54,23 +56,25 @@
      * @param {HTMLElement} activeItem Active tab hidden input
      */
     function updateActiveSelect(childrenEditor, activeSelect, activeItem) {
-        var selectedValue = activeSelect.value || activeItem.value;
-        activeSelect.items.getAll().forEach(function(item) {
-            if (item.value !== "") {
-                activeSelect.items.remove(item);
-            }
-        });
-        var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
-        if (cmpChildrenEditor) {
-            cmpChildrenEditor.items().forEach(function(item) {
-                activeSelect.items.add({
-                    selected: item.name === selectedValue,
-                    value: item.name,
-                    content: {
-                        textContent: item.description
-                    }
-                });
+        if (childrenEditor && activeSelect && activeItem) {
+            var selectedValue = activeSelect.value || activeItem.value;
+            activeSelect.items.getAll().forEach(function(item) {
+                if (item.value !== "") {
+                    activeSelect.items.remove(item);
+                }
             });
+            var cmpChildrenEditor = $(childrenEditor).adaptTo("cmp-childreneditor");
+            if (cmpChildrenEditor) {
+                cmpChildrenEditor.items().forEach(function(item) {
+                    activeSelect.items.add({
+                        selected: item.name === selectedValue,
+                        value: item.name,
+                        content: {
+                            textContent: item.description
+                        }
+                    });
+                });
+            }
         }
     }
 })(jQuery, Coral);

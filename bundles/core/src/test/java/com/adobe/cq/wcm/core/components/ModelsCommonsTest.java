@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -25,6 +25,6 @@ public class ModelsCommonsTest extends AbstractModelTest {
     public void testDefaultBehaviour() throws Exception {
         testDefaultBehaviour(new String[] {
                 "com.adobe.cq.wcm.core.components.models"
-        });
+       });
     }
 }

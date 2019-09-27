@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@
     window.CQ.CoreComponentsIT.Teaser.v1 = window.CQ.CoreComponentsIT.Teaser.v1 || {};
     var c                                = window.CQ.CoreComponentsIT.commons;
     var teaser                           = window.CQ.CoreComponentsIT.Teaser.v1;
-    var testImagePath                    = "/content/dam/core-components/core-comp-test-image.jpg";
+    var testAssetsPath                   = "/content/dam/core-components";
+    var testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
     var title                            = "Teaser Title";
     var description                      = "Teaser Description";
     var pageName                         = "teaser-page";
@@ -29,10 +30,9 @@
     var secondPageName                   = "teaser-second-page";
     var secondPageVar                    = "teaser_second_page";
     var pageDescription                  = "teaser page description";
-    // var actionText1                         = "Action Text 1";
-    var actionText2                         = "Action Text 2";
-    var actionExternalLink                  = "http://www.adobe.com";
-    var actionExternalText                  = "Adobe";
+    var actionText2                      = "Action Text 2";
+    var actionExternalLink               = "http://www.adobe.com";
+    var actionExternalText               = "Adobe";
 
     teaser.tcExecuteBeforeTest = function(tcExecuteBeforeTest, teaserRT, pageRT) {
         return new h.TestCase("Create sample content", {
@@ -107,6 +107,9 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -139,6 +142,9 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -183,7 +189,6 @@
                 var selector = selectors.component.description;
                 return h.find(selector, "#ContentFrame").html().trim() === description;
             });
-
     };
 
     teaser.testHideElementsTeaser = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, policyName, policyLocation, policyPath, policyAssignmentPath) {
@@ -246,7 +251,9 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
-
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
@@ -313,19 +320,17 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
-
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .click(selectors.editDialog.actionsEnabled)
-            // .fillInput(selectors.editDialog.actionLinkURL, "%" + pageVar + "%")
             .simulate(selectors.editDialog.actionLinkURL + " input[type!='hidden']", "key-sequence",
                 { sequence: "%" + pageVar + "%{enter}" })
-            // .fillInput(selectors.editDialog.actionText, actionText1)
             .click("button:contains('Add')")
-            // .fillInput(selectors.editDialog.actionLinkURL + ":eq(1)", "%" + secondPageVar + "%")
             .simulate(selectors.editDialog.actionLinkURL + ":eq(1) input[type!='hidden']", "key-sequence",
                 { sequence: "%" + secondPageVar + "%{enter}" })
-            // .fillInput(selectors.editDialog.actionText + ":eq(1)", actionText2)
 
             .execTestCase(c.tcSaveConfigureDialog)
 
@@ -368,7 +373,9 @@
             .execFct(function(opts, done) {
                 c.openSidePanel(done);
             })
-
+            // filter by test assets path
+            .fillInput(selectors.assetFinder.filters.path.textField, testAssetsPath)
+            .click(selectors.assetFinder.filters.path.buttonListItem + "[value='" + testAssetsPath + "']")
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .click(selectors.editDialog.actionsEnabled)
@@ -406,6 +413,73 @@
             .assert.isTrue(function() {
                 var selector = selectors.component.actionLink + ":contains('" + actionText2 + "')";
                 return h.find(selector, "#ContentFrame").size() === 1;
+            });
+    };
+
+    /**
+     * Test: Checkbox-Textfield Tuple
+     *
+     * 1. open the edit dialog
+     * 2. switch to the 'Text' tab
+     * 3. populate the title tuple textfield
+     * 4. open the 'Link & Actions' tab
+     * 5. add a link
+     * 6. open the 'Text' tab
+     * 7. verify the title tuple textfield value has not changed and that the textfield is not disabled
+     * 8. set 'Get title from linked page' checkbox, checked
+     * 9. verify the title value and disabled state
+     * 10. set 'Get title from linked page' checkbox, unchecked
+     * 11. verify the title has reverted to its previous user-input value
+     */
+    teaser.testCheckboxTextfieldTuple = function(tcExecuteBeforeTest, tcExecuteAfterTest, selectors) {
+        return new h.TestCase("Checkbox-Textfield Tuple", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest
+        })
+            // 1.
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+
+            // 2.
+            .click(selectors.editDialog.tabs.text)
+
+            // 3.
+            .fillInput(selectors.editDialog.title, title)
+            .execFct(function() {
+                var $textfield = h.find(selectors.editDialog.title);
+                $textfield[0].dispatchEvent(new Event("change"));
+            })
+
+            // 4.
+            .click(selectors.editDialog.tabs.linkAndActions)
+
+            // 5.
+            .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
+
+            // 6.
+            .click(selectors.editDialog.tabs.text)
+
+            // 7.
+            .asserts.isTrue(function() {
+                var $textfield = h.find(selectors.editDialog.title);
+                return ($textfield.val() === title) && ($textfield[0].disabled === false);
+            })
+
+            // 8.
+            .click(selectors.editDialog.titleFromPage)
+
+            // 9.
+            .asserts.isTrue(function() {
+                var $textfield = h.find(selectors.editDialog.title);
+                return ($textfield.val() === "") && ($textfield[0].disabled === true);
+            })
+
+            // 10.
+            .click(selectors.editDialog.titleFromPage)
+
+            // 11.
+            .asserts.isTrue(function() {
+                var $textfield = h.find(selectors.editDialog.title);
+                return ($textfield.val() === title) && ($textfield[0].disabled === false);
             });
     };
 }(hobs, jQuery));

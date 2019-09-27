@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2017 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ CSS styling. It should be added to a relevant site client library using the `emb
 BLOCK cmp-breadcrumb
     ELEMENT cmp-breadcrumb__list
     ELEMENT cmp-breadcrumb__item
+        MOD cmp-breadcrumb__item--active
     ELEMENT cmp-breadcrumb__item-link
 ```
 
@@ -57,4 +58,4 @@ BLOCK cmp-breadcrumb
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_breadcrumb\_v2](https://www.adobe.com/go/aem_cmp_breadcrumb_v2)
-
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_breadcrumb](https://www.adobe.com/go/aem_cmp_library_breadcrumb)

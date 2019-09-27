@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2017 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ The following properties are written to JCR for the Navigation component and are
 2. `./skipNavigationRoot` - if `true`, excludes the navigation root in the resulting tree, including its descendants only.
 3. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
 4. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
+5. `./accessibilityLabel` - defines an accessibility label for the navigation.
 
 ## Client Libraries
 The component provides a `core.wcm.components.navigation.v1.editor` editor client library category that includes
@@ -63,4 +64,4 @@ BLOCK cmp-navigation
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_navigation\_v1](https://www.adobe.com/go/aem_cmp_navigation_v1)
-
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_navigation](https://www.adobe.com/go/aem_cmp_library_navigation)

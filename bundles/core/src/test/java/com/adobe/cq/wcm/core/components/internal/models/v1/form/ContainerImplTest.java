@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.servlet.RequestDispatcher;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
@@ -34,7 +32,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
@@ -50,9 +48,6 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ContainerImplTest {
@@ -73,12 +68,8 @@ public class ContainerImplTest {
     @Mock
     private MockRequestDispatcherFactory requestDispatcherFactory;
 
-    @Mock
-    private RequestDispatcher requestDispatcher;
-
     @Before
     public void setUp() {
-        when(requestDispatcherFactory.getRequestDispatcher(any(Resource.class), any())).thenReturn(requestDispatcher);
         CONTEXT.registerService(FormStructureHelperFactory.class, new FormStructureHelperFactory() {
             @Override
             public FormStructureHelper getFormStructureHelper(Resource resource) {

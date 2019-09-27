@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018 Adobe Systems Incorporated
+ * Copyright 2018 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,7 +107,11 @@
             }
 
             if (markup) {
-                markup.innerHTML = escapeHtml(htmlBeautify(markup.innerHTML, { 'preserve_newlines': false, 'indent_size': 2 }));
+                try {
+                    markup.innerHTML = escapeHtml(htmlBeautify(markup.innerHTML, { 'preserve_newlines': false, 'indent_size': 2 }));
+                } catch (err) {
+                    markup.innerHTML = escapeHtml(markup.innerHTML);
+                }
             }
 
             if (hideCode) {

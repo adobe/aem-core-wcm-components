@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018 Adobe Systems Incorporated
+ *  Copyright 2018 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,18 +25,39 @@
 
     .cmp-image__image {
         width: @cmp-examples-logo-width;
-        padding-left: @cmp-examples-spacing-xs;
+    }
+}
+
+.cmp-examples-structure__header {
+    .cmp-image {
+        display: none;
     }
 }
 
 .cmp-examples-structure__aside {
     .cmp-image {
-        position: fixed;
-        top: @cmp-examples-spacing-xl;
+        position: absolute;
+        top: @cmp-examples-spacing-8;
+
+        width: 200*@px;
     }
 
     .cmp-image__image {
         width: @cmp-examples-logo-width;
-        margin-bottom: @cmp-examples-spacing-xl;
+        margin-bottom: @cmp-examples-spacing-8;
+    }
+}
+
+@media @cmp-examples-screen-l-min {
+    .cmp-examples-structure__header {
+        .cmp-image {
+            display: block;
+        }
+    }
+
+    .cmp-examples-structure__aside {
+        .cmp-image {
+            display: none;
+        }
     }
 }

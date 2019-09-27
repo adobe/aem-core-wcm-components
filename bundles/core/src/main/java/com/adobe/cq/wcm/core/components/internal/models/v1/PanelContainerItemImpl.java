@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import javax.annotation.Nonnull;
-
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -28,7 +27,7 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
 
     public static final String PN_PANEL_TITLE = "cq:panelTitle";
 
-    public PanelContainerItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Resource resource) {
+    public PanelContainerItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
         super(request, resource);
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {

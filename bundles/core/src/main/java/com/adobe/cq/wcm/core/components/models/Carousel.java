@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -73,6 +73,16 @@ public interface Carousel extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.6.0
      */
     default boolean getAutopauseDisabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns an accessibility label that describes the carousel.
+     *
+     * @return an accessibility label for the carousel
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
 

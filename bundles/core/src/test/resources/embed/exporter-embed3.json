@@ -1,0 +1,5 @@
+{
+    "type": "HTML",
+    "html": "<div>html</div>",
+    ":type": "core/wcm/components/embed/v1/embed"
+}

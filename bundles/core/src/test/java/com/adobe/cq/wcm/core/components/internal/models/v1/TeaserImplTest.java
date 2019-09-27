@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,40 +15,41 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Objects;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.apache.sling.testing.resourceresolver.MockValueMap;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractImageDelegatingModel;
-import com.adobe.cq.wcm.core.components.internal.models.v1.TeaserImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
-import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.designer.Style;
-import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import uk.org.lidalia.slf4jtest.TestLogger;
+import uk.org.lidalia.slf4jtest.TestLoggerFactory;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
 
-public class TeaserImplTest {
+
+@ExtendWith(AemContextExtension.class)
+class TeaserImplTest {
 
     private static final String TEST_BASE = "/teaser";
     private static final String CONTENT_ROOT = "/content";
@@ -69,39 +70,32 @@ public class TeaserImplTest {
     private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
     private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
     private static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
-    private Logger teaserLogger;
 
-    @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    private final AemContext context = CoreComponentTestContext.newAemContext();
+    private TestLogger testLogger;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content/dam/core/images");
-        AEM_CONTEXT.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
+    @BeforeEach
+    void setUp() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_DAM_JSON, "/content/dam/core/images");
+        context.load().binaryFile("/image/" + PNG_IMAGE_BINARY_NAME, PNG_ASSET_PATH + "/jcr:content/renditions/original");
+        testLogger = TestLoggerFactory.getTestLogger(TeaserImpl.class);
     }
 
-    @Before
-    public void setTestFixture() throws NoSuchFieldException, IllegalAccessException {
-        teaserLogger = spy(LoggerFactory.getLogger("FakeLogger"));
-        Field field = TeaserImpl.class.getDeclaredField("LOGGER");
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        field.setAccessible(true);
-        // remove final modifier from field
-
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, teaserLogger);
+    @AfterEach
+    void tearDown() {
+        TestLoggerFactory.clear();
     }
 
     @Test
-    public void testFullyConfiguredTeaser() {
+    void testFullyConfiguredTeaser() {
         Teaser teaser = getTeaserUnderTest(TEASER_1);
         if (teaser.getImageResource() != null) {
             // let's verify the ValueMap wrapping here
             testImageResourceValueMap(teaser.getImageResource().getValueMap());
-            testImageResourceValueMap(teaser.getImageResource().adaptTo(ValueMap.class));
+            testImageResourceValueMap(Objects.requireNonNull(teaser.getImageResource().adaptTo(ValueMap.class)));
+            assertEquals(TEASER_1, teaser.getImageResource().getPath());
         }
-        assertEquals(TEASER_1, teaser.getImageResource().getPath());
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(LINK, teaser.getLinkURL());
@@ -109,14 +103,14 @@ public class TeaserImplTest {
     }
 
     @Test
-    public void testFullyConfiguredTeaserVanityPath() {
+    void testFullyConfiguredTeaserVanityPath() {
         Teaser teaser = getTeaserUnderTest(TEASER_5);
         if (teaser.getImageResource() != null) {
             // let's verify the ValueMap wrapping here
             testImageResourceValueMap(teaser.getImageResource().getValueMap());
-            testImageResourceValueMap(teaser.getImageResource().adaptTo(ValueMap.class));
+            testImageResourceValueMap(Objects.requireNonNull(teaser.getImageResource().adaptTo(ValueMap.class)));
+            assertEquals(TEASER_5, teaser.getImageResource().getPath());
         }
-        assertEquals(TEASER_5, teaser.getImageResource().getPath());
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(CONTEXT_PATH + "/content/teasers.html", teaser.getLinkURL());
@@ -124,69 +118,60 @@ public class TeaserImplTest {
     }
 
     @Test
-    public void testPageInheritedProperties() {
+    void testPageInheritedProperties() {
         Teaser teaser = getTeaserUnderTest(TEASER_6);
         assertEquals("Teasers Test", teaser.getTitle());
         assertEquals("Teasers description", teaser.getDescription());
     }
 
     @Test
-    public void testInvalidFileReference() throws Exception {
+    void testInvalidFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_2);
-        verify(teaserLogger)
-                .error("Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.");
+        assertThat(testLogger.getLoggingEvents(), hasItem(error(
+                "Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.")));
         assertNull(teaser.getImageResource());
     }
 
     @Test
-    public void testEmptyFileReference() throws Exception {
+    void testEmptyFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_3);
-        verify(teaserLogger)
-                .debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.");
+        assertThat(testLogger.getLoggingEvents(), hasItem(debug(
+                "Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.")));
         assertNull(teaser.getImageResource());
     }
 
     @Test
-    public void testTeaserWithoutLink() throws Exception {
+    void testTeaserWithoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
-        verify(teaserLogger).debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.");
+        assertThat(testLogger.getLoggingEvents(),
+                hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
         assertNull(teaser.getLinkURL());
     }
 
     @Test
-    public void testTeaserWithHiddenLinks() throws Exception {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Teaser.PN_TITLE_LINK_HIDDEN, true);
-            put(Teaser.PN_IMAGE_LINK_HIDDEN, true);
-        }}));
-        Teaser teaser = getTeaserUnderTest(TEASER_5, mockStyle);
+    void testTeaserWithHiddenLinks() {
+        Teaser teaser = getTeaserUnderTest(TEASER_5,
+                Teaser.PN_TITLE_LINK_HIDDEN, true,
+                Teaser.PN_IMAGE_LINK_HIDDEN, true);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser7"));
     }
 
     @Test
-    public void testTeaserWithHiddenElements() throws Exception {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Teaser.PN_TITLE_HIDDEN, true);
-            put(Teaser.PN_DESCRIPTION_HIDDEN, true);
-        }}));
-
-        Teaser teaser = getTeaserUnderTest(TEASER_5, mockStyle);
+    void testTeaserWithHiddenElements() {
+        Teaser teaser = getTeaserUnderTest(TEASER_5,
+                Teaser.PN_TITLE_HIDDEN, true,
+                Teaser.PN_DESCRIPTION_HIDDEN, true);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser8"));
     }
 
     @Test
-    public void testTeaserWithoutImage() throws Exception {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource);
-
-        Teaser teaser = getTeaserUnderTest(TEASER_9, mockStyle);
+    void testTeaserWithoutImage() {
+        Teaser teaser = getTeaserUnderTest(TEASER_9);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser12"));
     }
 
     @Test
-    public void testTeaserWithActions() {
+    void testTeaserWithActions() {
         Teaser teaser = getTeaserUnderTest(TEASER_7);
         assertTrue("Expected teaser with actions", teaser.isActionsEnabled());
         assertEquals("Expected to find two actions", 2, teaser.getActions().size());
@@ -197,18 +182,14 @@ public class TeaserImplTest {
     }
 
     @Test
-    public void testTeaserWithActionsDisabled() {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Teaser.PN_ACTIONS_DISABLED, true);
-        }}));
-
-        Teaser teaser = getTeaserUnderTest(TEASER_7, mockStyle);
+    void testTeaserWithActionsDisabled() {
+        Teaser teaser = getTeaserUnderTest(TEASER_7,
+                Teaser.PN_ACTIONS_DISABLED, true);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser10"));
     }
 
     @Test
-    public void testTeaserWithTitleAndDescriptionFromActions() {
+    void testTeaserWithTitleAndDescriptionFromActions() {
         Teaser teaser = getTeaserUnderTest(TEASER_8);
         assertTrue("Expected teaser with actions", teaser.isActionsEnabled());
         assertEquals("Expected to find two Actions", 2, teaser.getActions().size());
@@ -218,54 +199,35 @@ public class TeaserImplTest {
     }
 
     @Test
-    public void testTeaserWithTitleType() throws Exception {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
-            put(Teaser.PN_TITLE_TYPE, "h5");
-        }}));
-
-        Teaser teaser = getTeaserUnderTest(TEASER_1, mockStyle);
+    void testTeaserWithTitleType() {
+        Teaser teaser = getTeaserUnderTest(TEASER_1,
+                Teaser.PN_TITLE_TYPE, "h5");
         assertEquals("Expected title type is not correct", "h5", teaser.getTitleType());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser2"));
 
     }
 
     @Test
-    public void testTeaserWithDefaultTitleType() throws Exception {
-        Resource mockResource = mock(Resource.class);
-        Style mockStyle = new MockStyle(mockResource);
-
-        Teaser teaser = getTeaserUnderTest(TEASER_1, mockStyle);
-        assertEquals("Expected the default title type is not correct", null, teaser.getTitleType());
+    void testTeaserWithDefaultTitleType() {
+        Teaser teaser = getTeaserUnderTest(TEASER_1);
+        assertNull("Expected the default title type is not correct", teaser.getTitleType());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
 
-    private Teaser getTeaserUnderTest(String resourcePath) {
-        return getTeaserUnderTest(resourcePath, null);
-    }
-
-    private Teaser getTeaserUnderTest(String resourcePath, Style currentStyle) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
-        if (resource == null) {
-            throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
-        }
-        final MockSlingHttpServletRequest request =
-                new MockSlingHttpServletRequest(AEM_CONTEXT.resourceResolver(), AEM_CONTEXT.bundleContext());
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        SlingBindings slingBindings = new SlingBindings();
-        slingBindings.put(SlingBindings.RESOURCE, resource);
-        slingBindings.put(WCMBindings.PROPERTIES, resource.adaptTo(ValueMap.class));
-        slingBindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
-        if (currentStyle != null) {
-            slingBindings.put(WCMBindings.CURRENT_STYLE, currentStyle);
+    private Teaser getTeaserUnderTest(String resourcePath, Object... properties) {
+        MockSlingHttpServletRequest request = context.request();
+        Resource resource = context.currentResource(resourcePath);
+        if (resource != null && properties != null) {
+            context.contentPolicyMapping(resource.getResourceType(), properties);
         }
         Component component = mock(Component.class);
         when(component.getProperties()).thenReturn(new ValueMapDecorator(new HashMap<String, Object>() {{
             put(AbstractImageDelegatingModel.IMAGE_DELEGATE, "core/wcm/components/image/v2/image");
         }}));
+        SlingBindings slingBindings = (SlingBindings) request.getAttribute(SlingBindings.class.getName());
         slingBindings.put(WCMBindings.COMPONENT, component);
         request.setAttribute(SlingBindings.class.getName(), slingBindings);
+        request.setContextPath(CONTEXT_PATH);
         return request.adaptTo(Teaser.class);
     }
 

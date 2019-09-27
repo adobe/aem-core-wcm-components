@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018 Adobe Systems Incorporated
+ * Copyright 2018 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -340,7 +340,7 @@
     if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady());
+        document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
 }());

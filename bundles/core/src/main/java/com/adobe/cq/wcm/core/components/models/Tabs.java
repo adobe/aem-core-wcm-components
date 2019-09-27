@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -32,6 +32,16 @@ public interface Tabs extends Container {
      * @since com.adobe.cq.wcm.core.components.models 12.5.0
      */
     default String getActiveItem() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns an accessibility label that describes the tabs.
+     *
+     * @return an accessibility label for tabs
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
 }

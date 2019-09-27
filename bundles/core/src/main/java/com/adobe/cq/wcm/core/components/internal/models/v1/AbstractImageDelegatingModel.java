@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +42,7 @@ public abstract class AbstractImageDelegatingModel {
     private List<String> hiddenProperties;
     private Resource imageResource;
 
-    protected void setImageResource(@Nonnull Component component, @Nonnull Resource toBeWrapped, @Nonnull List<String> hiddenProperties) {
+    protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties) {
         this.toBeWrapped = toBeWrapped;
         this.component = component;
         this.hiddenProperties = hiddenProperties;

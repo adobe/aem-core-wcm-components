@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018 Adobe Systems Incorporated
+ *  Copyright 2018 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@
     }
 }
 
-@media (max-width: @cmp-examples-breakpoint-s) {
+@media (min-width: @cmp-examples-breakpoint-xs) and (max-width: @cmp-examples-breakpoint-s) {
     .aem-Grid {
         .generate-grid(small, @max_col);
     }
@@ -37,5 +37,11 @@
 @media (min-width: @cmp-examples-breakpoint-s) and (max-width: @cmp-examples-breakpoint-m) {
     .aem-Grid {
         .generate-grid(medium, @max_col);
+    }
+}
+
+@media (min-width: @cmp-examples-breakpoint-m) and (max-width: @cmp-examples-breakpoint-l) {
+    .aem-Grid {
+        .generate-grid(large, @max_col);
     }
 }

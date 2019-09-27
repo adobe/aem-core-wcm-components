@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ public class MockExternalizerFactory {
     public static Externalizer getExternalizerService() {
         Externalizer externalizer = mock(Externalizer.class);
         when(externalizer.publishLink(any(ResourceResolver.class), anyString())).then(
-                invocationOnMock -> ROOT + invocationOnMock.getArgumentAt(1, String.class));
+                invocationOnMock -> ROOT + invocationOnMock.getArgument(1));
         return externalizer;
     }
 

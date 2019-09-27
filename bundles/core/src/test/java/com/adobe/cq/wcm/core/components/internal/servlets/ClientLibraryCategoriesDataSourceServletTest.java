@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -20,26 +20,22 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.Nullable;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.Whitebox;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
-import com.adobe.granite.ui.clientlibs.HtmlLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.adobe.granite.ui.components.ds.DataSource;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -70,36 +66,28 @@ public class ClientLibraryCategoriesDataSourceServletTest {
         dataSourceServlet = new ClientLibraryCategoriesDataSourceServlet();
 
         HtmlLibraryManager htmlLibraryManager = mock(HtmlLibraryManager.class);
-        when(htmlLibraryManager.isMinifyEnabled()).thenReturn(false);
 
         Map<String, ClientLibrary> clientLibraries = new HashMap<String, ClientLibrary>();
         when(htmlLibraryManager.getLibraries()).thenReturn(clientLibraries);
 
         // A. JavaScript only
         ClientLibrary libraryA = mock(ClientLibrary.class);
-        when(libraryA.allowProxy()).thenReturn(true);
-        when(libraryA.getPath()).thenReturn(CLIENTLIB_A_PATH);
         when(libraryA.getCategories()).thenReturn(CLIENTLIB_A_CATEGORIES);
-        when(libraryA.getTypes()).thenReturn(CLIENTLIB_A_TYPES);
         clientLibraries.put(libraryA.getPath(), libraryA);
 
         // B. CSS only
         ClientLibrary libraryB = mock(ClientLibrary.class);
-        when(libraryB.allowProxy()).thenReturn(false);
         when(libraryB.getPath()).thenReturn(CLIENTLIB_B_PATH);
         when(libraryB.getCategories()).thenReturn(CLIENTLIB_B_CATEGORIES);
-        when(libraryB.getTypes()).thenReturn(CLIENTLIB_B_TYPES);
         clientLibraries.put(libraryB.getPath(), libraryB);
 
         // C. JavaScript and CSS
         ClientLibrary libraryC = mock(ClientLibrary.class);
-        when(libraryC.allowProxy()).thenReturn(true);
         when(libraryC.getPath()).thenReturn(CLIENTLIB_C_PATH);
         when(libraryC.getCategories()).thenReturn(CLIENTLIB_C_CATEGORIES);
-        when(libraryC.getTypes()).thenReturn(CLIENTLIB_C_TYPES);
         clientLibraries.put(libraryC.getPath(), libraryC);
 
-        Whitebox.setInternalState(dataSourceServlet, "htmlLibraryManager", htmlLibraryManager);
+        Utils.setInternalState(dataSourceServlet, "htmlLibraryManager", htmlLibraryManager);
     }
 
     @Test

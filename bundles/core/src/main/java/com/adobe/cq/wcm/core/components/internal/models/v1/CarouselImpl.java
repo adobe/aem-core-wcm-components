@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -37,10 +38,10 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     protected static final Long DEFAULT_DELAY = 5000L; // milliseconds
 
     @ScriptVariable
-    protected Style currentStyle;
-
-    @ScriptVariable
     protected ValueMap properties;
+
+    @ValueMapValue(optional = true)
+    protected String accessibilityLabel;
 
     protected boolean autoplay;
     protected Long delay;
@@ -68,4 +69,8 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
         return autopauseDisabled;
     }
 
+    @Override
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
+    }
 }

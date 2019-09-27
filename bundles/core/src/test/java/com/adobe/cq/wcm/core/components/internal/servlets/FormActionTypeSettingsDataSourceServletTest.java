@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.ArrayList;
-import javax.annotation.Nullable;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.granite.ui.components.ds.DataSource;
@@ -60,7 +60,6 @@ public class FormActionTypeSettingsDataSourceServletTest {
         ArrayList<FormsManager.ComponentDescription> componentDescriptions = new ArrayList<>();
         componentDescriptions.add(description);
         when(formsManagerMock.getActions()).thenReturn(componentDescriptions.iterator());
-        when(description.getTitle()).thenReturn("Form Action");
         when(description.getResourceType()).thenReturn("form/action");
     }
 

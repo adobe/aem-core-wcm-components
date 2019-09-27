@@ -9,22 +9,23 @@
         jcr:description="Display a list of pages"
         jcr:primaryType="cq:PageContent"
         jcr:title="List"
-        sling:resourceType="core/wcm/components/page/v2/page">
+        sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
             <responsivegrid
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
-                <title
-                    cq:styleIds="[1544759629303]"
-                    jcr:created="{Date}2018-12-06T19:11:07.719+01:00"
+                <text_1740702241
+                    cq:styleIds="[1644862132301]"
+                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-06T19:21:37.259+01:00"
+                    jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h1"/>
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;h1>List&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
@@ -34,14 +35,39 @@
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>List can be used to display a list of pages. They can be defined either dynamically - by search query, tags or from a parent page - or as a static list of items.&lt;/p>&#xa;"
-                    textIsRich="true">
-                    <cq:responsive jcr:primaryType="nt:unstructured">
-                        <default
-                            jcr:primaryType="nt:unstructured"
-                            offset="0"
-                            width="9"/>
-                    </cq:responsive>
-                </text>
+                    textIsRich="true"/>
+                <teaser
+                    cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
+                    jcr:createdBy="admin"
+                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-02-14T16:49:57.290+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Technical Documentation"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_list_v2"
+                    textIsRich="true"
+                    titleFromPage="false"/>
+                <teaser_556024830
+                    cq:styleIds="[1550165685463]"
+                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
+                    jcr:createdBy="admin"
+                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                    jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Using Core Components"
+                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    actionsEnabled="false"
+                    descriptionFromPage="false"
+                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                    linkURL="https://www.adobe.com/go/aem_cmp_list_v2"
+                    textIsRich="true"
+                    titleFromPage="false"/>
                 <title_865328580
                     cq:styleIds="[1544759664489]"
                     jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
@@ -198,7 +224,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;table>&#xa;&lt;tbody>&lt;tr>&lt;td>List built from a search query term under a defined root page.&lt;br>&#xa;&lt;br>&#xa;&lt;/td>&#xa;&lt;/tr>&lt;/tbody>&lt;/table>&#xa;"
+                    text="&lt;p>List built from a search query term under a defined root page.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_839079176
                     jcr:created="{Date}2018-12-07T12:55:12.178+01:00"
@@ -220,7 +246,7 @@
                             childDepth="1"
                             linkItems="false"
                             listFrom="search"
-                            query="teaser"
+                            query="Carousel"
                             searchIn="/content/core-components-examples/library"
                             showDescription="false"
                             showModificationDate="false"
@@ -264,7 +290,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>List built from a set of tags to be found related to pages under a root page. Uses the default match &amp;quot;Any tag&amp;quot; feature, but it's also possible to configure the component to match all tags.&lt;/p>&#xa;"
+                    text="&lt;p>List built from a set of tags to be found related to pages under a root page. Uses the default match &lt;i>Any tag&lt;/i> feature, but it's also possible to configure the component to match all tags.&lt;/p>&#xa;"
                     textIsRich="true"/>
                 <demo_491373107
                     jcr:created="{Date}2018-12-07T12:55:16.267+01:00"
@@ -289,7 +315,7 @@
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="asc"
-                            tags="[core-components-examples:component-type/atom]"
+                            tags="[core-components-examples:component-type/basic]"
                             tagsMatch="any"
                             tagsSearchRoot="/content/core-components-examples/library"/>
                     </component>
@@ -509,5 +535,8 @@
                 </demo_1381767468>
             </responsivegrid>
         </root>
+        <image jcr:primaryType="nt:unstructured">
+            <file/>
+        </image>
     </jcr:content>
 </jcr:root>
