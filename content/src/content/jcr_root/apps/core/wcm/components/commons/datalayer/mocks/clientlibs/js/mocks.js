@@ -249,7 +249,6 @@
 
         // ====================================  Add event listener ======================================
 
-        // DONE
         // Register event listener: retrieving the object that was referenced by ID in the event
         window.dataLayer.push({
             "on": "image viewed",
@@ -258,7 +257,6 @@
             }
         });
 
-        // DONE
         // Register event listener listening on state change
         window.dataLayer.push({
             "on": "datalayer:change",
@@ -290,7 +288,6 @@
             }
         });
 
-        // DONE
         // Unregister event listener
         window.dataLayer.push({
             "off": "datalayer:change",
