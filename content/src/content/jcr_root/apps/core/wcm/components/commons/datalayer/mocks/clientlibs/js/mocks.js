@@ -151,43 +151,37 @@
 
         // ====================================  Add data ======================================
 
-        // DONE
+        // TODO
         // Add the page data (automatically triggers the datalayer:change event)
         window.dataLayer.push({
-            "data": {
-                "page": {
-                    "id": "/content/my-site/en/about-us",
-                    "pageName": "About Us",
-                    "siteLanguage": "en-us",
-                    "siteCountry": "US"
-                }
+            "page": {
+                "id": "/content/my-site/en/about-us",
+                "pageName": "About Us",
+                "siteLanguage": "en-us",
+                "siteCountry": "US"
             }
         });
 
-        // DONE
+        // TODO
         // Add a component
         window.dataLayer.push({
-            "data": {
-                "component": {
-                    "tab": {
-                        "tab2": {
-                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
-                            "title": "the ocean",
-                            "items": {}
-                        }
+            "component": {
+                "tab": {
+                    "tab2": {
+                        "id": "/content/mysite/en/home/jcr:content/root/tab2",
+                        "title": "the ocean",
+                        "items": {}
                     }
                 }
             }
         });
 
-        // DONE
+        // TODO
         // Remove data
         window.dataLayer.push({
-            "data": {
-                "component": {
-                    "image": {
-                        "image5": undefined
-                    }
+            "component": {
+                "image": {
+                    "image5": undefined
                 }
             }
         });
@@ -202,36 +196,51 @@
         });
 
         // TODO
-        // Add an event with a reference to the data
-        window.dataLayer.push({
-            "event": "click",
-            "id": ["component", "/content/my-site/en/about-us/jcr:content/root/responsivegrid/teaser"]
-        });
-
-        // DONE
         // Add an event with its data
         window.dataLayer.push({
             "event": "image viewed",
-            "data": {
-                "component": {
-                    "image": {
-                        "image5": {
-                            "id": "/content/mysite/en/home/jcr:content/root/image5",
-                            "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
-                        }
+            "component": {
+                "image": {
+                    "image5": {
+                        "id": "/content/mysite/en/home/jcr:content/root/image5",
+                        "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                     }
                 }
             }
         });
 
-        // DONE
+        // TODO
         // Add an event and remove data
         window.dataLayer.push({
             "event": "removed",
+            "component": {
+                "image": {
+                    "image5": undefined
+                }
+            }
+        });
+
+        // TODO
+        // Add event and reference the object by ID
+        window.dataLayer.push({
+            "event": "image viewed",
             "data": {
-                "component": {
-                    "image": {
-                        "image5": undefined
+                "id": "/content/mysite/en/home/jcr:content/root/image5"
+            }
+        });
+
+        // TODO
+        // Add an event with its data
+        window.dataLayer.push({
+            "event": "image viewed",
+            "data": {
+                // any data (is not persisted in the state)
+            },
+            "component": {
+                "image": {
+                    "image5": {
+                        "id": "/content/mysite/en/home/jcr:content/root/image5",
+                        "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
                     }
                 }
             }
@@ -240,36 +249,16 @@
         // ====================================  Add event listener ======================================
 
         // DONE
+        // Register event listener: retrieving the object that was referenced by ID in the event
         window.dataLayer.push({
-            "on": "page loaded",
+            "on": "image viewed",
             "handler": function(event) {
-                var pageUrl = window.dataLayer.get("page.id");
-                console.log(pageUrl);
-            }
-        });
-
-        // TODO
-        window.dataLayer.push({
-            "on": "click",
-            "listen": "future", // could also be called 'scope'. Possible values: past, future, all, once
-            "selector": "path='component' && type='my-site/components/teaser'",
-            "handler": function(event) {
-                var clickTarget = event.id;
-                console.log(clickTarget);
-            }
-        });
-
-        // TODO
-        window.dataLayer.push({
-            "on": "change",
-            "get": "user.userName",
-            "listen": "once",
-            "handler": function(userName) {
-                console.log(userName);
+                var image = window.dataLayer.get(event.data.id); // TODO: implement dataLayer.get()
             }
         });
 
         // DONE
+        // Register event listener listening on state change
         window.dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
@@ -279,6 +268,25 @@
                 console.log(event.data);
                 // the state
                 console.log(window.dataLayer.state);
+            }
+        });
+
+        // TODO
+        // Register event listener listening on state change
+        window.dataLayer.push({
+            "on": "datalayer:change",
+            "scope": "future", // Possible values: past, future, all, once
+            "selector": "user.userName",
+            "handler": function(userName) {
+                console.log(userName);
+            }
+        });
+
+        // Register event listener listening on all events
+        window.dataLayer.push({
+            "on": "datalayer:event",
+            "handler": function(event) {
+                console.log(event);
             }
         });
 
@@ -293,16 +301,6 @@
                 console.log(event.data);
                 // the state
                 console.log(window.dataLayer.state);
-            }
-        });
-
-        // TODO: is it still needed?
-        window.dataLayer.push({
-            "event": "tab viewed",
-            "eventData": {
-                "prop1": "the component id",
-                "prop2": "the component id",
-                "prop3": "the component id"
             }
         });
 
