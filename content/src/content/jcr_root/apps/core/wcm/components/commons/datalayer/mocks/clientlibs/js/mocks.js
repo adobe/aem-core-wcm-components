@@ -23,36 +23,8 @@
 
 
     function populateDataLayerBefore() {
-        window.dataLayer.push({
-            "event": "carousel clicked",
-            "data": {
-                "component": {
-                    "carousel": {
-                        "carousel3": {
-                            "id": "/content/mysite/en/home/jcr:content/root/carousel3",
-                            "items": {}
-                        }
-                    }
-                }
-            }
-        });
 
         window.dataLayer.push({
-            "event": "tab viewed",
-            "data": {
-                "component": {
-                    "tab": {
-                        "tab2": {
-                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
-                            "items": {}
-                        }
-                    }
-                }
-            }
-        });
-
-        window.dataLayer.push({
-            "event": "page loaded",
             "data": {
                 "page": {
                     "id": "/content/mysite/en/products/crossfit",
@@ -66,17 +38,56 @@
         });
 
         window.dataLayer.push({
+            "eventName": "carousel clicked",
+            "data": {
+                "component": {
+                    "carousel": {
+                        "carousel3": {
+                            "id": "/content/mysite/en/home/jcr:content/root/carousel3",
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        });
+
+        window.dataLayer.push({
+            "eventName": "tab viewed",
+            "data": {
+                "component": {
+                    "tab": {
+                        "tab2": {
+                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
+                            "items": {}
+                        }
+                    }
+                }
+            },
+            "info": {
+                "title": "some thing"
+            }
+        });
+
+        window.dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
-                console.log("event listener triggered on: ", event.event);
+                console.log("event listener triggered on: ", event[Object.keys(event)[0]]);
+            }
+        });
+
+        window.dataLayer.push({
+            "on": "datalayer:event",
+            "handler": function(event) {
+                console.log("event listener triggered on: ", event[Object.keys(event)[0]]);
             }
         });
 
     }
 
     function populateDataLayerAfter() {
+
         window.dataLayer.push({
-            "event": "page updated",
+            "eventName": "page updated",
             "data": {
                 "page": {
                     "new prop": "I'm new",
@@ -91,7 +102,7 @@
         });
 
         window.dataLayer.push({
-            "event": "component updated",
+            "eventName": "component updated",
             "data": {
                 "component": {
                     "image": {
@@ -105,11 +116,11 @@
         });
 
         window.dataLayer.push({
-            "event": "removed",
+            "eventName": "removed",
             "data": {
                 "component": {
                     "image": {
-                        "image5": {
+                        "image4": {
                             "id": "/content/mysite/en/home/jcr:content/root/image4",
                             "items": undefined
                         }
@@ -121,21 +132,7 @@
         window.dataLayer.push({
             "on": "removed",
             "handler": function(event) {
-                console.log("event listener triggered on: ", event.event);
-            }
-        });
-
-        window.dataLayer.push({
-            "event": "removed",
-            "data": {
-                "component": {
-                    "image": {
-                        "image4": {
-                            "id": "/content/mysite/en/home/jcr:content/root/image4",
-                            "items": undefined
-                        }
-                    }
-                }
+                console.log("event listener triggered on: ", event[Object.keys(event)[0]]);
             }
         });
 
@@ -151,37 +148,40 @@
 
         // ====================================  Add data ======================================
 
-        // TODO
         // Add the page data (automatically triggers the datalayer:change event)
         window.dataLayer.push({
-            "page": {
-                "id": "/content/my-site/en/about-us",
-                "pageName": "About Us",
-                "siteLanguage": "en-us",
-                "siteCountry": "US"
+            "data": {
+                "page": {
+                    "id": "/content/my-site/en/about-us",
+                    "pageName": "About Us",
+                    "siteLanguage": "en-us",
+                    "siteCountry": "US"
+                }
             }
         });
 
-        // TODO
         // Add a component
         window.dataLayer.push({
-            "component": {
-                "tab": {
-                    "tab2": {
-                        "id": "/content/mysite/en/home/jcr:content/root/tab2",
-                        "title": "the ocean",
-                        "items": {}
+            "data": {
+                "component": {
+                    "tab": {
+                        "tab2": {
+                            "id": "/content/mysite/en/home/jcr:content/root/tab2",
+                            "title": "the ocean",
+                            "items": {}
+                        }
                     }
                 }
             }
         });
 
-        // TODO
         // Remove data
         window.dataLayer.push({
-            "component": {
-                "image": {
-                    "image5": undefined
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": undefined
+                    }
                 }
             }
         });
@@ -189,58 +189,59 @@
         // ====================================  Add event ======================================
 
 
-        // DONE
         // Add an event (without data)
         window.dataLayer.push({
-            "event": "page loaded"
+            "eventName": "page loaded"
         });
 
-        // TODO
         // Add an event with its data
         window.dataLayer.push({
-            "event": "image viewed",
-            "component": {
-                "image": {
-                    "image5": {
-                        "id": "/content/mysite/en/home/jcr:content/root/image5",
-                        "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+            "eventName": "image viewed",
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": {
+                            "id": "/content/mysite/en/home/jcr:content/root/image5",
+                            "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                        }
                     }
                 }
             }
         });
 
-        // TODO
         // Add an event and remove data
         window.dataLayer.push({
-            "event": "removed",
-            "component": {
-                "image": {
-                    "image5": undefined
+            "eventName": "removed",
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": undefined
+                    }
                 }
             }
         });
 
-        // TODO
         // Add event and reference the object by ID
         window.dataLayer.push({
-            "event": "image viewed",
-            "data": {
+            "eventName": "image viewed",
+            "info": {
                 "id": "/content/mysite/en/home/jcr:content/root/image5"
             }
         });
 
-        // TODO
         // Add an event with its data
         window.dataLayer.push({
-            "event": "image viewed",
-            "data": {
+            "eventName": "image viewed",
+            "info": {
                 // any data (is not persisted in the state)
             },
-            "component": {
-                "image": {
-                    "image5": {
-                        "id": "/content/mysite/en/home/jcr:content/root/image5",
-                        "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+            "data": {
+                "component": {
+                    "image": {
+                        "image5": {
+                            "id": "/content/mysite/en/home/jcr:content/root/image5",
+                            "fileReference": "/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                        }
                     }
                 }
             }
@@ -271,7 +272,6 @@
             }
         });
 
-        // TODO
         // Register event listener listening on state change
         window.dataLayer.push({
             "on": "datalayer:change",

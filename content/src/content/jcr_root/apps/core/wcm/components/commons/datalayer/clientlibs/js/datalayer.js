@@ -20,7 +20,7 @@
     /* eslint no-unused-vars: "off" */
 
     var CHANGE_EVENT = "datalayer:change";
-    var EVENT_NAME_KEY = "event";
+    var EVENT_EVENT = "datalayer:event";
 
     function DataLayerHandler(dataLayer) {
         this.dataLayer = dataLayer;
@@ -32,22 +32,22 @@
     }
 
     DataLayerHandler.prototype._init = function() {
-        this._handleEventsBeforeScriptLoad(this.dataLayer);
+        this._handleItemsBeforeScriptLoad(this.dataLayer);
         this._overridePush();
     };
 
-    DataLayerHandler.prototype._handleEventsBeforeScriptLoad = function() {
+    DataLayerHandler.prototype._handleItemsBeforeScriptLoad = function() {
         var that = this;
-        this.dataLayer.forEach(function(event, idx) {
+        this.dataLayer.forEach(function(item, idx) {
             // remove event listeners defined before the script load
-            if (event.handler) {
+            if (that._isListener(item)) {
                 that.dataLayer.splice(idx, 1);
             }
-            that._handleEvent(event);
+            that._handleItem(item);
         });
     };
 
-    // Augments the push function to also handle the event
+    // Augments the push function to also handle the item
     DataLayerHandler.prototype._overridePush = function() {
         var that = this;
         // restrict the override to the data layer object
@@ -55,10 +55,10 @@
             var pushArguments = arguments;
             var filteredArguments = arguments;
             Object.keys(pushArguments).forEach(function(key) {
-                var event = pushArguments[key];
-                that._handleEvent(event);
+                var item = pushArguments[key];
+                that._handleItem(item);
                 // filter out event listeners
-                if (event.handler) {
+                if (that._isListener(item)) {
                     delete filteredArguments[key];
                 }
             });
@@ -68,51 +68,59 @@
         };
     };
 
-    DataLayerHandler.prototype._handleEvent = function(event) {
-        if (!event) {
+    DataLayerHandler.prototype._handleItem = function(item) {
+        if (!item) {
             return;
         }
-        if (event.data) {
-            this._updateState(event.data);
-            this._triggerListeners(event);
-        } else if (event[EVENT_NAME_KEY]) {
-            this._triggerListeners(event);
-        } else if (event.handler) {
-            if (event.off) {
-                this._removeListener(event);
-            } else {
-                this._registerListener(event);
-                this._triggerListener(event);
+        if (this._isListener(item)) {
+            if (item.on) {
+                this._registerListener(item);
+                this._triggerListener(item);
+            } else if (item.off) {
+                this._removeListener(item);
+            }
+        } else {
+            if (item.data) {
+                this._updateState(item);
+                this._triggerListeners(item, CHANGE_EVENT);
+            }
+            if (item.eventName) {
+                this._triggerListeners(item, EVENT_EVENT);
             }
         }
     };
 
-    DataLayerHandler.prototype._updateState = function(data) {
-        this._deepMerge(this.dataLayer.state, data);
+    DataLayerHandler.prototype._isListener = function(item) {
+        return (item.handler && (item.on || item.off));
     };
 
-    DataLayerHandler.prototype._triggerListeners = function(event) {
+    DataLayerHandler.prototype._updateState = function(item) {
+        this._deepMerge(this.dataLayer.state, item.data);
+    };
+
+    DataLayerHandler.prototype._triggerListeners = function(item, eventName) {
         this.dataLayer._listeners.forEach(function(listener) {
-            if (listener.on === CHANGE_EVENT || listener.on === event[EVENT_NAME_KEY]) {
-                listener.handler(event);
+            if (listener.on === eventName || listener.on === item.eventName) {
+                listener.handler(item);
             }
         });
     };
 
     DataLayerHandler.prototype._removeListener = function(listener) {
         var tmp = listener;
-        tmp["on"] = listener["off"];
-        delete tmp["off"];
+        tmp.on = listener.off;
+        delete tmp.off;
         var idx = this._getListenerIndex(tmp);
         if (idx > -1) {
             this.dataLayer._listeners.splice(idx, 1);
+            console.log("event listener unregistered on: ", tmp.on);
         }
     };
 
     DataLayerHandler.prototype._registerListener = function(listener) {
         if (this._getListenerIndex(listener) === -1) {
             this.dataLayer._listeners.push(listener);
-            console.log("event listener registered on: " + listener.on);
+            console.log("event listener registered on: ", listener.on);
         }
     };
 
@@ -138,11 +146,11 @@
         return -1;
     };
 
-    // trigger the listener on all previous events matching the listener
+    // trigger the listener on all previous items matching the listener
     DataLayerHandler.prototype._triggerListener = function(listener) {
-        this.dataLayer.forEach(function(event) {
-            if (listener.on === CHANGE_EVENT || listener.on === event[EVENT_NAME_KEY]) {
-                listener.handler(event);
+        this.dataLayer.forEach(function(item) {
+            if (listener.on === CHANGE_EVENT || listener.on === EVENT_EVENT || listener.on === item.eventName) {
+                listener.handler(item);
             }
         });
     };
