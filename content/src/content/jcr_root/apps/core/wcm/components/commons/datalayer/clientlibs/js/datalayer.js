@@ -20,6 +20,23 @@
     /* eslint no-unused-vars: "off" */
 
     /**
+     * @typedef {String} DataLayerEvents
+     **/
+
+    /**
+     * Enumeration of data layer events.
+     *
+     * @enum {DataLayerEvents}
+     * @readonly
+     */
+    var events = {
+        /** Represents an event triggered for any change in the data layer state */
+        CHANGE: "datalayer:change",
+        /** Represents an event triggered for any event push to the data layer */
+        EVENT: "datalayer:event"
+    };
+
+    /**
      * @typedef {String} ListenerScope
      **/
 
@@ -67,9 +84,6 @@
     /**
      * @typedef {DataConfig | EventConfig | ListenerOnConfig | ListenerOffConfig} ItemConfig
      */
-
-    var CHANGE_EVENT = "datalayer:change";
-    var EVENT_EVENT = "datalayer:event";
 
     function DataLayer(dataLayer) {
         this.dataLayer = dataLayer;
@@ -138,23 +152,12 @@
         } else {
             if (item.data) {
                 this._updateState(item);
-                this._triggerListeners(item, CHANGE_EVENT);
+                this._triggerListeners(item, events.CHANGE);
             }
             if (item.eventName) {
-                this._triggerListeners(item, EVENT_EVENT);
+                this._triggerListeners(item, events.EVENT);
             }
         }
-    };
-
-    /**
-     * Determines whether the passed item is a listener configuration.
-     *
-     * @param {ItemConfig} item
-     * @returns {Boolean} true if the item is a listener on/off configuration, false otherwise.
-     * @private
-     */
-    DataLayer.prototype._isListener = function(item) {
-        return !!(item.handler && (item.on || item.off));
     };
 
     /**
@@ -175,10 +178,18 @@
         });
     };
 
+    DataLayer.prototype._triggerListener = function(listener) {
+        this.dataLayer.forEach(function(item) {
+            if (listener.on === events.CHANGE || listener.on === events.EVENT || listener.on === item.eventName) {
+                listener.handler(item);
+            }
+        });
+    };
+
     /**
      * Registers a listener based on a listener on configuration.
      *
-     * @param {ListenerOnConfig} item
+     * @param {ListenerOnConfig} item The listener on configuration.
      * @private
      */
     DataLayer.prototype._registerListener = function(item) {
@@ -191,7 +202,7 @@
     /**
      * Unregisters a listener based on a listener off configuration.
      *
-     * @param {ListenerOffConfig} item
+     * @param {ListenerOffConfig} item The listener off configuration.
      * @private
      */
     DataLayer.prototype._unregisterListener = function(item) {
@@ -205,17 +216,24 @@
         }
     };
 
-    DataLayer.prototype._getListenerIndex = function(listener) {
+    /**
+     * Gets the index of a listener based on a listener on configuration.
+     *
+     * @param {ListenerOnConfig} item The listener on configuration.
+     * @returns {Number} The index of the listener.
+     * @private
+     */
+    DataLayer.prototype._getListenerIndex = function(item) {
         var listenerFound = true;
         for (var i = 0; i <  this.dataLayer._listeners.length; i++) {
             var existingListener = this.dataLayer._listeners[i];
-            if (Object.keys(existingListener).length !== Object.keys(listener).length) {
+            if (Object.keys(existingListener).length !== Object.keys(item).length) {
                 listenerFound = false;
                 break;
             }
             for (var j = 0; j < Object.keys(existingListener).length; j++) {
                 var field = Object.keys(existingListener)[j];
-                if (existingListener[field].toString() !== listener[field].toString()) {
+                if (existingListener[field].toString() !== item[field].toString()) {
                     listenerFound = false;
                     break;
                 }
@@ -227,13 +245,15 @@
         return -1;
     };
 
-    // trigger the listener on all previous items matching the listener
-    DataLayer.prototype._triggerListener = function(listener) {
-        this.dataLayer.forEach(function(item) {
-            if (listener.on === CHANGE_EVENT || listener.on === EVENT_EVENT || listener.on === item.eventName) {
-                listener.handler(item);
-            }
-        });
+    /**
+     * Determines whether the passed item is a listener configuration.
+     *
+     * @param {ItemConfig} item The listener on/off configuration.
+     * @returns {Boolean} true if the item is a listener on/off configuration, false otherwise.
+     * @private
+     */
+    DataLayer.prototype._isListener = function(item) {
+        return !!(item.handler && (item.on || item.off));
     };
 
     /**
@@ -296,7 +316,7 @@
     /**
      * Triggered when there is change in the data layer state.
      *
-     * @event datalayer:change
+     * @event DataLayerEvents.CHANGE
      * @type {Object}
      * @property {Object} data Data pushed that caused a change in the data layer state.
      */
@@ -304,7 +324,7 @@
     /**
      * Triggered when an event is pushed to the data layer.
      *
-     * @event datalayer:event
+     * @event DataLayerEvents.EVENT
      * @type {Object}
      * @property {String} eventName Name of the committed event.
      * @property {Object} info Additional information passed with the committed event.
