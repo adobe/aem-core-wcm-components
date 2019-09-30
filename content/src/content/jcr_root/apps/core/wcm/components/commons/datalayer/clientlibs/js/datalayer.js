@@ -33,7 +33,9 @@
         /** Represents an event triggered for any change in the data layer state */
         CHANGE: "datalayer:change",
         /** Represents an event triggered for any event push to the data layer */
-        EVENT: "datalayer:event"
+        EVENT: "datalayer:event",
+        /** Represents an event triggered when the data layer has initialized */
+        READY: "datalayer:ready"
     };
 
     /**
@@ -110,10 +112,13 @@
         });
     };
 
-    // Augments the push function to also handle the item
+    /**
+     * Overrides the push function of DataLayer.dataLayer to handle item pushes.
+     *
+     * @private
+     */
     DataLayer.prototype._overridePush = function() {
         var that = this;
-        // restrict the override to the data layer object
 
         /**
          * Pushes one or more items to the data layer.
@@ -121,17 +126,20 @@
          * @param {...ItemConfig} var_args The items to add to the data layer.
          * @returns {Number} The length of the data layer following push.
          */
-        that.dataLayer.push = function(var_args) {
+        that.dataLayer.push = function(var_args) { /* eslint-disable-line camelcase */
             var pushArguments = arguments;
             var filteredArguments = arguments;
+
             Object.keys(pushArguments).forEach(function(key) {
                 var item = pushArguments[key];
                 that._handleItem(item);
+
                 // filter out event listeners
                 if (that._isListener(item)) {
                     delete filteredArguments[key];
                 }
             });
+
             if (filteredArguments[0]) {
                 return Array.prototype.push.apply(this, filteredArguments);
             }
@@ -163,7 +171,7 @@
     /**
      * Updates the state with the passed data configuration.
      *
-     * @param {DataConfig} item
+     * @param {DataConfig} item The data configuration.
      * @private
      */
     DataLayer.prototype._updateState = function(item) {
@@ -308,7 +316,7 @@
         console.log("data layer prepopulated - let's initialize the data layer");
         window.dataLayer = window.dataLayer || [];
         new DataLayer(window.dataLayer);
-        var readyEvent = new CustomEvent("datalayer:ready");
+        var readyEvent = new CustomEvent(events.READY);
         window.dispatchEvent(readyEvent);
         console.log("data layer script initialized");
     });
@@ -339,6 +347,13 @@
      * @property {String} eventName Name of the committed event.
      * @property {Object} info Additional information passed with the committed event.
      * @property {Object} data Data that was pushed alongside the event.
+     */
+
+    /**
+     * Triggered when the data layer has initialized.
+     *
+     * @event DataLayerEvents.READY
+     * @type {Object}
      */
 
 })();
