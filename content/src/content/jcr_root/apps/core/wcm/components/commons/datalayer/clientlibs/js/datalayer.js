@@ -61,7 +61,7 @@
      * @typedef {Object} EventConfig
      * @property {String} eventName Name of the event.
      * @property {Object} [info] Additional information to pass to the event handler.
-     * @property {DataConfig} [] Data to be updated in the state.
+     * @property {DataConfig.data} [data] Data to be updated in the state.
      */
 
     /**
