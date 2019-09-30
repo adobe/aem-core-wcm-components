@@ -133,7 +133,7 @@
                 this._registerListener(item);
                 this._triggerListener(item);
             } else if (item.off) {
-                this._removeListener(item);
+                this._unregisterListener(item);
             }
         } else {
             if (item.data) {
@@ -146,10 +146,23 @@
         }
     };
 
+    /**
+     * Determines whether the passed item is a listener configuration.
+     *
+     * @param {ItemConfig} item
+     * @returns {Boolean} true if the item is a listener on/off configuration, false otherwise.
+     * @private
+     */
     DataLayer.prototype._isListener = function(item) {
-        return (item.handler && (item.on || item.off));
+        return !!(item.handler && (item.on || item.off));
     };
 
+    /**
+     * Updates the state with the passed data configuration.
+     *
+     * @param {DataConfig} item
+     * @private
+     */
     DataLayer.prototype._updateState = function(item) {
         DataLayer.utils.deepMerge(this.dataLayer.state, item.data);
     };
@@ -162,21 +175,33 @@
         });
     };
 
-    DataLayer.prototype._removeListener = function(listener) {
-        var tmp = listener;
-        tmp.on = listener.off;
+    /**
+     * Registers a listener based on a listener on configuration.
+     *
+     * @param {ListenerOnConfig} item
+     * @private
+     */
+    DataLayer.prototype._registerListener = function(item) {
+        if (this._getListenerIndex(item) === -1) {
+            this.dataLayer._listeners.push(item);
+            console.log("event listener registered on: ", item.on);
+        }
+    };
+
+    /**
+     * Unregisters a listener based on a listener off configuration.
+     *
+     * @param {ListenerOffConfig} item
+     * @private
+     */
+    DataLayer.prototype._unregisterListener = function(item) {
+        var tmp = item;
+        tmp.on = item.off;
         delete tmp.off;
         var idx = this._getListenerIndex(tmp);
         if (idx > -1) {
             this.dataLayer._listeners.splice(idx, 1);
             console.log("event listener unregistered on: ", tmp.on);
-        }
-    };
-
-    DataLayer.prototype._registerListener = function(listener) {
-        if (this._getListenerIndex(listener) === -1) {
-            this.dataLayer._listeners.push(listener);
-            console.log("event listener registered on: ", listener.on);
         }
     };
 
