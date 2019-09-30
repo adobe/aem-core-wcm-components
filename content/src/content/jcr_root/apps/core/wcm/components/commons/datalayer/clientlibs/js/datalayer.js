@@ -54,14 +54,14 @@
 
     /**
      * @typedef {Object} DataConfig
-     * @type {Object} data Data to be updated in the state.
+     * @property {Object} data Data to be updated in the state.
      */
 
     /**
      * @typedef {Object} EventConfig
-     * @type {String} eventName Name of the event.
-     * @type {Object} [info] Additional information to pass to the event handler.
-     * @type {DataConfig} [data] Data to be updated in the state.
+     * @property {String} eventName Name of the event.
+     * @property {Object} [info] Additional information to pass to the event handler.
+     * @property {DataConfig} [] Data to be updated in the state.
      */
 
     /**
