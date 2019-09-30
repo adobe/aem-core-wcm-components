@@ -22,7 +22,7 @@
     var CHANGE_EVENT = "datalayer:change";
     var EVENT_EVENT = "datalayer:event";
 
-    function DataLayerHandler(dataLayer) {
+    function DataLayer(dataLayer) {
         this.dataLayer = dataLayer;
         this.dataLayer.state = {};
         // TODO remove _listeners from data layer (this is used for testing): replace this.dataLayer._listeners and that.dataLayer._listeners
@@ -31,12 +31,12 @@
         this._init();
     }
 
-    DataLayerHandler.prototype._init = function() {
+    DataLayer.prototype._init = function() {
         this._handleItemsBeforeScriptLoad(this.dataLayer);
         this._overridePush();
     };
 
-    DataLayerHandler.prototype._handleItemsBeforeScriptLoad = function() {
+    DataLayer.prototype._handleItemsBeforeScriptLoad = function() {
         var that = this;
         this.dataLayer.forEach(function(item, idx) {
             // remove event listeners defined before the script load
@@ -48,7 +48,7 @@
     };
 
     // Augments the push function to also handle the item
-    DataLayerHandler.prototype._overridePush = function() {
+    DataLayer.prototype._overridePush = function() {
         var that = this;
         // restrict the override to the data layer object
         that.dataLayer.push = function() {
@@ -68,7 +68,7 @@
         };
     };
 
-    DataLayerHandler.prototype._handleItem = function(item) {
+    DataLayer.prototype._handleItem = function(item) {
         if (!item) {
             return;
         }
@@ -90,15 +90,15 @@
         }
     };
 
-    DataLayerHandler.prototype._isListener = function(item) {
+    DataLayer.prototype._isListener = function(item) {
         return (item.handler && (item.on || item.off));
     };
 
-    DataLayerHandler.prototype._updateState = function(item) {
-        this._deepMerge(this.dataLayer.state, item.data);
+    DataLayer.prototype._updateState = function(item) {
+        DataLayer.utils.deepMerge(this.dataLayer.state, item.data);
     };
 
-    DataLayerHandler.prototype._triggerListeners = function(item, eventName) {
+    DataLayer.prototype._triggerListeners = function(item, eventName) {
         this.dataLayer._listeners.forEach(function(listener) {
             if (listener.on === eventName || listener.on === item.eventName) {
                 listener.handler(item);
@@ -106,7 +106,7 @@
         });
     };
 
-    DataLayerHandler.prototype._removeListener = function(listener) {
+    DataLayer.prototype._removeListener = function(listener) {
         var tmp = listener;
         tmp.on = listener.off;
         delete tmp.off;
@@ -117,14 +117,14 @@
         }
     };
 
-    DataLayerHandler.prototype._registerListener = function(listener) {
+    DataLayer.prototype._registerListener = function(listener) {
         if (this._getListenerIndex(listener) === -1) {
             this.dataLayer._listeners.push(listener);
             console.log("event listener registered on: ", listener.on);
         }
     };
 
-    DataLayerHandler.prototype._getListenerIndex = function(listener) {
+    DataLayer.prototype._getListenerIndex = function(listener) {
         var listenerFound = true;
         for (var i = 0; i <  this.dataLayer._listeners.length; i++) {
             var existingListener = this.dataLayer._listeners[i];
@@ -147,7 +147,7 @@
     };
 
     // trigger the listener on all previous items matching the listener
-    DataLayerHandler.prototype._triggerListener = function(listener) {
+    DataLayer.prototype._triggerListener = function(listener) {
         this.dataLayer.forEach(function(item) {
             if (listener.on === CHANGE_EVENT || listener.on === EVENT_EVENT || listener.on === item.eventName) {
                 listener.handler(item);
@@ -155,17 +155,31 @@
         });
     };
 
-    DataLayerHandler.prototype._deepMerge = function(target, source) {
+    /**
+     * Data Layer utilities.
+     *
+     * @type {Object}
+     */
+    DataLayer.utils = {};
+
+    /**
+     * Deep merges a source and target object.
+     *
+     * @param {Object} target The target object.
+     * @param {Object} source The source object.
+     * @static
+     */
+    DataLayer.utils.deepMerge = function(target, source) {
         var tmpSource = {};
         var that = this;
-        if (this._isObject(target) && this._isObject(source)) {
+        if (that.isObject(target) && that.isObject(source)) {
             Object.keys(source).forEach(function(key) {
-                if (that._isObject(source[key])) {
+                if (that.isObject(source[key])) {
                     if (!target[key]) {
                         tmpSource[key] = {};
                         Object.assign(target, tmpSource);
                     }
-                    that._deepMerge(target[key], source[key]);
+                    that.deepMerge(target[key], source[key]);
                 } else {
                     if (source[key] === undefined) {
                         delete target[key];
@@ -178,14 +192,21 @@
         }
     };
 
-    DataLayerHandler.prototype._isObject = function(item) {
-        return (item && typeof item === "object" && !Array.isArray(item));
+    /**
+     * Checks whether the passed object is an object.
+     *
+     * @param {Object} obj The object that will be checked.
+     * @returns {Boolean} true if it is an object, false otherwise.
+     * @static
+     */
+    DataLayer.utils.isObject = function(obj) {
+        return (obj && typeof obj === "object" && !Array.isArray(obj));
     };
 
     window.addEventListener("datalayer:prepopulated", function() {
         console.log("data layer prepopulated - let's initialize the data layer");
         window.dataLayer = window.dataLayer || [];
-        new DataLayerHandler(window.dataLayer);
+        new DataLayer(window.dataLayer);
         var readyEvent = new CustomEvent("datalayer:ready");
         window.dispatchEvent(readyEvent);
         console.log("data layer script initialized");
@@ -195,28 +216,28 @@
      * Triggered when there is change in the data layer state.
      *
      * @event datalayer:change
-     * @type {object}
-     * @property {object} data Data pushed that caused a change in the data layer state.
+     * @type {Object}
+     * @property {Object} data Data pushed that caused a change in the data layer state.
      */
 
     /**
      * Triggered when an event is pushed to the data layer.
      *
      * @event datalayer:event
-     * @type {object}
-     * @property {string} eventName Name of the committed event.
-     * @property {object} info Additional information passed with the committed event.
-     * @property {object} data Data that was pushed alongside the event.
+     * @type {Object}
+     * @property {String} eventName Name of the committed event.
+     * @property {Object} info Additional information passed with the committed event.
+     * @property {Object} data Data that was pushed alongside the event.
      */
 
-     /**
-      * Triggered when an arbitrary event is pushed to the data layer.
-      *
-      * @event <eventName>
-      * @type {object}
-      * @property {string} eventName Name of the committed event.
-      * @property {object} info Additional information passed with the committed event.
-      * @property {object} data Data that was pushed alongside the event.
-      */
+    /**
+     * Triggered when an arbitrary event is pushed to the data layer.
+     *
+     * @event <eventName>
+     * @type {Object}
+     * @property {String} eventName Name of the committed event.
+     * @property {Object} info Additional information passed with the committed event.
+     * @property {Object} data Data that was pushed alongside the event.
+     */
 
 })();
