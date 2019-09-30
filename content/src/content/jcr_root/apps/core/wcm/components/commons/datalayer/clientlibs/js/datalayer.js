@@ -191,5 +191,31 @@
         console.log("data layer script initialized");
     });
 
-})();
+    /**
+     * Triggered when there is change in the data layer state.
+     *
+     * @event datalayer:change
+     * @type {object}
+     * @property {object} data Data pushed that caused a change in the data layer state.
+     */
 
+    /**
+     * Triggered when an event is pushed to the data layer.
+     *
+     * @event datalayer:event
+     * @type {object}
+     * @property {string} eventName Name of the committed event.
+     * @property {object} info Additional information passed with the committed event.
+     * @property {object} data Data that was pushed alongside the event.
+     */
+
+     /** Triggered when an arbitrary event is pushed to the data layer.
+      *
+      * @event <eventName>
+      * @type {object}
+      * @property {string} eventName Name of the committed event.
+      * @property {object} info Additional information passed with the committed event.
+      * @property {object} data Data that was pushed alongside the event.
+      */
+
+})();
