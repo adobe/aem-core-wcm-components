@@ -101,11 +101,21 @@
         this._init();
     }
 
+    /**
+     * Initializes the data layer.
+     *
+     * @private
+     */
     DataLayer.prototype._init = function() {
         this._handleItemsBeforeScriptLoad(this.dataLayer);
         this._overridePush();
     };
 
+    /**
+     * Handles the items that were pushed before the data layer script loaded.
+     *
+     * @private
+     */
     DataLayer.prototype._handleItemsBeforeScriptLoad = function() {
         var that = this;
         this.dataLayer.forEach(function(item, idx) {
@@ -151,6 +161,12 @@
         };
     };
 
+    /**
+     * Handles an item pushed to the data layer.
+     *
+     * @param {ItemConfig} item The item configuration.
+     * @private
+     */
     DataLayer.prototype._handleItem = function(item) {
         if (!item) {
             return;
