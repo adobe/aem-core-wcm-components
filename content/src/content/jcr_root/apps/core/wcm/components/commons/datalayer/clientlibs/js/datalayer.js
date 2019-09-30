@@ -64,6 +64,10 @@
      * @type {object} [DataConfig] Data to be updated in the state.
      */
 
+    /**
+     * @typedef {ListenerOnConfig | ListenerOffConfig | DataConfig | EventConfig} ItemConfig
+     */
+
     var CHANGE_EVENT = "datalayer:change";
     var EVENT_EVENT = "datalayer:event";
 
