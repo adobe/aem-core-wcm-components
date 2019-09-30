@@ -65,7 +65,7 @@
      */
 
     /**
-     * @typedef {ListenerOnConfig | ListenerOffConfig | DataConfig | EventConfig} ItemConfig
+     * @typedef {DataConfig | EventConfig | ListenerOnConfig | ListenerOffConfig} ItemConfig
      */
 
     var CHANGE_EVENT = "datalayer:change";
