@@ -209,7 +209,8 @@
      * @property {object} data Data that was pushed alongside the event.
      */
 
-     /** Triggered when an arbitrary event is pushed to the data layer.
+     /**
+      * Triggered when an arbitrary event is pushed to the data layer.
       *
       * @event <eventName>
       * @type {object}
