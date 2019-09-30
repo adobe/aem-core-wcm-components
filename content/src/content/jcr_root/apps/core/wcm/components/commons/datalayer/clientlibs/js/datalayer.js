@@ -19,6 +19,39 @@
     /* eslint no-console: "off" */
     /* eslint no-unused-vars: "off" */
 
+    /**
+     * @typedef {String} ListenerScope
+     **/
+
+    /**
+     * Enumeration of listener scopes.
+     *
+     * @enum {ListenerScope}
+     * @readonly
+     */
+    var listenerScope = {
+        /** Past events only */
+        PAST: "past",
+        /** Future events only */
+        FUTURE: "future",
+        /** All events, past and future */
+        ALL: "all"
+    };
+
+    /**
+     * @typedef  {Object} ListenerOn
+     * @property {String} on Name of the event to bind to.
+     * @property {String} [selector] Object key in the state to bind to.
+     * @property {String} [ListenerScope] Scope of the listener.
+     * @property {Function} handler Handler to execute when the bound event is triggered.
+     */
+
+    /**
+     * @typedef  {Object} ListenerOff
+     * @property {String} off Name of the event to unbind.
+     * @property {Function} [handler] Handler for a previously attached event to unbind.
+     */
+
     var CHANGE_EVENT = "datalayer:change";
     var EVENT_EVENT = "datalayer:event";
 
