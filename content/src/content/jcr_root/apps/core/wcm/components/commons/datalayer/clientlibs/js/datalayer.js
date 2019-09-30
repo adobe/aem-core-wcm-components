@@ -102,7 +102,7 @@
         // restrict the override to the data layer object
 
         /**
-         * Push one or more items to the data layer.
+         * Pushes one or more items to the data layer.
          *
          * @param {...ItemConfig} var_args The items to add to the data layer.
          * @returns {Number} The length of the data layer following push.

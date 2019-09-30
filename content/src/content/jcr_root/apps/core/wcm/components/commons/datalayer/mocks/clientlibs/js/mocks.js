@@ -270,6 +270,8 @@
             }
         });
 
+        // TODO: implement scope
+        // TODO: implement selector
         // Register event listener listening on state change
         window.dataLayer.push({
             "on": "datalayer:change",
