@@ -87,6 +87,11 @@
      * @typedef {DataConfig | EventConfig | ListenerOnConfig | ListenerOffConfig} ItemConfig
      */
 
+    /**
+     * @class DataLayer
+     * @classdesc Data layer controller that augments the passed data layer array and handles eventing.
+     * @param {Array} dataLayer The data layer array.
+     */
     function DataLayer(dataLayer) {
         this.dataLayer = dataLayer;
         this.dataLayer.state = {};
