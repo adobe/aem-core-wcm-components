@@ -42,7 +42,7 @@
      * @typedef  {Object} ListenerOnConfig
      * @property {String} on Name of the event to bind to.
      * @property {String} [selector] Object key in the state to bind to.
-     * @property {String} [ListenerScope] Scope of the listener.
+     * @property {ListenerScope} [scope] Scope of the listener.
      * @property {Function} handler Handler to execute when the bound event is triggered.
      */
 
