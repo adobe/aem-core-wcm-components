@@ -13,6 +13,7 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* global dataLayer */
 (function() {
     "use strict";
 
@@ -21,10 +22,9 @@
 
     window.dataLayer = window.dataLayer || [];
 
-
     function populateDataLayerBefore() {
 
-        window.dataLayer.push({
+        dataLayer.push({
             "data": {
                 "page": {
                     "id": "/content/mysite/en/products/crossfit",
@@ -37,7 +37,7 @@
             }
         });
 
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "carousel clicked",
             "data": {
                 "component": {
@@ -51,7 +51,7 @@
             }
         });
 
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "tab viewed",
             "data": {
                 "component": {
@@ -68,14 +68,14 @@
             }
         });
 
-        window.dataLayer.push({
+        dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
                 console.log("event listener triggered on: ", event[Object.keys(event)[0]]);
             }
         });
 
-        window.dataLayer.push({
+        dataLayer.push({
             "on": "datalayer:event",
             "handler": function(event) {
                 console.log("event listener triggered on: ", event[Object.keys(event)[0]]);
@@ -86,7 +86,7 @@
 
     function populateDataLayerAfter() {
 
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "page updated",
             "data": {
                 "page": {
@@ -101,7 +101,7 @@
             }
         });
 
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "component updated",
             "data": {
                 "component": {
@@ -115,7 +115,7 @@
             }
         });
 
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "removed",
             "data": {
                 "component": {
@@ -129,7 +129,7 @@
             }
         });
 
-        window.dataLayer.push({
+        dataLayer.push({
             "on": "removed",
             "handler": function(event) {
                 console.log("event listener triggered on: ", event[Object.keys(event)[0]]);
@@ -149,7 +149,7 @@
         // ====================================  Add data ======================================
 
         // Add the page data (automatically triggers the datalayer:change event)
-        window.dataLayer.push({
+        dataLayer.push({
             "data": {
                 "page": {
                     "id": "/content/my-site/en/about-us",
@@ -161,7 +161,7 @@
         });
 
         // Add a component
-        window.dataLayer.push({
+        dataLayer.push({
             "data": {
                 "component": {
                     "tab": {
@@ -176,7 +176,7 @@
         });
 
         // Remove data
-        window.dataLayer.push({
+        dataLayer.push({
             "data": {
                 "component": {
                     "image": {
@@ -190,12 +190,12 @@
 
 
         // Add an event (without data)
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "page loaded"
         });
 
         // Add an event with its data
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "image viewed",
             "data": {
                 "component": {
@@ -210,7 +210,7 @@
         });
 
         // Add an event and remove data
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "removed",
             "data": {
                 "component": {
@@ -222,7 +222,7 @@
         });
 
         // Add event and reference the object by ID
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "image viewed",
             "info": {
                 "id": "/content/mysite/en/home/jcr:content/root/image5"
@@ -230,7 +230,7 @@
         });
 
         // Add an event with its data
-        window.dataLayer.push({
+        dataLayer.push({
             "eventName": "image viewed",
             "info": {
                 // any data (is not persisted in the state)
@@ -250,15 +250,15 @@
         // ====================================  Add event listener ======================================
 
         // Register event listener: retrieving the object that was referenced by ID in the event
-        window.dataLayer.push({
+        dataLayer.push({
             "on": "image viewed",
             "handler": function(event) {
-                var image = window.dataLayer.get(event.data.id); // TODO: implement dataLayer.get()
+                var image = dataLayer.get(event.data.id); // TODO: implement dataLayer.get()
             }
         });
 
         // Register event listener listening on state change
-        window.dataLayer.push({
+        dataLayer.push({
             "on": "datalayer:change",
             "handler": function(event) {
                 // the event name
@@ -266,14 +266,14 @@
                 // the data that changed
                 console.log(event.data);
                 // the state
-                console.log(window.dataLayer.state);
+                console.log(dataLayer.getState());
             }
         });
 
         // TODO: implement scope
         // TODO: implement selector
         // Register event listener listening on state change
-        window.dataLayer.push({
+        dataLayer.push({
             "on": "datalayer:change",
             "scope": "future", // Possible values: past, future, all, once
             "selector": "user.userName",
@@ -283,7 +283,7 @@
         });
 
         // Register event listener listening on all events
-        window.dataLayer.push({
+        dataLayer.push({
             "on": "datalayer:event",
             "handler": function(event) {
                 console.log(event);
@@ -291,7 +291,7 @@
         });
 
         // Unregister event listener
-        window.dataLayer.push({
+        dataLayer.push({
             "off": "datalayer:change",
             "handler": function(event) {
                 // the event name
@@ -299,7 +299,7 @@
                 // the data that changed
                 console.log(event.data);
                 // the state
-                console.log(window.dataLayer.state);
+                console.log(dataLayer.getState());
             }
         });
 
