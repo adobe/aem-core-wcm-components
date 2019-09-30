@@ -39,7 +39,7 @@
     };
 
     /**
-     * @typedef  {Object} ListenerOn
+     * @typedef  {Object} ListenerOnConfig
      * @property {String} on Name of the event to bind to.
      * @property {String} [selector] Object key in the state to bind to.
      * @property {String} [ListenerScope] Scope of the listener.
@@ -47,9 +47,21 @@
      */
 
     /**
-     * @typedef  {Object} ListenerOff
+     * @typedef  {Object} ListenerOffConfig
      * @property {String} off Name of the event to unbind.
      * @property {Function} [handler] Handler for a previously attached event to unbind.
+     */
+
+    /**
+     * @typedef {Object} DataConfig
+     * @type {Object} data Data to be updated in the state.
+     */
+
+    /**
+     * @typedef {Object} EventConfig
+     * @type {String} eventName Name of the event.
+     * @type {Object} [info] Additional information to pass to the event handler.
+     * @type {object} [DataConfig] Data to be updated in the state.
      */
 
     var CHANGE_EVENT = "datalayer:change";
