@@ -100,7 +100,14 @@
     DataLayer.prototype._overridePush = function() {
         var that = this;
         // restrict the override to the data layer object
-        that.dataLayer.push = function() {
+
+        /**
+         * Push one or more items to the data layer.
+         *
+         * @param {...ItemConfig} var_args The items to add to the data layer.
+         * @returns {Number} The length of the data layer following push.
+         */
+        that.dataLayer.push = function(var_args) {
             var pushArguments = arguments;
             var filteredArguments = arguments;
             Object.keys(pushArguments).forEach(function(key) {
