@@ -93,12 +93,25 @@
      * @param {Array} dataLayer The data layer array.
      */
     function DataLayer(dataLayer) {
-        this.dataLayer = dataLayer;
-        this.dataLayer.state = {};
+        var that = this;
+
+        that.dataLayer = dataLayer;
+        that.state = {};
+
+        /**
+         * Returns a deep copy of the data layer state.
+         *
+         * @returns {Object} The deep copied state object.
+         */
+        that.dataLayer.getState = function() {
+            // use deep copying technique of JSON stringify and parsing the state.
+            return JSON.parse(JSON.stringify(that.state));
+        };
+
         // TODO remove _listeners from data layer (this is used for testing): replace this.dataLayer._listeners and that.dataLayer._listeners
-        this.dataLayer._listeners = [];
+        that.dataLayer._listeners = [];
         // this._listeners = [];
-        this._init();
+        that._init();
     }
 
     /**
@@ -196,7 +209,7 @@
      * @private
      */
     DataLayer.prototype._updateState = function(item) {
-        DataLayer.utils.deepMerge(this.dataLayer.state, item.data);
+        DataLayer.utils.deepMerge(this.state, item.data);
     };
 
     DataLayer.prototype._triggerListeners = function(item, eventName) {
