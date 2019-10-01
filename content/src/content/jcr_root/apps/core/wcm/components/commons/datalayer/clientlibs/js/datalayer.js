@@ -78,7 +78,7 @@
 
     /**
      * @typedef {Object} EventConfig
-     * @property {String} eventName Name of the event.
+     * @property {String} name Name of the event.
      * @property {Object} [info] Additional information to pass to the event handler.
      * @property {DataConfig.data} [data] Data to be updated in the state.
      */
@@ -187,7 +187,7 @@
         if (this._isListener(item)) {
             if (item.on) {
                 this._registerListener(item);
-                this._triggerListener(item);
+                //this._triggerListener(item);
             } else if (item.off) {
                 this._unregisterListener(item);
             }
@@ -196,7 +196,7 @@
                 this._updateState(item);
                 this._triggerListeners(item, events.CHANGE);
             }
-            if (item.eventName) {
+            if (item.event) {
                 this._triggerListeners(item, events.EVENT);
             }
         }
@@ -212,17 +212,21 @@
         DataLayer.utils.deepMerge(this.state, item.data);
     };
 
-    DataLayer.prototype._triggerListeners = function(item, eventName) {
+    DataLayer.prototype._triggerListeners = function(item, event) {
         this.dataLayer._listeners.forEach(function(listener) {
-            if (listener.on === eventName || listener.on === item.eventName) {
-                listener.handler(item);
+            if (listener.on === event || listener.on === item.event) {
+                var copy = JSON.parse(JSON.stringify(item));
+                if (item.event) {
+                    copy.name = item.event;
+                }
+                listener.handler(copy);
             }
         });
     };
 
     DataLayer.prototype._triggerListener = function(listener) {
         this.dataLayer.forEach(function(item) {
-            if (listener.on === events.CHANGE || listener.on === events.EVENT || listener.on === item.eventName) {
+            if (listener.on === events.CHANGE || listener.on === events.EVENT || listener.on === item.event) {
                 listener.handler(item);
             }
         });
@@ -235,9 +239,9 @@
      * @private
      */
     DataLayer.prototype._registerListener = function(item) {
-        if (this._getListenerIndex(item) === -1) {
+        if (this._getListenerIndexes(item).length === 0) {
             this.dataLayer._listeners.push(item);
-            console.log("event listener registered on: ", item.on);
+            //console.log("event listener registered on: ", item.on);
         }
     };
 
@@ -248,43 +252,38 @@
      * @private
      */
     DataLayer.prototype._unregisterListener = function(item) {
-        var tmp = item;
+        var tmp = JSON.parse(JSON.stringify(item));
         tmp.on = item.off;
         delete tmp.off;
-        var idx = this._getListenerIndex(tmp);
-        if (idx > -1) {
-            this.dataLayer._listeners.splice(idx, 1);
-            console.log("event listener unregistered on: ", tmp.on);
+        var indexes = this._getListenerIndexes(tmp);
+        for (var i = 0; i < indexes.length; i++) {
+            if (indexes[i] > -1) {
+                this.dataLayer._listeners.splice(indexes[i], 1);
+                //console.log("event listener unregistered on: ", tmp.on);
+            }
         }
     };
 
     /**
-     * Gets the index of a listener based on a listener on configuration.
+     * Gets the indexes listener matches based on a listener on configuration.
      *
      * @param {ListenerOnConfig} item The listener on configuration.
-     * @returns {Number} The index of the listener.
+     * @returns {Array} The indexes of the listener matches.
      * @private
      */
-    DataLayer.prototype._getListenerIndex = function(item) {
-        var listenerFound = true;
+    DataLayer.prototype._getListenerIndexes = function(item) {
+        var listenerIndexes = [];
         for (var i = 0; i <  this.dataLayer._listeners.length; i++) {
             var existingListener = this.dataLayer._listeners[i];
-            if (Object.keys(existingListener).length !== Object.keys(item).length) {
-                listenerFound = false;
-                break;
-            }
-            for (var j = 0; j < Object.keys(existingListener).length; j++) {
-                var field = Object.keys(existingListener)[j];
-                if (existingListener[field].toString() !== item[field].toString()) {
-                    listenerFound = false;
-                    break;
+            if (item.on === existingListener.on) {
+                if (item.handler && (item.handler.toString() !== existingListener.handler.toString())) {
+                    continue;
                 }
-            }
-            if (listenerFound) {
-                return i;
+                listenerIndexes.push(i);
+                continue;
             }
         }
-        return -1;
+        return listenerIndexes;
     };
 
     /**
@@ -295,7 +294,7 @@
      * @private
      */
     DataLayer.prototype._isListener = function(item) {
-        return !!(item.handler && (item.on || item.off));
+        return !!((item.on && item.handler) || item.off);
     };
 
     /**
@@ -347,12 +346,12 @@
     };
 
     window.addEventListener("datalayer:prepopulated", function() {
-        console.log("data layer prepopulated - let's initialize the data layer");
+        //console.log("data layer prepopulated - let's initialize the data layer");
         window.dataLayer = window.dataLayer || [];
         new DataLayer(window.dataLayer);
         var readyEvent = new CustomEvent(events.READY);
         window.dispatchEvent(readyEvent);
-        console.log("data layer script initialized");
+        console.log("datalayer:ready");
     });
 
     /**
@@ -368,7 +367,7 @@
      *
      * @event DataLayerEvents.EVENT
      * @type {Object}
-     * @property {String} eventName Name of the committed event.
+     * @property {String} name Name of the committed event.
      * @property {Object} info Additional information passed with the committed event.
      * @property {Object} data Data that was pushed alongside the event.
      */
@@ -376,9 +375,9 @@
     /**
      * Triggered when an arbitrary event is pushed to the data layer.
      *
-     * @event <eventName>
+     * @event <custom>
      * @type {Object}
-     * @property {String} eventName Name of the committed event.
+     * @property {String} name Name of the committed event.
      * @property {Object} info Additional information passed with the committed event.
      * @property {Object} data Data that was pushed alongside the event.
      */
