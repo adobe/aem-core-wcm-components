@@ -66,6 +66,9 @@
                                             componentPath="${requestPathInfo.suffix}"
                                             modelPath="${param.modelPath}"
                                             textOnly="{Boolean}true"/>
+                                        <granite:data
+                                            jcr:primaryType="nt:unstructured"
+                                            field-path="${requestPathInfo.resourcePath}"/>
                                     </orderBy>
                                     <sortOrder
                                         jcr:primaryType="nt:unstructured"
