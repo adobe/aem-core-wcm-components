@@ -117,7 +117,68 @@
                     <styletab
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/include"
+                        margin="{Boolean}true"
                         path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
+                    <amp
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Amp"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items
+                            jcr:primaryType="nt:unstructured"
+                            sling:hideChildren="[heading,well]">
+                            <mode
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                composite="{Boolean}false"
+                                fieldDescription="The mode in which you want AMP to be handled [add more description]"
+                                fieldLabel="Mode"
+                                name="./ampMode">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <noAmp
+                                        jcr:primaryType="nt:unstructured"
+                                        text="No Amp"
+                                        value="noAmp"/>
+                                    <pairedAmp
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Paired Amp"
+                                        value="pairedAmp"/>
+                                    <ampOnly
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Amp Only"
+                                        value="ampOnly"/>
+                                </items>
+                            </mode>
+                            <clientlibs
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                composite="{Boolean}false"
+                                fieldDescription="The CSS client library categories to load. Clientlibs selected will be added inline in the head of the document"
+                                fieldLabel="AMP Clientlibs">
+                                <field
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                    name="./ampClientlibs">
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <category
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete"
+                                            emptyText="AMP Clientlibs"
+                                            multiple="{Boolean}false"
+                                            name="./ampClientlibs"
+                                            required="{Boolean}false">
+                                            <datasource
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="core/wcm/components/commons/datasources/clientlibrarycategories/v1"/>
+                                            <options
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/autocomplete/list"/>
+                                        </category>
+                                    </items>
+                                </field>
+                            </clientlibs>
+                        </items>
+                    </amp>
                 </items>
             </tabs>
         </items>
