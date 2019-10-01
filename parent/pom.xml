@@ -19,7 +19,7 @@
     <groupId>com.adobe.cq</groupId>
     <artifactId>core.wcm.components.parent</artifactId>
     <packaging>pom</packaging>
-    <version>2.6.1-SNAPSHOT</version>
+    <version>2.7.1-SNAPSHOT</version>
 
     <name>Adobe Experience Manager Core WCM Components Parent</name>
     <description>A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.</description>
@@ -630,11 +630,10 @@
                 <version>2.9.5</version>
                 <scope>provided</scope>
             </dependency>
-
             <dependency>
-                <artifactId>org.apache.servicemix.specs.jaxb-api-2.2</artifactId>
-                <version>2.9.0</version>
-                <groupId>org.apache.servicemix.specs</groupId>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.1</version>
                 <scope>provided</scope>
             </dependency>
 

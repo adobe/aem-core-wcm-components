@@ -51,7 +51,7 @@ The following properties are written to JCR for this Carousel component and are 
 
 The edit dialog also allows editing of Carousel items (adding, removing, naming, re-ordering).
 
-Note: automatic transitioning only works on a publish instance or on an author instance with the URL parameter `wcmmode=disabled`.
+Note: on author instances automatic transitioning only works with the `wcmmode=disabled` URL parameter.
 
 ## Client Libraries
 The component provides a `core.wcm.components.carousel.v1` client library category that contains a recommended base
