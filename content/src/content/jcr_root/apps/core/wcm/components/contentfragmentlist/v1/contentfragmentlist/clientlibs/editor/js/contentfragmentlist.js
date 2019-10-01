@@ -21,6 +21,8 @@
 
     // field selectors
     var SELECTOR_MODEL_PATH = "[name='./modelPath']";
+    var SELECTOR_ORDER_BY = "coral-select[name='./orderBy']";
+    var SELECTOR_SORT_ORDER = "coral-select[name='./sortOrder']";
     var SELECTOR_ELEMENT_NAMES = "[data-granite-coral-multifield-name='./elementNames']";
     var SELECTOR_ELEMENT_NAMES_ADD = SELECTOR_ELEMENT_NAMES + " > [is=coral-button]";
 
@@ -48,19 +50,22 @@
     /**
      * A class which encapsulates the logic related to element selectors and variation name selector.
      */
-    var ElementsController = function() {
+    var ContentFragmentListController = function() {
         // container which contains either single elements select field or a multifield of element selectors
         this.elementNamesContainer = editDialog.querySelector(SELECTOR_ELEMENT_NAMES).parentNode;
         // element container resource path
         this.elementsContainerPath = editDialog.querySelector(SELECTOR_ELEMENT_NAMES).dataset.fieldPath;
+        this.orderBy = editDialog.querySelector(SELECTOR_ORDER_BY);
+        this.orderByPath = this.orderBy.dataset.fieldPath;
+        this.sortOrder = editDialog.querySelector(SELECTOR_SORT_ORDER);
         this.fetchedState = null;
-        this._updateFields();
+        this._updateElementsNamesFields();
     };
 
     /**
      * Updates the member fields of this class according to current dom of dialog.
      */
-    ElementsController.prototype._updateFields = function() {
+    ContentFragmentListController.prototype._updateElementsNamesFields = function() {
         // The multifield containing element selector dropdowns
         this.elementNames = editDialog.querySelector(SELECTOR_ELEMENT_NAMES);
         // The add button in multifield
@@ -70,27 +75,47 @@
     /**
      * Disable all the fields of this controller.
      */
-    ElementsController.prototype.disableFields = function() {
+    ContentFragmentListController.prototype.disableFields = function() {
         if (this.addElement) {
             this.addElement.setAttribute("disabled", "");
+        }
+
+        if (this.orderBy) {
+            this.orderBy.setAttribute("disabled", "");
+        }
+
+        if (this.sortOrder) {
+            this.sortOrder.setAttribute("disabled", "");
         }
     };
 
     /**
      * Enable all the fields of this controller.
      */
-    ElementsController.prototype.enableFields = function() {
+    ContentFragmentListController.prototype.enableFields = function() {
         if (this.addElement) {
             this.addElement.removeAttribute("disabled");
+        }
+
+        if (this.orderBy) {
+            this.orderBy.removeAttribute("disabled");
+        }
+
+        if (this.sortOrder) {
+            this.sortOrder.removeAttribute("disabled");
         }
     };
 
     /**
      * Resets all the fields of this controller.
      */
-    ElementsController.prototype.resetFields = function() {
+    ContentFragmentListController.prototype.resetFields = function() {
         if (this.elementNames) {
             this.elementNames.items.clear();
+        }
+
+        if (this.orderBy) {
+            this.orderBy.items.clear();
         }
     };
 
@@ -99,7 +124,7 @@
      *
      * @returns {Object} the resulting request object
      */
-    ElementsController.prototype.prepareRequest = function() {
+    ContentFragmentListController.prototype.prepareElementNamesRequest = function() {
         var data = {
             modelPath: modelPath.value
         };
@@ -112,29 +137,45 @@
     };
 
     /**
-     * Retrieves the html for element names and variation names and keeps the fetched values as "fetchedState" member.
+     * Creates an http request object for retrieving fragment's order by properties and returns it.
+     *
+     * @returns {Object} the resulting request object
+     */
+    ContentFragmentListController.prototype.prepareOrderByRequest = function() {
+        var data = {
+            modelPath: modelPath.value
+        };
+        var url = Granite.HTTP.externalize(this.orderByPath) + ".html";
+        var request = $.get({
+            url: url,
+            data: data
+        });
+        return request;
+    };
+
+    /**
+     * Retrieves the html for element names and orderBy properties and keeps the fetched values as "fetchedState" member.
      *
      * @param {Function} callback - function to execute when response is received
      */
-    ElementsController.prototype.testGetHTML = function(callback) {
-        var elementNamesRequest = this.prepareRequest();
+    ContentFragmentListController.prototype.getUpdatedComponentsHTML = function(callback) {
+        var elementNamesRequest = this.prepareElementNamesRequest();
+        var orderByRequest = this.prepareOrderByRequest();
         var self = this;
         // wait for requests to load
-        $.when(elementNamesRequest).then(function(result) {
-            var newElementNames = $(result).find(SELECTOR_ELEMENT_NAMES)[0];
-            // get the fields from the resulting markup and create a test state
-            Coral.commons.ready(newElementNames, function() {
-                self.fetchedState = {
-                    elementNames: newElementNames,
-                    elementNamesContainerHTML: result
-                };
-                callback();
+        $.when(elementNamesRequest, orderByRequest).done(function(elementNamesResult, orderByResult) {
+            var newElementNames = $(elementNamesResult[0]).find(SELECTOR_ELEMENT_NAMES)[0];
+            var orderBy = $(orderByResult[0]).find(SELECTOR_ORDER_BY)[0];
+            self.fetchedState = {
+                elementNames: newElementNames,
+                elementNamesContainerHTML: elementNamesResult[0],
+                orderBy: orderBy
+            };
+            callback();
+        })
+            .fail(function() {
+                ui.prompt(errorDialogTitle, errorDialogMessage, "error");
             });
-
-        }, function() {
-            // display error dialog if one of the requests failed
-            ui.prompt(errorDialogTitle, errorDialogMessage, "error");
-        });
     };
 
     /**
@@ -143,17 +184,19 @@
      *
      * @returns {Boolean} true if the states match or if there was no current state, false otherwise
      */
-    ElementsController.prototype.testStateForUpdate = function() {
+    ContentFragmentListController.prototype.testStateForUpdate = function() {
         // check if some element names are currently configured
-        if (this.elementNames && this.elementNames.items.length > 0) {
+        if ((this.elementNames && this.elementNames.items.length > 0) || (this.orderBy && this.orderBy.items.length > 0)) {
             // if we're unsetting the current fragment we need to reset the config
-            if (!this.fetchedState || !this.fetchedState.elementNames) {
+            if (!this.fetchedState || !this.fetchedState.elementNames || !this.fetchedState.orderBy) {
                 return false;
             }
             // compare the items of the current and new element names fields
-            var currentItems = this.elementNames.template.content.querySelectorAll("coral-select-item");
-            var newItems = this.fetchedState.elementNames.template.content.querySelectorAll("coral-select-item");
-            if (!itemsAreEqual(currentItems, newItems)) {
+            var currentElementNamesItems = this.elementNames.template.content.querySelectorAll("coral-select-item");
+            var newElementNamesItems = this.fetchedState.elementNames.template.content.querySelectorAll("coral-select-item");
+            var newOrderByItems = this.fetchedState.orderBy.items.getAll();
+            if (!itemsAreEqual(currentElementNamesItems, newElementNamesItems) ||
+                !itemsAreEqual(this.orderBy.items.getAll(), newOrderByItems)) {
                 return false;
             }
         }
@@ -164,34 +207,20 @@
     /**
      * Replace the current state with the values present in fetchedState and discard the fetchedState thereafter.
      */
-    ElementsController.prototype.saveFetchedState = function() {
+    ContentFragmentListController.prototype.saveFetchedState = function() {
         if (!this.fetchedState) {
             return;
         }
         this._updateElementsHTML(this.fetchedState.elementNamesContainerHTML);
+        this._updateOrderByHTML(this.fetchedState.orderBy);
         this.discardFetchedState();
     };
 
     /**
      * Discard the fetchedState data.
      */
-    ElementsController.prototype.discardFetchedState = function() {
+    ContentFragmentListController.prototype.discardFetchedState = function() {
         this.fetchedState = null;
-    };
-
-    /**
-     * Retrieve element names and update the current element names with the retrieved data.
-     */
-    ElementsController.prototype.fetchAndUpdateElementsHTML = function() {
-        var elementNamesRequest = this.prepareRequest();
-        var self = this;
-        // wait for requests to load
-        $.when(elementNamesRequest).then(function(result) {
-            self._updateElementsHTML(result);
-        }, function() {
-            // display error dialog if one of the requests failed
-            ui.prompt(errorDialogTitle, errorDialogMessage, "error");
-        });
     };
 
     /**
@@ -199,9 +228,19 @@
      *
      * @param {String} html - outerHTML value for elementNamesContainer
      */
-    ElementsController.prototype._updateElementsHTML = function(html) {
+    ContentFragmentListController.prototype._updateElementsHTML = function(html) {
         this.elementNamesContainer.innerHTML = $(html)[0].innerHTML;
-        this._updateFields();
+        this._updateElementsNamesFields();
+    };
+
+    /**
+     * Replaces the html of orderBy select item.
+     *
+     * @param {String} html - html value for orderBy
+     */
+    ContentFragmentListController.prototype._updateOrderByHTML = function(html) {
+        this.orderBy.replaceWith(html);
+        this.orderBy = editDialog.querySelector(SELECTOR_ORDER_BY);
     };
 
     function initialize(dialog) {
@@ -212,7 +251,7 @@
 
         // initialize state variables
         currentModelPath = modelPath.value;
-        elementsController = new ElementsController();
+        elementsController = new ContentFragmentListController();
 
         // disable add button and variation name if no content fragment is currently set
         if (!currentModelPath) {
@@ -243,7 +282,7 @@
             return;
         }
 
-        elementsController.testGetHTML(function() {
+        elementsController.getUpdatedComponentsHTML(function() {
             // check if we can keep the current configuration, in which case no confirmation dialog is necessary
             var canKeepConfig = elementsController.testStateForUpdate();
             if (canKeepConfig) {
