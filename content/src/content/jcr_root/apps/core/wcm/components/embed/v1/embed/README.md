@@ -20,9 +20,9 @@ Embed component written in HTL that allows third-party widgets (e.g. chatbots, l
 ## Features
 * The following input types are supported:
     * **URL** - an author is able to paste a URL of a widget to embed. URLs are checked against registered processors for a match. The following URL processors are provided:
-        * **oEmbed** - generic oEmbed URL processor with out-of-the-box configurations for Facebook Post, Instagram, SoundCloud, Twitter and YouTube.
+        * **oEmbed** - generic oEmbed URL processor with out-of-the-box configurations for Facebook Post, Facebook Video, Flickr, Instagram, SoundCloud, Twitter and YouTube.
         * **Pinterest** - processes Pinterest URLs. 
-    * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags.
+    * **Embeddable** - an author is able to select from pre-configured trusted embeddables. Embeddables can be parameterized and may include unsafe tags. A YouTube embeddable is included out-of-the-box.
     * **HTML** - an author is able to enter free-form HTML. HTML is restricted to safe tags only.
 * Each input type can be disabled by a template author.
 * For the embeddable type, the embeddables that are allowed to be selected in the edit dialog can be configured by a template author.
@@ -56,7 +56,7 @@ Extension of the Embed component is possible by providing any of the following:
 
 ### Custom URL Processor
 
-By implementing the [Embed.UrlProcessor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/models/embed/Embed.java) interface you can create your own URL processor.
+By implementing the [UrlProcessor](../../../../../../../../../../../bundles/core/src/main/java/com/adobe/cq/wcm/core/components/services/embed/UrlProcessor.java) interface you can create your own URL processor.
 
 You will also need to create an HTL template file, with the same name as the `processor` field returned in the `Result`.
 
@@ -69,7 +69,7 @@ Example:
 By adding an OSGi configuration you can embed an URL from an oEmbed provider.
 
 Example:
-* [YouTube configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.services.embed.oembed.OEmbedClientImplConfigurationFactory-youtube.config) 
+* [YouTube configuration](../../../../../../../../../../../config/src/content/jcr_root/apps/core/wcm/config/com.adobe.cq.wcm.core.components.internal.services.embed.OEmbedClientImplConfigurationFactory-youtube.config)
 
 See also:
 * [oEmbed specification](https://oembed.com)
@@ -91,7 +91,7 @@ The JCR properties for the edit configuration options of an embeddable _must_ be
 3. `./youtubeHeight` - defines the YouTube video player height.
 
 Example:
-* [YouTube embeddable](../../embeddables/youtube)
+* [YouTube embeddable](embeddable/youtube)
 
 ### Security Recommendations
 
