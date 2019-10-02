@@ -134,7 +134,7 @@
         execBefore: c.tcExecuteBeforeTestSuite,
         execInNewWindow: false
     })
-        .addTestCase(embed.tcUrlValidation(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors))
+        //.addTestCase(embed.tcUrlValidation(tcExecuteBeforeTest, tcExecuteAfterTest, urlValidation, selectors))
         .addTestCase(embed.tcUrlPinterest(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.pinterest, selectors))
         .addTestCase(embed.tcUrlOEmbedFacebookPost(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.facebookPost, selectors))
         .addTestCase(embed.tcUrlOEmbedFacebookVideo(tcExecuteBeforeTest, tcExecuteAfterTest, urlProcessors.oEmbed.facebookVideo, selectors))
