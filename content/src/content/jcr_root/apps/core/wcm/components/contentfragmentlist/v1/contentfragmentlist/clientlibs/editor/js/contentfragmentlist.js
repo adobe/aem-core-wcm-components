@@ -45,27 +45,27 @@
 
     var editDialog;
 
-    var elementsController;
+    var contentFragmentListController;
 
     /**
-     * A class which encapsulates the logic related to element selectors and variation name selector.
+     * A class which encapsulates the logic related to element selectors and orderBy field.
      */
     var ContentFragmentListController = function() {
         // container which contains either single elements select field or a multifield of element selectors
         this.elementNamesContainer = editDialog.querySelector(SELECTOR_ELEMENT_NAMES).parentNode;
         // element container resource path
-        this.elementsContainerPath = editDialog.querySelector(SELECTOR_ELEMENT_NAMES).dataset.fieldPath;
+        this.elementsContainerPath = editDialog.querySelector(SELECTOR_ELEMENT_NAMES).dataset.cmpFieldPath;
         this.orderBy = editDialog.querySelector(SELECTOR_ORDER_BY);
-        this.orderByPath = this.orderBy.dataset.fieldPath;
+        this.orderByPath = this.orderBy.dataset.cmpFieldPath;
         this.sortOrder = editDialog.querySelector(SELECTOR_SORT_ORDER);
         this.fetchedState = null;
-        this._updateElementsNamesFields();
+        this._updateElementNamesField();
     };
 
     /**
      * Updates the member fields of this class according to current dom of dialog.
      */
-    ContentFragmentListController.prototype._updateElementsNamesFields = function() {
+    ContentFragmentListController.prototype._updateElementNamesField = function() {
         // The multifield containing element selector dropdowns
         this.elementNames = editDialog.querySelector(SELECTOR_ELEMENT_NAMES);
         // The add button in multifield
@@ -120,37 +120,20 @@
     };
 
     /**
-     * Creates an http request object for retrieving fragment's element names or variation names and returns it.
+     * Creates an http request object for retrieving fragment's element names or orderBy datasource and returns it.
      *
+     * @param {String} url - the url to the datasource
      * @returns {Object} the resulting request object
      */
-    ContentFragmentListController.prototype.prepareElementNamesRequest = function() {
+    ContentFragmentListController.prototype.prepareDataSourceRequest = function(url) {
         var data = {
             modelPath: modelPath.value
         };
-        var url = Granite.HTTP.externalize(this.elementsContainerPath) + ".html";
-        var request = $.get({
+        url = Granite.HTTP.externalize(url) + ".html";
+        return $.get({
             url: url,
             data: data
         });
-        return request;
-    };
-
-    /**
-     * Creates an http request object for retrieving fragment's order by properties and returns it.
-     *
-     * @returns {Object} the resulting request object
-     */
-    ContentFragmentListController.prototype.prepareOrderByRequest = function() {
-        var data = {
-            modelPath: modelPath.value
-        };
-        var url = Granite.HTTP.externalize(this.orderByPath) + ".html";
-        var request = $.get({
-            url: url,
-            data: data
-        });
-        return request;
     };
 
     /**
@@ -159,8 +142,8 @@
      * @param {Function} callback - function to execute when response is received
      */
     ContentFragmentListController.prototype.getUpdatedComponentsHTML = function(callback) {
-        var elementNamesRequest = this.prepareElementNamesRequest();
-        var orderByRequest = this.prepareOrderByRequest();
+        var elementNamesRequest = this.prepareDataSourceRequest(this.elementsContainerPath);
+        var orderByRequest = this.prepareDataSourceRequest(this.orderByPath);
         var self = this;
         // wait for requests to load
         $.when(elementNamesRequest, orderByRequest).done(function(elementNamesResult, orderByResult) {
@@ -230,7 +213,7 @@
      */
     ContentFragmentListController.prototype._updateElementsHTML = function(html) {
         this.elementNamesContainer.innerHTML = $(html)[0].innerHTML;
-        this._updateElementsNamesFields();
+        this._updateElementNamesField();
     };
 
     /**
@@ -251,11 +234,11 @@
 
         // initialize state variables
         currentModelPath = modelPath.value;
-        elementsController = new ContentFragmentListController();
+        contentFragmentListController = new ContentFragmentListController();
 
         // disable add button and variation name if no content fragment is currently set
         if (!currentModelPath) {
-            elementsController.disableFields();
+            contentFragmentListController.disableFields();
         }
 
         // register change listener
@@ -269,34 +252,34 @@
     function onModelPathChange() {
         // if the fragment was reset (i.e. the fragment path was deleted)
         if (!modelPath.value) {
-            var canKeepConfig = elementsController.testStateForUpdate();
+            var canKeepConfig = contentFragmentListController.testStateForUpdate();
             if (canKeepConfig) {
                 // There was no current configuration. We just need to disable fields.
                 currentModelPath = modelPath.value;
-                elementsController.disableFields();
+                contentFragmentListController.disableFields();
                 return;
             }
             // There was some current configuration. Show a confirmation dialog
-            confirmModelChange(null, null, elementsController.disableFields, elementsController);
+            confirmModelChange(null, null, contentFragmentListController.disableFields, contentFragmentListController);
             // don't do anything else
             return;
         }
 
-        elementsController.getUpdatedComponentsHTML(function() {
+        contentFragmentListController.getUpdatedComponentsHTML(function() {
             // check if we can keep the current configuration, in which case no confirmation dialog is necessary
-            var canKeepConfig = elementsController.testStateForUpdate();
+            var canKeepConfig = contentFragmentListController.testStateForUpdate();
             if (canKeepConfig) {
                 if (!currentModelPath) {
-                    elementsController.enableFields();
+                    contentFragmentListController.enableFields();
                 }
                 currentModelPath = modelPath.value;
                 // its okay to save fetched state
-                elementsController.saveFetchedState();
+                contentFragmentListController.saveFetchedState();
                 return;
             }
             // else show a confirmation dialog
-            confirmModelChange(elementsController.discardFetchedState, elementsController,
-                elementsController.saveFetchedState, elementsController);
+            confirmModelChange(contentFragmentListController.discardFetchedState, contentFragmentListController,
+                contentFragmentListController.saveFetchedState, contentFragmentListController);
         });
 
     }
@@ -328,7 +311,7 @@
             primary: true,
             handler: function() {
                 // reset the current configuration
-                elementsController.resetFields();
+                contentFragmentListController.resetFields();
                 // update the current fragment path
                 currentModelPath = modelPath.value;
                 // execute callback

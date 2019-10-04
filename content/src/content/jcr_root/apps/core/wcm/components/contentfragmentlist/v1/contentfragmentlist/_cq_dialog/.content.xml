@@ -68,7 +68,7 @@
                                             textOnly="{Boolean}true"/>
                                         <granite:data
                                             jcr:primaryType="nt:unstructured"
-                                            field-path="${requestPathInfo.resourcePath}"/>
+                                            cmp-field-path="${requestPathInfo.resourcePath}"/>
                                     </orderBy>
                                     <sortOrder
                                         jcr:primaryType="nt:unstructured"
@@ -128,7 +128,7 @@
                                         </field>
                                         <granite:data
                                             jcr:primaryType="nt:unstructured"
-                                            field-path="${requestPathInfo.resourcePath}"/>
+                                            cmp-field-path="${requestPathInfo.resourcePath}"/>
                                     </elementNames>
                                 </items>
                             </column>
