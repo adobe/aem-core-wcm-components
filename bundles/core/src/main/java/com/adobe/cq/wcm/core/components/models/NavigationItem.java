@@ -45,7 +45,7 @@ public interface NavigationItem extends ListItem {
     /**
      * Returns {@code true} if the page contained by this navigation item is active.
      *
-     * @return {@code true} if it is the current page, otherwise {@code false}
+     * @return {@code true} if it is the current page or one of its ancestors, otherwise {@code false}
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean isActive() {
