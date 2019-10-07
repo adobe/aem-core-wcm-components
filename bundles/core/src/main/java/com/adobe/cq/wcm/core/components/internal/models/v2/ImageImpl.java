@@ -155,7 +155,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             // Parse the image map areas as defined at {@code Image.PN_MAP}
             String[] mapAreas = StringUtils.split(mapProperty, "][");
             for (String area : mapAreas) {
-                int coordinatesEndIndex = area.indexOf(")");
+                int coordinatesEndIndex = area.indexOf(')');
                 if (coordinatesEndIndex < 0) {
                     break;
                 }
