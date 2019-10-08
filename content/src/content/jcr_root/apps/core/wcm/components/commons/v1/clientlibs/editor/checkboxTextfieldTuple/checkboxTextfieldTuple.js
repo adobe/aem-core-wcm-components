@@ -210,11 +210,16 @@
      * @private
      */
     CheckboxTextfieldTuple.prototype._getTextfieldValue = function() {
+        var result;
         if (this._isRichText) {
-            return $(this._textfield).html();
+            result = $(this._textfield).html();
+            if (result) {
+                result = result.trim();
+            }
         } else {
-            return this._textfield.value;
+            result = this._textfield.value;
         }
+        return result;
     };
 
     /**
