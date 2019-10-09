@@ -55,6 +55,7 @@
                         <exclude>**/*.editorconfig</exclude>
                         <exclude>**/*.stylelintrc.yaml</exclude>
                         <exclude>**/*.eslintignore</exclude>
+                        <exclude>**/*.stylelintignore</exclude>
                     </excludes>
                 </configuration>
             </plugin>

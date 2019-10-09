@@ -1,5 +1,4 @@
 {
-    "id"   : "form-hidden-1220865394",
     "name" : "hidden",
     "value": "",
     ":type": "core/wcm/components/form/hidden/v2/hidden"

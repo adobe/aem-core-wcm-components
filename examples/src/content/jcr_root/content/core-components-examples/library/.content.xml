@@ -356,6 +356,7 @@
         </root>
     </jcr:content>
     <carousel/>
+    <container/>
     <content-fragment/>
     <content-fragment-list/>
     <image/>

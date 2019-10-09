@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe Systems Incorporated
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Form Text Field"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.form.text.v3.editor]"
+    helpPath="https://www.adobe.com/go/aem_cmp_form_text_v3"
+    trackingFeature="core-components:form-text:v3">
+    <content
+        granite:class="cmp-form-text__editDialog"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <properties
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Properties"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/include"
+                                                path="/apps/core/wcm/commons/comp_id/idSection"/>
+                                            <fieldType
+                                                granite:class="cmp-form-text__types"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldLabel="Constraint"
+                                                name="./type">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <text
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Text"
+                                                        value="text"/>
+                                                    <textarea
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Textarea"
+                                                        value="textarea"/>
+                                                    <email
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Email"
+                                                        value="email"/>
+                                                    <tel
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Tel"
+                                                        value="tel"/>
+                                                    <date
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Date"
+                                                        value="date"/>
+                                                    <number
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Number"
+                                                        value="number"/>
+                                                    <password
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Password"
+                                                        value="password"/>
+                                                </items>
+                                            </fieldType>
+                                            <rows
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                                fieldLabel="Text Lines"
+                                                min="{Long}1"
+                                                name="./rows"
+                                                value="2"
+                                                wrapperClass="cmp-form-textfield-rows"/>
+                                            <label
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Label of this field"
+                                                fieldLabel="Label"
+                                                name="./jcr:title"
+                                                required="{Boolean}true"/>
+                                            <hideLabel
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Needed if the label is required only for accessibility purpose and does not impart any additional visual information about the field"
+                                                name="./hideTitle"
+                                                text="Hide the label from being displayed"
+                                                value="true"/>
+                                            <name
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                emptyText="The name of the field which is submitted with the form data"
+                                                fieldDescription="The name of the field which is submitted with the form data"
+                                                fieldLabel="Element Name"
+                                                name="./name"
+                                                required="{Boolean}true"/>
+                                            <value
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Default value of the field"
+                                                fieldLabel="Value"
+                                                name="./value"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </properties>
+                    <about
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="About"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <helpMessage
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="A hint to the user of what can be entered in the field"
+                                                fieldLabel="Help Message"
+                                                name="./helpMessage"/>
+                                            <usePlaceholder
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Whether to display the help message inside the form input when it is empty and not focused"
+                                                name="./usePlaceholder"
+                                                text="Display help message as placeholder"
+                                                value="true"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </about>
+                    <constraints
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Constraints"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <constraintMessage
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                fieldDescription="Message displayed as tooltip when submitting the form if the value does not validate the Type chosen"
+                                                fieldLabel="Constraint Message"
+                                                name="./constraintMessage"
+                                                wrapperClass="cmp-form-text__constraintmessage"/>                                            
+                                             <regex
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="Enter custom regex pattern to validate value before submitting the form"
+                                                fieldLabel="Regex Pattern"
+                                                name="./regexPattern"
+                                                wrapperClass="cmp-form-text__regexpattern"/>     
+                                            <required
+                                                granite:class="cmp-form-text__required"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Whether the user must fill in a value before submitting the form"
+                                                name="./required"
+                                                text="Required"
+                                                value="true"/>
+                                            <readonlySelectedAlert
+                                                granite:class="cmp-form-text__readonlyselected-alert"
+                                                granite:hidden="{Boolean}true"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/alert"
+                                                size="S"
+                                                text="Enabling the required option disables the readonly option"
+                                                variant="warning"/>
+                                            <requiredMessage
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                fieldDescription="Message displayed as tooltip when submitting the form if the value is left empty"
+                                                fieldLabel="Required Message"
+                                                name="./requiredMessage"
+                                                wrapperClass="cmp-form-text__requiredmessage"/>
+                                            <readonly
+                                                granite:class="cmp-form-text__readonly"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="Whether the user cannot modify the value of the field"
+                                                name="./readOnly"
+                                                text="Make read only"
+                                                value="true"/>
+                                            <requiredSelectedAlert
+                                                granite:class="cmp-form-text__requiredselected-alert"
+                                                granite:hidden="{Boolean}true"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/alert"
+                                                size="S"
+                                                text="Enabling the readonly option disables the required option"
+                                                variant="warning"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </constraints>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

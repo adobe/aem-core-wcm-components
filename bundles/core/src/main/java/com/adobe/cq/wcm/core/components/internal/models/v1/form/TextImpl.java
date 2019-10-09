@@ -36,7 +36,7 @@ import com.day.cq.wcm.foundation.forms.FormsHelper;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Text.class, ComponentExporter.class},
-       resourceType = {FormConstants.RT_CORE_FORM_TEXT_V1, FormConstants.RT_CORE_FORM_TEXT_V2})
+       resourceType = {FormConstants.RT_CORE_FORM_TEXT_V1, FormConstants.RT_CORE_FORM_TEXT_V2, FormConstants.RT_CORE_FORM_TEXT_V3})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TextImpl extends AbstractFieldImpl implements Text, ComponentExporter {
@@ -54,6 +54,7 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     private static final boolean PROP_USE_PLACEHOLDER_DEFAULT = false;
     private static final int PROP_ROWS_DEFAULT = 2;
     private static final boolean PROP_HIDE_TITLE_DEFAULT = false;
+    private static final String PROP_REGEX_PATTERN_DEFAULT = "";
 
     @Self
     private SlingHttpServletRequest slingRequest;
@@ -102,6 +103,10 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     @ValueMapValue
     @Default(booleanValues = PROP_HIDE_TITLE_DEFAULT)
     private boolean hideTitle;
+    
+    @ValueMapValue
+    @Default(values = PROP_REGEX_PATTERN_DEFAULT)
+    private String regexPattern;
 
     @PostConstruct
     private void initModel() {
@@ -188,6 +193,11 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     @Override
     public boolean hideTitle() {
         return hideTitle;
+    }
+    
+    @Override
+    public String getRegexPattern() {
+        return regexPattern;
     }
 
 }
