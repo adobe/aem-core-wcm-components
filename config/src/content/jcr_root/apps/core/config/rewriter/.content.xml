@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="sling:Folder">
+    <amp
+        jcr:primaryType="nt:unstructured"
+        contentTypes="[text/html]"
+        enabled="{Boolean}true"
+        generatorType="htmlparser"
+        order="1"
+        paths="[/content]"
+        serializerType="htmlwriter"
+        transformerTypes="[amp-transformer]">
+        <generator-htmlparser
+            jcr:primaryType="nt:unstructured"
+            includeTags="[HEAD]"/>
+    </amp>
+</jcr:root>
