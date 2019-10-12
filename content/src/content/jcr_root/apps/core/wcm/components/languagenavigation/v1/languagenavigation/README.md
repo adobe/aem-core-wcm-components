@@ -15,7 +15,7 @@ limitations under the License.
 -->
 Language Navigation (v1)
 ====
-Language Navigation component written in HTL that renders a global language structure navigation.
+Language Navigation component is written in HTL that renders a global language structure navigation.
 
 ## Features
 
