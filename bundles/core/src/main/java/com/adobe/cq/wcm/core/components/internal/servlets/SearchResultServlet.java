@@ -124,7 +124,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         try {
             mapper.writeValue(response.getWriter(), results);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("cannot serialize to JSON",e);
         }
     }
 

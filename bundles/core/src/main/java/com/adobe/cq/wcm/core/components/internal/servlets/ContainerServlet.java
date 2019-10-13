@@ -83,7 +83,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
             }
             resolver.commit();
         } catch (PersistenceException e) {
-            LOGGER.error("Could not delete items of the container at {}: {}", container.getPath(), e);
+            LOGGER.error("Could not delete items of the container at {}", container.getPath(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
@@ -116,7 +116,7 @@ public class ContainerServlet extends SlingAllMethodsServlet {
                 }
             }
         } catch (RepositoryException | PersistenceException e) {
-            LOGGER.error("Could not order items of the container at {}: {}", container.getPath(), e);
+            LOGGER.error("Could not order items of the container at {}", container.getPath(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
