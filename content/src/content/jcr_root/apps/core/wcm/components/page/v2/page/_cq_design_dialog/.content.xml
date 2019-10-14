@@ -153,7 +153,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                 composite="{Boolean}false"
-                                fieldDescription="The CSS client library categories to load. Clientlibs selected will be added inline in the head of the document"
+                                fieldDescription="The CSS base client library categories to load (not embedding components clientlibs). Clientlibs selected will be added inline in the head of the document along with  the css clientlibs of all the components on the page"
                                 fieldLabel="AMP Clientlibs">
                                 <field
                                     jcr:primaryType="nt:unstructured"
