@@ -19,10 +19,10 @@ Extensible page component written in HTL.
 
 ## Features
 * Editable templates
-* Page title, subtitle, description and thumbnail
+* Page title, subtitle, description, and thumbnail
 * Navigation title, or hide from navigation
 * Vanity URL, page alias and redirection
-* Page tagging and define content language
+* Page tagging and define a content language
 * On/Off time and launches
 * Blueprints and live copy
 * Closed user groups and permissions
@@ -49,10 +49,10 @@ The Page component uses the following use objects:
 ## Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./clientlibs` - allows definition of a list of client libraries to be loaded by the pages associated with this policy configuration
-2. `./clientlibsJsHead` - allows definition of client libraries for which JavaScript is specifically intended to be loaded
+1. `./clientlibs` - allows the definition of a list of client libraries to be loaded by the pages associated with this policy configuration
+2. `./clientlibsJsHead` - allows the definition of client libraries for which JavaScript is specifically intended to be loaded
 in the document head (JavaScript only) of pages associated with this policy configuration
-3. `./appResourcesClientlib` - allows definition of the client library that is used to serve web resources such as favicons
+3. `./appResourcesClientlib` - allows the definition of the client library that is used to serve web resources such as favicons
 
 ## Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:
@@ -66,7 +66,7 @@ The following properties are written to JCR for this Page component and are expe
 7. `./subtitle` - defines a subtitle for this page
 8. `./jcr:description` - defines a description for this page
 9.  `./onTime` - defines when the page should become available
-10. `./offTime` - defines when the page should not be available any more
+10. `./offTime` - defines when the page should not be available anymore
 11. `./sling:vanityPath` - defines a vanity URL at which this page could be accessed
 12. `./sling:redirect` - if set to `true`, then this page will redirect to its defined vanity URL
 13. `./jcr:language` - defines the language set for this page, to help with `i18n`
@@ -75,7 +75,7 @@ The following properties are written to JCR for this Page component and are expe
 16. `./cq:allowedTemplates` - defines a template or a list of templates that the page should use
 17. `./cq:exportTemplate` - defines the template used for exporting this page for content synchronisation
 18. `./socialMedia` - defines the enabled social media configurations
-19. `./variantPath` - allows defining the social media variation experience fragment to be used for generating page meta data for social
+19. `./variantPath` - allows defining the social media variation experience fragment to be used for generating page metadata for social
 media
 20. `./cq:contextHubPath` - defines the Context Path configuration used by this page
 21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path
