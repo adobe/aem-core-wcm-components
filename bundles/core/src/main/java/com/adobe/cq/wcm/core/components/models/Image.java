@@ -291,7 +291,9 @@ public interface Image extends ComponentExporter {
     }
 
     /**
-     * Whether the image is decorative.
+     * Indicates whether the image is decorative.
+     *
+     * @return true if the image is decorative; false otherwise
      * @since com.adobe.cq.wcm.core.components.models 12.11.0
      */
     default boolean isDecorative() {
