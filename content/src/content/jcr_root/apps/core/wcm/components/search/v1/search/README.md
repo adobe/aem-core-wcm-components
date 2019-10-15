@@ -60,7 +60,7 @@ BLOCK cmp-search
 ```
 
 ## JavaScript Data Attribute Bindings
-Apply a `data-cmp-is="search"` attribute to the wrapper block to enable the initialization of the JavaScript component.
+Apply a `data-cmp-is="search"` attribute to the wrapper block to enable initialization of the JavaScript component.
 
 The following attributes can be added to the same element to provide options:
 
