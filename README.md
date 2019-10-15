@@ -3,7 +3,7 @@
 [![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all)
 
-A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.
+**A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.**
 
 ## Documentation
 
