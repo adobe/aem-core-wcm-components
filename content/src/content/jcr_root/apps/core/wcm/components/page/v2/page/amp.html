@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2016 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <!DOCTYPE HTML>
 <html amp data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page" lang="${page.language}"
-      data-sly-use.head="head.html"
       data-sly-use.footer="footer.html"
       data-sly-use.redirect="redirect.html">
 <head data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
@@ -23,10 +22,10 @@
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
     <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
-    <style amp-custom="">@import "newstyles.css"</style>
+    <style amp-custom=""></style>
 </head>
 <body class="${page.cssClassNames}">
-<h1>AMP page</h1>
+<h1>AMP page [placeholder]</h1>
 <sly data-sly-test="${!isRedirectPage}">
     <sly data-sly-include="body.socialmedia_begin.html"></sly>
     <sly data-sly-include="body.html"></sly>
