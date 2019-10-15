@@ -27,7 +27,6 @@ import org.osgi.service.component.annotations.Component;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
-import java.lang.NoSuchMethodException;
 import java.util.List;
 import java.util.stream.Collectors;
 
