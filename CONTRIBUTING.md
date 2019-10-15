@@ -24,11 +24,11 @@ This project adheres to the Adobe [Code of Conduct](CODE_OF_CONDUCT.md). By part
 
 ## Ways of Contributing
 
-There are many ways of contributing, from testing and reporting an issue to suggest and coding full components or features. Below is a summary of some of the best ways to get involved. 
+There are many ways of contributing, from testing and reporting an issue to suggesting and coding full components or features. Below is a summary of some of the best ways to get involved. 
 
 ### Joining Feature Discussions 💭
 
-You can add your voice to discussions around new and existing component features by commenting on an RTC. New components and features that openly invite public comments are marked by an [RTC](https://github.com/adobe/aem-core-wcm-components/labels/rtc) (Request to Comment) label. We strongly encourage users of the Core Components to bring their own project experience to these issues, as there may be alternative use-cases or requirements that haven't yet been considered.
+You can add your voice to discussions around new and existing component features by commenting on an RTC. New components and features that openly invite public comment are marked by an [RTC](https://github.com/adobe/aem-core-wcm-components/labels/rtc) (Request to Comment) label. We strongly encourage users of the Core Components to bring their own project experience to these issues, as there may be alternative use-cases or requirements that haven't yet been considered.
 
 ### Joining Developer Discussions 💬
 
@@ -47,7 +47,7 @@ If you have thoughts on the code, the general architecture of the project, or wo
 1. Visit our [issue tracker on GitHub](https://github.com/adobe/aem-core-wcm-components/issues).
 1. File a `New Issue` as a `Bug Report`.
 1. Ensure your issue follows the [issue report guidelines](#issue-report-guidelines).
-1. Thanks for the report! The committers will get back to you on time, typically within one week.
+1. Thanks for the report! The committers will get back to you in a timely manner, typically within one week.
 
 ### Requesting Features 🚀
 
@@ -55,7 +55,7 @@ If you have thoughts on the code, the general architecture of the project, or wo
 
 * Have a quick search through the currently open [enhancement](https://github.com/adobe/aem-core-wcm-components/labels/enhancement) and [request to comment](https://github.com/adobe/aem-core-wcm-components/labels/rtc) issues to see if the idea has already been suggested. If it has, you may still have a slightly different requirement that isn't covered, in which case, feel free to comment on the open issue. 
 * Take a look at the [Core Components Roadmap](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) to see if your feature is already on the radar. If it is and doesn't have a public issue yet, feel free to create one, listing your own requirements.
-* Consider whether your requirement is generically useful rather than project-specific and would, therefore, benefit all users of the Core Components.
+* Consider whether your requirement is generically useful rather than project-specific and would therefore benefit all users of the Core Components.
 
 ##### Requesting a Feature
 
