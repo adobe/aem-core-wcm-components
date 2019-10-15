@@ -63,7 +63,7 @@ public class ModelDataSourceServlet extends AbstractDataSourceServlet {
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/datasource/models";
 
     @Reference
-    private ExpressionResolver expressionResolver;
+    private transient ExpressionResolver expressionResolver;
 
     @NotNull
     @Override

@@ -96,9 +96,9 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
 
-    private MimeTypeService mimeTypeService;
+    private transient MimeTypeService mimeTypeService;
 
-    private AssetStore assetStore;
+    private transient AssetStore assetStore;
 
     public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth) {
         this.mimeTypeService = mimeTypeService;
