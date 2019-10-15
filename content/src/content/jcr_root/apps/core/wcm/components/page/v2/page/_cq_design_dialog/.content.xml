@@ -121,7 +121,7 @@
                         path="/mnt/overlay/cq/gui/components/authoring/dialog/style/tab_design/styletab"/>
                     <amp
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Amp"
+                        jcr:title="AMP"
                         sling:resourceType="granite/ui/components/coral/foundation/container"
                         margin="{Boolean}true">
                         <items
@@ -137,15 +137,15 @@
                                 <items jcr:primaryType="nt:unstructured">
                                     <noAmp
                                         jcr:primaryType="nt:unstructured"
-                                        text="No Amp"
+                                        text="No AMP"
                                         value="noAmp"/>
                                     <pairedAmp
                                         jcr:primaryType="nt:unstructured"
-                                        text="Paired Amp"
+                                        text="Paired AMP"
                                         value="pairedAmp"/>
                                     <ampOnly
                                         jcr:primaryType="nt:unstructured"
-                                        text="Amp Only"
+                                        text="AMP Only"
                                         value="ampOnly"/>
                                 </items>
                             </mode>
