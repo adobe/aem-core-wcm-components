@@ -26,7 +26,13 @@ import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.io.IOException;
 
 /**
@@ -122,7 +128,8 @@ public class AmpModeForwardFilter implements Filter {
     private boolean forward(SlingHttpServletRequest slingRequest, ServletResponse response,
                             RequestDispatcherOptions options) throws ServletException, IOException {
 
-        RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(slingRequest.getResource(), options);
+        RequestDispatcher
+            dispatcher = slingRequest.getRequestDispatcher(slingRequest.getResource(), options);
         if (dispatcher != null) {
             dispatcher.forward(slingRequest, response);
             return true;
