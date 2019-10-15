@@ -62,7 +62,7 @@ public class ModelElementsDataSourceServlet extends AbstractDataSourceServlet {
     protected static final String PARAMETER_AND_PN_MODEL_PATH = ContentFragmentList.PN_MODEL_PATH;
 
     @Reference
-    private ExpressionResolver expressionResolver;
+    private transient ExpressionResolver expressionResolver;
 
     @NotNull
     @Override

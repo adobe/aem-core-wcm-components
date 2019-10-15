@@ -78,7 +78,7 @@ public class VariationsDataSourceServlet extends AbstractContentFragmentDataSour
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragment/v1/datasource/variations";
 
     @Reference
-    private ExpressionResolver expressionResolver;
+    private transient ExpressionResolver expressionResolver;
 
     @NotNull
     @Override
