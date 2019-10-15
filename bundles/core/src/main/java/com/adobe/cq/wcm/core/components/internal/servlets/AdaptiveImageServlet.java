@@ -289,7 +289,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (originalWidth > renditionWidth) {
                     scaling = (double) originalWidth / renditionWidth;
                 } else {
-                    scaling = renditionWidth / originalWidth;
+                    if (originalWidth > 0 ) {
+                        scaling = renditionWidth / originalWidth;
+                    } else {
+                        scaling = 1.0;
+                    }
                 }
                 layer = new Layer(assetHandler.getImage(asset.getOriginal()));
                 if (Math.abs(scaling - 1.0D) != 0) {
