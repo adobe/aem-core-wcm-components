@@ -140,21 +140,17 @@ public class OEmbedClientImpl implements OEmbedClient {
     }
 
     protected InputStream getData(String url) throws IOException {
-        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout)
-                .build();
-        SocketConfig sc = SocketConfig.custom().setSoTimeout(soTimeout)
-                .build();
+        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
+            .build();
         HttpClient httpClient;
         if (httpClientBuilderFactory != null
                 && httpClientBuilderFactory.newBuilder() != null) {
             httpClient = httpClientBuilderFactory.newBuilder()
                     .setDefaultRequestConfig(rc)
-                    .setDefaultSocketConfig(sc)
                     .build();
         } else {
             httpClient = HttpClients.custom()
                     .setDefaultRequestConfig(rc)
-                    .setDefaultSocketConfig(sc)
                     .build();
         }
         HttpResponse response = httpClient.execute(new HttpGet(url));
