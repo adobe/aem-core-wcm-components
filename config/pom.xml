@@ -57,14 +57,18 @@
                 <extensions>true</extensions>
                 <configuration>
                     <showImportPackageReport>false</showImportPackageReport>
-                    <cloudManagerTarget>none</cloudManagerTarget>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>com.day.jcr.vault</groupId>
                 <artifactId>content-package-maven-plugin</artifactId>
                 <configuration>
-                    <cloudManagerTarget>none</cloudManagerTarget>
+                    <properties>
+                        <cloudManagerTarget>none</cloudManagerTarget>
+                    </properties>
                 </configuration>
             </plugin>
         </plugins>
