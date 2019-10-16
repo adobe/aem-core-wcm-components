@@ -63,6 +63,9 @@
             <plugin>
                 <groupId>com.day.jcr.vault</groupId>
                 <artifactId>content-package-maven-plugin</artifactId>
+                <configuration>
+                    <cloudManagerTarget>none</cloudManagerTarget>
+                </configuration>
             </plugin>
         </plugins>
     </build>
