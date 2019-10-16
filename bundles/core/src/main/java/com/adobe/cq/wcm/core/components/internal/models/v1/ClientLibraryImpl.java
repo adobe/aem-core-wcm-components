@@ -20,11 +20,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ClientLibrary;
 import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
 import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.designer.Style;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -41,44 +39,67 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
     defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class ClientLibraryImpl implements ClientLibrary {
 
+    @OSGiService
+    private ClientLibraryAggregatorService aggregatorService;
+
     @Inject
     private String categories;
-
-    @Inject
-    private String type;
-
-    @OSGiService
-    private ClientLibraryAggregatorService clientLibraryAggregatorService;
 
     @ScriptVariable
     private Page currentPage;
 
-    @ScriptVariable
-    private Style currentStyle;
+    @Inject
+    private String fallbackPath;
 
+    @Inject
+    private String primaryPath;
+
+    @Inject
+    private String type;
+
+    /**
+     * Returns the aggregated content of the specified clientlib type from the given comma delimited list of categories.
+     * @return The aggregated clientlib output.
+     */
     @Override
     public String getInline() {
-        String baseClientLibrary = currentStyle.get("appResourcesClientlib", String.class);
-        return clientLibraryAggregatorService.getClientLibOutput(baseClientLibrary, categories, type);
+        return aggregatorService.getClientLibOutput(categories, type);
     }
 
+    /**
+     * Returns the aggregated content of the specified clientlib type from the given categories and all categories of
+     * the current page's child resources.
+     * @return The aggregated clientlib output.
+     */
     @Override
     public String getInlineLimited() {
-        String baseClientLibrary = currentStyle.get("appResourcesClientlib", String.class);
+
         Set<String> resourceTypes = getResourceTypes(currentPage.getContentResource(), new HashSet<>());
-        return clientLibraryAggregatorService.getClientLibOutput(baseClientLibrary, resourceTypes, type);
+
+        return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
     }
 
+    /**
+     * Retrieves the resource types of the given resource and all of its child resources.
+     * @param resource The resource to start retrieving resources types from.
+     * @param resourceTypes String set to append resource type values to.
+     * @return String set of resource type values found.
+     */
     private Set<String> getResourceTypes(Resource resource, Set<String> resourceTypes) {
-        resourceTypes.add(resource.getResourceType());
-        if (resource.hasChildren()) {
-            for (Resource child : resource.getChildren()) {
-                resourceTypes.add(child.getResourceType());
-                if (child.hasChildren()) {
-                    getResourceTypes(child, resourceTypes);
-                }
-            }
+
+        if (resource == null) {
+            return resourceTypes;
         }
+
+        String resourceType = resource.getResourceType();
+        if (aggregatorService.isValidResourceType(resourceType)) {
+            resourceTypes.add(resourceType);
+        }
+
+        for (Resource child : resource.getChildren()) {
+            getResourceTypes(child, resourceTypes);
+        }
+
         return resourceTypes;
     }
 }

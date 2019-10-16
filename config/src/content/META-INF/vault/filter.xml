@@ -18,4 +18,7 @@
     <filter root="/apps/core/config"/>
     <filter root="/apps/core/wcm/config"/>
     <filter root="/apps/core/wcm/config.author"/>
+    <filter root="/apps">
+        <include pattern="/apps/rep:policy(/.*)?"/>
+    </filter>
 </workspaceFilter>

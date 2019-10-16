@@ -25,7 +25,10 @@ import org.osgi.annotation.versioning.ConsumerType;
 @ConsumerType
 public interface ClientLibraryAggregatorService {
 
-    String getClientLibOutput(String baseCategory, String categoryString, String type);
+    String getClientLibOutput(String categoryCsv, String type);
 
-    String getClientLibOutput(String baseCategory, Set<String> resourceTypes, String type);
+    String getClientLibOutput(String categoryCsv, String type, Set<String> resourceTypes, String primaryPath,
+                              String fallbackPath);
+
+    boolean isValidResourceType(String resourceType);
 }
