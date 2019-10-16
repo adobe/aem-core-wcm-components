@@ -290,4 +290,13 @@ public interface Image extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Indicates whether the image is decorative.
+     *
+     * @return true if the image is decorative; false otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.11.0
+     */
+    default boolean isDecorative() {
+        throw new UnsupportedOperationException();
+    };
 }

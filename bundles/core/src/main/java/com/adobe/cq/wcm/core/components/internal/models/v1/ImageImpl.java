@@ -327,6 +327,12 @@ public class ImageImpl implements Image {
         return resource.getResourceType();
     }
 
+    @Override
+    @JsonIgnore
+    public boolean isDecorative() {
+        return this.isDecorative;
+    }
+
     protected void buildJson() {
         JsonArrayBuilder smartSizesJsonBuilder = Json.createArrayBuilder();
         for (int size : smartSizes) {
