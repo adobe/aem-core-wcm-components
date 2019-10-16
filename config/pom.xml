@@ -57,6 +57,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <showImportPackageReport>false</showImportPackageReport>
+                    <cloudManagerTarget>none</cloudManagerTarget>
                 </configuration>
             </plugin>
             <plugin>
