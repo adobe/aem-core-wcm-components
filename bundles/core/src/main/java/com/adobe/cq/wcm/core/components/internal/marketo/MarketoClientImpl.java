@@ -46,6 +46,8 @@ import com.adobe.cq.wcm.core.components.marketo.MarketoResponse;
 import com.adobe.cq.wcm.core.components.models.marketo.MarketoClientConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Implementation of the MarketoClient using the REST API.
  * 
@@ -60,6 +62,8 @@ public class MarketoClientImpl implements MarketoClient {
 
   private ObjectMapper mapper = new ObjectMapper();
 
+  @SuppressFBWarnings(value = {
+      "RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE" }, justification = "See: https://github.com/spotbugs/spotbugs/issues/756")
   protected @Nonnull String getApiResponse(@Nonnull String url, String bearerToken) throws IOException {
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
       HttpGet httpGet = new HttpGet(url);
