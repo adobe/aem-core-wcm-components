@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:Template"
+    jcr:description="Marketo's powerful marketing automation software helps marketers master the art and science of digital marketing to engage customers and prospects."
+    jcr:title="Marketo"
+    allowedPaths="[/conf(/.*)?]"
+    ranking="{Long}100">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="core/wcm/components/cloudconfig/v1/marketo"/>
+</jcr:root>

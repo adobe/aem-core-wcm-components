@@ -1,0 +1,44 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly data-sly-use.list="com.adobe.cq.wcm.core.components.models.CloudConfigurationList">
+    <section class="coral-light core-cloudconfig-summary">
+        <h1 class="coral-Heading coral-Heading--1">${request.requestPathInfo.suffixResource.valueMap.jcr:title}</h1>
+        <p>${request.requestPathInfo.suffixResource.valueMap.jcr:description}</p>
+    </section>
+    <section>
+        <coral-masonry layout="fixed-spread" columnwidth="242" spacing="15" data-sly-list.config="${list.cloudConfigurations}">
+            <coral-masonry-item >
+                <coral-card colorhint="#ffffff" assetwidth="242" assetheight="242">
+                    <coral-card-asset>
+                        <img src="/apps/core/wcm/content/cloudservice/thumb.png" />
+                    </coral-card-asset>
+                    <coral-card-content>
+                        <div>
+                            <h4>${config.title}</h4>
+                        </div>
+                        <div>
+                            <p>${config.configPath}</p>
+                        </div>
+                    </coral-card-content>
+                </coral-card>
+                <coral-quickactions target="_prev" alignMy="left top" alignAt="left top">
+                    <coral-quickactions-item icon="edit" class="foundation-anchor" data-foundation-anchor-href="/libs/wcm/core/content/sites/properties.html?item=${config.itemPath @context='attribute'}">${'Edit Cloud Configuration' @ i18n}</coral-quickactions-item>
+                    <coral-quickactions-item icon="delete" class="foundation-collection-action" data-foundation-collection-action='{"action": "core.wcm.components.clientlib.delete", "data": {"path": "${config.itemPath}"}}'>${'Delete' @ i18n}</coral-quickactions-item>
+                </coral-quickactions>
+            </coral-masonry-item>
+        </coral-masonry>
+    </section>
+</sly>

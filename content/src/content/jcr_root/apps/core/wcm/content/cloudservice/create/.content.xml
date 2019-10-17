@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Create Cloud Configuration"
+        sling:resourceType="granite/ui/components/coral/foundation/page">
+        <head jcr:primaryType="nt:unstructured">
+            <viewport
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/admin/page/viewport"/>
+            <favicon
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/page/favicon"/>
+            <clientlibs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/includeclientlibs"
+                categories="[coralui3,granite.ui.coral.foundation]"/>
+        </head>
+        <body
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/page/body">
+            <items jcr:primaryType="nt:unstructured">
+                <form
+                    granite:id="core-cloudservice-create"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form"
+                    action="/bin/core/createcloudconfig"
+                    foundationForm="{Boolean}true"
+                    maximized="{Boolean}true"
+                    method="post"
+                    novalidate="{Boolean}true"
+                    style="vertical">
+                    <items jcr:primaryType="nt:unstructured">
+                        <wizard
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Create Cloud Configuration"
+                            sling:resourceType="granite/ui/components/coral/foundation/wizard"
+                            cancelHref="${empty header.Referer ? granite:concat(&quot;/apps/core/wcm/content/cloudservice/console.html&quot;, granite:encodeURIPath(requestPathInfo.suffix)) : header.Referer}">
+                            <items jcr:primaryType="nt:unstructured">
+                                <destinationStep
+                                    jcr:primaryType="nt:unstructured"
+                                    jcr:title="Select Configuration Root"
+                                    sling:resourceType="granite/ui/components/coral/foundation/wizard/lazycontainer"
+                                    maximized="{Boolean}true"
+                                    src="/apps/core/wcm/content/cloudservice/create/target.html/conf">
+                                    <parentConfig jcr:primaryType="nt:unstructured">
+                                        <next
+                                            granite:class="foundation-wizard-control"
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/button"
+                                            disabled="{Boolean}true"
+                                            text="Next"
+                                            variant="primary">
+                                            <granite:data
+                                                jcr:primaryType="nt:unstructured"
+                                                foundation-wizard-control-action="next"/>
+                                        </next>
+                                    </parentConfig>
+                                </destinationStep>
+                                <configureStep
+                                    jcr:primaryType="nt:unstructured"
+                                    jcr:title="Configure"
+                                    sling:resourceType="granite/ui/components/coral/foundation/container">
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <fixedColumns
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                            maximized="{Boolean}true">
+                                            <items jcr:primaryType="nt:unstructured">
+                                                <column
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                    <items jcr:primaryType="nt:unstructured">
+                                                        <configuration
+                                                            jcr:primaryType="nt:unstructured"
+                                                            jcr:title="New Configuration"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                                            <items jcr:primaryType="nt:unstructured">
+                                                                <title
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                    fieldLabel="Cloud Configuration Title"
+                                                                    name="title"
+                                                                    required="true"/>
+                                                                <name
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                    fieldLabel="Name"
+                                                                    name="name"
+                                                                    required="true"/>
+                                                                <template
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                                                                    name="template"
+                                                                    value="${requestPathInfo.suffix}"/>
+                                                            </items>
+                                                        </configuration>
+                                                    </items>
+                                                </column>
+                                            </items>
+                                        </fixedColumns>
+                                    </items>
+                                    <parentConfig jcr:primaryType="nt:unstructured">
+                                        <next
+                                            granite:class="foundation-wizard-control"
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/button"
+                                            text="Create"
+                                            type="submit"
+                                            variant="primary">
+                                            <granite:data
+                                                jcr:primaryType="nt:unstructured"
+                                                foundation-wizard-control-action="next"/>
+                                        </next>
+                                    </parentConfig>
+                                </configureStep>
+                            </items>
+                        </wizard>
+                    </items>
+                    <successresponse jcr:primaryType="nt:unstructured"
+                        jcr:title="Success"
+                        open="/libs/wcm/core/content/sites/properties.html?item={Path}"
+                        redirect="/apps/core/wcm/content/cloudservice/console.html${requestPathInfo.suffix}"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/responses/openprompt"
+                        text="Cloud Configuration created!"/>
+                </form>
+            </items>
+        </body>
+    </jcr:content>
+    <target
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/form/advancedselect"
+        maximized="{Boolean}true"
+        required="{Boolean}true"
+        selectionMode="single"
+        name="configPath">
+        <field
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/columnview"
+            itemprop="item"
+            itemResourceType="cq/gui/components/coral/admin/page/simplecolumnitem"
+            layoutId="columns"
+            limit="{Long}40"
+            loadAncestors="{Boolean}true"
+            path="${requestPathInfo.suffix}"
+            previewSrc="/libs/wcm/core/content/sites/pagecolumnpreview.html{+id}"
+            rootPath="/conf"
+            selectionCount="single"
+            size="{Long}40"
+            src="/apps/core/wcm/content/cloudservice/create/target/field{.offset,limit}.html{+id}">
+            <datasource
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="cq/gui/components/common/wcm/datasources/childresources"
+                exclude="/conf/[a-z-_]*"
+                limit="${empty requestPathInfo.selectors[1] ? &quot;41&quot; : requestPathInfo.selectors[1] + 1}"
+                offset="${requestPathInfo.selectors[0]}"
+                path="${requestPathInfo.suffix}"/>
+        </field>
+    </target>
+</jcr:root>
