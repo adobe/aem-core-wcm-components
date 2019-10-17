@@ -1,0 +1,43 @@
+{
+    "success": true,
+    "errors": [],
+    "requestId": "123",
+    "warnings": [],
+    "result": [
+        {
+            "id": 1,
+            "name": "Sample Form",
+            "description": "My Description",
+            "createdAt": "2017-08-31T20:08:43Z+0000",
+            "updatedAt": "2017-08-31T20:13:55Z+0000",
+            "url": "https://client.marketo.com/#formid",
+            "status": "approved",
+            "theme": "simple",
+            "language": "English",
+            "locale": "en_US",
+            "progressiveProfiling": false,
+            "labelPosition": "left",
+            "fontFamily": "Helvetica",
+            "fontSize": "13px",
+            "folder": {
+                "type": "Folder",
+                "value": 1234,
+                "folderName": "Sample Folder"
+            },
+            "knownVisitor": {
+                "type": "form",
+                "template": null
+            },
+            "thankYouList": [
+                {
+                    "followupType": "none",
+                    "followupValue": null,
+                    "default": true
+                }
+            ],
+            "buttonLocation": 1,
+            "buttonLabel": "Do Needful",
+            "waitingLabel": "Please Wait"
+        }
+    ]
+}

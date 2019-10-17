@@ -1,0 +1,91 @@
+{
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+        "jcr:primaryType": "cq:PageContent",
+        "jcr:title": "English",
+        "cq:conf": "/conf/test",
+        "sling:resourceType": "weretail/components/structure/page",
+        "root": {
+            "jcr:primaryType": "nt:unstructured",
+            "sling:resourceType": "wcm/foundation/components/responsivegrid"
+        }
+    },
+    "about-us": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "About Us",
+            "sling:resourceType": "weretail/components/structure/page",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "marketo-form": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "formId": "123"
+                },
+                "marketo-form-1": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "formId": "123",
+                    "script": "alert('hi')",
+                    "successUrl": "/content/anotherpage",
+                    "values": {
+                        "value-1": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "name": "Name",
+                            "source": "static",
+                            "value": "Perficient Digital"
+                        },
+                        "value-2": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "name": "Twitter",
+                            "source": "request",
+                            "value": "@PRFTDigital"
+                        }
+                    },
+                    "hidden": {
+                        "value-1": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "name": "Name",
+                            "source": "contextHub",
+                            "value": "Perficient Digital"
+                        },
+                        "value-2": {
+                            "jcr:primaryType": "nt:unstructured",
+                            "name": "Twitter",
+                            "source": "jsVariable",
+                            "value": "@PRFTDigital"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "invalid-service": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "cq:conf": "/conf/fake",
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "About Us",
+            "sling:resourceType": "weretail/components/structure/page",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+            }
+        }
+    },
+    "no-config": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "cq:conf": "",
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "About Us",
+            "sling:resourceType": "weretail/components/structure/page",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid"
+            }
+        }
+    }
+}

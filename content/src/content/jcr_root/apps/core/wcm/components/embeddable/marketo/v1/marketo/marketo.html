@@ -1,0 +1,31 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly data-sly-use.configMgr="com.adobe.cq.wcm.core.components.models.marketo.MarketoClientConfigurationManager" data-sly-use.marketoForm="com.adobe.cq.wcm.core.components.models.marketo.MarketoForm">
+    <div class="cq-placeholder" data-sly-test="${marketoForm.edit && marketoForm.formId == null}" data-emptytext="Configure Marketo Form"></div>
+    <div class="cq-placeholder" data-sly-test="${marketoForm.edit && configMgr.configuration == null}" data-emptytext="Configure Marketo Cloud Configuration"></div>
+    <sly data-sly-test="${!marketoForm.edit || (configMgr.configuration != null && marketoForm.formId != null)}">
+        <script src="//${configMgr.configuration.serverInstance @ context='unsafe'}/js/forms2/js/forms2.js"></script>
+        <form id="mktoForm_${properties.formId}"></form>
+        <script>
+          MktoForms2.loadForm("${configMgr.configuration.serverInstance @ context='unsafe'}", "${configMgr.configuration.munchkinId @ context='unsafe'}", ${marketoForm.formId @ context='scriptString'}, function(form){
+            ${marketoForm.successUrl @ context='unsafe'}
+            ${marketoForm.script @ context='unsafe'}
+            ${marketoForm.values @ context='unsafe'}
+            ${marketoForm.hidden @ context='unsafe'}
+          });
+        </script>
+    </sly>
+</sly>

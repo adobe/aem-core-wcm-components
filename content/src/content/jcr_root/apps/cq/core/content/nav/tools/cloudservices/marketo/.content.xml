@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="nt:unstructured"
+    href="/apps/core/wcm/content/cloudservice/console.html/apps/core/wcm/templates/marketocloudconfig"
+    icon="mcMarketoEngageColor"
+    id="marketo-cloud-configuration"
+    jcr:description="Marketo's powerful marketing automation software helps marketers master the art and science of digital marketing to engage customers and prospects."
+    jcr:title="Marketo" />

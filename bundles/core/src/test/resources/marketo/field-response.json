@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "errors": [],
+  "requestId": "123",
+  "warnings": [],
+  "result": [
+    {
+      "id": "Address",
+      "isRequired": false,
+      "dataType": "textarea",
+      "maxLength": 2000,
+      "visibleRows": 2
+    }
+  ]
+}

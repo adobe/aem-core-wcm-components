@@ -1,0 +1,6 @@
+{
+    "access_token": "TOKEN",
+    "token_type": "bearer",
+    "expires_in": 1,
+    "scope": "api-full-access@adobe.com"
+}

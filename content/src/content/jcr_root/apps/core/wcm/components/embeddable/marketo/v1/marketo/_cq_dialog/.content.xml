@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Marketo"
+    sling:resourceType="granite/ui/components/coral/foundation/container">
+    <items jcr:primaryType="nt:unstructured">
+        <content
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/foundation/container">
+            <layout
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/foundation/layouts/tabs"
+                type="nav"/>
+            <items jcr:primaryType="nt:unstructured">
+                <general
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="General"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                    <items jcr:primaryType="nt:unstructured">
+                        <column
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
+                            <items jcr:primaryType="nt:unstructured">
+                                <formId
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                    granite:class="cq-dialog-dropdown-showhide"
+                                    fieldLabel="Form"
+                                    forceSelection="{Boolean}true"
+                                    name="./formId"
+                                    required="{Boolean}true">
+                                    <granite:data 
+                                        jcr:primaryType="nt:unstructured" 
+                                        acs-select-filter="true" 
+                                        cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
+                                    <datasource
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="acs-commons/components/content/marketo-form/form-data-source" />
+                                </formId>
+                                <successUrl
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                    fieldLabel="Success Url"
+                                    name="./successUrl"
+                                    required="{Boolean}false"
+                                    rootPath="/content" />
+                            </items>
+                        </column>
+                    </items>
+                </general>
+                <values
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Values"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                    <items jcr:primaryType="nt:unstructured">
+                        <column
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
+                            <items jcr:primaryType="nt:unstructured">
+                                <values
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                    composite="{Boolean}true"
+                                    fieldLabel="Set Value"
+                                    required="{Boolean}false">
+                                    <field jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                                        name="./values">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <fieldName
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                granite:class="cq-dialog-dropdown-showhide"
+                                                fieldLabel="Field Name"
+                                                name="./name"
+                                                required="{Boolean}true" >
+                                                <granite:data 
+                                                    jcr:primaryType="nt:unstructured" 
+                                                    acs-select-filter="true" 
+                                                    cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
+                                                <datasource
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="acs-commons/components/content/marketo-form/field-data-source" />
+                                            </fieldName>
+                                            <source
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldLabel="Value Source"
+                                                name="./source"
+                                                required="{Boolean}true">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <static
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="Static"
+                                                       value="static" />
+                                                    <contextHub
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="ContextHub"
+                                                       value="contextHub" />
+                                                    <jsVariable
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="JavaScript Variable"
+                                                       value="jsVariable" />
+                                                    <param
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="Request Parameter"
+                                                       value="param" />
+                                                </items>
+                                            </source>
+                                            <value
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldLabel="Value"
+                                                fieldDescription="Usage depends on the selection of Value Source. For Static this should be the value of the field. For ContextHub, this should be the item path, ex: profile/familyName. For JavaScript Variable, this would be a valid JavaScript expression. For Request Parameter, this would be the name of the request parameter to use."
+                                                name="./value"
+                                                required="{Boolean}true" />
+                                        </items>
+                                    </field>
+                                </values>
+                                <addHidden
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                    composite="{Boolean}true"
+                                    fieldLabel="Add Hidden Fields"
+                                    required="{Boolean}false">
+                                    <field jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                                        name="./hidden">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <fieldName
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                granite:class="cq-dialog-dropdown-showhide"
+                                                fieldLabel="Field Name"
+                                                name="./name"
+                                                required="{Boolean}true" >
+                                                <granite:data 
+                                                    jcr:primaryType="nt:unstructured" 
+                                                    acs-select-filter="true" 
+                                                    cq-dialog-dropdown-showhide-target=".list-option-listfrom-showhide-target"/>
+                                                <datasource
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="acs-commons/components/content/marketo-form/field-data-source" />
+                                            </fieldName>
+                                            <source
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldLabel="Value Source"
+                                                name="./source"
+                                                required="{Boolean}true">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <static
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="Static"
+                                                       value="static" />
+                                                    <contextHub
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="ContextHub"
+                                                       value="contextHub" />
+                                                    <jsVariable
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="JavaScript Variable"
+                                                       value="jsVariable" />
+                                                    <request
+                                                       jcr:primaryType="nt:unstructured"
+                                                       text="Request Parameter"
+                                                       value="request" />
+                                                </items>
+                                            </source>
+                                            <value
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldLabel="Value"
+                                                fieldDescription="Usage depends on the selection of Value Source. For Static this should be the value of the field. For ContextHub, this should be the item path, ex: profile/familyName. For JavaScript Variable, this would be a valid JavaScript expression. For Request Parameter, this would be the name of the request parameter to use."
+                                                name="./value"
+                                                required="{Boolean}true" />
+                                        </items>
+                                    </field>
+                                </addHidden>
+                            </items>
+                        </column>
+                    </items>
+                </values>
+                <advanced
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Advanced"
+                    sling:resourceType="granite/ui/components/foundation/section">
+                    <items jcr:primaryType="nt:unstructured">
+                        <column
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
+                            <items jcr:primaryType="nt:unstructured">
+                                <script
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                    fieldLabel="Custom Script"
+                                    fieldDescription="Custom JavaScript to configure the form behavior, will have access to a variable 'form'"
+                                    name="./script"
+                                    required="{Boolean}false" />
+                            </items>
+                        </column>
+                    </items>
+                </advanced>
+            </items>
+        </content>
+    </items>
+    <granite:data
+        jcr:primaryType="nt:unstructured"
+        cmp-embed-dialog-edit-embeddableoptions="true"
+        cmp-embed-dialog-edit-showhidetargetvalue="core/wcm/components/embeddable/marketo/v1/marketo"/>
+</jcr:root>

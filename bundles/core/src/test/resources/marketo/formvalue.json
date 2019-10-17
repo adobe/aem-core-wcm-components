@@ -1,0 +1,24 @@
+{
+  "formvalue": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "jcr:title": "Form Value Test",
+      "sling:resourceType": "core/wcm/components/page/v2/page",
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "valid": {
+          "jcr:primaryType": "nt:unstructured",
+          "name": "Test",
+          "source": "static",
+          "value": "Value"
+        },
+        "invalid": {
+          "jcr:primaryType": "nt:unstructured",
+          "name": "Test",
+          "source": "static"
+        }
+      }
+    }
+  }
+}

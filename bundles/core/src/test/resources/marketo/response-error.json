@@ -1,0 +1,11 @@
+{
+    "requestId": "1234",
+    "success": false,
+    "warnings": [],
+    "errors": [
+        {
+            "code": "601",
+            "message": "Access token invalid"
+        }
+    ]
+}

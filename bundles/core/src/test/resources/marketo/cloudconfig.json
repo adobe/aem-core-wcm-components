@@ -1,0 +1,14 @@
+{
+  "jcr:primaryType": "cq:Page",
+  "jcr:content": {
+    "jcr:primaryType": "cq:PageContent",
+    "jcr:title": "Test Cloud Config",
+    "cq:template": "/apps/core/wcm/templates/marketocloudconfig",
+    "sling:resourceType": "page",
+    "endpointHost": "test.mktorest.com",
+    "serverInstance": "//test.marketo.com",
+    "munchkinId": "123-456-789",
+    "clientId": "123",
+    "clientSecret": "456"
+  }
+}

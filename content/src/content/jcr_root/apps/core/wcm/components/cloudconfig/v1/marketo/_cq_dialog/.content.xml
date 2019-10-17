@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Marketo Cloud Configuration"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    mode="edit">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+        <items jcr:primaryType="nt:unstructured">
+            <column
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/container">
+                <items jcr:primaryType="nt:unstructured">
+                    <metadata
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Metadata"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                        <items jcr:primaryType="nt:unstructured">
+                            <title
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Title"
+                                name="./jcr:title"
+                                required="{Boolean}true" />
+                        </items>
+                    </metadata>
+                    <configuration
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Configuration"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                        <items jcr:primaryType="nt:unstructured">
+                            <endpointHost
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="REST Endpoint Host"
+                                fieldDescription="The Marketo REST API Endpont host, found in Marketo under Admin >> Integration >> Web Services. Example: https://1234.mktorest.com"
+                                name="./endpointHost"
+                                required="{Boolean}true" />
+                            <serverInstance
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Marketo Server Instance"
+                                fieldDescription="URL Used to access marketo, e.g. //app-ab3123.marketo.com"
+                                name="./serverInstance"
+                                required="{Boolean}true" />
+                            <munchkinId
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Munchkin Account ID"
+                                fieldDescription="Found in Marketo under Admin >> Integration >> Munchkin"
+                                name="./munchkinId"
+                                required="{Boolean}true" />
+                            <clientId
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Client ID"
+                                fieldDescription="Found in Marketo under Admin >> Integration >> LaunchPoint"
+                                name="./clientId"
+                                required="{Boolean}true" />
+                            <clientSecret
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/password"
+                                fieldLabel="Client Secret"
+                                fieldDescription="Found in Marketo under Admin >> Integration >> LaunchPoint"
+                                name="./clientSecret"
+                                required="{Boolean}true" />
+                        </items>
+                    </configuration>
+                </items>
+            </column>
+        </items>
+    </content>
+</jcr:root>
