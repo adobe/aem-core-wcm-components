@@ -36,16 +36,13 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 @ExtendWith(AemContextExtension.class)
-public class TestCloudConfigurationListImpl {
+public class CloudConfigurationListImplTest {
 
   private final AemContext context = CoreComponentTestContext.newAemContext();
 
   @BeforeEach
   void init() {
-    context.addModelsForPackage("com.adobe.acs.commons.marketo.models",
-        "com.adobe.cq.wcm.core.components.internal.models.v1.marketo");
-    context.load().json("/marketo/cloudconfig.json", "/conf/test");
-
+    context.load().json("/cloudconfig/cloudconfig.json", "/conf/test");
   }
 
   @SuppressWarnings("unchecked")

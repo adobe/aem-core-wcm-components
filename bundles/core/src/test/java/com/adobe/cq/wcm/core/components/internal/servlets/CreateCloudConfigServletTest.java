@@ -40,16 +40,13 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 @ExtendWith(AemContextExtension.class)
-public class TestCreateCloudConfigServlet {
+public class CreateCloudConfigServletTest {
 
   private final AemContext context = CoreComponentTestContext.newAemContext();
 
   @BeforeEach
   public void init() {
-    context.addModelsForPackage("com.adobe.acs.commons.marketo.models",
-        "com.adobe.cq.wcm.core.components.internal.models.v1.marketo");
-    context.load().json("/marketo/pages.json", "/content/page");
-    context.load().json("/marketo/cloudconfig.json", "/conf/test");
+    context.load().json("/cloudconfig/cloudconfig.json", "/conf/test");
 
     ConfigurationResourceResolver configrr = Mockito.mock(ConfigurationResourceResolver.class);
     Mockito.when(configrr.getResourceCollection(Mockito.any(), Mockito.any(), Mockito.any()))
