@@ -163,19 +163,14 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
             // Iterate through each resource type and retrieve its clientlib categories.
             for (String resourceType : resourceTypes) {
 
-                Resource resource = getResourceType(resourceResolver, resourceType);
-                if (resource == null) {
-                    continue;
-                }
-
                 // Resolve the resource type's clientlib.
                 Resource clientlib = null;
                 if (!primaryPathBlank) {
-                    clientlib = resource.getChild(primaryPath);
+                    clientlib = resolveClientlib(resourceResolver, resourceType + "/" + primaryPath);
                 }
                 if (clientlib == null) {
                     if (!fallbackPathBlank) {
-                        clientlib = resource.getChild(fallbackPath);
+                        clientlib = resolveClientlib(resourceResolver, resourceType + "/" + fallbackPath);
                         if (clientlib == null) {
                             continue;
                         }
@@ -198,22 +193,22 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
     }
 
     /**
-     * Resolves the resource of a relative resource type path.
+     * Resolves the resource of a relative clientlib.
      * @param resolver Provides search paths used to turn relative paths to full paths and resolves the resource.
-     * @param resourceType The resource type to resolve.
+     * @param clientlibPath The path of the clientlib to resolve.
      * @return The resource of the resource type path.
      */
-    private Resource getResourceType(ResourceResolver resolver, String resourceType) {
+    private Resource resolveClientlib(ResourceResolver resolver, String clientlibPath) {
 
-        Resource testResource = resolver.getResource(resourceType);
-
-        if (testResource != null) {
-            LOG.debug(testResource.getPath());
+        // Resolve absolute client lib path.
+        if (clientlibPath.startsWith("/")) {
+            return resolver.getResource(clientlibPath);
         }
 
+        // Resolve relative client lib path.
         for (String path : resolver.getSearchPath()) {
 
-            Resource resource = resolver.getResource(path + resourceType);
+            Resource resource = resolver.getResource(path + clientlibPath);
             if (resource != null) {
                 return resource;
             }

@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Provides common value constants and methods used across AMP services.
  */
-class AmpHelperUtil {
+class AmpUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AmpHelperUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AmpUtil.class);
 
     private static final String AMP_MODE_PROP = "ampMode";
 

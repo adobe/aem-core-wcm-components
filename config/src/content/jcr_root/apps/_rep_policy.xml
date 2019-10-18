@@ -4,5 +4,9 @@
   <clientlibs-access
       jcr:primaryType="rep:GrantACE"
       rep:principalName="clientlibs-service"
-      rep:privileges="{Name}[jcr:read]"/>
+      rep:privileges="{Name}[jcr:read]">
+      <rep:restrictions
+          jcr:primaryType="rep:Restrictions"
+          rep:glob="*/clientlibs/*"/>
+  </clientlibs-access>
 </jcr:root>
