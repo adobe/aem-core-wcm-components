@@ -15,13 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.contentfragment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -196,7 +190,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     @NotNull
     @Override
     public Collection<DAMContentFragment> getListItems() {
-        return items;
+        return Collections.unmodifiableCollection(items);
     }
 
     @NotNull

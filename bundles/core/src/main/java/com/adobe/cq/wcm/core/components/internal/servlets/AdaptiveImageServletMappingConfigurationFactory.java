@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -105,7 +106,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      */
     @NotNull
     public List<String> getResourceTypes() {
-        return this.resourceTypes;
+        return Collections.unmodifiableList(this.resourceTypes);
     }
 
     /**
@@ -115,7 +116,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      */
     @NotNull
     public List<String> getSelectors() {
-        return this.selectors;
+        return Collections.unmodifiableList(this.selectors);
     }
 
     /**
@@ -125,7 +126,7 @@ public class AdaptiveImageServletMappingConfigurationFactory {
      */
     @NotNull
     public List<String> getExtensions() {
-        return this.extensions;
+        return Collections.unmodifiableList(this.extensions);
     }
 
     /**

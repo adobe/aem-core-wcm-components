@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
@@ -141,7 +142,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
-    public List<ImageArea> getAreas() { return areas; }
+    public List<ImageArea> getAreas() { return Collections.unmodifiableList(areas); }
 
     @Override
     public String getUuid() {

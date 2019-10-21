@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +46,7 @@ public abstract class AbstractImageDelegatingModel {
     protected void setImageResource(@NotNull Component component, @NotNull Resource toBeWrapped, @NotNull List<String> hiddenProperties) {
         this.toBeWrapped = toBeWrapped;
         this.component = component;
-        this.hiddenProperties = hiddenProperties;
+        this.hiddenProperties = new ArrayList<String>(hiddenProperties);
     }
 
     @JsonIgnore

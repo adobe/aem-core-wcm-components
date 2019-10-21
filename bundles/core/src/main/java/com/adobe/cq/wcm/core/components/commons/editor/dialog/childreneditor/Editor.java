@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.commons.editor.dialog.childreneditor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -82,7 +83,7 @@ public class Editor {
      * @return a list of child items
      */
     public List<Item> getItems() {
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     /**

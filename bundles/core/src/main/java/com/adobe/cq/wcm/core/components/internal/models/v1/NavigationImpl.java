@@ -147,7 +147,7 @@ public class NavigationImpl implements Navigation {
                 items = Collections.emptyList();
             }
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     @Override

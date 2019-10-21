@@ -116,7 +116,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
             }
         }
 
-        return pages;
+        return Collections.unmodifiableList(pages);
     }
 
     private Page getLocalizedPage(Page page, Page languageRoot) {

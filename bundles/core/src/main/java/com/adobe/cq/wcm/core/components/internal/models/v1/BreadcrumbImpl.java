@@ -104,7 +104,7 @@ public class BreadcrumbImpl implements Breadcrumb {
             }
             startLevel++;
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     private boolean checkIfNotHidden(Page page) {

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.jcr.RepositoryException;
@@ -106,7 +107,7 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
 
     @Override
     public Collection<ClientLibrary> getLibraries(String[] strings, LibraryType libraryType, boolean b, boolean b1) {
-        return clientLibraries;
+        return Collections.unmodifiableCollection(clientLibraries);
     }
 
     @Override

@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -240,7 +241,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public List<ListItem> getActions() {
-        return actions;
+        return Collections.unmodifiableList(actions);
     }
 
     @Override

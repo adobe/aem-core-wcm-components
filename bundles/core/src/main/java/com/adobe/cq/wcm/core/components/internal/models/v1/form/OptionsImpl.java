@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
         if (optionItems == null) {
             populateOptionItems();
         }
-        return optionItems;
+        return Collections.unmodifiableList(optionItems);
     }
 
     @Override
