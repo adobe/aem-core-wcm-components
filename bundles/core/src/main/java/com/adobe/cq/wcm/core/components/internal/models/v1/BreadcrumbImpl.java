@@ -78,7 +78,7 @@ public class BreadcrumbImpl implements Breadcrumb {
         if (items == null) {
             items = createItems();
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     @NotNull
@@ -104,7 +104,7 @@ public class BreadcrumbImpl implements Breadcrumb {
             }
             startLevel++;
         }
-        return Collections.unmodifiableList(items);
+        return items;
     }
 
     private boolean checkIfNotHidden(Page page) {

@@ -86,7 +86,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
                 items = Collections.emptyList();
             }
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     @NotNull
@@ -116,7 +116,7 @@ public class LanguageNavigationImpl implements LanguageNavigation {
             }
         }
 
-        return Collections.unmodifiableList(pages);
+        return pages;
     }
 
     private Page getLocalizedPage(Page page, Page languageRoot) {
