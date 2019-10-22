@@ -17,16 +17,62 @@ package com.adobe.cq.wcm.core.components.internal.services.amp;
 
 import org.apache.sling.rewriter.Transformer;
 import org.apache.sling.rewriter.TransformerFactory;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 /**
  * Instantiates the transformers needed to manipulate and add AMP specific page markup.
  */
-@Component(property = { "pipeline.type=amp-transformer" }, service = { TransformerFactory.class })
+@Component(
+    property = { "pipeline.type=amp-transformer" },
+    service = { TransformerFactory.class },
+    configurationPolicy = ConfigurationPolicy.REQUIRE
+)
+@Designate(
+    ocd = AmpTransformerFactory.Cfg.class
+)
 public class AmpTransformerFactory implements TransformerFactory {
+
+    private AmpTransformerFactory.Cfg cfg;
+
+    /**
+     * Reads the service's configuration when the service is started.
+     * @param cfg The service's configuration.
+     */
+    @Activate
+    @Modified
+    protected void activate(AmpTransformerFactory.Cfg cfg) {
+        this.cfg = cfg;
+    }
 
     @Override
     public Transformer createTransformer() {
-        return new AmpLinkTransformer();
+        return new AmpTransformer(cfg);
     }
+
+    @ObjectClassDefinition(name = "AMP Transformer Factory")
+    public @interface Cfg {
+
+        /**
+         * The name used for AMP js head library files.
+         */
+        @AttributeDefinition(
+            name = "Headlib Name",
+            description = "The name used for AMP js head library files.")
+        String getHeadlibName();
+
+        /**
+         * Regex defining valid resource type paths while aggregating head libraries.
+         */
+        @AttributeDefinition(
+            name = "Headlib Resource Type Regex",
+            description = "Regex defining valid resource type paths while aggregating head libraries.")
+        String getHeadlibResourceTypeRegex();
+    }
+
 }
