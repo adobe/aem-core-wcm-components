@@ -110,6 +110,7 @@ public class CoreFormHandlingServlet
     /**
      * @see org.apache.sling.api.servlets.SlingAllMethodsServlet#doPost(org.apache.sling.api.SlingHttpServletRequest, org.apache.sling.api.SlingHttpServletResponse)
      */
+    @Override
     protected void doPost(SlingHttpServletRequest request,
                           final SlingHttpServletResponse response)
             throws ServletException, IOException {

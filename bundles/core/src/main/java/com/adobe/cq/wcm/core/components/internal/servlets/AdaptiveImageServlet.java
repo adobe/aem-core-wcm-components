@@ -470,7 +470,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
         String csv = properties.get(ImageResource.PN_IMAGE_CROP, String.class);
         if (StringUtils.isNotEmpty(csv)) {
             try {
-                int ratio = csv.indexOf("/");
+                int ratio = csv.indexOf('/');
                 if (ratio >= 0) {
                     // skip ratio
                     csv = csv.substring(0, ratio);
