@@ -15,13 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.AMP_ONLY;
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.AMP_SELECTOR;
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.DOT;
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.NO_AMP;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.AMP_ONLY;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.AMP_SELECTOR;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.DOT;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.NO_AMP;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.request.RequestDispatcherOptions;
+import org.apache.sling.api.servlets.HttpConstants;
+import org.apache.sling.api.servlets.ServletResolverConstants;
+import org.apache.sling.engine.EngineConstants;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +45,11 @@ import java.io.IOException;
         service = {Filter.class},
         configurationPid = "com.adobe.cq.wcm.core.components.internal.services.amp.AmpModeForwardFilter",
         property = {
-                "sling.servlet.methods=GET",
-                "sling.servlet.extensions=amp.html",
-                "sling.filter.scope=request",
-                "sling.filter.pattern=/content/.*",
-                "service.ranking:Integer=1000",
+                ServletResolverConstants.SLING_SERVLET_METHODS + "=" + HttpConstants.METHOD_GET,
+                ServletResolverConstants.SLING_SERVLET_EXTENSIONS + "=amp.html",
+                EngineConstants.SLING_FILTER_SCOPE + "=" + EngineConstants.FILTER_SCOPE_REQUEST,
+                EngineConstants.SLING_FILTER_PATTERN + "=/content/.*",
+                "service.ranking:Integer=1000"
         }
 )
 public class AmpModeForwardFilter implements Filter {
@@ -69,7 +72,7 @@ public class AmpModeForwardFilter implements Filter {
 
         boolean hasAmpSelector = selectors.contains(AMP_SELECTOR);
 
-        String ampMode = AmpHelperUtil.getAmpMode(slingRequest);
+        String ampMode = AmpUtil.getAmpMode(slingRequest);
 
         if (hasAmpSelector && (ampMode.equals(NO_AMP) || ampMode.isEmpty())) {
 
@@ -128,8 +131,7 @@ public class AmpModeForwardFilter implements Filter {
     private boolean forward(SlingHttpServletRequest slingRequest, ServletResponse response,
                             RequestDispatcherOptions options) throws ServletException, IOException {
 
-        RequestDispatcher
-            dispatcher = slingRequest.getRequestDispatcher(slingRequest.getResource(), options);
+        RequestDispatcher dispatcher = slingRequest.getRequestDispatcher(slingRequest.getResource(), options);
         if (dispatcher != null) {
             dispatcher.forward(slingRequest, response);
             return true;

@@ -15,10 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.AMP_ONLY;
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.AMP_SELECTOR;
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.DOT;
-import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpHelperUtil.NO_AMP;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.AMP_ONLY;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.AMP_SELECTOR;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.DOT;
+import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.NO_AMP;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -71,7 +71,7 @@ public class AmpLinkTransformer implements Transformer {
 
         slingRequest = processingContext.getRequest();
 
-        ampMode = AmpHelperUtil.getAmpMode(slingRequest);
+        ampMode = AmpUtil.getAmpMode(slingRequest);
     }
 
     @Override

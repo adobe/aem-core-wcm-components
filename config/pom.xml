@@ -57,6 +57,9 @@
                 <extensions>true</extensions>
                 <configuration>
                     <showImportPackageReport>false</showImportPackageReport>
+                    <properties>
+                        <acHandling>merge_preserve</acHandling>
+                    </properties>
                 </configuration>
             </plugin>
             <plugin>
