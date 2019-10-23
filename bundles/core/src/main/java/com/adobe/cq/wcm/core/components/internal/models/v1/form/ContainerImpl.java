@@ -123,7 +123,7 @@ public class ContainerImpl implements Container {
             id = FormsHelper.getFormId(request);
         }
         this.name = id;
-        this.dropAreaResourceType += "/new";
+        this.dropAreaResourceType = "wcm/foundation/components/responsivegrid/new";
         if (redirect != null) {
             String contextPath = request.getContextPath();
             if (StringUtils.isNotBlank(contextPath) && redirect.startsWith("/")) {

@@ -4,4 +4,6 @@
     jcr:primaryType="cq:Component"
     jcr:title="New Paragraph - Form Container Component (v1)"
     sling:resourceSuperType="wcm/foundation/components/parsys/newpar"
+    cq:deprecated="Core Components 2.8.0"
+    cq:deprecatedReason="The Form Container now uses the responsive grid new component by default, overriding this in a proxy will not have an effect."
     componentGroup=".hidden"/>
