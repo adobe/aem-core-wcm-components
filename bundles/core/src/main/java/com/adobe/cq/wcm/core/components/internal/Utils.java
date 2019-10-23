@@ -59,6 +59,7 @@ public class Utils {
     /**
      * Retrieves the resource types of the given resource and all of its child resources.
      * @param resource The resource to start retrieving resources types from.
+     * @param resourceTypeRegex Regex used to filter the resource types collected. Gets all resource types if empty.
      * @param resourceTypes String set to append resource type values to.
      * @return String set of resource type values found.
      */
