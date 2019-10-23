@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import com.adobe.granite.ui.components.Value;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.Nullable;
@@ -38,8 +40,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AllowedHeadingElementsDataSourceServletTest {
 
+    private static final String TEST_BASE = "/title/datasource/allowedheadingelements";
+    private static final String TEST_PAGE = "/content/title";
+    private static final String TITLE_RESOURCE_JCR_TITLE_TYPE = TEST_PAGE + "/jcr:content/par/title-jcr-title-type";
+
     @Rule
-    public AemContext context = CoreComponentTestContext.createContext(null, "/apps");
+    public AemContext context = CoreComponentTestContext.createContext(TEST_BASE, "/content");
 
     @Mock
     private ContentPolicyManager contentPolicyManager;
@@ -54,7 +60,9 @@ public class AllowedHeadingElementsDataSourceServletTest {
 
     @Before
     public void setUp() throws Exception {
+        context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
         dataSourceServlet = new AllowedHeadingElementsDataSourceServlet();
+        context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE,TITLE_RESOURCE_JCR_TITLE_TYPE);
         registerContentPolicyManager();
         when(contentPolicyManager.getPolicy(context.currentResource())).thenReturn(contentPolicy);
         when(contentPolicy.getProperties()).thenReturn(properties);
