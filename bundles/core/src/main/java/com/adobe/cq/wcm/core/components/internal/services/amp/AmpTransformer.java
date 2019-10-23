@@ -20,6 +20,7 @@ import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.AMP
 import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.DOT;
 import static com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil.NO_AMP;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.crx.JcrConstants;
@@ -27,7 +28,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.rewriter.ProcessingComponentConfiguration;
 import org.apache.sling.rewriter.ProcessingContext;
 import org.apache.sling.rewriter.Transformer;
@@ -180,7 +180,8 @@ public class AmpTransformer implements Transformer {
         StringBuilder output = new StringBuilder();
 
         // Retrieve a set of the component's resource types.
-        Set<String> resourceTypes = getResourceTypes(request.getResource(), new HashSet<>());
+        Set<String> resourceTypes =
+            Utils.getResourceTypes(request.getResource(), cfg.getHeadlibResourceTypeRegex(), new HashSet<>());
 
         // Iterate through each resource type and read its AMP headlib.
         for (String resourceType : resourceTypes) {
@@ -188,7 +189,7 @@ public class AmpTransformer implements Transformer {
             // Resolve the resource type's AMP headlib.
             Resource headLibResource;
             String headLibPath = resourceType + "/" + cfg.getHeadlibName() + "/" + JcrConstants.JCR_CONTENT;
-            headLibResource = resolveHeadLibs(request.getResourceResolver(), headLibPath);
+            headLibResource = Utils.resolveResource(request.getResourceResolver(), headLibPath);
             if (headLibResource == null) {
                 LOG.trace("No custom headlib for resource type {}.", resourceType);
                 continue;
@@ -210,58 +211,6 @@ public class AmpTransformer implements Transformer {
         }
 
         return output.toString();
-    }
-
-    /**
-     * Retrieves the resource types of the given resource and all of its child resources.
-     * @param resource The resource to start retrieving resources types from.
-     * @param resourceTypes String set to append resource type values to.
-     * @return String set of resource type values found.
-     */
-    private Set<String> getResourceTypes(Resource resource, Set<String> resourceTypes) {
-
-        if (resource == null) {
-            return resourceTypes;
-        }
-
-        // Add resource type to return set if allowed by the resource type regex.
-        String resourceType = resource.getResourceType();
-        if (StringUtils.isBlank(cfg.getHeadlibResourceTypeRegex())
-            || resourceType.matches(cfg.getHeadlibResourceTypeRegex())) {
-            resourceTypes.add(resourceType);
-        }
-
-        // Iterate through the resource's children and recurse through them for resource types.
-        for (Resource child : resource.getChildren()) {
-            getResourceTypes(child, resourceTypes);
-        }
-
-        return resourceTypes;
-    }
-
-    /**
-     * Resolves the resource of a headlib.
-     * @param resolver Provides search paths used to turn relative paths to full paths and resolves the resource.
-     * @param headlibPath The path of the headlib to resolve.
-     * @return The resource of the headlib path.
-     */
-    private Resource resolveHeadLibs(ResourceResolver resolver, String headlibPath) {
-
-        // Resolve absolute headlib path.
-        if (headlibPath.startsWith("/")) {
-            return resolver.getResource(headlibPath);
-        }
-
-        // Resolve relative headlib path.
-        for (String path : resolver.getSearchPath()) {
-
-            Resource resource = resolver.getResource(path + headlibPath);
-            if (resource != null) {
-                return resource;
-            }
-        }
-
-        return null;
     }
 
     @Override

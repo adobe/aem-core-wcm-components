@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibrary;
 import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
 import com.day.cq.wcm.api.Page;
@@ -74,32 +75,9 @@ public class ClientLibraryImpl implements ClientLibrary {
     @Override
     public String getInlineLimited() {
 
-        Set<String> resourceTypes = getResourceTypes(currentPage.getContentResource(), new HashSet<>());
+        Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
+            aggregatorService.getResourceTypeRegex(), new HashSet<>());
 
         return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
-    }
-
-    /**
-     * Retrieves the resource types of the given resource and all of its child resources.
-     * @param resource The resource to start retrieving resources types from.
-     * @param resourceTypes String set to append resource type values to.
-     * @return String set of resource type values found.
-     */
-    private Set<String> getResourceTypes(Resource resource, Set<String> resourceTypes) {
-
-        if (resource == null) {
-            return resourceTypes;
-        }
-
-        String resourceType = resource.getResourceType();
-        if (aggregatorService.isValidResourceType(resourceType)) {
-            resourceTypes.add(resourceType);
-        }
-
-        for (Resource child : resource.getChildren()) {
-            getResourceTypes(child, resourceTypes);
-        }
-
-        return resourceTypes;
     }
 }
