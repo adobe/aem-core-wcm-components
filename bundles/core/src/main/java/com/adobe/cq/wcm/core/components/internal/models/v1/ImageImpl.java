@@ -334,7 +334,7 @@ public class ImageImpl implements Image {
         return this.isDecorative;
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("squid:CallToDeprecatedMethod")
     protected void buildJson() {
         JsonArrayBuilder smartSizesJsonBuilder = Json.createArrayBuilder();
         for (int size : smartSizes) {
