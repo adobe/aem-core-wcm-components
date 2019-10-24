@@ -49,6 +49,8 @@ import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.tagging.TagConstants;
 
+import static com.day.cq.dam.api.DamConstants.NT_DAM_ASSET;
+
 @Model(
         adaptables = SlingHttpServletRequest.class,
         adapters = {
@@ -127,7 +129,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
 
         Map<String, String> queryParameterMap = new HashMap<>();
         queryParameterMap.put("path", parentPath);
-        queryParameterMap.put("type", "dam:Asset");
+        queryParameterMap.put("type", NT_DAM_ASSET);
         queryParameterMap.put("p.limit", Integer.toString(maxItems));
         queryParameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/data/cq:model");
         queryParameterMap.put("1_property.value", modelPath);

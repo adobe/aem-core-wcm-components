@@ -46,6 +46,8 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.SearchResult;
 
+import static com.day.cq.wcm.api.NameConstants.NT_TEMPLATE;
+
 /**
  * Datasource that returns all content fragment models, where the title is the title of the content fragment and the
  * value is the path to the fragment.
@@ -83,7 +85,7 @@ public class ModelDataSourceServlet extends AbstractDataSourceServlet {
             Map<String, String> parameterMap = new HashMap<>();
 
             parameterMap.put("path", "/conf");
-            parameterMap.put("type", "cq:Template");
+            parameterMap.put("type", NT_TEMPLATE);
             parameterMap.put("p.limit", "-1");
             parameterMap.put("1_property", JcrConstants.JCR_CONTENT + "/model/" + ResourceResolver.PROPERTY_RESOURCE_TYPE);
             parameterMap.put("1_property.value", "wcm/scaffolding/components/scaffolding");
