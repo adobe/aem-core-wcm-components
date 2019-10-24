@@ -282,6 +282,7 @@ public class DownloadImpl implements Download {
         return extension;
     }
 
+    @SuppressWarnings("squid:S00112")
     private long getFileSize(Resource resource) {
         long size = 0;
         Node node = resource.adaptTo(Node.class);

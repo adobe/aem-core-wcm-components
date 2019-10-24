@@ -28,6 +28,7 @@ public class Utils {
      * @param field     name of the private field
      * @param value     value of the private field
      */
+    @SuppressWarnings("squid:S00112")
     public static void setInternalState(Object target, String field, Object value) {
         Class<?> c = target.getClass();
         try {
@@ -38,7 +39,6 @@ public class Utils {
             throw new RuntimeException("Unable to set internal state on a private field. Please report to mockito mailing list.", e);
         }
     }
-
     private static Field getFieldFromHierarchy(Class<?> clazz, String field) {
         Field f = getField(clazz, field);
         while (f == null && clazz != Object.class) {
@@ -46,7 +46,7 @@ public class Utils {
             f = getField(clazz, field);
         }
         if (f == null) {
-            throw new RuntimeException(
+            throw new IllegalArgumentException(
                     "You want me to get this field: '" + field +
                             "' on this class: '" + clazz.getSimpleName() +
                             "' but this field is not declared withing hierarchy of this class!");

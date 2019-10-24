@@ -35,7 +35,7 @@ import static org.junit.Assert.fail;
 public class AbstractModelTest {
 
     @SuppressWarnings("squid:S1181")
-    public void testDefaultBehaviour(String[] packages) throws Exception {
+    public void testDefaultBehaviour(String[] packages) throws IllegalAccessException {
         List<Class> models = new ArrayList<>();
         for (String p : packages) {
             models.addAll(getClasses(p));
