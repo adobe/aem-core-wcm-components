@@ -53,6 +53,7 @@ public class RedirectItemImpl implements NavigationItem {
 
     @Override
     @Nullable
+    @Deprecated
     public Page getPage() {
         return page;
     }

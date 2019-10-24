@@ -317,6 +317,7 @@ public class ImageImpl implements Image {
 
     @Override
     @JsonIgnore
+    @Deprecated
     public String getJson() {
         return json;
     }
@@ -333,6 +334,7 @@ public class ImageImpl implements Image {
         return this.isDecorative;
     }
 
+    @SuppressWarnings("deprecation")
     protected void buildJson() {
         JsonArrayBuilder smartSizesJsonBuilder = Json.createArrayBuilder();
         for (int size : smartSizes) {

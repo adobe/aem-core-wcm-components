@@ -19,6 +19,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -32,10 +33,10 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/tabs/v1/tabs";
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String activeItem;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String accessibilityLabel;
 
     private String activeItemName;

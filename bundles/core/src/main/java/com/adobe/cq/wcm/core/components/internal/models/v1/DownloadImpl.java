@@ -93,15 +93,15 @@ public class DownloadImpl implements Download {
 
     private boolean displayFilename;
 
-    @ValueMapValue(optional = true,
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
                    name = JcrConstants.JCR_TITLE)
     private String title;
 
-    @ValueMapValue(optional = true,
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
                    name = JcrConstants.JCR_DESCRIPTION)
     private String description;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String actionText;
 
     private String titleType;
