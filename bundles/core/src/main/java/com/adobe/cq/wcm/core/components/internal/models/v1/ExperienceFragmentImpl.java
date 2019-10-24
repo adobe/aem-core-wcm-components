@@ -180,7 +180,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 }
             }
         } catch (WCMException e) {
-            LOGGER.debug("Unable to get the blueprint: {}", e.getMessage());
         }
         return null;
     }
@@ -204,7 +203,6 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 }
             }
         } catch (WCMException e) {
-            LOGGER.debug("Unable to get the live copy: {}", e.getMessage());
         }
         return null;
     }
