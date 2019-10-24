@@ -58,7 +58,7 @@ public class Utils {
     @NotNull
     public static String getURL(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
         String vanityURL = page.getVanityUrl();
-        return StringUtils.isEmpty(vanityURL) ? ( request.getContextPath() + page.getPath() + ".html" ): (request.getContextPath() + vanityURL);
+        return StringUtils.isEmpty(vanityURL) ? (request.getContextPath() + page.getPath() + ".html"): (request.getContextPath() + vanityURL);
     }
 
     public enum Heading {

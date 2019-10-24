@@ -218,7 +218,7 @@ public class ImageImpl implements Image {
                         selector + DOT + jpegQuality + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
                         (lastModifiedDate > 0 ? ("/" + lastModifiedDate +
-                        (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "") + DOT + extension ): "");
+                        (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "") + DOT + extension): "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -233,7 +233,7 @@ public class ImageImpl implements Image {
                 src += extension;
             }
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? ("/" + lastModifiedDate +
-                (StringUtils.isNotBlank(imageName) ? ("/" + imageName ): "") + DOT + extension) : "");
+                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension) : "");
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
