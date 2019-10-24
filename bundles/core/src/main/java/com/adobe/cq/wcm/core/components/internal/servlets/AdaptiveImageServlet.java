@@ -200,9 +200,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
                 String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
                 if (StringUtils.isNotEmpty(redirectLocation)) {
-                    LOGGER.info(
-                            "The last modified information present in the request ({}) is different than expected. Redirect request to " +
-                                    "correct suffix ({})", requestLastModifiedSuffix, redirectLocation);
                     response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
                     response.setHeader("Location", redirectLocation);
                     return;
