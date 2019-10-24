@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.Servlet;
