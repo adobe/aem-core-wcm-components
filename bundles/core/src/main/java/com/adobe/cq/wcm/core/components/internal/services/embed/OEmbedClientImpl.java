@@ -75,7 +75,7 @@ public class OEmbedClientImpl implements OEmbedClient {
         try {
             jaxbContext = JAXBContext.newInstance(OEmbedXMLResponseImpl.class);
         } catch (JAXBException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("Failed to retrieve JAXBContext", e);
         }
     }
 
@@ -101,7 +101,7 @@ public class OEmbedClientImpl implements OEmbedClient {
                 String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
                 return mapper.readValue(getData(jsonURL), OEmbedJSONResponseImpl.class);
             } catch (IOException ioex) {
-                LOGGER.error(ioex.getMessage(), ioex);
+                LOGGER.error("Failed to read JSON response", ioex);
             }
         } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
@@ -109,7 +109,7 @@ public class OEmbedClientImpl implements OEmbedClient {
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 return (OEmbedResponse) jaxbUnmarshaller.unmarshal(getData(xmlURL));
             } catch (JAXBException | IOException e) {
-                LOGGER.error(e.getMessage());
+                LOGGER.error("Failed to read JSON response", e);
             }
         }
         return null;
