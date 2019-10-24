@@ -31,8 +31,10 @@ import org.reflections.scanners.SubTypesScanner;
 
 import static org.junit.Assert.fail;
 
+
 public class AbstractModelTest {
 
+    @SuppressWarnings("squid:S1181")
     public void testDefaultBehaviour(String[] packages) throws Exception {
         List<Class> models = new ArrayList<>();
         for (String p : packages) {
