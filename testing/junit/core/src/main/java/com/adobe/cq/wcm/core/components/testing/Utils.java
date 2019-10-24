@@ -34,7 +34,7 @@ public class Utils {
             Field f = getFieldFromHierarchy(c, field);
             f.setAccessible(true);
             f.set(target, value);
-        } catch (Exception e) {
+        } catch (IllegalAccessException|RuntimeException e) {
             throw new RuntimeException("Unable to set internal state on a private field. Please report to mockito mailing list.", e);
         }
     }
