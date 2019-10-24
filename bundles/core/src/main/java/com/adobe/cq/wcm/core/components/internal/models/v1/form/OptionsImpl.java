@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import javax.inject.Named;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -197,7 +199,7 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
             } else {
                 LOGGER.error("Failed to include the datasource at " + datasourceRT);
             }
-        } catch (Exception e) {
+        } catch (IOException | ServletException|RuntimeException e) {
             LOGGER.error("Failed to include the datasource at " + datasourceRT, e);
         }
 

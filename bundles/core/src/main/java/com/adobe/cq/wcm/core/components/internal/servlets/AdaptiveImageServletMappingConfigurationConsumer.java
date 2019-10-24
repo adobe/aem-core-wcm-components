@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -28,6 +29,7 @@ import org.apache.sling.commons.mime.MimeTypeService;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -96,7 +98,7 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
                     );
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException| InvalidSyntaxException|RuntimeException e) {
             LOG.error("Unable to retrieve previous configuration for the " + AdaptiveImageServlet.class.getName() + " component. " +
                     "The configuration, if it still exists, will not be reused to configure the defaultResizeWidth property of the " +
                     "servlet's registrations managed by this component.", e);

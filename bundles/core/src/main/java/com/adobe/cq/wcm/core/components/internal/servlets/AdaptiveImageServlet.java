@@ -488,7 +488,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 int x2 = Integer.parseInt(coords[2]);
                 int y2 = Integer.parseInt(coords[3]);
                 return new Rectangle(x1, y1, x2 - x1, y2 - y1);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 LOGGER.warn(String.format("Invalid cropping rectangle %s.", csv), e);
             }
         }
