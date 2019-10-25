@@ -159,7 +159,8 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
             }
         }
 
-        try (ResourceResolver resourceResolver = getServiceResourceResolver()) {
+        try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(
+            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE))) {
 
             // Iterate through each resource type and retrieve its clientlib categories.
             for (String resourceType : resourceTypes) {
@@ -196,19 +197,6 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
     @Override
     public String getResourceTypeRegex() {
         return cfg.getResourceTypeRegex();
-    }
-
-    /**
-     * Obtains a service resource resolver.
-     * @return {@link ResourceResolver} instance
-     * @throws LoginException if it cannot get the resource resolver object.
-     */
-    private ResourceResolver getServiceResourceResolver() throws LoginException {
-
-        Map<String, Object> param = new HashMap<>();
-        param.put(ResourceResolverFactory.SUBSERVICE, "component-clientlib-service");
-
-        return resolverFactory.getServiceResourceResolver(param);
     }
 
     @ObjectClassDefinition(name = "Client Library Aggregator Service")

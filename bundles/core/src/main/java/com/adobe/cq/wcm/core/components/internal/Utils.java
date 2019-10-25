@@ -17,16 +17,21 @@ package com.adobe.cq.wcm.core.components.internal;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.jetbrains.annotations.NotNull;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class Utils {
+
+    public static final String CLIENTLIB_SUBSERVICE = "component-clientlib-service";
 
     private Utils() {
     }

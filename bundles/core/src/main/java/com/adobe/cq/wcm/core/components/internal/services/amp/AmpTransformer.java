@@ -80,11 +80,15 @@ public class AmpTransformer implements Transformer {
 
     private AmpTransformerFactory.Cfg cfg;
 
+    private StringBuffer contentBuffer;
+
     private ContentHandler contentHandler;
 
     private boolean isAmpMode;
 
     private boolean isAmpSelector;
+
+    private boolean isHead;
 
     private boolean jsAppended;
 
@@ -107,17 +111,26 @@ public class AmpTransformer implements Transformer {
 
         ampMode = AmpUtil.getAmpMode(slingRequest);
 
+        contentBuffer = new StringBuffer();
+
         isAmpMode = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
 
         isAmpSelector = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
 
         if (isAmpMode) {
             jsContent = getJsContent(processingContext.getRequest());
+            if (StringUtils.isBlank(jsContent)) {
+                jsAppended = true;
+            }
         }
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+
+        if (localName.equals("head")) {
+            isHead = true;
+        }
 
         // Append AMP sibling page link element.
         if (isAmpMode) {
@@ -143,14 +156,15 @@ public class AmpTransformer implements Transformer {
     public void characters(char[] ch, int start, int length) throws SAXException {
 
         // Append the aggregated js to the head.
-        if (!jsAppended && isAmpMode && isAmpSelector) {
-            String content = new String(ch);
-            if (content.contains(HEAD_TAG)) {
-                content = content.replaceFirst(HEAD_TAG, HEAD_TAG + jsContent);
+        if (!jsAppended && isHead && isAmpMode && isAmpSelector) {
+            contentBuffer.append(new String(ch));
+            if (contentBuffer.indexOf(HEAD_TAG) > -1) {
                 jsAppended = true;
+                String content = contentBuffer.toString().replaceFirst(HEAD_TAG, HEAD_TAG + jsContent);
                 contentHandler.characters(content.toCharArray(), 0, content.length());
                 return;
             }
+            return;
         }
 
         contentHandler.characters(ch, start, length);
