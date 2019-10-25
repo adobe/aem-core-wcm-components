@@ -15,12 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.rewriter.Transformer;
 import org.apache.sling.rewriter.TransformerFactory;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ConfigurationPolicy;
-import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.*;
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
@@ -38,6 +36,8 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 )
 public class AmpTransformerFactory implements TransformerFactory {
 
+    private ResourceResolverFactory resolverFactory;
+
     private AmpTransformerFactory.Cfg cfg;
 
     /**
@@ -52,7 +52,12 @@ public class AmpTransformerFactory implements TransformerFactory {
 
     @Override
     public Transformer createTransformer() {
-        return new AmpTransformer(cfg);
+        return new AmpTransformer(cfg, resolverFactory);
+    }
+
+    @Reference
+    public void setResolverFactory(ResourceResolverFactory resolverFactory) {
+        this.resolverFactory = resolverFactory;
     }
 
     @ObjectClassDefinition(name = "AMP Transformer Factory")

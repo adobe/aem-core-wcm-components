@@ -27,7 +27,10 @@ import com.day.crx.JcrConstants;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.rewriter.ProcessingComponentConfiguration;
 import org.apache.sling.rewriter.ProcessingContext;
 import org.apache.sling.rewriter.Transformer;
@@ -42,9 +45,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Adds AMP specific elements to the page head based on the request's selectors and the configured AMP mode.
@@ -54,6 +55,10 @@ public class AmpTransformer implements Transformer {
     private static final Logger LOG = LoggerFactory.getLogger(AmpTransformer.class);
 
     private static final String AMP_REL = "amphtml";
+
+    private static final String CLIENTLIB_SUBSERVICE = "component-clientlib-service";
+
+    private static final String HEAD_TAG = "<head>\n";
 
     private static final String HREF_ATTR = "href";
 
@@ -67,22 +72,31 @@ public class AmpTransformer implements Transformer {
 
     private static final String REL_ATTR = "rel";
 
+    private static final String SCRIPT_TAG_REGEX = "(?=<script)";
+
+    private static final String SCRIPT_TAG_CLOSE = "</script>";
+
     private String ampMode;
 
     private AmpTransformerFactory.Cfg cfg;
 
     private ContentHandler contentHandler;
 
-    private boolean isAmp;
+    private boolean isAmpMode;
+
+    private boolean isAmpSelector;
 
     private boolean jsAppended;
 
     private String jsContent;
 
+    private ResourceResolverFactory resolverFactory;
+
     private SlingHttpServletRequest slingRequest;
 
-    AmpTransformer(AmpTransformerFactory.Cfg cfg) {
+    AmpTransformer(AmpTransformerFactory.Cfg cfg, ResourceResolverFactory resolverFactory) {
         this.cfg = cfg;
+        this.resolverFactory = resolverFactory;
     }
 
     @Override
@@ -93,9 +107,11 @@ public class AmpTransformer implements Transformer {
 
         ampMode = AmpUtil.getAmpMode(slingRequest);
 
-        isAmp = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
+        isAmpMode = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
 
-        if (isAmp) {
+        isAmpSelector = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
+
+        if (isAmpMode) {
             jsContent = getJsContent(processingContext.getRequest());
         }
     }
@@ -104,7 +120,7 @@ public class AmpTransformer implements Transformer {
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 
         // Append AMP sibling page link element.
-        if (isAmp) {
+        if (isAmpMode) {
 
             PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
             if (pageManager != null) {
@@ -127,9 +143,14 @@ public class AmpTransformer implements Transformer {
     public void characters(char[] ch, int start, int length) throws SAXException {
 
         // Append the aggregated js to the head.
-        if (isAmp && !jsAppended) {
-            contentHandler.characters(jsContent.toCharArray(), 0, jsContent.length());
-            jsAppended = true;
+        if (!jsAppended && isAmpMode && isAmpSelector) {
+            String content = new String(ch);
+            if (content.contains(HEAD_TAG)) {
+                content = content.replaceFirst(HEAD_TAG, HEAD_TAG + jsContent);
+                jsAppended = true;
+                contentHandler.characters(content.toCharArray(), 0, content.length());
+                return;
+            }
         }
 
         contentHandler.characters(ch, start, length);
@@ -143,8 +164,6 @@ public class AmpTransformer implements Transformer {
     private AttributesImpl getLinkAttributes(String pagePath) {
 
         AttributesImpl attributes = new AttributesImpl();
-
-        boolean isAmpSelector = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
 
         // Set the link element attributes based on the AMP mode and presence of the 'amp' request selector.
         if (ampMode.equals(PAIRED_AMP)) {
@@ -183,31 +202,56 @@ public class AmpTransformer implements Transformer {
         Set<String> resourceTypes =
             Utils.getResourceTypes(request.getResource(), cfg.getHeadlibResourceTypeRegex(), new HashSet<>());
 
-        // Iterate through each resource type and read its AMP headlib.
-        for (String resourceType : resourceTypes) {
+        try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(
+            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, CLIENTLIB_SUBSERVICE))) {
 
-            // Resolve the resource type's AMP headlib.
-            Resource headLibResource;
-            String headLibPath = resourceType + "/" + cfg.getHeadlibName() + "/" + JcrConstants.JCR_CONTENT;
-            headLibResource = Utils.resolveResource(request.getResourceResolver(), headLibPath);
-            if (headLibResource == null) {
-                LOG.trace("No custom headlib for resource type {}.", resourceType);
-                continue;
-            }
+            // Iterate through each resource type and read its AMP headlib.
+            for (String resourceType : resourceTypes) {
 
-            // Read the input stream from the resource type's AMP headlib.
-            InputStream is = headLibResource.adaptTo(InputStream.class);
-            if (is == null) {
-                LOG.debug("Failed to read input stream from {}.", headLibPath);
-                continue;
-            }
+                // Resolve the resource type's AMP headlib.
+                Resource headLibResource;
+                String headLibPath = resourceType + "/" + cfg.getHeadlibName() + "/" + JcrConstants.JCR_CONTENT;
+                headLibResource = Utils.resolveResource(resourceResolver, headLibPath);
+                if (headLibResource == null) {
+                    LOG.trace("No custom headlib for resource type {}.", resourceType);
+                    continue;
+                }
 
-            // Read the headlib input stream and append its data to the output.
-            try {
-                output.append(IOUtils.toString(is, StandardCharsets.UTF_8));
-            } catch (IOException e) {
-                LOG.error("Failed to read headlib content.", e);
+                // Read the input stream from the resource type's AMP headlib.
+                InputStream is = headLibResource.adaptTo(InputStream.class);
+                if (is == null) {
+                    LOG.debug("Failed to read input stream from {}.", headLibPath);
+                    continue;
+                }
+
+                // Read the headlib input stream and append its data to the output.
+                try {
+                    output.append(IOUtils.toString(is, StandardCharsets.UTF_8));
+                } catch (IOException e) {
+                    LOG.error("Failed to read headlib content.", e);
+                }
             }
+        } catch (LoginException e) {
+            LOG.error("Unable to get the service resource resolver.");
+        }
+
+        return formatJsOutput(output.toString());
+    }
+
+    private String formatJsOutput(String jsContent) {
+
+        Set<String> scriptTags = new HashSet<>();
+        for (String scriptTag : jsContent.split(SCRIPT_TAG_REGEX)) {
+            int endIndex = scriptTag.indexOf(SCRIPT_TAG_CLOSE);
+            if (endIndex > -1) {
+                scriptTags.add(scriptTag.substring(0, endIndex + SCRIPT_TAG_CLOSE.length()));
+            }
+        }
+
+        StringBuilder output = new StringBuilder();
+        for (String scriptTag : scriptTags) {
+            output.append(scriptTag);
+            output.append("\n");
         }
 
         return output.toString();
