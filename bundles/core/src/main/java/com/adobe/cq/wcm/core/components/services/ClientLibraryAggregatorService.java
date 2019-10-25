@@ -30,5 +30,5 @@ public interface ClientLibraryAggregatorService {
     String getClientLibOutput(String categoryCsv, String type, Set<String> resourceTypes, String primaryPath,
                               String fallbackPath);
 
-    boolean isValidResourceType(String resourceType);
+    String getResourceTypeRegex();
 }

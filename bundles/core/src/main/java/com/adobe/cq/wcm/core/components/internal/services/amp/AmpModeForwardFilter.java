@@ -145,7 +145,7 @@ public class AmpModeForwardFilter implements Filter {
     /**
      * @see Filter#init(FilterConfig)
      */
-    public void init(final FilterConfig config) throws ServletException {}
+    public void init(final FilterConfig config) {}
 
     /**
      * @see Filter#destroy()

@@ -424,7 +424,8 @@
                     jcr:title="Core Components Examples - Page"
                     sling:resourceType="wcm/core/components/policy/policy"
                     appResourcesClientlib="cmp-examples.site"
-                    clientlibs="cmp-examples.base">
+                    clientlibs="cmp-examples.base"
+                    ampMode="pairedAmp">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_212634895490169>
             </page>

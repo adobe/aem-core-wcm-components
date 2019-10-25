@@ -17,14 +17,76 @@ package com.adobe.cq.wcm.core.components.internal;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.jetbrains.annotations.NotNull;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
+import java.util.Collections;
+import java.util.Set;
+
 public class Utils {
 
+    public static final String CLIENTLIB_SUBSERVICE = "component-clientlib-service";
+
     private Utils() {
+    }
+
+    /**
+     * Resolves the resource at the given path. Supports relative and absolute paths.
+     * @param resolver Provides search paths used to turn relative paths to full paths and resolves the resource.
+     * @param path The path of the resource to resolve.
+     * @return The resource of the given path.
+     */
+    public static Resource resolveResource(ResourceResolver resolver, String path) {
+
+        // Resolve absolute resource path.
+        if (path.startsWith("/")) {
+            return resolver.getResource(path);
+        }
+
+        // Resolve relative resource path.
+        for (String searchPath : resolver.getSearchPath()) {
+
+            Resource resource = resolver.getResource(searchPath + path);
+            if (resource != null) {
+                return resource;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves the resource types of the given resource and all of its child resources.
+     * @param resource The resource to start retrieving resources types from.
+     * @param resourceTypeRegex Regex used to filter the resource types collected. Gets all resource types if empty.
+     * @param resourceTypes String set to append resource type values to.
+     * @return String set of resource type values found.
+     */
+    public static Set<String> getResourceTypes(Resource resource, String resourceTypeRegex, Set<String> resourceTypes) {
+
+        if (resource == null) {
+            return resourceTypes;
+        }
+
+        // Add resource type to return set if allowed by the resource type regex.
+        String resourceType = resource.getResourceType();
+        if (StringUtils.isBlank(resourceTypeRegex)
+            || resourceType.matches(resourceTypeRegex)) {
+            resourceTypes.add(resourceType);
+        }
+
+        // Iterate through the resource's children and recurse through them for resource types.
+        for (Resource child : resource.getChildren()) {
+            getResourceTypes(child, resourceTypeRegex, resourceTypes);
+        }
+
+        return resourceTypes;
     }
 
     /**

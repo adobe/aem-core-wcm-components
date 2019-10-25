@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibrary;
@@ -158,7 +159,8 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
             }
         }
 
-        try (ResourceResolver resourceResolver = getServiceResourceResolver()) {
+        try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(
+            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE))) {
 
             // Iterate through each resource type and retrieve its clientlib categories.
             for (String resourceType : resourceTypes) {
@@ -166,11 +168,11 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
                 // Resolve the resource type's clientlib.
                 Resource clientlib = null;
                 if (!primaryPathBlank) {
-                    clientlib = resolveClientlib(resourceResolver, resourceType + "/" + primaryPath);
+                    clientlib = Utils.resolveResource(resourceResolver, resourceType + "/" + primaryPath);
                 }
                 if (clientlib == null) {
                     if (!fallbackPathBlank) {
-                        clientlib = resolveClientlib(resourceResolver, resourceType + "/" + fallbackPath);
+                        clientlib = Utils.resolveResource(resourceResolver, resourceType + "/" + fallbackPath);
                         if (clientlib == null) {
                             continue;
                         }
@@ -192,52 +194,9 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
         return getClientLibOutput(StringUtils.join(categories, ","), type);
     }
 
-    /**
-     * Resolves the resource of a relative clientlib.
-     * @param resolver Provides search paths used to turn relative paths to full paths and resolves the resource.
-     * @param clientlibPath The path of the clientlib to resolve.
-     * @return The resource of the resource type path.
-     */
-    private Resource resolveClientlib(ResourceResolver resolver, String clientlibPath) {
-
-        // Resolve absolute client lib path.
-        if (clientlibPath.startsWith("/")) {
-            return resolver.getResource(clientlibPath);
-        }
-
-        // Resolve relative client lib path.
-        for (String path : resolver.getSearchPath()) {
-
-            Resource resource = resolver.getResource(path + clientlibPath);
-            if (resource != null) {
-                return resource;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Obtains a service resource resolver.
-     * @return {@link ResourceResolver} instance
-     * @throws LoginException if it cannot get the resource resolver object.
-     */
-    private ResourceResolver getServiceResourceResolver() throws LoginException {
-
-        Map<String, Object> param = new HashMap<>();
-        param.put(ResourceResolverFactory.SUBSERVICE, "component-clientlib-service");
-
-        return resolverFactory.getServiceResourceResolver(param);
-    }
-
-    /**
-     * Checks if the given resource type path is allowed by the services configured resource type regex.
-     * @param resourceType The resource type path to check.
-     * @return If the given resource type is valid.
-     */
     @Override
-    public boolean isValidResourceType(String resourceType) {
-        return StringUtils.isBlank(cfg.getResourceTypeRegex()) || resourceType.matches(cfg.getResourceTypeRegex());
+    public String getResourceTypeRegex() {
+        return cfg.getResourceTypeRegex();
     }
 
     @ObjectClassDefinition(name = "Client Library Aggregator Service")
