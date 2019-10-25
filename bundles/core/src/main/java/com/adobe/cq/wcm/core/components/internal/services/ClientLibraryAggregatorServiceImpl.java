@@ -159,7 +159,7 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
             }
         }
 
-        try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(
+        try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(
             Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE))) {
 
             // Iterate through each resource type and retrieve its clientlib categories.
@@ -168,11 +168,11 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
                 // Resolve the resource type's clientlib.
                 Resource clientlib = null;
                 if (!primaryPathBlank) {
-                    clientlib = Utils.resolveResource(resourceResolver, resourceType + "/" + primaryPath);
+                    clientlib = Utils.resolveResource(resolver, resourceType + "/" + primaryPath);
                 }
                 if (clientlib == null) {
                     if (!fallbackPathBlank) {
-                        clientlib = Utils.resolveResource(resourceResolver, resourceType + "/" + fallbackPath);
+                        clientlib = Utils.resolveResource(resolver, resourceType + "/" + fallbackPath);
                         if (clientlib == null) {
                             continue;
                         }

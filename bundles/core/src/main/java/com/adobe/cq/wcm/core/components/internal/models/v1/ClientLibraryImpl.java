@@ -15,6 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static com.adobe.cq.wcm.core.components.internal.Utils.CLIENTLIB_SUBSERVICE;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,12 +28,19 @@ import com.adobe.cq.wcm.core.components.models.ClientLibrary;
 import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
 import com.day.cq.wcm.api.Page;
 
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.foundation.AllowedComponentList;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @since com.adobe.cq.wcm.core.components.models 12.11.0
@@ -40,8 +50,13 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
     defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class ClientLibraryImpl implements ClientLibrary {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ClientLibraryImpl.class);
+
     @OSGiService
     private ClientLibraryAggregatorService aggregatorService;
+
+    @OSGiService
+    private ResourceResolverFactory resolverFactory;
 
     @Inject
     private String categories;
@@ -77,6 +92,14 @@ public class ClientLibraryImpl implements ClientLibrary {
 
         Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
             aggregatorService.getResourceTypeRegex(), new HashSet<>());
+
+        try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(
+            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, CLIENTLIB_SUBSERVICE))) {
+            Utils.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
+                resourceTypes);
+        } catch (LoginException e) {
+            LOG.error("Unable to get the service resource resolver.");
+        }
 
         return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
     }

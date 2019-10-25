@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.foundation.AllowedComponentList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.LoginException;
@@ -59,6 +61,23 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static Set<String> getTemplateResourceTypes(Page page, String resourceTypeRegex, ResourceResolver resolver,
+                                                       Set<String> resourceTypes) {
+        if (page.getTemplate() == null) {
+            return resourceTypes;
+        }
+
+        String templatePath = page.getTemplate().getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
+
+        Resource templateResource = resolver.getResource(templatePath);
+
+        if (templateResource != null) {
+            getResourceTypes(templateResource,resourceTypeRegex, resourceTypes);
+        }
+
+        return resourceTypes;
     }
 
     /**

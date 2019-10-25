@@ -40,12 +40,14 @@ import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Adds AMP specific elements to the page head based on the request's selectors and the configured AMP mode.
@@ -58,41 +60,29 @@ public class AmpTransformer implements Transformer {
 
     private static final String CLIENTLIB_SUBSERVICE = "component-clientlib-service";
 
-    private static final String HEAD_TAG = "<head>\n";
-
-    private static final String HREF_ATTR = "href";
-
     private static final String HTML = "html";
 
     private static final String HTML_REL = "canonical";
 
-    private static final String LINK_ELEMENT = "link";
-
     private static final String PAIRED_AMP = "pairedAmp";
-
-    private static final String REL_ATTR = "rel";
 
     private static final String SCRIPT_TAG_REGEX = "(?=<script)";
 
     private static final String SCRIPT_TAG_CLOSE = "</script>";
 
+    private static final String LINK_ELEMENT = "<link rel=\"%s\" href=\"%s\">";
+
     private String ampMode;
+
+    private boolean appendAmp;
 
     private AmpTransformerFactory.Cfg cfg;
 
-    private StringBuffer contentBuffer;
-
     private ContentHandler contentHandler;
-
-    private boolean isAmpMode;
 
     private boolean isAmpSelector;
 
-    private boolean isHead;
-
-    private boolean jsAppended;
-
-    private String jsContent;
+    private Page page;
 
     private ResourceResolverFactory resolverFactory;
 
@@ -111,99 +101,72 @@ public class AmpTransformer implements Transformer {
 
         ampMode = AmpUtil.getAmpMode(slingRequest);
 
-        contentBuffer = new StringBuffer();
-
-        isAmpMode = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
-
         isAmpSelector = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
 
-        if (isAmpMode) {
-            jsContent = getJsContent(processingContext.getRequest());
-            if (StringUtils.isBlank(jsContent)) {
-                jsAppended = true;
-            }
+        appendAmp = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
+
+        PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
+        if (pageManager == null) {
+            LOG.error("Failed to resolve page manager while initializing AMP transformer.");
+            return;
+        }
+
+        page = pageManager.getContainingPage(slingRequest.getResource());
+        if (page == null) {
+            LOG.error("Failed to resolve page while initializing AMP transformer");
         }
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 
-        if (localName.equals("head")) {
-            isHead = true;
-        }
-
-        // Append AMP sibling page link element.
-        if (isAmpMode) {
-
-            PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
-            if (pageManager != null) {
-
-                Page page = pageManager.getContainingPage(slingRequest.getResource());
-                if (page != null) {
-
-                    AttributesImpl attributes = getLinkAttributes(page.getPath());
-                    if (attributes != null) {
-                        contentHandler.startElement("", LINK_ELEMENT, LINK_ELEMENT, attributes);
-                    }
-                }
-            }
-        }
-
         contentHandler.startElement(uri, localName, qName, atts);
-    }
 
-    @Override
-    public void characters(char[] ch, int start, int length) throws SAXException {
+        if (appendAmp && localName.equals("head")) {
 
-        // Append the aggregated js to the head.
-        if (!jsAppended && isHead && isAmpMode && isAmpSelector) {
-            contentBuffer.append(new String(ch));
-            if (contentBuffer.indexOf(HEAD_TAG) > -1) {
-                jsAppended = true;
-                String content = contentBuffer.toString().replaceFirst(HEAD_TAG, HEAD_TAG + jsContent);
-                contentHandler.characters(content.toCharArray(), 0, content.length());
-                return;
+            appendAmp = false;
+
+            String content = "\n" + getLinkContent();
+
+            if (isAmpSelector) {
+                content += "\n" + getJsContent();
             }
-            return;
-        }
 
-        contentHandler.characters(ch, start, length);
+            contentHandler.characters(content.toCharArray(), 0, content.length());
+        }
     }
 
     /**
-     * Constructs the AMP link element attributes needed for the current AMP mode and request selectors.
-     * @param pagePath The path of the requested page.
-     * @return The AMP specific link element attributes.
+     * Constructs the markup for the AMP link element needed for the current AMP mode and request selectors.
+     * @return The AMP specific link element markup.
      */
-    private AttributesImpl getLinkAttributes(String pagePath) {
+    private String getLinkContent() {
 
-        AttributesImpl attributes = new AttributesImpl();
+        String content = "";
+
+        if (page == null) {
+            return content;
+        }
 
         // Set the link element attributes based on the AMP mode and presence of the 'amp' request selector.
         if (ampMode.equals(PAIRED_AMP)) {
             if (isAmpSelector) {
-                attributes.addAttribute("", REL_ATTR, REL_ATTR, "", AMP_REL);
-                attributes.addAttribute("", HREF_ATTR, HREF_ATTR, "", pagePath + DOT + HTML);
+                content = String.format(LINK_ELEMENT, HTML_REL, page.getPath() + DOT + HTML);
             } else {
-                attributes.addAttribute("", REL_ATTR, REL_ATTR, "", HTML_REL);
-                attributes.addAttribute("", HREF_ATTR, HREF_ATTR, "", pagePath + DOT + AMP_SELECTOR + DOT + HTML);
+                content = String.format(LINK_ELEMENT, AMP_REL, page.getPath() + DOT + AMP_SELECTOR + DOT + HTML);
             }
         } else if (ampMode.equals(AMP_ONLY)) {
-            attributes.addAttribute("", REL_ATTR, REL_ATTR, "", AMP_REL);
-            attributes.addAttribute("", HREF_ATTR, HREF_ATTR, "", pagePath + DOT + AMP_SELECTOR + DOT + HTML);
-        } else {
-            return null;
+            content = String.format(LINK_ELEMENT, HTML_REL, page.getPath() + DOT + AMP_SELECTOR + DOT + HTML);
         }
 
-        return attributes;
+        return content;
     }
 
     /**
      * Aggregates the AMP specific component js.
-     * @param request The request used to resolve the page and its resources.
      * @return The aggregated AMP component js.
      */
-    private String getJsContent(SlingHttpServletRequest request) {
+    private String getJsContent() {
 
         if (StringUtils.isBlank(cfg.getHeadlibName())) {
             LOG.error("Headlib name not defined. Failed to aggregate AMP component js.");
@@ -214,10 +177,14 @@ public class AmpTransformer implements Transformer {
 
         // Retrieve a set of the component's resource types.
         Set<String> resourceTypes =
-            Utils.getResourceTypes(request.getResource(), cfg.getHeadlibResourceTypeRegex(), new HashSet<>());
+            Utils.getResourceTypes(slingRequest.getResource(), cfg.getHeadlibResourceTypeRegex(), new HashSet<>());
 
-        try (ResourceResolver resourceResolver = resolverFactory.getServiceResourceResolver(
+        try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(
             Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, CLIENTLIB_SUBSERVICE))) {
+
+            if (page != null) {
+                Utils.getTemplateResourceTypes(page, cfg.getHeadlibResourceTypeRegex(), resolver, resourceTypes);
+            }
 
             // Iterate through each resource type and read its AMP headlib.
             for (String resourceType : resourceTypes) {
@@ -225,7 +192,7 @@ public class AmpTransformer implements Transformer {
                 // Resolve the resource type's AMP headlib.
                 Resource headLibResource;
                 String headLibPath = resourceType + "/" + cfg.getHeadlibName() + "/" + JcrConstants.JCR_CONTENT;
-                headLibResource = Utils.resolveResource(resourceResolver, headLibPath);
+                headLibResource = Utils.resolveResource(resolver, headLibPath);
                 if (headLibResource == null) {
                     LOG.trace("No custom headlib for resource type {}.", resourceType);
                     continue;
@@ -273,6 +240,11 @@ public class AmpTransformer implements Transformer {
 
     @Override
     public void dispose() { }
+
+    @Override
+    public void characters(char[] ch, int start, int length) throws SAXException {
+        contentHandler.characters(ch, start, length);
+    }
 
     @Override
     public void endDocument() throws SAXException {
