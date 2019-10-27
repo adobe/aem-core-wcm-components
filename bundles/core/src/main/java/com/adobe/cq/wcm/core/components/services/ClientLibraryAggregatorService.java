@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.services;
 
 import java.util.Set;
 
+import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -29,6 +31,8 @@ public interface ClientLibraryAggregatorService {
 
     String getClientLibOutput(String categoryCsv, String type, Set<String> resourceTypes, String primaryPath,
                               String fallbackPath);
+
+    ResourceResolver getClientlibResourceResolver() throws LoginException;
 
     String getResourceTypeRegex();
 }

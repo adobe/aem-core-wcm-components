@@ -15,9 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import static com.adobe.cq.wcm.core.components.internal.Utils.CLIENTLIB_SUBSERVICE;
-
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,13 +25,10 @@ import com.adobe.cq.wcm.core.components.models.ClientLibrary;
 import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
 import com.day.cq.wcm.api.Page;
 
-import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.foundation.AllowedComponentList;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
@@ -55,9 +49,6 @@ public class ClientLibraryImpl implements ClientLibrary {
     @OSGiService
     private ClientLibraryAggregatorService aggregatorService;
 
-    @OSGiService
-    private ResourceResolverFactory resolverFactory;
-
     @Inject
     private String categories;
 
@@ -73,13 +64,22 @@ public class ClientLibraryImpl implements ClientLibrary {
     @Inject
     private String type;
 
+    private String inline;
+
+    private String inlineLimited;
+
     /**
      * Returns the aggregated content of the specified clientlib type from the given comma delimited list of categories.
      * @return The aggregated clientlib output.
      */
     @Override
     public String getInline() {
-        return aggregatorService.getClientLibOutput(categories, type);
+
+        if (inline == null) {
+            inline = aggregatorService.getClientLibOutput(categories, type);
+        }
+
+        return inline;
     }
 
     /**
@@ -90,17 +90,22 @@ public class ClientLibraryImpl implements ClientLibrary {
     @Override
     public String getInlineLimited() {
 
-        Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
-            aggregatorService.getResourceTypeRegex(), new HashSet<>());
+        if (inlineLimited == null) {
 
-        try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(
-            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, CLIENTLIB_SUBSERVICE))) {
-            Utils.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
-                resourceTypes);
-        } catch (LoginException e) {
-            LOG.error("Unable to get the service resource resolver.");
+            Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
+                aggregatorService.getResourceTypeRegex(), new HashSet<>());
+
+            try (ResourceResolver resolver = aggregatorService.getClientlibResourceResolver()) {
+                Utils.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
+                    resourceTypes);
+            } catch (LoginException e) {
+                LOG.error("Unable to get the service resource resolver.", e);
+            }
+
+            inlineLimited =
+                aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
         }
 
-        return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
+        return inlineLimited;
     }
 }
