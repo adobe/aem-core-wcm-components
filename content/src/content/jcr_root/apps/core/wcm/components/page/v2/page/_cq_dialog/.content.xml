@@ -53,25 +53,25 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 composite="{Boolean}false"
-                                                fieldDescription="The mode in which you want AMP to be handled instead of what's defined in the page's content policy. Paired AMP will serve AMP pages when the 'amp' selector is present. No AMP will never serve AMP pages. AMP only will always serve AMP pages."
+                                                fieldDescription="The mode in which you want AMP to be handled instead of what's defined in the page's content policy. Inherit from Page Template, default, will use the mode specified in the current template's page policy. Paired AMP will serve AMP pages when the 'amp' selector is present. No AMP will never serve AMP pages. AMP only will always serve AMP pages."
                                                 fieldLabel="AMP Mode"
                                                 name="./ampMode">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <noOverride
+                                                    <inheritPageTemplate
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="No Override"
-                                                        value="noOverride"/>
+                                                        text="Inherit from Page Template"
+                                                        value="inheritPageTemplate"/>
                                                     <noAmp
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="No Amp"
+                                                        text="No AMP"
                                                         value="noAmp"/>
                                                     <pairedAmp
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="Paired Amp"
+                                                        text="Paired AMP"
                                                         value="pairedAmp"/>
                                                     <ampOnly
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="Amp Only"
+                                                        text="AMP Only"
                                                         value="ampOnly"/>
                                                 </items>
                                             </ampmode>

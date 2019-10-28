@@ -26,11 +26,15 @@ import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
 import com.day.cq.wcm.api.Page;
 
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @since com.adobe.cq.wcm.core.components.models 12.11.0
@@ -39,6 +43,8 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
     adapters = {ClientLibrary.class},
     defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class ClientLibraryImpl implements ClientLibrary {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClientLibraryImpl.class);
 
     @OSGiService
     private ClientLibraryAggregatorService aggregatorService;
@@ -58,13 +64,22 @@ public class ClientLibraryImpl implements ClientLibrary {
     @Inject
     private String type;
 
+    private String inline;
+
+    private String inlineLimited;
+
     /**
      * Returns the aggregated content of the specified clientlib type from the given comma delimited list of categories.
      * @return The aggregated clientlib output.
      */
     @Override
     public String getInline() {
-        return aggregatorService.getClientLibOutput(categories, type);
+
+        if (inline == null) {
+            inline = aggregatorService.getClientLibOutput(categories, type);
+        }
+
+        return inline;
     }
 
     /**
@@ -75,9 +90,22 @@ public class ClientLibraryImpl implements ClientLibrary {
     @Override
     public String getInlineLimited() {
 
-        Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
-            aggregatorService.getResourceTypeRegex(), new HashSet<>());
+        if (inlineLimited == null) {
 
-        return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
+            Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
+                aggregatorService.getResourceTypeRegex(), new HashSet<>());
+
+            try (ResourceResolver resolver = aggregatorService.getClientlibResourceResolver()) {
+                Utils.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
+                    resourceTypes);
+            } catch (LoginException e) {
+                LOG.error("Unable to get the service resource resolver.", e);
+            }
+
+            inlineLimited =
+                aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
+        }
+
+        return inlineLimited;
     }
 }
