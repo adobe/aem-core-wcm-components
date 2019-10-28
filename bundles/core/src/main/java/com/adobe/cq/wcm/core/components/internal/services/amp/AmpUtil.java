@@ -33,7 +33,7 @@ class AmpUtil {
 
     private static final String AMP_MODE_PROP = "ampMode";
 
-    private static final String NO_OVERRIDE = "noOverride";
+    private static final String INHERIT_PAGE_TEMPLATE = "inheritPageTemplate";
 
     static final String AMP_ONLY = "ampOnly";
 
@@ -63,7 +63,7 @@ class AmpUtil {
 
             String ampMode = page.getProperties().get(AMP_MODE_PROP, "");
 
-            if (!ampMode.isEmpty() && !ampMode.equals(NO_OVERRIDE)) {
+            if (!ampMode.isEmpty() && !ampMode.equals(INHERIT_PAGE_TEMPLATE)) {
                 return ampMode;
             }
         }

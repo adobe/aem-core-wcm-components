@@ -12,6 +12,6 @@
         transformerTypes="[amp-transformer]">
         <generator-htmlparser
             jcr:primaryType="nt:unstructured"
-            includeTags="[HEAD]"/>
+            includeTags="[HEAD,/HEAD]"/>
     </amp>
 </jcr:root>

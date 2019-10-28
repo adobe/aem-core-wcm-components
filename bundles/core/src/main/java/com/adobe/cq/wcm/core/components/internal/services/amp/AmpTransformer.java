@@ -74,7 +74,11 @@ public class AmpTransformer implements Transformer {
 
     private String ampMode;
 
-    private boolean appendAmp;
+    private boolean appendedJs;
+
+    private boolean appendedLink;
+
+    private boolean isAmp;
 
     private AmpTransformerFactory.Cfg cfg;
 
@@ -103,7 +107,7 @@ public class AmpTransformer implements Transformer {
 
         isAmpSelector = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
 
-        appendAmp = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
+        isAmp = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
 
         PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
         if (pageManager == null) {
@@ -122,18 +126,29 @@ public class AmpTransformer implements Transformer {
 
         contentHandler.startElement(uri, localName, qName, atts);
 
-        if (appendAmp && localName.equals("head")) {
+        if (isAmp && !appendedLink && localName.equals("head")) {
 
-            appendAmp = false;
+            appendedLink = true;
 
             String content = "\n" + getLinkContent();
 
-            if (isAmpSelector) {
-                content += "\n" + getJsContent();
-            }
+            contentHandler.characters(content.toCharArray(), 0, content.length());
+        }
+    }
+
+    @Override
+    public void endElement(String uri, String localName, String qName) throws SAXException {
+
+        if (isAmp && !appendedJs && isAmpSelector && localName.equals("head")) {
+
+            appendedJs = true;
+
+            String content = "\n" + getJsContent();
 
             contentHandler.characters(content.toCharArray(), 0, content.length());
         }
+
+        contentHandler.endElement(uri, localName, qName);
     }
 
     /**
@@ -156,7 +171,7 @@ public class AmpTransformer implements Transformer {
                 content = String.format(LINK_ELEMENT, AMP_REL, page.getPath() + DOT + AMP_SELECTOR + DOT + HTML);
             }
         } else if (ampMode.equals(AMP_ONLY)) {
-            content = String.format(LINK_ELEMENT, HTML_REL, page.getPath() + DOT + AMP_SELECTOR + DOT + HTML);
+            content = String.format(LINK_ELEMENT, HTML_REL, page.getPath() + DOT + HTML);
         }
 
         return content;
@@ -249,11 +264,6 @@ public class AmpTransformer implements Transformer {
     @Override
     public void endDocument() throws SAXException {
         contentHandler.endDocument();
-    }
-
-    @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
-        contentHandler.endElement(uri, localName, qName);
     }
 
     @Override

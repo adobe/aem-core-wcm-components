@@ -57,21 +57,21 @@
                                                 fieldLabel="AMP Mode"
                                                 name="./ampMode">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <noOverride
+                                                    <inheritPageTemplate
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="No Override"
-                                                        value="noOverride"/>
+                                                        text="Inherit from Page Template"
+                                                        value="inheritPageTemplate"/>
                                                     <noAmp
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="No Amp"
+                                                        text="No AMP"
                                                         value="noAmp"/>
                                                     <pairedAmp
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="Paired Amp"
+                                                        text="Paired AMP"
                                                         value="pairedAmp"/>
                                                     <ampOnly
                                                         jcr:primaryType="nt:unstructured"
-                                                        text="Amp Only"
+                                                        text="AMP Only"
                                                         value="ampOnly"/>
                                                 </items>
                                             </ampmode>
