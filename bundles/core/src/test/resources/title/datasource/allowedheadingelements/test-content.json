@@ -1,19 +1,5 @@
 
 {
-    "conf": {
-        "policy_1558011912823": {
-            "jcr:content": {
-                "jcr:primaryType": "nt:unstructured"
-            },
-            "jcr:primaryType": "nt:unstructured",
-            "jcr:title": "Title Policy",
-            "sling:resourceType": "wcm/core/components/policy/policy",
-            "type":"h1",
-            "linkDisabled": "false",
-            "defaultType": "h2",
-            "allowedTypes": "h2"
-        }
-    },
     "jcr:primaryType": "cq:Page",
     "jcr:createdBy"  : "admin",
     "jcr:created"    : "Wed Jan 13 2016 15:56:31 GMT+0100",
@@ -31,7 +17,7 @@
                 "jcr:primaryType"   : "nt:unstructured",
                 "jcr:createdBy"     : "admin",
                 "jcr:title"         : "Hello World",
-                "type"              : "h2",
+                "type"              : "h3",
                 "jcr:lastModifiedBy": "admin",
                 "jcr:created"       : "Wed Jan 13 2016 15:58:25 GMT+0100",
                 "jcr:lastModified"  : "Wed Jan 13 2016 16:14:51 GMT+0100",
