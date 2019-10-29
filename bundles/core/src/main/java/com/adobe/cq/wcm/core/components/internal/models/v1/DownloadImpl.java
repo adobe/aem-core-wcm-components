@@ -50,6 +50,8 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Download.class, ComponentExporter.class},
@@ -57,6 +59,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class DownloadImpl implements Download {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DownloadImpl.class);
 
     public final static String RESOURCE_TYPE = "core/wcm/components/download/v1/download";
 
@@ -282,7 +286,6 @@ public class DownloadImpl implements Download {
         return extension;
     }
 
-    @SuppressWarnings("squid:S00112")
     private long getFileSize(Resource resource) {
         long size = 0;
         Node node = resource.adaptTo(Node.class);
@@ -292,7 +295,7 @@ public class DownloadImpl implements Download {
                 size = data.getBinary().getSize();
             }
             catch (RepositoryException ex) {
-                throw new RuntimeException("Unable to detect binary file size for " + resource.getPath(), ex);
+                LOGGER.error("Unable to detect binary file size for " + resource.getPath(), ex);
             }
         }
         return size;

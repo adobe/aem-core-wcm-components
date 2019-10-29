@@ -162,6 +162,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
                     }
                 }
             } catch (RepositoryException e) {
+                LOG.error("Cannot determine size of binary at {}", resource.getPath(),e);
             }
         }
         return -1;
