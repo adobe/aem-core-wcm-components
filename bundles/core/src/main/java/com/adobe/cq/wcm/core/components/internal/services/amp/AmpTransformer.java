@@ -74,11 +74,7 @@ public class AmpTransformer implements Transformer {
 
     private String ampMode;
 
-    private boolean appendedJs;
-
-    private boolean appendedLink;
-
-    private boolean isAmp;
+    private boolean appendAmp;
 
     private AmpTransformerFactory.Cfg cfg;
 
@@ -107,7 +103,7 @@ public class AmpTransformer implements Transformer {
 
         isAmpSelector = Arrays.asList(slingRequest.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
 
-        isAmp = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
+        appendAmp = ampMode != null && !ampMode.isEmpty() && !ampMode.equals(NO_AMP);
 
         PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
         if (pageManager == null) {
@@ -122,28 +118,17 @@ public class AmpTransformer implements Transformer {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+    public void endElement(String uri, String localName, String qName) throws SAXException {
 
-        contentHandler.startElement(uri, localName, qName, atts);
+        if (appendAmp && localName.equals("head")) {
 
-        if (isAmp && !appendedLink && localName.equals("head")) {
-
-            appendedLink = true;
+            appendAmp = false;
 
             String content = "\n" + getLinkContent();
 
-            contentHandler.characters(content.toCharArray(), 0, content.length());
-        }
-    }
-
-    @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
-
-        if (isAmp && !appendedJs && isAmpSelector && localName.equals("head")) {
-
-            appendedJs = true;
-
-            String content = "\n" + getJsContent();
+            if (isAmpSelector) {
+                content +="\n" + getJsContent();
+            }
 
             contentHandler.characters(content.toCharArray(), 0, content.length());
         }
@@ -294,6 +279,11 @@ public class AmpTransformer implements Transformer {
     @Override
     public void skippedEntity(String name) throws SAXException {
         contentHandler.skippedEntity(name);
+    }
+
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
+        contentHandler.startElement(uri, localName, qName, atts);
     }
 
     @Override
