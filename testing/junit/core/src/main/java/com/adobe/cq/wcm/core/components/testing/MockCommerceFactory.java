@@ -50,6 +50,7 @@ public class MockCommerceFactory {
         return product;
     }
 
+    @SuppressWarnings("squid:S00112")
     public static CommerceService getCommerceService(Resource resource) {
         CommerceService commerceService = mock(CommerceService.class);
         try {

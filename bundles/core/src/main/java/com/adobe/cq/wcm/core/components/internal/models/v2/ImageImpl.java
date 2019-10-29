@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
@@ -109,8 +110,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             } 
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                 SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
-                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate +
-                (StringUtils.isNotBlank(imageName) ? "/" + imageName : "") + DOT + extension : "");
+                (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
+                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension): "");
 
             // if content policy delegate path is provided pass it to the image Uri
             String policyDelegatePath = request.getParameter(CONTENT_POLICY_DELEGATE_PATH);
@@ -141,7 +142,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
-    public List<ImageArea> getAreas() { return areas; }
+    public List<ImageArea> getAreas() { return Collections.unmodifiableList(areas); }
 
     @Override
     public String getUuid() {
