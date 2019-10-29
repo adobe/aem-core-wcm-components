@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -96,9 +97,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
 
-    private MimeTypeService mimeTypeService;
+    @SuppressFBWarnings(justification = "This field need to be transient")
+    private transient MimeTypeService mimeTypeService;
 
-    private AssetStore assetStore;
+    @SuppressFBWarnings(justification = "This field need to be transient")
+    private transient AssetStore assetStore;
 
     public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth) {
         this.mimeTypeService = mimeTypeService;
@@ -197,9 +200,6 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
             if (requestLastModifiedSuffix >= 0 && requestLastModifiedSuffix != lastModifiedEpoch) {
                 String redirectLocation = getRedirectLocation(request, lastModifiedEpoch);
                 if (StringUtils.isNotEmpty(redirectLocation)) {
-                    LOGGER.info(
-                            "The last modified information present in the request ({}) is different than expected. Redirect request to " +
-                                    "correct suffix ({})", requestLastModifiedSuffix, redirectLocation);
                     response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
                     response.setHeader("Location", redirectLocation);
                     return;
@@ -289,7 +289,11 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 if (originalWidth > renditionWidth) {
                     scaling = (double) originalWidth / renditionWidth;
                 } else {
-                    scaling = renditionWidth / originalWidth;
+                    if (originalWidth > 0 ) {
+                        scaling = renditionWidth / originalWidth;
+                    } else {
+                        scaling = 1.0;
+                    }
                 }
                 layer = new Layer(assetHandler.getImage(asset.getOriginal()));
                 if (Math.abs(scaling - 1.0D) != 0) {
@@ -481,7 +485,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
                 int x2 = Integer.parseInt(coords[2]);
                 int y2 = Integer.parseInt(coords[3]);
                 return new Rectangle(x1, y1, x2 - x1, y2 - y1);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
                 LOGGER.warn(String.format("Invalid cropping rectangle %s.", csv), e);
             }
         }

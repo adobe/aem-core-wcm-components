@@ -67,7 +67,7 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
 
 
     @Reference
-    private ExpressionResolver expressionResolver;
+    private transient ExpressionResolver expressionResolver;
 
     @NotNull
     @Override

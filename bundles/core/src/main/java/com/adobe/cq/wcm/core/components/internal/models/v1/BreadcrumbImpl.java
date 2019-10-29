@@ -78,7 +78,7 @@ public class BreadcrumbImpl implements Breadcrumb {
         if (items == null) {
             items = createItems();
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     @NotNull

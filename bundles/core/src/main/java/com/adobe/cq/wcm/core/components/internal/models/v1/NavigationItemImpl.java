@@ -39,6 +39,7 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
 
     @Override
     @JsonIgnore
+    @Deprecated
     public Page getPage() {
         return page;
     }
