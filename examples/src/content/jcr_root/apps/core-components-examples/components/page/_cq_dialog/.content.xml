@@ -35,6 +35,52 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 size="L">
                 <items jcr:primaryType="nt:unstructured">
+                    <amp
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="AMP"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <section
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="AMP Configuration"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <ampmode
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                composite="{Boolean}false"
+                                                fieldDescription="The mode in which you want AMP to be handled instead of what's defined in the page's content policy. Paired AMP will serve AMP pages when the 'amp' selector is present. No AMP will never serve AMP pages. AMP only will always serve AMP pages."
+                                                fieldLabel="AMP Mode"
+                                                name="./ampMode">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <inheritPageTemplate
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Inherit from Page Template"
+                                                        value=""/>
+                                                    <noAmp
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="No AMP"
+                                                        value="noAmp"/>
+                                                    <pairedAmp
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Paired AMP"
+                                                        value="pairedAmp"/>
+                                                    <ampOnly
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="AMP Only"
+                                                        value="ampOnly"/>
+                                                </items>
+                                            </ampmode>
+                                        </items>
+                                    </section>
+                                </items>
+                            </column>
+                        </items>
+                    </amp>
                     <socialmedia
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
