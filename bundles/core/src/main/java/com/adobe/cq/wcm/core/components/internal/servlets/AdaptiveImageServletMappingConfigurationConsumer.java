@@ -121,9 +121,8 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
      *
      * @param configurationFactory - {@link AdaptiveImageServletMappingConfigurationFactory} instance
      */
-    @SuppressWarnings("AEM Rules:AEM-15")
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, updated = "bindAdaptiveImageServletConfigurationFactory")
-    protected synchronized void bindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory, Map<String, ?> properties) {
+    protected  void bindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory, Map<String, ?> properties) {
         String servicePid = (String)properties.get(Constants.SERVICE_PID);
         applyValidConfiguration(configurationFactory, () -> {
             configs.put(servicePid, configurationFactory);
@@ -136,8 +135,7 @@ public class AdaptiveImageServletMappingConfigurationConsumer {
      *
      * @param configurationFactory - {@link AdaptiveImageServletMappingConfigurationFactory} instance
      */
-    @SuppressWarnings("AEM Rules:AEM-15")
-    protected synchronized void unbindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory, Map<String, ?> properties) {
+    protected  void unbindAdaptiveImageServletConfigurationFactory(AdaptiveImageServletMappingConfigurationFactory configurationFactory, Map<String, ?> properties) {
         String servicePid = (String)properties.get(Constants.SERVICE_PID);
         configs.remove(servicePid);
         updateServletRegistrations();

@@ -174,15 +174,13 @@ public class OEmbedClientImpl implements OEmbedClient {
         }
     }
 
-    @SuppressWarnings("AEM Rules:AEM-15")
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, updated = "bindOEmbedClientImplConfigurationFactory")
-    protected synchronized void bindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
+    protected void bindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
         String key = (String) properties.get(Constants.SERVICE_PID);
         configs.put(key, configurationFactory.getConfig());
     }
 
-    @SuppressWarnings("AEM Rules:AEM-15")
-    protected synchronized void unbindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
+    protected void unbindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
         String key = (String) properties.get(Constants.SERVICE_PID);
         configs.remove(key, configurationFactory.getConfig());
     }
