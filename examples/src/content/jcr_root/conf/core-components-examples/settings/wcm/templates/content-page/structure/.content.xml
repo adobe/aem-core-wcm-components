@@ -68,7 +68,7 @@
                     jcr:lastModified="{Date}2018-12-20T12:48:37.608Z"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/navigation/v1/navigation"
+                    sling:resourceType="core-components-examples//components/navigation"
                     collectAllPages="false"
                     navigationRoot="/content/core-components-examples/library"
                     skipNavigationRoot="true"
