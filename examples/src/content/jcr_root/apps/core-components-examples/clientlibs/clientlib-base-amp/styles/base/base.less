@@ -1,0 +1,59 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+html {
+    box-sizing: border-box;
+    font-size: @cmp-examples-base-size;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    line-height: @cmp-examples-line-height;
+
+    font-family: @cmp-examples-font-family;
+    font-size: @cmp-examples-font-size;
+    font-weight: @cmp-examples-font-weight-regular;
+    -webkit-font-smoothing: antialiased;
+
+    background-color: @cmp-examples-color-background;
+    color: @cmp-examples-color-text;
+    cursor: default;
+}
+
+p {
+    padding: 0;
+    margin: 0 0 @cmp-examples-spacing-6 0;
+}
+
+a {
+    color: @cmp-examples-color-blue-600;
+    text-decoration: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
