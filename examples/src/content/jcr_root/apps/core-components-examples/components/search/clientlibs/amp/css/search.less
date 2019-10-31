@@ -15,9 +15,16 @@
  */
 
  .cmp-search {
-    position: relative;
-    height: 2rem;
-    margin: 0 10px;
+
+    &__form {
+        position: relative;
+        height: 2rem;
+        margin: 0 10px;
+    }
+
+    &__auto-complete {
+        width: 100%;
+    }
 
     &__icon {
         display: block;
@@ -30,6 +37,7 @@
         height: 13px;
         border-radius: 13px;
         border: 2px solid #000;
+        z-index: 1;
 
         &:before {
             content: '';

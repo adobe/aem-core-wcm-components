@@ -38,6 +38,7 @@
           
         <amp-autocomplete filter="substring"
                           filter-value="title"
+                          class="cmp-search__auto-complete"
                           [src]="jsonUrl.url + typedText">
 
           <input class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
