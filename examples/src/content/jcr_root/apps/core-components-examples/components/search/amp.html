@@ -19,19 +19,35 @@
   data-cmp-is="search"
   data-cmp-min-length="${search.searchTermMinimumLength}"
   data-cmp-results-size="${search.resultsSize}">
-<form class="cmp-search__form" data-cmp-hook-search="form"
-   method="get" action="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
-   autocomplete="off">
- <div class="cmp-search__field">
-     <i class="cmp-search__icon" data-cmp-hook-search="icon"></i>
-     <span class="cmp-search__loading-indicator" data-cmp-hook-search="loadingIndicator"></span>
-     <input class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
-            role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-invalid="false">
-     <button class="cmp-search__clear" data-cmp-hook-search="clear">
-         <i class="cmp-search__clear-icon"></i>
-     </button>
- </div>
-</form>
+  <form class="cmp-search__form" data-cmp-hook-search="form"
+    method="get"
+    action="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
+    action-xhr="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
+    target="_top"
+    autocomplete="off">
+    <div class="cmp-search__field">
+        <i class="cmp-search__icon" data-cmp-hook-search="icon"></i>
+        <span class="cmp-search__loading-indicator" data-cmp-hook-search="loadingIndicator"></span>
+        <input class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
+                role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-invalid="false">
+        <button class="cmp-search__clear" data-cmp-hook-search="clear" type="submit">
+            Click to  Submit
+        </button>
+    </div>
+
+    <div submit-success>
+      <template type="amp-mustache">
+        Subscription successful!
+        {{ #items }}
+          <li><a href="{{ url }}">{{ title }}</a></li>
+        {{ /items }}
+      </template>
+    </div>
+    <div submit-error>
+      <template type="amp-mustache">
+        Subscription failed!
+      </template>
+    </div>    
+  </form>
 <div class="cmp-search__results" data-cmp-hook-search="results" role="listbox" aria-multiselectable="false"></div>
-<sly data-sly-include="itemTemplate.html"/>
 </section>
