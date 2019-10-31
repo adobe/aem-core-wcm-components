@@ -13,6 +13,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<amp-state id="jsonUrl">
+  <!-- TODO: figure out how to not hardcode this url /-->
+  <script type="application/json">
+    {
+      "url": "amp.searchresults.json/_jcr_content/root/responsivegrid/search?fulltext="
+    }
+  </script>
+</amp-state>
 
 <section class="cmp-search" role="search"
   data-sly-use.search="com.adobe.cq.wcm.core.components.models.Search"
@@ -23,18 +31,31 @@
     method="get"
     action="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
     action-xhr="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
-    target="_top"
-    autocomplete="off">
+    target="_top">
     <div class="cmp-search__field">
         <i class="cmp-search__icon" data-cmp-hook-search="icon"></i>
         <span class="cmp-search__loading-indicator" data-cmp-hook-search="loadingIndicator"></span>
-        <input class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
-               role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-invalid="false">
+          
+        <amp-autocomplete filter="substring"
+                          filter-value="title"
+                          [src]="jsonUrl.url + typedText">
+
+          <input class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
+                role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-invalid="false"
+                on="input-throttled:AMP.setState({ typedText: event.value })">
+
+          <!-- Autocomplete results container -->
+          <template type="amp-mustache" id="amp-template-custom">
+              <div class="city-item" data-value="{{title}}">
+                  <div>{{title}}</div>
+              </div>
+          </template>
+        </amp-autocomplete>
     </div>
 
     <div submit-success>
       <template type="amp-mustache">
-        Subscription successful!
+        <h3>Submit successful!</h3>
         {{ #items }}
           <li><a href="{{ url }}">{{ title }}</a></li>
         {{ /items }}
@@ -42,7 +63,7 @@
     </div>
     <div submit-error>
       <template type="amp-mustache">
-        Subscription failed!
+        <h3>Submit failed!</h3>
       </template>
     </div>    
   </form>
