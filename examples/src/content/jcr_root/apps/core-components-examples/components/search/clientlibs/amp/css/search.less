@@ -14,7 +14,44 @@
  *  limitations under the License.
  */
 
-import '/etc.clientlibs/'
-.cmp-navigation {
-    border:1px solid black;
-}
+ .cmp-search {
+    position: relative;
+    height: 2rem;
+    margin: 0 10px;
+
+    &__icon {
+        display: block;
+        position: absolute;
+        left: 12px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        width: 13px;
+        height: 13px;
+        border-radius: 13px;
+        border: 2px solid #000;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            bottom: -5px;
+            width: 2px;
+            transform: rotate(41deg);
+            height: 7px;
+            background: #000;
+        }
+    }
+
+    &__input {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-size: 14px;
+        line-height: 1.15;
+        margin: 0;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        height: 2rem;
+        width: 100%;
+    }
+ }
+
