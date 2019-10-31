@@ -14,7 +14,34 @@
  *  limitations under the License.
  */
 
-import '/etc.clientlibs/'
 .cmp-navigation {
-    border:1px solid black;
+    background: #fff;
+    margin-top: 0.25rem;
+    max-width: 15rem;
+    padding: 7.375rem 1.25rem 1.25rem;
+    width: 100%;
+
+    &__group {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__item {
+        list-style: none;
+
+        &-link {
+            border-radius: 0.25rem;
+            color: #505050;
+            display: block;
+            font-size: 0.875rem;            
+            margin-bottom: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            text-decoration: none;
+        }
+
+        &--active .cmp-navigation__item-link {
+            background-color: #f4f4f4;
+        }   
+    } 
 }

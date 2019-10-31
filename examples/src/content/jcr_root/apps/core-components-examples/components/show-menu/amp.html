@@ -17,4 +17,6 @@
 TODO: make ID configurable to point back to respective Nav component + add data-sly-test on the existence of such property value.
 TODO: Do not render the button for amp if there is no ID specified to trigger a toggle
 */-->
-<button on="tap:cmpExamplesSidebar.toggle" class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}"><i class="cmp-examples-button__icon fas fa-bars"></i></button>
+<button on="tap:cmpExamplesSidebar.toggle" class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}">
+  <i class="cmp-examples-button__icon fas fa-bars"></i>
+</button>
