@@ -176,6 +176,7 @@ public class PageImpl implements Page {
 
     @Override
     @JsonIgnore
+    @Deprecated
     public Map<String, String> getFavicons() {
         return favicons;
     }

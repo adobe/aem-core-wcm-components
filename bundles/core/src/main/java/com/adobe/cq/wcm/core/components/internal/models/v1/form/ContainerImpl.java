@@ -32,10 +32,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -87,14 +84,14 @@ public class ContainerImpl implements Container {
     @Default(values = "")
     private String id;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String actionType;
 
     @ValueMapValue(name = ResourceResolver.PROPERTY_RESOURCE_TYPE)
     @Default(values = "")
     private String dropAreaResourceType;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String redirect;
 
     private String name;
@@ -123,7 +120,7 @@ public class ContainerImpl implements Container {
             id = FormsHelper.getFormId(request);
         }
         this.name = id;
-        this.dropAreaResourceType += "/new";
+        this.dropAreaResourceType = "wcm/foundation/components/responsivegrid/new";
         if (redirect != null) {
             String contextPath = request.getContextPath();
             if (StringUtils.isNotBlank(contextPath) && redirect.startsWith("/")) {

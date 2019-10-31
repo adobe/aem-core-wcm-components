@@ -75,7 +75,7 @@ public class OEmbedClientImpl implements OEmbedClient {
         try {
             jaxbContext = JAXBContext.newInstance(OEmbedXMLResponseImpl.class);
         } catch (JAXBException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("Failed to retrieve JAXBContext", e);
         }
     }
 
@@ -101,7 +101,7 @@ public class OEmbedClientImpl implements OEmbedClient {
                 String jsonURL = buildURL(config.endpoint(), url, OEmbedResponse.Format.JSON.getValue(), null, null);
                 return mapper.readValue(getData(jsonURL), OEmbedJSONResponseImpl.class);
             } catch (IOException ioex) {
-                LOGGER.error(ioex.getMessage(), ioex);
+                LOGGER.error("Failed to read JSON response", ioex);
             }
         } else if (jaxbContext != null && OEmbedResponse.Format.XML == OEmbedResponse.Format.fromString(config.format())) {
             try {
@@ -109,7 +109,7 @@ public class OEmbedClientImpl implements OEmbedClient {
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 return (OEmbedResponse) jaxbUnmarshaller.unmarshal(getData(xmlURL));
             } catch (JAXBException | IOException e) {
-                LOGGER.error(e.getMessage());
+                LOGGER.error("Failed to read JSON response", e);
             }
         }
         return null;
@@ -140,21 +140,17 @@ public class OEmbedClientImpl implements OEmbedClient {
     }
 
     protected InputStream getData(String url) throws IOException {
-        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout)
-                .build();
-        SocketConfig sc = SocketConfig.custom().setSoTimeout(soTimeout)
-                .build();
+        RequestConfig rc = RequestConfig.custom().setConnectTimeout(connectionTimeout).setSocketTimeout(soTimeout)
+            .build();
         HttpClient httpClient;
         if (httpClientBuilderFactory != null
                 && httpClientBuilderFactory.newBuilder() != null) {
             httpClient = httpClientBuilderFactory.newBuilder()
                     .setDefaultRequestConfig(rc)
-                    .setDefaultSocketConfig(sc)
                     .build();
         } else {
             httpClient = HttpClients.custom()
                     .setDefaultRequestConfig(rc)
-                    .setDefaultSocketConfig(sc)
                     .build();
         }
         HttpResponse response = httpClient.execute(new HttpGet(url));
@@ -179,12 +175,12 @@ public class OEmbedClientImpl implements OEmbedClient {
     }
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, updated = "bindOEmbedClientImplConfigurationFactory")
-    protected synchronized void bindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
+    protected void bindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
         String key = (String) properties.get(Constants.SERVICE_PID);
         configs.put(key, configurationFactory.getConfig());
     }
 
-    protected synchronized void unbindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
+    protected void unbindOEmbedClientImplConfigurationFactory(final OEmbedClientImplConfigurationFactory configurationFactory, Map<String, ?> properties) {
         String key = (String) properties.get(Constants.SERVICE_PID);
         configs.remove(key, configurationFactory.getConfig());
     }

@@ -141,6 +141,7 @@ public class ListImpl implements List {
     }
 
     @Override
+    @Deprecated
     public Collection<Page> getItems() {
         if (listItems == null) {
             Source listType = getListType();

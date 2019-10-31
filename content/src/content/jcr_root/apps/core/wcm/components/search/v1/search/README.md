@@ -29,14 +29,14 @@ are fetched.
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./searchRoot` - the root page from which to search. Can be a blueprint master, language master or regular page.
+1. `./searchRoot` - the root page from which to search. It can be a blueprint master, language master or regular page.
 2. `./resultsSize` - the maximal number of results fetched by a search request
 3. `./searchTermMinimumLength` - the minimum required length of the search term before results are fetched
 
 ### Edit Dialog Properties
 The following properties are written to JCR for the Search component and are expected to be available as `Resource` properties:
 
-1. `./searchRoot` - the root page from which to search. Can be a blueprint master, language master or regular page.
+1. `./searchRoot` - the root page from which to search. It can be a blueprint master, language master or regular page.
 
 ## Client Libraries
 The component provides a `core.wcm.components.search.v1` client library category that contains a recommended base

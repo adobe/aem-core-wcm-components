@@ -66,13 +66,13 @@ public class TitleImpl implements Title {
     @JsonIgnore
     private Style currentStyle;
 
-    @ValueMapValue(optional = true, name = JcrConstants.JCR_TITLE)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
     private String title;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String type;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String linkURL;
 
     /**
