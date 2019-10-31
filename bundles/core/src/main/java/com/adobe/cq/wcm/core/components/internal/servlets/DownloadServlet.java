@@ -190,7 +190,7 @@ public class DownloadServlet extends SlingAllMethodsServlet {
             response.setContentLength((int) size);
         }
         if (inline) {
-            response.setHeader(CONTENT_DISPOSITION_HEADER, "inline");
+            response.setHeader(CONTENT_DISPOSITION_HEADER, INLINE_SELECTOR);
         } else {
             response.setHeader(CONTENT_DISPOSITION_HEADER, "attachment; filename=\"" + filename + "\"");
         }
