@@ -46,6 +46,7 @@ public class SearchImpl implements Search {
     public static final int PROP_RESULTS_SIZE_DEFAULT = 10;
     public static final int PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT = 3;
     public static final String PROP_SEARCH_ROOT_DEFAULT = "/content";
+    public static final Boolean PROP_WRAP_RESPONSE_IN_ITEMS_DEFAULT = false;
 
     @Self
     private SlingHttpServletRequest request;
@@ -62,11 +63,13 @@ public class SearchImpl implements Search {
     private String relativePath;
     private int resultsSize;
     private int searchTermMinimumLength;
+    private Boolean wrapResponseInItems;
 
     @PostConstruct
     private void initModel() {
         resultsSize = currentStyle.get(PN_RESULTS_SIZE, PROP_RESULTS_SIZE_DEFAULT);
         searchTermMinimumLength = currentStyle.get(PN_SEARCH_TERM_MINIMUM_LENGTH, PROP_SEARCH_TERM_MINIMUM_LENGTH_DEFAULT);
+        wrapResponseInItems = currentStyle.get(PN_WRAP_RESPONSE_IN_ITEMS, PROP_WRAP_RESPONSE_IN_ITEMS_DEFAULT);
         PageManager pageManager = currentPage.getPageManager();
         Resource currentResource = request.getResource();
         if (pageManager != null) {
@@ -86,6 +89,9 @@ public class SearchImpl implements Search {
     public int getSearchTermMinimumLength() {
         return searchTermMinimumLength;
     }
+
+    @Override
+    public Boolean getWrapResponseInItems() { return wrapResponseInItems; }
 
     @NotNull
     @Override

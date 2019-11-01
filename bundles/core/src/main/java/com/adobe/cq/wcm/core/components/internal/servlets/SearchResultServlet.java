@@ -102,7 +102,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         if (currentPage != null) {
             Resource searchResource = getSearchContentResource(request, currentPage);
             List<ListItem> results = getResults(request, searchResource, currentPage);
-            writeJson(results, response);
+            writeJson(request, searchResource, results, response);
         }
     }
 
@@ -117,12 +117,23 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return currentPage;
     }
 
-    private void writeJson(List<ListItem> results, SlingHttpServletResponse response) {
+    private void writeJson(SlingHttpServletRequest request, Resource searchResource, List<ListItem> results, SlingHttpServletResponse response) {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.writeValue(response.getWriter(), results);
+            Boolean wrapResponseInItems = SearchImpl.PROP_WRAP_RESPONSE_IN_ITEMS_DEFAULT;
+            if (searchResource != null) {
+                ValueMap valueMap = searchResource.getValueMap();
+                ValueMap contentPolicyMap = getContentPolicyProperties(searchResource, request.getResource());
+                wrapResponseInItems = valueMap.get(Search.PN_WRAP_RESPONSE_IN_ITEMS,
+                    contentPolicyMap.get(Search.PN_WRAP_RESPONSE_IN_ITEMS, SearchImpl.PROP_WRAP_RESPONSE_IN_ITEMS_DEFAULT));
+            }
+            if (wrapResponseInItems){
+                mapper.writeValue(response.getWriter(), new ResultItems(results));
+            } else {
+                mapper.writeValue(response.getWriter(), results);
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
@@ -288,5 +299,17 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             }
         }
         return null;
+    }
+
+    static class ResultItems {
+        private  List<ListItem> result;
+
+        ResultItems(List<ListItem> result) {
+            this.result = result;
+        }
+
+        public List<ListItem> getItems() {
+            return result;
+        }
     }
 }
