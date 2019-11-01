@@ -39,12 +39,11 @@
 
           <!-- Autocomplete results container -->
           <template type="amp-mustache" id="amp-template-custom">
-              <div data-value="{{ url }}" data-min="{{ url }}">
+              <div data-value="{{ url }}">
                   <a href="{{ url }}">{{ title }}</a>
               </div>
           </template>
         </amp-autocomplete>
-        <p [text]=searchQuery></p>
     </div>
   </form>
 <div class="cmp-search__results" data-cmp-hook-search="results" role="listbox" aria-multiselectable="false"></div>
