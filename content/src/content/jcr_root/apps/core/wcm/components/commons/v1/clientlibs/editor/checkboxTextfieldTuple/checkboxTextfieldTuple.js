@@ -21,6 +21,9 @@
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple || {};
 
+    var CQ_RICHTEXT = ".cq-RichText";
+    var CQ_RICHTEXT_INPUT = "input[type=hidden][data-cq-richtext-input='true']";
+
     /**
      * Creates a tuple consisting of a checkbox and a text field located in the same dialog.
      *
@@ -211,7 +214,13 @@
      */
     CheckboxTextfieldTuple.prototype._getTextfieldValue = function() {
         if (this._isRichText) {
-            return $(this._textfield).html();
+            var $richText = $(this._textfield).closest(CQ_RICHTEXT);
+            if ($richText.length) {
+                var $richTextInput = $richText.find(CQ_RICHTEXT_INPUT);
+                if ($richTextInput.length) {
+                    return $richTextInput.val();
+                }
+            }
         } else {
             return this._textfield.value;
         }
