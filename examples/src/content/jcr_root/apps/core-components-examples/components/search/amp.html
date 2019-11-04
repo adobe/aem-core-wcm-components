@@ -38,7 +38,9 @@
           
         <amp-autocomplete filter="substring"
                           filter-value="title"
+                          items="."
                           class="cmp-search__auto-complete"
+                          on="select:AMP.navigateTo(url=event.value)"
                           [src]="jsonUrl.url + typedText">
 
           <input class="cmp-search__input" data-cmp-hook-search="input" type="text" name="fulltext" placeholder="${'Search' @ i18n}"
@@ -47,26 +49,11 @@
 
           <!-- Autocomplete results container -->
           <template type="amp-mustache" id="amp-template-custom">
-              <div class="city-item" data-value="{{title}}">
-                  <div>{{title}}</div>
+              <div data-value="{{ url }}">
+                  <div>{{ title }}</div>
               </div>
           </template>
         </amp-autocomplete>
     </div>
-
-    <div submit-success>
-      <template type="amp-mustache">
-        <h3>Submit successful!</h3>
-        {{ #items }}
-          <li><a href="{{ url }}">{{ title }}</a></li>
-        {{ /items }}
-      </template>
-    </div>
-    <div submit-error>
-      <template type="amp-mustache">
-        <h3>Submit failed!</h3>
-      </template>
-    </div>    
   </form>
-<div class="cmp-search__results" data-cmp-hook-search="results" role="listbox" aria-multiselectable="false"></div>
 </section>
