@@ -33,7 +33,7 @@
         <editInNewTab
             jcr:primaryType="nt:unstructured"
             text="Edit"
-            handler="Granite.author.experienceFragments &amp;&amp; Granite.author.experienceFragments.actions.editInNewTab"
+            handler="CQ.CoreComponents.experienceFragment.v1.actions.editInNewTab"
             icon="edit"/>
     </cq:actionConfigs>
 </jcr:root>
