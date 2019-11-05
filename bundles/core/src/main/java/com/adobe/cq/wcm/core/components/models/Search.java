@@ -49,13 +49,6 @@ public interface Search extends ComponentExporter {
     String PN_RESULTS_SIZE = "resultsSize";
 
     /**
-     * Name of the configuration policy property that defines if teh json response should be wrapped in an "items" array. This is primarily to support AMP.
-     *
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    String PN_WRAP_RESPONSE_IN_ITEMS= "wrapResponseInItems";
-
-    /**
      * The maximal number of results fetched by a search request.
      *
      * @return number of results
@@ -72,16 +65,6 @@ public interface Search extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     default int getSearchTermMinimumLength() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Weather or not the JSON response should be wrapped in an "items" array. Mostly to support AMP.
-     *
-     * @return true if the response should be wrapped in an "items" array
-     * @since com.adobe.cq.wcm.core.components.models 12.2.0
-     */
-    default Boolean getWrapResponseInItems() {
         throw new UnsupportedOperationException();
     }
 
