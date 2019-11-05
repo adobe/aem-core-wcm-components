@@ -54,7 +54,7 @@
             backgroundColorSwatchesOnly.on("coral-overlay:beforeopen.cmp-container-v1-dialog-edit", function(event) {
                 backgroundColorSwatchesOnly.off("coral-overlay:beforeopen.cmp-container-v1-dialog-edit");
 
-                // ensures the swatches overlay is displayed in dialog inline mode, by aligning it bottom left of the toggle button
+                // ensures the swatches overlay is displayed correctly in dialog inline mode, by aligning it bottom left of the toggle button
                 var target = event.target || event.srcElement;
                 target.alignAt = Coral.Overlay.align.LEFT_BOTTOM;
                 target.alignMy = Coral.Overlay.align.LEFT_TOP;
