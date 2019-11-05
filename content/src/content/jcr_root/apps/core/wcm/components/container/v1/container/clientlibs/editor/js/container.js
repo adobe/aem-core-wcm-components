@@ -19,6 +19,9 @@
 
     var selectors = {
         dialogContent: ".cmp-container__editor",
+        edit: {
+            backgroundColorSwatchesOnly: "[data-cmp-container-v1-dialog-edit-hook='backgroundColorSwatchesOnly']"
+        },
         policy: {
             backgroundColorEnabled: "[data-cmp-container-v1-dialog-policy-hook='backgroundColorEnabled']",
             backgroundColorSwatchesOnly: "[data-cmp-container-v1-dialog-policy-hook='backgroundColorSwatchesOnly']",
@@ -32,11 +35,32 @@
         var dialogContent = $dialogContent.length > 0 ? $dialogContent[0] : undefined;
 
         if (dialogContent) {
-            if (dialogContent.querySelector("[data-cmp-container-v1-dialog-policy-hook]")) {
+            if (dialogContent.querySelector("[data-cmp-container-v1-dialog-edit-hook]")) {
+                handleEditDialog(dialogContent);
+            } else if (dialogContent.querySelector("[data-cmp-container-v1-dialog-policy-hook]")) {
                 handlePolicyDialog(dialogContent);
             }
         }
     });
+
+    /**
+     * Binds edit dialog handling
+     *
+     * @param {HTMLElement} containerEditor The dialog wrapper
+     */
+    function handleEditDialog(containerEditor) {
+        var backgroundColorSwatchesOnly = containerEditor.querySelector(selectors.edit.backgroundColorSwatchesOnly);
+        if (backgroundColorSwatchesOnly) {
+            backgroundColorSwatchesOnly.on("coral-overlay:beforeopen.cmp-container-v1-dialog-edit", function(event) {
+                backgroundColorSwatchesOnly.off("coral-overlay:beforeopen.cmp-container-v1-dialog-edit");
+
+                // ensures the swatches overlay is displayed in dialog inline mode, by aligning it bottom left of the toggle button
+                var target = event.target || event.srcElement;
+                target.alignAt = Coral.Overlay.align.LEFT_BOTTOM;
+                target.alignMy = Coral.Overlay.align.LEFT_TOP;
+            });
+        }
+    }
 
     /**
      * Binds policy dialog handling
