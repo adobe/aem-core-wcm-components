@@ -273,7 +273,7 @@
 
     Search.prototype._generateItems = function(data, results) {
         var self = this;
-        //TODO: if wrapResponseInItems is true the object structure will be different. do something like "if (data.items.length > 0) data = data.items" here
+
         data.forEach(function(item) {
             var el = document.createElement("span");
             el.innerHTML = self._elements.itemTemplate.innerHTML;
