@@ -63,13 +63,6 @@
                                 name="./searchTermMinimumLength"
                                 step="1"
                                 value="3"/>
-                            <wrapResponseInItems
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                fieldDescription="Wrap the json response of teh search in an 'items' array. This is mainly to support AMP (amp-autocomplete)"
-                                text="Wrap Response in an 'items' array"
-                                name="./wrapResponseInItems"
-                                value="true"/>
                         </items>
                     </properties>
                     <styletab
