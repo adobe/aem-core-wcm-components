@@ -51,6 +51,7 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -193,42 +194,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private void populateActions() {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
-            for (Resource action : actionsNode.getChildren()) {
-                actions.add(new ListItem() {
-
-                    private ValueMap properties = action.getValueMap();
-                    private String title = properties.get(PN_ACTION_TEXT, String.class);
-                    private String url = properties.get(PN_ACTION_LINK, String.class);
-                    private Page page = null;
-                    {
-                        if (url != null && url.startsWith("/")) {
-                            page = pageManager.getPage(url);
-                        }
-                    }
-
-                    @Nullable
-                    @Override
-                    public String getTitle() {
-                        return title;
-                    }
-
-                    @Nullable
-                    @Override
-                    @JsonIgnore
-                    public String getPath() {
-                        return url;
-                    }
-
-                    @Nullable
-                    @Override
-                    public String getURL() {
-                        if (page != null) {
-                            return Utils.getURL(request, page);
-                        } else {
-                            return url;
-                        }
-                    }
-                });
+            for (Resource actionRes : actionsNode.getChildren()) {
+                actions.add(new Action(actionRes));
             }
         }
     }
@@ -302,5 +269,45 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
+    }
+
+    @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
+    public class Action implements ListItem {
+        ValueMap properties;
+        String title;
+        String url;
+        Page page;
+
+        public Action(Resource actionRes) {
+            properties = actionRes.getValueMap();
+            title = properties.get(PN_ACTION_TEXT, String.class);
+            url = properties.get(PN_ACTION_LINK, String.class);
+            if (url != null && url.startsWith("/")) {
+                page = pageManager.getPage(url);
+            }
+        }
+
+        @Nullable
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Nullable
+        @Override
+        public String getPath() {
+            return url;
+        }
+
+        @Nullable
+        @Override
+        public String getURL() {
+            if (page != null) {
+                return Utils.getURL(request, page);
+            } else {
+                return url;
+            }
+        }
+
     }
 }
