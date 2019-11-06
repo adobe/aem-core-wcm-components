@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2019 Adobe Systems Incorporated
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${image.src}"
@@ -25,24 +26,30 @@
      data-title="${image.title || image.alt}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
-    <a data-sly-unwrap="${!image.link}"
-       class="cmp-image__link" href="${image.link}"
-       data-cmp-hook-image="link">
-        <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1 && !image.areas}" data-cmp-hook-image="noscript">
-            <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
-            <amp-img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
-                     data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-                     alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
-            <map data-sly-test="${image.areas}"
-                 data-sly-list.area="${image.areas}"
-                 name="${resource.path}"
-                 data-cmp-hook-image="map">
-                <area shape="${area.shape}" coords="${area.coordinates}" href="${area.href}" target="${area.target}" alt="${area.alt}"
-                      data-cmp-hook-image="area" data-cmp-relcoords="${area.relativeCoordinates}">
-            </map>
-        </noscript>
-    </a>
-    <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">this is an AMP image</span>
-    <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
+
+  <a data-sly-unwrap="${!image.link}"
+    class="cmp-image__link" href="${image.link}"
+    data-cmp-hook-image="link">
+
+    <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1 && !image.areas}" data-cmp-hook-image="noscript">
+      <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
+      <amp-img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
+                data-sly-attribute.usemap="${image.areas ? usemap : ''}"
+                layout="fill"
+                alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+
+      <map data-sly-test="${image.areas}"
+            data-sly-list.area="${image.areas}"
+            name="${resource.path}"
+            data-cmp-hook-image="map">
+
+        <area shape="${area.shape}" coords="${area.coordinates}" href="${area.href}" target="${area.target}" alt="${area.alt}"
+              data-cmp-hook-image="area" data-cmp-relcoords="${area.relativeCoordinates}">
+      </map>
+    </noscript>
+  </a>
+  <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">this is an AMP image</span>
+  <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
+
