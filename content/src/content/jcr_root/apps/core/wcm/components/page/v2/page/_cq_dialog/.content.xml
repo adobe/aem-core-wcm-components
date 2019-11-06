@@ -67,14 +67,15 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/include"/>
                                     <amp
                                         jcr:primaryType="nt:unstructured"
-                                        jcr:title="AMP"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        jcr:title="Accelerated Mobile Pages"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                                        cq:showOnCreate="false">
                                         <items jcr:primaryType="nt:unstructured">
                                             <ampmode
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 composite="{Boolean}false"
-                                                fieldDescription="The mode in which you want AMP to be handled instead of what's defined in the page's content policy. Paired AMP will serve AMP pages when the 'amp' selector is present. No AMP will never serve AMP pages. AMP only will always serve AMP pages."
+                                                fieldDescription="The mode in which AMP should be handled instead of what's defined in the Template's Page Policy. Paired AMP will serve an AMP page when the 'amp' selector is present and classic HTML page when not. No AMP will serve ONLY the HTML version of the page. AMP only will ONLY serve the AMP version of the page."
                                                 fieldLabel="AMP Mode"
                                                 name="./ampMode">
                                                 <items jcr:primaryType="nt:unstructured">
