@@ -17,14 +17,14 @@
 (function($, ns) {
     "use strict";
 
-    var MSG_NO_FRAGMENT_PATH = Granite.I18n.get("The experience fragment doesn't have an associated variation");
+    var MSG_NO_FRAGMENT_PATH = Granite.I18n.get("This experience fragment component doesn't have an associated variation");
 
-    ns.experienceFragment.v1.actions.editInNewTab = function() {
+    ns.experiencefragment.v1.actions.edit = function() {
         var ui = $(window).adaptTo("foundation-ui");
         $.get(this.path + ".model.json")
             .then(function(response) {
                 var path = response["localizedFragmentVariationPath"];
-                if (typeof path !== "undefined") {
+                if (typeof path === "string" && path.length > 0) {
                     window.open(Granite.HTTP.externalize("/editor.html" +
                         path.substring(0, path.lastIndexOf("/")) + ".html"));
                 } else {

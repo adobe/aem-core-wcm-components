@@ -18,7 +18,7 @@
 
     window.CQ = window.CQ || {};
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
-    window.CQ.CoreComponents.experienceFragment = window.CQ.CoreComponents.experienceFragment || {};
-    window.CQ.CoreComponents.experienceFragment.v1 = window.CQ.CoreComponents.experienceFragment.v1 || {};
-    window.CQ.CoreComponents.experienceFragment.v1.actions = {};
+    window.CQ.CoreComponents.experiencefragment = window.CQ.CoreComponents.experiencefragment || {};
+    window.CQ.CoreComponents.experiencefragment.v1 = window.CQ.CoreComponents.experiencefragment.v1 || {};
+    window.CQ.CoreComponents.experiencefragment.v1.actions = {};
 })();
