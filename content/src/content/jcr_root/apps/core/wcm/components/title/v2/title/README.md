@@ -20,6 +20,7 @@ Title component written in HTL, allowing to define a section heading.
 ## Features
 
 * In-place editing
+* Automatic reading of the page title from the current page, if no title text is defined
 * HTML element configuration (`h1` - `h6`)
 * Linkable to content pages, external URLs or page anchors
 * Styles
