@@ -20,10 +20,12 @@
     jcr:title="Container"
     sling:resourceType="cq/gui/components/authoring/dialog"
     helpPath="https://www.adobe.com/go/aem_cmp_container_v1"
-    trackingFeature="core-components:container:v1">
+    trackingFeature="core-components:container:v1"
+    extraClientlibs="[core.wcm.components.container.v1.editor]">
     <content
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/coral/foundation/container">
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        granite:class="cmp-container__editor">
         <items jcr:primaryType="nt:unstructured">
             <tabs
                 jcr:primaryType="nt:unstructured"
@@ -88,10 +90,14 @@
                                                 name="./backgroundColor"
                                                 showDefaultColors="{Boolean}false"
                                                 showProperties="{Boolean}false"
-                                                showSwatches="{Boolean}true">
+                                                showSwatches="{Boolean}true"
+                                                variant="swatch">
                                                 <datasource
                                                     jcr:primaryType="nt:unstructured"
                                                     sling:resourceType="core/wcm/components/commons/datasources/allowedcolorswatches/v1"/>
+                                                <granite:data
+                                                    jcr:primaryType="nt:unstructured"
+                                                    cmp-container-v1-dialog-edit-hook="backgroundColorSwatchesOnly"/>
                                             </backgroundColorSwatchesOnly>
                                             <backgroundImageAsset
                                                 granite:hide="${!cqDesign.backgroundImageEnabled}"
