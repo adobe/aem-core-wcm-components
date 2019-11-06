@@ -35,32 +35,54 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 size="L">
                 <items jcr:primaryType="nt:unstructured">
-                    <amp
+                    <advanced
+                        cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="AMP"
+                        jcr:title="Advanced"
                         sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
                         <items jcr:primaryType="nt:unstructured">
                             <column
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <items jcr:primaryType="nt:unstructured">
-                                    <section
+                                    <settings
                                         jcr:primaryType="nt:unstructured"
-                                        jcr:title="AMP Configuration"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/section1"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"/>
+                                    <configuration
+                                        jcr:primaryType="nt:unstructured"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/configuration"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"/>
+                                    <templates
+                                        jcr:primaryType="nt:unstructured"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/templates"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"/>
+                                    <authenticationrequirement
+                                        jcr:primaryType="nt:unstructured"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/authenticationrequirement"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"/>
+                                    <export
+                                        jcr:primaryType="nt:unstructured"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/export"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"/>
+                                    <amp
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Accelerated Mobile Pages"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                                        cq:showOnCreate="false">
                                         <items jcr:primaryType="nt:unstructured">
                                             <ampmode
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 composite="{Boolean}false"
-                                                fieldDescription="The mode in which you want AMP to be handled instead of what's defined in the page's content policy. Inherit from Page Template, default, will use the mode specified in the current template's page policy. Paired AMP will serve AMP pages when the 'amp' selector is present. No AMP will never serve AMP pages. AMP only will always serve AMP pages."
+                                                fieldDescription="The mode in which AMP should be handled instead of what's defined in the Template's Page Policy. Paired AMP will serve an AMP page when the 'amp' selector is present and classic HTML page when not. No AMP will serve ONLY the HTML version of the page. AMP only will ONLY serve the AMP version of the page."
                                                 fieldLabel="AMP Mode"
                                                 name="./ampMode">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <inheritPageTemplate
                                                         jcr:primaryType="nt:unstructured"
                                                         text="Inherit from Page Template"
-                                                        value="inheritPageTemplate"/>
+                                                        value=""/>
                                                     <noAmp
                                                         jcr:primaryType="nt:unstructured"
                                                         text="No AMP"
@@ -76,11 +98,11 @@
                                                 </items>
                                             </ampmode>
                                         </items>
-                                    </section>
+                                    </amp>
                                 </items>
                             </column>
                         </items>
-                    </amp>
+                    </advanced>
                     <socialmedia
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"
