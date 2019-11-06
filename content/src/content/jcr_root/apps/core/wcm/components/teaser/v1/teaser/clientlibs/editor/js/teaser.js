@@ -140,8 +140,12 @@
                 }
             });
         } else {
-            titleTuple.update();
-            descriptionTuple.update();
+            return $.ajax({
+                url: url
+            }).done(function() {
+                titleTuple.update();
+                descriptionTuple.update();
+            });
         }
     }
 
