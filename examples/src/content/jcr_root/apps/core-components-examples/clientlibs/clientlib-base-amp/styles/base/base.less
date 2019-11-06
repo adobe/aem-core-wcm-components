@@ -57,3 +57,19 @@ a {
         outline: none;
     }
 }
+
+/*
+ * Making sure all images included via the image component have the proper css fallback
+ */
+
+.cmp-image {
+    &__image {
+        height: 200px;
+        position: relative;
+        width: 100%;
+
+        img {
+            object-fit: contain;
+        }
+    }
+}
