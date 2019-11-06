@@ -54,7 +54,7 @@ The following configuration properties are used:
 ### Edit Dialog Properties
 The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:
 
-1. `./jcr:title` - defines the page title, used for the page SEO meta title and on-page titles (unless an overriding `./pageTitle` is defined).
+1. `./jcr:title` - defines the page title, used for the page SEO meta title and on-page title (unless an overriding `./pageTitle` is defined).
 2. `pageName` - defines the page name.
 3. `./cq:tags` - defines the page SEO meta tags.
 4. `./hideInNav` - if `true`, the page will be hidden in a navigation context (breadcrumb, navigation etc.).
