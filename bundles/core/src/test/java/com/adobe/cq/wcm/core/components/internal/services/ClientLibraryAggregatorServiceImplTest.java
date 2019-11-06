@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.services;
 
 import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -127,11 +128,9 @@ public class ClientLibraryAggregatorServiceImplTest {
         this.categoryCsv = "cmp-examples.base,cmp-examples.site";
         this.type = "js";
 
-        Mockito
-          .when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
+        when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
           .thenReturn(this.clientLibraryCollection);
-        Mockito
-          .when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
+        when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
           .thenReturn(null);
 
         this.cl.htmlLibraryManager = this.htmlLibraryManagerMock;
@@ -146,14 +145,11 @@ public class ClientLibraryAggregatorServiceImplTest {
 
         this.inputStreamSample = Mockito.mock(InputStream.class);
 
-        Mockito
-          .when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
+        when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
           .thenReturn(this.clientLibraryCollection);
-        Mockito
-          .when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
+        when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
           .thenReturn(this.htmlLibraryMock);
-        Mockito
-          .when(this.htmlLibraryMock.getInputStream(false))
+        when(this.htmlLibraryMock.getInputStream(false))
           .thenReturn(this.inputStreamSample);
 
         this.cl.htmlLibraryManager = this.htmlLibraryManagerMock;
@@ -170,14 +166,11 @@ public class ClientLibraryAggregatorServiceImplTest {
         String inputSample = "Some test data for my input stream";
         this.inputStreamSample = IOUtils.toInputStream(inputSample, StandardCharsets.UTF_8);
 
-        Mockito
-          .when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
+        when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
           .thenReturn(this.clientLibraryCollection);
-        Mockito
-          .when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
+        when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
           .thenReturn(this.htmlLibraryMock);
-        Mockito
-          .when(this.htmlLibraryMock.getInputStream(false))
+        when(this.htmlLibraryMock.getInputStream(false))
           .thenReturn(this.inputStreamSample);
 
         this.cl.htmlLibraryManager = this.htmlLibraryManagerMock;
@@ -207,8 +200,7 @@ public class ClientLibraryAggregatorServiceImplTest {
 
         this.resourceTypes.add("/dummyType");
 
-        Mockito
-          .when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
+        when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
           .thenReturn(this.resourceResolverMock);
 
         this.cl.resolverFactory = this.resourceResolverFactoryMock;
@@ -227,8 +219,7 @@ public class ClientLibraryAggregatorServiceImplTest {
 
         this.resourceTypes.add("/dummyType");
 
-        Mockito
-          .when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
+        when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
           .thenReturn(this.resourceResolverMock);
 
         this.cl.resolverFactory = this.resourceResolverFactoryMock;

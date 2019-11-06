@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal;
 
 import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,8 +72,7 @@ public class UtilsTest {
     public void resolveResource_pathStartsWithSlash() {
         this.pathMock = "/fake/path/for/testing";
 
-        Mockito
-         .when(this.resourceResolverMock.getResource(this.pathMock))
+        when(this.resourceResolverMock.getResource(this.pathMock))
          .thenReturn(this.resourceMock);
 
         assertEquals(this.resourceMock, Utils.resolveResource(this.resourceResolverMock, this.pathMock));
@@ -83,12 +83,9 @@ public class UtilsTest {
         this.pathMock = "fake/path/for/testing";
         this.searchPathMock = new String[] { "/base/fake/path" };
 
-        Mockito
-         .when(this.resourceResolverMock.getSearchPath())
+        when(this.resourceResolverMock.getSearchPath())
          .thenReturn(this.searchPathMock);
-
-        Mockito
-         .when(this.resourceResolverMock.getResource(this.searchPathMock[0] + this.pathMock))
+        when(this.resourceResolverMock.getResource(this.searchPathMock[0] + this.pathMock))
          .thenReturn(null);
 
         assertEquals(null, Utils.resolveResource(this.resourceResolverMock, this.pathMock));
@@ -99,12 +96,9 @@ public class UtilsTest {
         this.pathMock = "fake/path/for/testing";
         this.searchPathMock = new String[] { "/base/fake/path" };
 
-        Mockito
-         .when(this.resourceResolverMock.getSearchPath())
+        when(this.resourceResolverMock.getSearchPath())
          .thenReturn(this.searchPathMock);
-
-        Mockito
-         .when(this.resourceResolverMock.getResource(this.searchPathMock[0] + this.pathMock))
+        when(this.resourceResolverMock.getResource(this.searchPathMock[0] + this.pathMock))
          .thenReturn(this.resourceMock);
 
         assertEquals(this.resourceMock, Utils.resolveResource(this.resourceResolverMock, this.pathMock));
@@ -117,8 +111,7 @@ public class UtilsTest {
         this.resourceTypesMock.add("dummyType");
         this.resourceTypesMock.add("fakeType");
 
-        Mockito
-         .when(this.pageMock.getTemplate())
+        when(this.pageMock.getTemplate())
          .thenReturn(null);
 
         assertEquals(this.resourceTypesMock, Utils.getTemplateResourceTypes(this.pageMock, this.resourceTypeRegexMock, this.resourceResolverMock, this.resourceTypesMock));
@@ -132,16 +125,11 @@ public class UtilsTest {
         this.resourceTypesMock.add("dummyType");
         this.resourceTypesMock.add("fakeType");
 
-        Mockito
-         .when(this.pageMock.getTemplate())
+        when(this.pageMock.getTemplate())
          .thenReturn(this.templateMock);
-
-        Mockito
-         .when(this.templateMock.getPath())
+        when(this.templateMock.getPath())
          .thenReturn(this.pathMock);
-
-        Mockito
-         .when(this.resourceResolverMock.getResource(this.pathMock + AllowedComponentList.STRUCTURE_JCR_CONTENT))
+        when(this.resourceResolverMock.getResource(this.pathMock + AllowedComponentList.STRUCTURE_JCR_CONTENT))
          .thenReturn(null);
 
         assertEquals(this.resourceTypesMock, Utils.getTemplateResourceTypes(this.pageMock, this.resourceTypeRegexMock, this.resourceResolverMock, this.resourceTypesMock));
@@ -158,8 +146,7 @@ public class UtilsTest {
 
         this.resourceTypesMock.add("dummyType");
 
-        Mockito
-         .when(this.resourceMock.getResourceType())
+        when(this.resourceMock.getResourceType())
          .thenReturn("fakeType");
 
         Set<String> resourceTypesResult = new HashSet<String>();
@@ -174,8 +161,7 @@ public class UtilsTest {
     public void getURLExtended_pageNull() {
         this.pathMock = "fake/path/for/testing";
 
-        Mockito
-         .when(this.pageManagerMock.getPage(this.pathMock))
+        when(this.pageManagerMock.getPage(this.pathMock))
          .thenReturn(null);
 
         assertEquals(this.pathMock, Utils.getURL(this.slingHttpServletRequestMock, this.pageManagerMock, this.pathMock));
@@ -183,16 +169,11 @@ public class UtilsTest {
 
     @Test
     public void getURLExtended_vanityUrlEmpty() {
-        Mockito
-         .when(this.pageMock.getVanityUrl())
+        when(this.pageMock.getVanityUrl())
          .thenReturn("");
-
-        Mockito
-         .when(this.pageMock.getPath())
+        when(this.pageMock.getPath())
          .thenReturn("testPage");
-
-        Mockito
-         .when(this.slingHttpServletRequestMock.getContextPath())
+        when(this.slingHttpServletRequestMock.getContextPath())
          .thenReturn("/fake/path/for/testing/");
 
         assertEquals("/fake/path/for/testing/testPage.html", Utils.getURL(this.slingHttpServletRequestMock, this.pageMock));
@@ -200,12 +181,9 @@ public class UtilsTest {
 
     @Test
     public void getURLExtended_vanityUrlNotEmpty() {
-        Mockito
-         .when(this.pageMock.getVanityUrl())
+        when(this.pageMock.getVanityUrl())
          .thenReturn("testPage.html");
-
-        Mockito
-         .when(this.slingHttpServletRequestMock.getContextPath())
+        when(this.slingHttpServletRequestMock.getContextPath())
          .thenReturn("/fake/path/for/testing/");
 
         assertEquals("/fake/path/for/testing/testPage.html", Utils.getURL(this.slingHttpServletRequestMock, this.pageMock));
