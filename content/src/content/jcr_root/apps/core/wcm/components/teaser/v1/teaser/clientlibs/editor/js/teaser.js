@@ -40,6 +40,19 @@
             titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector);
             descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
 
+            var rteInstance = $(descriptionTextfieldSelector).data("rteinstance");
+            // wait for the description textfield rich text editor to signal start before initializing.
+            // Ensures that any state adjustments made here will not be overridden.
+            if (rteInstance && rteInstance.isActive) {
+                toggleInputs($dialogContent);
+                retrievePageInfo($dialogContent);
+            } else {
+                $(descriptionTextfieldSelector).on("editing-start", function() {
+                    toggleInputs($dialogContent);
+                    retrievePageInfo($dialogContent);
+                });
+            }
+
             var $linkURLField = $dialogContent.find(linkURLSelector);
             if ($linkURLField.length) {
                 linkURL = $linkURLField.adaptTo("foundation-field").getValue();
@@ -71,9 +84,6 @@
                     retrievePageInfo($dialogContent);
                 });
             }
-
-            toggleInputs($dialogContent);
-            retrievePageInfo($dialogContent);
         }
     });
 
@@ -140,12 +150,8 @@
                 }
             });
         } else {
-            return $.ajax({
-                url: url
-            }).done(function() {
-                titleTuple.update();
-                descriptionTuple.update();
-            });
+            titleTuple.update();
+            descriptionTuple.update();
         }
     }
 
