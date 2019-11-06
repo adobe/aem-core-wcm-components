@@ -2,6 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:rep="internal"
     jcr:mixinTypes="[rep:AccessControllable]"
     jcr:primaryType="cq:Page">
+    <rep:policy/>
     <wcm jcr:primaryType="nt:unstructured">
         <foundation jcr:primaryType="nt:unstructured">
             <components jcr:primaryType="nt:unstructured">
@@ -423,12 +424,25 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Core Components Examples - Page"
                     sling:resourceType="wcm/core/components/policy/policy"
+                    ampMode="pairedAmp"
                     appResourcesClientlib="cmp-examples.site"
-                    clientlibs="cmp-examples.base"
-                    ampMode="pairedAmp">
+                    clientlibs="cmp-examples.base">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_212634895490169>
             </page>
+            <search jcr:primaryType="nt:unstructured">
+                <policy_1572547933941
+                    jcr:lastModified="{Date}2019-10-31T12:58:04.144-06:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Core Components Examples - Search"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    resultsSize="30"
+                    searchRoot="/content/core-components-examples/library"
+                    searchTermMinimumLength="1">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1572547933941>
+            </search>
         </components>
     </core-components-examples>
 </jcr:root>

@@ -87,6 +87,15 @@
                         </components>
                     </wcm>
                 </core>
+                <core-components-examples jcr:primaryType="nt:unstructured">
+                    <components jcr:primaryType="nt:unstructured">
+                        <search
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"
+                            cq:policy="core-components-examples/components/search/policy_1572547933941">
+                        </search>
+                    </components>
+                </core-components-examples>
             </responsivegrid>
             <responsivegrid_1409995310
                 cq:policy="wcm/foundation/components/responsivegrid/policy_1545309074617"
