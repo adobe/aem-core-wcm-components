@@ -124,7 +124,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:47:21.991+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 altValueFromDAM="true"
                                 displayPopupTitle="true"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
@@ -136,7 +136,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:47:15.955+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             <image_1533234440
                                 jcr:created="{Date}2018-12-06T19:32:33.312+01:00"
@@ -144,7 +144,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:47:05.017+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
                         </carousel>
                     </component>
@@ -322,7 +322,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:01.312+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
                             <image_1072016967
                                 jcr:created="{Date}2018-12-06T19:32:52.544+01:00"
@@ -330,7 +330,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:06.410+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             <image
                                 jcr:created="{Date}2018-12-06T19:32:50.631+01:00"
@@ -338,7 +338,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:13.084+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
                         </carousel_7304850024>
                     </component>
@@ -407,7 +407,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:18.797+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
                             <image_1321018784
                                 jcr:created="{Date}2018-12-06T19:33:14.961+01:00"
@@ -415,7 +415,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:24.034+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             <image
                                 jcr:created="{Date}2018-12-06T19:33:13.071+01:00"
@@ -423,7 +423,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:29.338+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core-components-examples/components/image"
+                                sling:resourceType="core/wcm/components/image/v2/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
                         </carousel_1655133361>
                     </component>

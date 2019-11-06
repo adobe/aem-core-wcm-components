@@ -199,7 +199,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:13:13.580+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core-components-examples/components/image"
+                                    sling:resourceType="core/wcm/components/image/v2/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -234,7 +234,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:44.428+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core-components-examples/components/image"
+                                    sling:resourceType="core/wcm/components/image/v2/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -269,7 +269,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:50.727+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core-components-examples/components/image"
+                                    sling:resourceType="core/wcm/components/image/v2/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
