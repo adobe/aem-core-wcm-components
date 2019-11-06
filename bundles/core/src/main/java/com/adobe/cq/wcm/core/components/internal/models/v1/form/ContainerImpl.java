@@ -137,15 +137,19 @@ public class ContainerImpl implements Container {
     }
 
     private void runActionTypeInit(FormStructureHelper formStructureHelper) {
-        final RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        if (response != null && !StringUtils.equals(requestPathInfo.getSelectorString(),
-                SCRIPT_FORM_SERVER_VALIDATION) && StringUtils.isNotEmpty(actionType)) {
-            final Resource formStart = formStructureHelper.getFormResource(request.getResource());
-            try {
-                FormsHelper.runAction(actionType, INIT_SCRIPT, formStart, request, response);
-            } catch (IOException | ServletException e) {
-                LOGGER.error("Unable to initialise form " + resource.getPath(), e);
+        if ((request.getAttribute(FormsHelper.REQ_ATTR_IS_INIT) == null)) {
+            request.setAttribute(FormsHelper.REQ_ATTR_IS_INIT, "true");
+            final RequestPathInfo requestPathInfo = request.getRequestPathInfo();
+            if (response != null && !StringUtils.equals(requestPathInfo.getSelectorString(),
+                    SCRIPT_FORM_SERVER_VALIDATION) && StringUtils.isNotEmpty(actionType)) {
+                final Resource formStart = formStructureHelper.getFormResource(request.getResource());
+                try {
+                    FormsHelper.runAction(actionType, INIT_SCRIPT, formStart, request, response);
+                } catch (IOException | ServletException e) {
+                    LOGGER.error("Unable to initialise form " + resource.getPath(), e);
+                }
             }
+            request.removeAttribute(FormsHelper.REQ_ATTR_IS_INIT);
         }
     }
 
