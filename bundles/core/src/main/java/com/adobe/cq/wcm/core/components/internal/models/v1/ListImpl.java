@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import javax.annotation.PostConstruct;
@@ -27,13 +28,16 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -72,6 +76,7 @@ public class ListImpl implements List {
     private static final int PN_DEPTH_DEFAULT = 1;
     private static final String PN_DATE_FORMAT_DEFAULT = "yyyy-MM-dd";
     private static final String TAGS_MATCH_ANY_VALUE = "any";
+    private static final String TAG_READ_SERVICE_USER = "tag-read";
 
     @ScriptVariable
     private ValueMap properties;
@@ -87,6 +92,9 @@ public class ListImpl implements List {
 
     @SlingObject
     private Resource resource;
+
+    @OSGiService
+    private ResourceResolverFactory resolverFactory;
 
     @Self
     private SlingHttpServletRequest request;
@@ -244,7 +252,11 @@ public class ListImpl implements List {
         if (ArrayUtils.isNotEmpty(tags)) {
             Page rootPage = getRootPage(PN_TAGS_PARENT_PAGE);
             if (rootPage != null) {
-                TagManager tagManager = resourceResolver.adaptTo(TagManager.class);
+                ResourceResolver tagResourceResolver = getTagResourceResolver();
+                if (tagResourceResolver == null) {
+                    tagResourceResolver = resourceResolver;
+                }
+                TagManager tagManager = tagResourceResolver.adaptTo(TagManager.class);
                 if (tagManager != null) {
                     RangeIterator<Resource> resourceRangeIterator = tagManager.find(rootPage.getPath(), tags, matchAny);
                     if (resourceRangeIterator != null) {
@@ -258,6 +270,17 @@ public class ListImpl implements List {
                 }
             }
         }
+    }
+
+    private ResourceResolver getTagResourceResolver() {
+        ResourceResolver resolver = null;
+        try {
+            resolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(
+                    ResourceResolverFactory.SUBSERVICE, TAG_READ_SERVICE_USER));
+        } catch (LoginException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return resolver;
     }
 
     private void populateSearchListItems() {
