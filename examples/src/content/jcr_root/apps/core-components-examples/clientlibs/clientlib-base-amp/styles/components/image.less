@@ -14,6 +14,18 @@
  *  limitations under the License.
  */
 
-@import 'variables/index.less';
-@import 'base/index.less';
-@import 'components/index.less';
+/*
+ * Making sure all images included via the image component have the proper css fallback
+ */
+
+.cmp-image {
+    &__image {
+        height: 200px;
+        position: relative;
+        width: 100%;
+
+        img {
+            object-fit: contain;
+        }
+    }
+}
