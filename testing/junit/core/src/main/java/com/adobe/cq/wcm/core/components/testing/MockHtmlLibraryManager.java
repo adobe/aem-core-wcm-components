@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import javax.jcr.RepositoryException;
@@ -106,7 +107,7 @@ public class MockHtmlLibraryManager implements HtmlLibraryManager {
 
     @Override
     public Collection<ClientLibrary> getLibraries(String[] strings, LibraryType libraryType, boolean b, boolean b1) {
-        return clientLibraries;
+        return Collections.unmodifiableCollection(clientLibraries);
     }
 
     @Override

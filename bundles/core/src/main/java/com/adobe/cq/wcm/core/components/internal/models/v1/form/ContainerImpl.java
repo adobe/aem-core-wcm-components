@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 
@@ -34,11 +32,9 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,14 +84,14 @@ public class ContainerImpl implements Container {
     @Default(values = "")
     private String id;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String actionType;
 
     @ValueMapValue(name = ResourceResolver.PROPERTY_RESOURCE_TYPE)
     @Default(values = "")
     private String dropAreaResourceType;
 
-    @ValueMapValue(optional = true)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String redirect;
 
     private String name;
@@ -124,7 +120,7 @@ public class ContainerImpl implements Container {
             id = FormsHelper.getFormId(request);
         }
         this.name = id;
-        this.dropAreaResourceType += "/new";
+        this.dropAreaResourceType = "wcm/foundation/components/responsivegrid/new";
         if (redirect != null) {
             String contextPath = request.getContextPath();
             if (StringUtils.isNotBlank(contextPath) && redirect.startsWith("/")) {
@@ -138,15 +134,19 @@ public class ContainerImpl implements Container {
     }
 
     private void runActionTypeInit(FormStructureHelper formStructureHelper) {
-        final RequestPathInfo requestPathInfo = request.getRequestPathInfo();
-        if (response != null && !StringUtils.equals(requestPathInfo.getSelectorString(),
-                SCRIPT_FORM_SERVER_VALIDATION) && StringUtils.isNotEmpty(actionType)) {
-            final Resource formStart = formStructureHelper.getFormResource(request.getResource());
-            try {
-                FormsHelper.runAction(actionType, INIT_SCRIPT, formStart, request, response);
-            } catch (IOException | ServletException e) {
-                LOGGER.error("Unable to initialise form " + resource.getPath(), e);
+        if ((request.getAttribute(FormsHelper.REQ_ATTR_IS_INIT) == null)) {
+            request.setAttribute(FormsHelper.REQ_ATTR_IS_INIT, "true");
+            final RequestPathInfo requestPathInfo = request.getRequestPathInfo();
+            if (response != null && !StringUtils.equals(requestPathInfo.getSelectorString(),
+                    SCRIPT_FORM_SERVER_VALIDATION) && StringUtils.isNotEmpty(actionType)) {
+                final Resource formStart = formStructureHelper.getFormResource(request.getResource());
+                try {
+                    FormsHelper.runAction(actionType, INIT_SCRIPT, formStart, request, response);
+                } catch (IOException | ServletException e) {
+                    LOGGER.error("Unable to initialise form " + resource.getPath(), e);
+                }
             }
+            request.removeAttribute(FormsHelper.REQ_ATTR_IS_INIT);
         }
     }
 
@@ -185,7 +185,7 @@ public class ContainerImpl implements Container {
         return redirect;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         if (childrenModels == null) {
@@ -194,7 +194,7 @@ public class ContainerImpl implements Container {
         return childrenModels;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         if (exportedItemsOrder == null) {
@@ -208,13 +208,13 @@ public class ContainerImpl implements Container {
         return Arrays.copyOf(exportedItemsOrder,exportedItemsOrder.length);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return resource.getResourceType();
     }
 
-    private <T> Map<String, T> getChildrenModels(@Nonnull SlingHttpServletRequest request, @Nonnull Class<T>
+    private <T> Map<String, T> getChildrenModels(@NotNull SlingHttpServletRequest request, @NotNull Class<T>
             modelClass) {
         Map<String, T> models = new LinkedHashMap<>();
         for (Resource child : slingModelFilter.filterChildResources(resource.getChildren())) {

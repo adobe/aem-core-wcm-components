@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,17 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Set;
 import java.util.TreeSet;
-
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -41,6 +43,7 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,6 +126,8 @@ public class ImageImpl implements Image {
     protected String baseResourcePath;
     protected String templateRelativePath;
     protected boolean disableLazyLoading;
+    protected int jpegQuality;
+    protected String imageName;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.DEFAULT_SELECTOR;
@@ -146,6 +151,7 @@ public class ImageImpl implements Image {
                 asset = assetResource.adaptTo(Asset.class);
                 if (asset != null) {
                     mimeType = PropertiesUtil.toString(asset.getMimeType(), MIME_TYPE_IMAGE_JPEG);
+                    imageName = getImageNameFromDam();
                     hasContent = true;
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference, resource.getPath());
@@ -157,6 +163,8 @@ public class ImageImpl implements Image {
             Resource file = resource.getChild(DownloadResource.NN_FILE);
             if (file != null) {
                 mimeType = PropertiesUtil.toString(file.getResourceMetadata().get(ResourceMetadata.CONTENT_TYPE), MIME_TYPE_IMAGE_JPEG);
+                String fileName = properties.get(ImageResource.PN_FILE_NAME, String.class);
+                imageName = StringUtils.isNotEmpty(fileName) ? getSeoFriendlyName(FilenameUtils.getBaseName(fileName)) : "";
                 hasContent = true;
             }
         }
@@ -167,6 +175,10 @@ public class ImageImpl implements Image {
                 hasContent = false;
                 return;
             }
+            // The jcr:mimeType property may contain a charset suffix (image/jpeg;charset=UTF-8).
+            // For example if a file was written with JcrUtils#putFile and an optional charset was provided.
+            // Check for the suffix and remove as necessary.
+            mimeType = mimeType.split(";")[0];
             extension = mimeTypeService.getExtension(mimeType);
             ValueMap properties = resource.getValueMap();
             Calendar lastModified = properties.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
@@ -182,10 +194,11 @@ public class ImageImpl implements Image {
                     lastModifiedDate = assetLastModifiedDate;
                 }
             }
-            if (extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
+            if (extension == null || extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff")) {
                 extension = DEFAULT_EXTENSION;
             }
             disableLazyLoading = currentStyle.get(PN_DESIGN_LAZY_LOADING_ENABLED, false);
+            jpegQuality = currentStyle.get(PN_DESIGN_JPEG_QUALITY, AdaptiveImageServlet.DEFAULT_JPEG_QUALITY);
             int index = 0;
             Template template = currentPage.getTemplate();
             if (template != null && resource.getPath().startsWith(template.getPath())) {
@@ -202,9 +215,10 @@ public class ImageImpl implements Image {
                 smartSizes = new int[supportedRenditionWidths.size()];
                 for (Integer width : supportedRenditionWidths) {
                     smartImages[index] = baseResourcePath + DOT +
-                        selector + DOT + width + DOT + extension +
+                        selector + DOT + jpegQuality + DOT + width + DOT + extension +
                         (inTemplate ? Text.escapePath(templateRelativePath) : "") +
-                        (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT + extension : "");
+                        (lastModifiedDate > 0 ? ("/" + lastModifiedDate +
+                        (StringUtils.isNotBlank(imageName) ? ("/" + imageName) : "") + DOT + extension): "");
                     smartSizes[index] = width;
                     index++;
                 }
@@ -214,12 +228,12 @@ public class ImageImpl implements Image {
             }
             src = baseResourcePath + DOT + selector + DOT;
             if (smartSizes.length == 1) {
-                src += smartSizes[0] + DOT + extension;
+                src += jpegQuality + DOT + smartSizes[0] + DOT + extension;
             } else {
                 src += extension;
             }
-            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? "/" + lastModifiedDate + DOT +
-                    extension : "");
+            src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? ("/" + lastModifiedDate +
+                (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension) : "");
             if (!isDecorative) {
                 if (StringUtils.isNotEmpty(linkURL)) {
                     linkURL = Utils.getURL(request, pageManager, linkURL);
@@ -231,6 +245,44 @@ public class ImageImpl implements Image {
             buildJson();
         }
     }
+
+    /**
+     * Extracts the image name from the DAM resource
+     *
+     * @return image name from DAM
+     */
+    protected String getImageNameFromDam() {
+        String imageName = "";
+        Resource damResource = request.getResourceResolver().getResource(fileReference);
+        if (damResource != null) {
+            Asset asset = damResource.adaptTo(Asset.class);
+            imageName = asset != null ? StringUtils.trimToNull(asset.getName()) : "";
+        }
+        return getSeoFriendlyName(FilenameUtils.getBaseName(imageName));
+    }
+
+    /**
+     * Content editors can store DAM assets with white spaces in the name, this
+     * method makes the asset name SEO friendly, Translates the string into
+     * {@code application/x-www-form-urlencoded} format using {@code utf-8} encoding
+     * scheme.
+     *
+     * @param imageName
+     * @return the SEO friendly image name
+     */
+    protected String getSeoFriendlyName(String imageName) {
+
+        // Google recommends using hyphens (-) instead of underscores (_) for SEO. See
+        // https://support.google.com/webmasters/answer/76329?hl=en
+        String seoFriendlyName = imageName.replaceAll("[\\ _]", "-").toLowerCase();
+        try {
+            seoFriendlyName = URLEncoder.encode(seoFriendlyName, CharEncoding.UTF_8);
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error(String.format("The Character Encoding is not supported."));
+        }
+        return seoFriendlyName;
+    }
+
 
     @Override
     public String getSrc() {
@@ -265,16 +317,24 @@ public class ImageImpl implements Image {
 
     @Override
     @JsonIgnore
+    @Deprecated
     public String getJson() {
         return json;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return resource.getResourceType();
     }
 
+    @Override
+    @JsonIgnore
+    public boolean isDecorative() {
+        return this.isDecorative;
+    }
+
+    @SuppressWarnings("squid:CallToDeprecatedMethod")
     protected void buildJson() {
         JsonArrayBuilder smartSizesJsonBuilder = Json.createArrayBuilder();
         for (int size : smartSizes) {

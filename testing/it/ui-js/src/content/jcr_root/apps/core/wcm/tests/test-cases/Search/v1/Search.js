@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -425,19 +425,26 @@
             .config.changeContext(c.getContentFrame)
             .fillInput(selectors.component.input, "page", { delay: 1000 })
             .assert.isTrue(function() {
-                var $results = h.find(selectors.component.item.self);
-                return $results && $results.length === 10;
+                var $items = h.find(selectors.component.item.self);
+                return $items.length === 10;
             })
 
             // scroll down
             .execFct(function(opts, done) {
-                var resultsElt = h.find(selectors.component.results)[0];
-                resultsElt.scrollTop += 10;
-                done(true);
+                var $results = h.find(selectors.component.results);
+                if ($results.length === 1) {
+                    var results = $results[0];
+                    results.addEventListener("scroll", function() {
+                        done(true);
+                    });
+                    results.scrollTop += 10;
+                } else {
+                    done(false);
+                }
             })
             .assert.isTrue(function() {
-                var $results = h.find(selectors.component.item.self);
-                return $results && $results.length === 20;
+                var $items = h.find(selectors.component.item.self);
+                return $items.length === 20;
             });
     };
 

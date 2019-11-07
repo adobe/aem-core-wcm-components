@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2016 Adobe Systems Incorporated
+ * Copyright 2016 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,15 @@
     var properties = {
         /**
          * A validation message to display if there is a type mismatch between the user input and expected input.
+         *
+         * @type {String}
          */
         constraintMessage: {
         },
         /**
          * A validation message to display if no input is supplied, but input is expected for the field.
+         *
+         * @type {String}
          */
         requiredMessage: {
         }
@@ -159,7 +163,7 @@
     if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady());
+        document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
 })();

@@ -1,0 +1,90 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+.t-cmp-clean {
+    .cmp-download {
+        position: relative;
+
+        display: inline-block;
+        border: 1*@px solid;
+        border-radius: 3*@px;
+        padding: 18*@px;
+        overflow: hidden;
+    }
+
+    .cmp-download__title {
+        margin: 0 0 8*@px 0;
+    }
+
+    .cmp-download__title-link {
+        text-decoration: none;
+    }
+
+    .cmp-download__description {
+        margin: 0 0 18*@px 0;
+
+        p {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .cmp-download__properties {
+        margin: 0 0 18*@px 0;
+    }
+
+    .cmp-download__property {
+        display: inline-block;
+        margin-right: 4*@px;
+        border-radius: 3*@px;
+        padding: 4*@px 8*@px;
+    }
+
+    .cmp-download__property-label {
+        display: none;
+    }
+
+    .cmp-download__property-content {
+        margin: 0;
+    }
+
+    .cmp-download__action {
+        display: inline-block;
+        padding: 5*@px 7*@px;
+        border: 2*@px solid;
+        border-radius: 3*@px;
+
+        font-size: 10*@px;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        background: none;
+    }
+
+    .cmp-button__action-text {
+        display: inline-block;
+        vertical-align: top;
+        line-height: @cmp-clean-line-height;
+    }
+
+    @media @cmp-examples-screen-s-min {
+        .cmp-download__action {
+            padding: 8*@px 18*@px;
+            font-size: 12*@px;
+        }
+    }
+}

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import com.adobe.cq.commerce.api.Product;
 import com.adobe.cq.commerce.common.PriceFilter;
 import com.day.cq.commons.ImageResource;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -50,13 +50,14 @@ public class MockCommerceFactory {
         return product;
     }
 
+    @SuppressWarnings("squid:S00112")
     public static CommerceService getCommerceService(Resource resource) {
         CommerceService commerceService = mock(CommerceService.class);
         try {
             when(commerceService.login(any(SlingHttpServletRequest.class), any(SlingHttpServletResponse.class))).then(invocationOnMock -> {
                 CommerceSession commerceSession = mock(CommerceSession.class);
                 when(commerceSession.getProductPriceInfo(any(Product.class), any(PriceFilter.class))).then(invocation -> {
-                    Product product = invocation.getArgumentAt(0, Product.class);
+                    Product product = invocation.getArgument(0);
                     if (product.getPath().equals(resource.getPath())) {
                         return new ArrayList<PriceInfo>() {{
                             add(new PriceInfo(UNIVERSAL_PRICE, new Locale("en", "US")));

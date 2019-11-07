@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.testing;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -55,9 +55,9 @@ public class MockResponsiveGrid implements ContainerExporter {
      * @param modelClass  The Sling Model class to be adapted to.
      * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
      */
-    @Nonnull
-    private <T> Map<String, T> getChildModels(@Nonnull SlingHttpServletRequest slingRequest,
-                                              @Nonnull Class<T> modelClass) {
+    @NotNull
+    private <T> Map<String, T> getChildModels(@NotNull SlingHttpServletRequest slingRequest,
+                                              @NotNull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
         for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {
@@ -67,13 +67,13 @@ public class MockResponsiveGrid implements ContainerExporter {
         return  itemWrappers;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         return getChildModels(request, ComponentExporter.class);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         Map<String, ? extends ComponentExporter> models = getExportedItems();
@@ -85,7 +85,7 @@ public class MockResponsiveGrid implements ContainerExporter {
         return models.keySet().toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();

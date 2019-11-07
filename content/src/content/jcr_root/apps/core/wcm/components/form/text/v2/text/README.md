@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2017 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ Text form field component written in HTL.
   * telephone
   * date
   * number
+  * password
 * Custom constraint messages for the above types
 
 ### Use Object

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="code"
+    cq:isContainer="{Boolean}true"
+    jcr:description="Demos a component. Container that displays the component, its properties, HTML code and JSON output."
+    jcr:primaryType="cq:Component"
+    jcr:title="Demo"
+    componentGroup="Core Components Examples"/>

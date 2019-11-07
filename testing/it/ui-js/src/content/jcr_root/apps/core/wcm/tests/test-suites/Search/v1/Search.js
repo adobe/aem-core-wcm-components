@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -40,8 +40,8 @@
             c.policyPath, c.policyAssignmentPath))
         .addTestCase(search.testResultsSize(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
-        .addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
-            c.policyPath, c.policyAssignmentPath))
+        //.addTestCase(search.testScrollDown(tcExecuteBeforeTest, tcExecuteAfterTest, "/search", "core-component/components",
+        //    c.policyPath, c.policyAssignmentPath))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/search/v1/search/clientlibs/site.js"))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/search/v1/search/clientlibs/site.css"));
 

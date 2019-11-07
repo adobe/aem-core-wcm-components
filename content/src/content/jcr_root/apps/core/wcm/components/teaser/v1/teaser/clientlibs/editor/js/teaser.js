@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -40,12 +40,27 @@
             titleTuple = new CheckboxTextfieldTuple(dialogContent, titleCheckboxSelector, titleTextfieldSelector);
             descriptionTuple = new CheckboxTextfieldTuple(dialogContent, descriptionCheckboxSelector, descriptionTextfieldSelector, true);
 
-            var $linkURLField = $dialogContent.find(linkURLSelector);
-            linkURL = $linkURLField.adaptTo("foundation-field").getValue();
-            $linkURLField.on("change", function() {
-                linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+            var rteInstance = $(descriptionTextfieldSelector).data("rteinstance");
+            // wait for the description textfield rich text editor to signal start before initializing.
+            // Ensures that any state adjustments made here will not be overridden.
+            if (rteInstance && rteInstance.isActive) {
+                toggleInputs($dialogContent);
                 retrievePageInfo($dialogContent);
-            });
+            } else {
+                $(descriptionTextfieldSelector).on("editing-start", function() {
+                    toggleInputs($dialogContent);
+                    retrievePageInfo($dialogContent);
+                });
+            }
+
+            var $linkURLField = $dialogContent.find(linkURLSelector);
+            if ($linkURLField.length) {
+                linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+                $linkURLField.on("change", function() {
+                    linkURL = $linkURLField.adaptTo("foundation-field").getValue();
+                    retrievePageInfo($dialogContent);
+                });
+            }
 
             var $actionsEnabledCheckbox = $dialogContent.find(actionsEnabledCheckboxSelector);
             if ($actionsEnabledCheckbox.size() > 0) {
@@ -69,9 +84,6 @@
                     retrievePageInfo($dialogContent);
                 });
             }
-
-            toggleInputs($dialogContent);
-            retrievePageInfo($dialogContent);
         }
     });
 
@@ -79,36 +91,38 @@
         var $actionsMultifield = dialogContent.find(actionsMultifieldSelector);
         var linkURLField = dialogContent.find(linkURLSelector).adaptTo("foundation-field");
         var actions = $actionsMultifield.adaptTo("foundation-field");
-        if (actionsEnabled) {
-            linkURLField.setDisabled(true);
-            actions.setDisabled(false);
-            if ($actionsMultifield.size() > 0) {
-                var actionsMultifield = $actionsMultifield[0];
-                if (actionsMultifield.items.length < 1) {
-                    var newMultifieldItem = new Coral.Multifield.Item();
-                    actionsMultifield.items.add(newMultifieldItem);
-                    Coral.commons.ready(newMultifieldItem, function(element) {
-                        var linkField = $(element).find('foundation-autocomplete[name="link"]');
-                        if (linkField) {
-                            linkField.val(linkURL);
-                            linkField.trigger("change");
-                        }
-                    });
-                } else {
-                    toggleActionItems($actionsMultifield, false);
+        if (linkURLField && actions) {
+            if (actionsEnabled) {
+                linkURLField.setDisabled(true);
+                actions.setDisabled(false);
+                if ($actionsMultifield.size() > 0) {
+                    var actionsMultifield = $actionsMultifield[0];
+                    if (actionsMultifield.items.length < 1) {
+                        var newMultifieldItem = new Coral.Multifield.Item();
+                        actionsMultifield.items.add(newMultifieldItem);
+                        Coral.commons.ready(newMultifieldItem, function(element) {
+                            var linkField = $(element).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']");
+                            if (linkField) {
+                                linkField.val(linkURL);
+                                linkField.trigger("change");
+                            }
+                        });
+                    } else {
+                        toggleActionItems($actionsMultifield, false);
+                    }
                 }
+            } else {
+                linkURLField.setDisabled(false);
+                actions.setDisabled(true);
+                toggleActionItems($actionsMultifield, true);
             }
-        } else {
-            linkURLField.setDisabled(false);
-            actions.setDisabled(true);
-            toggleActionItems($actionsMultifield, true);
         }
     }
 
     function toggleActionItems(actionsMultifield, disabled) {
         actionsMultifield.find("coral-multifield-item").each(function(ix, item) {
-            var linkField = $(item).find("foundation-autocomplete[name='link']").adaptTo("foundation-field");
-            var textField = $(item).find("input[name='text']").adaptTo("foundation-field");
+            var linkField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionLink']").adaptTo("foundation-field");
+            var textField = $(item).find("[data-cmp-teaser-v1-dialog-edit-hook='actionTitle']").adaptTo("foundation-field");
             if (disabled && linkField.getValue() === "" && textField.getValue() === "") {
                 actionsMultifield[0].items.remove(item);
             }
@@ -120,7 +134,7 @@
     function retrievePageInfo(dialogContent) {
         var url;
         if (actionsEnabled) {
-            url = dialogContent.find('.cmp-teaser__editor-multifield_actions [name="link"]').val();
+            url = dialogContent.find('.cmp-teaser__editor-multifield_actions [data-cmp-teaser-v1-dialog-edit-hook="actionLink"]').val();
         } else {
             url = linkURL;
         }
@@ -144,7 +158,7 @@
     function updateText(target) {
         var url = target.val();
         if (url && url.startsWith("/")) {
-            var textField = target.parents("coral-multifield-item").find('[name="text"]');
+            var textField = target.parents("coral-multifield-item").find('[data-cmp-teaser-v1-dialog-edit-hook="actionTitle"]');
             if (textField && !textField.val()) {
                 $.ajax({
                     url: url + "/_jcr_content.json"

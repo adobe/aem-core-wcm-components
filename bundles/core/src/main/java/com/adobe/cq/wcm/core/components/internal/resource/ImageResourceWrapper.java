@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.resource;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -27,6 +25,7 @@ import org.apache.sling.api.resource.ResourceWrapper;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.apache.sling.models.annotations.Exporter;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ExporterConstants;
 
@@ -36,7 +35,7 @@ public class ImageResourceWrapper extends ResourceWrapper {
     private ValueMap valueMap;
     private String resourceType;
 
-    public ImageResourceWrapper(@Nonnull Resource resource, @Nonnull String resourceType) {
+    public ImageResourceWrapper(@NotNull Resource resource, @NotNull String resourceType) {
         super(resource);
         if (StringUtils.isEmpty(resourceType)) {
             throw new IllegalArgumentException("The " + ImageResourceWrapper.class.getName() + " needs to override the resource type of " +
@@ -47,7 +46,7 @@ public class ImageResourceWrapper extends ResourceWrapper {
         valueMap.put(ResourceResolver.PROPERTY_RESOURCE_TYPE, resourceType);
     }
 
-    public ImageResourceWrapper(@Nonnull Resource resource, @Nonnull String resourceType, List<String> hiddenProperties) {
+    public ImageResourceWrapper(@NotNull Resource resource, @NotNull String resourceType, List<String> hiddenProperties) {
         this(resource, resourceType);
         for (String property : hiddenProperties) {
             valueMap.remove(property);
@@ -63,7 +62,7 @@ public class ImageResourceWrapper extends ResourceWrapper {
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public ValueMap getValueMap() {
         return valueMap;
     }

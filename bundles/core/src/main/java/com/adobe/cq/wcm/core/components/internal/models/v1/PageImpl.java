@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -41,6 +39,7 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -55,8 +54,11 @@ import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Model(adaptables = SlingHttpServletRequest.class,
+       adapters = {Page.class, ContainerExporter.class},
+       resourceType = PageImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v1/page";
@@ -134,7 +136,7 @@ public class PageImpl implements Page {
         String templateName = null;
         String templatePath = pageProperties.get(NameConstants.PN_TEMPLATE, String.class);
         if (StringUtils.isNotEmpty(templatePath)) {
-            int i = templatePath.lastIndexOf("/");
+            int i = templatePath.lastIndexOf('/');
             if (i > 0) {
                 templateName = templatePath.substring(i + 1);
             }
@@ -174,6 +176,7 @@ public class PageImpl implements Page {
 
     @Override
     @JsonIgnore
+    @Deprecated
     public Map<String, String> getFavicons() {
         return favicons;
     }
@@ -194,7 +197,7 @@ public class PageImpl implements Page {
         return Arrays.copyOf(clientLibCategories, clientLibCategories.length);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         if (childModels == null) {
@@ -204,7 +207,7 @@ public class PageImpl implements Page {
         return childModels;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         Map<String, ? extends ComponentExporter> models = getExportedItems();
@@ -217,7 +220,7 @@ public class PageImpl implements Page {
 
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         if (StringUtils.isEmpty(resourceType)) {
@@ -232,20 +235,20 @@ public class PageImpl implements Page {
     /**
      * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
      *
-     * @param slingRequest The current request.
-     * @param modelClass  The Sling Model class to be adapted to.
-     * @return Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
+     * @param slingRequest the current request
+     * @param modelClass the Sling Model class to be adapted to
+     * @return a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}
      */
-    @Nonnull
-    private <T> Map<String, T> getChildModels(@Nonnull SlingHttpServletRequest slingRequest,
-                                              @Nonnull Class<T> modelClass) {
+    @NotNull
+    private <T> Map<String, T> getChildModels(@NotNull SlingHttpServletRequest slingRequest,
+                                              @NotNull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
         for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {
             itemWrappers.put(child.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, child, modelClass));
         }
 
-        return  itemWrappers;
+        return itemWrappers;
     }
 
     protected void loadFavicons(String designPath) {

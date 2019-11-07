@@ -1,0 +1,79 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2018 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.carousel="com.adobe.cq.wcm.core.components.models.Carousel"
+     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     class="cmp-carousel"
+     role="group"
+     aria-label="${carousel.accessibilityLabel}"
+     aria-roledescription="carousel"
+     data-cmp-is="carousel"
+     data-cmp-autoplay="${(wcmmode.edit || wcmmode.preview) ? '' : carousel.autoplay}"
+     data-cmp-delay="${carousel.delay}"
+     data-cmp-autopause-disabled="${carousel.autopauseDisabled}">
+    <div data-sly-test="${carousel.items && carousel.items.size > 0}"
+         class="cmp-carousel__content">
+        <div data-sly-repeat.item="${carousel.items}"
+             data-sly-resource="${item.name @ decorationTagName='div'}"
+             class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
+             role="tabpanel"
+             aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
+             data-cmp-hook-carousel="item"></div>
+        <div class="cmp-carousel__actions">
+            <button class="cmp-carousel__action cmp-carousel__action--previous"
+                    type="button"
+                    aria-label="${'Previous' @ i18n}"
+                    data-cmp-hook-carousel="previous">
+                <span class="cmp-carousel__action-icon"></span>
+                <span class="cmp-carousel__action-text">${'Previous' @ i18n}</span>
+            </button>
+            <button class="cmp-carousel__action cmp-carousel__action--next"
+                    type="button"
+                    aria-label="${'Next' @ i18n}"
+                    data-cmp-hook-carousel="next">
+                <span class="cmp-carousel__action-icon"></span>
+                <span class="cmp-carousel__action-text">${'Next' @ i18n}</span>
+            </button>
+            <button data-sly-test="${carousel.autoplay}"
+                    class="cmp-carousel__action cmp-carousel__action--pause"
+                    type="button"
+                    aria-label="${'Pause' @ i18n}"
+                    data-cmp-hook-carousel="pause">
+                <span class="cmp-carousel__action-icon"></span>
+                <span class="cmp-carousel__action-text">${'Pause' @ i18n}</span>
+            </button>
+            <button data-sly-test="${carousel.autoplay}"
+                    class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
+                    type="button"
+                    aria-label="${'Play' @ i18n}"
+                    data-cmp-hook-carousel="play">
+                <span class="cmp-carousel__action-icon"></span>
+                <span class="cmp-carousel__action-text">${'Play' @ i18n}</span>
+            </button>
+        </div>
+        <ol class="cmp-carousel__indicators"
+            role="tablist"
+            aria-label="${'Choose a slide to display' @ i18n}"
+            data-cmp-hook-carousel="indicators">
+            <li data-sly-repeat.item="${carousel.items}"
+                class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
+                role="tab"
+                aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"
+                data-cmp-hook-carousel="indicator">${item.title}</li>
+        </ol>
+    </div>
+    <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
+         data-sly-test="${(wcmmode.edit || wcmmode.preview) && carousel.items.size < 1}"></sly>
+</div>

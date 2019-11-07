@@ -1,5 +1,5 @@
 /*
- *  Copyright 2016 Adobe Systems Incorporated
+ *  Copyright 2016 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -263,6 +263,35 @@ window.CQ.CoreComponentsIT.Title.v1 = window.CQ.CoreComponentsIT.Title.v1 || {}
 
             .assert.isTrue(function() {
                 return h.find(".cmp-title h5", "#ContentFrame").size() === 1;
+            })
+        ;
+    };
+
+    /**
+     * Test: set link on title
+     */
+    title.tcSetLink = function(tcExecuteBeforeTest, tcExecuteAfterTest) {
+        return new h.TestCase("Set Link", {
+            execBefore: tcExecuteBeforeTest,
+            execAfter: tcExecuteAfterTest })
+
+            // open the config dialog
+            .execTestCase(c.tcOpenConfigureDialog("cmpPath"))
+            // enter the link
+            .execTestCase(c.tcSelectInAutocomplete("[name='./linkURL']", c.rootPage))
+
+            // save the dialog
+            .execTestCase(c.tcSaveConfigureDialog)
+
+            // switch to content frame
+            .config.changeContext(c.getContentFrame)
+            // click on the title
+            .click(".cmp-title__link", { expectNav: true })
+            // go back to top frame
+            .config.resetContext()
+            // check if the url is correct
+            .asserts.isTrue(function() {
+                return hobs.context().window.location.pathname.endsWith(c.rootPage + ".html");
             })
         ;
     };

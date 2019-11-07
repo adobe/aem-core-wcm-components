@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -23,27 +23,25 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.servlethelpers.MockSlingHttpServletRequest;
 import org.apache.sling.servlethelpers.MockSlingHttpServletResponse;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.testing.Utils;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHandlingServletHelper;
 import com.day.cq.wcm.foundation.security.SaferSlingPostValidator;
-
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(CoreFormHandlingServlet.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CoreFormHandlingServletTest {
 
     @Mock
@@ -58,8 +56,8 @@ public class CoreFormHandlingServletTest {
     @InjectMocks
     CoreFormHandlingServlet servlet;
 
-    @Rule
-    public final AemContext context = new AemContext();
+    @ClassRule
+    public static final AemContext context = CoreComponentTestContext.createContext();
 
     private static final String[] NAME_WHITELIST = {"param-text", "param-button"};
 
@@ -73,7 +71,6 @@ public class CoreFormHandlingServletTest {
     public void setUp() throws Exception {
         servlet = new CoreFormHandlingServlet();
         MockitoAnnotations.initMocks(this);
-        PowerMockito.whenNew(FormsHandlingServletHelper.class).withAnyArguments().thenReturn(formsHandlingServletHelper);
         servlet.activate(new CoreFormHandlingServlet.Configuration() {
 
             @Override
@@ -91,6 +88,7 @@ public class CoreFormHandlingServletTest {
                 return ALLOW_EXPRESSIONS;
             }
         });
+        Utils.setInternalState(servlet, "formsHandlingServletHelper", formsHandlingServletHelper);
     }
 
     @Test

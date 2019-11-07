@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2017 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ Title component written in HTL, allowing to define a section heading.
 ## Features
 
 * In-place editing
+* Automatic reading of the page title from the current page, if no title text is defined
 * HTML element configuration (`h1` - `h6`)
 * Linkable to content pages, external URLs or page anchors
 * Styles
@@ -58,3 +59,4 @@ BLOCK cmp-title
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_title\_v2](https://www.adobe.com/go/aem_cmp_title_v2)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_title](https://www.adobe.com/go/aem_cmp_library_title)

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2018 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 public class DefaultMethodSkippingModuleProvider implements ModuleProvider {
 
     private static final String PACKAGE_CORE_COMPONENTS = "com.adobe.cq.wcm.core.components";
+    private static final String PACKAGE_IMPL_INTERNAL = "internal.models";
 
     private SimpleModule module;
 
@@ -49,8 +50,13 @@ public class DefaultMethodSkippingModuleProvider implements ModuleProvider {
                     if (member instanceof Method) {
                         final Method method = (Method) member;
                         if (method.isDefault()) {
-                            // only exclude default methods if they are defined on interfaces from the core components
-                            return !method.getDeclaringClass().getName().startsWith(PACKAGE_CORE_COMPONENTS);
+                            try {
+                                // only exclude default methods if they are defined on interfaces from the core components
+                                String className = beanDesc.getBeanClass().getMethod(method.getName()).getDeclaringClass().getName();
+                                return !className.startsWith(PACKAGE_CORE_COMPONENTS) || className.contains(PACKAGE_IMPL_INTERNAL);
+                            } catch (NoSuchMethodException e) {
+                                return false;
+                            }
                         }
                     }
                     return true;

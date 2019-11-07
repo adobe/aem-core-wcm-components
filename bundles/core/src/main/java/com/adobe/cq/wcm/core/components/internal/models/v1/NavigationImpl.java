@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Optional;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -34,10 +35,9 @@ import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -82,6 +82,9 @@ public class NavigationImpl implements Navigation {
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String accessibilityLabel;
+
     private int structureDepth;
     private String navigationRootPage;
     private List<NavigationItem> items;
@@ -116,7 +119,7 @@ public class NavigationImpl implements Navigation {
             Page rootPage = pageManager.getPage(navigationRootPage);
             if (rootPage != null) {
                 NavigationRoot navigationRoot = new NavigationRoot(rootPage, structureDepth);
-                Page navigationRootLanguageRoot = languageManager.getLanguageRoot(navigationRoot.page.getContentResource());
+                Page navigationRootLanguageRoot = navigationRoot.getPageResource().map(languageManager::getLanguageRoot).orElse(null);
                 Page currentPageLanguageRoot = languageManager.getLanguageRoot(currentPage.getContentResource());
                 RangeIterator liveCopiesIterator = null;
                 try {
@@ -149,10 +152,15 @@ public class NavigationImpl implements Navigation {
                 items = Collections.emptyList();
             }
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
-    @Nonnull
+    @Override
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
+    }
+
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
@@ -250,8 +258,8 @@ public class NavigationImpl implements Navigation {
         return StringUtils.countMatches(page.getPath(), "/") - 1;
     }
 
-    @CheckForNull
-    private String getRelativePath(@Nonnull Page root, @Nonnull Page child) {
+    @Nullable
+    private String getRelativePath(@NotNull Page root, @NotNull Page child) {
         if (child.equals(root)) {
             return ".";
         } else if ((child.getPath() + "/").startsWith(root.getPath())) {
@@ -261,16 +269,32 @@ public class NavigationImpl implements Navigation {
     }
 
     private class NavigationRoot {
-        Page page;
+        final Page page;
         int startLevel;
         int structureDepth = -1;
 
-        private NavigationRoot(@Nonnull Page navigationRoot, int configuredStructureDepth) {
+        private NavigationRoot(@NotNull Page navigationRoot, int configuredStructureDepth) {
             page = navigationRoot;
             this.startLevel = getLevel(navigationRoot);
             if (configuredStructureDepth > -1) {
                 structureDepth = configuredStructureDepth + startLevel;
             }
+        }
+
+        /**
+         * Gets the resource representation of the navigation root page.
+         *
+         * @return the resource for the navigation root, empty if the resource could not be resolved
+         */
+        @NotNull
+        final Optional<Resource> getPageResource() {
+            return Optional.ofNullable(
+                Optional.of(this.page)
+                    // get the parent of the content resource
+                    .map(Page::getContentResource)
+                    .map(Resource::getParent)
+                    // if content resource is missing, resolve resource at page path
+                    .orElseGet(() -> resourceResolver.getResource(this.page.getPath())));
         }
     }
 

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,12 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
@@ -34,7 +33,7 @@ public class RedirectItemImpl implements NavigationItem {
     private String url;
     private SlingHttpServletRequest request;
 
-    public RedirectItemImpl(@Nonnull String redirectTarget, @Nonnull SlingHttpServletRequest request) {
+    public RedirectItemImpl(@NotNull String redirectTarget, @NotNull SlingHttpServletRequest request) {
         this.redirectTarget = redirectTarget;
         this.request = request;
         this.page = getRedirectPage();
@@ -54,12 +53,13 @@ public class RedirectItemImpl implements NavigationItem {
 
     @Override
     @Nullable
+    @Deprecated
     public Page getPage() {
         return page;
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public String getURL() {
         if(url == null) {
             if(page != null) {

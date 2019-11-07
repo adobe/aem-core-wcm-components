@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,6 +34,7 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,7 +143,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         return metadata;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
@@ -152,7 +151,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
 
     //*************** IMPLEMENTATION *******************
     @PostConstruct
-    private void initModel() throws Exception {
+    private void initModel() {
         ValueMap pageProperties = currentPage.getProperties();
         String[] socialMedia = pageProperties.get(PN_SOCIAL_MEDIA, String[].class);
         facebookEnabled = ArrayUtils.contains(socialMedia, PV_FACEBOOK);
@@ -221,20 +220,24 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
      * Instantiates the suitable metadata provider based on the contents of the current page.
      */
     private WebsiteMetadata createMetadataProvider() {
-        Product product = CommerceHelper.findCurrentProduct(currentPage);
-        ExperienceFragmentSocialVariation smVariant = findExperienceFragmentSocialVariation();
-        if (product == null) {
-            if (smVariant == null) {
-                return new WebsiteMetadataProvider();
+        try {
+            Product product = CommerceHelper.findCurrentProduct(currentPage);
+            ExperienceFragmentSocialVariation smVariant = findExperienceFragmentSocialVariation();
+            if (product == null) {
+                if (smVariant == null) {
+                    return new WebsiteMetadataProvider();
+                } else {
+                    return new ExperienceFragmentWebsiteMetadataProvider(smVariant);
+                }
             } else {
-                return new ExperienceFragmentWebsiteMetadataProvider(smVariant);
+                if (smVariant == null) {
+                    return new ProductMetadataProvider(product);
+                } else {
+                    return new ExperienceFragmentProductMetadataProvider(product, smVariant);
+                }
             }
-        } else {
-            if (smVariant == null) {
-                return new ProductMetadataProvider(product);
-            } else {
-                return new ExperienceFragmentProductMetadataProvider(product, smVariant);
-            }
+        } catch (NoClassDefFoundError e) {
+            return new WebsiteMetadataProvider();
         }
     }
 

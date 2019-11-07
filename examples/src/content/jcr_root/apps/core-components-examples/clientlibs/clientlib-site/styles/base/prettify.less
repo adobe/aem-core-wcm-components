@@ -1,0 +1,121 @@
+/*
+ *  Copyright 2018 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+// Core Component Library theme for Google code prettify https://github.com/google/code-prettify
+
+pre.prettyprint {
+    font-family: @cmp-examples-font-family-monospace;
+    font-size: @cmp-examples-font-size-code;
+    line-height: @cmp-examples-line-height;
+
+    background-color: @cmp-examples-color-background;
+
+    code,
+    .linenums {
+        font-family: @cmp-examples-font-family-monospace;
+    }
+
+    .L0, .L1, .L2, .L3, .L4, .L5, .L6, .L7, .L8, .L9 {
+        padding-left: @cmp-examples-spacing-4;
+        list-style-type: decimal;
+    }
+
+    // workaround - erroneous opening indent is inserted for language-html
+    .L0 > .pln {
+        display: none;
+    }
+
+    // line numbers
+    .linenums {
+        margin: 0;
+        color: @cmp-examples-color-text-light;
+    }
+
+    // plain text
+    .pln {
+        color: @cmp-examples-color-text;
+    }
+
+    // string content
+    .str {
+        color: @cmp-examples-color-blue-700;
+    }
+
+    // keyword
+    .kwd {
+        color: @cmp-examples-color-gray-800;
+    }
+
+    // comment
+    .com {
+        color: @cmp-examples-color-text-light;
+    }
+
+    // type name
+    .typ {
+        color: @cmp-examples-color-orange-700;
+    }
+
+    // literal value
+    .lit {
+        color: @cmp-examples-color-orange-700;
+    }
+
+    // punctuation
+    .pun {
+        color: @cmp-examples-color-text;
+    }
+
+    // open bracket
+    .opn {
+        color: @cmp-examples-color-text;
+    }
+
+    // close bracket
+    .clo {
+        color: @cmp-examples-color-text;
+    }
+
+    // html element tag name
+    .tag {
+        color: @cmp-examples-color-green-700;
+    }
+
+    // html element attribute name
+    .atn {
+        color: @cmp-examples-color-orange-700;
+    }
+
+    // html element attribute value
+    .atv {
+        color: @cmp-examples-color-blue-700;
+    }
+
+    // declaration
+    .dec {
+        color: @cmp-examples-color-text;
+    }
+
+    // variable name
+    .var {
+        color: @cmp-examples-color-green-700;
+    }
+
+    // function name
+    .fun {
+        color: @cmp-examples-color-red-600;
+    }
+}

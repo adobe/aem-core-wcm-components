@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2018 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -32,15 +32,29 @@
             assetDrag: function(imagePath) {
                 return 'coral-card.cq-draggable[data-path="' + imagePath + '"]';
             },
-            assetDrop: 'coral-fileupload[name="./file"',
-            linkURL: 'foundation-autocomplete[name="./linkURL"]',
-            titleFromPage: 'input[name="./titleFromPage"]',
-            title: 'input[name="./jcr:title"]',
-            descriptionFromPage: 'input[name="./descriptionFromPage"]',
-            description: 'input[name="./jcr:description"]',
-            actionsEnabled: 'coral-checkbox[name="./actionsEnabled"]',
-            actionLinkURL: 'foundation-autocomplete[name="link"]',
-            actionText: 'input[name="text"]'
+            assetDrop: '.cmp-teaser__editor coral-fileupload[name="./file"]',
+            linkURL: '.cmp-teaser__editor foundation-autocomplete[name="./linkURL"]',
+            titleFromPage: '.cmp-teaser__editor input[name="./titleFromPage"]',
+            title: '.cmp-teaser__editor input[name="./jcr:title"]',
+            descriptionFromPage: '.cmp-teaser__editor input[name="./descriptionFromPage"]',
+            description: '.cmp-teaser__editor input[name="./jcr:description"]',
+            actionsEnabled: '.cmp-teaser__editor coral-checkbox[name="./actionsEnabled"]',
+            actionLinkURL: '[data-cmp-teaser-v1-dialog-edit-hook="actionLink"]',
+            actionText: '[data-cmp-teaser-v1-dialog-edit-hook="actionTitle"]',
+            tabs: {
+                image: ".cmp-teaser__editor coral-tab:eq(0)",
+                text: ".cmp-teaser__editor coral-tab:eq(1)",
+                linkAndActions: ".cmp-teaser__editor coral-tab:eq(2)"
+            }
+        },
+        assetFinder: {
+            filters: {
+                path: {
+                    self: 'foundation-autocomplete[name="assetfilter_image_path"]',
+                    textField: 'foundation-autocomplete[name="assetfilter_image_path"] [is="coral-textfield"]',
+                    buttonListItem: 'foundation-autocomplete[name="assetfilter_image_path"] [is="coral-buttonlist-item"]'
+                }
+            }
         }
     };
 
@@ -63,5 +77,6 @@
         .addTestCase(teaser.testDisableActionsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components",
             c.policyPath, c.policyAssignmentPath))
         .addTestCase(teaser.testWithActionsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components"))
-        .addTestCase(teaser.testWithExternalActionsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components"));
+        .addTestCase(teaser.testWithExternalActionsTeaser(tcExecuteBeforeTest, tcExecuteAfterTest, selectors, "/teaser", "core-component/components"))
+        .addTestCase(teaser.testCheckboxTextfieldTuple(tcExecuteBeforeTest, tcExecuteAfterTest, selectors));
 }(hobs, jQuery));

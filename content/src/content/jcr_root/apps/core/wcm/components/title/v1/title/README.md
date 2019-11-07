@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2017 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ Title component written in HTL, allowing to define a section heading.
 ## Features
 
 * In-place editing
+* Automatic reading of the page title from the current page, if no title text is defined
 * HTML element configuration (`h1` - `h6`)
 * Styles
 

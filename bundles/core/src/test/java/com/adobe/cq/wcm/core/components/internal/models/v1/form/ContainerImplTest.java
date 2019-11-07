@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.servlet.RequestDispatcher;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
@@ -34,7 +32,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
@@ -50,8 +48,6 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ContainerImplTest {
@@ -67,22 +63,19 @@ public class ContainerImplTest {
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTAINING_PAGE);
 
     @Mock
-    private FormStructureHelperFactory formStructureHelperFactory;
-
-    @Mock
     private FormStructureHelper formStructureHelper;
 
     @Mock
     private MockRequestDispatcherFactory requestDispatcherFactory;
 
-    @Mock
-    private RequestDispatcher requestDispatcher;
-
     @Before
     public void setUp() {
-        when(formStructureHelperFactory.getFormStructureHelper(any(Resource.class))).thenReturn(formStructureHelper);
-        when(requestDispatcherFactory.getRequestDispatcher(any(Resource.class), any())).thenReturn(requestDispatcher);
-        CONTEXT.registerService(FormStructureHelperFactory.class, formStructureHelperFactory);
+        CONTEXT.registerService(FormStructureHelperFactory.class, new FormStructureHelperFactory() {
+            @Override
+            public FormStructureHelper getFormStructureHelper(Resource resource) {
+                return formStructureHelper;
+            }
+        });
         CONTEXT.registerService(SlingModelFilter.class, new SlingModelFilter() {
 
             private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
@@ -115,7 +108,7 @@ public class ContainerImplTest {
         assertEquals("application/x-www-form-urlencoded", container.getEnctype());
         assertEquals("GET", container.getMethod());
         assertEquals(CONTEXT_PATH + CONTAINING_PAGE + ".html", container.getAction());
-        assertEquals("core/wcm/components/form/container/v1/container/new", container.getResourceTypeForDropArea());
+        assertEquals("wcm/foundation/components/responsivegrid/new", container.getResourceTypeForDropArea());
         assertEquals(CONTEXT_PATH + "/content/coretest/home", container.getRedirect());
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, FORM1_PATH));
     }
@@ -126,7 +119,7 @@ public class ContainerImplTest {
         assertEquals("multipart/form-data", container.getEnctype());
         assertEquals("POST", container.getMethod());
         assertEquals(CONTEXT_PATH + CONTAINING_PAGE + ".html", container.getAction());
-        assertEquals("core/wcm/components/form/container/v1/container/new", container.getResourceTypeForDropArea());
+        assertEquals("wcm/foundation/components/responsivegrid/new", container.getResourceTypeForDropArea());
         assertNull(container.getRedirect());
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, FORM2_PATH));
     }

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2016 Adobe Systems Incorporated
+ *  Copyright 2016 Adobe
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,6 +34,10 @@
     c.proxyPath = "/apps/core-component/components/";
 
     // core component resource types
+    // accordion component
+    c.rtAccordion_v1 = "core/wcm/components/accordion/v1/accordion";
+    // embed component
+    c.rtEmbed_v1 = "core/wcm/components/embed/v1/embed";
     // text component
     c.rtText_v1 = "core/wcm/components/text/v1/text";
     c.rtText_v2 = "core/wcm/components/text/v2/text";
@@ -49,6 +53,8 @@
     // breadcrumb component
     c.rtBreadcrumb_v1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
     c.rtBreadcrumb_v2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
+    // button component
+    c.rtButton_v1 = "core/wcm/components/button/v1/button";
     // navigation component
     c.rtNavigation_v1 = "core/wcm/components/navigation/v1/navigation";
     // language navigation component
@@ -57,6 +63,14 @@
     c.rtSearch_v1 = "core/wcm/components/search/v1/search";
     // teaser component
     c.rtTeaser_v1 = "core/wcm/components/teaser/v1/teaser";
+    // carousel component
+    c.rtCarousel_v1 = "core/wcm/components/carousel/v1/carousel";
+    // tabs component
+    c.rtTabs_v1 = "core/wcm/components/tabs/v1/tabs";
+    // content fragment component
+    c.rtContentFragment_v1 = "core/wcm/components/contentfragment/v1/contentfragment";
+    // content fragment list component
+    c.rtContentFragmentList_v1 = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
     // form container
     c.rtFormContainer_v1 = "core/wcm/components/form/container/v1/container";
     c.rtFormContainer_v2 = "core/wcm/components/form/container/v2/container";
@@ -723,6 +737,37 @@
             // select the store action
             .click("coral-select[name='" + name + "'] coral-selectlist " +
                 "coral-selectlist-item[value='" + value + "']");
+    };
+
+    /**
+     * Selects a value in a Granite UI autocomplete field
+     *
+     * @param selector {String} Specific selector for the autocomplete (ex. "[name='./myField']")
+     * @param value {String} The value to be selected
+     *
+     * @returns {TestCase} A test case that selects a value in an autocomplete field
+     */
+    c.tcSelectInAutocomplete = function(selector, value) {
+        return new h.TestCase("Select in autocomplete the value '" + value + "' for " + selector)
+            // fill input
+            .fillInput("foundation-autocomplete" + selector + " input[type!='hidden']", value)
+            // click on the item in the open suggestion box
+            .click("foundation-autocomplete" + selector + " button[value^='" + value + "']", { after: 1000 });
+    };
+
+    /**
+     * Selects a tag in a Granite UI tags autocomplete field
+     *
+     * @param selector {String} Specific selector for the tags selector (ex. "[name='./tags']")
+     * @param value {String} The tag value
+     * @returns {TestCase} A test case that selects a tag in a tag selector field
+     */
+    c.tcSelectInTags = function(selector, value) {
+        return new h.TestCase("Select in autocomplete the value '" + value + "' for '" + selector)
+        // fill input
+            .fillInput("foundation-autocomplete" + selector + " input[is='coral-textfield']",  value)
+            // simulate Enter key
+            .simulate("foundation-autocomplete" + selector + " input[is='coral-textfield']", "keydown", { keyCode: 13, after: 1000 });
     };
 
     /**

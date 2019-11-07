@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -18,9 +18,8 @@ package com.adobe.cq.wcm.core.components.models;
 import java.util.Calendar;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -212,6 +211,7 @@ public interface Page extends ContainerExporter {
      * @deprecated since 12.2.0
      */
     @Deprecated
+    @JsonIgnore
     default Map<String, String> getFavicons() {
         throw new UnsupportedOperationException();
     }
@@ -227,14 +227,41 @@ public interface Page extends ContainerExporter {
     }
 
     /**
-     * If this page is associated with a Template, then this method will return the Template's client libraries categories.
+     * If this page is associated with a Template, then this method will return the Template's client library categories
+     * to be included in the page as defined by the user in the policy.
      *
-     * @return an array of client libraries categories; the array can be empty if the page doesn't have an associated template or if the
-     * template has no client libraries
+     * @return an array of client library categories to be included; the array can be empty if the page doesn't have an
+     * associated template or if the template has no client libraries defined.
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     @JsonIgnore
     default String[] getClientLibCategories() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * If this page is associated with a Template, then this method will return the JavaScript client library categories
+     * which are intended specifically to be loaded at the page body end (JavaScript only), as defined by the user in the policy.
+     *
+     * @return an array of JavaScript client library categories which are expected to be loaded at the page body end;
+     * the array can be empty if the page doesn't have an associated template or if the template has no body client libraries defined.
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0;
+     */
+    @JsonIgnore
+    default String[] getClientLibCategoriesJsBody() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * If this page is associated with a Template, then this method will return the JavaScript client library categories
+     * which are intended specifically to be loaded up front in the page head (JavaScript only), as defined by the user in the policy.
+     *
+     * @return an array of JavaScript client library categories which are expected to be loaded in the page head; the array can be empty
+     * if the page doesn't have an associated template or if the template has no head client libraries defined.
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0;
+     */
+    @JsonIgnore
+    default String[] getClientLibCategoriesJsHead() {
         throw new UnsupportedOperationException();
     }
 
@@ -294,7 +321,7 @@ public interface Page extends ContainerExporter {
      * @see ContainerExporter#getExportedItemsOrder()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String[] getExportedItemsOrder() {
         throw new UnsupportedOperationException();
@@ -304,7 +331,7 @@ public interface Page extends ContainerExporter {
      * @see ContainerExporter#getExportedItems()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default Map<String, ? extends ComponentExporter> getExportedItems() {
         throw new UnsupportedOperationException();
@@ -314,7 +341,7 @@ public interface Page extends ContainerExporter {
      * @see ContainerExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();

@@ -1,0 +1,36 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+@cmp-examples-breakpoint-xs: 480px;
+@cmp-examples-breakpoint-s: 768px;
+@cmp-examples-breakpoint-m: 1024px;
+@cmp-examples-breakpoint-l: 1280px;
+
+/*
+ * min screen width based pre-prepared media queries
+ *
+ * Usage:
+ *
+ * .my-selector {
+ *     @media @cmp-examples-screen-s-min {
+ *         // properties for small screen min-width
+ *     }
+ * }
+  */
+@cmp-examples-screen-s-min: ~'only screen and (min-width: @{cmp-examples-breakpoint-xs})';
+@cmp-examples-screen-m-min: ~'only screen and (min-width: @{cmp-examples-breakpoint-s})';
+@cmp-examples-screen-l-min: ~'only screen and (min-width: @{cmp-examples-breakpoint-m})';
+@cmp-examples-screen-xl-min: ~'only screen and (min-width: @{cmp-examples-breakpoint-l})';
