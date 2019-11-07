@@ -24,11 +24,8 @@
         data-cmp-expanded="${item.name in accordion.expandedItems}">
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">
-            <button class="cmp-accordion__button${item.name in accordion.expandedItems ? ' cmp-accordion__button--expanded' : ''}"
-                    data-cmp-hook-accordion="button">
-                <span class="cmp-accordion__title">${item.title}</span>
-                <span class="cmp-accordion__icon"></span>
-            </button>
+            <span class="cmp-accordion__title">${item.title}</span>
+            <span class="cmp-accordion__icon"></span>
         </h3>
         <div data-sly-resource="${item.name @ decorationTagName='div'}"
             data-cmp-hook-accordion="panel"
