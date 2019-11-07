@@ -31,6 +31,7 @@ import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.rewriter.ProcessingComponentConfiguration;
 import org.apache.sling.rewriter.ProcessingContext;
 import org.apache.sling.rewriter.Transformer;
@@ -195,7 +196,26 @@ public class AmpTransformer implements Transformer {
                 headLibResource = Utils.resolveResource(resolver, headLibPath);
                 if (headLibResource == null) {
                     LOG.trace("No custom headlib for resource type {}.", resourceType);
-                    continue;
+
+                    // Get resource from the resource type.
+                    Resource coreResource = slingRequest.getResourceResolver().getResource(resourceType);
+                    if (coreResource == null) {
+                        LOG.debug("Can't access resource from resource type {}.", resourceType);
+                        continue;
+                    }
+
+                    // Get resource superType path from the resource type.
+                    String superTypePath = coreResource.getResourceSuperType();
+                    if (superTypePath == null) {
+                      LOG.trace("No resource superType from resource type {}.", resourceType);
+                        continue;
+                    }
+                    // Get headLibResource from resource superType.
+                    headLibResource = Utils.resolveResource(resolver, superTypePath + "/" + cfg.getHeadlibName() + "/" + JcrConstants.JCR_CONTENT);
+                    if (headLibResource == null) {
+                        LOG.trace("No custom headlib for resource superType from resource type {}.", resourceType);
+                        continue;
+                    }
                 }
 
                 // Read the input stream from the resource type's AMP headlib.
