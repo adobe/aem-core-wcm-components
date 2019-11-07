@@ -57,6 +57,14 @@
                                 "jcr:uuid": "1927d32d-fc6c-4046-85d1-d0c3c87d4449"
                             }
                         }
+                    },
+                    "download-4"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fileReference"     : "/content/dam/core/documents_without_size/Download_Test_PDF.pdf",
+                        "jcr:title"         : "Download",
+                        "jcr:description"   : "Description",
+                        "actionText"        : "Click",
+                        "sling:resourceType": "core/wcm/components/download/v1/download"
                     }
                 }
             }

@@ -206,12 +206,16 @@ public class DownloadImpl implements Download {
                         }
                     }
 
-                    size = null;
+                    long rawFileSize;
                     Object rawFileSizeObject = downloadAsset.getMetadata(DamConstants.DAM_SIZE);
+
                     if (rawFileSizeObject != null) {
-                        long rawFileSize = (Long) rawFileSizeObject;
-                        size = FileUtils.byteCountToDisplaySize(rawFileSize);
+                        rawFileSize = (Long) rawFileSizeObject;
+                    } else {
+                        rawFileSize = downloadAsset.getOriginal().getSize();
                     }
+
+                    size = FileUtils.byteCountToDisplaySize(rawFileSize);
             }
         }
     }
