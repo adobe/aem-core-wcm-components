@@ -40,10 +40,12 @@ class DownloadImplTest {
     private static final String CONTENT_ROOT = "/content";
     private static final String PDF_BINARY_NAME = "Download_Test_PDF.pdf";
     private static final String PDF_ASSET_PATH = "/content/dam/core/documents/" + PDF_BINARY_NAME;
+    private static final String PDF_ASSET_WITHOUT_SIZE_PROP_PATH = "/content/dam/core/documents_without_size/" + PDF_BINARY_NAME;
     private static final String PDF_FILE_PATH = "/content/downloads/jcr:content/root/responsivegrid/download-3/file";
     private static final String PDF_ASSET_DOWNLOAD_PATH = PDF_ASSET_PATH + "." + DownloadServlet.SELECTOR + ".pdf";
     private static final String PDF_FILE_DOWNLOAD_PATH = PDF_FILE_PATH + "." + DownloadServlet.SELECTOR + ".inline.pdf/" + PDF_BINARY_NAME;
     private static final String TEST_CONTENT_DAM_JSON = "/test-content-dam.json";
+    private static final String TEST_CONTENT_DAM_WITHOUT_SIZE_PROP_JSON = "/test-content-dam-without-size-prop.json";
     private static final String CONTEXT_PATH = "/core";
     private static final String TEST_ROOT_PAGE = "/content/downloads";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
@@ -60,6 +62,7 @@ class DownloadImplTest {
     private static final String DOWNLOAD_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-1";
     private static final String DOWNLOAD_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-2";
     private static final String DOWNLOAD_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-3";
+    private static final String DOWNLOAD_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/download-4";
     private static final String DOWNLOAD_FULLY_CONFIGURED = "download-fully-configured";
     private static final String DOWNLOAD_WITH_DAM_PROPERTIES = "download-with-dam-properties";
     private static final String DOWNLOAD_FULLY_CONFIGURED_FILE = "download-fully-configured-file";
@@ -86,6 +89,22 @@ class DownloadImplTest {
         assertEquals(PDF_FORMAT_STRING, download.getFormat());
         assertEquals(COMPONENT_ACTION_TEXT, download.getActionText());
         Utils.testJSONExport(download, Utils.getTestExporterJSONPath(TEST_BASE, DOWNLOAD_FULLY_CONFIGURED));
+    }
+
+    @Test
+    void testFullyConfiguredDownload_assetWithoutSizeProperty() {
+        context.load().json(TEST_BASE + TEST_CONTENT_DAM_WITHOUT_SIZE_PROP_JSON, "/content/dam/core/documents_without_size");
+        context.load().binaryFile("/download/" + PDF_BINARY_NAME, PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "/jcr:content/renditions/original");
+
+        Download download = getDownloadUnderTest(DOWNLOAD_4);
+        assertEquals(TITLE, download.getTitle());
+        assertEquals(DESCRIPTION, download.getDescription());
+        assertEquals(PDF_ASSET_WITHOUT_SIZE_PROP_PATH + "." + DownloadServlet.SELECTOR + ".pdf", download.getUrl());
+        assertEquals(PDF_FILENAME, download.getFilename());
+        assertEquals(PDF_EXTENSION, download.getExtension());
+        assertEquals(PDF_FILESIZE_STRING, download.getSize());
+        assertEquals(PDF_FORMAT_STRING, download.getFormat());
+        assertEquals(COMPONENT_ACTION_TEXT, download.getActionText());
     }
 
     @Test
