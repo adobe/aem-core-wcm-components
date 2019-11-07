@@ -48,7 +48,7 @@
                     "sling:resourceType": "core/wcm/components/navigation/v1/navigation",
                     "navigationRoot"    : "/content/navigation",
                     "rootLevel"         : "2"
-
+                }
             }
         },
         "navigation-1"   : {
