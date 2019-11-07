@@ -42,8 +42,18 @@ public interface Navigation extends ComponentExporter {
      * omitted, {@code false} otherwise).
      *
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @deprecated since 12.4.0
      */
+    @Deprecated
     String PN_SKIP_NAVIGATION_ROOT = "skipNavigationRoot";
+
+    /**
+     * Name of the resource / configuration policy property that defines the start level of navigation, relative to the
+     * {@link #PN_NAVIGATION_ROOT}, from which to start building the tree. The property should provide a Long value.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_ROOT_LEVEL = "rootLevel";
 
     /**
      * Name of the resource / configuration policy property that defines if the resulted navigation tree should collect all child pages

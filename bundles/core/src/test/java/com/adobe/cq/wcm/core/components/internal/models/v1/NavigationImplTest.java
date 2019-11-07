@@ -42,6 +42,9 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -72,8 +75,11 @@ class NavigationImplTest {
     // points to the nav component used for when the nav root has no jcr:content child
     private static final String NAV_COMPONENT_11 = TEST_ROOT + "/jcr:content/root/navigation-component-11";
 
+    private static final String NAV_COMPONENT_11 = TEST_ROOT + "/jcr:content/root/navigation-component-12";
+    private static final String NAV_COMPONENT_12 = TEST_ROOT + "/jcr:content/root/navigation-component-13";
+    private static final String NAV_COMPONENT_13 = TEST_ROOT + "/jcr:content/root/navigation-component-14";
 
-    @BeforeEach
+
     void setUp() throws WCMException {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
         context.load().json("/navigation/test-conf.json", "/conf");
@@ -302,6 +308,65 @@ class NavigationImplTest {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_10);
         // get the elements, an NPE will cause the test to fail
         getNavigationItems(navigation);
+    }
+
+    @Test
+    public void testRootLevelZero() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_11);
+        Object[][] expectedPages = {
+            {"/content/navigation", 0, true, "/content/navigation.html"},
+            {"/content/navigation/navigation-1", 1, false, "/navigation-1-vanity"},
+            {"/content/navigation/navigation-1/navigation-1-1", 2, false, "/content/navigation/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 4, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation/navigation-2", 1, false, "/content/navigation/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation11"));
+    }
+
+    @Test
+    public void testRootLevelOne() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_12);
+        Object[][] expectedPages = {
+            {"/content/navigation/navigation-1", 0, false, "/navigation-1-vanity"},
+            {"/content/navigation/navigation-1/navigation-1-1", 1, false, "/content/navigation/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation/navigation-2", 0, false, "/content/navigation/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation12"));
+    }
+
+    @Test
+    public void testRootLevelTwo() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_13);
+        Object[][] expectedPages = {
+            {"/content/navigation/navigation-1/navigation-1-1", 0, false, "/content/navigation/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 1, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 1, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 2, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation13"));
     }
 
     private Navigation getNavigationUnderTest(String resourcePath) {
