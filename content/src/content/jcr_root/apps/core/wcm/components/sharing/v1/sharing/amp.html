@@ -17,18 +17,10 @@
      data-sly-use.socialMedia="com.adobe.cq.wcm.core.components.models.SocialMediaHelper"
      data-sly-call="${template.placeholder @ isEmpty=!socialMedia.socialMediaEnabled}"></sly>
 
-<div data-sly-test="${socialMedia.facebookEnabled}">
-  <!-- TODO: Add Facebook Share button -->
-</div>
+<sly data-sly-test="${socialMedia.facebookEnabled && socialMedia.facebookAppId}">
+  <amp-social-share type="facebook" data-param-app_id="${socialMedia.facebookAppId}"></amp-social-share>
+</sly>
 
-<div data-sly-test="${socialMedia.pinterestEnabled}">
-  <amp-pinterest
-    height="18"
-    width="56"
-    data-do="buttonPin"
-    data-count="beside"
-    data-url="${socialMedia.metadata.og:url}"
-    data-media="${socialMedia.metadata.og:imgae}"
-    data-description="${socialMedia.metadata.og:description}">
-  </amp-pinterest>
-</div>
+<sly data-sly-test="${socialMedia.pinterestEnabled}">
+  <amp-social-share type="pinterest" data-param-media="${socialMedia.metadata.og:image}"></amp-social-share>
+</sly>
