@@ -154,6 +154,17 @@
                                                     </pinterest>
                                                 </items>
                                             </field>
+                                            <facebookAppId
+                                                cq:showOnCreate="{Boolean}true"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                name="./facebookAppId"
+                                                fieldLabel="Facebook App ID"
+                                                fieldDescription="Facebook APp ID to be used if Facebook sharing is enabled. See https://developers.facebook.com/apps for details">
+                                                <granite:data
+                                                        jcr:primaryType="nt:unstructured"
+                                                        cq-msm-lockable="facebookAppId"/>
+                                            </facebookAppId>
                                             <variantpath
                                                 cq:showOnCreate="{Boolean}true"
                                                 jcr:primaryType="nt:unstructured"

@@ -30,8 +30,8 @@
           
         <amp-autocomplete filter="substring"
                           filter-value="title"
-                          class="cmp-search__auto-complete"
                           items="."
+                          class="cmp-search__auto-complete"
                           on="select:AMP.navigateTo(url=event.value)"
                           src="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}?fulltext=*">
 
