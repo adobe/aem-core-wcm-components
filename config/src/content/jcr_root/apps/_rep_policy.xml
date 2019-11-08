@@ -17,4 +17,12 @@
             jcr:primaryType="rep:Restrictions"
             rep:glob="*/customheadlibs.amp.html*"/>
     </clientlibs-access2>
+    <clientlibs-access3
+        jcr:primaryType="rep:GrantACE"
+        rep:principalName="clientlibs-service"
+        rep:privileges="{Name}[jcr:read]">
+        <rep:restrictions
+            jcr:primaryType="rep:Restrictions"
+            rep:glob="*/components/*"/>
+    </clientlibs-access3>
 </jcr:root>

@@ -59,7 +59,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Helper class for page functionality related to page sharing by user on social media platforms.
  */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {SocialMediaHelper.class, ComponentExporter.class}, resourceType =
-        SocialMediaHelperImpl.RESOURCE_TYPE)
+    SocialMediaHelperImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class SocialMediaHelperImpl implements SocialMediaHelper {
 
@@ -99,6 +99,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     private boolean facebookEnabled;
     private boolean pinterestEnabled;
     private boolean socialMediaEnabled;
+    private String facebookAppId;
     private String variantPath;
 
     /**
@@ -121,6 +122,11 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     @Override
     public boolean isSocialMediaEnabled() {
         return socialMediaEnabled;
+    }
+
+    @Override
+    public String getFacebookAppId() {
+        return facebookAppId;
     }
 
     @Override
@@ -158,6 +164,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         pinterestEnabled = ArrayUtils.contains(socialMedia, PV_PINTEREST);
         socialMediaEnabled = facebookEnabled || pinterestEnabled;
         variantPath = pageProperties.get(PN_VARIANT_PATH, String.class);
+        facebookAppId = pageProperties.get(PN_FACEBOOK_APP_ID, String.class);
     }
 
     //Private accessor for hasSharingComponent field providing lazy initialization.
