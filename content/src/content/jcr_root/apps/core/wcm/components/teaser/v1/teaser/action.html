@@ -14,5 +14,5 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-template.action="${@ action}">
-    <a class="cmp-teaser__action-link" href="${action.URL}">${action.title}</a>
+    <a class="cmp-teaser__action-link${action.highlighted ? ' cmp-teaser__action-link-highlighted' : ''}" href="${action.URL}">${action.title}</a>
 </sly>
