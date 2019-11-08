@@ -71,7 +71,8 @@
                             "item0" : {
                                 "jcr:primaryType" : "nt:unstructured",
                                 "link": "http://www.adobe.com",
-                                "text": "Adobe"
+                                "text": "Adobe",
+                                "highlighted": true
                             },
                             "item1" : {
                                 "jcr:primaryType" : "nt:unstructured",

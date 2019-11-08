@@ -175,9 +175,11 @@ class TeaserImplTest {
         Teaser teaser = getTeaserUnderTest(TEASER_7);
         assertTrue("Expected teaser with actions", teaser.isActionsEnabled());
         assertEquals("Expected to find two actions", 2, teaser.getActions().size());
-        ListItem action = teaser.getActions().get(0);
+        Teaser.TeaserAction action = teaser.getActions().get(0);
         assertEquals("Action link does not match", "http://www.adobe.com", action.getPath());
         assertEquals("Action text does not match", "Adobe", action.getTitle());
+        assertTrue("Action is not highlighted",  action.getHighlighted());
+        assertFalse("Action is highlighted", Objects.requireNonNull(teaser.getActions().get(1)).getHighlighted());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser9"));
     }
 

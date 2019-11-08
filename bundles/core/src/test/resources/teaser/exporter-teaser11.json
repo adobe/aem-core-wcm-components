@@ -8,11 +8,13 @@
   "actions": [
     {
       "title": "Teasers",
-      "url": "/core/content/teasers.html"
+      "url": "/core/content/teasers.html",
+      "highlighted": false
     },
     {
       "title": "Adobe",
-      "url": "http://www.adobe.com"
+      "url": "http://www.adobe.com",
+      "highlighted": false
     }
   ],
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-8.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
