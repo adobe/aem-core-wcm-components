@@ -439,8 +439,7 @@
                     sling:resourceType="wcm/core/components/policy/policy"
                     resultsSize="30"
                     searchRoot="/content/core-components-examples/library"
-                    searchTermMinimumLength="1"
-                    wrapResponseInItems="true">
+                    searchTermMinimumLength="1">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_1572547933941>
             </search>

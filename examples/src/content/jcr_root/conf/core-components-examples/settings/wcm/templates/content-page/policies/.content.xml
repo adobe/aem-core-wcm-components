@@ -95,7 +95,7 @@
                             cq:policy="core-components-examples/components/search/policy_1572547933941">
                         </search>
                     </components>
-                </core-components-examples>                
+                </core-components-examples>
             </responsivegrid>
             <responsivegrid_1409995310
                 cq:policy="wcm/foundation/components/responsivegrid/policy_1545309074617"
