@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -284,14 +285,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         private final String title;
 
         /**
-         * Teaser action URL.
+         * Teaser action path.
          */
-        private final String url;
+        private final String path;
 
         /**
-         * Teaser action page.
+         * Teaser action url.
          */
-        private final Page page;
+        private final String url;
 
         /**
          * Flag indicating if the teaser action is highlighted.
@@ -305,26 +306,27 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
          */
         TeaserActionImpl(@NotNull final Resource actionRes) {
             ValueMap properties = actionRes.getValueMap();
-            title = properties.get(PN_ACTION_TEXT, String.class);
-            url = properties.get(PN_ACTION_LINK, String.class);
-            if (url != null && url.startsWith("/")) {
-                page = pageManager.getPage(url);
-            } else {
-                page = null;
-            }
+            this.title = properties.get(PN_ACTION_TEXT, String.class);
+            this.path = properties.get(PN_ACTION_LINK, String.class);
+            this.url = Optional.ofNullable(this.path)
+                .filter(p -> p.startsWith("/"))
+                .map(pageManager::getPage)
+                .map(p -> Utils.getURL(request, p))
+                .orElse(this.path);
+
             this.highlighted = properties.get(PN_ACTION_HIGHLIGHTED, Boolean.FALSE);
         }
 
         @Nullable
         @Override
         public String getTitle() {
-            return title;
+            return this.title;
         }
 
         @Nullable
         @Override
         public String getPath() {
-            return url;
+            return this.path;
         }
 
         @Override
@@ -335,11 +337,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Nullable
         @Override
         public String getURL() {
-            if (page != null) {
-                return Utils.getURL(request, page);
-            } else {
-                return url;
-            }
+            return this.url;
         }
 
     }
