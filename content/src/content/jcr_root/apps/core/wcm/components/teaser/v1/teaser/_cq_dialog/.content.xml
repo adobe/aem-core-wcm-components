@@ -330,6 +330,20 @@
                                                                 jcr:primaryType="nt:unstructured"
                                                                 cmp-teaser-v1-dialog-edit-hook="actionTitle"/>
                                                         </text>
+                                                        <highlighted
+                                                            granite:class="cmp-teaser__editor-actionField"
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                            name="highlighted"
+                                                            text="Hightlight"
+                                                            checked="{Boolean}false"
+                                                            deleteHint="{Boolean}true"
+                                                            value="{Boolean}true"/>
+                                                        <highlightedTypeHint
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/foundation/form/hidden"
+                                                            name="highlighted@TypeHint"
+                                                            value="Boolean"/>
                                                     </items>
                                                 </field>
                                             </actions>
