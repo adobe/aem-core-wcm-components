@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2016 Adobe
+ * Copyright 2016 Adobe Systems Incorporated
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
     var NS = "cmp";
     var IS = "image";
+    var BG = "bgimage";
 
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     var LAZY_THRESHOLD = 0;
@@ -25,6 +26,7 @@
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
+        selfbg: "[data-" + NS + '-is="' + BG + '"]',
         image: '[data-cmp-hook-image="image"]',
         map: '[data-cmp-hook-image="map"]',
         area: '[data-cmp-hook-image="area"]'
@@ -39,6 +41,16 @@
     };
 
     var properties = {
+        /**
+         * A boolean of if this image is a backgroundImage or not.
+         * Used for logic throughout - different things are done for an image vs background images (lazy loading, for example)
+         *
+         * @memberof Image
+         * @type {Boolean}
+         * @default false
+         */
+        "isBgImage": false,
+
         /**
          * An array of alternative image widths (in pixels).
          * Used to replace a {.width} variable in the src property with an optimal width if a URI template is provided.
@@ -84,15 +96,26 @@
          * @type {String}
          */
         "src": {
+        },
+        /**
+         * The bgImage-source.
+         *
+         * Can be a simple image source, or a URI template representation that
+         * can be variable expanded - useful for building an image configuration with an alternative width.
+         * e.g. '/path/image.coreimg{.width}.jpeg/1506620954214.jpeg'
+         *
+         * @memberof Image
+         * @type {String}
+         */
+        "bgsrc": {
         }
     };
 
     var devicePixelRatio = window.devicePixelRatio || 1;
 
-    function readData(element) {
+    function readData(element, capitalized) {
         var data = element.dataset;
         var options = [];
-        var capitalized = IS;
         capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
         var reserved = ["is", "hook" + capitalized];
 
@@ -124,15 +147,15 @@
             setupProperties(config.options);
             cacheElements(config.element);
 
-            if (!that._elements.noscript) {
+            if (!that._elements.noscript && !that._properties.isBgImage) {
                 return;
             }
 
             that._elements.container = that._elements.link ? that._elements.link : that._elements.self;
 
-            unwrapNoScript();
+            if (!that._properties.isBgImage) unwrapNoScript();
 
-            if (that._properties.lazy) {
+            if (that._properties.lazy && !that._properties.isBgImage) {
                 addLazyLoader();
             }
 
@@ -143,24 +166,49 @@
             window.addEventListener("scroll", that.update);
             window.addEventListener("resize", onWindowResize);
             window.addEventListener("update", that.update);
-            that._elements.image.addEventListener("cmp-image-redraw", that.update);
+            if (!that._properties.isBgImage) {
+                that._elements.image.addEventListener("cmp-image-redraw", that.update);
+            } else {
+                that._elements.self.addEventListener("cmp-image-redraw", that.update);
+            }
             that.update();
         }
 
         function loadImage() {
             var hasWidths = that._properties.widths && that._properties.widths.length > 0;
             var replacement = hasWidths ? "." + getOptimalWidth() : "";
-            var url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
-
-            if (that._elements.image.getAttribute("src") !== url) {
-                that._elements.image.setAttribute("src", url);
-                if (!hasWidths) {
-                    window.removeEventListener("scroll", that.update);
-                }
+            var url = "";
+            if (!that._properties.isBgImage) {
+                url = that._properties.src.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
+            } else {
+                url = that._properties.bgsrc.replace(SRC_URI_TEMPLATE_WIDTH_VAR, replacement);
             }
 
-            if (that._lazyLoaderShowing) {
-                that._elements.image.addEventListener("load", removeLazyLoader);
+            if (that._properties.isBgImage) {
+                // find a way to just get the url() portion of background-image: url() attribute
+                var imageAttr = that._elements.self.style.backgroundImage;
+                if (imageAttr) {
+                    imageAttr = imageAttr.substr(imageAttr.indexOf("url(") + 4); // to get rid of url( portion
+                    imageAttr = imageAttr.substr(imageAttr.indexOf("\"") + 1); // to get rid of " at start of image path
+                    imageAttr = imageAttr.substr(0, imageAttr.indexOf("\"")); // to get rid of ") at end of image path
+                }
+                if (imageAttr !== url) {
+                    that._elements.self.style.backgroundImage = "url(" + url + ")";
+                    if (!hasWidths) {
+                        window.removeEventListener("scroll", that.update);
+                    }
+                }
+            } else {
+                if (that._elements.image.getAttribute("src") !== url) {
+                    that._elements.image.setAttribute("src", url);
+                    if (!hasWidths) {
+                        window.removeEventListener("scroll", that.update);
+                    }
+                }
+
+                if (that._lazyLoaderShowing) {
+                    that._elements.image.addEventListener("load", removeLazyLoader);
+                }
             }
         }
 
@@ -283,11 +331,19 @@
         function cacheElements(wrapper) {
             that._elements = {};
             that._elements.self = wrapper;
-            var hooks = that._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
+            if (!that._properties.isBgImage) {
+                var hooks = that._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
 
-            for (var i = 0; i < hooks.length; i++) {
-                var hook = hooks[i];
-                var capitalized = IS;
+                for (var i = 0; i < hooks.length; i++) {
+                    var hook = hooks[i];
+                    var capitalized = IS;
+                    capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
+                    var key = hook.dataset[NS + "Hook" + capitalized];
+                    that._elements[key] = hook;
+                }
+            } else {
+                var hook = that._elements.self;
+                var capitalized = BG;
                 capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
                 var key = hook.dataset[NS + "Hook" + capitalized];
                 that._elements[key] = hook;
@@ -304,6 +360,9 @@
                         if (property && typeof property.transform === "function") {
                             that._properties[key] = property.transform(options[key]);
                         } else {
+                            if (key == "bgsrc") {
+                                that._properties.isBgImage = (options[key] != null);
+                            }
                             that._properties[key] = options[key];
                         }
                     } else {
@@ -323,7 +382,7 @@
         }
 
         that.update = function() {
-            if (that._properties.lazy) {
+            if (that._properties.lazy && !that._properties.isBgImage) {
                 if (isLazyVisible()) {
                     loadImage();
                 }
@@ -339,8 +398,14 @@
 
     function onDocumentReady() {
         var elements = document.querySelectorAll(selectors.self);
+        var bgElements = document.querySelectorAll(selectors.selfbg);
+
         for (var i = 0; i < elements.length; i++) {
-            new Image({ element: elements[i], options: readData(elements[i]) });
+            new Image({ element: elements[i], options: readData(elements[i], IS) });
+        }
+
+        for (var i = 0; i < bgElements.length; i++) {
+            new Image({ element: bgElements[i], options: readData(bgElements[i], BG) });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -354,7 +419,12 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Image({ element: element, options: readData(element) });
+                                new Image({ element: element, options: readData(element, IS) });
+                            });
+
+                            var bgElementsArray = [].slice.call(addedNode.querySelectorAll(selectors.selfbg));
+                            bgElementsArray.forEach(function(element) {
+                                new Image({ element: element, options: readData(element, BG) });
                             });
                         }
                     });
@@ -372,7 +442,7 @@
     if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady);
+        document.addEventListener("DOMContentLoaded", onDocumentReady());
     }
 
     /*
