@@ -58,8 +58,6 @@ public class AmpTransformer implements Transformer {
 
     private static final String AMP_REL = "amphtml";
 
-    private static final String CLIENTLIB_SUBSERVICE = "component-clientlib-service";
-
     private static final String HTML = "html";
 
     private static final String HTML_REL = "canonical";
@@ -180,22 +178,31 @@ public class AmpTransformer implements Transformer {
             Utils.getResourceTypes(slingRequest.getResource(), cfg.getHeadlibResourceTypeRegex(), new HashSet<>());
 
         try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(
-            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, CLIENTLIB_SUBSERVICE))) {
+            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE))) {
 
             if (page != null) {
                 Utils.getTemplateResourceTypes(page, cfg.getHeadlibResourceTypeRegex(), resolver, resourceTypes);
             }
+
+            // Last part of any headlib path.
+            String headLibRelPath = "/" + cfg.getHeadlibName() + "/" + JcrConstants.JCR_CONTENT;
 
             // Iterate through each resource type and read its AMP headlib.
             for (String resourceType : resourceTypes) {
 
                 // Resolve the resource type's AMP headlib.
                 Resource headLibResource;
-                String headLibPath = resourceType + "/" + cfg.getHeadlibName() + "/" + JcrConstants.JCR_CONTENT;
+                String headLibPath = resourceType + headLibRelPath;
                 headLibResource = Utils.resolveResource(resolver, headLibPath);
                 if (headLibResource == null) {
                     LOG.trace("No custom headlib for resource type {}.", resourceType);
-                    continue;
+
+                    // Get headLibResource from resource superType.
+                    headLibResource = getHeadlibResourceSuperType(resolver, resourceType, headLibRelPath);
+                    if (headLibResource == null) {
+                        LOG.trace("No custom headlib for resource superType from resource type {}.", resourceType);
+                        continue;
+                    }
                 }
 
                 // Read the input stream from the resource type's AMP headlib.
@@ -217,6 +224,27 @@ public class AmpTransformer implements Transformer {
         }
 
         return formatJsOutput(output.toString());
+    }
+
+    private Resource getHeadlibResourceSuperType(ResourceResolver resolver, String resourceType, String headLibRelPath) {
+        Resource resource = Utils.resolveResource(resolver, resourceType);
+        if (resource == null) {
+            LOG.debug("Can't access resource from resource type {}.", resourceType);
+            System.out.println("Nothing for " + resourceType);
+            return null;
+        }
+        // Get resource superType path from the resource type.
+        String superTypePath = resource.getResourceSuperType();
+        if (superTypePath == null) {
+            LOG.trace("No resource superType from resource type {}.", resourceType);
+            return null;
+        }
+        // Get headLibResource from resource superType.
+        Resource headLibResource = Utils.resolveResource(resolver, superTypePath + headLibRelPath);
+        // Return next superType or headLibResource.
+        return headLibResource == null ?
+          getHeadlibResourceSuperType(resolver, superTypePath, headLibRelPath) :
+          headLibResource;
     }
 
     private String formatJsOutput(String jsContent) {
