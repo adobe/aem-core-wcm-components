@@ -58,6 +58,11 @@ public interface Teaser extends ComponentExporter {
     String PN_ACTION_TEXT = "text";
 
     /**
+     * Name of the resource property that stores the Call-to-Action flag indicating if the CTA is highlighted.
+     */
+    String PN_ACTION_HIGHLIGHTED = "highlighted";
+
+    /**
      * Name of the policy property that defines whether or not Call-to-Actions are disabled
      *
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
@@ -130,7 +135,7 @@ public interface Teaser extends ComponentExporter {
      * @return the list of CTAs
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    default List<ListItem> getActions() {
+    default List<TeaserAction> getActions() {
         throw new UnsupportedOperationException();
     }
 
@@ -211,6 +216,21 @@ public interface Teaser extends ComponentExporter {
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Teaser action interface.
+     */
+    interface TeaserAction extends ListItem {
+
+        /**
+         * Checks if the teaser instance is marked as highlighted.
+         *
+         * @return True if the teaser instance is highlighted, false if not.
+         */
+        default boolean getHighlighted() {
+            throw new UnsupportedOperationException();
+        }
     }
 
 }

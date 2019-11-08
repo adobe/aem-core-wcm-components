@@ -73,7 +73,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private boolean titleLinkHidden = false;
     private boolean titleFromPage = false;
     private boolean descriptionFromPage = false;
-    private List<ListItem> actions = new ArrayList<>();
+    private List<Teaser.TeaserAction> actions = new ArrayList<>();
     private final List<String> hiddenImageResourceProperties = new ArrayList<String>() {{
         add(JcrConstants.JCR_TITLE);
         add(JcrConstants.JCR_DESCRIPTION);
@@ -196,7 +196,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
             for (Resource actionRes : actionsNode.getChildren()) {
-                actions.add(new Action(actionRes));
+                actions.add(new TeaserActionImpl(actionRes));
             }
         }
     }
@@ -207,7 +207,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     @Override
-    public List<ListItem> getActions() {
+    public List<Teaser.TeaserAction> getActions() {
         return Collections.unmodifiableList(actions);
     }
 
@@ -272,20 +272,47 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return request.getResource().getResourceType();
     }
 
+    /**
+     * Teaser Call-to-Action implementation.
+     */
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
-    public class Action implements ListItem {
-        ValueMap properties;
-        String title;
-        String url;
-        Page page;
+    public class TeaserActionImpl implements TeaserAction {
 
-        public Action(Resource actionRes) {
-            properties = actionRes.getValueMap();
+        /**
+         * Teaser action title.
+         */
+        private final String title;
+
+        /**
+         * Teaser action URL.
+         */
+        private final String url;
+
+        /**
+         * Teaser action page.
+         */
+        private final Page page;
+
+        /**
+         * Flag indicating if the teaser action is highlighted.
+         */
+        private final boolean highlighted;
+
+        /**
+         * Construct a teaser action from the given resource.
+         *
+         * @param actionRes The teaser action resource.
+         */
+        TeaserActionImpl(@NotNull final Resource actionRes) {
+            ValueMap properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
             url = properties.get(PN_ACTION_LINK, String.class);
             if (url != null && url.startsWith("/")) {
                 page = pageManager.getPage(url);
+            } else {
+                page = null;
             }
+            this.highlighted = properties.get(PN_ACTION_HIGHLIGHTED, Boolean.FALSE);
         }
 
         @Nullable
@@ -298,6 +325,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Override
         public String getPath() {
             return url;
+        }
+
+        @Override
+        public boolean getHighlighted() {
+            return this.highlighted;
         }
 
         @Nullable
