@@ -16,12 +16,12 @@
 <amp-accordion data-sly-use.accordion="com.adobe.cq.wcm.core.components.models.Accordion"
      class="cmp-accordion"
      data-cmp-is="accordion"
-     data-cmp-single-expansion="${accordion.singleExpansion}">
+     data-sly-attribute.expand-single-section="${accordion.singleExpansion}">
       <section data-sly-test="${accordion.items.size > 0}"
         data-sly-repeat.item="${accordion.items}"
         class="cmp-accordion__item"
         data-cmp-hook-accordion="item"
-        data-cmp-expanded="${item.name in accordion.expandedItems}">
+        data-sly-attribute.expanded="${item.name in accordion.expandedItems}">
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">
             <span class="cmp-accordion__title">${item.title}</span>
