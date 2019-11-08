@@ -58,8 +58,6 @@ public class AmpTransformer implements Transformer {
 
     private static final String AMP_REL = "amphtml";
 
-    private static final String CLIENTLIB_SUBSERVICE = "component-clientlib-service";
-
     private static final String HTML = "html";
 
     private static final String HTML_REL = "canonical";
@@ -180,7 +178,7 @@ public class AmpTransformer implements Transformer {
             Utils.getResourceTypes(slingRequest.getResource(), cfg.getHeadlibResourceTypeRegex(), new HashSet<>());
 
         try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(
-            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, CLIENTLIB_SUBSERVICE))) {
+            Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE))) {
 
             if (page != null) {
                 Utils.getTemplateResourceTypes(page, cfg.getHeadlibResourceTypeRegex(), resolver, resourceTypes);
