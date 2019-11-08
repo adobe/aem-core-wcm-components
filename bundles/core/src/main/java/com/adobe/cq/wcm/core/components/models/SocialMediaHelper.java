@@ -67,7 +67,6 @@ public interface SocialMediaHelper extends ComponentExporter {
      */
     String PV_PINTEREST = "pinterest";
 
-
     /**
      * Returns {@code true} if Facebook sharing is enabled in page configuration, {@code false} otherwise.
      *

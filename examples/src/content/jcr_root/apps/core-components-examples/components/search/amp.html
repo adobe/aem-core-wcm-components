@@ -32,7 +32,6 @@
                           filter-value="title"
                           items="."
                           class="cmp-search__auto-complete"
-                          items="."
                           on="select:AMP.navigateTo(url=event.value)"
                           src="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}?fulltext=*">
 

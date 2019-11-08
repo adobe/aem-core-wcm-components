@@ -120,7 +120,9 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     }
 
     @Override
-    public boolean isSocialMediaEnabled() { return socialMediaEnabled; }
+    public boolean isSocialMediaEnabled() {
+        return socialMediaEnabled;
+    }
 
     @Override
     public String getFacebookAppId() {
@@ -539,4 +541,3 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         }
     }
 }
-
