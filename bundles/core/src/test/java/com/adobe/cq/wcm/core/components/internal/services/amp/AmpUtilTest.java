@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -48,12 +50,19 @@ public class AmpUtilTest {
 
     private TestLogger testLogger;
 
+    @Mock
     private PageManager pageManagerMock;
+    @Mock
     private Page pageMock;
+    @Mock
     private SlingHttpServletRequest slingHttpServletRequestMock;
+    @Mock
     private ResourceResolver resourceResolverMock;
+    @Mock
     private Resource resourceMock;
+    @Mock
     private ContentPolicyManager contentPolicyManagerMock;
+    @Mock
     private ContentPolicy contentPolicyMock;
 
     private ValueMap mapSample;
@@ -62,13 +71,7 @@ public class AmpUtilTest {
     void setUp() {
         this.testLogger = TestLoggerFactory.getTestLogger(AmpUtil.class);
 
-        this.pageManagerMock = Mockito.mock(PageManager.class);
-        this.pageMock = Mockito.mock(Page.class);
-        this.slingHttpServletRequestMock = Mockito.mock(SlingHttpServletRequest.class);
-        this.resourceResolverMock = Mockito.mock(ResourceResolver.class);
-        this.resourceMock = Mockito.mock(Resource.class);
-        this.contentPolicyManagerMock = Mockito.mock(ContentPolicyManager.class);
-        this.contentPolicyMock = Mockito.mock(ContentPolicy.class);
+        initMocks(this);
     }
 
     @AfterEach

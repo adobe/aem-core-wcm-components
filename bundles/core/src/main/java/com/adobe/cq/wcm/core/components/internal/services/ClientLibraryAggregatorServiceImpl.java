@@ -62,10 +62,10 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
     }
 
     @Reference
-    protected HtmlLibraryManager htmlLibraryManager;
+    private HtmlLibraryManager htmlLibraryManager;
 
     @Reference
-    protected ResourceResolverFactory resolverFactory;
+    private ResourceResolverFactory resolverFactory;
 
     private Cfg cfg;
 

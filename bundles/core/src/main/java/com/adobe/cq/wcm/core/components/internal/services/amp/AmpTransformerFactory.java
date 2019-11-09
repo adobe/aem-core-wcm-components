@@ -60,6 +60,14 @@ public class AmpTransformerFactory implements TransformerFactory {
         this.resolverFactory = resolverFactory;
     }
 
+    public AmpTransformerFactory.Cfg getCfg() {
+        return this.cfg;
+    }
+
+    public ResourceResolverFactory getResolverFactory() {
+        return this.resolverFactory;
+    }
+
     @ObjectClassDefinition(name = "AMP Transformer Factory")
     public @interface Cfg {
 

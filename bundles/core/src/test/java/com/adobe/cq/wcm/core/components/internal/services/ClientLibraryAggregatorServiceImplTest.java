@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services;
 
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -25,20 +27,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 
+import uk.org.lidalia.slf4jtest.TestLogger;
+import uk.org.lidalia.slf4jtest.TestLoggerFactory;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
+import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
+
 import java.io.InputStream;
 import java.io.IOException;
 import org.apache.sling.api.resource.LoginException;
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
 
 import static java.util.Arrays.asList;
 import java.util.Collections;
@@ -58,38 +57,37 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 public class ClientLibraryAggregatorServiceImplTest {
     private TestLogger testLogger;
 
+    @Mock
+    private ClientLibrary clientLibraryMock;
+    @Mock
+    private HtmlLibrary htmlLibraryMock;
+    @Mock
+    private HtmlLibraryManager htmlLibraryManagerMock;
+    @Mock
+    private ResourceResolverFactory resourceResolverFactoryMock;
+    @Mock
+    private ResourceResolver resourceResolverMock;
+    @Mock
+    private InputStream inputStreamSample;
+    @InjectMocks
     private ClientLibraryAggregatorServiceImpl cl;
+
     private String categoryCsv;
     private String type;
     private Set<String> resourceTypes;
     private String primaryPath;
     private String fallbackPath;
 
-    private InputStream inputStreamSample;
-
-    private ClientLibrary clientLibraryMock;
     private Collection<ClientLibrary> clientLibraryCollection;
-    private HtmlLibrary htmlLibraryMock;
-    private HtmlLibraryManager htmlLibraryManagerMock;
-
-    private ResourceResolverFactory resourceResolverFactoryMock;
-    private ResourceResolver resourceResolverMock;
 
     @BeforeEach
     void setUp() {
-        this.cl = new ClientLibraryAggregatorServiceImpl();
-
         this.testLogger = TestLoggerFactory.getTestLogger(ClientLibraryAggregatorServiceImpl.class);
 
-        this.htmlLibraryManagerMock = Mockito.mock(HtmlLibraryManager.class);
-        this.clientLibraryMock = Mockito.mock(ClientLibrary.class);
-        this.htmlLibraryMock = Mockito.mock(HtmlLibrary.class);
+        initMocks(this);
 
         this.clientLibraryCollection = new LinkedList<ClientLibrary>();
         clientLibraryCollection.add(clientLibraryMock);
-
-        this.resourceResolverFactoryMock = Mockito.mock(ResourceResolverFactory.class);
-        this.resourceResolverMock = Mockito.mock(ResourceResolver.class);
     }
 
     @AfterEach
@@ -133,8 +131,6 @@ public class ClientLibraryAggregatorServiceImplTest {
         when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
           .thenReturn(null);
 
-        this.cl.htmlLibraryManager = this.htmlLibraryManagerMock;
-
         assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type));
     }
 
@@ -143,16 +139,12 @@ public class ClientLibraryAggregatorServiceImplTest {
         this.categoryCsv = "cmp-examples.base,cmp-examples.site";
         this.type = "js";
 
-        this.inputStreamSample = Mockito.mock(InputStream.class);
-
         when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
           .thenReturn(this.clientLibraryCollection);
         when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
           .thenReturn(this.htmlLibraryMock);
         when(this.htmlLibraryMock.getInputStream(false))
           .thenReturn(this.inputStreamSample);
-
-        this.cl.htmlLibraryManager = this.htmlLibraryManagerMock;
 
         assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type));
         assertThat(this.testLogger.getLoggingEvents(), hasItem(error("Error getting input stream from clientlib with path '{}'.", clientLibraryMock.getPath())));
@@ -172,8 +164,6 @@ public class ClientLibraryAggregatorServiceImplTest {
           .thenReturn(this.htmlLibraryMock);
         when(this.htmlLibraryMock.getInputStream(false))
           .thenReturn(this.inputStreamSample);
-
-        this.cl.htmlLibraryManager = this.htmlLibraryManagerMock;
 
         assertEquals(inputSample, this.cl.getClientLibOutput(this.categoryCsv, this.type));
     }
@@ -203,8 +193,6 @@ public class ClientLibraryAggregatorServiceImplTest {
         when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
           .thenReturn(this.resourceResolverMock);
 
-        this.cl.resolverFactory = this.resourceResolverFactoryMock;
-
         assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type, this.resourceTypes, this.primaryPath, this.fallbackPath));
         assertThat(this.testLogger.getLoggingEvents(), hasItem(error("No client libraries of type '{}'.", this.type)));
     }
@@ -221,8 +209,6 @@ public class ClientLibraryAggregatorServiceImplTest {
 
         when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
           .thenReturn(this.resourceResolverMock);
-
-        this.cl.resolverFactory = this.resourceResolverFactoryMock;
 
         assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type, this.resourceTypes, this.primaryPath, this.fallbackPath));
         assertThat(this.testLogger.getLoggingEvents(), hasItem(error("No client libraries of type '{}'.", this.type)));
