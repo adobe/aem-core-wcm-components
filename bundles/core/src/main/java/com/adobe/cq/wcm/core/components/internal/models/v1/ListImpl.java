@@ -94,7 +94,7 @@ public class ListImpl implements List {
     private Resource resource;
 
     @OSGiService
-    private ResourceResolverFactory resolverFactory;
+    private ResourceResolverFactory resourceResolverFactory;
 
     @Self
     private SlingHttpServletRequest request;
@@ -246,41 +246,35 @@ public class ListImpl implements List {
     }
 
     private void populateTagListItems() {
-        listItems = new ArrayList<>();
         String[] tags = properties.get(PN_TAGS, new String[0]);
         boolean matchAny = properties.get(PN_TAGS_MATCH, TAGS_MATCH_ANY_VALUE).equals(TAGS_MATCH_ANY_VALUE);
         if (ArrayUtils.isNotEmpty(tags)) {
             Page rootPage = getRootPage(PN_TAGS_PARENT_PAGE);
             if (rootPage != null) {
-                ResourceResolver tagResourceResolver = getTagResourceResolver();
-                if (tagResourceResolver == null) {
-                    tagResourceResolver = resourceResolver;
-                }
-                TagManager tagManager = tagResourceResolver.adaptTo(TagManager.class);
-                if (tagManager != null) {
-                    RangeIterator<Resource> resourceRangeIterator = tagManager.find(rootPage.getPath(), tags, matchAny);
-                    if (resourceRangeIterator != null) {
-                        while (resourceRangeIterator.hasNext()) {
-                            Page containingPage = pageManager.getContainingPage(resourceRangeIterator.next());
-                            if (containingPage != null) {
-                                listItems.add(containingPage);
-                            }
-                        }
-                    }
-                }
+                collectTaggedPages(rootPage, tags, matchAny);
             }
         }
     }
 
-    private ResourceResolver getTagResourceResolver() {
-        ResourceResolver resolver = null;
-        try {
-            resolver = resolverFactory.getServiceResourceResolver(Collections.singletonMap(
-                    ResourceResolverFactory.SUBSERVICE, TAG_READ_SERVICE_USER));
+    private void collectTaggedPages(Page rootPage, String[] tags, boolean matchAny) {
+        listItems = new ArrayList<>();
+        try (ResourceResolver tagServiceResolver = resourceResolverFactory.getServiceResourceResolver(Collections.singletonMap(
+                ResourceResolverFactory.SUBSERVICE, TAG_READ_SERVICE_USER))) {
+            TagManager tagManager = tagServiceResolver.adaptTo(TagManager.class);
+            if (tagManager != null) {
+                RangeIterator<Resource> resourceRangeIterator = tagManager.find(rootPage.getPath(), tags, matchAny);
+                if (resourceRangeIterator != null) {
+                    while (resourceRangeIterator.hasNext()) {
+                        Page containingPage = pageManager.getContainingPage(resourceRangeIterator.next());
+                        if (containingPage != null) {
+                            listItems.add(containingPage);
+                        }
+                    }
+                }
+            }
         } catch (LoginException e) {
             LOGGER.error(e.getMessage());
         }
-        return resolver;
     }
 
     private void populateSearchListItems() {

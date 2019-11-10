@@ -80,7 +80,11 @@ public final class CoreComponentTestContext {
     }
 
     public static io.wcm.testing.mock.aem.junit5.AemContext newAemContext() {
-        return new AemContextBuilder().resourceResolverType(ResourceResolverType.JCR_MOCK)
+        return newAemContext(ResourceResolverType.JCR_MOCK);
+    }
+
+    public static io.wcm.testing.mock.aem.junit5.AemContext newAemContext(ResourceResolverType type) {
+        return new AemContextBuilder().resourceResolverType(type)
                 .<io.wcm.testing.mock.aem.junit5.AemContext>afterSetUp(context -> {
                             context.addModelsForClasses(MockResponsiveGrid.class);
                             context.addModelsForPackage("com.adobe.cq.wcm.core.components.models");
