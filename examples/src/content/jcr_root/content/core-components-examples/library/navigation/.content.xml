@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-05-24T12:37:58.229+02:00"
+        cq:lastModified="{Date}2019-11-11T15:37:43.912+01:00"
         cq:lastModifiedBy="admin"
         cq:tags="[core-components-examples:component-type/template]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
@@ -110,15 +110,15 @@
                         <navigation
                             jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-05-21T18:59:35.605+03:00"
+                            jcr:lastModified="{Date}2019-11-11T15:30:21.684+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="true"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
+                            rootLevel="1"
                             showHidden="true"
-                            skipNavigationRoot="true"
                             startLevel="2"/>
                     </component>
                     <info
@@ -173,15 +173,15 @@
                         <navigation
                             jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-05-21T19:07:03.606+03:00"
+                            jcr:lastModified="{Date}2019-11-11T15:31:18.756+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="true"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
+                            rootLevel="0"
                             showHidden="true"
-                            skipNavigationRoot="false"
                             startLevel="2"/>
                     </component>
                     <info
@@ -204,6 +204,65 @@
                             reference="../../component"/>
                     </info>
                 </demo_56474747>
+                <title_2061144506
+                    jcr:created="{Date}2019-11-11T15:35:19.374+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:35:49.428+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Skip multiple levels"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    type="h3"/>
+                <text_130342336
+                    jcr:created="{Date}2019-11-11T15:36:38.362+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:37:43.907+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;p>Multiple root levels can be skipped. In this example we are skipping two, showing sibling pages.&lt;/p>&#xd;&#xa;"
+                    textIsRich="true"/>
+                <demo_1435920429
+                    jcr:created="{Date}2019-11-11T15:34:17.715+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:34:17.715+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <navigation
+                            jcr:created="{Date}2019-11-11T15:34:30.422+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-11-11T15:35:02.543+01:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/navigation/v1/navigation"
+                            collectAllPages="true"
+                            navigationRoot="/content/core-components-examples"
+                            rootLevel="2"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_1435920429>
                 <title
                     jcr:created="{Date}2019-05-21T19:07:47.223+03:00"
                     jcr:createdBy="admin"
@@ -235,16 +294,15 @@
                         <navigation
                             jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-05-21T19:28:11.709+03:00"
+                            jcr:lastModified="{Date}2019-11-11T15:31:48.003+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="false"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
+                            rootLevel="0"
                             showHidden="true"
-                            skipNavigationRoot="false"
-                            startLevel="2"
                             structureDepth="1"/>
                     </component>
                     <info
