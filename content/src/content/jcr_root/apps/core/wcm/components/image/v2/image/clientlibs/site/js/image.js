@@ -153,7 +153,9 @@
 
             that._elements.container = that._elements.link ? that._elements.link : that._elements.self;
 
-            if (!that._properties.isBgImage) unwrapNoScript();
+            if (!that._properties.isBgImage) {
+                unwrapNoScript();
+            }
 
             if (that._properties.lazy && !that._properties.isBgImage) {
                 addLazyLoader();
@@ -167,7 +169,7 @@
             window.addEventListener("resize", onWindowResize);
             window.addEventListener("update", that.update);
             if (!that._properties.isBgImage) {
-            that._elements.image.addEventListener("cmp-image-redraw", that.update);
+                that._elements.image.addEventListener("cmp-image-redraw", that.update);
             } else {
                 that._elements.self.addEventListener("cmp-image-redraw", that.update);
             }
@@ -335,11 +337,11 @@
                 var hooks = that._elements.self.querySelectorAll("[data-" + NS + "-hook-" + IS + "]");
 
                 for (var i = 0; i < hooks.length; i++) {
-                    var hook = hooks[i];
-                    var capitalized = IS;
-                    capitalized = capitalized.charAt(0).toUpperCase() + capitalized.slice(1);
-                    var key = hook.dataset[NS + "Hook" + capitalized];
-                    that._elements[key] = hook;
+                    var loopHook = hooks[i];
+                    var loopCapitalized = IS;
+                    loopCapitalized = loopCapitalized.charAt(0).toUpperCase() + loopCapitalized.slice(1);
+                    var loopKey = loopHook.dataset[NS + "Hook" + loopCapitalized];
+                    that._elements[loopKey] = loopHook;
                 }
             } else {
                 var hook = that._elements.self;
@@ -360,7 +362,7 @@
                         if (property && typeof property.transform === "function") {
                             that._properties[key] = property.transform(options[key]);
                         } else {
-                            if (key == "bgsrc") {
+                            if (key === "bgsrc") {
                                 that._properties.isBgImage = (options[key] != null);
                             }
                             that._properties[key] = options[key];
@@ -404,8 +406,8 @@
             new Image({ element: elements[i], options: readData(elements[i], IS) });
         }
 
-        for (var i = 0; i < bgElements.length; i++) {
-            new Image({ element: bgElements[i], options: readData(bgElements[i], BG) });
+        for (var j = 0; i < bgElements.length; j++) {
+            new Image({ element: bgElements[j], options: readData(bgElements[j], BG) });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
