@@ -181,7 +181,7 @@
                 <plugin>
                     <groupId>org.apache.jackrabbit</groupId>
                     <artifactId>filevault-package-maven-plugin</artifactId>
-                    <version>1.0.4</version>
+                    <version>1.0.0</version>
                     <configuration>
                         <failOnMissingEmbed>true</failOnMissingEmbed>
                         <filterSource>${project.basedir}/src/content/META-INF/vault/filter.xml</filterSource>

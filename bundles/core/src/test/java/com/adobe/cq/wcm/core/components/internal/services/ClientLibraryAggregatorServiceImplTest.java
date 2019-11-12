@@ -38,7 +38,6 @@ import org.apache.sling.api.resource.LoginException;
 import org.apache.commons.io.IOUtils;
 import java.nio.charset.StandardCharsets;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-
 import static java.util.Arrays.asList;
 import java.util.Collections;
 import java.util.Collection;

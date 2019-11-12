@@ -40,22 +40,22 @@ import java.util.HashSet;
 
 public class UtilsTest {
     @Mock
-    ResourceResolver resourceResolverMock;
+    private ResourceResolver resourceResolverMock;
     @Mock
-    Resource resourceMock;
+    private Resource resourceMock;
     @Mock
-    Page pageMock;
+    private Page pageMock;
     @Mock
-    Template templateMock;
+    private Template templateMock;
     @Mock
-    SlingHttpServletRequest slingHttpServletRequestMock;
+    private SlingHttpServletRequest slingHttpServletRequestMock;
     @Mock
-    PageManager pageManagerMock;
+    private PageManager pageManagerMock;
 
-    String pathSample;
-    String[] searchPathSample;
-    String resourceTypeRegexSample;
-    Set<String> resourceTypesSample;
+    private String pathSample;
+    private String[] searchPathSample;
+    private String resourceTypeRegexSample;
+    private Set<String> resourceTypesSample;
 
     @BeforeEach
     void setUp() {
