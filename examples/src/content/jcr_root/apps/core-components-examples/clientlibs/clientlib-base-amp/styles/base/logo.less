@@ -15,36 +15,13 @@
  */
 
 @import '../variables/index.less';
+
 @cmp-examples-logo-width: 200*@px;
 
 .cmp-examples-structure__header,
 .cmp-examples-structure__aside {
-    // we assume the logo is the only image component in the header and aside
-    .cmp-image__link {
-        pointer-events: all;
-    }
 
     .cmp-image__image {
-        width: @cmp-examples-logo-width;
-    }
-}
-
-.cmp-examples-structure__header {
-    .cmp-image {
         display: none;
-    }
-}
-
-.cmp-examples-structure__aside {
-    .cmp-image {
-        position: absolute;
-        top: @cmp-examples-spacing-8;
-
-        width: 200*@px;
-    }
-
-    .cmp-image__image {
-        width: @cmp-examples-logo-width;
-        margin-bottom: @cmp-examples-spacing-8;
     }
 }

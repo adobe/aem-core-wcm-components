@@ -21,3 +21,28 @@ amp-accordion section[expanded] .show-more {
 amp-accordion section:not([expanded]) .show-less {
     display: none;
 }
+
+.cmp-accordion {
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    &__item {
+        position: relative;
+    }
+
+    &__header {
+        margin: 0;
+        position: relative;
+        border: none;
+        border-bottom: 0.0625rem solid;
+        padding: 0.5rem 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        border-color: #e1e1e1;
+        color: #737373;
+    }
+}
