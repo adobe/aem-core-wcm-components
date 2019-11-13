@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Optional;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
 
@@ -89,7 +87,7 @@ public class NavigationImpl implements Navigation {
     private String navigationRootPage;
     private List<NavigationItem> items;
     private boolean skipNavigationRoot;
-    private int rootLevel;
+    private int structureStart;
 
     @PostConstruct
     private void initModel() {
@@ -99,15 +97,15 @@ public class NavigationImpl implements Navigation {
             structureDepth = -1;
         }
         navigationRootPage = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
-        if (currentStyle.containsKey("rootLevel") || properties.containsKey("rootLevel")) {
-            //workaround to maintain the content of Navigation component of users in case they update to the current i.e. the `rootLevel` version. 
-            rootLevel = properties.get(PN_ROOT_LEVEL, currentStyle.get(PN_ROOT_LEVEL, 1));
+        if (currentStyle.containsKey(PN_STRUCTURE_START) || properties.containsKey(PN_STRUCTURE_START)) {
+            //workaround to maintain the content of Navigation component of users in case they update to the current i.e. the `structureStart` version.
+            structureStart = properties.get(PN_STRUCTURE_START, currentStyle.get(PN_STRUCTURE_START, 1));
         } else {
             skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
             if (skipNavigationRoot) {
-                rootLevel = 1;
+                structureStart = 1;
             } else {
-                rootLevel = 0;
+                structureStart = 0;
             }
         }
     }
@@ -183,7 +181,7 @@ public class NavigationImpl implements Navigation {
                 int level = pageLevel - navigationRoot.startLevel - 1;
                 List<NavigationItem> children = getItems(navigationRoot, page);
                 boolean isSelected = checkSelected(page);
-                if (rootLevel == 0) {
+                if (structureStart == 0) {
                     level = level + 1;
                 }
                 pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
@@ -194,12 +192,12 @@ public class NavigationImpl implements Navigation {
 
     private List<NavigationItem> getNavigationTree(NavigationRoot navigationRoot) {
         List<NavigationItem> itemTree = new ArrayList<>();
-        Iterator<NavigationRoot> it = getRootItems(navigationRoot, rootLevel).iterator();
+        Iterator<NavigationRoot> it = getRootItems(navigationRoot, structureStart).iterator();
         while (it.hasNext()) {
             NavigationRoot item = it.next();
             itemTree.addAll(getItems(item, item.page));
         }
-        if (rootLevel == 0) {
+        if (structureStart == 0) {
             boolean isSelected = checkSelected(navigationRoot.page);
             NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree);
             itemTree = new ArrayList<>();
@@ -208,12 +206,12 @@ public class NavigationImpl implements Navigation {
         return  itemTree;
     }
 
-    private List<NavigationRoot> getRootItems(NavigationRoot navigationRoot, int rootLevel) {
+    private List<NavigationRoot> getRootItems(NavigationRoot navigationRoot, int structureStart) {
         LinkedList<NavigationRoot> pages = new LinkedList<>();
         pages.addLast(navigationRoot);
-        if (rootLevel != 0) {
+        if (structureStart != 0) {
             int level = 1;
-            while (level != rootLevel && !pages.isEmpty()) {
+            while (level != structureStart && !pages.isEmpty()) {
                 int size = pages.size();
                 while (size > 0) {
                     NavigationRoot item = pages.removeFirst();

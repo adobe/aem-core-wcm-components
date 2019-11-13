@@ -53,7 +53,7 @@ public interface Navigation extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.11.0
      */
-    String PN_ROOT_LEVEL = "rootLevel";
+    String PN_STRUCTURE_START = "structureStart";
 
     /**
      * Name of the resource / configuration policy property that defines if the resulted navigation tree should collect all child pages

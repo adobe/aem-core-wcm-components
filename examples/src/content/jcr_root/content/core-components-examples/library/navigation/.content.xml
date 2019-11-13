@@ -117,9 +117,8 @@
                             collectAllPages="true"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
-                            rootLevel="1"
-                            showHidden="true"
-                            startLevel="2"/>
+                            structureStart="1"
+                            showHidden="true"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -180,9 +179,8 @@
                             collectAllPages="true"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
-                            rootLevel="0"
-                            showHidden="true"
-                            startLevel="2"/>
+                            structureStart="0"
+                            showHidden="true"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -241,7 +239,7 @@
                             sling:resourceType="core/wcm/components/navigation/v1/navigation"
                             collectAllPages="true"
                             navigationRoot="/content/core-components-examples"
-                            rootLevel="2"/>
+                            structureStart="2"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -301,7 +299,7 @@
                             collectAllPages="false"
                             hideCurrent="false"
                             navigationRoot="/content/core-components-examples"
-                            rootLevel="0"
+                            structureStart="0"
                             showHidden="true"
                             structureDepth="1"/>
                     </component>

@@ -35,19 +35,19 @@
                     "jcr:primaryType"   : "nt:unstructured",
                     "sling:resourceType": "core/wcm/components/navigation/v1/navigation",
                     "navigationRoot"    : "/content/navigation",
-                    "rootLevel"         : "0"
+                    "structureStart"    : "0"
                 },
                 "navigation-component-13": {
                     "jcr:primaryType"   : "nt:unstructured",
                     "sling:resourceType": "core/wcm/components/navigation/v1/navigation",
                     "navigationRoot"    : "/content/navigation",
-                    "rootLevel"         : "1"
+                    "structureStart"    : "1"
                 },
                 "navigation-component-14": {
                     "jcr:primaryType"   : "nt:unstructured",
                     "sling:resourceType": "core/wcm/components/navigation/v1/navigation",
                     "navigationRoot"    : "/content/navigation",
-                    "rootLevel"         : "2"
+                    "structureStart"    : "2"
                 }
             }
         },

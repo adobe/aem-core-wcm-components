@@ -58,16 +58,16 @@
                                                 name="./navigationRoot"
                                                 value="${not empty cqDesign.navigationRoot ? cqDesign.navigationRoot : ''}"
                                                 required="{Boolean}true"/>
-                                            <rootLevel
+                                            <structureStart
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
                                                 fieldDescription="The levels below navigation root that are to be excluded. To include navigation root enter 0."
                                                 fieldLabel="Exclude Root Levels"
                                                 max="100"
                                                 min="0"
-                                                name="./rootLevel"
+                                                name="./structureStart"
                                                 step="1"
-                                                value="${not empty cqDesign.rootLevel ? cqDesign.rootLevel : 1}"/>
+                                                value="${not empty cqDesign.structureStart ? cqDesign.structureStart : 1}"/>
                                             <collectAllPages
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

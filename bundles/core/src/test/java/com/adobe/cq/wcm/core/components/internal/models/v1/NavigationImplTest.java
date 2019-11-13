@@ -74,7 +74,7 @@ class NavigationImplTest {
     private static final String NAV_COMPONENT_10 = TEST_ROOT + "/jcr:content/root/navigation-component-10";
     // points to the nav component used for when the nav root has no jcr:content child
     private static final String NAV_COMPONENT_11 = TEST_ROOT + "/jcr:content/root/navigation-component-11";
-    // tests for new rootLevel option
+    // tests for new structureStart option
     private static final String NAV_COMPONENT_12 = TEST_ROOT + "/jcr:content/root/navigation-component-12";
     private static final String NAV_COMPONENT_13 = TEST_ROOT + "/jcr:content/root/navigation-component-13";
     private static final String NAV_COMPONENT_14 = TEST_ROOT + "/jcr:content/root/navigation-component-14";
@@ -311,7 +311,7 @@ class NavigationImplTest {
     }
 
     @Test
-    public void testRootLevelZero() {
+    public void testStructureStartZero() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_12);
         Object[][] expectedPages = {
             {"/content/navigation", 0, true, "/content/navigation.html"},
@@ -332,7 +332,7 @@ class NavigationImplTest {
     }
 
     @Test
-    public void testRootLevelOne() {
+    public void testStructureStartOne() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_13);
         Object[][] expectedPages = {
             {"/content/navigation/navigation-1", 0, false, "/navigation-1-vanity"},
@@ -352,7 +352,7 @@ class NavigationImplTest {
     }
 
     @Test
-    public void testRootLevelTwo() {
+    public void testStructureStartTwo() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_14);
         Object[][] expectedPages = {
             {"/content/navigation/navigation-1/navigation-1-1", 0, false, "/content/navigation/navigation-1/navigation-1-1.html"},
