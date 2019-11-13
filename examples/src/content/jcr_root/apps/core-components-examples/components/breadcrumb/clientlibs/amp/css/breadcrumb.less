@@ -32,5 +32,27 @@
         &-link {
             color: #737373;
         }
+
+        &:after {
+            content: '>';
+            display: inline-block;
+            margin: 0 4px;
+            vertical-align: top;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 18px;
+            line-height: 21px;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+
+        &:last-child {
+            &:after {
+                content: none;
+            }
+        }        
     }
 }
