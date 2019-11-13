@@ -48,8 +48,8 @@
       </map>
     </noscript>
   </a>
-  <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">this is an AMP image</span>
-  <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
+  <span data-sly-test="${!image.displayPopupTitle && image.title} class="cmp-image__title" itemprop="caption" ">${image.title}</span>
+  <meta data-sly-test="${image.displayPopupTitle && image.title}" itemprop="caption" content="${image.title}" >
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
 
