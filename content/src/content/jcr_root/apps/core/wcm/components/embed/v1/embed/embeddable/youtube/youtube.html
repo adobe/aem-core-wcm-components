@@ -17,4 +17,5 @@
         width="${properties.youtubeWidth || '100%' @ context='scriptString'}"
         height="${properties.youtubeHeight || 390 @ context='scriptString'}"
         src="${'https://www.youtube.com/embed/{0}?origin={1}://{2}' @ format=[properties.youtubeVideoId, request.scheme, request.serverName]}"
-        frameborder="0"></iframe>
+        frameborder="0"
+        allowfullscreen></iframe>
