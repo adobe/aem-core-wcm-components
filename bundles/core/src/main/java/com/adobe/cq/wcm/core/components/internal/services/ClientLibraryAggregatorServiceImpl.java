@@ -79,6 +79,20 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
         this.cfg = cfg;
     }
 
+    protected String[] getClientLibArrayCategories(String categoryCsv) {
+      String[] categories;
+      if (categoryCsv.contains(",")) {
+          categories = categoryCsv.split(",");
+      } else {
+          categories = new String[] {categoryCsv};
+      }
+      return categories;
+    }
+
+    protected LibraryType getClientLibType(String type) {
+      return libraryTypeMap.get(type);
+    }
+
     /**
      * Returns the aggregated content of the specified clientlib type from the given comma delimited list of categories.
      * @param categoryCsv Comma delimited list of clientlib categories to read the content from.
@@ -98,15 +112,10 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
         }
 
         // Parse the array of categories from the comma delimited category string.
-        String[] categories;
-        if (categoryCsv.contains(",")) {
-            categories = categoryCsv.split(",");
-        } else {
-            categories = new String[] {categoryCsv};
-        }
+        String[] categories = getClientLibArrayCategories(categoryCsv);
 
         // Retrieve the clientlibs of the categories of the specified type.
-        LibraryType libraryType = libraryTypeMap.get(type);
+        LibraryType libraryType = getClientLibType(type);
         Collection<ClientLibrary> libraries = htmlLibraryManager.getLibraries(categories, libraryType, false, true);
 
         // Iterate through the clientlibs and aggregate their content.
@@ -198,6 +207,7 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
         return cfg.getResourceTypeRegex();
     }
 
+    @Override
     public ResourceResolver getClientlibResourceResolver() throws LoginException {
         return resolverFactory.getServiceResourceResolver(
             Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
@@ -215,4 +225,3 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
         String getResourceTypeRegex();
     }
 }
-

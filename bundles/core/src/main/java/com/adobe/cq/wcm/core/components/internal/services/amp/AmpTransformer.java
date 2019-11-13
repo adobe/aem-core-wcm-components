@@ -230,7 +230,6 @@ public class AmpTransformer implements Transformer {
         Resource resource = Utils.resolveResource(resolver, resourceType);
         if (resource == null) {
             LOG.debug("Can't access resource from resource type {}.", resourceType);
-            System.out.println("Nothing for " + resourceType);
             return null;
         }
         // Get resource superType path from the resource type.

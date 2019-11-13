@@ -50,19 +50,19 @@ public class ClientLibraryImpl implements ClientLibrary {
     private ClientLibraryAggregatorService aggregatorService;
 
     @Inject
-    private String categories;
+    protected String categories;
 
     @ScriptVariable
     private Page currentPage;
 
     @Inject
-    private String fallbackPath;
+    protected String fallbackPath;
 
     @Inject
-    private String primaryPath;
+    protected String primaryPath;
 
     @Inject
-    private String type;
+    protected String type;
 
     private String inline;
 
