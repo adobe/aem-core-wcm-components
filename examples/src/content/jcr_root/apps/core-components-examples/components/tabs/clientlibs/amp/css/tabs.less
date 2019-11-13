@@ -16,6 +16,7 @@
  
 @space-1: .5rem;
 @space-4: 2rem;
+@gray: #232323;
  
 amp-selector[role=tablist].tabs-with-flex {
     display: flex;
@@ -25,6 +26,7 @@ amp-selector[role=tablist].tabs-with-flex [role=tab] {
     flex-grow: 1;
     text-align: center;
     padding: var(@space-1);
+    margin: 0 50px 0 0;
 }
 
 amp-selector[role=tablist].tabs-with-flex [role=tabpanel] {
@@ -67,4 +69,28 @@ amp-selector.tabpanels [role=tabpanel][selected] {
 
 amp-selector[role=tablist] [role=tab][selected] + [role=tabpanel] {
     display: block;
+}
+
+amp-selector [option][selected] {
+    outline: none;
+}
+
+.cmp-tabs {
+    &__tablist {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 0.0625rem solid;
+        padding-left: 0;
+        list-style: none;
+        border-color: #e1e1e1;
+    }
+
+    &__tab {
+        &[aria-selected="true"] {
+            border: 0;
+            outline: none;
+            border-bottom: 2px solid @gray;
+            color: @gray;
+        }
+    }
 }
