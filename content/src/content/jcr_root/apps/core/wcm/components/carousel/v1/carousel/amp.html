@@ -29,7 +29,7 @@
       delay="${carousel.delay}"
       height="200">
         <div data-sly-repeat.item="${carousel.items}"
-            data-sly-resource="${item.name @ decorationTagName='div'}"
+            data-sly-resource="${item.name @ decorationTagName='div', selectors='amp'}"
             class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
             role="tabpanel"
             aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
