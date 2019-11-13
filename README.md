@@ -1,8 +1,8 @@
-# AEM Sites Core Components Sandbox
+# AEM Sites Core Components 3.0.0 Sandbox
 [![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development)
 [![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 
-**The Sandbox represents a space where work-in-progress versions of the Core Components are developed. They provide _beta features_ and *should not be used in production*. When the components become stable, they will be promoted to new production-ready releases and moved out of the sandbox.**
+**The 3.0.0 Sandbox represents a space where work-in-progress versions of the Core Components for the 3.0.0 release are developed. It provides _beta features_ and *should not be used in production*. When the 3.0.0 sandbox become stable, it will be promoted to a new production-ready release.**
 
 ## Documentation
 
