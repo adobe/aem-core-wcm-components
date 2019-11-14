@@ -114,7 +114,7 @@
                             jcr:lastModified="{Date}2019-05-21T10:21:29.728+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="false"
                             showHidden="false"
                             startLevel="2"/>
@@ -174,7 +174,7 @@
                             jcr:lastModified="{Date}2019-05-21T10:21:36.131+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="false"
                             showHidden="false"
                             startLevel="3"/>
@@ -234,7 +234,7 @@
                             jcr:lastModified="{Date}2019-05-21T10:22:19.080+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="false"
                             showHidden="true"
                             startLevel="2"/>
@@ -294,7 +294,7 @@
                             jcr:lastModified="{Date}2019-05-21T15:14:14.179+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="true"
                             showHidden="false"
                             startLevel="2"/>
