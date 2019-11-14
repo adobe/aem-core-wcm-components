@@ -14,9 +14,12 @@
  *  limitations under the License.
  */
 
-@import 'units.less';
-@import 'colors.less';
-@import 'border.less';
-@import 'spacing.less';
-@import 'text.less';
-@import 'z-index.less';
+/*
+  Vendor prefix for the user-select property.
+ */
+.user-select(@value) {
+    -webkit-user-select: @value;
+    -moz-user-select: @value;
+    -ms-user-select: @value;
+    user-select: @value;
+}
