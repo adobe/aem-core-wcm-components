@@ -20,7 +20,7 @@ Navigation component written in HTL that renders a website navigation tree.
 
 ## Features
 * Can be used on both templates and pages
-* Defines a configurable navigation root, and structure depth to allow flexibility in building the navigation tree
+* Defines a configurable navigation root, navigation root depth and structure depth to allow flexibility in building the navigation tree
 * Automatically filters out pages that should be hidden from navigation
 * Automatically handles redirect targets defined on pages
 
@@ -31,18 +31,20 @@ The Navigation component uses the `com.adobe.cq.wcm.core.components.models.Navig
 The following configuration properties are used:
 
 1. `./navigationRoot` - the root page from which to build the navigation. It can be a blueprint master, language master or regular page.
-2. `./skipNavigationRoot` - if `true`, excludes the navigation root in the resulting tree, including its descendants only.
-3. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
-4. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
+2. `./structureStart` - the start level of the navigation structure relative to the navigation root. 
+3. ~~./skipNavigationRoot~~ - **deprecated**; if `true`, excludes the navigation root in the resulting tree, including its descendants only.
+4. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
+5. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for the Navigation component and are expected to be available as `Resource` properties:
 
 1. `./navigationRoot` - the root page from which to build the navigation. It can be a blueprint master, language master or regular page.
-2. `./skipNavigationRoot` - if `true`, excludes the navigation root in the resulting tree, including its descendants only.
-3. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
-4. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
-5. `./accessibilityLabel` - defines an accessibility label for the navigation.
+2. `./structureStart` - the start level of the navigation structure relative to the navigation root.
+3. ~~./skipNavigationRoot~~ - **deprecated**; if `true`, excludes the navigation root in the resulting tree, including its descendants only.
+4. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
+5. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
+6. `./accessibilityLabel` - defines an accessibility label for the navigation.
 
 ## Client Libraries
 The component provides a `core.wcm.components.navigation.v1.editor` editor client library category that includes
