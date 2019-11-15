@@ -163,7 +163,7 @@
             .assert.visible('coral-numberinput[name="./structureDepth"]', false)
             .fillInput('foundation-autocomplete[name="./navigationRoot"]', "%page_1%")
             // uncheck the skip root option
-            .click('input[name="./skipNavigationRoot"]')
+            .fillInput('input[name="./structureStart"]', "0")
             .execTestCase(c.tcSaveConfigureDialog)
             .wait(200)
             .config.changeContext(c.getContentFrame)
