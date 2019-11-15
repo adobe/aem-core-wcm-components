@@ -30,7 +30,7 @@ The Navigation component uses the `com.adobe.cq.wcm.core.components.models.Navig
 ### Component Policy Configuration Properties
 The following configuration properties are used:
 
-1. `./navigationRoot` - the root page from which to build the navigation. Can be a blueprint master, language master or regular page.
+1. `./navigationRoot` - the root page from which to build the navigation. It can be a blueprint master, language master or regular page.
 2. `./skipNavigationRoot` - if `true`, excludes the navigation root in the resulting tree, including its descendants only.
 3. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
 4. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
@@ -38,7 +38,7 @@ The following configuration properties are used:
 ### Edit Dialog Properties
 The following properties are written to JCR for the Navigation component and are expected to be available as `Resource` properties:
 
-1. `./navigationRoot` - the root page from which to build the navigation. Can be a blueprint master, language master or regular page.
+1. `./navigationRoot` - the root page from which to build the navigation. It can be a blueprint master, language master or regular page.
 2. `./skipNavigationRoot` - if `true`, excludes the navigation root in the resulting tree, including its descendants only.
 3. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
 4. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.

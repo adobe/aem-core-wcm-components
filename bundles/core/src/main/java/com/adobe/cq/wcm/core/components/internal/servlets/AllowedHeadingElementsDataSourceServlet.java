@@ -67,7 +67,7 @@ public class AllowedHeadingElementsDataSourceServlet extends SlingSafeMethodsSer
         ResourceResolver resolver = request.getResourceResolver();
         Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
         ContentPolicyManager policyManager = resolver.adaptTo(ContentPolicyManager.class);
-        if (policyManager != null) {
+        if (contentResource != null && policyManager != null) {
             ContentPolicy policy = policyManager.getPolicy(contentResource);
             if (policy != null) {
                 ValueMap props = policy.getProperties();
