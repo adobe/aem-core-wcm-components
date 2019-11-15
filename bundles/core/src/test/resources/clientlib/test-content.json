@@ -1,0 +1,14 @@
+{
+    "clientlib": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Button Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "type"              : "css",
+            "primaryPath"       : "clientlibs/amp",
+            "fallbackPath"      : "clientlibs/site",
+            "categories"        : "cmp-examples.base.amp"
+        }
+    }
+}

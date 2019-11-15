@@ -15,201 +15,139 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services;
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.mockito.Mockito.when;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
 
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
+import static org.junit.Assert.assertEquals;
 
-import java.io.InputStream;
-import java.io.IOException;
-import org.apache.sling.api.resource.LoginException;
-import org.apache.commons.io.IOUtils;
-import java.nio.charset.StandardCharsets;
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import static java.util.Arrays.asList;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Set;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
+import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
+import com.adobe.granite.ui.clientlibs.LibraryType;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
-import com.adobe.granite.ui.clientlibs.HtmlLibrary;
-import com.adobe.granite.ui.clientlibs.ClientLibrary;
-import org.apache.sling.api.resource.Resource;
+import java.util.Map;
+import java.util.Set;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.apache.sling.testing.resourceresolver.MockResourceResolver;
+import org.apache.sling.testing.resourceresolver.MockResourceResolverFactory;
+import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
+@ExtendWith(AemContextExtension.class)
 public class ClientLibraryAggregatorServiceImplTest {
-    private TestLogger testLogger;
 
-    @Mock
-    private ClientLibrary clientLibraryMock;
-    @Mock
-    private HtmlLibrary htmlLibraryMock;
-    @Mock
-    private HtmlLibraryManager htmlLibraryManagerMock;
-    @Mock
-    private ResourceResolverFactory resourceResolverFactoryMock;
-    @Mock
-    private ResourceResolver resourceResolverMock;
-    @Mock
-    private InputStream inputStreamSample;
-    @InjectMocks
-    private ClientLibraryAggregatorServiceImpl cl;
 
-    private String categoryCsv;
-    private String type;
-    private Set<String> resourceTypes;
-    private String primaryPath;
-    private String fallbackPath;
+    private AemContext context = CoreComponentTestContext.newAemContext();
+    private ClientLibraryAggregatorService clientLibraryAggregatorService;
+    private final String testRegex = "(?![A-Za-z]{2}:).*";
 
-    private Collection<ClientLibrary> clientLibraryCollection;
+    @Test
+    public void testClientLibOutput() {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-    @BeforeEach
-    void setUp() {
-        this.testLogger = TestLoggerFactory.getTestLogger(ClientLibraryAggregatorServiceImpl.class);
-
-        initMocks(this);
-
-        this.clientLibraryCollection = new LinkedList<ClientLibrary>();
-        clientLibraryCollection.add(clientLibraryMock);
-    }
-
-    @AfterEach
-    void tearDown() {
-        TestLoggerFactory.clear();
+        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        String text = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css");
+        assertEquals("", text);
     }
 
     @Test
-    public void getClientLibOutput_categoryCsvEmpty() {
-        this.categoryCsv = "";
-        this.type = "js";
+    public void testClientLibOutputWithResourceTypes() {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type));
+        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+
+        Set<String> resourceTypes = new HashSet<>();
+        resourceTypes.add("core/wcm/components/text/v2/text");
+        resourceTypes.add("core/wcm/components/teaser/v1/teaser");
+
+        String text = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css", resourceTypes, "clientlibs/amp", "clientlibs/site");
+        assertEquals("", text);
     }
 
     @Test
-    public void getClientLibOutput_typeEmpty() {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "";
+    public void testResourceTypeRegex() {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("No client libraries of type '{}'.", this.type)));
+        Map<String, Object> configs = getClientLibraryAggregatorConfig();
+        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl(), configs);
+        String resourceTypeRegex = clientLibraryAggregatorService.getResourceTypeRegex();
+        assertEquals(testRegex, resourceTypeRegex);
     }
 
     @Test
-    public void getClientLibOutput_typeWrong() {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "txt";
+    public void testClientlibResourceResolver() throws LoginException {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("No client libraries of type '{}'.", this.type)));
+        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ResourceResolver mockResourceResolver = clientLibraryAggregatorService.getClientlibResourceResolver();
+        assertEquals(MockResourceResolver.class, mockResourceResolver.getClass());
     }
 
     @Test
-    public void getClientLibOutput_libraryIsNull() {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "js";
+    public void testClientLibType() throws LoginException {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
-          .thenReturn(this.clientLibraryCollection);
-        when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
-          .thenReturn(null);
+        ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = new ClientLibraryAggregatorServiceImpl();
 
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type));
+        LibraryType cssLibraryType = clientLibraryAggregatorService.getClientLibType("css");
+        assertEquals("text/css", cssLibraryType.contentType);
+        assertEquals(".css", cssLibraryType.extension);
+
+        LibraryType jsLibraryType = clientLibraryAggregatorService.getClientLibType("js");
+        assertEquals("application/javascript", jsLibraryType.contentType);
+        assertEquals(".js", jsLibraryType.extension);
+
     }
 
     @Test
-    public void getClientLibOutput_libraryIncorrect() throws IOException {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "js";
+    public void testClientLibArrayCategoriesWithMultiple() throws LoginException {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
-          .thenReturn(this.clientLibraryCollection);
-        when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
-          .thenReturn(this.htmlLibraryMock);
-        when(this.htmlLibraryMock.getInputStream(false))
-          .thenReturn(this.inputStreamSample);
+        ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = new ClientLibraryAggregatorServiceImpl();
 
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("Error getting input stream from clientlib with path '{}'.", clientLibraryMock.getPath())));
+        String[] categories = new String[] {"clientlib-a", "clientlib-b"};
+        String categoriesString = "clientlib-a,clientlib-b";
+
+        assertEquals(ArrayUtils.toString(categories), ArrayUtils.toString(clientLibraryAggregatorService.getClientLibArrayCategories(categoriesString)));
     }
 
     @Test
-    public void getClientLibOutput_libraryCorrect() throws IOException {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "js";
+    public void testClientLibArrayCategories() throws LoginException {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        String inputSample = "Some test data for my input stream";
-        this.inputStreamSample = IOUtils.toInputStream(inputSample, StandardCharsets.UTF_8);
+        ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = new ClientLibraryAggregatorServiceImpl();
 
-        when(this.htmlLibraryManagerMock.getLibraries(this.cl.getClientLibArrayCategories(this.categoryCsv), this.cl.getClientLibType(this.type), false, true))
-          .thenReturn(this.clientLibraryCollection);
-        when(this.htmlLibraryManagerMock.getLibrary(this.cl.getClientLibType(this.type), this.clientLibraryMock.getPath()))
-          .thenReturn(this.htmlLibraryMock);
-        when(this.htmlLibraryMock.getInputStream(false))
-          .thenReturn(this.inputStreamSample);
+        String[] categories = new String[] {"clientlib-a"};
+        String categoriesString = "clientlib-a";
 
-        assertEquals(inputSample, this.cl.getClientLibOutput(this.categoryCsv, this.type));
+        assertEquals(categoriesString, categories[0]);
     }
 
-    @Test
-    public void getClientLibOutputExtended_primaryAndFallbackPathsIncorrect() throws IOException {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "";
-        this.resourceTypes = new HashSet<String>();
-        this.primaryPath = "";
-        this.fallbackPath = "";
+    private Map<String, Object> getClientLibraryAggregatorConfig() {
+        Map<String, Object> config = new HashMap<>();
+        config.put("resource.type.regex", testRegex);
 
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type, this.resourceTypes, this.primaryPath, this.fallbackPath));
-        assertThat(this.testLogger.getLoggingEvents(), is(asList(debug("Resource type clientlib aggregator must have a path value."))));
+        return config;
     }
 
-    @Test
-    public void getClientLibOutputExtended_primaryPathCorrectTypeEmpty() throws LoginException {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "";
-        this.resourceTypes = new HashSet<String>();
-        this.primaryPath = "path/to/resources";
-        this.fallbackPath = "";
 
-        this.resourceTypes.add("/dummyType");
-
-        when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
-          .thenReturn(this.resourceResolverMock);
-
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type, this.resourceTypes, this.primaryPath, this.fallbackPath));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("No client libraries of type '{}'.", this.type)));
-    }
-
-    @Test
-    public void getClientLibOutputExtended_fallbackPathCorrectTypeEmpty() throws LoginException {
-        this.categoryCsv = "cmp-examples.base,cmp-examples.site";
-        this.type = "";
-        this.resourceTypes = new HashSet<String>();
-        this.primaryPath = "";
-        this.fallbackPath = "path/to/resources";
-
-        this.resourceTypes.add("/dummyType");
-
-        when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
-          .thenReturn(this.resourceResolverMock);
-
-        assertEquals("", this.cl.getClientLibOutput(this.categoryCsv, this.type, this.resourceTypes, this.primaryPath, this.fallbackPath));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("No client libraries of type '{}'.", this.type)));
-    }
 }

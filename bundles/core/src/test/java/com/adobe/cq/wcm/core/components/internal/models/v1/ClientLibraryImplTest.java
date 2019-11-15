@@ -15,94 +15,55 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import org.mockito.Mockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.mockito.Mockito.when;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
-
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
-import com.day.cq.wcm.api.Page;
-import org.apache.sling.api.resource.ResourceResolver;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.services.ClientLibraryAggregatorServiceImpl;
+import com.adobe.cq.wcm.core.components.models.ClientLibrary;
+import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
+import com.day.cq.commons.jcr.JcrConstants;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.sling.api.resource.Resource;
-import java.util.Set;
-import java.util.HashSet;
-import org.apache.sling.api.resource.LoginException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
+@ExtendWith(AemContextExtension.class)
 public class ClientLibraryImplTest {
-    private TestLogger testLogger;
 
-    @Mock
-    private ClientLibraryAggregatorService clientLibraryAggregatorServiceMock;
-    @Mock
-    private Page pageMock;
-    @Mock
-    private ResourceResolver resourceResolverMock;
-    @Mock
-    private Resource resourceMock;
-    @InjectMocks
-    private ClientLibraryImpl cl;
+    private static final String TEST_BASE = "/clientlib";
+    private static final String TEST_ROOT_PAGE = "/content";
+    private static final String CLIENT_LIB = TEST_ROOT_PAGE + "/clientlib";
 
-    private String categories = "category";
-    private String type = "js";
-    private String primaryPath = "/primary/path";
-    private String fallbackPath = "/fallback/path";
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
-    String resourceTypeRegexSample;
 
     @BeforeEach
     void setUp() {
-        this.testLogger = TestLoggerFactory.getTestLogger(ClientLibraryImpl.class);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
 
-        initMocks(this);
-    }
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        context.currentPage(CLIENT_LIB);
 
-    @AfterEach
-    void tearDown() {
-        TestLoggerFactory.clear();
-    }
-
-    @Test
-    public void getInline() {
-        this.cl.categories = this.categories;
-        this.cl.type = this.type;
-
-        when(this.clientLibraryAggregatorServiceMock.getClientLibOutput(this.categories, this.type))
-          .thenReturn("output inline");
-
-        assertEquals("output inline", this.cl.getInline());
     }
 
     @Test
-    public void getInlineLimited_correct() throws LoginException {
-        this.cl.categories = this.categories;
-        this.cl.type = this.type;
-        this.cl.primaryPath = this.primaryPath;
-        this.cl.fallbackPath = this.fallbackPath;
-
-        Set<String> resourceTypes = Utils.getResourceTypes(this.resourceMock, this.resourceTypeRegexSample, new HashSet<>());
-
-        when(this.pageMock.getContentResource())
-          .thenReturn(this.resourceMock);
-        when(this.clientLibraryAggregatorServiceMock.getResourceTypeRegex())
-          .thenReturn(this.resourceTypeRegexSample);
-        when(this.clientLibraryAggregatorServiceMock.getClientlibResourceResolver())
-        .thenReturn(this.resourceResolverMock);
-        when(this.clientLibraryAggregatorServiceMock.getClientLibOutput(this.categories, this.type, resourceTypes, this.primaryPath, this.fallbackPath))
-          .thenReturn("output inline");
-
-        assertEquals("output inline", this.cl.getInlineLimited());
+    void testGetInline() {
+        Resource resource = context.currentResource(CLIENT_LIB + "/" + JcrConstants.JCR_CONTENT);
+        ClientLibrary clientLibrary = resource.adaptTo(ClientLibraryImpl.class);
+        assertEquals("", clientLibrary.getInline());
     }
+
+    @Test
+    void testGetInlineLimited() {
+        Resource resource = context.currentResource(CLIENT_LIB + "/" + JcrConstants.JCR_CONTENT);
+        ClientLibrary clientLibrary = context.request().adaptTo(ClientLibraryImpl.class);
+        // TODO - currentPage is getting null when adapted from resource, inject the currentPage variable.
+        assertEquals("", clientLibrary.getInlineLimited());
+    }
+
 }
