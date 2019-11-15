@@ -69,9 +69,9 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for the main upcoming components and features.
 
-## Accelerated Mobile Pages support
+## AMP support
 
-Google's AMP suport has been added to the AEM Core Components. Learn more about Accelerated Mobile Pages [here](https://amp.dev/).
+AMP suport has been added to the AEM Core Components. Learn more about AMP [here](https://amp.dev/).
 
 The [Component Library](https://www.adobe.com/go/aem_cmp_library) and [its code](examples/src/content/jcr_root/apps/core-components-examples) in this repository show how it can be used. 
 
