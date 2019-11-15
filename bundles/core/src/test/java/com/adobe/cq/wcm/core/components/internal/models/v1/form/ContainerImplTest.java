@@ -108,7 +108,7 @@ public class ContainerImplTest {
         assertEquals("application/x-www-form-urlencoded", container.getEnctype());
         assertEquals("GET", container.getMethod());
         assertEquals(CONTEXT_PATH + CONTAINING_PAGE + ".html", container.getAction());
-        assertEquals("core/wcm/components/form/container/v1/container/new", container.getResourceTypeForDropArea());
+        assertEquals("wcm/foundation/components/responsivegrid/new", container.getResourceTypeForDropArea());
         assertEquals(CONTEXT_PATH + "/content/coretest/home", container.getRedirect());
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, FORM1_PATH));
     }
@@ -119,7 +119,7 @@ public class ContainerImplTest {
         assertEquals("multipart/form-data", container.getEnctype());
         assertEquals("POST", container.getMethod());
         assertEquals(CONTEXT_PATH + CONTAINING_PAGE + ".html", container.getAction());
-        assertEquals("core/wcm/components/form/container/v1/container/new", container.getResourceTypeForDropArea());
+        assertEquals("wcm/foundation/components/responsivegrid/new", container.getResourceTypeForDropArea());
         assertNull(container.getRedirect());
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, FORM2_PATH));
     }

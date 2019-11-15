@@ -23,7 +23,7 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 ## Mailing List
 
-For discussions and Q&A you can use our public mailing list hosted on [googlegroups.com](https://groups.google.com/forum/#!forum/aem-core-components-dev). 
+For discussions and Q&A, you can use our public mailing list hosted on [googlegroups.com](https://groups.google.com/forum/#!forum/aem-core-components-dev). 
 You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups.com](mailto:aem-core-components-dev+subscribe@googlegroups.com).
 
 ## Available Components
@@ -67,7 +67,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 26. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
 27. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
-Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for main upcoming components and features.
+Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for the main upcoming components and features.
 
 ## Component Versioning
 
@@ -154,7 +154,7 @@ To include the core components package into your own project's maven build using
 
  inside the configuration of the `content-package-maven-plugin`.
 
- Also, make sure that if you have a sub module like ui.apps to add the core components as a dependency to ui.apps/pom.xml as well.
+ Also, make sure that if you have a submodule like ui.apps to add the core components as a dependency to ui.apps/pom.xml as well.
 
  ### For Projects Using Maven Archetype 18 and Above
 
@@ -179,5 +179,5 @@ Then add it as a subpackage
 
 inside the configuration of the `filevault-package-maven-plugin`.
 
- For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
+ For more information on how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)

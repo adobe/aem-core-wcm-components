@@ -33,14 +33,14 @@
              data-cmp-hook-carousel="item"></div>
         <div class="cmp-carousel__actions">
             <button class="cmp-carousel__action cmp-carousel__action--previous"
-                    role="button"
+                    type="button"
                     aria-label="${'Previous' @ i18n}"
                     data-cmp-hook-carousel="previous">
                 <span class="cmp-carousel__action-icon"></span>
                 <span class="cmp-carousel__action-text">${'Previous' @ i18n}</span>
             </button>
             <button class="cmp-carousel__action cmp-carousel__action--next"
-                    role="button"
+                    type="button"
                     aria-label="${'Next' @ i18n}"
                     data-cmp-hook-carousel="next">
                 <span class="cmp-carousel__action-icon"></span>
@@ -48,7 +48,7 @@
             </button>
             <button data-sly-test="${carousel.autoplay}"
                     class="cmp-carousel__action cmp-carousel__action--pause"
-                    role="button"
+                    type="button"
                     aria-label="${'Pause' @ i18n}"
                     data-cmp-hook-carousel="pause">
                 <span class="cmp-carousel__action-icon"></span>
@@ -56,7 +56,7 @@
             </button>
             <button data-sly-test="${carousel.autoplay}"
                     class="cmp-carousel__action cmp-carousel__action--play cmp-carousel__action--disabled"
-                    role="button"
+                    type="button"
                     aria-label="${'Play' @ i18n}"
                     data-cmp-hook-carousel="play">
                 <span class="cmp-carousel__action-icon"></span>
