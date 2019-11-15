@@ -19,4 +19,5 @@
     jcr:primaryType="cq:Component"
     jcr:title="Teaser"
     sling:resourceSuperType="core/wcm/components/teaser/v1/teaser"
-    componentGroup="Core Components Examples"/>
+    componentGroup="Core Components Examples"
+    imageDelegate="core/wcm/components/image/v2/image"/>
