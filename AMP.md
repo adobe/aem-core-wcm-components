@@ -11,7 +11,7 @@ A [Transformer](bundles/core/src/main/java/com/adobe/cq/wcm/core/components/inte
 
 ### Inline CSS
 
-AMP requires all the CSS used for a page to be inline in the `<head>` element of the document. This also has to be **optimized** so that the CSS code does not represent all possible component combination but only the ones needed for the page currently being rendered. 
+AMP requires all the CSS used for a page to be inline in the `<head>` element of the document. This also has to be **optimized** so that the CSS code does not represent all possible component combinations but only the ones needed for the page currently being rendered. 
 
 To achieve this, a developer will need to override the [ampheadlibs.html](examples/src/content/jcr_root/apps/core-components-examples/components/page/ampheadlibs.html) file and provide a spcific clientlib inclusion like so:
 
