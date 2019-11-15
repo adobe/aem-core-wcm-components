@@ -75,7 +75,7 @@ AMP suport has been added to the AEM Core Components. Learn more about AMP [here
 
 The [Component Library](https://www.adobe.com/go/aem_cmp_library) and [its code](examples/src/content/jcr_root/apps/core-components-examples) in this repository show how it can be used. 
 
-###AMP behavior control
+### AMP behavior control
 
 For AEM users to control if they want their pages to be / not be AMP, an author with sufficient permissions can go un the page template's Page Policy and select the **AMP Mode**. It has the following options:
 
