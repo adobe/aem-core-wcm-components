@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.services;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
@@ -49,12 +50,19 @@ public class ClientLibraryAggregatorServiceImplTest {
     @Test
     public void testClientLibOutput() {
         com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        MockHtmlLibraryManager htmlLibraryManager = context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
-        String text = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css");
-        assertEquals("", text);
+        ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+
+        String cssLibrary = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css");
+        assertEquals("", cssLibrary);
+
+        String jsLibrary = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","js");
+        assertEquals("", jsLibrary);
+
+        String xmlLibrary = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","xml");
+        assertEquals("", xmlLibrary);
     }
 
     @Test
@@ -69,12 +77,16 @@ public class ClientLibraryAggregatorServiceImplTest {
         resourceTypes.add("core/wcm/components/text/v2/text");
         resourceTypes.add("core/wcm/components/teaser/v1/teaser");
 
-        String text = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css", resourceTypes, "clientlibs/amp", "clientlibs/site");
-        assertEquals("", text);
+        String clientLibOutput_1 = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css", resourceTypes, "clientlibs/amp", "clientlibs/site");
+        assertEquals("", clientLibOutput_1);
+
+
+        String clientLibOutput_2 = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css", resourceTypes, "", "");
+        assertEquals("", clientLibOutput_2);
     }
 
     @Test
-    public void testResourceTypeRegex() {
+    public void testValidResourceTypeRegex() {
         com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
         context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
@@ -83,6 +95,19 @@ public class ClientLibraryAggregatorServiceImplTest {
         clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl(), configs);
         String resourceTypeRegex = clientLibraryAggregatorService.getResourceTypeRegex();
         assertEquals(testRegex, resourceTypeRegex);
+
+        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        assertNull(clientLibraryAggregatorService.getResourceTypeRegex());
+    }
+
+    @Test
+    public void testNullResourceTypeRegex() {
+        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
+
+        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        assertNull(clientLibraryAggregatorService.getResourceTypeRegex());
     }
 
     @Test
@@ -111,6 +136,9 @@ public class ClientLibraryAggregatorServiceImplTest {
         LibraryType jsLibraryType = clientLibraryAggregatorService.getClientLibType("js");
         assertEquals("application/javascript", jsLibraryType.contentType);
         assertEquals(".js", jsLibraryType.extension);
+
+        LibraryType xmlLibraryType = clientLibraryAggregatorService.getClientLibType("xml");
+        assertNull(xmlLibraryType);
 
     }
 
