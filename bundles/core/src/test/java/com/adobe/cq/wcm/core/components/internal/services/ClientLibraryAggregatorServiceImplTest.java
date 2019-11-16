@@ -50,7 +50,7 @@ public class ClientLibraryAggregatorServiceImplTest {
     @Test
     public void testClientLibOutput() {
         com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        MockHtmlLibraryManager htmlLibraryManager = context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
         ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
@@ -96,8 +96,6 @@ public class ClientLibraryAggregatorServiceImplTest {
         String resourceTypeRegex = clientLibraryAggregatorService.getResourceTypeRegex();
         assertEquals(testRegex, resourceTypeRegex);
 
-        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
-        assertNull(clientLibraryAggregatorService.getResourceTypeRegex());
     }
 
     @Test
