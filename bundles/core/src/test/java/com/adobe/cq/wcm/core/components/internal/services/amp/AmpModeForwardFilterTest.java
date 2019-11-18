@@ -15,181 +15,92 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.any;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
 
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.request.RequestPathInfo;
-import org.apache.sling.api.request.RequestDispatcherOptions;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import java.util.HashMap;
-import java.util.Map;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Page;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletException;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.io.IOException;
-import com.adobe.cq.commerce.common.ValueMapDecorator;
+import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import org.apache.sling.api.request.RequestDispatcherOptions;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(AemContextExtension.class)
 public class AmpModeForwardFilterTest {
-    private static final String AMP_MODE_PROP = "ampMode";
+    private static final String TEST_BASE = "/amp-mode-forward-filter";
+    private static final String TEST_ROOT_PAGE = "/content";
+    private static final String AMP_PAGE_PROPERTY = TEST_ROOT_PAGE + "/amp-only";
+    private static final String AMP_SELECTOR = TEST_ROOT_PAGE + "/amp-selector";
+    private static final String AMP_SELECTOR_WITH_AMP_MODE = TEST_ROOT_PAGE + "/amp-selector-with-amp-mode";
 
-    private TestLogger testLogger;
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private SlingHttpServletRequest slingHttpServletRequestMock;
-    @Mock
-    private FilterChain filterChainMock;
-    @Mock(extraInterfaces = SlingHttpServletRequest.class)
-    private ServletRequest servletRequestMock;
-    @Mock
-    private ServletResponse servletResponseMock;
-    @Mock
-    private RequestPathInfo requestPathInfoMock;
-    @Mock
-    private RequestDispatcher requestDispatcherMock;
-    @Mock
-    private PageManager pageManagerMock;
-    @Mock
-    private Page pageMock;
-    @Mock
-    private ResourceResolver resourceResolverMock;
-    @Mock
-    private Resource resourceMock;
-    @InjectMocks
-    private AmpModeForwardFilter amff;
-
-    private ValueMap mapSample;
+    private AmpModeForwardFilter ampModeForwardFilter;
+    private FilterChain filterChain;
 
     @BeforeEach
-    void setUp() {
-        this.testLogger = TestLoggerFactory.getTestLogger(AmpModeForwardFilter.class);
+    public void setUp() {
+        ampModeForwardFilter = new AmpModeForwardFilter();
+        filterChain = mock(FilterChain.class);
+        MockRequestDispatcherFactory mockRequestDispatcherFactory = new MockRequestDispatcherFactory() {
+            @Override
+            public RequestDispatcher getRequestDispatcher(String s,
+                RequestDispatcherOptions requestDispatcherOptions) {
+                return mock(RequestDispatcher.class);
+            }
 
-        initMocks(this);
-        this.slingHttpServletRequestMock = (SlingHttpServletRequest) this.servletRequestMock;
-    }
+            @Override
+            public RequestDispatcher getRequestDispatcher(Resource resource,
+                RequestDispatcherOptions requestDispatcherOptions) {
+                return mock(RequestDispatcher.class);
+            }
+        };
+        context.request().setRequestDispatcherFactory(mockRequestDispatcherFactory);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
 
-    @AfterEach
-    void tearDown() {
-        TestLoggerFactory.clear();
-    }
-
-    @Test
-    public void doFilter_noAmpForwardFalse() throws IOException, ServletException {
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "noAmp");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
-
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectorString())
-          .thenReturn("amp");
-
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-
-
-        when(this.slingHttpServletRequestMock.getRequestDispatcher(any(Resource.class), any(RequestDispatcherOptions.class)))
-          .thenReturn(null);
-
-        this.amff.doFilter(this.servletRequestMock, this.servletResponseMock, this.filterChainMock);
-
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(debug("Request dispatcher is null. AMP mode forwarding aborted.")));
-        verify(this.filterChainMock, times(1)).doFilter(this.servletRequestMock, this.servletResponseMock);
     }
 
     @Test
-    public void doFilter_ampOnlyForwardFalse() throws IOException, ServletException {
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "ampOnly");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
-
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectorString())
-          .thenReturn("");
-
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-
-
-        when(this.slingHttpServletRequestMock.getRequestDispatcher(any(Resource.class), any(RequestDispatcherOptions.class)))
-          .thenReturn(null);
-
-        this.amff.doFilter(this.servletRequestMock, this.servletResponseMock, this.filterChainMock);
-
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(debug("Request dispatcher is null. AMP mode forwarding aborted.")));
-        verify(this.filterChainMock, times(1)).doFilter(this.servletRequestMock, this.servletResponseMock);
+    void testFilteringWithNoSelector() throws IOException, ServletException {
+        context.currentPage(AMP_PAGE_PROPERTY);
+        context.currentResource();
+        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
     }
 
     @Test
-    public void doFilter_dotPlusAmpForwardFalse() throws IOException, ServletException {
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "ampOnly");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
+    void testFilteringWithAmpSelector() throws IOException, ServletException {
+        context.currentPage(AMP_SELECTOR);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with amp selector
+        context.requestPathInfo().setSelectorString("amp");
+        context.requestPathInfo().setExtension("html");
+        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
 
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectorString())
-          .thenReturn(".amp");
+        //with .amp selector
+        context.requestPathInfo().setSelectorString(".amp");
+        context.requestPathInfo().setExtension("html");
+        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
 
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-
-
-        when(this.slingHttpServletRequestMock.getRequestDispatcher(any(Resource.class), any(RequestDispatcherOptions.class)))
-          .thenReturn(this.requestDispatcherMock);
-
-        this.amff.doFilter(this.servletRequestMock, this.servletResponseMock, this.filterChainMock);
-
-        verify(this.requestDispatcherMock, times(1)).forward(this.slingHttpServletRequestMock, this.servletResponseMock);
+        //with amp. selector
+        context.requestPathInfo().setSelectorString("amp.");
+        context.requestPathInfo().setExtension("html");
+        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
     }
+
+    @Test
+    void testFilteringWithSelectorWithAmpMode() throws IOException, ServletException {
+        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with .amp selector
+        context.requestPathInfo().setSelectorString(".amp");
+        context.requestPathInfo().setExtension("html");
+        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+    }
+
 }
