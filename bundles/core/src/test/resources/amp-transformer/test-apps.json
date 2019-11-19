@@ -1,0 +1,42 @@
+{
+    "text": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "text"         : {
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Text (v1)",
+                "sling:resourceSuperType": "core/wcm/components/text",
+                "componentGroup"         : ".core-wcm",
+                "ampheadlibs.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/html",
+                        "jcr:data": "<script>console.log('This is amp text component script')</script>"
+                    }
+                }
+            }
+        }
+    },
+    "page": {
+        "jcr:primaryType": "sling:Folder",
+        "v2"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "page"       : {
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Page (v2)",
+                "sling:resourceSuperType": "wcm/foundation/components/basicpage/v1/basicpage",
+                "componentGroup"         : ".core-wcm",
+                "ampheadlibs.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/html",
+                        "jcr:data": "<script>console.log('This is amp page script')</script>"
+                    }
+                }
+            }
+        }
+    }
+}

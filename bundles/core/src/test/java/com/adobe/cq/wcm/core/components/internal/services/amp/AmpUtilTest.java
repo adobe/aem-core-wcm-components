@@ -15,166 +15,54 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.mockito.Mockito.when;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.trace;
-
-import com.adobe.cq.wcm.core.components.internal.services.amp.AmpUtil;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.Resource;
-import com.adobe.cq.commerce.common.ValueMapDecorator;
-import org.apache.sling.api.resource.ValueMap;
-import java.util.HashMap;
-import java.util.Map;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.day.cq.wcm.api.policies.ContentPolicy;
+import com.google.common.base.Function;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.jetbrains.annotations.Nullable;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 
+@ExtendWith(AemContextExtension.class)
 public class AmpUtilTest {
-    private static final String AMP_MODE_PROP = "ampMode";
+    private static final String TEST_BASE = "/amp-util";
+    private static final String TEST_ROOT_PAGE = "/content";
 
-    private TestLogger testLogger;
-
-    @Mock
-    private PageManager pageManagerMock;
-    @Mock
-    private Page pageMock;
-    @Mock
-    private SlingHttpServletRequest slingHttpServletRequestMock;
-    @Mock
-    private ResourceResolver resourceResolverMock;
-    @Mock
-    private Resource resourceMock;
-    @Mock
-    private ContentPolicyManager contentPolicyManagerMock;
-    @Mock
-    private ContentPolicy contentPolicyMock;
-
-    private ValueMap mapSample;
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
     @BeforeEach
     void setUp() {
-        this.testLogger = TestLoggerFactory.getTestLogger(AmpUtil.class);
-
-        initMocks(this);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
     }
 
-    @AfterEach
-    void tearDown() {
-        TestLoggerFactory.clear();
+
+    @Test
+    public void isAmpModeWithDefaults() {
+        AmpUtil.getAmpMode(context.request());
     }
 
     @Test
-    public void getAmpMode_pageManagerNull() {
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(null);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
+    public void isAmpMode() {
 
-        String output = AmpUtil.getAmpMode(this.slingHttpServletRequestMock);
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(debug("Can't resolve page manager. Falling back to content policy AMP mode.")));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(trace("Policy manager is null. Unable to read policy property.")));
-        assertEquals("", output);
+        PageManager pageManager = Mockito.mock(PageManager.class);
+        context.registerAdapter(ResourceResolver.class, PageManager.class, new Function<ResourceResolver, PageManager>() {
+            @Override
+            public PageManager apply(@Nullable ResourceResolver resourceResolver) {
+                return pageManager;
+            }
+        });
+        Resource resource = context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
+
+        context.request().setResource(resource);
+        context.registerService(PageManager.class, pageManager);
+        AmpUtil.getAmpMode(context.request());
     }
 
-    @Test
-    public void getAmpMode_pageNull() {
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.pageManagerMock.getContainingPage(this.slingHttpServletRequestMock.getResource()))
-          .thenReturn(null);
 
-        String output = AmpUtil.getAmpMode(this.slingHttpServletRequestMock);
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(trace("Policy manager is null. Unable to read policy property.")));
-        assertEquals("", output);
-    }
 
-    @Test
-    public void getAmpMode_pageExists() {
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "ampOnly");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
-
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-
-        assertEquals("ampOnly", AmpUtil.getAmpMode(this.slingHttpServletRequestMock));
-    }
-
-    @Test
-    public void getPolicyProperty_contentPolicyNull() {
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(this.contentPolicyManagerMock);
-        when(this.pageManagerMock.getContainingPage(this.slingHttpServletRequestMock.getResource()))
-          .thenReturn(null);
-        when(this.contentPolicyManagerMock.getPolicy(this.resourceMock))
-          .thenReturn(null);
-
-        String output = AmpUtil.getAmpMode(this.slingHttpServletRequestMock);
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(trace("Content policy is null. Unable to read policy property.")));
-        assertEquals("", output);
-    }
-
-    @Test
-    public void getPolicyProperty_contentPolicyExists() {
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "inheritPageTemplate");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
-
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(this.contentPolicyManagerMock);
-        when(this.pageManagerMock.getContainingPage(this.slingHttpServletRequestMock.getResource()))
-          .thenReturn(null);
-        when(this.contentPolicyManagerMock.getPolicy(this.resourceMock))
-          .thenReturn(this.contentPolicyMock);
-        when(this.contentPolicyMock.getProperties())
-          .thenReturn(this.mapSample);
-
-        assertEquals("inheritPageTemplate", AmpUtil.getAmpMode(this.slingHttpServletRequestMock));
-    }
 }

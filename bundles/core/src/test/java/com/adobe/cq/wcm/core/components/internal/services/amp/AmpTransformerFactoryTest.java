@@ -34,8 +34,8 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 public class AmpTransformerFactoryTest {
 
     private AemContext context = CoreComponentTestContext.newAemContext();
-    private final String TEST_REGEX = "(?![A-Za-z]{2}:).*";
-    private final String TEST_HEADLIBS = "testheadlibs.amp.html";
+    private static final String TEST_REGEX = "(?![A-Za-z]{2}:).*";
+    private static final String TEST_HEADLIBS = "ampheadlibs.html";
     private AmpTransformerFactory ampTransformerFactory;
 
     @Test
@@ -71,7 +71,7 @@ public class AmpTransformerFactoryTest {
     }
 
 
-    private Map<String, Object> getAmpTransformerFactoryConfig() {
+    public static Map<String, Object> getAmpTransformerFactoryConfig() {
         Map<String, Object> config = new HashMap<>();
         config.put("getHeadlibName", TEST_HEADLIBS);
         config.put("getHeadlibResourceTypeRegex", TEST_REGEX);

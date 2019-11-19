@@ -45,7 +45,7 @@ public class AmpModeForwardFilterTest {
     private FilterChain filterChain;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         ampModeForwardFilter = new AmpModeForwardFilter();
         filterChain = mock(FilterChain.class);
         MockRequestDispatcherFactory mockRequestDispatcherFactory = new MockRequestDispatcherFactory() {
