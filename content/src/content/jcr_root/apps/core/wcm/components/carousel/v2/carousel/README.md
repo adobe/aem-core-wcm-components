@@ -1,5 +1,5 @@
 <!--
-Copyright 2018 Adobe Systems Incorporated
+Copyright 2019 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -47,8 +47,11 @@ The following properties are written to JCR for this Carousel component and are 
 1. `./autoplay` - defines whether or not the carousel should automatically transition between slides.
 2. `./delay` - defines the delay (in milliseconds) when automatically transitioning between slides.
 3. `./autopauseDisabled` - defines whether or not automatic pause when hovering the carousel is disabled.
+4. `./accessibilityLabel` - defines an accessibility label for the carousel.
 
 The edit dialog also allows editing of Carousel items (adding, removing, naming, re-ordering).
+
+Note: on author instances automatic transitioning only works with the `wcmmode=disabled` URL parameter.
 
 ## Client Libraries
 The component provides a `core.wcm.components.carousel.v2` client library category that contains a recommended base
