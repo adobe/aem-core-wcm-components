@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNull;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
+import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -36,6 +37,7 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.testing.resourceresolver.MockResourceResolver;
 import org.apache.sling.testing.resourceresolver.MockResourceResolverFactory;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
@@ -48,11 +50,7 @@ public class ClientLibraryAggregatorServiceImplTest {
 
     @Test
     public void testClientLibOutput() {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
-
-        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = setup(null);
 
         String cssLibrary = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css");
         assertEquals("", cssLibrary);
@@ -66,11 +64,7 @@ public class ClientLibraryAggregatorServiceImplTest {
 
     @Test
     public void testClientLibOutputWithResourceTypes() {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
-
-        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = setup(null);
 
         Set<String> resourceTypes = new HashSet<>();
         resourceTypes.add("core/wcm/components/text/v2/text");
@@ -86,44 +80,30 @@ public class ClientLibraryAggregatorServiceImplTest {
 
     @Test
     public void testValidResourceTypeRegex() {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = setup(getClientLibraryAggregatorConfig());
 
-        Map<String, Object> configs = getClientLibraryAggregatorConfig();
-        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl(), configs);
         String resourceTypeRegex = clientLibraryAggregatorService.getResourceTypeRegex();
         assertEquals(testRegex, resourceTypeRegex);
-
     }
 
     @Test
     public void testNullResourceTypeRegex() {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = setup(null);
 
-        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
         assertNull(clientLibraryAggregatorService.getResourceTypeRegex());
     }
 
     @Test
     public void testClientlibResourceResolver() throws LoginException {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = setup(null);
 
-        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
         ResourceResolver mockResourceResolver = clientLibraryAggregatorService.getClientlibResourceResolver();
         assertEquals(MockResourceResolver.class, mockResourceResolver.getClass());
     }
 
     @Test
     public void testClientLibType() throws LoginException {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
-
+        setup(null);
         ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = new ClientLibraryAggregatorServiceImpl();
 
         LibraryType cssLibraryType = clientLibraryAggregatorService.getClientLibType("css");
@@ -141,10 +121,7 @@ public class ClientLibraryAggregatorServiceImplTest {
 
     @Test
     public void testClientLibArrayCategoriesWithMultiple() throws LoginException {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
-
+        setup(null);
         ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = new ClientLibraryAggregatorServiceImpl();
 
         String[] categories = new String[] {"clientlib-a", "clientlib-b"};
@@ -158,6 +135,15 @@ public class ClientLibraryAggregatorServiceImplTest {
         config.put("resource.type.regex", testRegex);
 
         return config;
+    }
+
+    @BeforeEach
+    private ClientLibraryAggregatorService setup(Map<String, Object> configs) {
+        ClientLibrary clientLibrary = Mockito.mock(ClientLibrary.class);
+        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
+
+        return context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl(), configs);
     }
 
 

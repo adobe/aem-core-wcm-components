@@ -15,18 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.jetbrains.annotations.Nullable;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+
 
 @ExtendWith(AemContextExtension.class)
 public class AmpUtilTest {
@@ -35,32 +38,28 @@ public class AmpUtilTest {
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @BeforeEach
-    void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
-    }
-
-
     @Test
     public void isAmpModeWithDefaults() {
-        AmpUtil.getAmpMode(context.request());
+        Assert.assertEquals("", AmpUtil.getAmpMode(context.request()));
     }
 
     @Test
     public void isAmpMode() {
 
-        PageManager pageManager = Mockito.mock(PageManager.class);
-        context.registerAdapter(ResourceResolver.class, PageManager.class, new Function<ResourceResolver, PageManager>() {
-            @Override
-            public PageManager apply(@Nullable ResourceResolver resourceResolver) {
-                return pageManager;
-            }
-        });
         Resource resource = context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
 
-        context.request().setResource(resource);
-        context.registerService(PageManager.class, pageManager);
-        AmpUtil.getAmpMode(context.request());
+        SlingHttpServletRequest mockSlingHttpServletRequest = mock(SlingHttpServletRequest.class);
+        ResourceResolver mockResourceResolver = mock(ResourceResolver.class);
+        PageManager mockPageManager = mock(PageManager.class);
+        Page page = mock(Page.class);
+
+        when(mockSlingHttpServletRequest.getResourceResolver()).thenReturn(mockResourceResolver);
+        when(mockSlingHttpServletRequest.getResourceResolver().adaptTo(PageManager.class)).thenReturn(mockPageManager);
+        when(mockSlingHttpServletRequest.getResource()).thenReturn(resource);
+        when(mockPageManager.getContainingPage(mockSlingHttpServletRequest.getResource())).thenReturn(page);
+        when(page.getProperties()).thenReturn(resource.getChild("amp-only/jcr:content").getValueMap());
+
+        Assert.assertEquals("ampOnly", AmpUtil.getAmpMode(mockSlingHttpServletRequest));
     }
 
 
