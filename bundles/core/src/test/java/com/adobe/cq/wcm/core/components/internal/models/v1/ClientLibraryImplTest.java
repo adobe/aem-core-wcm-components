@@ -30,9 +30,7 @@ import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import org.apache.commons.io.IOUtils;
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,7 +88,7 @@ public class ClientLibraryImplTest {
         when(htmlLibraryManager.getLibrary(any(), any())).thenReturn(library);
         when(library.getInputStream(anyBoolean())).thenReturn(clientLibResource.adaptTo(InputStream.class));
 
-        String outputString = IOUtils.toString(clientLibResource.adaptTo(InputStream.class), StandardCharsets.UTF_8);
+        String outputString = "html { \n box-sizing: border-box;\n font-size: 14px; \n}";
         assertEquals(outputString, clientLibrary.getInline());
     }
 
@@ -107,7 +105,7 @@ public class ClientLibraryImplTest {
         when(htmlLibraryManager.getLibrary(any(), any())).thenReturn(library);
         when(library.getInputStream(anyBoolean())).thenReturn(clientLibResource.adaptTo(InputStream.class));
 
-        String outputString = IOUtils.toString(clientLibResource.adaptTo(InputStream.class), StandardCharsets.UTF_8);
+        String outputString = "console.log{'cmp-examples.base.amp clientlib js'}";
         assertEquals(outputString, clientLibrary.getInline());
     }
 

@@ -20,7 +20,7 @@
                 "jcr:content": {
                     "jcr:primaryType": "nt:resource",
                     "jcr:mimeType": "text/css",
-                    "jcr:data": "html { \n box-sizing: border-box;\n font-size: @cmp-examples-base-size; \n}"
+                    "jcr:data": "html { \n box-sizing: border-box;\n font-size: 14px; \n}"
                 }
             }
         },
@@ -39,7 +39,7 @@
                 "jcr:content": {
                     "jcr:primaryType": "nt:resource",
                     "jcr:mimeType": "application/javascript",
-                    "jcr:data": "console.log{'amp js'}"
+                    "jcr:data": "console.log{'cmp-examples.base.amp clientlib js'}"
                 }
             }
         }
