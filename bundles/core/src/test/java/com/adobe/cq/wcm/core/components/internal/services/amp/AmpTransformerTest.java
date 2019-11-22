@@ -15,435 +15,302 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.trace;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.debug;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
-
-import com.day.crx.JcrConstants;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.services.amp.AmpTransformerFactory;
-import org.apache.sling.rewriter.ProcessingComponentConfiguration;
-import org.apache.sling.rewriter.ProcessingContext;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.request.RequestPathInfo;
-import org.apache.sling.api.resource.ResourceResolverFactory;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.resource.LoginException;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Page;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collections;
-import java.io.InputStream;
-import com.adobe.cq.commerce.common.ValueMapDecorator;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.apache.sling.rewriter.ProcessingContext;
+import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.apache.sling.testing.resourceresolver.MockResourceResolverFactory;
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(AemContextExtension.class)
 public class AmpTransformerTest {
-    private static final String AMP_MODE_PROP = "ampMode";
+    private static final String TEST_BASE = "/amp-transformer";
+    private static final String TEST_ROOT_PAGE = "/content";
+    private static final String AMP_PAGE_PROPERTY = TEST_ROOT_PAGE + "/amp-only";
+    private static final String AMP_SELECTOR = TEST_ROOT_PAGE + "/amp-selector";
+    private static final String PAIRED_AMP = TEST_ROOT_PAGE + "/paired-amp";
+    private static final String AMP_SELECTOR_WITH_AMP_MODE = TEST_ROOT_PAGE + "/amp-selector-with-amp-mode";
+    private static final String INVALID_PAGE_RESOURCE = TEST_ROOT_PAGE + "/invalid-page-resource";
+    private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    private TestLogger testLogger;
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
-    @Mock
-    private AmpTransformerFactory.Cfg cfgMock;
-    @Mock
-    private ProcessingContext processingContextMock;
-    @Mock
-    private ProcessingComponentConfiguration processingComponentConfigurationMock;
-    @Mock
-    private SlingHttpServletRequest slingHttpServletRequestMock;
-    @Mock
-    private RequestPathInfo requestPathInfoMock;
-    @Mock
-    private ResourceResolverFactory resourceResolverFactoryMock;
-    @Mock
-    private ResourceResolver resourceResolverMock;
-    @Mock
-    private Resource resourceMock;
-    @Mock
-    private Resource coreResourceMock;
-    @Mock
-    private Resource supertypeResourceMock;
-    @Mock
-    private ContentPolicyManager contentPolicyManagerMock;
-    @Mock
-    private ContentPolicy contentPolicyMock;
-    @Mock
-    private PageManager pageManagerMock;
-    @Mock
-    private Page pageMock;
-    @Mock
-    private ContentHandler contentHandlerMock;
-    @Mock
-    private Locator locatorMock;
-    @Mock
-    private Attributes attributesMock;
-    @InjectMocks
-    private AmpTransformer at;
 
-    private ValueMap mapSample;
-    private String resourceTypeRegexSample;
+    private AmpTransformer ampTransformer;
+    private ResourceResolverFactory resolverFactory;
+    private ContentHandler contentHandler;
 
     @BeforeEach
-    void setUp() {
-        this.testLogger = TestLoggerFactory.getTestLogger(AmpTransformer.class);
+    void setUp() throws LoginException {
 
-        initMocks(this);
-    }
+        resolverFactory = mock(MockResourceResolverFactory.class);
+        contentHandler = mock(ContentHandler.class);
 
-    @AfterEach
-    void tearDown() {
-        TestLoggerFactory.clear();
-    }
+        Map<String, Object> configs = AmpTransformerFactoryTest.getAmpTransformerFactoryConfig();
+        AmpTransformerFactory ampTransformerFactory = context.registerInjectActivateService(new AmpTransformerFactory(), configs);
 
-    @Test
-    public void init_pageManagerNull() {
-        String[] selectors = new String[] {"amp"};
+        AmpTransformerFactory.Cfg ampCfg = ampTransformerFactory.getCfg();
 
-        when(this.processingContextMock.getRequest())
-          .thenReturn(this.slingHttpServletRequestMock);
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(null);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectors())
-          .thenReturn(selectors);
+        ampTransformer = new AmpTransformer(ampCfg, resolverFactory);
 
-        this.at.init(this.processingContextMock, this.processingComponentConfigurationMock);
+        ampTransformer.setContentHandler(contentHandler);
 
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("Failed to resolve page manager while initializing AMP transformer.")));
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+
     }
 
     @Test
-    public void init_pageNull() {
-        String[] selectors = new String[] {"amp"};
+    void initTransformer() throws SAXException {
+        context.currentResource(AMP_PAGE_PROPERTY);
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
-        when(this.processingContextMock.getRequest())
-          .thenReturn(this.slingHttpServletRequestMock);
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.pageManagerMock.getContainingPage(this.slingHttpServletRequestMock.getResource()))
-          .thenReturn(null);
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectors())
-          .thenReturn(selectors);
-
-        this.at.init(this.processingContextMock, this.processingComponentConfigurationMock);
-
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("Failed to resolve page while initializing AMP transformer")));
+        ampTransformer.init(processingContext, null);
     }
 
     @Test
-    public void contentHandler() throws SAXException {
-        char[] ch = new char[26];
-        int index = 0;
-        for (char c = 'a'; c <= 'z'; c++) {
-            ch[index++] = c;
-        }
+    void initTransformerWithEmptyPage() throws SAXException {
+        context.currentResource(INVALID_PAGE_RESOURCE);
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
-        this.at.setContentHandler(this.contentHandlerMock);
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
 
-        this.at.startDocument();
-        verify(this.contentHandlerMock, times(1)).startDocument();
-        this.at.startElement("uri", "localName", "qName", this.attributesMock);
-        verify(this.contentHandlerMock, times(1)).startElement("uri", "localName", "qName", this.attributesMock);
-        this.at.startPrefixMapping("prefix", "uri");
-        verify(this.contentHandlerMock, times(1)).startPrefixMapping("prefix", "uri");
-        this.at.characters(ch, 0, 5);
-        verify(this.contentHandlerMock, times(1)).characters(ch, 0, 5);
-        this.at.ignorableWhitespace(ch, 3, 15);
-        verify(this.contentHandlerMock, times(1)).ignorableWhitespace(ch, 3, 15);
-        this.at.processingInstruction("target", "data");
-        verify(this.contentHandlerMock, times(1)).processingInstruction("target", "data");
-        this.at.setDocumentLocator(locatorMock);
-        verify(this.contentHandlerMock, times(1)).setDocumentLocator(locatorMock);
-        this.at.skippedEntity("name");
-        verify(this.contentHandlerMock, times(1)).skippedEntity("name");
-        this.at.endPrefixMapping("pre");
-        verify(this.contentHandlerMock, times(1)).endPrefixMapping("pre");
-        this.at.endDocument();
-        verify(this.contentHandlerMock, times(1)).endDocument();
+        verify(contentHandler, atLeastOnce()).endElement(isNull(), eq("head"), isNull());
+        verify(contentHandler, never()).characters(isNull(), eq(0), anyInt());
+
     }
 
     @Test
-    public void endElement_ampOnlyHeadlibEmpty() throws SAXException {
-        String[] selectors = new String[] {"amp"};
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "ampOnly");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
+    void testNotAHeadElement() throws SAXException {
+        context.currentPage(AMP_PAGE_PROPERTY);
 
-        when(this.processingContextMock.getRequest())
-          .thenReturn(this.slingHttpServletRequestMock);
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectors())
-          .thenReturn(selectors);
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
-        when(this.pageMock.getPath())
-          .thenReturn("/path/to/testing/page");
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "body", null);
 
-        when(this.cfgMock.getHeadlibName())
-          .thenReturn("");
+        verify(contentHandler, atLeastOnce()).endElement(isNull(), eq("body"), isNull());
+        verify(contentHandler, never()).characters(isNull(), eq(0), anyInt());
 
-        this.at.init(this.processingContextMock, this.processingComponentConfigurationMock);
-        this.at.setContentHandler(this.contentHandlerMock);
-        this.at.endElement("uri", "head", "qName");
+    }
 
-        verify(this.contentHandlerMock, times(1)).endElement("uri", "head", "qName");
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("Headlib name not defined. Failed to aggregate AMP component js.")));
+
+    @Test
+    void testHeadLinkAmpOnlyMode() throws SAXException {
+        context.currentPage(AMP_PAGE_PROPERTY);
+
+
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
+
+        ArgumentCaptor<char[]> charCaptor = ArgumentCaptor.forClass(char[].class);
+        ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        String output ="\n<link rel=\"canonical\" href=\"/content/amp-only.html\">";
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
+        Assert.assertEquals(output, new String(charCaptor.getValue()));
+        Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
+
     }
 
     @Test
-    public void endElement_pairedAmpHeadlibNameEmpty() throws SAXException {
-        String[] selectors = new String[] {"amp"};
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "pairedAmp");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
+    void testHeadLinkPairedAmpMode() throws SAXException {
+        context.currentPage(PAIRED_AMP);
 
-        when(this.processingContextMock.getRequest())
-          .thenReturn(this.slingHttpServletRequestMock);
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectors())
-          .thenReturn(selectors);
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
-        when(this.pageMock.getPath())
-          .thenReturn("/path/to/testing/page");
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
 
-        when(this.cfgMock.getHeadlibName())
-          .thenReturn("");
+        ArgumentCaptor<char[]> charCaptor = ArgumentCaptor.forClass(char[].class);
+        ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
 
-        this.at.init(this.processingContextMock, this.processingComponentConfigurationMock);
-        this.at.setContentHandler(this.contentHandlerMock);
-        this.at.endElement("uri", "head", "qName");
+        String output ="\n<link rel=\"amphtml\" href=\"/content/paired-amp.amp.html\">";
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
+        Assert.assertEquals(output, new String(charCaptor.getValue()));
+        Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
 
-        verify(this.contentHandlerMock, times(1)).endElement("uri", "head", "qName");
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(error("Headlib name not defined. Failed to aggregate AMP component js.")));
     }
 
     @Test
-    public void endElement_pairedAmpHeadlibResourceAlwaysNull() throws SAXException, LoginException {
-        String[] selectors = new String[] {"amp"};
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "pairedAmp");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
+    void testHeadJsContent() throws SAXException, LoginException {
+        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with amp selector
+        context.requestPathInfo().setSelectorString("amp");
+        context.requestPathInfo().setExtension("html");
 
-        when(this.processingContextMock.getRequest())
-          .thenReturn(this.slingHttpServletRequestMock);
 
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectors())
-          .thenReturn(selectors);
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
-        when(this.pageMock.getPath())
-          .thenReturn("/path/to/testing/page");
 
-        when(this.cfgMock.getHeadlibName())
-          .thenReturn("customheadlibs.amp.html");
-        when(this.cfgMock.getHeadlibResourceTypeRegex())
-          .thenReturn(this.resourceTypeRegexSample);
-        when(this.resourceMock.getResourceType())
-          .thenReturn("/fakeType");
-        when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
-          .thenReturn(this.resourceResolverMock);
-        when(this.resourceResolverMock.getResource("/fakeType/customheadlibs.amp.html/" + JcrConstants.JCR_CONTENT))
-          .thenReturn(null);
-        when(this.resourceResolverMock.getResource("/fakeType"))
-          .thenReturn(null);
+        ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
+        ResourceResolver serviceResouceResolver =resourceResolver.clone(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
+        when(resolverFactory.getServiceResourceResolver(anyMap())).thenReturn(serviceResouceResolver);
 
-        this.at.init(this.processingContextMock, this.processingComponentConfigurationMock);
-        this.at.setContentHandler(this.contentHandlerMock);
-        this.at.endElement("uri", "head", "qName");
 
-        verify(this.contentHandlerMock, times(1)).endElement("uri", "head", "qName");
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(trace("No custom headlib for resource type {}.", "/fakeType")));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(debug("Can't access resource from resource type {}.", "/fakeType")));
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
+
+        ArgumentCaptor<char[]> charCaptor = ArgumentCaptor.forClass(char[].class);
+        ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        String output ="\n"
+            + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode.html\">\n"
+            + "<script>console.log('This is amp page script')</script>\n"
+            + "<script>console.log('This is amp text component script')</script>\n";
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
+        Assert.assertEquals(output, new String(charCaptor.getValue()));
+        Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
+
     }
 
     @Test
-    public void endElement_pairedAmpHeadlibResourceSupertypeNull() throws SAXException, LoginException {
-        String[] selectors = new String[] {"amp"};
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "pairedAmp");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
+    void testHeadJsContentWithNoConfig() throws SAXException, LoginException {
 
-        when(this.processingContextMock.getRequest())
-          .thenReturn(this.slingHttpServletRequestMock);
+        Map<String, Object> configs = new HashMap<>();
+        configs.put("getHeadlibName", StringUtils.EMPTY);
+        configs.put("getHeadlibResourceTypeRegex", StringUtils.EMPTY);
 
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectors())
-          .thenReturn(selectors);
+        AmpTransformerFactory ampTransformerFactory = context.registerInjectActivateService(new AmpTransformerFactory(), configs);
 
-        when(this.pageMock.getPath())
-          .thenReturn("/path/to/testing/page");
+        AmpTransformerFactory.Cfg ampCfg = ampTransformerFactory.getCfg();
 
-        when(this.cfgMock.getHeadlibName())
-          .thenReturn("customheadlibs.amp.html");
-        when(this.cfgMock.getHeadlibResourceTypeRegex())
-          .thenReturn(this.resourceTypeRegexSample);
-        when(this.resourceMock.getResourceType())
-          .thenReturn("/fakeType");
-        when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
-          .thenReturn(this.resourceResolverMock);
-        when(this.resourceResolverMock.getResource("/fakeType/customheadlibs.amp.html/" + JcrConstants.JCR_CONTENT))
-          .thenReturn(null);
-        when(this.resourceResolverMock.getResource("/fakeType"))
-          .thenReturn(this.coreResourceMock);
-        when(this.coreResourceMock.getResourceSuperType())
-          .thenReturn(null);
+        ampTransformer = new AmpTransformer(ampCfg, resolverFactory);
 
-        this.at.init(this.processingContextMock, this.processingComponentConfigurationMock);
-        this.at.setContentHandler(this.contentHandlerMock);
-        this.at.endElement("uri", "head", "qName");
+        setContentHandler();
 
-        verify(this.contentHandlerMock, times(1)).endElement("uri", "head", "qName");
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(trace("No custom headlib for resource type {}.", "/fakeType")));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(trace("No resource superType from resource type {}.", "/fakeType")));
+        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with amp selector
+        context.requestPathInfo().setSelectorString("amp");
+        context.requestPathInfo().setExtension("html");
+
+
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+
+
+        ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
+        ResourceResolver serviceResouceResolver =resourceResolver.clone(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
+        when(resolverFactory.getServiceResourceResolver(anyMap())).thenReturn(serviceResouceResolver);
+
+
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
+
+        ArgumentCaptor<char[]> charCaptor = ArgumentCaptor.forClass(char[].class);
+        ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        String output ="\n"
+            + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode.html\">\n";
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
+        Assert.assertEquals(output, new String(charCaptor.getValue()));
+        Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
+
     }
 
     @Test
-    public void endElement_pairedAmpHeadlibResourceSupertypeExistsInputStreamNull() throws SAXException, LoginException {
-        String[] selectors = new String[] {"amp"};
-        Map<String, Object> map = new HashMap<String, Object>(){{
-            put(AMP_MODE_PROP, "pairedAmp");
-        }};
-        this.mapSample = new ValueMapDecorator(map);
+    void setContentHandler() {
+        ampTransformer.setContentHandler(contentHandler);
+    }
 
-        when(this.processingContextMock.getRequest())
-          .thenReturn(this.slingHttpServletRequestMock);
+    @Test
+    void dispose() {
+        ampTransformer.dispose();
+    }
 
-        when(this.slingHttpServletRequestMock.getResourceResolver())
-          .thenReturn(this.resourceResolverMock);
-        when(this.slingHttpServletRequestMock.getResource())
-          .thenReturn(this.resourceMock);
-        when(this.resourceResolverMock.adaptTo(PageManager.class))
-          .thenReturn(this.pageManagerMock);
-        when(this.resourceResolverMock.adaptTo(ContentPolicyManager.class))
-          .thenReturn(null);
-        when(this.pageManagerMock.getContainingPage(this.resourceMock))
-          .thenReturn(this.pageMock);
-        when(this.pageMock.getProperties())
-          .thenReturn(this.mapSample);
-        when(this.slingHttpServletRequestMock.getRequestPathInfo())
-          .thenReturn(this.requestPathInfoMock);
-        when(this.requestPathInfoMock.getSelectors())
-          .thenReturn(selectors);
+    @Test
+    void setDocumentLocator() {
+        ampTransformer.setDocumentLocator(null);
+        verify(contentHandler).setDocumentLocator(isNull());
+    }
 
-        when(this.pageMock.getPath())
-          .thenReturn("/path/to/testing/page");
+    @Test
+    void startDocument() throws SAXException {
+        ampTransformer.startDocument();
+        verify(contentHandler).startDocument();
+    }
 
-        when(this.cfgMock.getHeadlibName())
-          .thenReturn("customheadlibs.amp.html");
-        when(this.cfgMock.getHeadlibResourceTypeRegex())
-          .thenReturn(this.resourceTypeRegexSample);
-        when(this.resourceMock.getResourceType())
-          .thenReturn("/fakeType");
-        when(this.resourceResolverFactoryMock.getServiceResourceResolver(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE)))
-          .thenReturn(this.resourceResolverMock);
-        when(this.resourceResolverMock.getResource("/fakeType/customheadlibs.amp.html/" + JcrConstants.JCR_CONTENT))
-          .thenReturn(null);
-        when(this.resourceResolverMock.getResource("/fakeType"))
-          .thenReturn(this.coreResourceMock);
-        when(this.coreResourceMock.getResourceSuperType())
-          .thenReturn("/path/to/superType");
-        when(this.resourceResolverMock.getResource("/path/to/superType/customheadlibs.amp.html/" + JcrConstants.JCR_CONTENT))
-          .thenReturn(this.supertypeResourceMock);
-        when(this.supertypeResourceMock.adaptTo(InputStream.class))
-          .thenReturn(null);
+    @Test
+    void endDocument() throws SAXException {
+        ampTransformer.endDocument();
+        verify(contentHandler).endDocument();
+    }
 
-        this.at.init(this.processingContextMock, this.processingComponentConfigurationMock);
-        this.at.setContentHandler(this.contentHandlerMock);
-        this.at.endElement("uri", "head", "qName");
+    @Test
+    void startPrefixMapping() throws SAXException {
+        ampTransformer.startPrefixMapping(null, null);
+        verify(contentHandler).startPrefixMapping(null, null);
+    }
 
-        verify(this.contentHandlerMock, times(1)).endElement("uri", "head", "qName");
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(trace("No custom headlib for resource type {}.", "/fakeType")));
-        assertThat(this.testLogger.getLoggingEvents(), hasItem(debug("Failed to read input stream from {}.", "/fakeType/customheadlibs.amp.html/" + JcrConstants.JCR_CONTENT)));
+    @Test
+    void endPrefixMapping() throws SAXException {
+        ampTransformer.endPrefixMapping(null);
+        verify(contentHandler).endPrefixMapping(null);
+    }
+
+    @Test
+    void startElement() throws SAXException {
+        ampTransformer.startElement(null, null, null, null);
+        verify(contentHandler).startElement(null, null, null, null);
+    }
+
+    @Test
+    void characters() throws SAXException {
+        ampTransformer.characters(null, 0, 0);
+        verify(contentHandler).characters(null, 0, 0);
+    }
+
+    @Test
+    void ignorableWhitespace() throws SAXException {
+        ampTransformer.ignorableWhitespace(null, 0, 0);
+        verify(contentHandler).ignorableWhitespace(null, 0, 0);
+    }
+
+    @Test
+    void processingInstruction() throws SAXException {
+        ampTransformer.processingInstruction(null, null);
+        verify(contentHandler).processingInstruction(null, null);
+    }
+
+    @Test
+    void skippedEntity() throws SAXException {
+        ampTransformer.skippedEntity(null);
+        verify(contentHandler).skippedEntity(null);
     }
 }

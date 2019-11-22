@@ -1,0 +1,47 @@
+{
+    "amp-only": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "ampOnly"
+        }
+    },
+    "paired-amp": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "pairedAmp"
+        }
+    },
+    "amp-selector-with-amp-mode": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "ampOnly",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "responsivegrid": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "text": {
+                        "jcr:primaryType": "core/wcm/components/text/v1/text",
+                        "text": " Aloha spirits in Northern Norway Text:"
+                    }
+                }
+            }
+        }
+    },
+    "invalid-page-resource": {
+        "jcr:primaryType": "nt:unstructured",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "nt:unstructured",
+            "jcr:title"         : "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page"
+        }
+    }
+}

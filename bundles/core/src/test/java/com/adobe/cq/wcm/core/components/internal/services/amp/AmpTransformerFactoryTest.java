@@ -15,53 +15,68 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.mockito.Mockito.when;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.sling.testing.resourceresolver.MockResourceResolverFactory;
+import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.apache.sling.api.resource.ResourceResolverFactory;
-import com.adobe.cq.wcm.core.components.internal.services.amp.AmpTransformerFactory;
-import com.adobe.cq.wcm.core.components.internal.services.amp.AmpTransformer;
 
+@ExtendWith(AemContextExtension.class)
 public class AmpTransformerFactoryTest {
 
-    @Mock
-    private ResourceResolverFactory resourceResolverFactoryMock;
-    @Mock
-    private ResourceResolverFactory resourceResolverFactoryMock2;
-    @Mock
-    private AmpTransformerFactory.Cfg cfgMock;
-    @Mock
-    private AmpTransformerFactory.Cfg cfgMock2;
-    @InjectMocks
-    private AmpTransformerFactory atf;
+    private AemContext context = CoreComponentTestContext.newAemContext();
+    private static final String TEST_REGEX = "(?![A-Za-z]{2}:).*";
+    private static final String TEST_HEADLIBS = "ampheadlibs.html";
+    private AmpTransformerFactory ampTransformerFactory;
 
-    @BeforeEach
-    void setUp() {
-        initMocks(this);
+    @Test
+    public void testValidCfg() {
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
+
+        Map<String, Object> configs = getAmpTransformerFactoryConfig();
+        ampTransformerFactory = context.registerInjectActivateService(new AmpTransformerFactory(), configs);
+
+        AmpTransformerFactory.Cfg ampCfg = ampTransformerFactory.getCfg();
+
+        assertNotNull(ampTransformerFactory.createTransformer());
+
+        assertNotNull(ampCfg);
+        assertEquals(TEST_HEADLIBS, ampCfg.getHeadlibName());
+        assertEquals(TEST_REGEX, ampCfg.getHeadlibResourceTypeRegex());
+
     }
 
     @Test
-    public void testFactory() {
-        assertEquals(AmpTransformer.class, this.atf.createTransformer().getClass());
+    public void testNullCfg() {
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        this.atf.activate(this.cfgMock);
-        assertEquals(this.cfgMock, this.atf.getCfg());
-        this.atf.activate(this.cfgMock2);
-        assertEquals(this.cfgMock2, this.atf.getCfg());
+        ampTransformerFactory = context.registerInjectActivateService(new AmpTransformerFactory());
 
-        this.atf.setResolverFactory(this.resourceResolverFactoryMock);
-        assertEquals(this.resourceResolverFactoryMock, this.atf.getResolverFactory());
-        this.atf.setResolverFactory(this.resourceResolverFactoryMock2);
-        assertEquals(this.resourceResolverFactoryMock2, this.atf.getResolverFactory());
+        AmpTransformerFactory.Cfg ampCfg = ampTransformerFactory.getCfg();
+
+        assertNotNull(ampTransformerFactory.createTransformer());
+        assertNotNull(ampCfg);
+        assertNull(ampCfg.getHeadlibName());
+        assertNull(ampCfg.getHeadlibResourceTypeRegex());
+
     }
+
+
+    public static Map<String, Object> getAmpTransformerFactoryConfig() {
+        Map<String, Object> config = new HashMap<>();
+        config.put("getHeadlibName", TEST_HEADLIBS);
+        config.put("getHeadlibResourceTypeRegex", TEST_REGEX);
+
+        return config;
+    }
+
 }

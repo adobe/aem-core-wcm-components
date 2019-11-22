@@ -67,7 +67,7 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
     @Reference
     private ResourceResolverFactory resolverFactory;
 
-    private Cfg cfg;
+    private String resourceTypeRegex;
 
     /**
      * Reads the service's configuration when the service is started.
@@ -75,22 +75,22 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
      */
     @Activate
     @Modified
-    protected void activate(Cfg cfg) {
-        this.cfg = cfg;
+    protected final void activate(ClientLibraryAggregatorServiceImpl.Cfg cfg) {
+        this.resourceTypeRegex = cfg.resource_type_regex();
     }
 
     protected String[] getClientLibArrayCategories(String categoryCsv) {
-      String[] categories;
-      if (categoryCsv.contains(",")) {
-          categories = categoryCsv.split(",");
-      } else {
-          categories = new String[] {categoryCsv};
-      }
-      return categories;
+        String[] categories;
+        if (categoryCsv.contains(",")) {
+            categories = categoryCsv.split(",");
+        } else {
+            categories = new String[] {categoryCsv};
+        }
+        return categories;
     }
 
     protected LibraryType getClientLibType(String type) {
-      return libraryTypeMap.get(type);
+        return libraryTypeMap.get(type);
     }
 
     /**
@@ -148,7 +148,7 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
      */
     @Override
     public String getClientLibOutput(String categoryCsv, String type, Set<String> resourceTypes, String primaryPath,
-                                     String fallbackPath) {
+        String fallbackPath) {
 
         // Validate the given path values.
         boolean primaryPathBlank = StringUtils.isBlank(primaryPath);
@@ -204,7 +204,7 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
 
     @Override
     public String getResourceTypeRegex() {
-        return cfg.getResourceTypeRegex();
+        return this.resourceTypeRegex;
     }
 
     @Override
@@ -222,6 +222,6 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
         @AttributeDefinition(
             name = "Resource Type Regex",
             description = "Regex defining valid resource type paths while aggregating client libraries.")
-        String getResourceTypeRegex();
+        String resource_type_regex() default StringUtils.EMPTY;
     }
 }

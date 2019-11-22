@@ -15,94 +15,124 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import org.mockito.Mockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
 
-import uk.org.lidalia.slf4jtest.TestLogger;
-import uk.org.lidalia.slf4jtest.TestLoggerFactory;
-import static uk.org.lidalia.slf4jtest.LoggingEvent.error;
-
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.services.ClientLibraryAggregatorService;
-import com.day.cq.wcm.api.Page;
-import org.apache.sling.api.resource.ResourceResolver;
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.services.ClientLibraryAggregatorServiceImpl;
+import com.adobe.cq.wcm.core.components.models.ClientLibrary;
+import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
+import com.adobe.granite.ui.clientlibs.HtmlLibrary;
+import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import java.io.InputStream;
+import java.util.Arrays;
 import org.apache.sling.api.resource.Resource;
-import java.util.Set;
-import java.util.HashSet;
-import org.apache.sling.api.resource.LoginException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+
+@ExtendWith(AemContextExtension.class)
 public class ClientLibraryImplTest {
-    private TestLogger testLogger;
 
-    @Mock
-    private ClientLibraryAggregatorService clientLibraryAggregatorServiceMock;
-    @Mock
-    private Page pageMock;
-    @Mock
-    private ResourceResolver resourceResolverMock;
-    @Mock
-    private Resource resourceMock;
-    @InjectMocks
-    private ClientLibraryImpl cl;
+    private static final String TEST_BASE = "/clientlib";
+    private static final String TEST_ROOT_PAGE = "/content";
+    private static final String CLIENT_LIB_CSS = TEST_ROOT_PAGE + "/clientlib-css";
+    private static final String CLIENT_LIB_JS = TEST_ROOT_PAGE + "/clientlib-js";
+    private static final String TEST_APPS_ROOT = "/apps/core-components-examples/clientlibs";
 
-    private String categories = "category";
-    private String type = "js";
-    private String primaryPath = "/primary/path";
-    private String fallbackPath = "/fallback/path";
+    protected final AemContext context = CoreComponentTestContext.newAemContext();
 
-    String resourceTypeRegexSample;
 
     @BeforeEach
     void setUp() {
-        this.testLogger = TestLoggerFactory.getTestLogger(ClientLibraryImpl.class);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
 
-        initMocks(this);
-    }
-
-    @AfterEach
-    void tearDown() {
-        TestLoggerFactory.clear();
     }
 
     @Test
-    public void getInline() {
-        this.cl.categories = this.categories;
-        this.cl.type = this.type;
+    void testEmptyGetInlineCss() throws Exception {
+        context.registerInjectActivateService(new MockHtmlLibraryManager(mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class)));
+        context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
 
-        when(this.clientLibraryAggregatorServiceMock.getClientLibOutput(this.categories, this.type))
-          .thenReturn("output inline");
+        ClientLibrary clientLibrary = getClientLibraryUnderTestFromResource(CLIENT_LIB_CSS);
 
-        assertEquals("output inline", this.cl.getInline());
+        assertEquals("", clientLibrary.getInline());
     }
 
     @Test
-    public void getInlineLimited_correct() throws LoginException {
-        this.cl.categories = this.categories;
-        this.cl.type = this.type;
-        this.cl.primaryPath = this.primaryPath;
-        this.cl.fallbackPath = this.fallbackPath;
+    void testEmptyGetInlineJs() throws Exception {
+        context.registerInjectActivateService(new MockHtmlLibraryManager(mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class)));
+        context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ClientLibrary clientLibrary = getClientLibraryUnderTestFromResource(CLIENT_LIB_JS);
 
-        Set<String> resourceTypes = Utils.getResourceTypes(this.resourceMock, this.resourceTypeRegexSample, new HashSet<>());
-
-        when(this.pageMock.getContentResource())
-          .thenReturn(this.resourceMock);
-        when(this.clientLibraryAggregatorServiceMock.getResourceTypeRegex())
-          .thenReturn(this.resourceTypeRegexSample);
-        when(this.clientLibraryAggregatorServiceMock.getClientlibResourceResolver())
-        .thenReturn(this.resourceResolverMock);
-        when(this.clientLibraryAggregatorServiceMock.getClientLibOutput(this.categories, this.type, resourceTypes, this.primaryPath, this.fallbackPath))
-          .thenReturn("output inline");
-
-        assertEquals("output inline", this.cl.getInlineLimited());
+        assertEquals("", clientLibrary.getInline());
     }
+
+    @Test
+    void testGetInlineCss() throws Exception {
+        HtmlLibraryManager htmlLibraryManager = context.registerInjectActivateService(mock(MockHtmlLibraryManager.class));
+        context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        HtmlLibrary library = mock(HtmlLibrary.class);
+
+        ClientLibrary clientLibrary = getClientLibraryUnderTestFromResource(CLIENT_LIB_CSS);
+        Resource clientLibResource = context.currentResource(TEST_APPS_ROOT + "/clientlib-base-amp/styles/index.css");
+
+        when(htmlLibraryManager.getLibraries(any(), any(), anyBoolean(), anyBoolean())).thenReturn(Arrays.asList(mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class)));
+        when(htmlLibraryManager.getLibrary(any(), any())).thenReturn(library);
+        when(library.getInputStream(anyBoolean())).thenReturn(clientLibResource.adaptTo(InputStream.class));
+
+        String outputString = "html { \n box-sizing: border-box;\n font-size: 14px; \n}";
+        assertEquals(outputString, clientLibrary.getInline());
+    }
+
+    @Test
+    void testGetInlineJs() throws Exception {
+        HtmlLibraryManager htmlLibraryManager = context.registerInjectActivateService(mock(MockHtmlLibraryManager.class));
+        context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        HtmlLibrary library = mock(HtmlLibrary.class);
+
+        ClientLibrary clientLibrary = getClientLibraryUnderTestFromResource(CLIENT_LIB_JS);
+        Resource clientLibResource = context.currentResource(TEST_APPS_ROOT + "/clientlib-base-amp/scripts/index.js");
+
+        when(htmlLibraryManager.getLibraries(any(), any(), anyBoolean(), anyBoolean())).thenReturn(Arrays.asList(mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class)));
+        when(htmlLibraryManager.getLibrary(any(), any())).thenReturn(library);
+        when(library.getInputStream(anyBoolean())).thenReturn(clientLibResource.adaptTo(InputStream.class));
+
+        String outputString = "console.log{'cmp-examples.base.amp clientlib js'}";
+        assertEquals(outputString, clientLibrary.getInline());
+    }
+
+    @Test
+    void testEmptyGetInlineLimited() {
+        context.registerInjectActivateService(new MockHtmlLibraryManager(mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class)));
+        context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+
+        ClientLibrary clientLibrary = getClientLibraryUnderTestFromRequest(CLIENT_LIB_CSS);
+        assertEquals("", clientLibrary.getInlineLimited());
+    }
+
+    private ClientLibrary getClientLibraryUnderTestFromResource(String path) {
+        Resource resource = context.currentResource(path + "/jcr:content");
+        if (resource != null) {
+            return resource.adaptTo(ClientLibrary.class);
+        }
+        return null;
+    }
+
+    private ClientLibrary getClientLibraryUnderTestFromRequest(String path) {
+        Resource resource = context.currentResource(path);
+        if (resource != null) {
+            context.request().setResource(resource);
+            return context.request().adaptTo(ClientLibrary.class);
+        }
+        return null;
+    }
+
 }
