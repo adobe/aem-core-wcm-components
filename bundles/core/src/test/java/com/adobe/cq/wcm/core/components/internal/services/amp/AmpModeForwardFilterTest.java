@@ -15,7 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.services.amp;
 
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -41,12 +45,14 @@ public class AmpModeForwardFilterTest {
 
     protected final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private AmpModeForwardFilter ampModeForwardFilter;
+    private AmpModeForwardFilter spyAmpModeForwardFilter;
     private FilterChain filterChain;
 
     @BeforeEach
     void setUp() {
-        ampModeForwardFilter = new AmpModeForwardFilter();
+        //use spy to verify the filter
+        spyAmpModeForwardFilter = spy(new AmpModeForwardFilter());
+
         filterChain = mock(FilterChain.class);
         MockRequestDispatcherFactory mockRequestDispatcherFactory = new MockRequestDispatcherFactory() {
             @Override
@@ -70,27 +76,39 @@ public class AmpModeForwardFilterTest {
     void testFilteringWithNoSelector() throws IOException, ServletException {
         context.currentPage(AMP_PAGE_PROPERTY);
         context.currentResource();
-        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
     }
 
     @Test
     void testFilteringWithAmpSelector() throws IOException, ServletException {
+        //without amp selector
+        context.currentPage(AMP_SELECTOR);
+        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
+
         context.currentPage(AMP_SELECTOR);
         context.requestPathInfo().setResourcePath(AMP_SELECTOR);
         //with amp selector
         context.requestPathInfo().setSelectorString("amp");
         context.requestPathInfo().setExtension("html");
-        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+
+        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
 
         //with .amp selector
         context.requestPathInfo().setSelectorString(".amp");
         context.requestPathInfo().setExtension("html");
-        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+
+        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
 
         //with amp. selector
         context.requestPathInfo().setSelectorString("amp.");
         context.requestPathInfo().setExtension("html");
-        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+
+        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
     }
 
     @Test
@@ -100,7 +118,9 @@ public class AmpModeForwardFilterTest {
         //with .amp selector
         context.requestPathInfo().setSelectorString(".amp");
         context.requestPathInfo().setExtension("html");
-        ampModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+
+        spyAmpModeForwardFilter.doFilter(context.request(), context.response(), filterChain);
+        verify(spyAmpModeForwardFilter, atLeastOnce()).doFilter(eq(context.request()), eq(context.response()) , eq(filterChain));
     }
 
 }

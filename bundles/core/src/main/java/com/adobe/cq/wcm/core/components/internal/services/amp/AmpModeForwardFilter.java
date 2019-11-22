@@ -59,6 +59,7 @@ public class AmpModeForwardFilter implements Filter {
     /**
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
      */
+    @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
 
@@ -145,10 +146,12 @@ public class AmpModeForwardFilter implements Filter {
     /**
      * @see Filter#init(FilterConfig)
      */
+    @Override
     public void init(final FilterConfig config) {}
 
     /**
      * @see Filter#destroy()
      */
+    @Override
     public void destroy() {}
 }

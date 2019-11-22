@@ -34,7 +34,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -100,7 +99,7 @@ public class AmpTransformerTest {
         ampTransformer.endElement(null, "head", null);
 
         verify(contentHandler, atLeastOnce()).endElement(isNull(), eq("head"), isNull());
-        verify(contentHandler, never()).characters(isNull(), Mockito.eq(0), anyInt());
+        verify(contentHandler, never()).characters(isNull(), eq(0), anyInt());
 
     }
 
@@ -110,13 +109,13 @@ public class AmpTransformerTest {
 
         MockSlingHttpServletRequest slingHttpServletRequest = context.request();
         ProcessingContext processingContext = mock(ProcessingContext.class);
-        Mockito.when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
         ampTransformer.init(processingContext, null);
         ampTransformer.endElement(null, "body", null);
 
         verify(contentHandler, atLeastOnce()).endElement(isNull(), eq("body"), isNull());
-        verify(contentHandler, never()).characters(isNull(), Mockito.eq(0), anyInt());
+        verify(contentHandler, never()).characters(isNull(), eq(0), anyInt());
 
     }
 
@@ -137,7 +136,7 @@ public class AmpTransformerTest {
         ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
 
         String output ="\n<link rel=\"canonical\" href=\"/content/amp-only.html\">";
-        Mockito.verify(contentHandler, Mockito.atLeastOnce()).characters(charCaptor.capture(), Mockito.eq(0), lengthCaptor.capture());
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
         Assert.assertEquals(output, new String(charCaptor.getValue()));
         Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
 
@@ -158,7 +157,7 @@ public class AmpTransformerTest {
         ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
 
         String output ="\n<link rel=\"amphtml\" href=\"/content/paired-amp.amp.html\">";
-        Mockito.verify(contentHandler, Mockito.atLeastOnce()).characters(charCaptor.capture(), Mockito.eq(0), lengthCaptor.capture());
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
         Assert.assertEquals(output, new String(charCaptor.getValue()));
         Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
 
@@ -174,8 +173,8 @@ public class AmpTransformerTest {
 
 
         MockSlingHttpServletRequest slingHttpServletRequest = context.request();
-        ProcessingContext processingContext = Mockito.mock(ProcessingContext.class);
-        Mockito.when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
 
         ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
@@ -193,7 +192,7 @@ public class AmpTransformerTest {
             + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode.html\">\n"
             + "<script>console.log('This is amp page script')</script>\n"
             + "<script>console.log('This is amp text component script')</script>\n";
-        Mockito.verify(contentHandler, Mockito.atLeastOnce()).characters(charCaptor.capture(), Mockito.eq(0), lengthCaptor.capture());
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
         Assert.assertEquals(output, new String(charCaptor.getValue()));
         Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
 
@@ -222,8 +221,8 @@ public class AmpTransformerTest {
 
 
         MockSlingHttpServletRequest slingHttpServletRequest = context.request();
-        ProcessingContext processingContext = Mockito.mock(ProcessingContext.class);
-        Mockito.when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
 
 
         ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
@@ -239,7 +238,7 @@ public class AmpTransformerTest {
 
         String output ="\n"
             + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode.html\">\n";
-        Mockito.verify(contentHandler, Mockito.atLeastOnce()).characters(charCaptor.capture(), Mockito.eq(0), lengthCaptor.capture());
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
         Assert.assertEquals(output, new String(charCaptor.getValue()));
         Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
 

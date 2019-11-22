@@ -64,9 +64,6 @@ public class ClientLibraryImpl implements ClientLibrary {
     @Inject
     private String type;
 
-    private String inline;
-
-    private String inlineLimited;
 
     /**
      * Returns the aggregated content of the specified clientlib type from the given comma delimited list of categories.
@@ -74,12 +71,7 @@ public class ClientLibraryImpl implements ClientLibrary {
      */
     @Override
     public String getInline() {
-
-        if (inline == null) {
-            inline = aggregatorService.getClientLibOutput(categories, type);
-        }
-
-        return inline;
+        return aggregatorService.getClientLibOutput(categories, type);
     }
 
     /**
@@ -89,23 +81,16 @@ public class ClientLibraryImpl implements ClientLibrary {
      */
     @Override
     public String getInlineLimited() {
+        Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
+            aggregatorService.getResourceTypeRegex(), new HashSet<>());
 
-        if (inlineLimited == null) {
-
-            Set<String> resourceTypes = Utils.getResourceTypes(currentPage.getContentResource(),
-                aggregatorService.getResourceTypeRegex(), new HashSet<>());
-
-            try (ResourceResolver resolver = aggregatorService.getClientlibResourceResolver()) {
-                Utils.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
-                    resourceTypes);
-            } catch (LoginException e) {
-                LOG.error("Unable to get the service resource resolver.", e);
-            }
-
-            inlineLimited =
-                aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
+        try (ResourceResolver resolver = aggregatorService.getClientlibResourceResolver()) {
+            Utils.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
+                resourceTypes);
+        } catch (LoginException e) {
+            LOG.error("Unable to get the service resource resolver.", e);
         }
 
-        return inlineLimited;
+        return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
     }
 }

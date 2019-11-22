@@ -44,7 +44,6 @@ public class ClientLibraryAggregatorServiceImplTest {
 
 
     private AemContext context = CoreComponentTestContext.newAemContext();
-    private ClientLibraryAggregatorService clientLibraryAggregatorService;
     private final String testRegex = "(?![A-Za-z]{2}:).*";
 
     @Test
@@ -53,7 +52,7 @@ public class ClientLibraryAggregatorServiceImplTest {
         context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
 
         String cssLibrary = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css");
         assertEquals("", cssLibrary);
@@ -71,7 +70,7 @@ public class ClientLibraryAggregatorServiceImplTest {
         context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
 
         Set<String> resourceTypes = new HashSet<>();
         resourceTypes.add("core/wcm/components/text/v2/text");
@@ -92,7 +91,7 @@ public class ClientLibraryAggregatorServiceImplTest {
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
         Map<String, Object> configs = getClientLibraryAggregatorConfig();
-        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl(), configs);
+        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl(), configs);
         String resourceTypeRegex = clientLibraryAggregatorService.getResourceTypeRegex();
         assertEquals(testRegex, resourceTypeRegex);
 
@@ -104,7 +103,7 @@ public class ClientLibraryAggregatorServiceImplTest {
         context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
         assertNull(clientLibraryAggregatorService.getResourceTypeRegex());
     }
 
@@ -114,7 +113,7 @@ public class ClientLibraryAggregatorServiceImplTest {
         context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
         context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
 
-        clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
+        ClientLibraryAggregatorService clientLibraryAggregatorService = context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
         ResourceResolver mockResourceResolver = clientLibraryAggregatorService.getClientlibResourceResolver();
         assertEquals(MockResourceResolver.class, mockResourceResolver.getClass());
     }
@@ -152,20 +151,6 @@ public class ClientLibraryAggregatorServiceImplTest {
         String categoriesString = "clientlib-a,clientlib-b";
 
         assertEquals(ArrayUtils.toString(categories), ArrayUtils.toString(clientLibraryAggregatorService.getClientLibArrayCategories(categoriesString)));
-    }
-
-    @Test
-    public void testClientLibArrayCategories() throws LoginException {
-        com.adobe.granite.ui.clientlibs.ClientLibrary clientLibrary = Mockito.mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class);
-        context.registerInjectActivateService(new MockHtmlLibraryManager(clientLibrary));
-        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
-
-        ClientLibraryAggregatorServiceImpl clientLibraryAggregatorService = new ClientLibraryAggregatorServiceImpl();
-
-        String[] categories = new String[] {"clientlib-a"};
-        String categoriesString = "clientlib-a";
-
-        assertEquals(categoriesString, categories[0]);
     }
 
     private Map<String, Object> getClientLibraryAggregatorConfig() {
