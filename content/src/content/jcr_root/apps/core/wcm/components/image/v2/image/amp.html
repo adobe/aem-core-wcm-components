@@ -33,10 +33,12 @@
 
     <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1 && !image.areas}" data-cmp-hook-image="noscript">
       <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
-      <amp-img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
-                data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-                layout="fill"
-                alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+      <div class="cmp-image__container">
+        <amp-img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
+                  data-sly-attribute.usemap="${image.areas ? usemap : ''}"
+                  layout="fill"
+                  alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+      </div>                  
 
       <map data-sly-test="${image.areas}"
             data-sly-list.area="${image.areas}"
@@ -48,8 +50,8 @@
       </map>
     </noscript>
   </a>
-  <span class="cmp-image__title" itemprop="caption" data-sly-test="${!image.displayPopupTitle && image.title}">this is an AMP image</span>
-  <meta itemprop="caption" content="${image.title}" data-sly-test="${image.displayPopupTitle && image.title}">
+  <span data-sly-test="${!image.displayPopupTitle && image.title}" class="cmp-image__title" itemprop="caption">${image.title}</span>
+  <meta data-sly-test="${image.displayPopupTitle && image.title}" itemprop="caption" content="${image.title}">
 </div>
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
 

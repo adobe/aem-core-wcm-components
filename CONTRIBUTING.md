@@ -66,13 +66,13 @@ If you have thoughts on the code, the general architecture of the project, or wo
 
 ### Contributing Code 👾 
 
-High quality code is important to the project, and to keep it that way, all code submissions are reviewed by committers before being accepted. A close adherence to the guidelines below can help speed up the review process and increase the likelihood of the submission being accepted.
+High quality code is important to the project, and to keep it that way, all code submissions are reviewed by committers before being accepted. Close adherence to the guidelines below can help speed up the review process and increase the likelihood of the submission being accepted.
 
 ##### Before Contributing
 
 * Consider [joining developer discussions](#joining-developer-discussions-) to get feedback on what you are thinking of contributing. It's better to get this early feedback before going ahead and potentially having to rewrite everything later.
 * Create a [bug report](#reporting-bugs-) or [feature request](#requesting-features-) issue summarizing the problem that you will be solving. This will again help with early feedback and tracking.
-* Have a look at our [component checklist](Guidelines.md), for an idea of what certifies a production ready component.
+* Have a look at our [component checklist](Guidelines.md), for an idea of what certifies a production-ready component.
 * Ensure you have [signed the Adobe Contributor License Agreement](http://opensource.adobe.com/cla.html). If you are an Adobe employee, you do not have to sign the CLA.
 
 ##### Contributing
@@ -91,7 +91,7 @@ The title of the pull request typically matches that of the issue it fixes, see 
 Have a look at our [pull request template](.github/pull_request_template.md) to see what is expected to be included in the pull request description. The same template is available when the pull request is triggered. 
 
 ##### Your first contribution
-Would you would like to contribute to the project but don't have an issue in mind? Or are still fairly unfamiliar with the code? Then have a look at our [good first issues](https://github.com/adobe/aem-core-wcm-components/labels/good%20first%20issue), they are fairly simple starter issues that should only require a small amount of code and simple testing.
+Would you like to contribute to the project but don't have an issue in mind? Or are you still fairly unfamiliar with the code? Then have a look at our [good first issues](https://github.com/adobe/aem-core-wcm-components/labels/good%20first%20issue), they are fairly simple starter issues that should only require a small amount of code and simple testing.
 
 ### Reviewing Code 👀
 
@@ -123,7 +123,7 @@ Once an issue is reported, the project committers will assign it a relevant labe
 
 ## Contributor License Agreement
 
-By contributing your code to the Adobe Marketing Cloud Github Organisation you grant Adobe a non-exclusive, irrevocable, worldwide, royalty-free, sublicenseable, transferable license under all of Your relevant intellectual property rights (including copyright, patent, and any other rights), to use, copy, prepare derivative works of, distribute and publicly perform and display the Contributions on any licensing terms, including without limitation: (a) open source licenses like the Apache License, Version 2.0; and (b) binary, proprietary, or commercial licenses. Except for the licenses granted herein, You reserve all right, title, and interest in and to the Contribution.
+By contributing your code to the Adobe Marketing Cloud Github Organisation you grant Adobe a non-exclusive, irrevocable, worldwide, royalty-free, sublicensable, transferable license under all of Your relevant intellectual property rights (including copyright, patent, and any other rights), to use, copy, prepare derivative works of, distribute and publicly perform and display the Contributions on any licensing terms, including without limitation: (a) open source licenses like the Apache License, Version 2.0; and (b) binary, proprietary, or commercial licenses. Except for the licenses granted herein, You reserve all right, title, and interest in and to the Contribution.
 
 You confirm that you are able to grant us these rights. You represent that You are legally entitled to grant the above license. If Your employer has rights to intellectual property that You create, You represent that You have received permission to make the Contributions on behalf of that employer, or that Your employer has waived such rights for the Contributions.
 

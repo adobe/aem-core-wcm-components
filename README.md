@@ -23,7 +23,7 @@ Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for mo
 
 ## Mailing List
 
-For discussions and Q&A you can use our public mailing list hosted on [googlegroups.com](https://groups.google.com/forum/#!forum/aem-core-components-dev). 
+For discussions and Q&A, you can use our public mailing list hosted on [googlegroups.com](https://groups.google.com/forum/#!forum/aem-core-components-dev). 
 You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups.com](mailto:aem-core-components-dev+subscribe@googlegroups.com).
 
 ## Available Components
@@ -67,7 +67,26 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 26. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
 27. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
-Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for main upcoming components and features.
+Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for the main upcoming components and features.
+
+## AMP support
+
+AMP suport has been added to the AEM Core Components. Learn more about AMP [here](https://amp.dev/).
+
+The [Component Library](https://www.adobe.com/go/aem_cmp_library) and [its code](examples/src/content/jcr_root/apps/core-components-examples) in this repository show how it can be used. 
+
+### AMP behavior control
+
+For AEM users to control if they want their pages to be / not be AMP, an author with sufficient permissions can go un the page template's Page Policy and select the **AMP Mode**. It has the following options:
+
+1. ***No AMP***: This is the default. Pages will still render as usual and if a page is requested with the `amp` selector, its HTML version will be rendered and the proper metadata in the `<head>` will inform there is no AMP version for this page.
+2. ***Paired AMP***: This mode will allow delivery of **both** HTML and AMP pages relying on the `amp` sling selctor to render a `page.html` and `page.amp.html` (see [Technical aspects of AMP for AEM Core Components](AMP.md) for more details)
+3. ***AMP Only***: The oposite of "No AMP". Pages requested will attempt to render their AMP version regardless of the request containing the `.amp` selector or not.
+
+All pages using the template where this is specified will inherit the behavior. This can also be overwritten at the page level by going to the page properties, under the "Advanced" tab and changing the "AMP Mode" from "Inherit from Page template" to something else. This will let Authors control if they want certain pages to have a different behavior than the one specified by the template.
+
+**Read more about the [Technical aspects of AMP for AEM Core Components](AMP.md)**
+
 
 ## Component Versioning
 
@@ -154,7 +173,7 @@ To include the core components package into your own project's maven build using
 
  inside the configuration of the `content-package-maven-plugin`.
 
- Also, make sure that if you have a sub module like ui.apps to add the core components as a dependency to ui.apps/pom.xml as well.
+ Also, make sure that if you have a submodule like ui.apps to add the core components as a dependency to ui.apps/pom.xml as well.
 
  ### For Projects Using Maven Archetype 18 and Above
 
@@ -179,5 +198,5 @@ Then add it as a subpackage
 
 inside the configuration of the `filevault-package-maven-plugin`.
 
- For more information how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
+ For more information on how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
  related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)

@@ -21,3 +21,47 @@ amp-accordion section[expanded] .show-more {
 amp-accordion section:not([expanded]) .show-less {
     display: none;
 }
+
+.cmp-accordion {
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    &__icon {
+        position: absolute;
+        right: 0;
+        width: 20px;
+        height: 20px;
+
+        &:after {
+            content: '\0203A'; // right arrow
+            position: absolute;
+            transform: scale(1.5);
+        }
+    }
+
+    &__item {
+        position: relative;
+    }
+
+    &__header {
+        margin: 0;
+        position: relative;
+        border: none;
+        border-bottom: 1px solid;
+        padding: 8px 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        border-color: #e1e1e1;
+        color: #737373;
+
+        &[aria-expanded="true"] {
+            .cmp-accordion__icon:after {
+                transform: scale(1.5) rotate(90deg);
+            }
+        }
+    }
+}

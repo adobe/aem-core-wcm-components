@@ -57,6 +57,11 @@ The following properties are written to JCR for this Container component and are
 BLOCK cmp-container
 ```
 
+### Enabling Container Editing Functionality
+The following property is required in the proxy component to enable full editing functionality for the Container:
+
+1. `./cq:isContainer` - set to `{Boolean}true`, marks the Container as a container component
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
