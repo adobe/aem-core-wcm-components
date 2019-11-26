@@ -92,6 +92,10 @@ public class ElementsDataSourceServlet extends AbstractContentFragmentDataSource
             while (elementIterator.hasNext()) {
                 ContentElement element = elementIterator.next();
                 String contentType = element.getValue().getContentType();
+                if (contentType == null) {
+                    contentType = element.getContentType();
+                }
+
                 if (contentType != null && contentType.startsWith("text/") &&
                         !element.getValue().getDataType().isMultiValue()) {
                     elementList.add(element);
