@@ -15,22 +15,22 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components;
 
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
-import javax.json.Json;
-import javax.json.JsonReader;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
 import com.adobe.cq.wcm.core.components.internal.jackson.PageModuleProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 /**
  * Testing utilities.
@@ -56,16 +56,15 @@ public class Utils {
         } catch (IOException e) {
             fail(String.format("Unable to generate JSON export for model %s: %s", model.getClass().getName(), e.getMessage()));
         }
-        JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString()));
-        InputStream is = Utils.class.getResourceAsStream
-                (expectedJsonResource);
-        if (is != null) {
-            JsonReader expectedReader = Json.createReader(is);
-            assertEquals(expectedReader.read(), outputReader.read());
-        } else {
-            fail("Unable to find test file " + expectedJsonResource + ".");
+
+        String actualJson = writer.toString();
+        try (InputStream is = Utils.class.getResourceAsStream(expectedJsonResource)) {
+            String expectedJson = IOUtils.toString(is, StandardCharsets.UTF_8.name());
+            JSONAssert.assertEquals(expectedJson, actualJson, true);
         }
-        IOUtils.closeQuietly(is);
+        catch (JSONException | IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
