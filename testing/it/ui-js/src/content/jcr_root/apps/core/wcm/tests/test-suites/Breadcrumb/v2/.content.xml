@@ -6,4 +6,5 @@
         aem.core-components.testsuite.breadcrumb,
         aem.core-components.testsuite.breadcrumb.v2]"
     dependencies="[aem.core-components.tests.commons,
-        aem.core-components.tests.breadcrumb.v1]"/>
+        aem.core-components.tests.breadcrumb.v1,
+        aem.core-components.tests.breadcrumb.v2]"/>

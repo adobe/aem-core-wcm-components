@@ -1,0 +1,26 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<template data-sly-template.element="${@ element='The content fragment element'}">
+    <div class="cmp-contentfragment__element cmp-contentfragment__element--${element.name}" data-cmp-contentfragment-element-type="${element.dataType}">
+        <dt class="cmp-contentfragment__element-title">${element.title}</dt>
+        <dd class="cmp-contentfragment__element-value">
+            <sly data-sly-test="${element.dataType == 'calendar'}" data-sly-use.tpl="core/wcm/components/contentfragment/v1/contentfragment/calendar.html"
+                 data-sly-call="${tpl.element @ date = element.value}"></sly>
+            <sly data-sly-test="${element.dataType == 'boolean'}">${element.value ? "true" : "false"}</sly>
+            <sly data-sly-test="${element.dataType != 'calendar' && element.dataType != 'boolean'}">${(element.value) @join='<br/>', context='html'}</sly>
+        </dd>
+    </div>
+</template>

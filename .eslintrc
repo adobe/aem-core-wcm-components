@@ -35,7 +35,6 @@
             "before": true,
             "after": true
         }],
-        "linebreak-style": ["error", "unix"],
         "no-eval": "error",
         "no-mixed-spaces-and-tabs": "error",
         "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],

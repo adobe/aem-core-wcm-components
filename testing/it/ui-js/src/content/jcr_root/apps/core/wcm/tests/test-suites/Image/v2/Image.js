@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2016 Adobe Systems Incorporated
+ * Copyright 2016 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@
         .addTestCase(imageV1.tcSetLink(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV2.tcDisableCaptionAsPopup(titleSelector, tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(imageV2.tcSetImageAsDecorative(tcExecuteBeforeTest, tcExecuteAfterTest))
+        .addTestCase(imageV2.tcCheckMapAreaNavigationAndResponsiveResize(tcExecuteBeforeTest, tcExecuteAfterTest))
         .addTestCase(c.tcCheckProxiedClientLibrary("/core/wcm/components/image/v2/image/clientlibs/site.js"));
 
 }(hobs, jQuery));

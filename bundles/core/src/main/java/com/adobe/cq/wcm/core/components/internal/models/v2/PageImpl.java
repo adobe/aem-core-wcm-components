@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -33,6 +33,8 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.Version;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -46,6 +48,7 @@ import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
@@ -53,6 +56,7 @@ import com.google.common.collect.Lists;
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
+    protected static final String PN_CLIENTLIBS_JS_HEAD = "clientlibsJsHead";
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
 
     private Boolean hasCloudconfigSupport;
@@ -76,6 +80,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     private String appResourcesPath;
     private NavigationItem redirectTarget;
 
+    protected String[] clientLibCategoriesJsBody = new String[0];
+    protected String[] clientLibCategoriesJsHead = new String[0];
+
     @PostConstruct
     protected void initModel() {
         super.initModel();
@@ -88,6 +95,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 appResourcesPath = getProxyPath(clientLibraryList.get(0));
             }
         }
+        populateClientLibCategoriesJs();
         setRedirect();
     }
 
@@ -116,13 +124,36 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return path;
     }
 
+    protected void populateClientLibCategoriesJs() {
+        if (currentStyle != null) {
+            clientLibCategoriesJsHead = currentStyle.get(PN_CLIENTLIBS_JS_HEAD, ArrayUtils.EMPTY_STRING_ARRAY);
+            LinkedHashSet<String> categories = new LinkedHashSet<>(Arrays.asList(clientLibCategories));
+            categories.removeAll(Arrays.asList(clientLibCategoriesJsHead));
+            clientLibCategoriesJsBody = categories.toArray(new String[0]);
+        }
+    }
+
     @Override
     protected void loadFavicons(String designPath) {
     }
 
     @Override
+    @JsonIgnore
+    @Deprecated
     public Map<String, String> getFavicons() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @JsonIgnore
+    public String[] getClientLibCategoriesJsBody() {
+        return Arrays.copyOf(clientLibCategoriesJsBody, clientLibCategoriesJsBody.length);
+    }
+
+    @Override
+    @JsonIgnore
+    public String[] getClientLibCategoriesJsHead() {
+        return Arrays.copyOf(clientLibCategoriesJsHead, clientLibCategoriesJsHead.length);
     }
 
     @Override
@@ -136,13 +167,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return StringUtils.join(cssClassesSet, " ");
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public String[] getExportedItemsOrder() {
         return super.getExportedItemsOrder();
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
         return super.getExportedItems();

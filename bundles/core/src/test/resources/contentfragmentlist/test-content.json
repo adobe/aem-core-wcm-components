@@ -1,0 +1,60 @@
+{
+    "contentfragmentlist": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Content Fragments List Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"                      : "nt:unstructured",
+                    "sling:resourceType"                   : "wcm/foundation/components/responsivegrid",
+                    "no-model"                             : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist"
+                    },
+                    "non-existing-model"                   : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar"
+                    },
+                    "non-existing-model-path-tags"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "parentPath"        : "/content/dam/some-other-parent-path",
+                        "tagNames"          : ["quux"]
+                    },
+                    "model-path-tags"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "parentPath"        : "/content/dam/some-other-parent-path",
+                        "tagNames"          : ["quux"]
+                    },
+                    "model-elements"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "elementNames"      : "main"
+                    },
+                    "model-max-limit"       : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "maxItems"          : "20"
+                    },
+                    "model-order-by"        : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/contentfragmentlist/v1/contentfragmentlist",
+                        "modelPath"         : "foobar",
+                        "orderBy"           : "main",
+                        "sortOrder"         : "desc"
+                    }
+                }
+            }
+        }
+    }
+}

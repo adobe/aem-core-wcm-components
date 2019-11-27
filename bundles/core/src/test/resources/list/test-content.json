@@ -185,7 +185,7 @@
             "jcr:content"    : {
                 "jcr:primaryType": "cq:PageContent",
                 "jcr:title"      : "Page 1",
-                "cq:lastModified": "Fri Sep 23 2016 16:12:45 GMT-0700"
+                "cq:lastModified": "2016-09-23T16:12:45.000-07:00"
             },
             "page_1_1"       : {
                 "jcr:primaryType": "cq:Page",
@@ -231,7 +231,7 @@
             "jcr:content"    : {
                 "jcr:primaryType": "cq:PageContent",
                 "jcr:title"      : "Page 2",
-                "cq:lastModified": "Fri Sep 21 2016 16:12:45 GMT-0700"
+                "cq:lastModified": "2016-09-21T16:12:45.000-07:00"
             }
         },
         "page_3": {

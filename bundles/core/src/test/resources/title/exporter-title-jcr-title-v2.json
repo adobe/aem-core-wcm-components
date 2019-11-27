@@ -1,4 +1,5 @@
 {
     "text": "Hello World",
+    "linkDisabled": false,
     ":type": "core/wcm/components/title/v2/title"
 }

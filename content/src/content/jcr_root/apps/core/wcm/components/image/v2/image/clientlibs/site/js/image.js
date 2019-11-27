@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2016 Adobe Systems Incorporated
+ * Copyright 2016 Adobe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,9 @@
 
     var selectors = {
         self: "[data-" + NS + '-is="' + IS + '"]',
-        image: '[data-cmp-hook-image="image"]'
+        image: '[data-cmp-hook-image="image"]',
+        map: '[data-cmp-hook-image="map"]',
+        area: '[data-cmp-hook-image="area"]'
     };
 
     var lazyLoader = {
@@ -40,11 +42,14 @@
         /**
          * An array of alternative image widths (in pixels).
          * Used to replace a {.width} variable in the src property with an optimal width if a URI template is provided.
+         *
+         * @memberof Image
+         * @type {Number[]}
+         * @default []
          */
         "widths": {
             "default": [],
             "transform": function(value) {
-                // number[]
                 var widths = [];
                 value.split(",").forEach(function(item) {
                     item = parseFloat(item);
@@ -57,11 +62,14 @@
         },
         /**
          * Indicates whether the image should be rendered lazily.
+         *
+         * @memberof Image
+         * @type {Boolean}
+         * @default false
          */
         "lazy": {
             "default": false,
             "transform": function(value) {
-                // boolean
                 return !(value === null || typeof value === "undefined");
             }
         },
@@ -71,6 +79,9 @@
          * Can be a simple image source, or a URI template representation that
          * can be variable expanded - useful for building an image configuration with an alternative width.
          * e.g. '/path/image.coreimg{.width}.jpeg/1506620954214.jpeg'
+         *
+         * @memberof Image
+         * @type {String}
          */
         "src": {
         }
@@ -125,8 +136,12 @@
                 addLazyLoader();
             }
 
+            if (that._elements.map) {
+                that._elements.image.addEventListener("load", onLoad);
+            }
+
             window.addEventListener("scroll", that.update);
-            window.addEventListener("resize", that.update);
+            window.addEventListener("resize", onWindowResize);
             window.addEventListener("update", that.update);
             that._elements.image.addEventListener("cmp-image-redraw", that.update);
             that.update();
@@ -150,7 +165,12 @@
         }
 
         function getOptimalWidth() {
-            var containerWidth = that._elements.self.clientWidth;
+            var container = that._elements.self;
+            var containerWidth = container.clientWidth;
+            while (containerWidth === 0 && container.parentNode) {
+                container = container.parentNode;
+                containerWidth = container.clientWidth;
+            }
             var optimalWidth = containerWidth * devicePixelRatio;
             var len = that._properties.widths.length;
             var key = 0;
@@ -191,14 +211,22 @@
             var temporaryDocument = parser.parseFromString(markup, "text/html");
             var imageElement = temporaryDocument.querySelector(selectors.image);
             imageElement.removeAttribute("src");
-
             that._elements.container.insertBefore(imageElement, that._elements.noscript);
+
+            var mapElement = temporaryDocument.querySelector(selectors.map);
+            if (mapElement) {
+                that._elements.container.insertBefore(mapElement, that._elements.noscript);
+            }
+
             that._elements.noscript.parentNode.removeChild(that._elements.noscript);
             if (that._elements.container.matches(selectors.image)) {
                 that._elements.image = that._elements.container;
             } else {
                 that._elements.image = that._elements.container.querySelector(selectors.image);
             }
+
+            that._elements.map = that._elements.container.querySelector(selectors.map);
+            that._elements.areas = that._elements.container.querySelectorAll(selectors.area);
         }
 
         function removeLazyLoader() {
@@ -223,6 +251,33 @@
             var eb = et + that._elements.container.clientHeight;
 
             return eb >= wt - LAZY_THRESHOLD && et <= wb + LAZY_THRESHOLD;
+        }
+
+        function resizeAreas() {
+            if (that._elements.areas && that._elements.areas.length > 0) {
+                for (var i = 0; i < that._elements.areas.length; i++) {
+                    var width = that._elements.image.width;
+                    var height = that._elements.image.height;
+
+                    if (width && height) {
+                        var relcoords = that._elements.areas[i].dataset.cmpRelcoords;
+                        if (relcoords) {
+                            var relativeCoordinates = relcoords.split(",");
+                            var coordinates = new Array(relativeCoordinates.length);
+
+                            for (var j = 0; j < coordinates.length; j++) {
+                                if (j % 2 === 0) {
+                                    coordinates[j] = parseInt(relativeCoordinates[j] * width);
+                                } else {
+                                    coordinates[j] = parseInt(relativeCoordinates[j] * height);
+                                }
+                            }
+
+                            that._elements.areas[i].coords = coordinates;
+                        }
+                    }
+                }
+            }
         }
 
         function cacheElements(wrapper) {
@@ -258,6 +313,15 @@
             }
         }
 
+        function onWindowResize() {
+            that.update();
+            resizeAreas();
+        }
+
+        function onLoad() {
+            resizeAreas();
+        }
+
         that.update = function() {
             if (that._properties.lazy) {
                 if (isLazyVisible()) {
@@ -268,7 +332,7 @@
             }
         };
 
-        if (config.element) {
+        if (config && config.element) {
             init(config);
         }
     }
@@ -308,7 +372,7 @@
     if (document.readyState !== "loading") {
         onDocumentReady();
     } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady());
+        document.addEventListener("DOMContentLoaded", onDocumentReady);
     }
 
     /*

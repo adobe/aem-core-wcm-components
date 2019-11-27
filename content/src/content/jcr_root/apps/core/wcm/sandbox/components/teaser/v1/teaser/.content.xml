@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="image"
-    jcr:description="Displays an image together with a link that can act as a teaser for a site section."
-    jcr:primaryType="cq:Component"
-    jcr:title="Teaser (v1 - sandbox)"
-    sling:resourceSuperType="core/wcm/components/image"
-    imageDelegate="core/wcm/components/image/v2/image"
-    componentGroup=".core-wcm"/>

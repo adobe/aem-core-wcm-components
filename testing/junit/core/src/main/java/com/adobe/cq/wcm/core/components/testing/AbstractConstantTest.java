@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,17 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.testing;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AbstractConstantTest {
 
-    protected void testConsistentStructure(Class constantsClass) throws Exception {
+    protected void testConsistentStructure(Class constantsClass) throws IllegalAccessException,
+        InvocationTargetException, InstantiationException {
         assertTrue("Class should be final", Modifier.isFinal(constantsClass.getModifiers()));
         Constructor[] declaredConstructors = constantsClass.getDeclaredConstructors();
         assertEquals("Only one constructor should be present", 1, declaredConstructors.length);

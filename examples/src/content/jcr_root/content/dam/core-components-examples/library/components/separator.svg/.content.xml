@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="3cc09582-c044-4002-9d6a-1d0dfa44d5ed">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2019-05-24T12:27:23.527+02:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2019-05-24T12:27:23.150+02:00"
+            dam:sha1="ba67ff72e59139f1a8e10add743e43cc419be348"
+            dam:size="{Long}1771"
+            dc:format="image/svg+xml"
+            dc:modified="{Date}2019-02-28T15:51:34.957+01:00"
+            dc:title="Separator"
+            jcr:lastModified="{Date}2019-05-24T12:27:19.988+02:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

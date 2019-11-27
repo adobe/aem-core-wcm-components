@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:EditConfig">
+    <cq:dropTargets jcr:primaryType="nt:unstructured">
+        <image
+            jcr:primaryType="cq:DropTargetConfig"
+            accept="[image/gif,image/jpeg,image/png,image/tiff,image/svg\\+xml]"
+            groups="[media]"
+            propertyName="./fileReference">
+            <parameters
+                jcr:primaryType="nt:unstructured"
+                imageCrop=""
+                imageMap=""
+                imageRotate=""/>
+        </image>
+    </cq:dropTargets>
+    <cq:inplaceEditing
+        jcr:primaryType="cq:InplaceEditingConfig"
+        active="{Boolean}true"
+        configPath="inplaceEditingConfig"
+        editorType="image">
+        <inplaceEditingConfig jcr:primaryType="nt:unstructured">
+            <plugins jcr:primaryType="nt:unstructured">
+                <crop
+                    jcr:primaryType="nt:unstructured"
+                    features="*">
+                    <aspectRatios jcr:primaryType="nt:unstructured">
+                        <wideLandscape
+                            jcr:primaryType="nt:unstructured"
+                            name="Wide Landscape"
+                            ratio="0.6180"/>
+                        <landscape
+                            jcr:primaryType="nt:unstructured"
+                            name="Landscape"
+                            ratio="0.8284"/>
+                        <square
+                            jcr:primaryType="nt:unstructured"
+                            name="Square"
+                            ratio="1"/>
+                        <portrait
+                            jcr:primaryType="nt:unstructured"
+                            name="Portrait"
+                            ratio="1.6180"/>
+                    </aspectRatios>
+                </crop>
+                <flip
+                    jcr:primaryType="nt:unstructured"
+                    features="-"/>
+                <map
+                    jcr:primaryType="nt:unstructured"
+                    features="*"/>
+                <rotate
+                    jcr:primaryType="nt:unstructured"
+                    features="*"/>
+                <zoom
+                    jcr:primaryType="nt:unstructured"
+                    features="*"/>
+            </plugins>
+            <ui jcr:primaryType="nt:unstructured">
+                <inline
+                    jcr:primaryType="nt:unstructured"
+                    toolbar="[crop#launch,rotate#right,history#undo,history#redo,fullscreen#fullscreen,control#close,control#finish]">
+                    <replacementToolbars
+                        jcr:primaryType="nt:unstructured"
+                        crop="[crop#identifier,crop#unlaunch,crop#confirm]"/>
+                </inline>
+                <fullscreen jcr:primaryType="nt:unstructured">
+                    <toolbar
+                        jcr:primaryType="nt:unstructured"
+                        left="[crop#launchwithratio,rotate#right,flip#horizontal,flip#vertical,zoom#reset100,zoom#popupslider]"
+                        right="[history#undo,history#redo,fullscreen#fullscreenexit]"/>
+                    <replacementToolbars jcr:primaryType="nt:unstructured">
+                        <crop
+                            jcr:primaryType="nt:unstructured"
+                            left="[crop#identifier]"
+                            right="[crop#unlaunch,crop#confirm]"/>
+                    </replacementToolbars>
+                </fullscreen>
+            </ui>
+        </inplaceEditingConfig>
+    </cq:inplaceEditing>
+</jcr:root>

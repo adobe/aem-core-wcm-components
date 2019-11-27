@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.jcr.RangeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -37,6 +35,8 @@ import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.servlets.SlingSafeMethodsServlet;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
@@ -87,16 +87,16 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchResultServlet.class);
 
     @Reference
-    private QueryBuilder queryBuilder;
+    private transient QueryBuilder queryBuilder;
 
     @Reference
-    private LanguageManager languageManager;
+    private transient LanguageManager languageManager;
 
     @Reference
-    private LiveRelationshipManager relationshipManager;
+    private transient LiveRelationshipManager relationshipManager;
 
     @Override
-    protected void doGet(@Nonnull SlingHttpServletRequest request, @Nonnull SlingHttpServletResponse response)
+    protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
             throws IOException {
         Page currentPage = getCurrentPage(request);
         if (currentPage != null) {
@@ -124,7 +124,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         try {
             mapper.writeValue(response.getWriter(), results);
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error("cannot serialize to JSON",e);
         }
     }
 
@@ -269,8 +269,8 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         return contentPolicyProperties;
     }
 
-    @CheckForNull
-    private String getRelativePath(@Nonnull Page root, @Nonnull Page child) {
+    @Nullable
+    private String getRelativePath(@NotNull Page root, @NotNull Page child) {
         if (child.equals(root)) {
             return ".";
         } else if ((child.getPath() + "/").startsWith(root.getPath())) {

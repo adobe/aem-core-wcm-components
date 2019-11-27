@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2017 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ Image component written in HTL that renders a smart adaptive image.
 * Smart loading of optimal rendition
 * In-place editing, cropping, rotating, and resizing
 * Image title, description, accessibility text and link
+* SVG support
 * Styles
 
 ### Use Object
@@ -31,7 +32,8 @@ The following configuration properties are used:
 
 1. `./allowedWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
 component; the actual size will be requested by the client device;
-2. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
+2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
+3. `./disableLazyLoading` - allows to disable lazy loading for images (loading the image only when the image is visible on the client
 device)
 
 ### Edit Dialog Properties
@@ -93,10 +95,10 @@ The images are loaded through the `com.adobe.cq.wcm.core.components.internal.ser
 
 ```
 Author:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>/<timestamp>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<quality>.<width>.<extension>/<timestamp>/<filename>.<extension>
 
 Publish:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<width>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.img.<quality>.<width>.<extension>/<timestamp>/<filename>.<extension>
 ```
 
 ## Client Libraries
@@ -105,6 +107,10 @@ CSS styling. It should be added to a relevant site client library using the `emb
 
 It also provides a `core.wcm.components.image.v1.editor` editor client library category that includes
 JavaScript handling for dialog interaction. It is already included by its edit dialog.
+
+## SVG
+SVG MIME-types are supported, but have some specific handling. Alternative smart image widths defined at the component policy dialog are ignored for SVG images, with `Image#getWidths` returning an empty array.
+In addition, SVG image types have a more limited set of editing options available in the AEM inline image editor. The lazy loading feature is still supported for SVG images.
 
 ## Information
 * **Vendor**: Adobe

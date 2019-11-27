@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,10 +19,9 @@ import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +30,7 @@ import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl implements ListItem {
 
@@ -39,7 +39,7 @@ public class PageListItemImpl implements ListItem {
     protected SlingHttpServletRequest request;
     protected Page page;
 
-    public PageListItemImpl(@Nonnull SlingHttpServletRequest request, @Nonnull Page page) {
+    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
         this.request = request;
         this.page = page;
         Page redirectTarget = getRedirectTarget(page);
@@ -83,8 +83,13 @@ public class PageListItemImpl implements ListItem {
         return page.getPath();
     }
 
+    @Override
+    @JsonIgnore
+    public String getName() {
+        return page.getName();
+    }
 
-    private Page getRedirectTarget(@Nonnull Page page) {
+    private Page getRedirectTarget(@NotNull Page page) {
         Page result = page;
         String redirectTarget;
         PageManager pageManager = page.getPageManager();

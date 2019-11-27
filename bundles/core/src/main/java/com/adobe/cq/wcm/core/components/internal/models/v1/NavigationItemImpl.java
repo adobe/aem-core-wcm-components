@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
 
     @Override
     @JsonIgnore
+    @Deprecated
     public Page getPage() {
         return page;
     }

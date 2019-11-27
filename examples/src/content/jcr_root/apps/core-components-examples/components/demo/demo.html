@@ -1,0 +1,28 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2018 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div class="cmp-examples-demo" data-cmp-examples-is="demo" data-cmp-examples-label="${'Demo' @ i18n}">
+    <div class="cmp-examples-demo__top t-cmp-clean t-cmp-clean--light" data-cmp-examples-hook-demo="top">
+        <div class="cmp-examples-demo__component cmp-examples-demo__component--width${resource.valueMap.fullWidth ? 'Full' : 'Auto'}" data-sly-resource="${'component' @ decoration=true}"></div>
+    </div>
+    <div class="cmp-examples-demo__info cmp-examples-demo__info--open" data-cmp-examples-hook-demo="info">
+        <div data-sly-resource="${'info' @ decoration=true, wcmmode='disabled'}"></div>
+        <div class="cmp-examples-demo__info-actions">
+            <button class="cmp-examples-button" data-cmp-examples-hook-demo="copyCode" aria-label="${'Copy to clipboard' @ i18n}" data-cmp-examples-tooltip="${'Copy to clipboard' @ i18n}"><i class="cmp-examples-button__icon fas fa-copy"></i></button><!--
+         --><button class="cmp-examples-button" data-cmp-examples-hook-demo="hideCode" aria-label="${'Hide code' @ i18n}" data-cmp-examples-tooltip="${'Hide code' @ i18n}"><i class="cmp-examples-button__icon fas fa-angle-down"></i></button><!--
+         --><button disabled class="cmp-examples-button" data-cmp-examples-hook-demo="showCode" aria-label="${'Show code' @ i18n}" data-cmp-examples-tooltip="${'Show code' @ i18n}"><i class="cmp-examples-button__icon fas fa-angle-up"></i></button>
+        </div>
+    </div>
+</div>

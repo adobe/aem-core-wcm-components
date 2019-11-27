@@ -4,8 +4,9 @@
     <cq:inplaceEditing
         jcr:primaryType="cq:InplaceEditingConfig"
         active="{Boolean}true"
+        configPath="inplaceEditingConfig"
         editorType="text">
-        <config jcr:primaryType="nt:unstructured">
+        <inplaceEditingConfig jcr:primaryType="nt:unstructured">
             <rtePlugins jcr:primaryType="nt:unstructured">
                 <tracklinks
                     jcr:primaryType="nt:unstructured"
@@ -51,6 +52,10 @@
                             jcr:primaryType="nt:unstructured"
                             description="Quote"
                             tag="blockquote"/>
+                        <default_hr
+                            jcr:primaryType="nt:unstructured"
+                            description="Horizontal Rule (visual line break)"
+                            tag="hr"/>
                         <default_pre
                             jcr:primaryType="nt:unstructured"
                             description="Preformatted"
@@ -89,6 +94,6 @@
                     jcr:primaryType="nt:unstructured"
                     features="bold,italic"/>
             </rtePlugins>
-        </config>
+        </inplaceEditingConfig>
     </cq:inplaceEditing>
 </jcr:root>

@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
+import java.util.Optional;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
 
@@ -33,10 +33,9 @@ import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -81,10 +80,14 @@ public class NavigationImpl implements Navigation {
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String accessibilityLabel;
+
     private int structureDepth;
     private String navigationRootPage;
     private List<NavigationItem> items;
     private boolean skipNavigationRoot;
+    private int structureStart;
 
     @PostConstruct
     private void initModel() {
@@ -94,7 +97,17 @@ public class NavigationImpl implements Navigation {
             structureDepth = -1;
         }
         navigationRootPage = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
-        skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
+        if (currentStyle.containsKey(PN_STRUCTURE_START) || properties.containsKey(PN_STRUCTURE_START)) {
+            //workaround to maintain the content of Navigation component of users in case they update to the current i.e. the `structureStart` version.
+            structureStart = properties.get(PN_STRUCTURE_START, currentStyle.get(PN_STRUCTURE_START, 1));
+        } else {
+            skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
+            if (skipNavigationRoot) {
+                structureStart = 1;
+            } else {
+                structureStart = 0;
+            }
+        }
     }
 
     @Override
@@ -104,7 +117,7 @@ public class NavigationImpl implements Navigation {
             Page rootPage = pageManager.getPage(navigationRootPage);
             if (rootPage != null) {
                 NavigationRoot navigationRoot = new NavigationRoot(rootPage, structureDepth);
-                Page navigationRootLanguageRoot = languageManager.getLanguageRoot(navigationRoot.page.getContentResource());
+                Page navigationRootLanguageRoot = navigationRoot.getPageResource().map(languageManager::getLanguageRoot).orElse(null);
                 Page currentPageLanguageRoot = languageManager.getLanguageRoot(currentPage.getContentResource());
                 RangeIterator liveCopiesIterator = null;
                 try {
@@ -132,21 +145,20 @@ public class NavigationImpl implements Navigation {
                         }
                     }
                 }
-                items = getItems(navigationRoot, navigationRoot.page);
-                if (!skipNavigationRoot) {
-                    boolean isSelected = checkSelected(navigationRoot.page);
-                    NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, items);
-                    items = new ArrayList<>();
-                    items.add(root);
-                }
+                items = getNavigationTree(navigationRoot);
             } else {
                 items = Collections.emptyList();
             }
         }
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
-    @Nonnull
+    @Override
+    public String getAccessibilityLabel() {
+        return accessibilityLabel;
+    }
+
+    @NotNull
     @Override
     public String getExportedType() {
         return request.getResource().getResourceType();
@@ -166,13 +178,50 @@ public class NavigationImpl implements Navigation {
             while (it.hasNext()) {
                 Page page = it.next();
                 int pageLevel = getLevel(page);
-                int level = pageLevel - navigationRoot.startLevel;
+                int level = pageLevel - navigationRoot.startLevel - 1;
                 List<NavigationItem> children = getItems(navigationRoot, page);
                 boolean isSelected = checkSelected(page);
-                if (skipNavigationRoot) {
-                    level = level - 1;
+                if (structureStart == 0) {
+                    level = level + 1;
                 }
                 pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
+            }
+        }
+        return pages;
+    }
+
+    private List<NavigationItem> getNavigationTree(NavigationRoot navigationRoot) {
+        List<NavigationItem> itemTree = new ArrayList<>();
+        Iterator<NavigationRoot> it = getRootItems(navigationRoot, structureStart).iterator();
+        while (it.hasNext()) {
+            NavigationRoot item = it.next();
+            itemTree.addAll(getItems(item, item.page));
+        }
+        if (structureStart == 0) {
+            boolean isSelected = checkSelected(navigationRoot.page);
+            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree);
+            itemTree = new ArrayList<>();
+            itemTree.add(root);
+        }
+        return  itemTree;
+    }
+
+    private List<NavigationRoot> getRootItems(NavigationRoot navigationRoot, int structureStart) {
+        LinkedList<NavigationRoot> pages = new LinkedList<>();
+        pages.addLast(navigationRoot);
+        if (structureStart != 0) {
+            int level = 1;
+            while (level != structureStart && !pages.isEmpty()) {
+                int size = pages.size();
+                while (size > 0) {
+                    NavigationRoot item = pages.removeFirst();
+                    Iterator<Page> it = item.page.listChildren(new PageFilter());
+                    while (it.hasNext()) {
+                        pages.addLast(new NavigationRoot(it.next(), structureDepth));
+                    }
+                    size = size - 1;
+                }
+                level = level + 1;
             }
         }
         return pages;
@@ -194,7 +243,7 @@ public class NavigationImpl implements Navigation {
                 PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
                 if (pageManager != null) {
                     Page redirectPage = pageManager.getPage(redirectTarget);
-                    if (redirectPage.equals(currentPage)) {
+                    if (currentPage.equals(redirectPage)) {
                         currentPageIsRedirectTarget = true;
                     }
                 }
@@ -207,8 +256,8 @@ public class NavigationImpl implements Navigation {
         return StringUtils.countMatches(page.getPath(), "/") - 1;
     }
 
-    @CheckForNull
-    private String getRelativePath(@Nonnull Page root, @Nonnull Page child) {
+    @Nullable
+    private String getRelativePath(@NotNull Page root, @NotNull Page child) {
         if (child.equals(root)) {
             return ".";
         } else if ((child.getPath() + "/").startsWith(root.getPath())) {
@@ -218,16 +267,32 @@ public class NavigationImpl implements Navigation {
     }
 
     private class NavigationRoot {
-        Page page;
+        final Page page;
         int startLevel;
         int structureDepth = -1;
 
-        private NavigationRoot(@Nonnull Page navigationRoot, int configuredStructureDepth) {
+        private NavigationRoot(@NotNull Page navigationRoot, int configuredStructureDepth) {
             page = navigationRoot;
             this.startLevel = getLevel(navigationRoot);
             if (configuredStructureDepth > -1) {
                 structureDepth = configuredStructureDepth + startLevel;
             }
+        }
+
+        /**
+         * Gets the resource representation of the navigation root page.
+         *
+         * @return the resource for the navigation root, empty if the resource could not be resolved
+         */
+        @NotNull
+        final Optional<Resource> getPageResource() {
+            return Optional.ofNullable(
+                Optional.of(this.page)
+                    // get the parent of the content resource
+                    .map(Page::getContentResource)
+                    .map(Resource::getParent)
+                    // if content resource is missing, resolve resource at page path
+                    .orElseGet(() -> resourceResolver.getResource(this.page.getPath())));
         }
     }
 

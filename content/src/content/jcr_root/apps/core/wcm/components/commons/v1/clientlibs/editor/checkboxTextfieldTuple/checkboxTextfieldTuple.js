@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -21,12 +21,16 @@
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple || {};
 
+    var CQ_RICHTEXT = ".cq-RichText";
+    var CQ_RICHTEXT_INPUT = "input[type=hidden][data-cq-richtext-input='true']";
+
     /**
      * Creates a tuple consisting of a checkbox and a text field located in the same dialog.
      *
      * @param {HTMLElement} dialog The dialog where the two elements are found.
      * @param {String} checkboxSelector The selector for the checkbox.
      * @param {String} textfieldSelector The selector for the text field.
+     * @param {Boolean} isRichText Defines whether the text field is a rich text editor.
      * @constructor
      */
     var CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple.v1 = function(dialog, checkboxSelector, textfieldSelector, isRichText) {
@@ -73,6 +77,9 @@
         }
         if (self._textfield) {
             self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+            self._textfield.addEventListener("change", function() {
+                self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+            });
             $(window).adaptTo("foundation-registry").register("foundation.adapters", {
                 type: "foundation-toggleable",
                 selector: self._textfieldSelector,
@@ -121,7 +128,7 @@
     };
 
     /**
-     * Seeds a value in the {@link #ATTR_SEEDED_VALUE} data attribute of the checkbox. If the value is empty then the data attribute is
+     * Seeds a value in the {@link #ATTR_SEEDED_VALUE} data attribute of the textfield. If the value is empty then the data attribute is
      * removed.
      *
      * @param {String} [value] The value to seed.
@@ -202,11 +209,18 @@
     /**
      * Gets the value of the text field, accounting for it being a rich-text
      *
+     * @returns {String} The text field value
      * @private
      */
     CheckboxTextfieldTuple.prototype._getTextfieldValue = function() {
         if (this._isRichText) {
-            return $(this._textfield).html();
+            var $richText = $(this._textfield).closest(CQ_RICHTEXT);
+            if ($richText.length) {
+                var $richTextInput = $richText.find(CQ_RICHTEXT_INPUT);
+                if ($richTextInput.length) {
+                    return $richTextInput.val();
+                }
+            }
         } else {
             return this._textfield.value;
         }
@@ -215,7 +229,7 @@
     /**
      * Sets the value of the text field, accounting for it being a rich-text
      *
-     * @param value - The value to set
+     * @param {String} value The value to set
      * @private
      */
     CheckboxTextfieldTuple.prototype._setTextfieldValue = function(value) {
@@ -229,7 +243,7 @@
     /**
      * Disables the text field, accounting for it being a rich-text
      *
-     * @param disabled - {@code true} to disable, {@code false} to enable the field
+     * @param {Boolean} disabled {@code true} to disable, {@code false} to enable the field
      * @private
      */
     CheckboxTextfieldTuple.prototype._disableTextfield = function(disabled) {

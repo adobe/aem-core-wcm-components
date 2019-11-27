@@ -1,0 +1,15 @@
+{
+    "title": "titleOfTheContentFragment",
+    "path": "/path/to/the/content/fragment",
+    "variation": "slave",
+    "elements": [
+        "foo",
+        "bar"
+    ],
+    "associatedContent": [
+        {
+            "title": "associatedContentTitle",
+            "path": "/path/to/the/associated/content"
+        }
+    ]
+}

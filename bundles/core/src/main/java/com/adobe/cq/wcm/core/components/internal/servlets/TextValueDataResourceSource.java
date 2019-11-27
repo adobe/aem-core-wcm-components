@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -24,8 +24,9 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 
 public abstract class TextValueDataResourceSource extends SyntheticResource {
 
-    protected static final String PN_VALUE = "value";
-    protected static final String PN_TEXT = "text";
+    public static final String PN_VALUE = "value";
+    public static final String PN_TEXT = "text";
+    protected static final String PN_SELECTED = "selected";
 
     private ValueMap valueMap;
 
@@ -51,9 +52,14 @@ public abstract class TextValueDataResourceSource extends SyntheticResource {
         valueMap = new ValueMapDecorator(new HashMap<String, Object>());
         valueMap.put(PN_VALUE, getValue());
         valueMap.put(PN_TEXT, getText());
+        valueMap.put(PN_SELECTED, getSelected());
     }
 
-    protected abstract String getText();
+    public abstract String getText();
 
-    protected abstract String getValue();
+    public abstract String getValue();
+
+    protected boolean getSelected() {
+        return false;
+    }
 }

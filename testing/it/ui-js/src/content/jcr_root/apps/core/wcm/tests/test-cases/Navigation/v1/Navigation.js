@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -163,7 +163,7 @@
             .assert.visible('coral-numberinput[name="./structureDepth"]', false)
             .fillInput('foundation-autocomplete[name="./navigationRoot"]', "%page_1%")
             // uncheck the skip root option
-            .click('input[name="./skipNavigationRoot"]')
+            .fillInput('input[name="./structureStart"]', "0")
             .execTestCase(c.tcSaveConfigureDialog)
             .wait(200)
             .config.changeContext(c.getContentFrame)

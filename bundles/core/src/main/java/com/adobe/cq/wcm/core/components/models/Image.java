@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import javax.annotation.Nonnull;
+import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -38,6 +39,13 @@ public interface Image extends ComponentExporter {
     String PN_DESIGN_ALLOWED_RENDITION_WIDTHS = "allowedRenditionWidths";
 
     /**
+     * Name of the configuration policy property that will store the image quality for an image.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.5.0
+     */
+    String PN_DESIGN_JPEG_QUALITY = "jpegQuality";
+
+    /**
      * Name of the configuration policy property that will indicate if lazy loading should be disabled.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
@@ -50,6 +58,13 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
      */
     String PN_IS_DECORATIVE = "isDecorative";
+
+    /**
+     * Name of the policy property that defines whether or not the UUID is disabled.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_UUID_DISABLED = "uuidDisabled";
 
     /**
      * Name of the resource property that will indicate if the image's caption will be rendered as a popup.
@@ -85,7 +100,6 @@ public interface Image extends ComponentExporter {
     @Deprecated
     String JSON_LAZY_ENABLED = "lazyEnabled";
 
-
     /**
      * Name of the configuration policy property that will indicate if the value of the {@code alt} attribute should be populated from
      * DAM if the component is configured with a file reference.
@@ -102,7 +116,6 @@ public interface Image extends ComponentExporter {
      */
     String PN_TITLE_VALUE_FROM_DAM = "titleValueFromDAM";
 
-
     /**
      * Name of the resource property that will indicate if the current image should be flipped horizontally.
      *
@@ -117,6 +130,21 @@ public interface Image extends ComponentExporter {
      */
     String PN_FLIP_VERTICAL = "imageFlipVertical";
 
+    /**
+     * Name of the resource property that defines areas of an image map.
+     *
+     * The property stores map areas as follows:
+     * [area1][area2][...]
+     *
+     * Area format:
+     * [SHAPE(COORDINATES)"HREF"|"TARGET"|"ALT"|(RELATIVE_COORDINATES)]
+     *
+     * Example:
+     * [rect(0,0,10,10)"http://www.adobe.com"|"_self"|"alt"|(0,0,0.8,0.8)][circle(10,10,10)"http://www.adobe.com"|"_self"|"alt"|(0.8,0.8,0.8)]
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_MAP = "imageMap";
 
     /**
      * Returns the value for the {@code src} attribute of the image.
@@ -145,6 +173,16 @@ public interface Image extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the value for the image's uuid, if one was set.
+     *
+     * @return the value for the image's uuid, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0;
+     */
+    default String getUuid() {
         throw new UnsupportedOperationException();
     }
 
@@ -206,7 +244,7 @@ public interface Image extends ComponentExporter {
      * @return the alternative image widths (in pixels)
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    @Nonnull
+    @NotNull
     default int[] getWidths() {
         throw new UnsupportedOperationException();
     }
@@ -233,13 +271,32 @@ public interface Image extends ComponentExporter {
     }
 
     /**
+     * Returns a list of image map areas.
+     *
+     * @return the image map areas
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default List<ImageArea> getAreas() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Indicates whether the image is decorative.
+     *
+     * @return true if the image is decorative; false otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.11.0
+     */
+    default boolean isDecorative() {
+        throw new UnsupportedOperationException();
+    };
 }

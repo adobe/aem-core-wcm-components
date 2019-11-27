@@ -1,0 +1,172 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+@cmp-clean-carousel-action-size: 30*@px;
+@cmp-clean-carousel-action-icon-size: 18*@px;
+@cmp-clean-carousel-action-padding: (@cmp-clean-carousel-action-size - @cmp-clean-carousel-action-icon-size) / 2;
+@cmp-clean-carousel-indicator-size: 8*@px;
+@cmp-clean-carousel-indicator-gap: 12*@px;
+
+.t-cmp-clean {
+    .cmp-carousel {
+        position: relative;
+    }
+
+    .cmp-carousel__item {
+        display: none;
+
+        &--active {
+            display: block;
+        }
+    }
+
+    .cmp-carousel__actions {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .cmp-carousel__action {
+        color: inherit;
+        .appearance('none');
+    }
+
+    .cmp-carousel__indicators {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        height: @cmp-clean-carousel-action-size;
+        margin: 0;
+        padding: 0;
+
+        list-style: none;
+    }
+
+    .cmp-carousel__indicator {
+        position: relative;
+
+        flex: 0 1 auto;
+        width: @cmp-clean-carousel-indicator-size;
+        height: @cmp-clean-carousel-indicator-size;
+        margin: 0 @cmp-clean-carousel-indicator-gap / 2;
+        border-radius: 50%;
+
+        font-size: 0;
+        text-indent: -3000px;
+
+        cursor: pointer;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .cmp-carousel__actions {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .cmp-carousel__action {
+        width: @cmp-clean-carousel-action-size;
+        height: @cmp-clean-carousel-action-size;
+        border: 0;
+        padding: @cmp-clean-carousel-action-padding;
+        line-height: @cmp-clean-carousel-action-size;
+
+        cursor: pointer;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &--disabled {
+            display: none;
+        }
+
+        &--previous {
+            order: 1;
+
+            .cmp-carousel__action-icon {
+                &:before {
+                    content: 'chevron_left';
+                }
+            }
+        }
+
+        &--next {
+            order: 4;
+
+            .cmp-carousel__action-icon {
+                &:before {
+                    content: 'chevron_right';
+                }
+            }
+        }
+
+        &--pause {
+            order: 2;
+
+            .cmp-carousel__action-icon {
+                &:before {
+                    content: 'pause';
+                }
+            }
+        }
+
+        &--play {
+            order: 3;
+
+            .cmp-carousel__action-icon {
+                &:before {
+                    content: 'play_arrow';
+                }
+            }
+        }
+    }
+
+    .cmp-carousel__action-icon {
+        &:before {
+            display: inline-block;
+            vertical-align: top;
+
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: @cmp-clean-carousel-action-icon-size;
+
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            -moz-osx-font-smoothing: grayscale;
+            font-feature-settings: 'liga';
+        }
+    }
+
+    .cmp-carousel__action-text {
+        display: none;
+    }
+}

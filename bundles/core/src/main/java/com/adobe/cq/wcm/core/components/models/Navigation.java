@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,8 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import javax.annotation.Nonnull;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 
@@ -41,8 +42,18 @@ public interface Navigation extends ComponentExporter {
      * omitted, {@code false} otherwise).
      *
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     * @deprecated since 12.11.0
      */
+    @Deprecated
     String PN_SKIP_NAVIGATION_ROOT = "skipNavigationRoot";
+
+    /**
+     * Name of the resource / configuration policy property that defines the start level of navigation, relative to the
+     * {@link #PN_NAVIGATION_ROOT}, from which to start building the tree. The property should provide a Long value.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.11.0
+     */
+    String PN_STRUCTURE_START = "structureStart";
 
     /**
      * Name of the resource / configuration policy property that defines if the resulted navigation tree should collect all child pages
@@ -75,9 +86,19 @@ public interface Navigation extends ComponentExporter {
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Retrieves an accessibility label that describes the navigation.
+     *
+     * @return an accessibility label for the navigation
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
 

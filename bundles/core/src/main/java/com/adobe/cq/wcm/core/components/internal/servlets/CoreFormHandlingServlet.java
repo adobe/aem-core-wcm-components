@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -88,15 +88,15 @@ public class CoreFormHandlingServlet
 
     private String[] dataNameWhitelist;
 
-    private FormsHandlingServletHelper formsHandlingServletHelper;
+    private transient FormsHandlingServletHelper formsHandlingServletHelper;
 
     private boolean allowExpressions;
 
     @Reference
-    private SaferSlingPostValidator validator;
+    private transient SaferSlingPostValidator validator;
 
     @Reference
-    private FormStructureHelperFactory formStructureHelperFactory;
+    private transient FormStructureHelperFactory formStructureHelperFactory;
 
     @Activate
     protected void activate(Configuration configuration) {
@@ -110,6 +110,7 @@ public class CoreFormHandlingServlet
     /**
      * @see org.apache.sling.api.servlets.SlingAllMethodsServlet#doPost(org.apache.sling.api.SlingHttpServletRequest, org.apache.sling.api.SlingHttpServletResponse)
      */
+    @Override
     protected void doPost(SlingHttpServletRequest request,
                           final SlingHttpServletResponse response)
             throws ServletException, IOException {

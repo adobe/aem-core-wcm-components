@@ -1,5 +1,5 @@
 <!--
-Copyright 2017 Adobe Systems Incorporated
+Copyright 2017 Adobe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,8 +19,10 @@ Image component written in HTL that renders an adaptive image.
 
 ## Features
 * Smart loading of optimal rendition
-* In-place editing, cropping, rotating, and resizing
+* In-place editing, cropping, rotating, resizing and image map definition
+* Responsive image map resizing
 * Image title, description, accessibility text and link
+* SVG support
 * Styles
 
 ### Use Object
@@ -31,7 +33,8 @@ The following configuration properties are used:
 
 1. `./allowedRenditionWidths` - defines the allowed renditions (as an integer array) that will be generated for the images rendered by this
 component; the actual size will be requested by the client device;
-2. `./disableLazyLoading` - if `true`, the lazy loading of images (loading only when the image is visible on the client
+2. `./jpegQuality` - defines the image quality for JPEGs (0 lowest quality / size to 100 highest quality / size). Default value is 82.
+3. `./disableLazyLoading` - if `true`, the lazy loading of images (loading only when the image is visible on the client
 device) is disabled.
 
 ### Edit Dialog Properties
@@ -59,10 +62,10 @@ The images are loaded through the `com.adobe.cq.wcm.core.components.internal.ser
 
 ```
 Author:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.coreimg.<width>.<extension>/<timestamp>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.coreimg.<quality>.<width>.<extension>/<timestamp>/<filename>.<extension>
 
 Publish:
-/content/<project_path>/<page_path>/<component_path>/<component_name>.coreimg.<width>.<extension>
+/content/<project_path>/<page_path>/<component_path>/<component_name>.coreimg.<quality>.<width>.<extension>/<timestamp>/<filename>.<extension>
 ```
 
 ## Client Libraries
@@ -98,10 +101,12 @@ A hook attribute from the following should be added to the corresponding element
  data-cmp-hook-image="image"
  data-cmp-hook-image="link"
  data-cmp-hook-image="noscript"
+ data-cmp-hook-image="map"
+ data-cmp-hook-image="area"
 ```
 
-The `img` should be placed inside a `noscript` element with the `data-cmp-hook-image="noscript"` attribute.
-It will be inserted into the DOM by the JavaScript component.
+The `img` and an optional image `map` should be placed inside a `noscript` element with the `data-cmp-hook-image="noscript"` attribute.
+They will be inserted into the DOM by the JavaScript component.
 
 To allow lazy loading it is expected that the `data-cmp-lazy` and `data-cmp-src` options are supplied.
 
@@ -110,10 +115,21 @@ The most appropriate width being the one which is at least as wide as the image'
 The `data-cmp-widths` option must be provided with more than one width, as well as the `data-cmp-src` option,
 with a URI template representation of the source.
 
+To allow responsive recalculation of image map areas, a `data-cmp-relcoords` attribute should be added to each map `area`. The coordinates
+are represented as comma-separated decimal percentages:
+
+```
+    <area shape="rect" coords="0,0,10,10" data-cmp-relcoords="0,0,0.5,0.5" href="http://www.adobe.com">
+```
+
+## SVG
+SVG MIME-types are supported, but have some specific handling. Alternative smart image widths defined at the component policy dialog are ignored for SVG images, with `Image#getWidths` returning an empty array.
+In addition, SVG image types have a more limited set of editing options available in the AEM inline image editor. The lazy loading feature is still supported for SVG images.
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v2
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
 * **Documentation**: [https://www.adobe.com/go/aem\_cmp\_image\_v2](https://www.adobe.com/go/aem_cmp_image_v2)
-
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_image](https://www.adobe.com/go/aem_cmp_library_image)

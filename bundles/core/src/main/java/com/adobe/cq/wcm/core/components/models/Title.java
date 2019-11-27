@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe Systems Incorporated
+ ~ Copyright 2017 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@
 
 package com.adobe.cq.wcm.core.components.models;
 
-import javax.annotation.Nonnull;
-
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
@@ -37,6 +36,13 @@ public interface Title extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PN_DESIGN_DEFAULT_TYPE = "type";
+
+    /**
+     * Name of the policy property that defines whether or not the title link is disabled.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    String PN_TITLE_LINK_DISABLED = "linkDisabled";
 
     /**
      * Returns the text to be displayed as title.
@@ -59,10 +65,30 @@ public interface Title extends ComponentExporter {
     }
 
     /**
+     * Returns the Title's link URL, if one was set.
+     *
+     * @return the title's link URL, if one was set, or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default String getLinkURL() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Checks if link is disabled on the title.
+     *
+     * @return {@code true} if link is disabled on the title, {@code false} otherwise
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    default boolean isLinkDisabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
-    @Nonnull
+    @NotNull
     @Override
     default String getExportedType() {
         throw new UnsupportedOperationException();
