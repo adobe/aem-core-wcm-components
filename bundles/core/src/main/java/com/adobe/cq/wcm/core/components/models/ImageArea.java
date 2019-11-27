@@ -15,7 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
  * Interface for an image map area, used by the {@link Image} model.
@@ -56,11 +59,23 @@ public interface ImageArea {
     }
 
     /**
+     * Returns the link of the image area.
+     * 
+     * @see Link of the image area.
+     * @since com.adobe.cq.wcm.core.components.models 12.11.0
+     */
+    default @NotNull Link getLink() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the value for the {@code href} attribute of the image map area.
      *
      * @return the image map area link href
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     * @deprecated Please use {@link #getLink()}
      */
+    @Deprecated
     default String getHref() {
         throw new UnsupportedOperationException();
     }
@@ -70,7 +85,9 @@ public interface ImageArea {
      *
      * @return the image map area link target
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     * @deprecated Please use {@link #getLink()}
      */
+    @Deprecated
     default String getTarget() {
         throw new UnsupportedOperationException();
     }

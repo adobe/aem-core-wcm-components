@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 import com.adobe.cq.wcm.core.components.internal.models.v1.ImageAreaImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
@@ -125,9 +126,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         }
     }
 
-    @NotNull
     @Override
-    public int[] getWidths() {
+    public int @NotNull [] getWidths() {
         return Arrays.copyOf(smartSizes, smartSizes.length);
     }
 
@@ -170,20 +170,24 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 }
                 if (remainingTokens.length > 0) {
                     String href = StringUtils.removeAll(remainingTokens[0], "\"");
-                    if (StringUtils.isBlank(href)) {
+                    String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
+
+                    Link link = linkHandler.getLink(href, target);
+                    if (!link.isValid()) {
                         break;
                     }
-                    String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
+
                     String alt = remainingTokens.length > 2 ? StringUtils.removeAll(remainingTokens[2], "\"") : "";
                     String relativeCoordinates = remainingTokens.length > 3 ? remainingTokens[3] : "";
                     relativeCoordinates = StringUtils.substringBetween(relativeCoordinates, "(", ")");
-                    if (href.startsWith("/")) {
-                        href = Utils.getURL(request, pageManager, href);
-                    }
-                    areas.add(new ImageAreaImpl(shape, coordinates, relativeCoordinates, href, target, alt));
+                    areas.add(newImageArea(shape, coordinates, relativeCoordinates, link, alt));
                 }
             }
         }
+    }
+    
+    protected ImageArea newImageArea(String shape, String coordinates, String relativeCoordinates, @NotNull Link link, String alt ) {
+        return new ImageAreaImpl(shape, coordinates, relativeCoordinates, link, alt);
     }
 
 }

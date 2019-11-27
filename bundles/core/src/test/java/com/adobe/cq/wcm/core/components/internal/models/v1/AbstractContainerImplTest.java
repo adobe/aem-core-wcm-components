@@ -15,21 +15,23 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.Utils;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class AbstractContainerImplTest {
 
@@ -41,12 +43,12 @@ public class AbstractContainerImplTest {
     private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
-    @ClassRule
-    public static final AemContext AEM_CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
+    @Rule
+    public final AemContext context = CoreComponentTestContext.createContext(TEST_BASE, CONTENT_ROOT);
 
-    @BeforeClass
-    public static void init() {
-        AEM_CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
+    @Before
+    public void init() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
     }
 
     @Test
@@ -67,15 +69,16 @@ public class AbstractContainerImplTest {
     }
 
     private Container getContainerUnderTest(String resourcePath) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        AEM_CONTEXT.currentResource(resource);
-        AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
+        context.currentResource(resource);
+        context.request().setContextPath(CONTEXT_PATH);
         Container container = new ContainerImpl();
         Utils.setInternalState(container, "resource", resource);
-        Utils.setInternalState(container, "request", AEM_CONTEXT.request());
+        Utils.setInternalState(container, "request", context.request());
+        Utils.setInternalState(container, "linkHandler", context.request().adaptTo(LinkHandler.class));
         return container;
     }
 

@@ -45,7 +45,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core/wcm/components/teaser/v2/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
@@ -61,7 +61,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core/wcm/components/teaser/v2/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
@@ -76,7 +76,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_975671860
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -159,7 +159,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Sample Content"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_492503290
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -199,7 +199,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:13:13.580+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core/wcm/components/image/v3/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -234,7 +234,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:44.428+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core/wcm/components/image/v3/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -269,7 +269,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:50.727+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core/wcm/components/image/v3/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -323,7 +323,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Expanded Item"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_915061381
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -416,7 +416,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Expanded Items"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_915061380
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -509,7 +509,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Single Expansion"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_915061311
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -603,7 +603,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Nested"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_741455954
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"

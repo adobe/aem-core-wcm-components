@@ -15,6 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.form;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,31 +26,24 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.servlethelpers.MockRequestDispatcherFactory;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
 import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.form.Container;
 import com.day.cq.wcm.api.NameConstants;
-import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.foundation.forms.FormStructureHelper;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.msm.api.MSMNameConstants;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ContainerImplTest {
@@ -59,8 +55,8 @@ public class ContainerImplTest {
     private static final String FORM2_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container_350773202";
     private static final String FORM3_PATH = CONTAINING_PAGE + "/jcr:content/root/responsivegrid/container-v2";
 
-    @ClassRule
-    public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, CONTAINING_PAGE);
+    @Rule
+    public final AemContext context = CoreComponentTestContext.createContext(TEST_BASE, CONTAINING_PAGE);
 
     @Mock
     private FormStructureHelper formStructureHelper;
@@ -70,13 +66,14 @@ public class ContainerImplTest {
 
     @Before
     public void setUp() {
-        CONTEXT.registerService(FormStructureHelperFactory.class, new FormStructureHelperFactory() {
+        context.request().setContextPath(CONTEXT_PATH);
+        context.registerService(FormStructureHelperFactory.class, new FormStructureHelperFactory() {
             @Override
             public FormStructureHelper getFormStructureHelper(Resource resource) {
                 return formStructureHelper;
             }
         });
-        CONTEXT.registerService(SlingModelFilter.class, new SlingModelFilter() {
+        context.registerService(SlingModelFilter.class, new SlingModelFilter() {
 
             private final Set<String> IGNORED_NODE_NAMES = new HashSet<String>() {{
                 add(NameConstants.NN_RESPONSIVE_CONFIG);
@@ -131,23 +128,11 @@ public class ContainerImplTest {
     }
 
     private Container getContainerUnderTest(String resourcePath) {
-        Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
+        Resource resource = context.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
         }
-        SlingBindings bindings = new SlingBindings();
-        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(CONTEXT.resourceResolver(), CONTEXT.bundleContext());
-        MockSlingHttpServletResponse response = new MockSlingHttpServletResponse();
-        request.setContextPath(CONTEXT_PATH);
-        request.setResource(resource);
-        bindings.put(SlingBindings.RESOURCE, resource);
-        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
-        bindings.put(SlingBindings.REQUEST, request);
-        bindings.put(SlingBindings.RESPONSE, response);
-        Page page = CONTEXT.currentPage(CONTAINING_PAGE);
-        bindings.put(WCMBindings.CURRENT_PAGE, page);
-        request.setRequestDispatcherFactory(requestDispatcherFactory);
-        request.setAttribute(SlingBindings.class.getName(), bindings);
-        return request.adaptTo(Container.class);
+        context.currentResource(resource);
+        return context.request().adaptTo(Container.class);
     }
 }

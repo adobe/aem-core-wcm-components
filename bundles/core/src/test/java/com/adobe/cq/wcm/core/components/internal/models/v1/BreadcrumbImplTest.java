@@ -16,6 +16,8 @@
 
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +27,12 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Breadcrumb;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
+
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-
 @ExtendWith(AemContextExtension.class)
-class BreadcrumbImplTest {
+public class BreadcrumbImplTest {
 
     private static final String TEST_BASE = "/breadcrumb";
     private static final String CURRENT_PAGE = "/content/breadcrumb/women/shirts/devi-sleeveless-shirt";
@@ -42,60 +43,66 @@ class BreadcrumbImplTest {
     private static final String BREADCRUMB_5 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-style-based";
     private static final String BREADCRUMB_6 = CURRENT_PAGE + "/jcr:content/header/breadcrumb-v2";
 
-
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
+    protected String testBase;
+    
     @BeforeEach
-    void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content/breadcrumb/women");
+    protected void setUp() {
+        testBase = TEST_BASE;
+        internalSetup();
+    }
+    
+    protected void internalSetup() {
+        context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, "/content/breadcrumb/women");
     }
 
     @Test
-    void testBreadcrumbItems() {
+    protected void testBreadcrumbItems() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_1);
         checkBreadcrumbConsistency(breadcrumb, new String[]{"Women", "Devi Sleeveless Shirt"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_1));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_1));
     }
 
     @Test
-    void testGetShowHidden() {
+    protected void testGetShowHidden() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_2);
         checkBreadcrumbConsistency(breadcrumb, new String[]{"Women", "Shirts", "Devi Sleeveless Shirt"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_2));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_2));
     }
 
     @Test
-    void testGetHideCurrent() {
+    protected void testGetHideCurrent() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_3);
         checkBreadcrumbConsistency(breadcrumb, new String[]{"Women"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_3));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_3));
     }
 
     @Test
-    void testStartLevel() {
+    protected void testStartLevel() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_4);
         checkBreadcrumbConsistency(breadcrumb, new String[]{"Shirts", "Devi Sleeveless Shirt"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_4));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_4));
     }
 
     @Test
-    void testStyleBasedBreadcrumb() {
+    protected void testStyleBasedBreadcrumb() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_5,
                 BreadcrumbImpl.PN_START_LEVEL, 3,
                 BreadcrumbImpl.PN_HIDE_CURRENT, false,
                 BreadcrumbImpl.PN_SHOW_HIDDEN, false
         );
         checkBreadcrumbConsistency(breadcrumb, new String[]{"Devi Sleeveless Shirt"});
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_5));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_5));
     }
 
     @Test
-    void testV2JSONExporter() {
+    protected void testV2JSONExporter() {
         Breadcrumb breadcrumb = getBreadcrumbUnderTest(BREADCRUMB_6);
-        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(TEST_BASE, BREADCRUMB_6));
+        Utils.testJSONExport(breadcrumb, Utils.getTestExporterJSONPath(testBase, BREADCRUMB_6));
     }
 
-    private void checkBreadcrumbConsistency(Breadcrumb breadcrumb, String[] expectedPages) {
+    protected void checkBreadcrumbConsistency(Breadcrumb breadcrumb, String[] expectedPages) {
         assertEquals("Expected that the returned breadcrumb will contain " + expectedPages.length + " items", breadcrumb.getItems().size(),
                 expectedPages.length);
         int index = 0;
@@ -104,7 +111,7 @@ class BreadcrumbImplTest {
         }
     }
 
-    private Breadcrumb getBreadcrumbUnderTest(String resourcePath, Object... properties) {
+    protected Breadcrumb getBreadcrumbUnderTest(String resourcePath, Object... properties) {
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);

@@ -15,6 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +28,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockRequestPathInfo;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,17 +45,15 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
+import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SearchResultServletTest {
@@ -79,7 +82,6 @@ public class SearchResultServletTest {
 
     private static final String TEST_ROOT_EN = "/content/en/search/page";
     private static final String TEST_TEMPLATE_EN = "/content/en/search/page-template";
-    private static final String TEST_ROOT_DE = "/content/de";
 
     @Before
     public void setUp() throws Exception {
@@ -104,7 +106,7 @@ public class SearchResultServletTest {
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
-                        "url", "null/content/en/search/page.html",
+                        "url", "/content/en/search/page.html",
                         "title", "Page"
                 )
         );
@@ -123,7 +125,7 @@ public class SearchResultServletTest {
         underTest.doGet(request, context.response());
         List<Map<String, String>> expected = ImmutableList.of(
                 ImmutableMap.of(
-                        "url", "null/content/en/search/page-template.html",
+                        "url", "/content/en/search/page-template.html",
                         "title", "Page"
                 )
         );
@@ -131,6 +133,7 @@ public class SearchResultServletTest {
         validateResponse(context.response(), expected);
     }
 
+    @SuppressWarnings("deprecation")
     private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SimpleAbstractTypeResolver resolver = new SimpleAbstractTypeResolver();
@@ -151,6 +154,7 @@ public class SearchResultServletTest {
     }
 
     private static class Item implements ListItem {
+        private Link link;
         private String url;
         private String title;
         private String path;
@@ -159,6 +163,11 @@ public class SearchResultServletTest {
         private String name;
 
         public Item() {
+        }
+        
+        @Override
+        public @NotNull Link getLink() {
+            return link;
         }
 
         @Nullable
@@ -173,4 +182,34 @@ public class SearchResultServletTest {
             return title;
         }
     }
+
+    private static class Link implements com.adobe.cq.wcm.core.components.commons.link.Link {
+        
+        private boolean valid;
+        private String url;
+        private Map<String,String> htmlAttributes;
+        private Page targetPage;
+
+        @Override
+        public boolean isValid() {
+            return valid;
+        }
+
+        @Override
+        public @Nullable String getURL() {
+            return url;
+        }
+
+        @Override
+        public @NotNull Map<String, String> getHtmlAttributes() {
+            return htmlAttributes;
+        }
+
+        @Override
+        public @Nullable Page getTargetPage() {
+            return targetPage;
+        }
+        
+    }
+    
 }

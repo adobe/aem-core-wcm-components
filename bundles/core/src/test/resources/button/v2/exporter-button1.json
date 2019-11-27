@@ -1,0 +1,6 @@
+{
+    "text": "Adobe",
+    "buttonLink": { "valid": true, "url": "https://www.adobe.com" },
+    "icon": "adobe",
+    ":type": "core/wcm/components/button/v2/button"
+}

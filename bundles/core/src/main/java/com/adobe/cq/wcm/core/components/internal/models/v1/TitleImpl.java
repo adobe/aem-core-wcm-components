@@ -31,7 +31,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.Heading;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Title;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
@@ -72,13 +74,14 @@ public class TitleImpl implements Title {
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String type;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String linkURL;
+    @Self
+    private LinkHandler linkHandler;
+    protected Link link;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the type of this title.
      */
-    private Utils.Heading heading;
+    private Heading heading;
 
     @PostConstruct
     private void initModel() {
@@ -87,17 +90,13 @@ public class TitleImpl implements Title {
         }
 
         if (heading == null) {
-            heading = Utils.Heading.getHeading(type);
+            heading = Heading.getHeading(type);
             if (heading == null && currentStyle != null) {
-                heading = Utils.Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
+                heading = Heading.getHeading(currentStyle.get(PN_DESIGN_DEFAULT_TYPE, String.class));
             }
         }
 
-        if (StringUtils.isNotEmpty(linkURL)) {
-            linkURL = Utils.getURL(request, pageManager, linkURL);
-        } else {
-            linkURL = null;
-        }
+        link = linkHandler.getLink(resource);
 
         if(currentStyle != null) {
             linkDisabled = currentStyle.get(Title.PN_TITLE_LINK_DISABLED, linkDisabled);
@@ -119,7 +118,7 @@ public class TitleImpl implements Title {
 
     @Override
     public String getLinkURL() {
-        return linkURL;
+        return link.getURL();
     }
 
     @Override

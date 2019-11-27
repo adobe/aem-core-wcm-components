@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -40,7 +41,9 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.Heading;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Teaser;
@@ -64,7 +67,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     private String title;
     private String description;
-    private String linkURL;
     private String titleType;
     private boolean actionsEnabled = false;
     private boolean titleHidden = false;
@@ -95,6 +97,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Self
     private SlingHttpServletRequest request;
 
+    @Self
+    private LinkHandler linkHandler;
+    protected Link link;
+    
     @OSGiService
     private ModelFactory modelFactory;
 
@@ -110,20 +116,24 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
-        linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
 
         if (actionsEnabled) {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            linkURL = null;
+            link = linkHandler.getInvalid();
             populateActions();
             if (actions.size() > 0) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
                     targetPage = pageManager.getPage(firstAction.getPath());
+                    link = linkHandler.getLink(targetPage);
                 }
             }
         } else {
-            targetPage = pageManager.getPage(linkURL);
+            link = linkHandler.getLink(resource);
+            targetPage = link.getTargetPage();
+        }
+        if (link == null) {
+            link = linkHandler.getInvalid();
         }
 
         if (titleHidden) {
@@ -152,7 +162,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
-        if (StringUtils.isEmpty(linkURL)) {
+        if (!link.isValid()) {
             LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
         }
         if (StringUtils.isEmpty(fileReference)) {
@@ -170,9 +180,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
         if (hasImage) {
             setImageResource(component, request.getResource(), hiddenImageResourceProperties);
-        }
-        if (targetPage != null) {
-            linkURL = Utils.getURL(request, targetPage);
         }
     }
 
@@ -196,9 +203,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
             for (Resource actionRes : actionsNode.getChildren()) {
-                actions.add(new Action(actionRes));
+                actions.add(newAction(actionRes));
             }
         }
+    }
+    
+    protected ListItem newAction(Resource actionRes) {
+        return new Action(actionRes);
     }
 
     @Override
@@ -213,7 +224,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getLinkURL() {
-        return linkURL;
+        return link.getURL();
     }
 
     public String getImagePath() {
@@ -259,7 +270,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getTitleType() {
-        Utils.Heading heading = Utils.Heading.getHeading(titleType);
+        Heading heading = Heading.getHeading(titleType);
         if (heading != null) {
             return heading.getElement();
         }
@@ -274,18 +285,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action implements ListItem {
-        ValueMap properties;
-        String title;
-        String url;
-        Page page;
+        private final ValueMap properties;
+        private final String title;
+        protected final Link actionLink;
 
         public Action(Resource actionRes) {
             properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
-            url = properties.get(PN_ACTION_LINK, String.class);
-            if (url != null && url.startsWith("/")) {
-                page = pageManager.getPage(url);
-            }
+            actionLink = linkHandler.getLink(actionRes, PN_ACTION_LINK);
         }
 
         @Nullable
@@ -297,17 +304,20 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Nullable
         @Override
         public String getPath() {
-            return url;
+            Page page = actionLink.getTargetPage();
+            if (page != null) {
+                return page.getPath();
+            }
+            else {
+                // probably would make more sense to return null when not page is target, but we keep this for backward compatibility 
+                return actionLink.getURL();
+            }
         }
 
         @Nullable
         @Override
         public String getURL() {
-            if (page != null) {
-                return Utils.getURL(request, page);
-            } else {
-                return url;
-            }
+            return actionLink.getURL();
         }
 
     }

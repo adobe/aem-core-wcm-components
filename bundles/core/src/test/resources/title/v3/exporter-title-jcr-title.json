@@ -1,0 +1,6 @@
+{
+    "text": "Hello World",
+    "link": { "valid": false },
+    "linkDisabled": false,
+    ":type": "core/wcm/components/title/v3/title"
+}

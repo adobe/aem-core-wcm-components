@@ -27,12 +27,12 @@
                                 </v1>
                             </embed>
                             <title jcr:primaryType="nt:unstructured">
-                                <v2 jcr:primaryType="nt:unstructured">
+                                <v3 jcr:primaryType="nt:unstructured">
                                     <title
-                                        cq:policy="core/wcm/components/title/v2/title/policy_1544759499870"
+                                        cq:policy="core/wcm/components/title/v3/title/policy_1544759499870"
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="wcm/core/components/policies/mapping"/>
-                                </v2>
+                                </v3>
                             </title>
                             <text jcr:primaryType="nt:unstructured">
                                 <v2 jcr:primaryType="nt:unstructured">
@@ -43,12 +43,12 @@
                                 </v2>
                             </text>
                             <teaser jcr:primaryType="nt:unstructured">
-                                <v1 jcr:primaryType="nt:unstructured">
+                                <v2 jcr:primaryType="nt:unstructured">
                                     <teaser
-                                        cq:policy="core/wcm/components/teaser/v1/teaser/policy_1547060084604"
+                                        cq:policy="core/wcm/components/teaser/v2/teaser/policy_1547060084604"
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="wcm/core/components/policies/mapping"/>
-                                </v1>
+                                </v2>
                             </teaser>
                             <form jcr:primaryType="nt:unstructured">
                                 <text jcr:primaryType="nt:unstructured">

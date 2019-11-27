@@ -36,7 +36,7 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
         getChildren().forEach(res -> {
-            items.add(new PanelContainerItemImpl(request, res));
+            items.add(new PanelContainerItemImpl(request, res, linkHandler));
         });
         return items;
     }

@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
  * Defines the {@code Button} Sling Model used for the {@code /apps/core/wcm/components/button} component.
@@ -42,8 +43,20 @@ public interface Button extends ComponentExporter {
      * Returns the button link.
      *
      * @return the button link
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     * @since com.adobe.cq.wcm.core.components.models 12.11.0
      */
+    default @NotNull Link getButtonLink() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the button link.
+     *
+     * @return the button link
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     * @deprecated Please use {@link #getButtonLink()}
+     */
+    @Deprecated
     default String getLink() {
         throw new UnsupportedOperationException();
     }

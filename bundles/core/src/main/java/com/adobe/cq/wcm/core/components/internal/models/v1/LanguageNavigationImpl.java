@@ -32,7 +32,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
+import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageFilter;
@@ -60,6 +62,9 @@ public class LanguageNavigationImpl implements LanguageNavigation {
     @ScriptVariable
     private Style currentStyle;
 
+    @Self
+    private LinkHandler linkHandler;
+    
     private String navigationRoot;
     private int structureDepth;
     private Page rootPage;
@@ -112,11 +117,15 @@ public class LanguageNavigationImpl implements LanguageNavigation {
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title));
+                pages.add(newLanguageNavigationItem(page, active, linkHandler, level, children, title));
             }
         }
 
         return pages;
+    }
+    
+    protected LanguageNavigationItem newLanguageNavigationItem(Page page, boolean active, @NotNull LinkHandler linkHandler, int level, List<NavigationItem> children, String title) {
+        return new LanguageNavigationItemImpl(page, active, linkHandler, level, children, title);
     }
 
     private Page getLocalizedPage(Page page, Page languageRoot) {

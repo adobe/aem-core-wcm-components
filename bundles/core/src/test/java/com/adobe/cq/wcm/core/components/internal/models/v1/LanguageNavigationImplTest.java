@@ -34,10 +34,10 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.Assert.assertEquals;
 
 @ExtendWith(AemContextExtension.class)
-class LanguageNavigationImplTest {
+public class LanguageNavigationImplTest {
 
     private static final String TEST_BASE = "/languagenavigation";
-    private static final String CONTEXT_PATH = "/core";
+    protected static final String CONTEXT_PATH = "/core";
     private static final String NAVIGATION_ROOT = "/content/languagenavigation";
     private static final Object[][] EXPECTED_PAGES_DEPTH_1 = {
             {"/content/languagenavigation/LOCALE-1/LOCALE-5/about", "LOCALE 1", true, 0, "US", "en-US",
@@ -70,55 +70,64 @@ class LanguageNavigationImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
+    protected String testBase;
+    protected String resourceType;
+
     @BeforeEach
-    void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
-        context.load().json("/languagenavigation/test-conf.json", "/conf");
+    protected void setUp() {
+        testBase = TEST_BASE;
+        resourceType = LanguageNavigationImpl.RESOURCE_TYPE;
+        internalSetup();
+    }
+
+    protected void internalSetup() {
+        context.load().json(testBase + CoreComponentTestContext.TEST_CONTENT_JSON, "/content");
+        context.load().json(testBase + "/test-conf.json", "/conf");
     }
 
     @Test
-    void testLanguageNavigationItems() {
+    protected void testLanguageNavigationItems() {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
                 NAVIGATION_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-1");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         verifyLanguageNavigationItems(EXPECTED_PAGES_DEPTH_1, items);
-        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation1"));
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation1"));
 
     }
 
     @Test
-    void testLanguageNavigationItemsStructureDepth() {
+    protected void testLanguageNavigationItemsStructureDepth() {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
                 NAVIGATION_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-2");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         verifyLanguageNavigationItems(EXPECTED_PAGES_DEPTH_2, items);
-        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation2"));
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation2"));
     }
 
     @Test
-    void testLanguageNavigationItemsStructureDepthContentPolicy() {
-        context.contentPolicyMapping(LanguageNavigationImpl.RESOURCE_TYPE,
+    protected void testLanguageNavigationItemsStructureDepthContentPolicy() {
+        context.contentPolicyMapping(resourceType,
                 "siteRoot", "/content/languagenavigation",
                 "structureDepth", 2);
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
                 NAVIGATION_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-3");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
         verifyLanguageNavigationItems(EXPECTED_PAGES_DEPTH_2, items);
-        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation2"));
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation2"));
 
     }
 
     @Test
-    void testLanguageNavigationItemsNoRoot() {
+    protected void testLanguageNavigationItemsNoRoot() {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
                 NAVIGATION_ROOT + "/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-4");
         assertEquals("Didn't expect any language navigation items.", 0, languageNavigation.getItems().size());
-        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(TEST_BASE, "languagenavigation3"));
+        Utils.testJSONExport(languageNavigation, Utils.getTestExporterJSONPath(testBase, "languagenavigation3"));
 
     }
 
     @Test
-    void testLanguageNavigationItemsOnTemplate() {
+    protected void testLanguageNavigationItemsOnTemplate() {
         LanguageNavigation languageNavigation = getLanguageNavigationUnderTest(
                 "/conf/coretest/settings/wcm/templates/template-1/structure/jcr:content/root/languagenavigation");
         List<NavigationItem> items = getLanguageNavigationItems(languageNavigation);
@@ -144,14 +153,14 @@ class LanguageNavigationImplTest {
 
     }
 
-    private LanguageNavigation getLanguageNavigationUnderTest(String resourcePath) {
+    protected  LanguageNavigation getLanguageNavigationUnderTest(String resourcePath) {
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath(CONTEXT_PATH);
         return request.adaptTo(LanguageNavigation.class);
     }
 
-    private List<NavigationItem> getLanguageNavigationItems(LanguageNavigation languageNavigation) {
+    protected  List<NavigationItem> getLanguageNavigationItems(LanguageNavigation languageNavigation) {
         List<NavigationItem> items = new ArrayList<>();
         for (NavigationItem item : languageNavigation.getItems()) {
             collect(items, item);
@@ -159,35 +168,40 @@ class LanguageNavigationImplTest {
         return items;
     }
 
-    private void collect(List<NavigationItem> items, NavigationItem navigationItem) {
+    protected  void collect(List<NavigationItem> items, NavigationItem navigationItem) {
         items.add(navigationItem);
         for (NavigationItem item : navigationItem.getChildren()) {
             collect(items, item);
         }
     }
 
-    private void verifyLanguageNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
+    protected void verifyLanguageNavigationItems(Object[][] expectedPages, List<NavigationItem> items) {
         assertEquals("The language navigation items contain a different number of pages than expected.", expectedPages.length,
                 items.size());
         int index = 0;
         while (items.size() > index) {
             LanguageNavigationItem item = (LanguageNavigationItem) items.get(index);
-            assertEquals("The language navigation items don't seem to have the correct order.", expectedPages[index][0], item.getPath());
-            assertEquals("The language navigation item's title is not what was expected: " + item.getPath(), expectedPages[index][1],
-                    item.getTitle());
-            assertEquals("The language navigation item's active state is not what was expected: " + item.getPath(), expectedPages[index][2],
-                    item.isActive());
-            assertEquals("The language navigation item's level is not what was expected: " + item.getPath(), expectedPages[index][3],
-                    item.getLevel());
-            assertEquals("The language navigation item's country is not what was expected: " + item.getPath(), expectedPages[index][4],
-                    item.getCountry());
-            assertEquals("The language navigation item's language is not what was expected: " + item.getPath(), expectedPages[index][5],
-                    item.getLanguage());
-            assertEquals("The language navigation item's locale is not what was expected: " + item.getPath(), expectedPages[index][5],
-                    item.getLocale().toString().replace('_', '-'));
-            assertEquals("The language navigation item's URL is not what was expected: " + item.getPath(),
-                    CONTEXT_PATH + expectedPages[index][6], item.getURL());
+            verifyLanguageNavigationItem(expectedPages[index], item);
             index++;
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    protected void verifyLanguageNavigationItem(Object[] expectedPage, LanguageNavigationItem item) {
+        assertEquals("The language navigation items don't seem to have the correct order.", expectedPage[0], item.getPath());
+        assertEquals("The language navigation item's title is not what was expected: " + item.getPath(), expectedPage[1],
+                item.getTitle());
+        assertEquals("The language navigation item's active state is not what was expected: " + item.getPath(), expectedPage[2],
+                item.isActive());
+        assertEquals("The language navigation item's level is not what was expected: " + item.getPath(), expectedPage[3],
+                item.getLevel());
+        assertEquals("The language navigation item's country is not what was expected: " + item.getPath(), expectedPage[4],
+                item.getCountry());
+        assertEquals("The language navigation item's language is not what was expected: " + item.getPath(), expectedPage[5],
+                item.getLanguage());
+        assertEquals("The language navigation item's locale is not what was expected: " + item.getPath(), expectedPage[5],
+                item.getLocale().toString().replace('_', '-'));
+        assertEquals("The language navigation item's URL is not what was expected: " + item.getPath(),
+                CONTEXT_PATH + expectedPage[6], item.getURL());
     }
 }

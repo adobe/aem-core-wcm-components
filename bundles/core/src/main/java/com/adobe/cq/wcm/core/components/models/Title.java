@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
 
 /**
  * Defines the {@code Title} Sling Model used for the {@code /apps/core/wcm/components/title} component.
@@ -65,11 +66,24 @@ public interface Title extends ComponentExporter {
     }
 
     /**
+     * Returns the Title's link.
+     *
+     * @return the title's link
+     * @since com.adobe.cq.wcm.core.components.models 12.11.0
+     */
+    @NotNull
+    default Link getLink() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the Title's link URL, if one was set.
      *
      * @return the title's link URL, if one was set, or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     * @deprecated Please use {@link #getLink()}
      */
+    @Deprecated
     default String getLinkURL() {
         throw new UnsupportedOperationException();
     }

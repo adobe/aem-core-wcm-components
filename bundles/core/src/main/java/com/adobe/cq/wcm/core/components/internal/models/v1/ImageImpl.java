@@ -20,6 +20,7 @@ import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -49,7 +50,8 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.commons.DownloadResource;
@@ -107,8 +109,9 @@ public class ImageImpl implements Image {
     @ValueMapValue(name = JcrConstants.JCR_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
     protected String title;
 
-    @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String linkURL;
+    @Self
+    protected LinkHandler linkHandler;
+    protected Link link;
 
     protected String src;
     protected String[] smartImages = new String[]{};
@@ -235,11 +238,9 @@ public class ImageImpl implements Image {
             src += (inTemplate ? Text.escapePath(templateRelativePath) : "") + (lastModifiedDate > 0 ? ("/" + lastModifiedDate +
                 (StringUtils.isNotBlank(imageName) ? ("/" + imageName): "") + DOT + extension) : "");
             if (!isDecorative) {
-                if (StringUtils.isNotEmpty(linkURL)) {
-                    linkURL = Utils.getURL(request, pageManager, linkURL);
-                }
+                link = linkHandler.getLink(resource);
             } else {
-                linkURL = null;
+                link = linkHandler.getInvalid();
                 alt = null;
             }
             buildJson();
@@ -306,7 +307,7 @@ public class ImageImpl implements Image {
 
     @Override
     public String getLink() {
-        return linkURL;
+        return link.getURL();
     }
 
     @Override

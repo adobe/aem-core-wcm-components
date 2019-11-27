@@ -42,6 +42,8 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.jackson.DefaultMethodSkippingModuleProvider;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -121,6 +123,9 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         ObjectMapper mapper = new ObjectMapper();
+        // ignore unimplemented default methods when serializing to JSON
+        DefaultMethodSkippingModuleProvider defaultMethodSkippingModuleProvider = new DefaultMethodSkippingModuleProvider();
+        mapper.registerModule(defaultMethodSkippingModuleProvider.getModule());
         try {
             mapper.writeValue(response.getWriter(), results);
         } catch (IOException e) {
@@ -199,6 +204,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
         }
         SearchResult searchResult = query.getResult();
 
+        LinkHandler linkHandler = request.adaptTo(LinkHandler.class);
         List<Hit> hits = searchResult.getHits();
         if (hits != null) {
             for (Hit hit : hits) {
@@ -206,7 +212,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                     Resource hitRes = hit.getResource();
                     Page page = getPage(hitRes);
                     if (page != null) {
-                        results.add(new PageListItemImpl(request, page));
+                        results.add(new PageListItemImpl(linkHandler, page));
                     }
                 } catch (RepositoryException e) {
                     LOGGER.error("Unable to retrieve search results for query.", e);

@@ -21,7 +21,7 @@
                                     assetGroup="media"
                                     assetMimetype="image/*"
                                     droptarget="image"
-                                    resourceType="core/wcm/components/image/v2/image"/>
+                                    resourceType="core/wcm/components/image/v3/image"/>
                             </assetToComponentMapping>
                         </cq:authoring>
                         <jcr:content
@@ -44,7 +44,7 @@
                                     assetGroup="media"
                                     assetMimetype="image/*"
                                     droptarget="image"
-                                    resourceType="core/wcm/components/image/v2/image"/>
+                                    resourceType="core/wcm/components/image/v3/image"/>
                             </assetToComponentMapping>
                         </cq:authoring>
                         <cq:styleGroups jcr:primaryType="nt:unstructured">
@@ -99,7 +99,7 @@
                     </v1>
                 </embed>
                 <title jcr:primaryType="nt:unstructured">
-                    <v2 jcr:primaryType="nt:unstructured">
+                    <v3 jcr:primaryType="nt:unstructured">
                         <title jcr:primaryType="nt:unstructured">
                             <policy_1544759499870
                                 jcr:lastModified="{Date}2018-12-20T19:58:20.742Z"
@@ -136,10 +136,7 @@
                                 </cq:styleGroups>
                             </policy_1544759499870>
                         </title>
-                    </v2>
-                    <v1 jcr:primaryType="nt:unstructured">
-                        <title jcr:primaryType="nt:unstructured"/>
-                    </v1>
+                    </v3>
                 </title>
                 <text jcr:primaryType="nt:unstructured">
                     <v2 jcr:primaryType="nt:unstructured">
@@ -292,7 +289,7 @@
                     </v2>
                 </text>
                 <teaser jcr:primaryType="nt:unstructured">
-                    <v1 jcr:primaryType="nt:unstructured">
+                    <v2 jcr:primaryType="nt:unstructured">
                         <teaser jcr:primaryType="nt:unstructured">
                             <policy_1547060084604
                                 jcr:lastModified="{Date}2019-01-09T19:55:10.729+01:00"
@@ -321,7 +318,7 @@
                                 </cq:styleGroups>
                             </policy_1547060084604>
                         </teaser>
-                    </v1>
+                    </v2>
                 </teaser>
                 <form jcr:primaryType="nt:unstructured">
                     <text jcr:primaryType="nt:unstructured">

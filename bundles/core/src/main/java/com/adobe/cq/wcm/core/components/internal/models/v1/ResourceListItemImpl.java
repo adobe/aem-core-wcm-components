@@ -21,24 +21,24 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.commons.link.Link;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ResourceListItemImpl implements ListItem {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceListItemImpl.class);
-
-    protected String url;
+    protected Link link;
     protected String title;
     protected String description;
     protected Calendar lastModified;
     protected String path;
     protected String name;
 
-    public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
+    public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource,
+            @NotNull LinkHandler linkHandler) {
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
@@ -47,12 +47,20 @@ public class ResourceListItemImpl implements ListItem {
         }
         path = resource.getPath();
         name = resource.getName();
-        url = null;
+        link = linkHandler.getInvalid();
+    }
+    
+    @Override
+    @NotNull
+    @JsonIgnore
+    public Link getLink() {
+        return link;
     }
 
     @Override
+    @JsonIgnore
     public String getURL() {
-        return url;
+        return link.getURL();
     }
 
     @Override

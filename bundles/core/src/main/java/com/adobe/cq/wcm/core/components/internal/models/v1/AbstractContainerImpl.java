@@ -38,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.internal.link.LinkHandler;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.components.Component;
@@ -55,6 +56,9 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     @Self
     protected SlingHttpServletRequest request;
 
+    @Self
+    protected LinkHandler linkHandler;
+    
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
     protected Style currentStyle;
@@ -139,7 +143,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
         getChildren().forEach(res -> {
-            items.add(new ResourceListItemImpl(request, res));
+            items.add(new ResourceListItemImpl(request, res, linkHandler));
         });
         return items;
     }

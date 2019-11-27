@@ -24,7 +24,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Image&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Image&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -45,7 +45,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core/wcm/components/teaser/v2/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
@@ -61,7 +61,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core/wcm/components/teaser/v2/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
@@ -76,7 +76,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -86,7 +86,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -113,7 +113,7 @@
                             jcr:lastModified="{Date}2019-01-22T18:31:15.058+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/image/v2/image"
+                            sling:resourceType="core/wcm/components/image/v3/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
                             fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
@@ -148,7 +148,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Caption"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337505101
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -175,7 +175,7 @@
                             jcr:lastModified="{Date}2018-12-07T12:48:48.962+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/image/v2/image"
+                            sling:resourceType="core/wcm/components/image/v3/image"
                             altValueFromDAM="true"
                             displayPopupTitle="false"
                             fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
@@ -210,7 +210,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Linked"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337505103
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -237,7 +237,7 @@
                             jcr:lastModified="{Date}2019-01-22T18:31:25.860+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/image/v2/image"
+                            sling:resourceType="core/wcm/components/image/v3/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
                             fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
@@ -273,7 +273,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="SVG and GIF Images"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337505105
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -300,7 +300,7 @@
                             jcr:lastModified="{Date}2019-01-22T18:30:58.321+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/image/v2/image"
+                            sling:resourceType="core/wcm/components/image/v3/image"
                             altValueFromDAM="true"
                             displayPopupTitle="true"
                             fileReference="/content/dam/core-components-examples/library/components/component.svg"

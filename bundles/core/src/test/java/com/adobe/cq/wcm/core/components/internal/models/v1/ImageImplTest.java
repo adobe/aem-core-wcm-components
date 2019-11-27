@@ -41,19 +41,20 @@ public class ImageImplTest extends AbstractImageTest {
     protected static String ASSET_NAME = "adobe-systems-logo-and-wordmark";
 
     protected String testBase = TEST_BASE;
+    protected String resourceType = ImageImpl.RESOURCE_TYPE;
     protected String selector = SELECTOR;
     protected int jpegQuality = JPEG_QUALITY;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
         internalSetUp(testBase);
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    void testImageWithTwoOrMoreSmartSizes() {
+    protected void testImageWithTwoOrMoreSmartSizes() {
         String escapedResourcePath = IMAGE0_PATH.replace("jcr:content", "_jcr_content");
-        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+        context.contentPolicyMapping(resourceType,
                 "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
         Image image = getImageUnderTest(IMAGE0_PATH);
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
@@ -74,9 +75,9 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    void testImageWithOneSmartSize() {
+    protected void testImageWithOneSmartSize() {
         String escapedResourcePath = IMAGE3_PATH.replace("jcr:content", "_jcr_content");
-        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+        context.contentPolicyMapping(resourceType,
                 "allowedRenditionWidths", new int[]{600}, "disableLazyLoading", true);
         Image image = getImageUnderTest(IMAGE3_PATH);
         assertEquals(IMAGE_TITLE_ALT, image.getAlt());
@@ -93,7 +94,7 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    void testSimpleDecorativeImage() {
+    protected void testSimpleDecorativeImage() {
         String escapedResourcePath = IMAGE4_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE4_PATH);
         assertNull("Did not expect a value for the alt attribute, since the image is marked as decorative.", image.getAlt());
@@ -109,8 +110,8 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    void testExtensionDeterminedFromMimetype() {
-        context.contentPolicyMapping(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.RESOURCE_TYPE,
+    protected void testExtensionDeterminedFromMimetype() {
+        context.contentPolicyMapping(resourceType,
                 "allowedRenditionWidths", new int[]{128,256,512,1024,1280,1440,1920,2048},
                 "uuidDisabled", true,
                 "disableLazyLoading", false);
@@ -121,8 +122,8 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    void testImageCacheKiller() {
-        context.contentPolicyMapping(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.RESOURCE_TYPE,
+    protected void testImageCacheKiller() {
+        context.contentPolicyMapping(resourceType,
                 "uuidDisabled", true);
         String escapedResourcePath = IMAGE15_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE15_PATH);
@@ -131,8 +132,8 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    void testTIFFImage() {
-        context.contentPolicyMapping(com.adobe.cq.wcm.core.components.internal.models.v2.ImageImpl.RESOURCE_TYPE,
+    protected void testTIFFImage() {
+        context.contentPolicyMapping(resourceType,
                 "uuidDisabled", true);
         String escapedResourcePath = IMAGE16_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE16_PATH);
@@ -141,14 +142,14 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     @Test
-    void testExportedType() {
+    protected void testExportedType() {
         Image image = getImageUnderTest(IMAGE0_PATH);
-        assertEquals(ImageImpl.RESOURCE_TYPE, (image).getExportedType());
+        assertEquals(resourceType, (image).getExportedType());
     }
 
     @Test
     @SuppressWarnings("deprecation")
-    void testImageFromTemplateStructure() {
+    protected void testImageFromTemplateStructure() {
         context.contentPolicyMapping("core/wcm/components/image",
                 "allowedRenditionWidths", new int[]{600, 700, 800, 2000, 2500});
         Image image = getImageUnderTest(TEMPLATE_IMAGE_PATH);
@@ -176,8 +177,8 @@ public class ImageImplTest extends AbstractImageTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    void testLocalFileWithoutFileNameParameter() {
-        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE,
+    protected void testLocalFileWithoutFileNameParameter() {
+        context.contentPolicyMapping(resourceType,
                 "allowedRenditionWidths", new int[]{600}, "disableLazyLoading", true);
         String escapedResourcePath = IMAGE27_PATH.replace("jcr:content", "_jcr_content");
         Image image = getImageUnderTest(IMAGE27_PATH);

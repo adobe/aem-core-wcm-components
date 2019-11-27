@@ -1,0 +1,6 @@
+{
+    "type": "h2",
+    "link": { "valid": false },
+    "linkDisabled": false,
+    ":type": "core/wcm/components/title/v3/title"
+}

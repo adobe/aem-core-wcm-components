@@ -1,0 +1,5 @@
+{
+    "link": { "valid": true, "url": "https://www.adobe.com" },
+    "linkDisabled": true,
+    ":type": "core/wcm/components/title/v3/title"
+}

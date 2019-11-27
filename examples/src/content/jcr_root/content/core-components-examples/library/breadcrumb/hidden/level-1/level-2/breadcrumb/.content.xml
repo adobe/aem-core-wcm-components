@@ -25,7 +25,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Breadcrumb&lt;sub>v2&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Breadcrumb&lt;sub>v3&lt;/sub>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -46,11 +46,11 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core/wcm/components/teaser/v2/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v3/breadcrumb"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -62,7 +62,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core/wcm/components/teaser/v2/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
@@ -77,7 +77,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h2"/>
                 <title_290384408
                     cq:styleIds="[1544759676459]"
@@ -87,7 +87,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Standard"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -114,7 +114,7 @@
                             jcr:lastModified="{Date}2019-05-21T10:21:29.728+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core/wcm/components/breadcrumb/v3/breadcrumb"
                             hideCurrent="false"
                             showHidden="false"
                             startLevel="2"/>
@@ -147,7 +147,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Navigation Start Level"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337506761_copy_1034941677
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -174,7 +174,7 @@
                             jcr:lastModified="{Date}2019-05-21T10:21:36.131+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core/wcm/components/breadcrumb/v3/breadcrumb"
                             hideCurrent="false"
                             showHidden="false"
                             startLevel="3"/>
@@ -207,7 +207,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Show Hidden Navigation Items"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337506761_copy_1888023046
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -234,7 +234,7 @@
                             jcr:lastModified="{Date}2019-05-21T10:22:19.080+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core/wcm/components/breadcrumb/v3/breadcrumb"
                             hideCurrent="false"
                             showHidden="true"
                             startLevel="2"/>
@@ -267,7 +267,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Hide Current Page"
-                    sling:resourceType="core/wcm/components/title/v2/title"
+                    sling:resourceType="core/wcm/components/title/v3/title"
                     type="h3"/>
                 <text_1337506761_copy_1888023047
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
@@ -294,7 +294,7 @@
                             jcr:lastModified="{Date}2019-05-21T15:14:14.179+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core/wcm/components/breadcrumb/v3/breadcrumb"
                             hideCurrent="true"
                             showHidden="false"
                             startLevel="2"/>

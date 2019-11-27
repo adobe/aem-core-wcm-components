@@ -1,0 +1,37 @@
+{
+    "dateFormatString"    : "yyyy-MM-dd",
+    "items"               : [
+        {
+            "link"       : { "valid": true, "url": "/content/list/pages/page_1/page_1_1.html" },
+            "path"       : "/content/list/pages/page_1/page_1_1",
+            "description": null,
+            "lastModified": null,
+            "title"      : "Page 1.1"
+        },
+        {
+            "link"       : { "valid": true, "url": "/content/list/pages/page_1/page_1_2.html" },
+            "path"       : "/content/list/pages/page_1/page_1_2",
+            "description": null,
+            "lastModified": null,
+            "title"      : "Page 1.2"
+        },
+        {
+            "link"       : { "valid": true, "url": "/content/list/pages/page_1/page_1_2/page_1_2_1.html" },
+            "path"       : "/content/list/pages/page_1/page_1_2/page_1_2_1",
+            "description": null,
+            "lastModified": null,
+            "title"      : "Page 1.2.1"
+        },
+        {
+            "link"       : { "valid": true, "url": "/content/list/pages/page_1/page_1_3.html" },
+            "path"       : "/content/list/pages/page_1/page_1_3",
+            "description": null,
+            "lastModified": null,
+            "title"      : "Page 1.3"
+        }
+    ],
+    "showDescription"     : false,
+    "showModificationDate": false,
+    "linkItems"           : false,
+    ":type"               : "core/wcm/components/list/v3/list"
+}
