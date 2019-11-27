@@ -84,13 +84,6 @@ required to enable social sharing. It should be added to a relevant site client 
 It also provides a `core.wcm.components.page.v1.editor` editor client library category that includes
 JavaScript handling for dialog interaction. It is already included by its edit dialog.
 
-## Client Libraries
-The component provides a `core.wcm.components.page.v1.sharing` client library category that contains the JavaScript
-required to enable social sharing. It should be added to a relevant site client library using the `embed` property.
-
-It also provides a `core.wcm.components.page.v1.editor` editor client library category that includes
-JavaScript handling for dialog interaction. It is already included by its edit dialog.
-
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
