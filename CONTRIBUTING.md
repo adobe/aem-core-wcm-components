@@ -12,7 +12,7 @@ The following are a set of guidelines for contributing to the project.
   * [Submitting Features](#submitting-features-) 🚀
   * [Reviewing Code](#reviewing-code-) 👀
   * [Documenting](#documenting-) 📜
-  * [Questions or Enhancement Requests](#questions-or-enhancement-requests-) 💭
+  * [Questions and Enhancement Requests](#questions-and-enhancement-requests-) 💭
 * [Contributing Code](#contributing-code)
 * [Issue Report Guidelines](#issue-report-guidelines)
 * [Contributor License Agreement](#contributor-license-agreement)
@@ -62,6 +62,7 @@ We very much welcome issue reports or pull requests that improve our documentati
 ### Questions and Enhancement Requests
 
 If you have questions about Core Components functionality or would like to submit a feature request or enhancement suggestions, we recommend posting them to the [Core Components Developer Mailing List](https://groups.google.com/forum/#!forum/aem-core-components-dev).
+
 You can also add your voice to discussions around new and existing component features by commenting on an RTC. New components and features that openly invite public comment are marked by an [RTC](https://github.com/adobe/aem-core-wcm-components/labels/rtc) (Request to Comment) label.
 
 ## Contributing Code 👾 
