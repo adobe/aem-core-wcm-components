@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.xf.ExperienceFragmentVariation;
 import com.adobe.cq.xf.ExperienceFragmentsConstants;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
@@ -43,6 +45,7 @@ import com.day.cq.wcm.msm.api.LiveCopy;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.day.text.Text;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {ExperienceFragment.class, ComponentExporter.class },
@@ -83,6 +86,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private LiveRelationshipManager relationshipManager;
 
     private String localizedFragmentVariationPath;
+    private String name;
 
     @PostConstruct
     protected void initModel() {
@@ -96,6 +100,20 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 localizedFragmentVariationPath = StringUtils.join(localizedXfRootPath, xfRelativePath, JCR_CONTENT_ROOT);
             }
         }
+
+        PageManager pageManager = resolver.adaptTo(PageManager.class);
+        if (pageManager != null) {
+            Page page = pageManager.getPage(fragmentVariationPath);
+            if (page != null) {
+                ExperienceFragmentVariation variation = page.adaptTo(ExperienceFragmentVariation.class);
+                if (variation != null) {
+                    com.adobe.cq.xf.ExperienceFragment parent = variation.getParent();
+                    String parentPath = parent.getPath();
+                    name = ResourceUtil.getName(parentPath);
+                }
+            }
+        }
+
         String xfContentPath = StringUtils.join(fragmentVariationPath, JCR_CONTENT_ROOT);
         if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
             localizedFragmentVariationPath = xfContentPath;
@@ -108,6 +126,12 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Override
     public String getLocalizedFragmentVariationPath() {
         return localizedFragmentVariationPath;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getName() {
+        return name;
     }
 
     @NotNull
