@@ -39,6 +39,7 @@ import com.adobe.cq.xf.ExperienceFragmentVariation;
 import com.adobe.cq.xf.ExperienceFragmentsConstants;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.msm.api.LiveCopy;
