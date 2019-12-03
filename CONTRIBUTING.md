@@ -13,7 +13,7 @@ The following are a set of guidelines for contributing to the project.
   * [Reviewing Code](#reviewing-code-) 👀
   * [Documenting](#documenting-) 📜
   * [Questions and Enhancement Requests](#questions-and-enhancement-requests-) 💭
-* [Contributing Code](#contributing-code)
+* [Contributing Code](#contributing-code-)
 * [Issue Report Guidelines](#issue-report-guidelines)
 * [Contributor License Agreement](#contributor-license-agreement)
 
@@ -43,13 +43,14 @@ Once a contribution is being reviewed, the Core Engineering Team will apply a re
 1. Thanks for the report! The committers will get back to you in a timely manner, typically within one week.
 
 #### Fixing a Bug
-If you have a fix ready for a bug, submit a [pull request](#contributing-code) and reference it in the associated issue.
+If you have a fix ready for a bug, submit a [pull request](#contributing-code-) and reference it in the associated issue.
 
 ### Submitting Features 🚀
+**Please Note**: New experimental components features should always go to [aem-core-wcm-component-contrib]("") repository by default. All feature submissions should be accompanied by a [pull request]("#contributing-code-")
+
 * Have a quick search through the currently open [enhancement](https://github.com/adobe/aem-core-wcm-components/labels/enhancement) and [request to comment](https://github.com/adobe/aem-core-wcm-components/labels/rtc) issues to see if the idea has already been suggested. If it has, you may still have a slightly different requirement that isn't covered, in which case, feel free to comment on the open issue. 
 * Take a look at the [Core Components Roadmap](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) to see if your feature is already on the radar. If it is and doesn't have a public issue yet, feel free to create one, listing your own requirements.
 * Consider whether your requirement is generically useful rather than project-specific and would therefore benefit all users of the Core Components.
-**Please Note**: New components and experimental features should go to [aem-core-wcm-component-contrib]("") repository by default.
 
 ### Reviewing Code 👀
 
