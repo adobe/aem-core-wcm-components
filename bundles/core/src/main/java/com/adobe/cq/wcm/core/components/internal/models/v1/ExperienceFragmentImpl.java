@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -35,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
-import com.adobe.cq.xf.ExperienceFragmentVariation;
 import com.adobe.cq.xf.ExperienceFragmentsConstants;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
@@ -104,13 +102,11 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
 
         PageManager pageManager = resolver.adaptTo(PageManager.class);
         if (pageManager != null) {
-            Page page = pageManager.getPage(fragmentVariationPath);
-            if (page != null) {
-                ExperienceFragmentVariation variation = page.adaptTo(ExperienceFragmentVariation.class);
-                if (variation != null) {
-                    com.adobe.cq.xf.ExperienceFragment parent = variation.getParent();
-                    String parentPath = parent.getPath();
-                    name = ResourceUtil.getName(parentPath);
+            Page xfVariationPage = pageManager.getPage(fragmentVariationPath);
+            if (xfVariationPage != null) {
+                Page xfPage = xfVariationPage.getParent();
+                if (xfPage != null) {
+                    name = xfPage.getName();
                 }
             }
         }
