@@ -37,12 +37,14 @@ import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.xf.ExperienceFragmentsConstants;
 import com.day.cq.wcm.api.LanguageManager;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.WCMException;
 import com.day.cq.wcm.msm.api.LiveCopy;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.day.text.Text;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {ExperienceFragment.class, ComponentExporter.class },
@@ -83,6 +85,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private LiveRelationshipManager relationshipManager;
 
     private String localizedFragmentVariationPath;
+    private String name;
 
     @PostConstruct
     protected void initModel() {
@@ -96,6 +99,18 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
                 localizedFragmentVariationPath = StringUtils.join(localizedXfRootPath, xfRelativePath, JCR_CONTENT_ROOT);
             }
         }
+
+        PageManager pageManager = resolver.adaptTo(PageManager.class);
+        if (pageManager != null) {
+            Page xfVariationPage = pageManager.getPage(fragmentVariationPath);
+            if (xfVariationPage != null) {
+                Page xfPage = xfVariationPage.getParent();
+                if (xfPage != null) {
+                    name = xfPage.getName();
+                }
+            }
+        }
+
         String xfContentPath = StringUtils.join(fragmentVariationPath, JCR_CONTENT_ROOT);
         if (!resourceExists(localizedFragmentVariationPath) && resourceExists(xfContentPath)) {
             localizedFragmentVariationPath = xfContentPath;
@@ -108,6 +123,12 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     @Override
     public String getLocalizedFragmentVariationPath() {
         return localizedFragmentVariationPath;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getName() {
+        return name;
     }
 
     @NotNull

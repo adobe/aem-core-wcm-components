@@ -77,8 +77,11 @@ public abstract class AbstractContentFragmentTest<T> {
     static final String TITLE = "Test Content Fragment";
     static final String DESCRIPTION = "This is a test content fragment.";
     static final String TEXT_ONLY_TYPE = "/content/dam/contentfragments/text-only/jcr:content/model";
+    static final String TEXT_ONLY_NAME = "text-only";
     static final String STRUCTURED_TYPE = "global/models/test";
+    static final String STRUCTURED_NAME = "structured";
     static final String STRUCTURED_TYPE_NESTED = "global/nested/models/test";
+    static final String STRUCTURED_NESTED_NAME = "structured-nested-model";
     static final String[] ASSOCIATED_CONTENT = new String[]{"/content/dam/collections/X/X7v6pJAcy5qtkUdXdIxR/test"};
 
     static final MockElement MAIN = new MockElement("main", "Main", "text/html",

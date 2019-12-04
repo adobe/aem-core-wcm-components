@@ -15,7 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
 <template data-sly-template.contentFragment="${@ fragment='The content fragment', fragmentPath='', wcmmode='WCM mode'}">
-    <article class="cmp-contentfragment"
+    <article class="cmp-contentfragment cmp-contentfragment--${fragment.name}"
              data-cmp-contentfragment-model="${fragment.type}"
              data-sly-attribute.data-cmp-contentfragment-path="${fragmentPath}"
              data-json="${!wcmmode.disabled && fragment.editorJSON}">
