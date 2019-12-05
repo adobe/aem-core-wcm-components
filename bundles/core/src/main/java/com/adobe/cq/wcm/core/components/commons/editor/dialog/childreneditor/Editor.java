@@ -63,7 +63,7 @@ public class Editor {
             container = resolver.getResource(containerPath);
             if (container != null) {
                 ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
-                if(componentManager != null){
+                if (componentManager != null){
                     for (Resource resource : container.getChildren()) {
                         if (resource != null) {
                             Component component = componentManager.getComponentOfResource(resource);

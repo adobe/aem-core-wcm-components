@@ -61,7 +61,7 @@
                                             <structureStart
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                                fieldDescription="The levels below navigation root that are to be excluded. To include navigation root enter 0."
+                                                fieldDescription="The levels below the navigation root that are to be excluded. To include the navigation root, enter 0."
                                                 fieldLabel="Exclude Root Levels"
                                                 max="100"
                                                 min="0"
