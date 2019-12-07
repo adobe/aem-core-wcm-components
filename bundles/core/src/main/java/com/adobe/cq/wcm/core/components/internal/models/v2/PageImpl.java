@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 
@@ -200,17 +201,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public String getCanonicalURLOfPage() {
-        String serverName = request.getServerName();
         String requestSelectors = request.getRequestPathInfo().getSelectorString();
         String requestSuffixes = request.getRequestPathInfo().getSuffix();
-        String url;
 
-        if (PageUtils.isServerNameAnIpAddress(serverName) || PageUtils.isServerNameLocalhost(serverName)) {
-            url = request.getRequestURI();
-        } else {
-            url = request.getRequestURL().toString();
-        }
-        return PageUtils.removeSelectorsAndSuffixesFromURL(url, requestSelectors, requestSuffixes);
+        return Optional.of(request.getResourceResolver())
+            .map(rr -> rr.map(request.getRequestURI()))
+            .map(rq -> PageUtils.removeSelectorsAndSuffixesFromURL(rq, requestSelectors, requestSuffixes))
+            .orElse(request.getRequestURI());
     }
 
 }
