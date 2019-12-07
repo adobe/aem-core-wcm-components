@@ -138,8 +138,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
 
     @Test
     void testIPv4AddressPage_withoutSelectorsAndSuffixes() {
-        Page page = new PageImpl();
-        page = getPageUnderTest(PAGE);
+        Page page = getPageUnderTest(PAGE);
         context.request().setServerName("192.168.1.1");
         context.request().setServerPort(4503);
 
@@ -149,8 +148,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
 
     @Test
     void testLocalhostPage_withoutSelectorsAndSuffixes() {
-        Page page = new PageImpl();
-        page = getPageUnderTest(PAGE);
+        Page page = getPageUnderTest(PAGE);
         context.request().setServerName("localhost");
         context.request().setServerPort(4503);
 
@@ -159,18 +157,8 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
     }
 
     @Test
-    void testExternalPage_withoutSelectorsAndSuffixes() {
-        Page page = new PageImpl();
-        page = getPageUnderTest(PAGE);
-        context.request().setServerName("adobe.com");
-
-        assertEquals("http://adobe.com/content/page/templated-page.html", page.getCanonicalURLOfPage());
-    }
-
-    @Test
     void testIPAddressPage_withSelectorsAndSuffixes() {
-        Page page = new PageImpl();
-        page = getPageUnderTest(PAGE);
+        Page page = getPageUnderTest(PAGE);
         context.request().setServerName("192.168.1.1");
         context.request().setServerPort(4503);
         context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
@@ -183,8 +171,7 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
 
     @Test
     void testLocalhostPage_withSelectorsAndSuffixes() {
-        Page page = new PageImpl();
-        page = getPageUnderTest(PAGE);
+        Page page = getPageUnderTest(PAGE);
         context.request().setServerName("localhost");
         context.request().setServerPort(4503);
         context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
@@ -193,29 +180,6 @@ class PageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.P
         assertEquals("http://localhost:4503/content/page/templated-page.s1.s2.s3.s4.html/a/b/3/a/2",
             context.request().getRequestURL().toString());
         assertEquals("/content/page/templated-page.html", page.getCanonicalURLOfPage());
-    }
-
-    @Test
-    void testExternalPage_withSelectorsAndSuffixes() {
-        Page page = new PageImpl();
-        page = getPageUnderTest(PAGE);
-        context.request().setServerName("adobe.com");
-        context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
-        context.requestPathInfo().setSuffix("/a/b/3/a/2");
-
-        assertEquals("http://adobe.com/content/page/templated-page.html", page.getCanonicalURLOfPage());
-    }
-
-    @Test
-    void testExternalPageSubdomain_withSelectorsAndSuffixes() {
-        Page page = new PageImpl();
-        page = getPageUnderTest(PAGE);
-        context.request().setServerName("subdomain.adobe.com");
-        context.requestPathInfo().setSelectorString("s1.s2.s3.s4");
-        context.requestPathInfo().setSuffix("/a/b/3/a/2");
-
-        assertEquals("http://subdomain.adobe.com/content/page/templated-page.html",
-            page.getCanonicalURLOfPage());
     }
 
 //    private Page getPageUnderTest(String pagePath) {
