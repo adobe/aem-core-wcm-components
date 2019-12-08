@@ -130,7 +130,7 @@ class TeaserImplTest {
     void testInvalidFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_2);
         assertThat(testLogger.getLoggingEvents(), hasItem(error(
-                "Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.")));
+            "Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.")));
         assertNull(teaser.getImageResource());
     }
 
@@ -138,7 +138,7 @@ class TeaserImplTest {
     void testEmptyFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_3);
         assertThat(testLogger.getLoggingEvents(), hasItem(debug(
-                "Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.")));
+            "Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.")));
         assertNull(teaser.getImageResource());
     }
 
@@ -146,23 +146,24 @@ class TeaserImplTest {
     void testTeaserWithoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
         assertThat(testLogger.getLoggingEvents(),
-                hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
+            hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
         assertNull(teaser.getLinkURL());
     }
 
     @Test
     void testTeaserWithHiddenLinks() {
         Teaser teaser = getTeaserUnderTest(TEASER_5,
-                Teaser.PN_TITLE_LINK_HIDDEN, true,
-                Teaser.PN_IMAGE_LINK_HIDDEN, true);
+            Teaser.PN_TITLE_LINK_HIDDEN, true,
+            Teaser.PN_IMAGE_LINK_HIDDEN, true);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser7"));
     }
 
     @Test
     void testTeaserWithHiddenElements() {
         Teaser teaser = getTeaserUnderTest(TEASER_5,
-                Teaser.PN_TITLE_HIDDEN, true,
-                Teaser.PN_DESCRIPTION_HIDDEN, true);
+            Teaser.PN_TITLE_HIDDEN, true,
+            Teaser.PN_DESCRIPTION_HIDDEN, true,
+            Teaser.PN_PRETITLE_HIDDEN, true);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser8"));
     }
 
@@ -186,7 +187,7 @@ class TeaserImplTest {
     @Test
     void testTeaserWithActionsDisabled() {
         Teaser teaser = getTeaserUnderTest(TEASER_7,
-                Teaser.PN_ACTIONS_DISABLED, true);
+            Teaser.PN_ACTIONS_DISABLED, true);
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser10"));
     }
 
@@ -203,7 +204,7 @@ class TeaserImplTest {
     @Test
     void testTeaserWithTitleType() {
         Teaser teaser = getTeaserUnderTest(TEASER_1,
-                Teaser.PN_TITLE_TYPE, "h5");
+            Teaser.PN_TITLE_TYPE, "h5");
         assertEquals("Expected title type is not correct", "h5", teaser.getTitleType());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser2"));
 
