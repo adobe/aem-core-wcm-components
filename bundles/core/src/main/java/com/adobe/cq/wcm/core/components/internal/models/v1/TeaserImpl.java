@@ -33,7 +33,6 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -68,7 +67,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private String description;
     private String linkURL;
     private String titleType;
-    private String pretitleType;
     private boolean actionsEnabled = false;
     private boolean titleHidden = false;
     private boolean descriptionHidden = false;
