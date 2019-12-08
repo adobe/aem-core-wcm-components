@@ -50,6 +50,12 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/text"
                                         text="Elements"
                                         granite:class="coral-Form-fieldlabel"/>
+                                    <pretitle
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                        text="Hide pretitle"
+                                        name="./pretitleHidden"
+                                        value="{Boolean}true"/>
                                     <title
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"

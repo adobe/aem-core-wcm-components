@@ -59,6 +59,7 @@ class TeaserImplTest {
     private static final String TEST_ROOT_PAGE = "/content/teasers";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String TITLE = "Teaser";
+    private static final String PRETITLE = "Teaser's Pretitle";
     private static final String DESCRIPTION = "Description";
     private static final String LINK = "https://www.adobe.com";
     private static final String TEASER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-1";
@@ -96,6 +97,7 @@ class TeaserImplTest {
             testImageResourceValueMap(Objects.requireNonNull(teaser.getImageResource().adaptTo(ValueMap.class)));
             assertEquals(TEASER_1, teaser.getImageResource().getPath());
         }
+        assertEquals(PRETITLE, teaser.getPretitle());
         assertEquals(TITLE, teaser.getTitle());
         assertEquals(DESCRIPTION, teaser.getDescription());
         assertEquals(LINK, teaser.getLinkURL());

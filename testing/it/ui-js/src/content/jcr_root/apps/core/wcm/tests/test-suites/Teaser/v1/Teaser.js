@@ -23,6 +23,7 @@
         component: {
             self: ".cmp-teaser",
             image: ".cmp-teaser__image",
+            pretitle: ".cmp-teaser__pretitle",
             title: ".cmp-teaser__title",
             titleLink: ".cmp-teaser__title-link",
             description: ".cmp-teaser__description",
@@ -35,6 +36,7 @@
             assetDrop: '.cmp-teaser__editor coral-fileupload[name="./file"]',
             linkURL: '.cmp-teaser__editor foundation-autocomplete[name="./linkURL"]',
             titleFromPage: '.cmp-teaser__editor input[name="./titleFromPage"]',
+            pretitle: '.cmp-teaser__editor input[name="./pretitle"]',
             title: '.cmp-teaser__editor input[name="./jcr:title"]',
             descriptionFromPage: '.cmp-teaser__editor input[name="./descriptionFromPage"]',
             description: '.cmp-teaser__editor input[name="./jcr:description"]',
