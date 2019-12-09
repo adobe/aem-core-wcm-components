@@ -64,7 +64,7 @@
                         <dependency>
                             <group>adobe/cq60</group>
                             <name>core.wcm.components.examples.ui.apps</name>
-                            <version>[${version},)</version>
+                            <version>[${project.version},)</version>
                         </dependency>
                     </dependencies>
                 </configuration>
@@ -222,7 +222,7 @@
         <dependency>
             <groupId>com.adobe.cq</groupId>
             <artifactId>core.wcm.components.examples.ui.apps</artifactId>
-            <version>${version}</version>
+            <version>${project.version}</version>
             <type>zip</type>
             <scope>provided</scope>
         </dependency>
