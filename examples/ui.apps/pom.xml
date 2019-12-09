@@ -59,15 +59,6 @@
                 <configuration>
                     <properties>
                         <acHandling>merge_preserve</acHandling>
-                        <configuration>
-                            <dependencies>
-                                <dependency>
-                                    <groupId>com.adobe.cq</groupId>
-                                    <artifactId>core.wcm.components.examples.ui.apps</artifactId>
-                                    <version>${version}</version>
-                                </dependency>
-                            </dependencies>
-                        </configuration>
                     </properties>
                 </configuration>
             </plugin>
