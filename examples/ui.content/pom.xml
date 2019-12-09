@@ -62,9 +62,9 @@
                     </properties>
                     <dependencies>
                         <dependency>
-                            <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.examples.ui.apps</artifactId>
-                            <version>${version}</version>
+                            <group>adobe/cq60</group>
+                            <name>core.wcm.components.examples.ui.apps</name>
+                            <version>[${version},)</version>
                         </dependency>
                     </dependencies>
                 </configuration>
@@ -214,4 +214,17 @@
             </build>
         </profile>
     </profiles>
+
+    <!-- ====================================================================== -->
+    <!-- D E P E N D E N C I E S                                                -->
+    <!-- ====================================================================== -->
+    <dependencies>
+        <dependency>
+            <groupId>com.adobe.cq</groupId>
+            <artifactId>core.wcm.components.examples.ui.apps</artifactId>
+            <version>${version}</version>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
