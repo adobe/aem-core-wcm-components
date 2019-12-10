@@ -172,9 +172,9 @@ public interface Teaser extends ComponentExporter {
     }
 
     /**
-     * Returns this preteaser's title, if one was defined.
+     * Returns this teaser's pretitle, if one was defined.
      *
-     * @return the teaser's title or {@code null}
+     * @return the teaser's pretitle or {@code null}
      * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     default String getPretitle() {
