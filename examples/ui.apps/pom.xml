@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2016 Adobe
+  ~ Copyright 2018 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ====================================================================== -->
@@ -25,30 +24,22 @@
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
         <version>2.8.1-SNAPSHOT</version>
-        <relativePath>../../../parent/pom.xml</relativePath>
+        <relativePath>../../parent/pom.xml</relativePath>
     </parent>
 
     <!-- ====================================================================== -->
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
-    <artifactId>core.wcm.components.it.ui-js</artifactId>
-    <packaging>content-package</packaging>
-    <name>Adobe Experience Manager Core WCM Components JS Tests</name>
+    <artifactId>core.wcm.components.examples.ui.apps</artifactId>
     <version>2.8.1-SNAPSHOT</version>
-
-    <!-- ====================================================================== -->
-    <!-- P R O P E R T I E S                                                    -->
-    <!-- ====================================================================== -->
-    <properties>
-        <vault.package.version>${project.version}</vault.package.version>
-        <vault.package.group>day/cq63/testing</vault.package.group>
-        <vault.package.company>Adobe Systems</vault.package.company>
-    </properties>
+    <packaging>content-package</packaging>
+    <name>Adobe Experience Manager Core WCM Components Examples Application Package</name>
 
     <!-- ====================================================================== -->
     <!-- B U I L D   D E F I N I T I O N                                        -->
     <!-- ====================================================================== -->
     <build>
+        <sourceDirectory>src/content/jcr_root</sourceDirectory>
         <resources>
             <!-- define the resources that will go into the package -->
             <resource>
@@ -60,69 +51,34 @@
                 <targetPath>../vault-work/META-INF/vault/definition</targetPath>
             </resource>
         </resources>
-
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <includeEmptyDirs>true</includeEmptyDirs>
-                </configuration>
-            </plugin>
-
-            <!-- disable source plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-                <inherited>true</inherited>
-                <configuration>
-                    <attach>false</attach>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <properties>
+                        <acHandling>merge_preserve</acHandling>
+                    </properties>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.day.jcr.vault</groupId>
                 <artifactId>content-package-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>htl-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>install node and npm</id>
-                        <phase>validate</phase>
+                        <id>validate-htl-scripts</id>
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>validate</goal>
                         </goals>
+                        <phase>generate-sources</phase>
                         <configuration>
-                            <nodeVersion>${node.version}</nodeVersion>
-                            <npmVersion>${npm.version}</npmVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm install</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>lint</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>run eslint</arguments>
+                            <generateJavaClasses>true</generateJavaClasses>
+                            <generatedJavaClassesPrefix>org.apache.sling.scripting.sightly</generatedJavaClassesPrefix>
                         </configuration>
                     </execution>
                 </executions>
@@ -132,14 +88,10 @@
                 <artifactId>apache-rat-plugin</artifactId>
                 <configuration>
                     <excludes combine.children="append">
-                        <!-- Ignore lint-files -->
-                        <exclude>**/*.eslintrc</exclude>
+                        <!-- Ignore files -->
                         <exclude>**/*.editorconfig</exclude>
-                        <exclude>**/*.stylelintrc.yaml</exclude>
-                        <exclude>**/*.eslintignore</exclude>
-                        <!-- Ignore Node and npm -->
-                        <exclude>**/node/**</exclude>
-                        <exclude>**/node_modules/**</exclude>
+                        <exclude>**/vendor/**/*</exclude>
+                        <exclude>**/renditions/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -150,6 +102,58 @@
     <!-- P R O F I L E S                                                        -->
     <!-- ====================================================================== -->
     <profiles>
+        <profile>
+            <id>autoInstallSinglePackage</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.day.jcr.vault</groupId>
+                        <artifactId>content-package-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-package</id>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                                <configuration>
+                                    <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
+                                    <failOnError>true</failOnError>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>autoInstallSinglePackagePublish</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.day.jcr.vault</groupId>
+                        <artifactId>content-package-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-package-publish</id>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                                <configuration>
+                                    <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
+                                    <failOnError>true</failOnError>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>autoInstallPackage</id>
             <activation>
@@ -166,12 +170,12 @@
                                 <goals>
                                     <goal>install</goal>
                                 </goals>
+                                <configuration>
+                                    <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
+                                    <failOnError>true</failOnError>
+                                </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <targetURL>http://${aem.host}:${aem.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
-                            <failOnError>true</failOnError>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -188,20 +192,47 @@
                         <artifactId>content-package-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>install-package</id>
+                                <id>install-package-publish</id>
                                 <goals>
                                     <goal>install</goal>
                                 </goals>
+                                <configuration>
+                                    <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
+                                    <failOnError>true</failOnError>
+                                </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <targetURL>http://${aem.publish.host}:${aem.publish.port}${aem.contextPath}/crx/packmgr/service.jsp</targetURL>
-                            <failOnError>true</failOnError>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
 
+    <!-- ====================================================================== -->
+    <!-- D E P E N D E N C I E S                                                -->
+    <!-- ====================================================================== -->
+    <dependencies>
+
+        <!-- HTL dependencies needed for the HTL Maven Plugin source code generation -->
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.scripting.sightly.compiler</artifactId>
+            <version>1.0.14</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sling</groupId>
+            <artifactId>org.apache.sling.scripting.sightly.compiler.java</artifactId>
+            <version>1.0.16</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- AEM APIs -->
+        <dependency>
+            <groupId>com.adobe.aem</groupId>
+            <artifactId>uber-jar</artifactId>
+            <classifier>apis</classifier>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

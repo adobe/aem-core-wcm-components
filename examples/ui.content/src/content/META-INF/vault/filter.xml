@@ -15,7 +15,6 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
-    <filter root="/apps/core-components-examples"/>
     <filter root="/conf/core-components-examples"/>
     <filter root="/content/core-components-examples"/>
     <filter root="/content/cq:tags/core-components-examples"/>

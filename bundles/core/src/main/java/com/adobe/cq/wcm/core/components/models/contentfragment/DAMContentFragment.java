@@ -185,6 +185,19 @@ public interface DAMContentFragment extends ComponentExporter {
     }
 
     /**
+     * Returns the technical name of the content fragment.
+     *
+     * @return the technical name of the content fragment
+     * @see com.adobe.cq.dam.cfm.ContentFragment#getName()
+     * @since com.adobe.cq.wcm.core.components.models.contentfragment 1.3.0
+     */
+    @NotNull
+    @JsonIgnore
+    default String getName() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the description of the content fragment.
      *
      * @return the description of the content fragment

@@ -208,7 +208,7 @@
                     jcr:lastModified="{Date}2019-11-11T15:35:49.428+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Skip multiple levels"
+                    jcr:title="Skip Multiple Levels"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h3"/>
                 <text_130342336

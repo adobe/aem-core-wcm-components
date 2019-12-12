@@ -128,6 +128,12 @@ public class ContentFragmentImpl implements ContentFragment {
         return damContentFragment.getType();
     }
 
+    @Nullable
+    @Override
+    public String getName() {
+        return damContentFragment.getName();
+    }
+
     @NotNull
     @Override
     public String getGridResourceType() {
@@ -226,6 +232,11 @@ public class ContentFragmentImpl implements ContentFragment {
 
         @Override
         public @Nullable String getType() {
+            return null;
+        }
+
+        @Override
+        public @Nullable String getName() {
             return null;
         }
 
