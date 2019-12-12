@@ -34,6 +34,7 @@ The following property is written to JCR for the experience fragment component a
 ## BEM Description
 ```
 BLOCK cmp-experiencefragment
+  MOD cmp-experiencefragment--<name>
 ```
 
 Note: the rendered HTML markup of the experience fragment component may contain CSS classes that start with `xf-` (e.g. `xf-content-height` or `xf-master-building-block`) -

@@ -205,6 +205,65 @@
                             reference="../../component"/>
                     </info>
                 </demo_56474747>
+                <title_2061144506
+                    jcr:created="{Date}2019-11-11T15:35:19.374+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:35:49.428+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Skip Multiple Levels"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    type="h3"/>
+                <text_130342336
+                    jcr:created="{Date}2019-11-11T15:36:38.362+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:37:43.907+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core/wcm/components/text/v2/text"
+                    text="&lt;p>Multiple root levels can be skipped. In this example we are skipping two, showing sibling pages.&lt;/p>&#xd;&#xa;"
+                    textIsRich="true"/>
+                <demo_1435920429
+                    jcr:created="{Date}2019-11-11T15:34:17.715+01:00"
+                    jcr:createdBy="admin"
+                    jcr:lastModified="{Date}2019-11-11T15:34:17.715+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <navigation
+                            jcr:created="{Date}2019-11-11T15:34:30.422+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-11-11T15:35:02.543+01:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/navigation/v1/navigation"
+                            collectAllPages="true"
+                            navigationRoot="/content/core-components-examples"
+                            structureStart="2"/>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_1435920429>
                 <title
                     jcr:created="{Date}2019-05-21T19:07:47.223+03:00"
                     jcr:createdBy="admin"

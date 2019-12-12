@@ -54,6 +54,16 @@ public interface ExperienceFragment extends ComponentExporter {
     }
 
     /**
+     * Returns the technical name of the experience fragment.
+     *
+     * @return the technical name of the experience fragment
+     * @since com.adobe.cq.wcm.core.components.models 12.11.0
+     */
+    default String getName() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.9.0
      */

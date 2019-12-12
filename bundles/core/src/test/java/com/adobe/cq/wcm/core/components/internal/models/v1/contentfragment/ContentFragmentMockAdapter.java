@@ -95,6 +95,7 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
 
         String title = contentProperties.get(JCR_TITLE, String.class);
         String description = contentProperties.get(JCR_DESCRIPTION, String.class);
+        String cfName = resource.getName();
         Resource model;
         Resource modelAdaptee;
         List<ContentElement> elements = new LinkedList<>();
@@ -133,6 +134,7 @@ public class ContentFragmentMockAdapter implements Function<Resource, ContentFra
         ContentFragment fragment = mock(ContentFragment.class, withSettings().lenient());
         when(fragment.getTitle()).thenReturn(title);
         when(fragment.getDescription()).thenReturn(description);
+        when(fragment.getName()).thenReturn(cfName);
         when(fragment.adaptTo(Resource.class)).thenReturn(resource);
         when(fragment.getElement(isNull())).thenAnswer(invocation -> {
             String name = invocation.getArgument(0);

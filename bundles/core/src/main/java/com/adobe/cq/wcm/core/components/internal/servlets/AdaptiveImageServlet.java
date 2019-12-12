@@ -97,10 +97,10 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private static final String SELECTOR_WIDTH_KEY = "width";
     private int defaultResizeWidth;
 
-    @SuppressFBWarnings(justification = "This field need to be transient")
+    @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient MimeTypeService mimeTypeService;
 
-    @SuppressFBWarnings(justification = "This field need to be transient")
+    @SuppressFBWarnings(justification = "This field needs to be transient")
     private transient AssetStore assetStore;
 
     public AdaptiveImageServlet(MimeTypeService mimeTypeService, AssetStore assetStore, int defaultResizeWidth) {

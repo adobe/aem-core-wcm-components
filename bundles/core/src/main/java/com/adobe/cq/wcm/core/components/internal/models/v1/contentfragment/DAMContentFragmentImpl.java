@@ -132,6 +132,12 @@ public class DAMContentFragmentImpl implements DAMContentFragment {
         return type;
     }
 
+    @NotNull
+    @Override
+    public String getName() {
+        return contentFragment.getName();
+    }
+
     @Nullable
     @Override
     public List<DAMContentElement> getElements() {

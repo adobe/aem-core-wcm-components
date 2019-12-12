@@ -33,26 +33,26 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 ### Page authoring components
 
-6. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
-7. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
+7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
 8. [Image](content/src/content/jcr_root/apps/core/wcm/components/image/v2/image)
-9. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
-10. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
-11. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
-12. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
-13. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
-14. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
-15. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
-16. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
-17. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
-18. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+9. [Button](content/src/content/jcr_root/apps/core/wcm/components/button/v1/button)
+10. [Teaser](content/src/content/jcr_root/apps/core/wcm/components/teaser/v1/teaser)
+11. [Download](content/src/content/jcr_root/apps/core/wcm/components/download/v1/download)
+12. [List](content/src/content/jcr_root/apps/core/wcm/components/list/v2/list)
+13. [Experience Fragment](content/src/content/jcr_root/apps/core/wcm/components/experiencefragment/v1/experiencefragment)
+14. [Content Fragment](content/src/content/jcr_root/apps/core/wcm/components/contentfragment/v1/contentfragment)
+15. [Content Fragment List](content/src/content/jcr_root/apps/core/wcm/components/contentfragmentlist/v1/contentfragmentlist)
+16. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
+17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
+18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
 
 ### Container components
 
 19. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
 20. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-21. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
-22. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+21. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+22. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
 
 ### Form components
 
@@ -93,7 +93,7 @@ The latest version of the Core Components, require the below system requirements
 
 Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
 ----------------|---------|---------|---------|------
-[2.7.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.7.0) | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
+[2.8.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0) | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
@@ -153,7 +153,7 @@ To include the core components package into your own project's maven build using
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.7.0</version>
+     <version>2.8.0</version>
  </dependency>
  ```
 
@@ -178,7 +178,7 @@ To include the core components package into your own project using AEM Archetype
      <groupId>com.adobe.cq</groupId>
      <artifactId>core.wcm.components.all</artifactId>
      <type>zip</type>
-     <version>2.7.0</version>
+     <version>2.8.0</version>
  </dependency>
  ```
 
