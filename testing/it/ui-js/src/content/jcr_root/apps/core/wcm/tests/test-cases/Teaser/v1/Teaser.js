@@ -23,6 +23,7 @@
     var teaser                           = window.CQ.CoreComponentsIT.Teaser.v1;
     var testAssetsPath                   = "/content/dam/core-components";
     var testImagePath                    = testAssetsPath + "/core-comp-test-image.jpg";
+    var pretitle                         = "Teaser Pretitle";
     var title                            = "Teaser Title";
     var description                      = "Teaser Description";
     var pageName                         = "teaser-page";
@@ -113,12 +114,17 @@
             // drag'n'drop the test image
             .cui.dragdrop(selectors.editDialog.assetDrag(testImagePath), selectors.editDialog.assetDrop)
             .fillInput(selectors.editDialog.linkURL, "%" + pageVar + "%")
+            .fillInput(selectors.editDialog.pretitle, pretitle)
             .fillInput(selectors.editDialog.title, title)
             .fillInput(selectors.editDialog.description, description)
             .execTestCase(c.tcSaveConfigureDialog)
             .assert.isTrue(function() {
                 return h.find(selectors.component.image + ' img[src*="' + h.param(pageVar)() +
                     '/_jcr_content/root/responsivegrid/teaser"]', "#ContentFrame").size() === 1;
+            })
+            .assert.isTrue(function() {
+                var selector = selectors.component.pretitle;
+                return h.find(selector, "#ContentFrame").html().trim() === pretitle;
             })
             .assert.isTrue(function() {
                 var selector = "a" + selectors.component.titleLink + '[href$="' + h.param(pageVar)() + '.html"]';

@@ -30,11 +30,12 @@ The Teaser component uses the `com.adobe.cq.wcm.core.components.models.Teaser` S
 The following configuration properties are used:
 
 1. `./actionsDisabled` - defines whether or not Call-to-Actions are disabled
-2. `./titleHidden` - defines whether or not the title is hidden
-3. `./descriptionHidden` - defines whether or not the description is hidden
-4. `./imageLinkHidden` - defines whether or not the image link is hidden
-5. `./titleLinkHidden` - defines whether or not the title link is hidden
-6. `./titleType` - stores the value for this title's HTML element type
+2. `./pretitleHidden` - defines whether or not the pretitle is hidden
+3. `./titleHidden` - defines whether or not the title is hidden
+4. `./descriptionHidden` - defines whether or not the description is hidden
+5. `./imageLinkHidden` - defines whether or not the image link is hidden
+6. `./titleLinkHidden` - defines whether or not the title link is hidden
+7. `./titleType` - stores the value for this title's HTML element type
 
 The following configuration properties are inherited from the image component:
 
@@ -52,10 +53,11 @@ The following properties are written to JCR for this Teaser component and are ex
     2. `text` - property that stores the Call-to-Action text
 3. `./fileReference` - property or `file` child node - will store either a reference to the image file, or the image file
 4. `./linkURL` - link applied to teaser elements. URL or path to a content page
-5. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
-6. `./titleFromPage` - defines whether or not the title value is taken from the linked page
-7. `./jcr:description` - defines the value of the teaser description
-8. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
+5. `./pretitle` - defines the value of the teaser pretitle
+6. `./jcr:title` - defines the value of the teaser title and HTML `title` attribute of the teaser image
+7. `./titleFromPage` - defines whether or not the title value is taken from the linked page
+8. `./jcr:description` - defines the value of the teaser description
+9. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
 
 ### Extending the Teaser Component
 When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for
@@ -71,6 +73,7 @@ imageDelegate="core/wcm/components/image/v2/image"
 BLOCK cmp-teaser
     ELEMENT cmp-teaser__image
     ELEMENT cmp-teaser__content
+    ELEMENT cmp-teaser__pretitle
     ELEMENT cmp-teaser__title
     ELEMENT cmp-teaser__title-link
     ELEMENT cmp-teaser__description

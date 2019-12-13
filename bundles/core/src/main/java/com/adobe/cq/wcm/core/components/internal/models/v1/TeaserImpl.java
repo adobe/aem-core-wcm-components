@@ -62,6 +62,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v1/teaser";
 
+    private String pretitle;
     private String title;
     private String description;
     private String linkURL;
@@ -70,6 +71,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private boolean titleHidden = false;
     private boolean descriptionHidden = false;
     private boolean imageLinkHidden = false;
+    private boolean pretitleHidden = false;
     private boolean titleLinkHidden = false;
     private boolean titleFromPage = false;
     private boolean descriptionFromPage = false;
@@ -126,6 +128,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             targetPage = pageManager.getPage(linkURL);
         }
 
+        if (pretitleHidden) {
+            pretitle = null;
+        } else {
+            pretitle = properties.get("pretitle", String.class);
+        }
         if (titleHidden) {
             title = null;
         } else {
@@ -178,6 +185,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     private void populateStyleProperties() {
         if (currentStyle != null) {
+            pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
             titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
             descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
             titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
@@ -245,6 +253,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String getPretitle() {
+        return pretitle;
     }
 
     @Override
