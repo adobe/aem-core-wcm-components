@@ -70,6 +70,15 @@ public class AmpTransformerFactoryTest {
 
     }
 
+    @Test
+    public void testResolver() {
+        context.registerService(ResourceResolverFactory.class, new MockResourceResolverFactory());
+
+        ampTransformerFactory = context.registerInjectActivateService(new AmpTransformerFactory());
+
+        assertNotNull(ampTransformerFactory.getResolverFactory());
+    }
+
 
     public static Map<String, Object> getAmpTransformerFactoryConfig() {
         Map<String, Object> config = new HashMap<>();

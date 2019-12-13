@@ -19,6 +19,59 @@
             }
         }
     },
+    "sample": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "sample"         : {
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Sample (v1)",
+                "sling:resourceSuperType": "core/wcm/components/sample_super/v1/sample_super",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    },
+    "sample_super": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "sample_super"         : {
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Sample Super (v1)",
+                "sling:resourceSuperType": "core/wcm/components/text",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    },
+    "null-supertype": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "null-supertype"         : {
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Null Supertype (v1)",
+                "sling:resourceSuperType": "core/wcm/components/non-existing",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    },
+    "invalid-headlib": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "invalid-headlib"         : {
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Invalid Headlib (v1)",
+                "componentGroup"         : ".core-wcm",
+                "ampheadlibs.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:unstructured"
+                    }
+                }
+            }
+        }
+    },
     "page": {
         "jcr:primaryType": "sling:Folder",
         "v2"             : {
