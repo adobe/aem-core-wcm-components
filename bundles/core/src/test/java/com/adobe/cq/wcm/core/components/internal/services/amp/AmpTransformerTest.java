@@ -48,6 +48,9 @@ public class AmpTransformerTest {
     private static final String AMP_SELECTOR = TEST_ROOT_PAGE + "/amp-selector";
     private static final String PAIRED_AMP = TEST_ROOT_PAGE + "/paired-amp";
     private static final String AMP_SELECTOR_WITH_AMP_MODE = TEST_ROOT_PAGE + "/amp-selector-with-amp-mode";
+    private static final String AMP_SELECTOR_WITH_AMP_MODE_NO_COMPONENT = TEST_ROOT_PAGE + "/amp-selector-with-amp-mode-no-component";
+    private static final String AMP_SELECTOR_WITH_AMP_MODE_NO_SUPERTYPE = TEST_ROOT_PAGE + "/amp-selector-with-amp-mode-no-supertype";
+    private static final String AMP_SELECTOR_WITH_AMP_MODE_INVALID_HEADLIB = TEST_ROOT_PAGE + "/amp-selector-with-amp-mode-invalid-headlib";
     private static final String INVALID_PAGE_RESOURCE = TEST_ROOT_PAGE + "/invalid-page-resource";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
@@ -178,7 +181,7 @@ public class AmpTransformerTest {
 
 
         ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
-        ResourceResolver serviceResouceResolver =resourceResolver.clone(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
+        ResourceResolver serviceResouceResolver = resourceResolver.clone(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
         when(resolverFactory.getServiceResourceResolver(anyMap())).thenReturn(serviceResouceResolver);
 
 
@@ -192,6 +195,108 @@ public class AmpTransformerTest {
             + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode.html\">\n"
             + "<script>console.log('This is amp page script')</script>\n"
             + "<script>console.log('This is amp text component script')</script>\n";
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
+        Assert.assertEquals(output, new String(charCaptor.getValue()));
+        Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
+
+    }
+
+    @Test
+    void testHeadJsContentNoComponent() throws SAXException, LoginException {
+        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE_NO_COMPONENT);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with amp selector
+        context.requestPathInfo().setSelectorString("amp");
+        context.requestPathInfo().setExtension("html");
+
+
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+
+
+        ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
+        ResourceResolver serviceResouceResolver = resourceResolver.clone(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
+        when(resolverFactory.getServiceResourceResolver(anyMap())).thenReturn(serviceResouceResolver);
+
+
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
+
+        ArgumentCaptor<char[]> charCaptor = ArgumentCaptor.forClass(char[].class);
+        ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        String output ="\n"
+            + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode-no-component.html\">\n"
+            + "<script>console.log('This is amp page script')</script>\n";
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
+        Assert.assertEquals(output, new String(charCaptor.getValue()));
+        Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
+
+    }
+
+    @Test
+    void testHeadJsContentNoSupertype() throws SAXException, LoginException {
+        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE_NO_SUPERTYPE);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with amp selector
+        context.requestPathInfo().setSelectorString("amp");
+        context.requestPathInfo().setExtension("html");
+
+
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+
+
+        ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
+        ResourceResolver serviceResouceResolver = resourceResolver.clone(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
+        when(resolverFactory.getServiceResourceResolver(anyMap())).thenReturn(serviceResouceResolver);
+
+
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
+
+        ArgumentCaptor<char[]> charCaptor = ArgumentCaptor.forClass(char[].class);
+        ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        String output ="\n"
+            + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode-no-supertype.html\">\n"
+            + "<script>console.log('This is amp page script')</script>\n";
+        verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
+        Assert.assertEquals(output, new String(charCaptor.getValue()));
+        Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
+
+    }
+
+    @Test
+    void testHeadJsContentInvalidHeadlib() throws SAXException, LoginException {
+        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE_INVALID_HEADLIB);
+        context.requestPathInfo().setResourcePath(AMP_SELECTOR);
+        //with amp selector
+        context.requestPathInfo().setSelectorString("amp");
+        context.requestPathInfo().setExtension("html");
+
+
+        MockSlingHttpServletRequest slingHttpServletRequest = context.request();
+        ProcessingContext processingContext = mock(ProcessingContext.class);
+        when(processingContext.getRequest()).thenReturn(slingHttpServletRequest);
+
+
+        ResourceResolver resourceResolver = slingHttpServletRequest.getResourceResolver();
+        ResourceResolver serviceResouceResolver = resourceResolver.clone(Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
+        when(resolverFactory.getServiceResourceResolver(anyMap())).thenReturn(serviceResouceResolver);
+
+
+        ampTransformer.init(processingContext, null);
+        ampTransformer.endElement(null, "head", null);
+
+        ArgumentCaptor<char[]> charCaptor = ArgumentCaptor.forClass(char[].class);
+        ArgumentCaptor<Integer> lengthCaptor = ArgumentCaptor.forClass(Integer.class);
+
+        String output ="\n"
+            + "<link rel=\"canonical\" href=\"/content/amp-selector-with-amp-mode-invalid-headlib.html\">\n"
+            + "<script>console.log('This is amp page script')</script>\n";
         verify(contentHandler, atLeastOnce()).characters(charCaptor.capture(), eq(0), lengthCaptor.capture());
         Assert.assertEquals(output, new String(charCaptor.getValue()));
         Assert.assertEquals(Integer.valueOf(output.length()), lengthCaptor.getValue());
