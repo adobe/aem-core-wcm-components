@@ -1,27 +1,27 @@
 {
     "amp-only": {
         "jcr:primaryType": "cq:Page",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Filter Test",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
             "ampMode": "ampOnly"
         }
     },
     "paired-amp": {
         "jcr:primaryType": "cq:Page",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Filter Test",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
             "ampMode": "pairedAmp"
         }
     },
     "amp-selector-with-amp-mode": {
         "jcr:primaryType": "cq:Page",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Filter Test",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
             "ampMode": "ampOnly",
             "root": {
@@ -38,9 +38,9 @@
     },
     "amp-selector-with-amp-mode-no-component": {
         "jcr:primaryType": "cq:Page",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Filter Test",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
             "ampMode": "ampOnly",
             "root": {
@@ -56,9 +56,9 @@
     },
     "amp-selector-with-amp-mode-no-supertype": {
         "jcr:primaryType": "cq:Page",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Filter Test",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
             "ampMode": "ampOnly",
             "root": {
@@ -74,9 +74,9 @@
     },
     "amp-selector-with-amp-mode-invalid-headlib": {
         "jcr:primaryType": "cq:Page",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Filter Test",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
             "ampMode": "ampOnly",
             "root": {
@@ -92,9 +92,9 @@
     },
     "invalid-page-resource": {
         "jcr:primaryType": "nt:unstructured",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "nt:unstructured",
-            "jcr:title"         : "Filter Test",
+        "jcr:content": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:title": "Filter Test",
             "sling:resourceType": "core/wcm/components/page/v2/page"
         }
     }

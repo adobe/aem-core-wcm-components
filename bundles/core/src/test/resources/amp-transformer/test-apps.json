@@ -1,13 +1,13 @@
 {
     "text": {
         "jcr:primaryType": "sling:Folder",
-        "v1"             : {
+        "v1": {
             "jcr:primaryType": "nt:unstructured",
-            "text"         : {
-                "jcr:primaryType"        : "cq:Component",
-                "jcr:title"              : "Text (v1)",
+            "text": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Text (v1)",
                 "sling:resourceSuperType": "core/wcm/components/text",
-                "componentGroup"         : ".core-wcm",
+                "componentGroup": ".core-wcm",
                 "ampheadlibs.html": {
                     "jcr:primaryType": "nt:file",
                     "jcr:content": {
@@ -21,48 +21,48 @@
     },
     "sample": {
         "jcr:primaryType": "sling:Folder",
-        "v1"             : {
+        "v1": {
             "jcr:primaryType": "nt:unstructured",
-            "sample"         : {
-                "jcr:primaryType"        : "cq:Component",
-                "jcr:title"              : "Sample (v1)",
+            "sample": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Sample (v1)",
                 "sling:resourceSuperType": "core/wcm/components/sample_super/v1/sample_super",
-                "componentGroup"         : ".core-wcm"
+                "componentGroup": ".core-wcm"
             }
         }
     },
     "sample_super": {
         "jcr:primaryType": "sling:Folder",
-        "v1"             : {
+        "v1": {
             "jcr:primaryType": "nt:unstructured",
-            "sample_super"         : {
-                "jcr:primaryType"        : "cq:Component",
-                "jcr:title"              : "Sample Super (v1)",
+            "sample_super": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Sample Super (v1)",
                 "sling:resourceSuperType": "core/wcm/components/text",
-                "componentGroup"         : ".core-wcm"
+                "componentGroup": ".core-wcm"
             }
         }
     },
     "null-supertype": {
         "jcr:primaryType": "sling:Folder",
-        "v1"             : {
+        "v1": {
             "jcr:primaryType": "nt:unstructured",
-            "null-supertype"         : {
-                "jcr:primaryType"        : "cq:Component",
-                "jcr:title"              : "Null Supertype (v1)",
+            "null-supertype": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Null Supertype (v1)",
                 "sling:resourceSuperType": "core/wcm/components/non-existing",
-                "componentGroup"         : ".core-wcm"
+                "componentGroup": ".core-wcm"
             }
         }
     },
     "invalid-headlib": {
         "jcr:primaryType": "sling:Folder",
-        "v1"             : {
+        "v1": {
             "jcr:primaryType": "nt:unstructured",
-            "invalid-headlib"         : {
-                "jcr:primaryType"        : "cq:Component",
-                "jcr:title"              : "Invalid Headlib (v1)",
-                "componentGroup"         : ".core-wcm",
+            "invalid-headlib": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Invalid Headlib (v1)",
+                "componentGroup": ".core-wcm",
                 "ampheadlibs.html": {
                     "jcr:primaryType": "nt:file",
                     "jcr:content": {
@@ -74,13 +74,13 @@
     },
     "page": {
         "jcr:primaryType": "sling:Folder",
-        "v2"             : {
+        "v2": {
             "jcr:primaryType": "nt:unstructured",
-            "page"       : {
-                "jcr:primaryType"        : "cq:Component",
-                "jcr:title"              : "Page (v2)",
+            "page": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Page (v2)",
                 "sling:resourceSuperType": "wcm/foundation/components/basicpage/v1/basicpage",
-                "componentGroup"         : ".core-wcm",
+                "componentGroup": ".core-wcm",
                 "ampheadlibs.html": {
                     "jcr:primaryType": "nt:file",
                     "jcr:content": {
