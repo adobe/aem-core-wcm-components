@@ -60,6 +60,9 @@ public class ClientLibraryAggregatorServiceImplTest {
 
         String xmlLibrary = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","xml");
         assertEquals("", xmlLibrary);
+
+        String emptyLibrary = clientLibraryAggregatorService.getClientLibOutput("","css");
+        assertEquals("", emptyLibrary);
     }
 
     @Test
@@ -76,6 +79,9 @@ public class ClientLibraryAggregatorServiceImplTest {
 
         String clientLibOutput_2 = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp","css", resourceTypes, "", "");
         assertEquals("", clientLibOutput_2);
+
+        String clientLibOutput_3 = clientLibraryAggregatorService.getClientLibOutput("cmp-examples.base.amp,cmp-examples.base.amp","css", resourceTypes, "", "");
+        assertEquals("", clientLibOutput_3);
     }
 
     @Test
