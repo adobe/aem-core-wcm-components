@@ -59,6 +59,7 @@
                     <showImportPackageReport>false</showImportPackageReport>
                     <properties>
                         <cloudManagerTarget>none</cloudManagerTarget>
+                        <acHandling>merge_preserve</acHandling>
                     </properties>
                 </configuration>
             </plugin>
