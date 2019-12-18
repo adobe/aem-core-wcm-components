@@ -20,12 +20,15 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Tabs;
+
+import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -38,6 +41,9 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String accessibilityLabel;
+
+    @SlingObject
+    private Resource resource;
 
     private String activeItemName;
 
@@ -55,5 +61,15 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     @Override
     public String getAccessibilityLabel() {
         return accessibilityLabel;
+    }
+
+    @Override
+    public String getTabsId() {
+        String resourcePath = resource.getPath();
+        String identifier = resourcePath.substring(resourcePath.indexOf(JCR_CONTENT) + JCR_CONTENT.length());
+        if (resourcePath.startsWith("/conf")) {
+            identifier += "-template";
+        }
+        return identifier.replace("/", "-");
     }
 }

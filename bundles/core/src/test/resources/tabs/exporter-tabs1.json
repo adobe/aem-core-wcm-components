@@ -1,5 +1,6 @@
 {
     "activeItem": "item_2",
+    "tabsId": "-root-responsivegrid-tabs-1",
     ":itemsOrder": [
         "item_1",
         "item_2"
