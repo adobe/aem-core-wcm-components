@@ -15,9 +15,6 @@
  */
 
 @cmp-examples-demo-border-width: 1*@px;
-@cmp-examples-demo-info-content-max-lines: 12;
-@cmp-examples-demo-info-content-height: @cmp-examples-demo-info-content-max-lines * (@cmp-examples-font-size-code * @cmp-examples-line-height);
-@cmp-examples-demo-tab-border-width: 2*@px;
 
 .cmp-examples-demo {
     position: relative;
@@ -38,96 +35,4 @@
 
 .cmp-examples-demo__component--widthFull {
     width: 100%;
-}
-
-.cmp-examples-demo__info {
-    position: relative;
-    display: none;
-
-    .cmp-tabs__tablist {
-        margin: 0;
-        padding-left: 8*@px;
-        border: @cmp-examples-demo-border-width solid @cmp-examples-color-gray-400;
-        border-width: @cmp-examples-demo-border-width 0 0 0;
-    }
-
-    .cmp-tabs__tab {
-        margin-bottom: -@cmp-examples-demo-border-width;
-        border-bottom: @cmp-examples-demo-tab-border-width solid transparent;
-        padding: @cmp-examples-spacing-3 @cmp-examples-spacing-4 10*@px @cmp-examples-spacing-4;
-
-        font-size: @cmp-examples-font-size-s;
-        line-height: 1.2;
-
-        visibility: hidden;
-        color: @cmp-examples-color-gray-800;
-
-        &:hover,
-        &--active {
-            color: @cmp-examples-color-gray-900;
-        }
-
-        &:focus {
-            outline: none;
-        }
-    }
-}
-
-.cmp-examples-demo__info-actions {
-    position: absolute;
-    top: 0;
-    right: @cmp-examples-spacing-1;
-}
-
-.cmp-examples-demo__info-content {
-    width: auto;
-    height: 0;
-    margin: 0;
-    border-bottom-left-radius: @cmp-examples-border-radius;
-    border-bottom-right-radius: @cmp-examples-border-radius;
-    overflow: auto;
-}
-
-.cmp-examples-demo__properties {
-    margin: 0;
-    line-height: @cmp-examples-line-height;
-
-    font-family: @cmp-examples-font-family-monospace;
-    font-size: @cmp-examples-font-size-code;
-    color: @cmp-examples-color-text-light;
-
-    overflow: auto;
-    white-space: nowrap;
-    list-style-type: decimal;
-
-    .cmp-examples-demo__property-title {
-        padding-left: 1rem;
-        color: @cmp-examples-color-blue-600;
-    }
-
-    .cmp-examples-demo__property-value {
-        color: @cmp-examples-color-green-700;
-    }
-
-    .cmp-examples-demo__property-separator {
-        color: @cmp-examples-color-text;
-    }
-}
-
-.cmp-examples-demo__info--open {
-    .cmp-examples-demo__info-content {
-        height: @cmp-examples-demo-info-content-height;
-    }
-
-    .cmp-tabs__tablist {
-        border-bottom-width: @cmp-examples-demo-border-width;
-    }
-
-    .cmp-tabs__tab {
-        visibility: visible;
-
-        &--active {
-            border-color: @cmp-examples-color-gray-900;
-        }
-    }
 }
