@@ -46,7 +46,7 @@ Once a contribution is being reviewed, the Core Engineering Team will apply a re
 If you have a fix ready for a bug, submit a [pull request](#contributing-code-) and reference it in the associated issue.
 
 ### Submitting Features 🚀
-**Please Note**: New experimental components and features should always go to [aem-core-wcm-component-contrib]("") repository by default. All feature submissions should be accompanied by a [pull request]("#contributing-code-")
+**Please Note**: New experimental components and features should always go to [aem-contrib-wcm-components](https://github.com/adobe/aem-contrib-wcm-components) repository by default. All feature submissions should be accompanied by a [pull request]("#contributing-code-")
 
 * Have a quick search through the currently open [enhancement](https://github.com/adobe/aem-core-wcm-components/labels/enhancement) and [request to comment](https://github.com/adobe/aem-core-wcm-components/labels/rtc) issues to see if the idea has already been suggested. If it has, you may still have a slightly different requirement that isn't covered, in which case, feel free to comment on the open issue. 
 * Take a look at the [Core Components Roadmap](https://github.com/adobe/aem-core-wcm-components/wiki#roadmap) to see if your feature is already on the radar. If it is and doesn't have a public issue yet, feel free to create one, listing your own requirements.
