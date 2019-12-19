@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-12-19T17:12:31.389+01:00"
+        cq:lastModified="{Date}2019-12-19T17:32:54.204+01:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="cq:PageContent"
@@ -99,62 +99,93 @@
                     sling:resourceType="core/wcm/components/text/v2/text"
                     text="&lt;p>Form Container with Form-Option Checkboxes.&amp;nbsp;&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
-                <container
-                    jcr:created="{Date}2019-12-19T13:48:54.926+01:00"
+                <demo_1594702855
+                    jcr:created="{Date}2019-12-19T17:32:42.686+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-19T13:48:54.926+01:00"
+                    jcr:lastModified="{Date}2019-12-19T17:32:42.686+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/form/container/v2/container"
-                    action="/content/usergenerated/core-components-examples/library/form-options/cq-gen1576759734929/"
-                    actionType="foundation/components/form/actions/store">
-                    <cq:responsive jcr:primaryType="nt:unstructured"/>
-                    <options
-                        jcr:created="{Date}2019-12-19T13:49:08.311+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-12-19T13:55:10.975+01:00"
-                        jcr:lastModifiedBy="admin"
+                    sling:resourceType="core-components-examples/components/demo">
+                    <component
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Venue Planning"
-                        sling:resourceType="core/wcm/components/form/options/v2/options"
-                        helpMessage="We like to plan our events and prepare the meals in advance, please help us by choosing your preferences"
-                        name="venue-planning"
-                        source="local"
-                        type="checkbox">
-                        <items jcr:primaryType="nt:unstructured">
-                            <item0
+                        sling:resourceType="core-components-examples/components/demo/component">
+                        <container
+                            jcr:created="{Date}2019-12-19T13:48:54.926+01:00"
+                            jcr:createdBy="admin"
+                            jcr:lastModified="{Date}2019-12-19T13:48:54.926+01:00"
+                            jcr:lastModifiedBy="admin"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/form/container/v2/container"
+                            action="/content/usergenerated/core-components-examples/library/form-options/cq-gen1576759734929/"
+                            actionType="foundation/components/form/actions/store">
+                            <cq:responsive jcr:primaryType="nt:unstructured"/>
+                            <options
+                                jcr:created="{Date}2019-12-19T13:49:08.311+01:00"
+                                jcr:createdBy="admin"
+                                jcr:lastModified="{Date}2019-12-19T13:55:10.975+01:00"
+                                jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                selected="false"
-                                text="I attend alone"
-                                value="alone"/>
-                            <item1
-                                jcr:primaryType="nt:unstructured"
-                                selected="false"
-                                text="I attend with spouse"
-                                value="spouse"/>
-                            <item2
-                                jcr:primaryType="nt:unstructured"
-                                selected="false"
-                                text="I eat meat"
-                                value="meat"/>
-                            <item3
-                                jcr:primaryType="nt:unstructured"
-                                selected="false"
-                                text="I am vegetarian"
-                                value="vet"/>
-                            <item4
-                                jcr:primaryType="nt:unstructured"
-                                selected="false"
-                                text="Spouse is vegetarian"
-                                value="spouse-veg"/>
-                            <item5
-                                jcr:primaryType="nt:unstructured"
-                                selected="false"
-                                text="Spouse eats meat"
-                                value="spouse-meat"/>
-                        </items>
-                    </options>
-                </container>
+                                jcr:title="Venue Planning"
+                                sling:resourceType="core/wcm/components/form/options/v2/options"
+                                helpMessage="We like to plan our events and prepare the meals in advance, please help us by choosing your preferences"
+                                name="venue-planning"
+                                source="local"
+                                type="checkbox">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <item0
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="I attend alone"
+                                        value="alone"/>
+                                    <item1
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="I attend with spouse"
+                                        value="spouse"/>
+                                    <item2
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="I eat meat"
+                                        value="meat"/>
+                                    <item3
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="I am vegetarian"
+                                        value="vet"/>
+                                    <item4
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="Spouse is vegetarian"
+                                        value="spouse-veg"/>
+                                    <item5
+                                        jcr:primaryType="nt:unstructured"
+                                        selected="false"
+                                        text="Spouse eats meat"
+                                        value="spouse-meat"/>
+                                </items>
+                            </options>
+                        </container>
+                    </component>
+                    <info
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        <properties
+                            cq:panelTitle="Properties"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/properties"
+                            reference="../../component"/>
+                        <markup
+                            cq:panelTitle="Markup"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/markup"
+                            reference="../../component"/>
+                        <json
+                            cq:panelTitle="JSON"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core-components-examples/components/demo/json"
+                            reference="../../component"/>
+                    </info>
+                </demo_1594702855>
                 <title_1975440126
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2019-12-12T15:09:49.918+01:00"
