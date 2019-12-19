@@ -6,7 +6,7 @@
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Form-Hidden"
+        jcr:title="Form Hidden"
         sling:resourceType="core-components-examples/components/page"
         translated="{Boolean}false">
         <root
