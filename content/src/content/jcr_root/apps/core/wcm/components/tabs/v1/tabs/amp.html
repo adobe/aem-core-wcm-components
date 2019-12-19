@@ -29,8 +29,8 @@
 
         <div role="tab"
              option
-             id="tab-item-${tabList.index}"
-             aria-controls="tab-panel-${tabList.index}"
+             id="tab-item${tabs.tabsId}-${tabList.index}"
+             aria-controls="tab-panel${tabs.tabsId}-${tabList.index}"
              class="cmp-tabs__tab"
              data-sly-attribute.selected=${isActive}
              tabindex="${isActive ? '0' : '-1'}"
@@ -38,8 +38,8 @@
              ${tab.title}
         </div>
 
-        <div id="tab-panel-${tabList.index}"
-             aria-labelledby="tab-item-${tabList.index}"
+        <div id="tab-panel${tabs.tabsId}-${tabList.index}"
+             aria-labelledby="tab-item${tabs.tabsId}-${tabList.index}"
              data-sly-resource="${tab.name @ decorationTagName='div'}"
              role="tabpanel"
              tabindex="0"

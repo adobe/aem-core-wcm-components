@@ -1,5 +1,5 @@
 # AMP
-Learn more about how AMP mode can be cotrolled [here](README.md)
+Learn more about how AMP mode can be controlled [here](README.md)
 
 ## Major Technical aspects
 

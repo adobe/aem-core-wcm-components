@@ -1,5 +1,6 @@
 {
     "activeItem": "item_2",
+    "tabsId": "-root-responsivegrid-tabs-2",
     ":itemsOrder": [
         "item_1",
         "item_2"
@@ -24,6 +25,7 @@
                 },
                 "item_1_2": {
                     "activeItem": "item_1_2_2",
+                    "tabsId": "-root-responsivegrid-tabs-2-item_1-item_1_2",
                     ":itemsOrder": [
                         "item_1_2_1",
                         "item_1_2_2"
