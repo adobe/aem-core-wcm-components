@@ -19,13 +19,6 @@
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
-                <showmenu
-                    jcr:created="{Date}2018-12-20T16:16:40.169Z"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-20T16:16:40.169Z"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/show-menu"/>
                 <image_1442382866
                     jcr:created="{Date}2019-01-08T17:48:01.449+01:00"
                     jcr:createdBy="admin"
@@ -40,14 +33,15 @@
                     linkURL="/content/core-components-examples/library"
                     titleValueFromDAM="true"/>
             </responsivegrid_1409995310>
-            <responsivegrid_1755067073
+            <sidebar
                 cq:styleIds="[1545309119491]"
                 jcr:created="{Date}2018-12-20T12:31:05.318Z"
                 jcr:createdBy="admin"
                 jcr:lastModified="{Date}2018-12-20T12:31:05.318Z"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="wcm/foundation/components/responsivegrid">
+                sling:resourceType="core-components-examples/components/sidebar"
+                id="mainNavigation">
                 <cq:responsive jcr:primaryType="nt:unstructured"/>
                 <image_1442382866_cop
                     jcr:created="{Date}2019-01-08T17:48:01.449+01:00"
@@ -73,7 +67,7 @@
                     navigationRoot="/content/core-components-examples/library"
                     skipNavigationRoot="true"
                     structureDepth="1"/>
-            </responsivegrid_1755067073>
+            </sidebar>
             <responsivegrid
                 cq:styleIds="[1545309110033]"
                 jcr:created="{Date}2018-12-20T12:31:03.201Z"
