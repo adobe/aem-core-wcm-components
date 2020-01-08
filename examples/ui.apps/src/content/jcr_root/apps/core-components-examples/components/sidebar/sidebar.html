@@ -14,8 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.container="com.adobe.cq.wcm.core.components.models.LayoutContainer">
-    <h1>stuff</h1>
-    <sly data-sly-resource="${'show-menu' @ resourceType='core-components-examples/components/show-menu'}"></sly>
+    <button class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}"><i class="cmp-examples-button__icon fas fa-bars"></i></button>
     <sly data-sly-test.responsive="${container.layout == 'RESPONSIVE_GRID'}"
          data-sly-use.responsiveGridTemplate="responsiveGrid.html"
          data-sly-call="${responsiveGridTemplate.responsiveGrid @ container=container}"></sly>

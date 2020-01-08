@@ -34,7 +34,6 @@
                     titleValueFromDAM="true"/>
             </responsivegrid_1409995310>
             <sidebar
-                cq:styleIds="[1545309119491]"
                 jcr:created="{Date}2018-12-20T12:31:05.318Z"
                 jcr:createdBy="admin"
                 jcr:lastModified="{Date}2018-12-20T12:31:05.318Z"
