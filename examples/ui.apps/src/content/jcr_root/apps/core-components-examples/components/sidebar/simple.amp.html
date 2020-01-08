@@ -23,8 +23,6 @@
         id="${container.id}"
         class="cmp-container${wcmmode.edit ? ' {0}': '' @ format=[allowed.cssClass]}"
         style="${container.backgroundStyle @ context='styleString'}">
-
-        <!-- TODO: do we need an image here? -->
         <sly data-sly-test.isAllowedApplicable="${allowed.isApplicable}"
              data-sly-test="${isAllowedApplicable}"
              data-sly-use.allowedTemplate="allowedcomponents.html"
