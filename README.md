@@ -77,9 +77,9 @@ The components' versioning scheme is documented on the [AEM Core WCM Components'
 
 The latest version of the Core Components, require the below system requirements:
 
-Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
-----------------|---------|---------|---------|------
-[2.8.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0) | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
+Core Components | [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html) | [AEM 6.5](https://docs.adobe.com/content/help/en/experience-manager-65/user-guide/home.html) | [AEM 6.4](https://docs.adobe.com/content/help/en/experience-manager-64/user-guide/home.html) | AEM 6.3 | Java
+----------------|---------|---------|---------|---------|------
+[2.8.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0) | Continual | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
 
 For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
 
