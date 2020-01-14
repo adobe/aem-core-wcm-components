@@ -586,24 +586,7 @@
             </responsivegrid>
         </root>
     </jcr:content>
-    <accordion/>
-    <breadcrumb/>
-    <button/>
-    <carousel/>
     <container/>
-    <content-fragment/>
-    <content-fragment-list/>
-    <download/>
-    <embed/>
-    <experience-fragment/>
-    <image/>
-    <language-navigation/>
-    <list/>
-    <navigation/>
-    <separator/>
-    <social-sharing/>
-    <tabs/>
-    <teaser/>
-    <text/>
-    <title/>
+    <page-authoring/>
+    <template/>
 </jcr:root>

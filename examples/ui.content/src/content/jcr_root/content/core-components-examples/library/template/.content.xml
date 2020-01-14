@@ -9,14 +9,13 @@
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="nt:unstructured"
-        jcr:title="Container"
+        jcr:title="Template"
         sling:redirect="{Boolean}true"
         sling:redirectStatus="{Long}302"
         sling:resourceType="foundation/components/redirect"
         redirectTarget="/content/core-components-examples/library">
     </jcr:content>
-    <accordion/>
-    <carousel/>
-    <container/>
-    <tabs/>
+    <breadcrumb/>
+    <language-navigation/>
+    <navigation/>
 </jcr:root>
