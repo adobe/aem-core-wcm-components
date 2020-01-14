@@ -402,11 +402,22 @@
                                 jcr:lastModified="{Date}2019-05-28T18:24:48.269+03:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                jcr:title="Default"
+                                jcr:title="Core Components Examples - Container"
                                 sling:resourceType="wcm/core/components/policy/policy"
-                                backgroundColorEnabled="true"
-                                backgroundImageEnabled="true">
+                                backgroundColorEnabled="false"
+                                backgroundImageEnabled="false">
                                 <jcr:content jcr:primaryType="nt:unstructured"/>
+                                <cq:styleGroups jcr:primaryType="nt:unstructured">
+                                    <item0 jcr:primaryType="nt:unstructured">
+                                        <cq:styles jcr:primaryType="nt:unstructured">
+                                            <item0
+                                                cq:styleClasses="cmp-examples-container--component-group"
+                                                cq:styleId="1579016386576"
+                                                cq:styleLabel="Component Group"
+                                                jcr:primaryType="nt:unstructured"/>
+                                        </cq:styles>
+                                    </item0>
+                                </cq:styleGroups>
                             </policy_1559057070844>
                         </container>
                     </v1>
