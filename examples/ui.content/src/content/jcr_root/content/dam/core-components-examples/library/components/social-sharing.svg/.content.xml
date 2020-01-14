@@ -2,21 +2,17 @@
 <jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="92df0cd9-dbbb-4964-af88-e57c6f617b3a">
+    jcr:uuid="5e3006d2-62fa-4ee8-a900-394f6c1216b0">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-24T12:27:23.742+02:00"
+        jcr:lastModified="{Date}2020-01-14T15:20:18.183+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-05-24T12:27:23.361+02:00"
-            dam:sha1="ee3154bdbb210471d2351971016ec44d30bdf36d"
-            dam:size="{Long}4737"
+            dam:extracted="{Date}2020-01-14T15:20:17.714+01:00"
+            dam:sha1="60de9b14f8c0a765e52a15ca079386bb13431df6"
+            dam:size="{Long}3120"
             dc:format="image/svg+xml"
-            dc:modified="{Date}2019-05-24T12:27:20.572+02:00"
-            dc:title="Social Sharing"
-            jcr:lastModified="{Date}2019-05-24T12:27:20.571+02:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
