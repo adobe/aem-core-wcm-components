@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-08-29T18:28:39.658+03:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/reference]"
+        cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Embed a third-party widget"
         jcr:primaryType="cq:PageContent"

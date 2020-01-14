@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-12-08T11:08:38.587+01:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/reference]"
+        cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Link an image and text"
         jcr:primaryType="cq:PageContent"

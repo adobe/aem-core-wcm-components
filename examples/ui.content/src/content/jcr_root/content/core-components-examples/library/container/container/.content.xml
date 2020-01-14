@@ -4,6 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-06-11T19:56:33.712+02:00"
         cq:lastModifiedBy="admin"
+        cq:tags="[core-components-examples:component-type/container]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Group and layout components"
         jcr:primaryType="cq:PageContent"

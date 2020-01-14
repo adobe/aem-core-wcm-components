@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-01-09T20:30:27.177+01:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/basic]"
+        cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display a button or anchor button"
         jcr:primaryType="cq:PageContent"

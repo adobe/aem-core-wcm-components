@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-01-16T13:38:02.466+01:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/reference]"
+        cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display a list of pages"
         jcr:primaryType="cq:PageContent"
@@ -315,7 +315,7 @@
                             showDescription="false"
                             showModificationDate="false"
                             sortOrder="asc"
-                            tags="[core-components-examples:component-type/basic]"
+                            tags="[core-components-examples:component-type/page-authoring]"
                             tagsMatch="any"
                             tagsSearchRoot="/content/core-components-examples/library"/>
                     </component>

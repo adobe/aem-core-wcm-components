@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-01-16T14:20:39.952+01:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/reference]"
+        cq:tags="[core-components-examples:component-type/page-authoring]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display a content fragment asset"
         jcr:primaryType="cq:PageContent"
