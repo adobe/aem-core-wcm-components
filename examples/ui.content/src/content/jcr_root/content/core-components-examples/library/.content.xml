@@ -64,7 +64,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/accordion.svg"
-                    linkURL="/content/core-components-examples/library/accordion"
+                    linkURL="/content/core-components-examples/library/container/accordion"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -90,7 +90,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/breadcrumb.svg"
-                    linkURL="/content/core-components-examples/library/breadcrumb/hidden/level-1/level-2/breadcrumb"
+                    linkURL="/content/core-components-examples/library/template/breadcrumb/hidden/level-1/level-2/breadcrumb"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -116,7 +116,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/button.svg"
-                    linkURL="/content/core-components-examples/library/button"
+                    linkURL="/content/core-components-examples/library/page-authoring/button"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -142,7 +142,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/carousel.svg"
-                    linkURL="/content/core-components-examples/library/carousel"
+                    linkURL="/content/core-components-examples/library/container/carousel"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -168,7 +168,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/container.svg"
-                    linkURL="/content/core-components-examples/library/container"
+                    linkURL="/content/core-components-examples/library/container/container"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -194,7 +194,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/content-fragment.svg"
-                    linkURL="/content/core-components-examples/library/content-fragment"
+                    linkURL="/content/core-components-examples/library/page-authoring/content-fragment"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -220,7 +220,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/content-fragment-list.svg"
-                    linkURL="/content/core-components-examples/library/content-fragment-list"
+                    linkURL="/content/core-components-examples/library/page-authoring/content-fragment-list"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -246,7 +246,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/download.svg"
-                    linkURL="/content/core-components-examples/library/download"
+                    linkURL="/content/core-components-examples/library/page-authoring/download"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -272,7 +272,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/embed.svg"
-                    linkURL="/content/core-components-examples/library/embed"
+                    linkURL="/content/core-components-examples/library/page-authoring/embed"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -298,7 +298,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/experience-fragment.svg"
-                    linkURL="/content/core-components-examples/library/experience-fragment"
+                    linkURL="/content/core-components-examples/library/page-authoring/experience-fragment"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -324,7 +324,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/image.svg"
-                    linkURL="/content/core-components-examples/library/image"
+                    linkURL="/content/core-components-examples/library/page-authoring/image"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -350,7 +350,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/language-navigation.svg"
-                    linkURL="/content/core-components-examples/library/language-navigation/language-structure/us/en/language-navigation"
+                    linkURL="/content/core-components-examples/library/template/language-navigation/language-structure/us/en/language-navigation"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -376,7 +376,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/list.svg"
-                    linkURL="/content/core-components-examples/library/list"
+                    linkURL="/content/core-components-examples/library/page-authoring/list"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -402,7 +402,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/navigation.svg"
-                    linkURL="/content/core-components-examples/library/navigation"
+                    linkURL="/content/core-components-examples/library/template/navigation"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -428,7 +428,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/separator.svg"
-                    linkURL="/content/core-components-examples/library/separator"
+                    linkURL="/content/core-components-examples/library/page-authoring/separator"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -454,7 +454,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/social-sharing.svg"
-                    linkURL="/content/core-components-examples/library/social-sharing"
+                    linkURL="/content/core-components-examples/library/page-authoring/social-sharing"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -480,7 +480,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/tabs.svg"
-                    linkURL="/content/core-components-examples/library/tabs"
+                    linkURL="/content/core-components-examples/library/container/tabs"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -506,7 +506,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/teaser.svg"
-                    linkURL="/content/core-components-examples/library/teaser"
+                    linkURL="/content/core-components-examples/library/page-authoring/teaser"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -532,7 +532,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/text.svg"
-                    linkURL="/content/core-components-examples/library/text"
+                    linkURL="/content/core-components-examples/library/page-authoring/text"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
@@ -558,7 +558,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="true"
                     fileReference="/content/dam/core-components-examples/library/components/title.svg"
-                    linkURL="/content/core-components-examples/library/title"
+                    linkURL="/content/core-components-examples/library/page-authoring/title"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
