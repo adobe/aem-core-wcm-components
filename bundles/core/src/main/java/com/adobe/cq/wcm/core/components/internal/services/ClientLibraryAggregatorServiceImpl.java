@@ -68,6 +68,7 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
     private ResourceResolverFactory resolverFactory;
 
     private String resourceTypeRegex;
+    private String headlibName;
 
     /**
      * Reads the service's configuration when the service is started.
@@ -77,6 +78,7 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
     @Modified
     protected final void activate(ClientLibraryAggregatorServiceImpl.Cfg cfg) {
         this.resourceTypeRegex = cfg.resource_type_regex();
+        this.headlibName = cfg.headlib_name();
     }
 
     protected String[] getClientLibArrayCategories(String categoryCsv) {
@@ -208,6 +210,11 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
     }
 
     @Override
+    public String getHeadlibName() {
+        return this.headlibName;
+    }
+
+    @Override
     public ResourceResolver getClientlibResourceResolver() throws LoginException {
         return resolverFactory.getServiceResourceResolver(
             Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, Utils.CLIENTLIB_SUBSERVICE));
@@ -215,6 +222,14 @@ public class ClientLibraryAggregatorServiceImpl implements ClientLibraryAggregat
 
     @ObjectClassDefinition(name = "Client Library Aggregator Service")
     public @interface Cfg {
+
+        /**
+         * The name used for AMP js head library files.
+         */
+        @AttributeDefinition(
+            name = "Headlib Name",
+            description = "The name used for AMP js head library files.")
+        String headlib_name() default "customheadlibs.amp.html";
 
         /**
          * Regex defining valid resource type paths while aggregating client libraries.
