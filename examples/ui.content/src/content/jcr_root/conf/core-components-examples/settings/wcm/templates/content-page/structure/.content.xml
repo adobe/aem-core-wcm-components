@@ -62,17 +62,46 @@
                     isDecorative="false"
                     linkURL="/content/core-components-examples/library"
                     titleValueFromDAM="true"/>
-                <navigation
-                    jcr:created="{Date}2018-12-20T12:48:21.218Z"
+                <accordion
+                    jcr:created="{Date}2020-01-14T17:57:59.520+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-20T12:48:37.608Z"
+                    jcr:lastModified="{Date}2020-01-14T17:59:24.157+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/navigation/v1/navigation"
-                    collectAllPages="false"
-                    navigationRoot="/content/core-components-examples/library"
-                    skipNavigationRoot="true"
-                    structureDepth="1"/>
+                    sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                    expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267]"
+                    singleExpansion="false">
+                    <item_1579021121673
+                        cq:panelTitle="Template"
+                        jcr:lastModified="{Date}2020-01-14T18:00:08.828+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/navigation/v1/navigation"
+                        collectAllPages="false"
+                        navigationRoot="/content/core-components-examples/library/template"
+                        structureDepth="1"
+                        structureStart="1"/>
+                    <item_1579021131667
+                        cq:panelTitle="Page Authoring"
+                        jcr:lastModified="{Date}2020-01-14T18:00:26.432+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/navigation/v1/navigation"
+                        collectAllPages="false"
+                        navigationRoot="/content/core-components-examples/library/page-authoring"
+                        structureDepth="1"
+                        structureStart="1"/>
+                    <item_1579021109267
+                        cq:panelTitle="Container"
+                        jcr:lastModified="{Date}2020-01-14T18:00:53.492+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/navigation/v1/navigation"
+                        collectAllPages="false"
+                        navigationRoot="/content/core-components-examples/library/container"
+                        structureDepth="1"
+                        structureStart="1"/>
+                </accordion>
             </responsivegrid_1755067073>
             <responsivegrid
                 cq:styleIds="[1545309110033]"
