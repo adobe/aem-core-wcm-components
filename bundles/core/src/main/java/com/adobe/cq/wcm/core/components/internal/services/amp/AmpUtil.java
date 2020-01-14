@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Provides common value constants and methods used across AMP services.
  */
-class AmpUtil {
+public class AmpUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(AmpUtil.class);
 
@@ -35,18 +35,20 @@ class AmpUtil {
 
     static final String AMP_ONLY = "ampOnly";
 
-    static final String AMP_SELECTOR = "amp";
-
-    static final String DOT = ".";
-
     static final String NO_AMP = "noAmp";
+
+    public static final String PAIRED_AMP = "pairedAmp";
+
+    public static final String AMP_SELECTOR = "amp";
+
+    public static final String DOT = ".";
 
     /**
      * Retrieves the AMP mode value of the requested resource.
      * @param slingRequest Request used to resolve the resource and AMP mode value from.
      * @return The AMP mode value.
      */
-    static String getAmpMode(@NotNull SlingHttpServletRequest slingRequest) {
+    public static String getAmpMode(@NotNull SlingHttpServletRequest slingRequest) {
 
         PageManager pageManager = slingRequest.getResourceResolver().adaptTo(PageManager.class);
 
