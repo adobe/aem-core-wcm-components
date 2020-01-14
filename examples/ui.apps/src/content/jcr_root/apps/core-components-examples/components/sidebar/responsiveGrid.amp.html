@@ -13,10 +13,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<!--/*
-TODO: make ID configurable to point back to respective Nav component + add data-sly-test on the existence of such property value.
-TODO: Do not render the button for amp if there is no ID specified to trigger a toggle
-*/-->
-<button on="tap:cmpExamplesSidebar.toggle" class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}">
-  <i class="cmp-examples-show-menu--mid-line"></i>
-</button>
+<template data-sly-template.responsiveGrid="${ @ container}">
+    <button on="tap:${container.id @ context = 'attribute'}.toggle" class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}">
+        <i class="cmp-examples-show-menu--mid-line"></i>
+    </button>
+    <amp-sidebar
+        layout="nodisplay"
+        id="${container.id}"
+        class="cmp-container"
+        style="${container.backgroundStyle @ context='styleString'}">
+        <sly data-sly-resource="${resource @ resourceType='wcm/foundation/components/responsivegrid'}"></sly>
+    </amp-sidebar>
+</template>

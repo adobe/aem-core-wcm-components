@@ -63,11 +63,6 @@
                                         cq:styleId="1545309110033"
                                         cq:styleLabel="Main"
                                         jcr:primaryType="nt:unstructured"/>
-                                    <item2
-                                        cq:styleClasses="cmp-examples-structure__aside"
-                                        cq:styleId="1545309119491"
-                                        cq:styleLabel="Aside"
-                                        jcr:primaryType="nt:unstructured"/>
                                     <item3
                                         cq:styleClasses="cmp-examples-structure__footer"
                                         cq:styleId="1551382932159"

@@ -13,14 +13,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-
-<amp-sidebar id="cmpExamplesSidebar" class="cmp-navigation"
-     layout="nodisplay"
-     itemscope itemtype="http://schema.org/SiteNavigationElement"
-     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-use.navigation="com.adobe.cq.wcm.core.components.models.Navigation"
-     data-sly-test.hasContent="${navigation.items.size > 0}"
-     data-sly-use.groupTemplate="group.html"
-     data-sly-call="${groupTemplate.group @ items=navigation.items}">
-</amp-sidebar>
-<sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-navigation'}"></sly>
+<sly data-sly-use.container="com.adobe.cq.wcm.core.components.models.LayoutContainer">
+    <sly data-sly-test.responsive="${container.layout == 'RESPONSIVE_GRID'}"
+         data-sly-use.responsiveGridTemplate="responsiveGrid.amp.html"
+         data-sly-call="${responsiveGridTemplate.responsiveGrid @ container=container}"></sly>
+    <sly data-sly-test.simple="${!responsive}"
+         data-sly-use.simpleTemplate="simple.amp.html"
+         data-sly-call="${simpleTemplate.simple @ container=container}"></sly>
+</sly>
