@@ -66,14 +66,14 @@ public class AmpPageImpl implements AmpPage {
     private ClientLibraryAggregatorService aggregatorService;
 
     private Map<String, String> pageLinkAttrs;
-    private List<String> headlibIncludes;
+    private Set<String> headlibIncludes;
 
     @PostConstruct
     protected void init() {
         String ampMode = AmpUtil.getAmpMode(request);
         boolean isAmpSelector = Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
         pageLinkAttrs = new HashMap<>();
-        headlibIncludes = new ArrayList<>();
+        headlibIncludes = new HashSet<>();
         String relValue;
         String hrefValue;
         if (!isAmpSelector && ampMode.equals(AmpUtil.PAIRED_AMP)) {
@@ -148,6 +148,6 @@ public class AmpPageImpl implements AmpPage {
 
     @Override
     public List<String> getHeadlibIncludes() {
-        return headlibIncludes;
+        return new ArrayList<>(headlibIncludes);
     }
 }
