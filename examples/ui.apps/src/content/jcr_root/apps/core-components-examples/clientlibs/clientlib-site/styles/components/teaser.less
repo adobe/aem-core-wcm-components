@@ -17,8 +17,6 @@
 @cmp-examples-teaser-border-width: 1*@px;
 
 @cmp-examples-teaser-component-image-height: 180*@px;
-@cmp-examples-teaser-component-image-area-height: 220*@px;
-@cmp-examples-teaser-component-image-margin: (@cmp-examples-teaser-component-image-area-height - @cmp-examples-teaser-component-image-height) / 2;
 
 @cmp-examples-teaser-document-width: 260*@px;
 @cmp-examples-teaser-document-height: 64*@px;
@@ -77,13 +75,13 @@
         }
 
         .cmp-image__image {
-            margin-top: @cmp-examples-teaser-component-image-margin;
             height: @cmp-examples-teaser-component-image-height;
+            padding: 0 @cmp-examples-spacing-1;
         }
     }
 
     .cmp-teaser__content {
-        margin-top: @cmp-examples-teaser-component-image-area-height;
+        margin-top: @cmp-examples-teaser-component-image-height;
         padding: @cmp-examples-spacing-3 @cmp-examples-spacing-4 @cmp-examples-spacing-4;
         background-color: @cmp-examples-color-white;
     }
