@@ -89,10 +89,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -115,10 +115,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -141,10 +141,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -187,10 +187,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -213,10 +213,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -229,20 +229,21 @@
                         jcr:lastModified="{Date}2019-01-09T17:30:40.938+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
+                        jcr:title="CF List"
                         sling:resourceType="core/wcm/components/teaser/v1/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
                         fileReference="/content/dam/core-components-examples/library/components/content-fragment-list.svg"
                         linkURL="/content/core-components-examples/library/page-authoring/content-fragment-list"
                         textIsRich="true"
-                        titleFromPage="true">
+                        titleFromPage="false">
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -265,10 +266,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -291,10 +292,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -317,10 +318,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -343,10 +344,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -369,10 +370,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -395,10 +396,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -421,10 +422,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -447,10 +448,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -473,10 +474,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -499,10 +500,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -545,10 +546,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -571,10 +572,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -597,10 +598,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
@@ -623,10 +624,10 @@
                         <cq:responsive jcr:primaryType="nt:unstructured">
                             <default
                                 jcr:primaryType="nt:unstructured"
-                                width="4"/>
+                                width="3"/>
                             <small
                                 jcr:primaryType="nt:unstructured"
-                                width="6"/>
+                                width="4"/>
                             <extrasmall
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
