@@ -347,4 +347,8 @@ public interface Page extends ContainerExporter {
         throw new UnsupportedOperationException();
     }
 
+    default String getDataLayerJson() {
+        throw new UnsupportedOperationException();
+    }
+
 }
