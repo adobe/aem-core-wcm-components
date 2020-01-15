@@ -69,61 +69,9 @@
                         jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Template"
+                        jcr:title="Templating"
                         sling:resourceType="core/wcm/components/title/v2/title"
                         type="h2"/>
-                    <teaser_931274390
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/breadcrumb.svg"
-                        linkURL="/content/core-components-examples/library/template/breadcrumb/hidden/level-1/level-2/breadcrumb"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_931274390>
-                    <teaser_1607066013
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:31:20.431+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/language-navigation.svg"
-                        linkURL="/content/core-components-examples/library/template/language-navigation/language-structure/us/en/language-navigation"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1607066013>
                     <teaser_7603064014
                         cq:styleIds="[1547060090076]"
                         jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
@@ -135,7 +83,7 @@
                         actionsEnabled="false"
                         descriptionFromPage="true"
                         fileReference="/content/dam/core-components-examples/library/components/navigation.svg"
-                        linkURL="/content/core-components-examples/library/template/navigation"
+                        linkURL="/content/core-components-examples/library/templating/navigation"
                         textIsRich="true"
                         titleFromPage="true">
                         <cq:responsive jcr:primaryType="nt:unstructured">
@@ -150,6 +98,58 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_7603064014>
+                    <teaser_1607066013
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:31:20.431+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/language-navigation.svg"
+                        linkURL="/content/core-components-examples/library/templating/language-navigation/language-structure/us/en/language-navigation"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1607066013>
+                    <teaser_931274390
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/breadcrumb.svg"
+                        linkURL="/content/core-components-examples/library/templating/breadcrumb/hidden/level-1/level-2/breadcrumb"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_931274390>
                 </container>
                 <container_40754488
                     cq:styleIds="[1579016386576]"
@@ -170,6 +170,84 @@
                         jcr:title="Page Authoring"
                         sling:resourceType="core/wcm/components/title/v2/title"
                         type="h2"/>
+                    <teaser_1276818308
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:30:09.811+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:33:23.402+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/title.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/title"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1276818308>
+                    <teaser_893705994
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:30:11.839+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:33:11.153+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/text.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/text"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_893705994>
+                    <teaser_1579987477
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:29:52.616+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:30:56.410+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/image.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/image"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1579987477>
                     <teaser_1923066042
                         cq:styleIds="[1547060090076]"
                         jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
@@ -196,6 +274,110 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_1923066042>
+                    <teaser_1609110728
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:30:07.216+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:32:39.312+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/teaser.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/teaser"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1609110728>
+                    <teaser_1138854624
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-05-21T11:52:24.956+02:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/download.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/download"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1138854624>
+                    <teaser_1607066012
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:31:20.431+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/list.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/list"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1607066012>
+                    <teaser_1565704130
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:29:52.616+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:30:56.410+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/experience-fragment.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/experience-fragment"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1565704130>
                     <teaser_739474271
                         cq:styleIds="[1547060090076]"
                         jcr:created="{Date}2019-01-09T16:29:50.507+01:00"
@@ -249,32 +431,6 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_931274384>
-                    <teaser_1138854624
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-05-21T11:52:24.956+02:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/download.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/download"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1138854624>
                     <teaser_1138854628
                         cq:styleIds="[1547060090076]"
                         jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
@@ -301,110 +457,6 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_1138854628>
-                    <teaser_1565704130
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:52.616+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:30:56.410+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/experience-fragment.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/experience-fragment"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1565704130>
-                    <teaser_1579987477
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:52.616+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:30:56.410+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/image.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/image"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1579987477>
-                    <teaser_1607066012
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:56.315+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:31:20.431+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/list.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/list"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1607066012>
-                    <teaser_803940090
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:58.871+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:31:40.985+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/separator.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/separator"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_803940090>
                     <teaser_1803864476
                         cq:styleIds="[1547060090076]"
                         jcr:created="{Date}2019-01-09T16:30:01.616+01:00"
@@ -431,18 +483,18 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_1803864476>
-                    <teaser_1609110728
+                    <teaser_803940090
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:07.216+01:00"
+                        jcr:created="{Date}2019-01-09T16:29:58.871+01:00"
                         jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:32:39.312+01:00"
+                        jcr:lastModified="{Date}2019-01-09T17:31:40.985+01:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core/wcm/components/teaser/v1/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/teaser.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/teaser"
+                        fileReference="/content/dam/core-components-examples/library/components/separator.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/separator"
                         textIsRich="true"
                         titleFromPage="true">
                         <cq:responsive jcr:primaryType="nt:unstructured">
@@ -456,59 +508,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 width="12"/>
                         </cq:responsive>
-                    </teaser_1609110728>
-                    <teaser_893705994
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:11.839+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:11.153+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/text.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/text"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_893705994>
-                    <teaser_1276818308
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:30:09.811+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:23.402+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/title.svg"
-                        linkURL="/content/core-components-examples/library/page-authoring/title"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1276818308>
+                    </teaser_803940090>
                 </container_40754488>
                 <container_1589240805
                     cq:styleIds="[1579016386576]"
@@ -529,58 +529,6 @@
                         jcr:title="Container"
                         sling:resourceType="core/wcm/components/title/v2/title"
                         type="h2"/>
-                    <teaser_1276818309
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/accordion.svg"
-                        linkURL="/content/core-components-examples/library/container/accordion"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser_1276818309>
-                    <teaser
-                        cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
-                        jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
-                        jcr:lastModifiedBy="admin"
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                        actionsEnabled="false"
-                        descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/carousel.svg"
-                        linkURL="/content/core-components-examples/library/container/carousel"
-                        textIsRich="true"
-                        titleFromPage="true">
-                        <cq:responsive jcr:primaryType="nt:unstructured">
-                            <default
-                                jcr:primaryType="nt:unstructured"
-                                width="3"/>
-                            <small
-                                jcr:primaryType="nt:unstructured"
-                                width="4"/>
-                            <extrasmall
-                                jcr:primaryType="nt:unstructured"
-                                width="12"/>
-                        </cq:responsive>
-                    </teaser>
                     <teaser_1837085907
                         cq:styleIds="[1547060090076]"
                         jcr:created="{Date}2019-05-28T13:32:25.481+03:00"
@@ -607,6 +555,32 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_1837085907>
+                    <teaser
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/carousel.svg"
+                        linkURL="/content/core-components-examples/library/container/carousel"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser>
                     <teaser_1767983946
                         cq:styleIds="[1547060090076]"
                         jcr:created="{Date}2019-01-09T16:30:04.042+01:00"
@@ -633,6 +607,32 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_1767983946>
+                    <teaser_1276818309
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-01-09T16:29:48.058+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-01-09T17:33:49.020+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/accordion.svg"
+                        linkURL="/content/core-components-examples/library/container/accordion"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1276818309>
                 </container_1589240805>
                 <text_557507476
                     cq:styleIds="[1550360114923]"
@@ -649,5 +649,5 @@
     </jcr:content>
     <container/>
     <page-authoring/>
-    <template/>
+    <templating/>
 </jcr:root>

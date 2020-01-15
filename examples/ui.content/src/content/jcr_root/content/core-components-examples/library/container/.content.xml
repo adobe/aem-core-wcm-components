@@ -13,8 +13,8 @@
         sling:redirectStatus="{Long}302"
         sling:resourceType="foundation/components/redirect"
         redirectTarget="/content/core-components-examples/library"/>
-    <accordion/>
-    <carousel/>
     <container/>
+    <carousel/>
     <tabs/>
+    <accordion/>
 </jcr:root>

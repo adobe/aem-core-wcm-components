@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-11-11T15:37:43.912+01:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/template]"
+        cq:tags="[core-components-examples:component-type/templating]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display a site navigation menu"
         jcr:primaryType="cq:PageContent"

@@ -2,14 +2,15 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-06-06T10:59:04.878+03:00"
+        cq:lastModified="{Date}2019-06-06T11:02:34.698+03:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/template]"
+        cq:tags="[core-components-examples:component-type/templating]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Display a language switcher"
         jcr:primaryType="cq:PageContent"
         jcr:title="Language Navigation"
-        sling:resourceType="core-components-examples/components/page">
+        sling:resourceType="core-components-examples/components/page"
+        navTitle="Navigation Linguistique"
+        pageTitle="Navigation Linguistique">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
@@ -20,21 +21,21 @@
                     cq:styleIds="[1644862132301]"
                     jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
+                    jcr:lastModified="{Date}2019-06-06T11:01:37.269+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Language Navigation&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
+                    text="&lt;h1>Navigation Linguisitique&lt;sub>v1&lt;/sub>&lt;/h1>&#xd;&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
                     jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-06T10:59:04.875+03:00"
+                    jcr:lastModified="{Date}2019-06-06T11:01:50.400+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Language Navigation provides a language/country navigation for a site, so that visitors can navigate to the same page in a different locale.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>Navigation Linguistique fournit une navigation par langue / pays pour un site, de sorte que les visiteurs puissent accéder à la même page dans des paramètres régionaux différents.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <teaser
                     cq:styleIds="[1550165685463]"
@@ -75,7 +76,7 @@
                     jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Examples"
+                    jcr:title="Exemples"
                     sling:resourceType="core/wcm/components/title/v2/title"
                     type="h2"/>
                 <title_290384408
@@ -91,11 +92,11 @@
                 <text_1337506761
                     jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-06-06T10:58:35.598+03:00"
+                    jcr:lastModified="{Date}2019-06-06T11:02:30.677+03:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Simple language navigation with &lt;i>Language Structure Depth&lt;/i> set to two. Shows a language navigation structure built from a page tree with both country and locale displayed in the result.&lt;/p>&#xd;&#xa;"
+                    text="&lt;p>&lt;i>Profondeur de la Structure de Language&lt;/i> configurée à deux. Affiche une structure de navigation construite à partir d’une arborescence de pages avec le pays et la langue affichés dans le résultat.&lt;/p>&#xd;&#xa;"
                     textIsRich="true"/>
                 <demo
                     jcr:created="{Date}2018-12-07T12:55:03.496+01:00"
@@ -110,7 +111,7 @@
                         <languageNavigation
                             jcr:created="{Date}2019-03-06T14:11:01.819+01:00"
                             jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2019-06-06T10:40:17.077+03:00"
+                            jcr:lastModified="{Date}2019-06-06T11:02:34.696+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
                             sling:resourceType="core/wcm/components/languagenavigation/v1/languagenavigation"

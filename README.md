@@ -23,7 +23,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 ## Available Components
 
-### Template components
+### Templating
 
 1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
 2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
@@ -31,7 +31,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
-### Page authoring components
+### Page Authoring
 
 6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
@@ -47,7 +47,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
 18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
 
-### Container components
+### Container
 
 19. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
 20. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)

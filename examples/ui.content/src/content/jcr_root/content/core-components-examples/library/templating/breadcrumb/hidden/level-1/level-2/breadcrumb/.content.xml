@@ -4,7 +4,7 @@
     <jcr:content
         cq:lastModified="{Date}2019-05-23T13:33:43.701+03:00"
         cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/template]"
+        cq:tags="[core-components-examples:component-type/templating]"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="Display a breadcrumb navigation"
         jcr:primaryType="cq:PageContent"
