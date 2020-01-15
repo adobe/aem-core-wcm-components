@@ -647,7 +647,7 @@
             </responsivegrid>
         </root>
     </jcr:content>
-    <container/>
-    <page-authoring/>
     <templating/>
+    <page-authoring/>
+    <container/>
 </jcr:root>
