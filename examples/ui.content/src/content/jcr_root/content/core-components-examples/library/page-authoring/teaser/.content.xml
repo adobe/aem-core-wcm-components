@@ -249,7 +249,7 @@
                             actionsEnabled="false"
                             descriptionFromPage="false"
                             fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
-                            linkURL="/content/core-components-examples/library/teaser"
+                            linkURL="/content/core-components-examples/library/page-authoring/teaser"
                             textIsRich="true"
                             titleFromPage="false"/>
                     </component>
@@ -319,7 +319,7 @@
                             <actions jcr:primaryType="nt:unstructured">
                                 <item0
                                     jcr:primaryType="nt:unstructured"
-                                    link="/content/core-components-examples/library/teaser"
+                                    link="/content/core-components-examples/library/page-authoring/teaser"
                                     text="Call To Action"/>
                             </actions>
                         </teaser>
@@ -390,7 +390,7 @@
                             <actions jcr:primaryType="nt:unstructured">
                                 <item0
                                     jcr:primaryType="nt:unstructured"
-                                    link="/content/core-components-examples/library/teaser"
+                                    link="/content/core-components-examples/library/page-authoring/teaser"
                                     text="Call To Action"/>
                                 <item1
                                     jcr:primaryType="nt:unstructured"
@@ -458,7 +458,7 @@
                             sling:resourceType="core/wcm/components/teaser/v1/teaser"
                             actionsEnabled="false"
                             descriptionFromPage="true"
-                            linkURL="/content/core-components-examples/library/teaser"
+                            linkURL="/content/core-components-examples/library/page-authoring/teaser"
                             textIsRich="true"
                             titleFromPage="true"/>
                     </component>
