@@ -67,10 +67,11 @@ public class AmpPageImpl implements AmpPage {
 
     private Map<String, String> pageLinkAttrs;
     private Set<String> headlibIncludes;
+    private String ampMode;
 
     @PostConstruct
     protected void init() {
-        String ampMode = AmpUtil.getAmpMode(request);
+        ampMode = AmpUtil.getAmpMode(request);
         boolean isAmpSelector = Arrays.asList(request.getRequestPathInfo().getSelectors()).contains(AMP_SELECTOR);
         pageLinkAttrs = new HashMap<>();
         headlibIncludes = new HashSet<>();
@@ -149,5 +150,10 @@ public class AmpPageImpl implements AmpPage {
     @Override
     public List<String> getHeadlibIncludes() {
         return new ArrayList<>(headlibIncludes);
+    }
+
+    @Override
+    public boolean isAmpEnabled() {
+        return ampMode.equals(AmpUtil.PAIRED_AMP) || ampMode.equals(AmpUtil.AMP_ONLY);
     }
 }

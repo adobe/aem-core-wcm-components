@@ -45,4 +45,13 @@ public interface AmpPage {
     default List<String> getHeadlibIncludes() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Getter for whether the current page is AMP enabled.
+     *
+     * @return boolean for AMP enabled
+     */
+    default boolean isAmpEnabled() {
+        throw new UnsupportedOperationException();
+    }
 }

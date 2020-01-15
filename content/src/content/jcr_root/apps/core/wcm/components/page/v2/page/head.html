@@ -25,7 +25,7 @@
     <sly data-sly-include="head.socialmedia.html"></sly>
 
     <sly data-sly-use.ampPage="com.adobe.cq.wcm.core.components.models.AmpPage"/>
-    <link data-sly-attribute="${ampPage.pageLinkAttrs}">
+    <link data-sly-test="${ampPage.ampEnabled}" data-sly-attribute="${ampPage.pageLinkAttrs}">
 
     <sly data-sly-include="customheaderlibs.html"></sly>
     <sly data-sly-call="${headlibRenderer.headlibs @

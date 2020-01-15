@@ -33,7 +33,7 @@ public class AmpUtil {
 
     private static final String AMP_MODE_PROP = "ampMode";
 
-    static final String AMP_ONLY = "ampOnly";
+    public static final String AMP_ONLY = "ampOnly";
 
     static final String NO_AMP = "noAmp";
 

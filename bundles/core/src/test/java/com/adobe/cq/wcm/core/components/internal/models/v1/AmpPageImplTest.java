@@ -32,6 +32,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
@@ -66,6 +67,8 @@ public class AmpPageImplTest {
         expectedAttrs.put("href", "/content/paired-amp.html");
         assertEquals(expectedAttrs, ampPage.getPageLinkAttrs());
 
+        assertTrue(ampPage.isAmpEnabled());
+
         assertNotNull(ampPage.getHeadlibIncludes());
         assertEquals(1, ampPage.getHeadlibIncludes().size());
         assertEquals("/apps/core/wcm/components/page/v2/page/customheadlibs.amp.html", ampPage.getHeadlibIncludes().get(0));
@@ -81,6 +84,8 @@ public class AmpPageImplTest {
         expectedAttrs.put("rel", "amphtml");
         expectedAttrs.put("href", "/content/paired-amp.amp.html");
         assertEquals(expectedAttrs, ampPage.getPageLinkAttrs());
+
+        assertTrue(ampPage.isAmpEnabled());
 
         assertNotNull(ampPage.getHeadlibIncludes());
         assertEquals(0, ampPage.getHeadlibIncludes().size());
