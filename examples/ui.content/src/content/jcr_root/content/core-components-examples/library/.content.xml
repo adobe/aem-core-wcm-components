@@ -646,6 +646,7 @@
                     textIsRich="true"/>
             </responsivegrid>
         </root>
+        <image/>
     </jcr:content>
     <templating/>
     <page-authoring/>
