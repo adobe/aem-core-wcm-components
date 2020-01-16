@@ -2,11 +2,11 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-12-19T17:32:54.204+01:00"
+        cq:lastModified="{Date}2020-01-16T17:27:16.788+01:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:primaryType="cq:PageContent"
-        jcr:title="Form Options"
+        jcr:title="Form-Options"
         sling:resourceType="core-components-examples/components/page"
         translated="{Boolean}false">
         <root
@@ -85,10 +85,10 @@
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2019-12-12T14:21:54.312+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-19T13:56:01.970+01:00"
+                    jcr:lastModified="{Date}2020-01-16T17:26:41.474+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Form Option Checkbox"
+                    jcr:title="Checkbox"
                     sling:resourceType="core/wcm/components/title/v2/title"/>
                 <text_1910564414
                     jcr:created="{Date}2019-12-12T14:22:11.663+01:00"
@@ -190,11 +190,12 @@
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2019-12-12T15:09:49.918+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-19T14:56:08.650+01:00"
+                    jcr:lastModified="{Date}2020-01-16T17:26:50.174+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Form Option Radio Button"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    jcr:title="Radio Button"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    type="h1"/>
                 <text_1068966881
                     jcr:created="{Date}2019-12-12T15:10:07.890+01:00"
                     jcr:createdBy="admin"
@@ -279,11 +280,12 @@
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2019-12-12T15:42:33.231+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-19T15:06:46.192+01:00"
+                    jcr:lastModified="{Date}2020-01-16T17:27:02.036+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Form Option Drop-Down"
-                    sling:resourceType="core/wcm/components/title/v2/title"/>
+                    jcr:title="Drop-Down"
+                    sling:resourceType="core/wcm/components/title/v2/title"
+                    type="h1"/>
                 <text_203677928
                     jcr:created="{Date}2019-12-12T15:42:55.336+01:00"
                     jcr:createdBy="admin"
@@ -378,10 +380,10 @@
                     cq:styleIds="[1544759676459]"
                     jcr:created="{Date}2019-12-19T14:57:30.796+01:00"
                     jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-19T15:08:21.889+01:00"
+                    jcr:lastModified="{Date}2020-01-16T17:27:16.779+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    jcr:title="Form Option Multi-select Drop-Down"
+                    jcr:title="Multi-select Drop-Down"
                     sling:resourceType="core/wcm/components/title/v2/title"/>
                 <text_1221698802
                     jcr:created="{Date}2019-12-19T14:57:49.048+01:00"
