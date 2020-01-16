@@ -14,18 +14,8 @@
  *  limitations under the License.
  */
 
-// we assume there is one navigation component in the aside
+// we assume there is one navigation styling in the aside
 .cmp-examples-structure__aside {
-    .cmp-navigation {
-        margin-top: @cmp-examples-spacing-1;
-        padding-right: @cmp-examples-spacing-5;
-        padding-bottom: @cmp-examples-spacing-8;
-
-        @media @cmp-examples-screen-s-min {
-            padding-right: @cmp-examples-spacing-8;
-        }
-    }
-
     .cmp-navigation__group {
         margin: 0;
         padding: 0;
@@ -35,9 +25,9 @@
 
     .cmp-navigation__item-link {
         display: block;
-        margin-bottom: @cmp-examples-spacing-1;
+        margin: @cmp-examples-spacing-1 0;
         border-radius: @cmp-examples-border-radius;
-        padding: @cmp-examples-spacing-2 @cmp-examples-spacing-3;
+        padding: @cmp-examples-spacing-2 @cmp-examples-spacing-3 @cmp-examples-spacing-2 @cmp-examples-spacing-6;
 
         font-size: @cmp-examples-font-size-s;
         text-decoration: none;
