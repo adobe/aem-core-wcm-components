@@ -141,8 +141,8 @@
                     sling:resourceType="core/wcm/components/teaser/v1/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="true"
-                    fileReference="/content/dam/core-components-examples/library/components/form-input.svg"
-                    linkURL="/content/core-components-examples/library/form-input"
+                    fileReference="/content/dam/core-components-examples/library/components/carousel.svg"
+                    linkURL="/content/core-components-examples/library/carousel"
                     textIsRich="true"
                     titleFromPage="true">
                     <cq:responsive jcr:primaryType="nt:unstructured">
