@@ -34,7 +34,7 @@
         var imageElt = event.currentTarget;
         var imageData = getImageData(imageElt);
         dataLayer.push({
-            event: 'image clicked',
+            event: "image clicked",
             info: {
                 path: imageData[Object.keys(imageData)[0]].path
             }
@@ -47,7 +47,7 @@
     }
 
     function onDocumentReady() {
-        var elements = document.querySelectorAll('.cmp-image');
+        var elements = document.querySelectorAll("[data-cmp-image-data-layer]");
         for (var i = 0; i < elements.length; i++) {
             init(elements[i]);
         }
