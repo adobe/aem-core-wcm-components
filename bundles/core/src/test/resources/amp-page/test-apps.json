@@ -8,7 +8,7 @@
                 "jcr:title": "Text (v1)",
                 "sling:resourceSuperType": "core/wcm/components/text",
                 "componentGroup": ".core-wcm",
-                "ampheadlibs.html": {
+                "customheadlibs.amp.html": {
                     "jcr:primaryType": "nt:file",
                     "jcr:content": {
                         "jcr:primaryType": "nt:resource",
@@ -39,7 +39,15 @@
                 "jcr:primaryType": "cq:Component",
                 "jcr:title": "Sample Super (v1)",
                 "sling:resourceSuperType": "core/wcm/components/text",
-                "componentGroup": ".core-wcm"
+                "componentGroup": ".core-wcm",
+                "customheadlibs.amp.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/html",
+                        "jcr:data": "<script>console.log('This is amp text component script')</script>"
+                    }
+                }
             }
         }
     },
@@ -55,20 +63,26 @@
             }
         }
     },
-    "invalid-headlib": {
+    "no-supertype": {
         "jcr:primaryType": "sling:Folder",
         "v1": {
             "jcr:primaryType": "nt:unstructured",
-            "invalid-headlib": {
+            "no-supertype": {
                 "jcr:primaryType": "cq:Component",
-                "jcr:title": "Invalid Headlib (v1)",
+                "jcr:title": "No Supertype (v1)",
+                "componentGroup": ".core-wcm"
+            }
+        }
+    },
+    "no-local": {
+        "jcr:primaryType": "sling:Folder",
+        "v1": {
+            "jcr:primaryType": "nt:unstructured",
+            "no-local": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "No Local Headlib (v1)",
                 "componentGroup": ".core-wcm",
-                "ampheadlibs.html": {
-                    "jcr:primaryType": "nt:file",
-                    "jcr:content": {
-                        "jcr:primaryType": "nt:unstructured"
-                    }
-                }
+                "sling:resourceSuperType":"core/wcm/components/no-supertype/v1/no-supertype"
             }
         }
     },
@@ -81,7 +95,7 @@
                 "jcr:title": "Page (v2)",
                 "sling:resourceSuperType": "wcm/foundation/components/basicpage/v1/basicpage",
                 "componentGroup": ".core-wcm",
-                "ampheadlibs.html": {
+                "customheadlibs.amp.html": {
                     "jcr:primaryType": "nt:file",
                     "jcr:content": {
                         "jcr:primaryType": "nt:resource",

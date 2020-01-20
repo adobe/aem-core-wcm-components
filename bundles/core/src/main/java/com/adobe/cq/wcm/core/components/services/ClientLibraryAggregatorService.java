@@ -34,5 +34,7 @@ public interface ClientLibraryAggregatorService {
 
     ResourceResolver getClientlibResourceResolver() throws LoginException;
 
+    String getHeadlibName();
+
     String getResourceTypeRegex();
 }
