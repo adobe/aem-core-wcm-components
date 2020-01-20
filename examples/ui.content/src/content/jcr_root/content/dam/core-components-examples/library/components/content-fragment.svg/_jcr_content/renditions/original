@@ -1,57 +1,55 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 180 180" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
-    <g id="Group_21" transform="matrix(1,0,0,1,-4599,-1114)">
-        <g id="Rectangle_146076" transform="matrix(1,0,0,1,4599,1114)">
-            <rect x="0" y="0" width="180" height="180" style="fill:none;"/>
-        </g>
-        <g id="Rectangle_146077" transform="matrix(1,0,0,1,4626.5,1155.5)">
-            <path d="M122,2C122,0.896 121.104,0 120,0L2,0C0.896,0 0,0.896 0,2L0,85C0,86.104 0.896,87 2,87L120,87C121.104,87 122,86.104 122,85L122,2Z" style="fill:none;stroke:rgb(179,179,179);stroke-width:3px;"/>
-        </g>
-        <g id="Line_43" transform="matrix(1,0,0,1,4627,1179)">
-            <path d="M0,0L121,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:3px;"/>
-        </g>
-        <g id="Group_16">
-            <g id="Group_15">
-                <g id="Line_44" transform="matrix(1,0,0,1,4663,1191)">
-                    <path d="M0,0L67,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
-                </g>
-                <g id="Line_45" transform="matrix(1,0,0,1,4663,1197)">
-                    <path d="M0,0L60,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
-                </g>
-            </g>
-            <g id="Line_46" transform="matrix(1,0,0,1,4639.5,1191.5)">
-                <path d="M0,0L13,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:3px;"/>
-            </g>
-        </g>
-        <g id="Group_18">
-            <g id="Group_17">
-                <g id="Line_47" transform="matrix(1,0,0,1,4663,1208)">
-                    <path d="M0,0L67,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
-                </g>
-                <g id="Line_48" transform="matrix(1,0,0,1,4663,1214)">
-                    <path d="M0,0L60,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
-                </g>
-            </g>
-            <g id="Line_49" transform="matrix(1,0,0,1,4639.5,1208.5)">
-                <path d="M0,0L13,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:3px;"/>
-            </g>
-        </g>
-        <g id="Group_20">
-            <g id="Group_19">
-                <g id="Line_50" transform="matrix(1,0,0,1,4663,1225)">
-                    <path d="M0,0L67,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
-                </g>
-                <g id="Line_51" transform="matrix(1,0,0,1,4663,1231)">
-                    <path d="M0,0L60,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:2px;"/>
-                </g>
-            </g>
-            <g id="Line_52" transform="matrix(1,0,0,1,4639.5,1225.5)">
-                <path d="M0,0L13,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:3px;"/>
-            </g>
-        </g>
-        <g id="Line_53" transform="matrix(1,0,0,1,4639.5,1167.5)">
-            <path d="M0,0L51,0" style="fill:none;stroke:rgb(179,179,179);stroke-width:3px;"/>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <g id="Group_21" transform="translate(-4599 -1114)">
+    <g id="Rectangle_146076" transform="translate(4599 1114)">
+      <rect id="Rectangle_11" data-name="Rectangle 11" width="180" height="180" fill="none"/>
     </g>
+    <g id="Rectangle_146077" transform="translate(4626.5 1155.5)">
+      <path id="Path_573" data-name="Path 573" d="M122,2a2,2,0,0,0-2-2H2A2,2,0,0,0,0,2V85a2,2,0,0,0,2,2H120a2,2,0,0,0,2-2Z" fill="none" stroke="#b3b3b3" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill-rule="evenodd"/>
+    </g>
+    <g id="Line_43" transform="translate(4627 1179)">
+      <path id="Path_574" data-name="Path 574" d="M0,0H121" fill="none" stroke="#b3b3b3" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill-rule="evenodd"/>
+    </g>
+    <g id="Group_16">
+      <g id="Group_15">
+        <g id="Line_44" transform="translate(4663 1191)">
+          <path id="Path_575" data-name="Path 575" d="M0,0H67" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd"/>
+        </g>
+        <g id="Line_45" transform="translate(4663 1197)">
+          <path id="Path_576" data-name="Path 576" d="M0,0H60" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd"/>
+        </g>
+      </g>
+      <g id="Line_46" transform="translate(4639.5 1191.5)">
+        <path id="Path_577" data-name="Path 577" d="M0,0H13" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill-rule="evenodd"/>
+      </g>
+    </g>
+    <g id="Group_18">
+      <g id="Group_17">
+        <g id="Line_47" transform="translate(4663 1208)">
+          <path id="Path_578" data-name="Path 578" d="M0,0H67" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd"/>
+        </g>
+        <g id="Line_48" transform="translate(4663 1214)">
+          <path id="Path_579" data-name="Path 579" d="M0,0H60" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd"/>
+        </g>
+      </g>
+      <g id="Line_49" transform="translate(4639.5 1208.5)">
+        <path id="Path_580" data-name="Path 580" d="M0,0H13" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill-rule="evenodd"/>
+      </g>
+    </g>
+    <g id="Group_20">
+      <g id="Group_19">
+        <g id="Line_50" transform="translate(4663 1225)">
+          <path id="Path_581" data-name="Path 581" d="M0,0H67" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd"/>
+        </g>
+        <g id="Line_51" transform="translate(4663 1231)">
+          <path id="Path_582" data-name="Path 582" d="M0,0H60" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill-rule="evenodd"/>
+        </g>
+      </g>
+      <g id="Line_52" transform="translate(4639.5 1225.5)">
+        <path id="Path_583" data-name="Path 583" d="M0,0H13" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill-rule="evenodd"/>
+      </g>
+    </g>
+    <g id="Line_53" transform="translate(4639.5 1167.5)">
+      <path id="Path_584" data-name="Path 584" d="M0,0H51" fill="none" stroke="#1673e6" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" fill-rule="evenodd"/>
+    </g>
+  </g>
 </svg>
