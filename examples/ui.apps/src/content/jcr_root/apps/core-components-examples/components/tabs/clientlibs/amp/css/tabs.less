@@ -75,22 +75,11 @@ amp-selector [option][selected] {
     outline: none;
 }
 
-.cmp-tabs {
-    &__tablist {
-        display: flex;
-        flex-wrap: wrap;
-        border-bottom: 0.0625rem solid;
-        padding-left: 0;
-        list-style: none;
-        border-color: #e1e1e1;
-    }
-
-    &__tab {
-        &[aria-selected="true"] {
-            border: 0;
-            outline: none;
-            border-bottom: 2px solid @gray;
-            color: @gray;
-        }
+.cmp-tabs__tab {
+    &[selected] {
+        border: 0;
+        outline: none;
+        border-bottom: 2px solid @gray;
+        color: @gray;
     }
 }
