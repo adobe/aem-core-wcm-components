@@ -5,17 +5,17 @@
     jcr:uuid="99104768-166b-4a65-bc43-0e0291b968c8">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-24T13:26:26.415+02:00"
+        jcr:lastModified="{Date}2019-12-19T17:36:29.848+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-05-24T13:21:57.120+02:00"
+            dam:extracted="{Date}2019-12-19T17:36:29.696+01:00"
             dam:sha1="a6c0b203501a627752b294a678b0d01d7250deb5"
             dam:size="{Long}4356"
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-05-24T13:26:26.415+02:00"
             dc:title="Breadcrumb"
-            jcr:lastModified="{Date}2019-05-24T13:26:26.415+02:00"
+            jcr:lastModified="{Date}2019-12-19T17:36:29.759+01:00"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured">

@@ -8,17 +8,17 @@
         cq:name="embed.svg"
         cq:parentPath="/content/dam/core-components-examples/library/components"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-07-30T15:51:22.276+02:00"
+        jcr:lastModified="{Date}2019-12-19T17:36:29.732+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-07-30T15:51:09.847+02:00"
+            dam:extracted="{Date}2019-12-19T17:36:28.928+01:00"
             dam:sha1="5f0b4154b1649835489da33e607d4853f45e298d"
             dam:size="{Long}9501"
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-07-30T15:51:22.276+02:00"
             dc:title="Embed"
-            jcr:lastModified="{Date}2019-07-30T15:51:22.276+02:00"
+            jcr:lastModified="{Date}2019-12-19T17:36:29.732+01:00"
             jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured">
