@@ -13,41 +13,21 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-  
-<div data-sly-use.tabs="com.adobe.cq.wcm.core.components.models.Tabs"
-     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-     class="cmp-tabs"
-     data-cmp-is="tabs">
-
-    <amp-selector data-sly-test="${tabs.items && tabs.items.size > 0}"
-        role="tablist"
-        data-sly-list.tab="${tabs.items}"
-        class="cmp-tabs__tablist tabs-with-flex"
-        aria-label="${tabs.accessibilityLabel}"
-        aria-multiselectable="false">
-        <sly data-sly-test.isActive="${tab.name == tabs.activeItem}"/>
-
-        <div role="tab"
-             option
-             id="tab-item${tabs.tabsId}-${tabList.index}"
-             aria-controls="tab-panel${tabs.tabsId}-${tabList.index}"
-             class="cmp-tabs__tab"
-             data-sly-attribute.selected=${isActive}
-             tabindex="${isActive ? '0' : '-1'}"
-             data-cmp-hook-tabs="tab">
-             ${tab.title}
-        </div>
-
-        <div id="tab-panel${tabs.tabsId}-${tabList.index}"
-             aria-labelledby="tab-item${tabs.tabsId}-${tabList.index}"
-             data-sly-resource="${tab.name @ decorationTagName='div'}"
-             role="tabpanel"
-             tabindex="0"
-             class="cmp-tabs__tabpanel${tab.name == tabs.activeItem ? ' cmp-tabs__tabpanel--active' : ''}"
-             data-cmp-hook-tabs="tabpanel"></div>
-
-        <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
-             data-sly-test="${(wcmmode.edit || wcmmode.preview) && tabs.items.size < 1}">
-        </sly>         
-    </amp-selector>
-</div>
+<amp-selector data-sly-use.tabs="com.adobe.cq.wcm.core.components.models.Tabs"
+              data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+              data-sly-test="${tabs.items && tabs.items.size > 0}"
+              data-sly-list.item="${tabs.items}"
+              class="cmp-tabs tabs-with-flex"
+              role="tablist">
+    <div id="tab-item${tabs.tabsId}-${itemList.index}"
+         class="cmp-tabs__tab"
+         option
+         selected="${item.name == tabs.activeItem}"
+         role="tab"
+         aria-controls="tab-panel${tabs.tabsId}-${itemList.index}">${item.title}</div>
+    <div id="tab-panel${tabs.tabsId}-${itemList.index}"
+         aria-labelledby="tab-item${tabs.tabsId}-${itemList.index}"
+         data-sly-resource="${item.name @ decorationTagName='div'}"
+         role="tabpanel"
+         class="cmp-tabs__tabpanel"></div>
+</amp-selector>

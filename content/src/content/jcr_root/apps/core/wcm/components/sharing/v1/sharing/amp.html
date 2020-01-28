@@ -13,14 +13,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-use.socialMedia="com.adobe.cq.wcm.core.components.models.SocialMediaHelper"
+<sly data-sly-use.socialMedia="com.adobe.cq.wcm.core.components.models.SocialMediaHelper"
+     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-call="${template.placeholder @ isEmpty=!socialMedia.socialMediaEnabled}"></sly>
-
-<sly data-sly-test="${socialMedia.facebookEnabled && socialMedia.facebookAppId}">
-  <amp-social-share type="facebook" data-param-app_id="${socialMedia.facebookAppId}"></amp-social-share>
-</sly>
-
-<sly data-sly-test="${socialMedia.pinterestEnabled}">
-  <amp-social-share type="pinterest" data-param-media="${socialMedia.metadata.og:image}"></amp-social-share>
-</sly>
+<amp-social-share data-sly-test="${socialMedia.facebookEnabled && socialMedia.facebookAppId}"
+                  type="facebook"
+                  data-param-app_id="${socialMedia.facebookAppId}"></amp-social-share>
+<amp-social-share data-sly-test="${socialMedia.pinterestEnabled}"
+                  type="pinterest"
+                  data-param-media="${socialMedia.metadata.og:image}"></amp-social-share>
