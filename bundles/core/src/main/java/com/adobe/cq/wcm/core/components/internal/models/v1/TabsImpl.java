@@ -20,6 +20,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
@@ -27,6 +28,9 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Tabs;
+
+import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.components.ComponentManager;
 
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 
@@ -45,6 +49,9 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     @SlingObject
     private Resource resource;
 
+    @Self
+    SlingHttpServletRequest request;
+
     private String activeItemName;
 
     @Override
@@ -53,6 +60,19 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
             Resource active = resource.getChild(activeItem);
             if (active != null) {
                 activeItemName = activeItem;
+            } else {
+                ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
+                if (componentManager != null) {
+                    for (Resource res : resource.getChildren()) {
+                        if (res != null) {
+                            Component component = componentManager.getComponentOfResource(res);
+                            if (component != null) {
+                                activeItemName = res.getName();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
         return activeItemName;
