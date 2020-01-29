@@ -313,7 +313,16 @@
     "navigation-livecopy"         : {
         "jcr:primaryType": "cq:Page",
         "jcr:content"    : {
-            "jcr:primaryType": "cq:PageContent"
+            "jcr:primaryType": "cq:PageContent",
+            "root"           : {
+                "jcr:primaryType"        : "nt:unstructured",
+                "navigation-component-15": {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "core/wcm/components/navigation/v1/navigation",
+                    "navigationRoot"    : "/content/navigation-blueprint",
+                    "skipNavigationRoot": false
+                }
+            }
         },
         "1"              : {
             "jcr:primaryType": "cq:Page",

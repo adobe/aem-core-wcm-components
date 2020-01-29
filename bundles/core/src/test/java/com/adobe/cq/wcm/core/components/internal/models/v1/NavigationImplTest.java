@@ -78,6 +78,7 @@ class NavigationImplTest {
     private static final String NAV_COMPONENT_12 = TEST_ROOT + "/jcr:content/root/navigation-component-12";
     private static final String NAV_COMPONENT_13 = TEST_ROOT + "/jcr:content/root/navigation-component-13";
     private static final String NAV_COMPONENT_14 = TEST_ROOT + "/jcr:content/root/navigation-component-14";
+    private static final String NAV_COMPONENT_15 = "/content/navigation-livecopy/jcr:content/root/navigation-component-15";
 
     @BeforeEach
     void setUp() throws WCMException {
@@ -272,6 +273,21 @@ class NavigationImplTest {
                 {"/content/navigation-livecopy/1/1-3", 2, false, "/content/navigation-livecopy/1/1-3.html"},
                 {"/content/navigation-livecopy/2", 1, true, "/content/navigation-livecopy/2.html"},
                 {"/content/navigation-livecopy/3", 1, false, "/content/navigation-livecopy/3.html"},
+
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+    }
+
+    @Test
+    void testNavigationWithLiveCopyTreeCurrentPageAtRoot() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_15);
+        Object[][] expectedPages = {
+            {"/content/navigation-livecopy", 0, true, "/content/navigation-livecopy.html"},
+            {"/content/navigation-livecopy/1", 1, false, "/content/navigation-livecopy/1.html"},
+            {"/content/navigation-livecopy/1/1-1", 2, false, "/content/navigation-livecopy/1/1-1.html"},
+            {"/content/navigation-livecopy/1/1-3", 2, false, "/content/navigation-livecopy/1/1-3.html"},
+            {"/content/navigation-livecopy/2", 1, false, "/content/navigation-livecopy/2.html"},
+            {"/content/navigation-livecopy/3", 1, false, "/content/navigation-livecopy/3.html"},
 
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
