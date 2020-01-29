@@ -1,0 +1,55 @@
+{
+    "imagelist": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Image List Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description"   : "Image List description",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "imagelist-1"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "sling:resourceType"  : "core/wcm/components/imagelist/v1/imagelist",
+                        "imageList"                : {
+                            "jcr:primaryType" : "nt:unstructured",
+                            "item0" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "sling:resourceType"  :"core/wcm/components/image",
+                                "fileReference"   : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                                "linkURL": "http://www.adobe.com",
+                                "linkText": "Adobe"
+                            },
+                            "item1" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "sling:resourceType"  :"core/wcm/components/image",
+                                "fileReference"   : "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                                "linkURL": "https://www.google.com/",
+                                "linkText": "ImageList"
+                            }
+                        }
+                    },
+                   "imagelist-2"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "sling:resourceType"  : "core/wcm/components/imagelist/v1/imagelist",
+                        "imageList"                : {
+                            "jcr:primaryType" : "nt:unstructured",
+                            "item0" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "sling:resourceType"  :"core/wcm/components/image"
+                            },
+                            "item1" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "sling:resourceType"  :"core/wcm/components/image"
+                            }
+                        }
+                    } 
+                }
+            }
+        }
+    }
+}
