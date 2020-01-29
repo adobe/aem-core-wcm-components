@@ -93,7 +93,7 @@ public class LayoutContainerImplTest {
     @Test
     public void testContainerNoProperties() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_2, null);
-        assertNull("Id", container.getId());
+        assertEquals("Id mismatch", "container-1fe48feca7", container.getId());
         assertNull("Style", container.getBackgroundStyle());
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.SIMPLE,
@@ -103,7 +103,7 @@ public class LayoutContainerImplTest {
     @Test
     public void testContainerWithPropertiesAndNoPolicy() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_3, null);
-        assertNull("Id", container.getId());
+        assertEquals("Id mismatch", "container-0880528a35", container.getId());
         assertNull("Style", container.getBackgroundStyle());
     }
     
