@@ -21,6 +21,8 @@
      data-sly-use.descriptionTemplate="description.html"
      data-sly-use.actionsTemplate="actions.html"
      data-sly-test.hasContent="${teaser.imageResource || teaser.pretitle || teaser.title || teaser.description || teaser.actions.size > 0}"
+     data-sly-use.cmp="com.adobe.cq.wcm.core.components.models.Component"
+     id="${cmp.id}"
      class="cmp-teaser${!wcmmode.disabled && teaser.imageResource ? ' cq-dd-image' : ''}">
     <sly data-sly-call="${imageTemplate.image @ teaser=teaser}"></sly>
     <div class="cmp-teaser__content">

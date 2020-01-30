@@ -23,6 +23,8 @@
      data-asset="${image.fileReference}"
      data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
+     data-sly-use.cmp="com.adobe.cq.wcm.core.components.models.Component"
+     id="${cmp.id}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
     <a data-sly-unwrap="${!image.link}"

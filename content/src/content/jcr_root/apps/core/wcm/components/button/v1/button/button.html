@@ -16,6 +16,8 @@
 <button data-sly-use.button="com.adobe.cq.wcm.core.components.models.Button"
         data-sly-use.iconTemplate="icon.html"
         data-sly-element="${button.link ? 'a' : 'button'}"
+        data-sly-use.cmp="com.adobe.cq.wcm.core.components.models.Component"
+        id="${cmp.id}"
         class="cmp-button"
         href="${button.link}"
         aria-label="${button.accessibilityLabel}">
