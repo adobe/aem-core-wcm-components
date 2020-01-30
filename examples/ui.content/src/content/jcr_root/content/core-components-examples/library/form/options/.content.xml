@@ -9,6 +9,7 @@
         jcr:title="Form Options"
         jcr:description="Display different options to choose from"
         sling:resourceType="core-components-examples/components/page"
+        navTitle="Options"
         translated="{Boolean}false">
         <root
             jcr:primaryType="nt:unstructured"
