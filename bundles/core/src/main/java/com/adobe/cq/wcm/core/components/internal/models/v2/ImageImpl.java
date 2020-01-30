@@ -119,8 +119,6 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 srcUriTemplate += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
                 src += "?" + CONTENT_POLICY_DELEGATE_PATH + "=" + policyDelegatePath;
             }
-
-            buildAreas();
             buildJson();
         }
     }
@@ -142,48 +140,51 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
-    public List<ImageArea> getAreas() { return Collections.unmodifiableList(areas); }
+    public List<ImageArea> getAreas() {
+        if (areas == null ) {
+            areas = new ArrayList<>();
+            if (hasContent) {
+                String mapProperty = properties.get(Image.PN_MAP, String.class);
+                if (StringUtils.isNotEmpty(mapProperty)) {
+                    // Parse the image map areas as defined at {@code Image.PN_MAP}
+                    String[] mapAreas = StringUtils.split(mapProperty, "][");
+                    for (String area : mapAreas) {
+                        int coordinatesEndIndex = area.indexOf(')');
+                        if (coordinatesEndIndex < 0) {
+                            break;
+                        }
+                        String shapeAndCoords = StringUtils.substring(area, 0, coordinatesEndIndex + 1);
+                        String shape = StringUtils.substringBefore(shapeAndCoords, "(");
+                        String coordinates = StringUtils.substringBetween(shapeAndCoords, "(", ")");
+                        String remaining = StringUtils.substring(area, coordinatesEndIndex + 1);
+                        String[] remainingTokens = StringUtils.split(remaining, "|");
+                        if (StringUtils.isBlank(shape) || StringUtils.isBlank(coordinates)) {
+                            break;
+                        }
+                        if (remainingTokens.length > 0) {
+                            String href = StringUtils.removeAll(remainingTokens[0], "\"");
+                            if (StringUtils.isBlank(href)) {
+                                break;
+                            }
+                            String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
+                            String alt = remainingTokens.length > 2 ? StringUtils.removeAll(remainingTokens[2], "\"") : "";
+                            String relativeCoordinates = remainingTokens.length > 3 ? remainingTokens[3] : "";
+                            relativeCoordinates = StringUtils.substringBetween(relativeCoordinates, "(", ")");
+                            if (href.startsWith("/")) {
+                                href = Utils.getURL(request, pageManager, href);
+                            }
+                            areas.add(new ImageAreaImpl(shape, coordinates, relativeCoordinates, href, target, alt));
+                        }
+                    }
+                }
+            }
+        }
+        return Collections.unmodifiableList(areas);
+    }
 
     @Override
     public String getUuid() {
         return uuid;
-    }
-
-    protected void buildAreas() {
-        areas = new ArrayList<>();
-        String mapProperty = properties.get(Image.PN_MAP, String.class);
-        if (StringUtils.isNotEmpty(mapProperty)) {
-            // Parse the image map areas as defined at {@code Image.PN_MAP}
-            String[] mapAreas = StringUtils.split(mapProperty, "][");
-            for (String area : mapAreas) {
-                int coordinatesEndIndex = area.indexOf(')');
-                if (coordinatesEndIndex < 0) {
-                    break;
-                }
-                String shapeAndCoords = StringUtils.substring(area, 0, coordinatesEndIndex + 1);
-                String shape = StringUtils.substringBefore(shapeAndCoords, "(");
-                String coordinates = StringUtils.substringBetween(shapeAndCoords, "(", ")");
-                String remaining = StringUtils.substring(area, coordinatesEndIndex + 1);
-                String[] remainingTokens = StringUtils.split(remaining, "|");
-                if (StringUtils.isBlank(shape) || StringUtils.isBlank(coordinates)) {
-                    break;
-                }
-                if (remainingTokens.length > 0) {
-                    String href = StringUtils.removeAll(remainingTokens[0], "\"");
-                    if (StringUtils.isBlank(href)) {
-                        break;
-                    }
-                    String target = remainingTokens.length > 1 ? StringUtils.removeAll(remainingTokens[1], "\"") : "";
-                    String alt = remainingTokens.length > 2 ? StringUtils.removeAll(remainingTokens[2], "\"") : "";
-                    String relativeCoordinates = remainingTokens.length > 3 ? remainingTokens[3] : "";
-                    relativeCoordinates = StringUtils.substringBetween(relativeCoordinates, "(", ")");
-                    if (href.startsWith("/")) {
-                        href = Utils.getURL(request, pageManager, href);
-                    }
-                    areas.add(new ImageAreaImpl(shape, coordinates, relativeCoordinates, href, target, alt));
-                }
-            }
-        }
     }
 
 }

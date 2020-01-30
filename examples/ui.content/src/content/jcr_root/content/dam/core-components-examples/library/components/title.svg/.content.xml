@@ -2,21 +2,17 @@
 <jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="8cfa7969-f3dd-4640-8e63-a6231c55836e">
+    jcr:uuid="9a3aaf28-6167-462b-a1b0-f264019f3ebe">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-24T12:27:24.766+02:00"
+        jcr:lastModified="{Date}2020-01-14T15:20:00.927+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-05-24T12:27:20.203+02:00"
-            dam:sha1="16179c075a2fa1f3b37173fbcea16b53f569f7a3"
-            dam:size="{Long}3121"
+            dam:extracted="{Date}2020-01-14T15:20:00.558+01:00"
+            dam:sha1="7b17c6b9d8f065072f3bc62af0e6c14e7a615936"
+            dam:size="{Long}2981"
             dc:format="image/svg+xml"
-            dc:modified="{Date}2019-02-26T20:26:29.542+01:00"
-            dc:title="Title"
-            jcr:lastModified="{Date}2019-05-24T12:27:24.766+02:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

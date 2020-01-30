@@ -24,16 +24,25 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.osgi.services.HttpClientBuilderFactory;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 
+import com.adobe.cq.wcm.core.components.services.embed.OEmbedClient;
 import com.adobe.cq.wcm.core.components.services.embed.OEmbedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class OEmbedClientImplTest {
@@ -79,8 +88,9 @@ class OEmbedClientImplTest {
                 });
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
-        ObjectMapper mapper = Mockito.mock(ObjectMapper.class);
-        when(mapper.readValue(Mockito.any(InputStream.class), Mockito.any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
+        ObjectMapper mapper = mock(ObjectMapper.class);
+        mockHttpClient(client);
+        when(mapper.readValue(any(InputStream.class), any(Class.class))).thenReturn(new OEmbedJSONResponseImpl());
         FieldSetter.setField(client, client.getClass().getDeclaredField("mapper"), mapper);
         String provider = client.getProvider("http://test.com/json");
         assertEquals("Test JSON", provider);
@@ -91,7 +101,7 @@ class OEmbedClientImplTest {
     }
 
     @Test
-    void testXML() throws NoSuchFieldException, JAXBException {
+    void testXML() throws NoSuchFieldException, JAXBException, IOException {
         OEmbedClientImpl client = new OEmbedClientImpl();
         OEmbedClientImplConfigurationFactory configurationFactory = new OEmbedClientImplConfigurationFactory();
         configurationFactory.configure(new OEmbedClientImplConfigurationFactory.Config() {
@@ -130,15 +140,36 @@ class OEmbedClientImplTest {
         });
 
         client.bindOEmbedClientImplConfigurationFactory(configurationFactory, new HashMap<>());
-        JAXBContext jaxbContext = Mockito.mock(JAXBContext.class);
+        JAXBContext jaxbContext = mock(JAXBContext.class);
         FieldSetter.setField(client, client.getClass().getDeclaredField("jaxbContext"), jaxbContext);
-        Unmarshaller unmarshaller = Mockito.mock(Unmarshaller.class);
+        Unmarshaller unmarshaller = mock(Unmarshaller.class);
         when(jaxbContext.createUnmarshaller()).thenReturn(unmarshaller);
-        when(unmarshaller.unmarshal(Mockito.any(InputStream.class))).thenReturn(new OEmbedXMLResponseImpl());
+        mockHttpClient(client);
+        when(unmarshaller.unmarshal(any(InputStream.class))).thenReturn(new OEmbedXMLResponseImpl());
         String provider = client.getProvider("http://test.com/xml");
         assertEquals("Test XML", provider);
         assertNotNull(client.getResponse("http://test.com/xml"));
         boolean unsafeContext = client.isUnsafeContext("https://test.com/json");
         assertFalse(unsafeContext);
+    }
+
+    protected void mockHttpClient(OEmbedClient client) throws NoSuchFieldException, IOException {
+        HttpClientBuilderFactory mockBuilderFactory = mock(HttpClientBuilderFactory.class);
+        FieldSetter.setField(client, client.getClass().getDeclaredField("httpClientBuilderFactory"), mockBuilderFactory);
+
+        HttpClientBuilder mockBuilder = mock(HttpClientBuilder.class);
+        when(mockBuilderFactory.newBuilder()).thenReturn(mockBuilder);
+
+        CloseableHttpClient mockClient = mock(CloseableHttpClient.class);
+        when(mockBuilder.setDefaultRequestConfig(any(RequestConfig.class))).thenReturn(mockBuilder);
+        when(mockBuilder.build()).thenReturn(mockClient);
+
+        CloseableHttpResponse mockResponse = mock(CloseableHttpResponse.class);
+        when(mockClient.execute(any(HttpUriRequest.class))).thenReturn(mockResponse);
+
+        HttpEntity mockEntity = mock(HttpEntity.class);
+        when(mockResponse.getEntity()).thenReturn(mockEntity);
+
+        when(mockEntity.getContent()).thenReturn(mock(InputStream.class));
     }
 }

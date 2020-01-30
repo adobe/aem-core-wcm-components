@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="58717266-185a-41d5-8ca3-d6b87bbfa2bf">
+    jcr:uuid="474dca75-919c-496e-9afb-c0cba9d35c30">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-29T13:19:08.709+02:00"
+        jcr:lastModified="{Date}2020-01-14T15:22:40.655+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-05-29T13:18:43.829+02:00"
-            dam:sha1="1be187ed7c94c16bb5d99952553de8c387ff1897"
-            dam:size="{Long}3726"
+            dam:extracted="{Date}2020-01-14T15:22:40.329+01:00"
+            dam:sha1="3a8e3c224643762372d6fc05f6e9c345fe920a9c"
+            dam:size="{Long}2402"
             dc:format="image/svg+xml"
-            dc:modified="{Date}2019-05-29T13:19:08.710+02:00"
-            dc:title="Accordion"
-            jcr:lastModified="{Date}2019-05-29T13:19:08.709+02:00"
-            jcr:lastModifiedBy="admin"
             jcr:mixinTypes="[cq:Taggable]"
-            jcr:primaryType="nt:unstructured">
-            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
-        </metadata>
+            jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>
