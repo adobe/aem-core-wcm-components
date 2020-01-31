@@ -664,7 +664,7 @@
                         sling:resourceType="core/wcm/components/teaser/v1/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                        fileReference="/content/dam/core-components-examples/library/components/form-container.svg"
                         linkURL="/content/core-components-examples/library/form/container"
                         textIsRich="true"
                         titleFromPage="false">
@@ -691,7 +691,7 @@
                         sling:resourceType="core/wcm/components/teaser/v1/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                        fileReference="/content/dam/core-components-examples/library/components/form-input.svg"
                         linkURL="/content/core-components-examples/library/form/input"
                         textIsRich="true"
                         titleFromPage="false">
@@ -718,7 +718,7 @@
                         sling:resourceType="core/wcm/components/teaser/v1/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                        fileReference="/content/dam/core-components-examples/library/components/form-options.svg"
                         linkURL="/content/core-components-examples/library/form/options"
                         textIsRich="true"
                         titleFromPage="false">
@@ -745,7 +745,7 @@
                         sling:resourceType="core/wcm/components/teaser/v1/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                        fileReference="/content/dam/core-components-examples/library/components/form-hidden.svg"
                         linkURL="/content/core-components-examples/library/form/hidden"
                         textIsRich="true"
                         titleFromPage="false">
@@ -772,7 +772,7 @@
                         sling:resourceType="core/wcm/components/teaser/v1/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                        fileReference="/content/dam/core-components-examples/library/components/form-button.svg"
                         linkURL="/content/core-components-examples/library/form/button"
                         textIsRich="true"
                         titleFromPage="false">
