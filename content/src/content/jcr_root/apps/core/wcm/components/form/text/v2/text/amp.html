@@ -13,37 +13,31 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div class="cmp-form-text"
-     data-sly-use.text="com.adobe.cq.wcm.core.components.models.form.Text"
-     data-cmp-is="formText">
+<div data-sly-use.text="com.adobe.cq.wcm.core.components.models.form.Text"
+     class="cmp-form-text">
     <label for="${text.id}" data-sly-test="${text.title && !text.hideTitle}">${text.title}</label>
     <p data-sly-test="${!text.placeholder && text.helpMessage}" class="cmp-form-text__help-block">${text.helpMessage}</p>
     <textarea data-sly-test.useTextarea="${text.type == 'textarea'}"
-        class="cmp-form-text__textarea"
-        data-cmp-hook-form-text="input"
-        aria-label="${text.hideTitle && text.title}"
-        id="${text.id}"
-        placeholder="${text.placeholder}"
-        name="${text.name}"
-        readonly="${text.readOnly}"
-        required="${text.required}"
-        rows="${text.rows}">${text.value}</textarea>
+              id="${text.id}"
+              class="cmp-form-text__textarea"
+              name="${text.name}"
+              required="${text.required}"
+              readonly="${text.readOnly}"
+              rows="${text.rows}"
+              placeholder="${text.placeholder}"
+              aria-label="${text.hideTitle && text.title}">${text.value}</textarea>
     <input data-sly-test="${!useTextarea}"
-        class="cmp-form-text__text"
-        data-cmp-hook-form-text="input"
-        aria-label="${text.hideTitle && text.title}"
-        required="${text.required}"
-        type="${text.type}"
-        id="${text.id}"
-        placeholder="${text.placeholder}"
-        name="${text.name}"
-        value="${text.value}"
-        readonly="${text.readOnly}"/>
-
+           id="${text.id}"
+           class="cmp-form-text__text"
+           type="${text.type}"
+           name="${text.name}"
+           value="${text.value}"
+           required="${text.required}"
+           readonly="${text.readOnly}"
+           placeholder="${text.placeholder}"
+           aria-label="${text.hideTitle && text.title}"/>
     <span visible-when-invalid="valueMissing"
           validation-for="${text.id}">${text.requiredMessage}</span>
-    <span visible-when-invalid="patternMismatch"
-          validation-for="${text.id}">${text.constraintMessage}</span>          
     <span visible-when-invalid="typeMismatch"
           validation-for="${text.id}">${text.constraintMessage}</span>
 </div>
