@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Page extends ContainerExporter {
+public interface Page extends ContainerExporter, DataLayerProvider {
 
     /**
      * Key used for the regular favicon file.
@@ -346,5 +346,4 @@ public interface Page extends ContainerExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
-
 }

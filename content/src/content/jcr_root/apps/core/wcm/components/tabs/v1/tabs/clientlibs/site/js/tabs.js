@@ -16,6 +16,8 @@
 (function() {
     "use strict";
 
+    var dataLayer = window.dataLayer = window.dataLayer || [];
+
     var NS = "cmp";
     var IS = "tabs";
 
@@ -263,8 +265,19 @@
          * @param {Number} index The index of the item to navigate to
          */
         function navigateAndFocusTab(index) {
+            var exActive = that._active;
             navigate(index);
             focusWithoutScroll(that._elements["tab"][index]);
+
+            dataLayer.push({
+                event: 'tabsItem:show',
+                info: JSON.parse(that._elements.tabpanel[index].dataset.cmpDataLayer)
+            });
+
+            dataLayer.push({
+                event: 'tabsItem:hide',
+                info: JSON.parse(that._elements.tabpanel[exActive].dataset.cmpDataLayer)
+            });
         }
     }
 

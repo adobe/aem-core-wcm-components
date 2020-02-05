@@ -20,10 +20,10 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.annotations.Exporter;
@@ -285,14 +285,42 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return request.getResource().getResourceType();
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return resource.getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "teaser";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return resource.getName();
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action implements ListItem {
         ValueMap properties;
         String title;
         String url;
+        String path;
         Page page;
 
         public Action(Resource actionRes) {
+            ResourceMetadata m = actionRes.getResourceMetadata();
+            path = m.getResolutionPath();
             properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
             url = properties.get(PN_ACTION_LINK, String.class);
@@ -323,5 +351,28 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
+        /*
+         * DataLayerProvider implementation of field getters
+         */
+
+        @Override
+        public String getDataLayerId() {
+            return path;
+        }
+
+        @Override
+        public String getDataLayerType() {
+            return "teaserActionItem";
+        }
+
+        @Override
+        public String getDataLayerLinkUrl() {
+            return getURL();
+        }
+
+        @Override
+        public String getDataLayerTitle() {
+            return getTitle();
+        }
     }
 }

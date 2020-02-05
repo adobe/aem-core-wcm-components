@@ -1,4 +1,5 @@
 {
     "linkDisabled": false,
+    "dataLayerJson": "{\"id\":\"/content/title/jcr:content/par/title-wrongtype\",\"type\":\"title\"}",
     ":type": "core/wcm/components/title/v1/title"
 }

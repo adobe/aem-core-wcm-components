@@ -59,7 +59,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
        resourceType = PageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class PageImpl implements Page {
+public class PageImpl extends AbstractDataLayerProvider implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v1/page";
 
@@ -291,5 +291,34 @@ public class PageImpl implements Page {
         if (currentStyle != null) {
             Collections.addAll(categories, currentStyle.get(PN_CLIENTLIBS, ArrayUtils.EMPTY_STRING_ARRAY));
         }
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return currentPage.getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "page";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerTemplate() {
+        return currentPage.getTemplate().getPath();
+    }
+
+    @Override
+    public String getDataLayerLanguage() {
+        return getLanguage();
     }
 }

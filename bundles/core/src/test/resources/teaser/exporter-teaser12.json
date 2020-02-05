@@ -6,5 +6,6 @@
   "imageLinkHidden": false,
   "titleLinkHidden": false,
   "actions": [],
+  "dataLayerJson": "{\"id\":\"/content/teasers/jcr:content/root/responsivegrid/teaser-9\",\"type\":\"teaser\",\"name\":\"teaser-9\",\"title\":\"Teaser\"}",
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

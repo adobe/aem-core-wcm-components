@@ -60,9 +60,9 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest();
         Object[][] expectedItems = {
-                {"item_1", "Teaser 1"},
-                {"item_2", "Teaser 2"},
-                {"item_3", "Carousel Panel 3"},
+                {"item_1", "Teaser 1", "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1\",\"type\":\"resourceListItem\",\"name\":\"item_1\",\"title\":\"Teaser 1\"}"},
+                {"item_2", "Teaser 2", "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2\",\"type\":\"resourceListItem\",\"name\":\"item_2\",\"title\":\"Teaser 2\"}"},
+                {"item_3", "Carousel Panel 3", "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3\",\"type\":\"resourceListItem\",\"name\":\"item_3\",\"title\":\"Carousel Panel 3\"}"},
         };
         verifyCarouselItems(expectedItems, carousel.getItems());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
@@ -89,6 +89,8 @@ class CarouselImplTest {
                     expectedItems[index][0], item.getName());
             assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
                     expectedItems[index][1], item.getTitle());
+            assertEquals("The carousel item's data layer is not what was expected: " + item.getDataLayerJson(),
+                    expectedItems[index][2], item.getDataLayerJson());
             index++;
         }
     }

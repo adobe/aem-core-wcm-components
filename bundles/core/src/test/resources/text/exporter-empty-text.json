@@ -1,4 +1,5 @@
 {
     "richText": false,
-    ":type"   : "core/wcm/components/text/v1/text"
+    "dataLayerJson": "{\"id\":\"/content/text/empty-text\",\"type\":\"text\",\"text\":\"\"}",
+    ":type": "core/wcm/components/text/v1/text"
 }

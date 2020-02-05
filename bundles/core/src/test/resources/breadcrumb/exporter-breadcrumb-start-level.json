@@ -1,15 +1,18 @@
 {
     "items": [
         {
-            "url"   : "/content/breadcrumb/women/shirts.html",
-            "title" : "Shirts",
-            "active": false
+            "active": false,
+            "url": "/content/breadcrumb/women/shirts.html",
+            "title": "Shirts",
+            "dataLayerJson": "{\"id\":\"/content/breadcrumb/women/shirts\",\"type\":\"breadcrumbItem\",\"text\":\"Shirts\",\"name\":\"shirts\",\"title\":\"Shirts\",\"linkUrl\":\"/content/breadcrumb/women/shirts.html\"}"
         },
         {
-            "url"   : "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
-            "title" : "Devi Sleeveless Shirt",
-            "active": true
+            "active": true,
+            "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
+            "title": "Devi Sleeveless Shirt",
+            "dataLayerJson": "{\"id\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt\",\"type\":\"breadcrumbItem\",\"text\":\"Devi Sleeveless Shirt\",\"name\":\"devi-sleeveless-shirt\",\"title\":\"Devi Sleeveless Shirt\",\"linkUrl\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html\"}"
         }
     ],
+    "dataLayerJson": "{\"id\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt/jcr:content/header/breadcrumb-start-level\",\"type\":\"breadcrumb\",\"name\":\"breadcrumb-start-level\",\"itemsCount\":2}",
     ":type": "core/wcm/components/breadcrumb"
 }

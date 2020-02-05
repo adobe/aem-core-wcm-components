@@ -1,4 +1,5 @@
 {
     "src": "/core/content/test/_jcr_content/root/image16.img.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
+    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image16\",\"src\":\"/core/content/test/_jcr_content/root/image16.img.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg\",\"type\":\"image\"}",
     ":type": "core/wcm/components/image/v1/image"
 }

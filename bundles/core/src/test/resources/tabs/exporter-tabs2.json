@@ -1,12 +1,17 @@
 {
     "id": "tabs-7e84106a6a",
     "activeItem": "item_2",
+    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2\",\"type\":\"tabs\",\"name\":\"tabs-2\",\"activeItem\":\"item_2\",\"itemsCount\":2}",
     ":itemsOrder": [
         "item_1",
         "item_2"
     ],
     ":items": {
         "item_1": {
+            ":itemsOrder": [
+                "item_1_1",
+                "item_1_2"
+            ],
             ":items": {
                 "item_1_1": {
                     "title": "Teaser 1",
@@ -15,17 +20,23 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_1\",\"type\":\"teaser\",\"name\":\"item_1_1\",\"title\":\"Teaser 1\"}",
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
                     "id": "tabs-e14a27b1c3",
                     "activeItem": "item_1_2_2",
+                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2\",\"type\":\"tabs\",\"name\":\"item_1_2\",\"activeItem\":\"item_1_2_2\",\"itemsCount\":2}",
                     ":itemsOrder": [
                         "item_1_2_1",
                         "item_1_2_2"
                     ],
                     ":items": {
                         "item_1_2_1": {
+                            ":itemsOrder": [
+                                "item_1_2_1_1",
+                                "item_1_2_1_2"
+                            ],
                             ":items": {
                                 "item_1_2_1_1": {
                                     "title": "Teaser 1",
@@ -34,6 +45,7 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_1/item_1_2_1_1\",\"type\":\"teaser\",\"name\":\"item_1_2_1_1\",\"title\":\"Teaser 1\"}",
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_1_2": {
@@ -43,6 +55,7 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_1/item_1_2_1_2\",\"type\":\"teaser\",\"name\":\"item_1_2_1_2\",\"title\":\"Teaser 2\"}",
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
@@ -54,6 +67,10 @@
                             "cq:panelTitle": "Tab 1.1"
                         },
                         "item_1_2_2": {
+                            ":itemsOrder": [
+                                "item_1_2_2_1",
+                                "item_1_2_2_2"
+                            ],
                             ":items": {
                                 "item_1_2_2_1": {
                                     "title": "Teaser 1",
@@ -62,6 +79,7 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_1\",\"type\":\"teaser\",\"name\":\"item_1_2_2_1\",\"title\":\"Teaser 1\"}",
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
@@ -69,6 +87,7 @@
                                     "autoplay": false,
                                     "delay": 5000,
                                     "autopauseDisabled": false,
+                                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2\",\"type\":\"carousel\",\"itemCount\":3}",
                                     ":itemsOrder": [
                                         "item_1_2_2_2_1",
                                         "item_1_2_2_2_2",
@@ -82,6 +101,7 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2/item_1_2_2_2_1\",\"type\":\"teaser\",\"name\":\"item_1_2_2_2_1\",\"title\":\"Teaser 1\"}",
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 1"
                                         },
@@ -92,6 +112,7 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2/item_1_2_2_2_2\",\"type\":\"teaser\",\"name\":\"item_1_2_2_2_2\",\"title\":\"Teaser 2\"}",
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 2"
                                         },
@@ -102,6 +123,7 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2/item_1_2_2_2_3\",\"type\":\"teaser\",\"name\":\"item_1_2_2_2_3\",\"title\":\"Teaser 3\"}",
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 3"
                                         }
@@ -128,6 +150,10 @@
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
+            ":itemsOrder": [
+                "item_2_1",
+                "item_2_2"
+            ],
             ":items": {
                 "item_2_1": {
                     "title": "Teaser 1",
@@ -136,6 +162,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_2/item_2_1\",\"type\":\"teaser\",\"name\":\"item_2_1\",\"title\":\"Teaser 1\"}",
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_2_2": {
@@ -145,6 +172,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "dataLayerJson": "{\"id\":\"/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_2/item_2_2\",\"type\":\"teaser\",\"name\":\"item_2_2\",\"title\":\"Teaser 2\"}",
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },

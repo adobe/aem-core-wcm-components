@@ -110,4 +110,33 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
         }
         return null;
     }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return resource.getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "accordion";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return resource.getName();
+    }
+
+    @Override
+    public int getDataLayerItemsCount() {
+        return getItems().size();
+    }
+
+    @Override
+    public String[] getDataLayerExpandedItems() {
+        return getExpandedItems();
+    }
 }

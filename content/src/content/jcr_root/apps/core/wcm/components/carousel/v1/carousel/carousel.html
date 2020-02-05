@@ -23,7 +23,8 @@
      data-cmp-is="carousel"
      data-cmp-autoplay="${(wcmmode.edit || wcmmode.preview) ? '' : carousel.autoplay}"
      data-cmp-delay="${carousel.delay}"
-     data-cmp-autopause-disabled="${carousel.autopauseDisabled}">
+     data-cmp-autopause-disabled="${carousel.autopauseDisabled}"
+     data-cmp-data-layer="${carousel.dataLayerJson}">
     <div data-sly-test="${carousel.items && carousel.items.size > 0}"
          class="cmp-carousel__content">
         <div data-sly-repeat.item="${carousel.items}"
@@ -32,6 +33,7 @@
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              role="tabpanel"
              aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
+             data-cmp-data-layer="${item.dataLayerJson}"
              data-cmp-hook-carousel="item"></div>
         <div class="cmp-carousel__actions">
             <button class="cmp-carousel__action cmp-carousel__action--previous"

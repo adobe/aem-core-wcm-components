@@ -1,28 +1,30 @@
 {
-    "designPath"      : "/etc/designs/mysite",
-    "title"           : "Templated Page",
+    "designPath": "/etc/designs/mysite",
+    "title": "Templated Page",
     "lastModifiedDate": 1453282416000,
-    "templateName"    : "product-page",
+    "templateName": "product-page",
     "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
-    "cssClassNames"   : "class1 class2",
-    "language"        : "en-GB",
-    ":itemsOrder"     : [
+    "cssClassNames": "class1 class2",
+    "language": "en-GB",
+    "dataLayerJson": "{\"id\":\"/content/page/templated-page\",\"type\":\"page\",\"name\":\"Templated Page\",\"template\":\"/conf/coretest/settings/wcm/templates/product-page\",\"language\":\"en-GB\"}",
+    ":itemsOrder": [
         "root"
     ],
-    ":items"          : {
+    ":items": {
         "root": {
+            ":type": "wcm/foundation/components/responsivegrid",
             ":itemsOrder": [
                 "text"
             ],
-            ":items"     : {
+            ":items": {
                 "text": {
-                    "text"    : "<p>This is a test</p>",
+                    "text": "<p>This is a test</p>",
                     "richText": true,
-                    ":type"   : "core/wcm/components/text/v2/text"
+                    "dataLayerJson": "{\"id\":\"/content/page/templated-page/jcr:content/root/text\",\"type\":\"text\",\"text\":\"<p>This is a test</p>\"}",
+                    ":type": "core/wcm/components/text/v2/text"
                 }
-            },
-            ":type"      : "wcm/foundation/components/responsivegrid"
+            }
         }
     },
-    ":type"           : "core/wcm/components/page/v2/page"
+    ":type": "core/wcm/components/page/v2/page"
 }

@@ -62,5 +62,4 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return listItems;
     }
-
 }

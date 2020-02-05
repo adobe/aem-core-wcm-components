@@ -3,5 +3,6 @@
     "title": "Adobe Logo",
     "src": "/core/content/test/_jcr_content/root/image0.img.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "link": "/core/content/test-image.html",
+    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image0\",\"src\":\"/core/content/test/_jcr_content/root/image0.img.png/1490005239000/adobe-systems-logo-and-wordmark.png\",\"type\":\"image\",\"name\":\"Adobe Logo\",\"linkUrl\":\"/core/content/test-image.html\"}",
     ":type": "core/wcm/components/image/v1/image"
 }

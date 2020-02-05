@@ -44,4 +44,5 @@ public interface Tabs extends Container {
     default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
+
 }

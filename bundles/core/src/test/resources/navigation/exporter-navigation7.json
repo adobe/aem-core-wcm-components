@@ -1,36 +1,40 @@
 {
   "items": [
     {
-      "path": "/content/navigation/navigation-1",
-      "description": null,
-      "lastModified": null,
-      "title": "Navigation 1",
-      "active": true,
       "children": [
         {
-          "path": "/content/navigation/navigation-1/navigation-1-1",
-          "description": null,
-          "lastModified": null,
-          "title": "Navigation 1.1",
-          "active": true,
           "children": [],
           "level": 1,
-          "url": "/core/content/navigation/navigation-1/navigation-1-1.html"
+          "active": true,
+          "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
+          "path": "/content/navigation/navigation-1/navigation-1-1",
+          "description": null,
+          "title": "Navigation 1.1",
+          "lastModified": null,
+          "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1/navigation-1-1\",\"type\":\"navigationItem\",\"text\":\"Navigation 1.1\",\"name\":\"navigation-1-1\",\"title\":\"Navigation 1.1\",\"linkUrl\":\"/core/content/navigation/navigation-1/navigation-1-1.html\"}"
         }
       ],
       "level": 0,
-      "url": "/core/navigation-1-vanity"
+      "active": true,
+      "url": "/core/navigation-1-vanity",
+      "path": "/content/navigation/navigation-1",
+      "description": null,
+      "title": "Navigation 1",
+      "lastModified": null,
+      "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1\",\"type\":\"navigationItem\",\"text\":\"Navigation 1\",\"name\":\"navigation-1\",\"title\":\"Navigation 1\",\"linkUrl\":\"/core/navigation-1-vanity\"}"
     },
     {
-      "path": "/content/navigation/navigation-2",
-      "description": null,
-      "lastModified": null,
-      "title": "Navigation 2",
-      "active": false,
       "children": [],
       "level": 0,
-      "url": "/core/content/navigation/navigation-2.html"
+      "active": false,
+      "url": "/core/content/navigation/navigation-2.html",
+      "path": "/content/navigation/navigation-2",
+      "description": null,
+      "title": "Navigation 2",
+      "lastModified": null,
+      "dataLayerJson": "{\"id\":\"/content/navigation/navigation-2\",\"type\":\"navigationItem\",\"text\":\"Navigation 2\",\"name\":\"navigation-2\",\"title\":\"Navigation 2\",\"linkUrl\":\"/core/content/navigation/navigation-2.html\"}"
     }
   ],
+  "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1/navigation-1-1/jcr:content/root/navigation-component-4\",\"type\":\"navigation\",\"name\":\"navigation-component-4\",\"itemsCount\":2}",
   ":type": "core/wcm/components/navigation/v1/navigation"
 }

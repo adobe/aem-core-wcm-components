@@ -39,11 +39,13 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Calendar;
+
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Title.class, ComponentExporter.class},
        resourceType = {TitleImpl.RESOURCE_TYPE_V1, TitleImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TitleImpl implements Title {
+public class TitleImpl extends AbstractDataLayerProvider implements Title {
 
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/title/v1/title";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/title/v2/title";
@@ -133,4 +135,27 @@ public class TitleImpl implements Title {
         return resource.getResourceType();
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return resource.getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "title";
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLinkURL();
+    }
+
+    @Override
+    public String getDataLayerText() {
+        return getText();
+    }
 }

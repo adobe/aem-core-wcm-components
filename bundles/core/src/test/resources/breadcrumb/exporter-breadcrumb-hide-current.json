@@ -1,10 +1,12 @@
 {
     "items": [
         {
-            "url"   : "/content/breadcrumb/women.html",
-            "title" : "Women",
-            "active": false
+            "active": false,
+            "url": "/content/breadcrumb/women.html",
+            "title": "Women",
+            "dataLayerJson": "{\"id\":\"/content/breadcrumb/women\",\"type\":\"breadcrumbItem\",\"text\":\"Women\",\"name\":\"women\",\"title\":\"Women\",\"linkUrl\":\"/content/breadcrumb/women.html\"}"
         }
     ],
+    "dataLayerJson": "{\"id\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt/jcr:content/header/breadcrumb-hide-current\",\"type\":\"breadcrumb\",\"name\":\"breadcrumb-hide-current\",\"itemsCount\":1}",
     ":type": "core/wcm/components/breadcrumb"
 }

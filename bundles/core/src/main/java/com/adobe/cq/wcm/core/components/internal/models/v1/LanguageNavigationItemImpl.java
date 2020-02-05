@@ -70,4 +70,32 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
         return language;
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "languageNavigationItem";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return getName();
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getURL();
+    }
 }

@@ -4,18 +4,31 @@
         {
             "url": "/context/content/list/pages/page_1.html",
             "path": "/content/list/pages/page_1",
-            "title": "Page 1",
             "description": null,
+            "dataLayerId": "/content/list/pages/page_1",
+            "dataLayerType": "pageListItem",
+            "dataLayerName": "page_1",
+            "dataLayerText": "Page 1",
+            "dataLayerLinkUrl": "/context/content/list/pages/page_1.html",
+            "title": "Page 1",
             "lastModified": 1474672365000
         },
         {
             "url": "/context/content/list/pages/page_2.html",
             "path": "/content/list/pages/page_2",
-            "title": "Page 2",
             "description": null,
+            "dataLayerId": "/content/list/pages/page_2",
+            "dataLayerType": "pageListItem",
+            "dataLayerName": "page_2",
+            "dataLayerText": "Page 2",
+            "dataLayerLinkUrl": "/context/content/list/pages/page_2.html",
+            "title": "Page 2",
             "lastModified": 1474499565000
         }
     ],
+    "dataLayerId": "/content/list/listTypes/staticListType",
+    "dataLayerType": "list",
+    "dataLayerItemsCount": 2,
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

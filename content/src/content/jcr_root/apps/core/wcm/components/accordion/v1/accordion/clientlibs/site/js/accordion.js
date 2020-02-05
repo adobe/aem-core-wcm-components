@@ -16,6 +16,8 @@
 (function() {
     "use strict";
 
+    var dataLayer = window.dataLayer = window.dataLayer || [];
+
     var NS = "cmp";
     var IS = "accordion";
 
@@ -313,8 +315,16 @@
         function setItemExpanded(item, expanded) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
+                dataLayer.push({
+                    event: 'accordionItem:expanded',
+                    info: JSON.parse(item.dataset.cmpDataLayer)
+                })
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
+                dataLayer.push({
+                    event: 'accordionItem:collapsed',
+                    info: JSON.parse(item.dataset.cmpDataLayer)
+                })
             }
             refreshItem(item);
         }

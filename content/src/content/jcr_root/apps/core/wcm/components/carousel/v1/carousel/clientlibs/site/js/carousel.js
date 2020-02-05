@@ -16,6 +16,8 @@
 (function() {
     "use strict";
 
+    var dataLayer = window.dataLayer = window.dataLayer || [];
+
     var NS = "cmp";
     var IS = "carousel";
 
@@ -484,6 +486,11 @@
         function navigateAndFocusIndicator(index) {
             navigate(index);
             focusWithoutScroll(that._elements["indicator"][index]);
+
+            dataLayer.push({
+                event: 'carouselItem:navigated',
+                info: JSON.parse(that._elements.item[index].dataset.cmpDataLayer)
+            });
         }
 
         /**

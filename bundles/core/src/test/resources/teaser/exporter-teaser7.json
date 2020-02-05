@@ -2,10 +2,11 @@
   "title": "Teaser",
   "description": "Description",
   "linkURL": "/core/content/teasers.html",
+  "actionsEnabled": false,
   "imageLinkHidden": true,
   "titleLinkHidden": true,
-  "actionsEnabled": false,
-  "actions": [ ],
+  "actions": [],
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-5.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+  "dataLayerJson": "{\"id\":\"/content/teasers/jcr:content/root/responsivegrid/teaser-5\",\"type\":\"teaser\",\"name\":\"teaser-5\",\"title\":\"Teaser\"}",
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

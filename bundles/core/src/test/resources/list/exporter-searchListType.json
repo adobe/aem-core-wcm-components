@@ -1,16 +1,19 @@
 {
-    "dateFormatString"    : "yyyy-MM-dd",
-    "items"               : [
+    "dateFormatString": "yyyy-MM-dd",
+    "dataLayerId": "/content/list/listTypes/searchListType",
+    "dataLayerType": "list",
+    "dataLayerItemsCount": 1,
+    "items": [
         {
-            "path"       : "/content/list/pages/page_1",
-            "pageTitle"  : null,
-            "name"       : "page_1",
+            "path": "/content/list/pages/page_1",
+            "pageTitle": null,
+            "name": "page_1",
             "description": null,
-            "title"      : "Page 1"
+            "title": "Page 1"
         }
     ],
-    "showDescription"     : false,
+    "showDescription": false,
     "showModificationDate": false,
-    "linkItems"           : false,
-    ":type"               : "core/wcm/components/list"
+    "linkItems": false,
+    ":type": "core/wcm/components/list"
 }

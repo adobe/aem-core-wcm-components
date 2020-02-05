@@ -1,6 +1,7 @@
 {
+    "linkDisabled": false,
     "type": "h2",
     "text": "Hello World",
-    "linkDisabled": false,
+    "dataLayerJson": "{\"id\":\"/content/title/jcr:content/par/title-jcr-title-type\",\"type\":\"title\",\"text\":\"Hello World\"}",
     ":type": "core/wcm/components/title/v1/title"
 }

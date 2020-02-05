@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
-public class ResourceListItemImpl implements ListItem {
+public class ResourceListItemImpl extends AbstractDataLayerProvider implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceListItemImpl.class);
 
@@ -37,6 +37,7 @@ public class ResourceListItemImpl implements ListItem {
     protected Calendar lastModified;
     protected String path;
     protected String name;
+
 
     public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
@@ -78,5 +79,34 @@ public class ResourceListItemImpl implements ListItem {
     @Override
     public String getName() {
         return name;
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "resourceListItem";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return getName();
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getURL();
     }
 }

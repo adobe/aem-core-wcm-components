@@ -31,7 +31,7 @@ import com.adobe.cq.export.json.ContainerExporter;
  * @since com.adobe.cq.wcm.core.components.models 12.5.0
  */
 @ConsumerType
-public interface Container extends Component, ContainerExporter {
+public interface Container extends Component, ContainerExporter, DataLayerProvider {
 
     /**
      * Name of the configuration policy property that indicates if background images are enabled

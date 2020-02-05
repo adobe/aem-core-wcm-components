@@ -16,6 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
@@ -29,7 +31,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
-import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -73,5 +74,38 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     @Override
     public String getAccessibilityLabel() {
         return accessibilityLabel;
+    }
+
+    @Override
+    public String getDataLayerJson() {
+        JsonObjectBuilder data = Json.createObjectBuilder();
+        data.add("id", resource.getPath());
+        data.add("type", "carousel");
+        data.add("itemCount", getItems().size());
+        return  data.build().toString();
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return resource.getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "carousel";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return resource.getName();
+    }
+
+    @Override
+    public int getDataLayerItemsCount() {
+        return getItems().size();
     }
 }

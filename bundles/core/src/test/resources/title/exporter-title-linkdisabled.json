@@ -1,5 +1,6 @@
 {
-    "linkURL": "https://www.adobe.com",
     "linkDisabled": true,
+    "linkURL": "https://www.adobe.com",
+    "dataLayerJson": "{\"id\":\"/content/title/jcr:content/par/title-jcr-title-link-v2\",\"type\":\"title\",\"linkUrl\":\"https://www.adobe.com\"}",
     ":type": "core/wcm/components/title/v2/title"
 }

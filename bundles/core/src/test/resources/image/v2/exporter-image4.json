@@ -1,9 +1,10 @@
 {
-    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image4.coreimg{.width}.png/1494867377756/adobe-systems-logo-and-wordmark.png",
-    "widths": [],
+    "title": "Adobe Systems Logo and Wordmark",
+    "src": "/core/content/test/_jcr_content/root/image4.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
+    "srcUriTemplate": "/core/content/test/_jcr_content/root/image4.coreimg{.width}.png/1494867377756/adobe-systems-logo-and-wordmark.png",
     "areas": [],
-    "lazyEnabled"           : false,
-    "title"                 : "Adobe Systems Logo and Wordmark",
-    "src"                   : "/core/content/test/_jcr_content/root/image4.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
-    ":type"                 : "core/wcm/components/image/v2/image"
+    "widths": [],
+    "lazyEnabled": false,
+    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image4\",\"src\":\"/core/content/test/_jcr_content/root/image4.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png\",\"type\":\"image\",\"name\":\"Adobe Systems Logo and Wordmark\"}",
+    ":type": "core/wcm/components/image/v2/image"
 }

@@ -2,5 +2,6 @@
     "text": "Adobe",
     "link": "https://www.adobe.com",
     "icon": "adobe",
+    "dataLayerJson": "{\"id\":\"/content/button/jcr:content/root/responsivegrid/button-1\",\"type\":\"button\",\"text\":\"Adobe\",\"linkUrl\":\"https://www.adobe.com\"}",
     ":type": "core/wcm/components/button/v1/button"
 }

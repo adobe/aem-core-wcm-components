@@ -1,10 +1,12 @@
 {
     "items": [
         {
-            "url"   : "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
-            "title" : "Devi Sleeveless Shirt",
-            "active": true
+            "active": true,
+            "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
+            "title": "Devi Sleeveless Shirt",
+            "dataLayerJson": "{\"id\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt\",\"type\":\"breadcrumbItem\",\"text\":\"Devi Sleeveless Shirt\",\"name\":\"devi-sleeveless-shirt\",\"title\":\"Devi Sleeveless Shirt\",\"linkUrl\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html\"}"
         }
     ],
+    "dataLayerJson": "{\"id\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt/jcr:content/header/breadcrumb-style-based\",\"type\":\"breadcrumb\",\"name\":\"breadcrumb-style-based\",\"itemsCount\":1}",
     ":type": "core/wcm/components/breadcrumb"
 }

@@ -23,6 +23,7 @@
      class="cmp-navigation"
      role="navigation"
      itemscope itemtype="http://schema.org/SiteNavigationElement"
+	 data-cmp-data-layer="${navigation.dataLayerJson}"
      aria-label="${navigation.accessibilityLabel}">
 </nav>
 <sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-navigation'}"></sly>

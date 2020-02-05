@@ -22,6 +22,7 @@
          data-sly-repeat.item="${accordion.items}"
          class="cmp-accordion__item"
          data-cmp-hook-accordion="item"
+         data-cmp-data-layer="${item.dataLayerJson}"
          data-cmp-expanded="${item.name in accordion.expandedItems}">
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">

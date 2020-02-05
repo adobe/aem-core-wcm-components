@@ -1,13 +1,14 @@
 {
+    "alt": "Adobe Logo",
+    "title": "Adobe Logo",
+    "src": "/core/content/test/_jcr_content/root/image3.coreimg.82.600.png",
+    "srcUriTemplate": "/core/content/test/_jcr_content/root/image3.coreimg.82{.width}.png",
+    "areas": [],
     "widths": [
         600
     ],
-    "areas": [],
-    "lazyEnabled"           : false,
-    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image3.coreimg.82{.width}.png",
-    "title"                 : "Adobe Logo",
-    "alt"                   : "Adobe Logo",
-    "link"                  : "https://www.adobe.com",
-    "src"                   : "/core/content/test/_jcr_content/root/image3.coreimg.82.600.png",
-    ":type"                 : "core/wcm/components/image/v2/image"
+    "lazyEnabled": false,
+    "link": "https://www.adobe.com",
+    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image3\",\"src\":\"/core/content/test/_jcr_content/root/image3.coreimg.82.600.png\",\"type\":\"image\",\"name\":\"Adobe Logo\",\"linkUrl\":\"https://www.adobe.com\"}",
+    ":type": "core/wcm/components/image/v2/image"
 }

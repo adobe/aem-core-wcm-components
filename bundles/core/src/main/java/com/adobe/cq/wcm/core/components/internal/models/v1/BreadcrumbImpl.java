@@ -40,7 +40,7 @@ import com.day.cq.wcm.api.designer.Style;
        adapters = {Breadcrumb.class, ComponentExporter.class},
        resourceType = {BreadcrumbImpl.RESOURCE_TYPE_V1, BreadcrumbImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class BreadcrumbImpl implements Breadcrumb {
+public class BreadcrumbImpl extends AbstractDataLayerProvider implements Breadcrumb {
 
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/breadcrumb/v1/breadcrumb";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/breadcrumb/v2/breadcrumb";
@@ -109,5 +109,29 @@ public class BreadcrumbImpl implements Breadcrumb {
 
     private boolean checkIfNotHidden(Page page) {
         return !page.isHideInNav() || showHidden;
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return request.getResource().getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "breadcrumb";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return request.getResource().getName();
+    }
+
+    @Override
+    public int getDataLayerItemsCount() {
+        return getItems().size();
     }
 }

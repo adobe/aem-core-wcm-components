@@ -56,4 +56,33 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     public String getAccessibilityLabel() {
         return accessibilityLabel;
     }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return resource.getPath();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return "tabs";
+    }
+
+    @Override
+    public String getDataLayerName() {
+        return resource.getName();
+    }
+
+    @Override
+    public String getDataLayerActiveItem() {
+        return getActiveItem();
+    }
+
+    @Override
+    public int getDataLayerItemsCount() {
+        return getItems().size();
+    }
 }

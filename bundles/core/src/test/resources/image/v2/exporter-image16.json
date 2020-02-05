@@ -1,8 +1,9 @@
 {
-    "widths": [],
+    "src": "/core/content/test/_jcr_content/root/image16.coreimg.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
+    "srcUriTemplate": "/core/content/test/_jcr_content/root/image16.coreimg{.width}.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
     "areas": [],
-    "lazyEnabled"           : false,
-    "srcUriTemplate"        : "/core/content/test/_jcr_content/root/image16.coreimg{.width}.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
-    "src"                   : "/core/content/test/_jcr_content/root/image16.coreimg.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg",
-    ":type"                 : "core/wcm/components/image/v2/image"
+    "widths": [],
+    "lazyEnabled": false,
+    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image16\",\"src\":\"/core/content/test/_jcr_content/root/image16.coreimg.jpeg/1500299989000/adobe-systems-logo-and-wordmark.jpeg\",\"type\":\"image\"}",
+    ":type": "core/wcm/components/image/v2/image"
 }
