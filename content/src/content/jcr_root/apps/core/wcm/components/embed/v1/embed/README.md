@@ -42,6 +42,7 @@ The following JCR properties are used:
 2. `./url` - defines the URL of the widget to embed.
 3. `./embeddableResourceType` - defines the resource type of an embeddable.
 4. `./html` - defines a HTML string to embed.
+5. `./id` - defines the component HTML ID attribute.
 
 ## BEM Description
 ```

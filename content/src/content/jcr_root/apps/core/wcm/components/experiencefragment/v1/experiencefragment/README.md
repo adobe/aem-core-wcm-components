@@ -30,6 +30,7 @@ The experience fragment component uses the `com.adobe.cq.wcm.core.components.mod
 The following property is written to JCR for the experience fragment component and is expected to be available as a `Resource` property:
 
 1. `./fragmentVariationPath` - defines the path to the experience fragment variation to be rendered.
+2. `./id` - defines the component HTML ID attribute.
 
 ## BEM Description
 ```
