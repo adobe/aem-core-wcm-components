@@ -48,7 +48,9 @@ public abstract class AbstractComponentImpl implements Component {
                 id = properties.get(Component.PN_ID, String.class);
             }
             if (StringUtils.isEmpty(id)) {
-                id = getGeneratedId();
+                id = generateId();
+            } else {
+                id = StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(id)), " ", "-");
             }
         }
         return id;
@@ -60,7 +62,7 @@ public abstract class AbstractComponentImpl implements Component {
         return resource.getResourceType();
     }
 
-    private String getGeneratedId() {
+    private String generateId() {
         String resourceType = resource.getResourceType();
         String prefix = StringUtils.substringAfterLast(resourceType, "/");
         return prefix + "-" + StringUtils.substring(DigestUtils.shaHex(resource.getPath()), 0, 10);
