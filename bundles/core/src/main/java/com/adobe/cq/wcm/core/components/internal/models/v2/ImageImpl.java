@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -187,4 +189,14 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
         return uuid;
     }
 
+    @Override
+    public String getDataLayerJson() {
+        JsonObjectBuilder image = Json.createObjectBuilder();
+        JsonObjectBuilder imageProperties = Json.createObjectBuilder();
+        imageProperties.add("path", resource.getPath());
+        imageProperties.add("fileReference", fileReference);
+        imageProperties.add("src", src);
+        imageProperties.add("title", title);
+        return image.build().toString();
+    }
 }
