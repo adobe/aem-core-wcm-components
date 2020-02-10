@@ -5,6 +5,14 @@
 
 A set of standardized components for AEM 6.3+ that can be used to speed up development of websites.
 
+---
+## Usability Study 2020
+
+We're conducting a usability study about the Core Components. One part of it is using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability. It's a ten-item questionnaire with possible answers that range from "strongly disagree" to "strongly agree."
+Please help us making the Core Components better by responding to **[this questionnaire](https://s2.userzoom.com/m/MSBDNTc1MlMxMDk1)**. It'll take you less than 5 minutes. Thank you!
+
+---
+
 ## Documentation
 
 * [Component Library](https://www.adobe.com/go/aem_cmp_library)
