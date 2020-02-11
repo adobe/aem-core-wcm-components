@@ -19,11 +19,17 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.components.ComponentContext;
 
 import com.adobe.cq.wcm.core.components.models.Component;
 
@@ -36,6 +42,12 @@ public abstract class AbstractComponentImpl implements Component {
 
     @SlingObject
     protected Resource resource;
+
+    @ScriptVariable
+    protected ComponentContext componentContext;
+
+    @ScriptVariable
+    private Page currentPage;
 
     private String id;
 
@@ -62,9 +74,43 @@ public abstract class AbstractComponentImpl implements Component {
         return resource.getResourceType();
     }
 
+    /**
+     * Returns an auto generated component ID.
+     *
+     * The ID is an SHA hash of the component path, prefixed with the component name.
+     *
+     * If the component is referenced, the path is taken to be a concatenation of the component path,
+     * with the path of the first parent context resource that exists on the page or in the template.
+     * This ensures the ID is unique if the same component is referenced multiple times
+     * on the same page or template.
+     *
+     * @return the auto generated component ID
+     */
     private String generateId() {
         String resourceType = resource.getResourceType();
         String prefix = StringUtils.substringAfterLast(resourceType, "/");
-        return prefix + "-" + StringUtils.substring(DigestUtils.shaHex(resource.getPath()), 0, 10);
+        String path = resource.getPath();
+        PageManager pageManager = currentPage.getPageManager();
+        Page containingPage = pageManager.getContainingPage(resource);
+        Template template = currentPage.getTemplate();
+        Boolean inCurrentPage = (containingPage != null && StringUtils.equals(containingPage.getPath(), currentPage.getPath()));
+        Boolean inTemplate = (template != null && path.startsWith(template.getPath()));
+        if (!inCurrentPage && !inTemplate) {
+            ComponentContext parentContext = componentContext.getParent();
+            while (parentContext != null) {
+                Resource parentContextResource = parentContext.getResource();
+                if (parentContextResource != null) {
+                    Page parentContextPage = pageManager.getContainingPage(parentContextResource);
+                    inCurrentPage = (parentContextPage != null && StringUtils.equals(parentContextPage.getPath(), currentPage.getPath()));
+                    inTemplate = (template != null && parentContextResource.getPath().startsWith(template.getPath()));
+                    if (inCurrentPage || inTemplate) {
+                        path = parentContextResource.getPath().concat(resource.getPath());
+                        break;
+                    }
+                }
+                parentContext = parentContext.getParent();
+            }
+        }
+        return prefix + "-" + StringUtils.substring(DigestUtils.shaHex(path), 0, 10);
     }
 }

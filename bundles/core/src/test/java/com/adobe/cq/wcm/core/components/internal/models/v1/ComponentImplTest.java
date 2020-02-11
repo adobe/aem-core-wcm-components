@@ -44,7 +44,7 @@ public class ComponentImplTest {
     @Test
     public void testComponentId() {
         Component component = getComponentUnderTest(TITLE_RESOURCE_JCR_TITLE);
-        Assert.assertEquals("Id mismatch", "title-af55b2ad84", component.getId());
+        Assert.assertEquals("ID mismatch", "title-af55b2ad84", component.getId());
     }
 
     private Component getComponentUnderTest(String resourcePath, Object ... properties) {
