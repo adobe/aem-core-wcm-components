@@ -19,6 +19,11 @@
       data-sly-use.footer="footer.html"
       data-sly-use.redirect="redirect.html">
     <head data-sly-call="${head.head @ page = page}"></head>
+
+    <script type="text/javascript">
+        dataLayer.push(${page.dataLayerJson @ context='unsafe'});
+    </script>
+
     <body class="${page.cssClassNames}">
         <sly data-sly-test.isRedirectPage="${page.redirectTarget && (wcmmode.edit || wcmmode.preview)}"
              data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>
