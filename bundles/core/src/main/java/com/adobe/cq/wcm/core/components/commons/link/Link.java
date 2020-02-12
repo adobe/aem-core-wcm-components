@@ -46,7 +46,7 @@ public interface Link {
      * Map with Attributes for HTML Anchor tag for this links.
      * This usually also contains the Link URL as <code>href</code> attribute,
      * but may contain additional attributes like <code>target</code> and others.
-     * @return Map with HTML-specific anchor attributes, or null if link is invalid
+     * @return Map with HTML-specific anchor attributes, or an empty map if link is invalid
      */
     @NotNull
     Map<String, String> getHtmlAttributes();
