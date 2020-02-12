@@ -736,7 +736,7 @@ public class AdaptiveImageServlet extends SlingSafeMethodsServlet {
     private long getRequestLastModifiedSuffix(@Nullable String suffix) {
         long requestLastModified = 0;
         if (StringUtils.isNotEmpty(suffix) && suffix.contains(".")) {
-            // check if the 13 digits UTC milliseconds timestamp, proceeded by a forward slash is present in the suffix
+            // check if the 13 digits UTC milliseconds timestamp, preceded by a forward slash is present in the suffix
             Pattern p = Pattern.compile("\\(|\\)|\\/\\d{13}");
             Matcher m = p.matcher(suffix);
             if (!m.find()) {
