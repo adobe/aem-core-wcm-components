@@ -15,6 +15,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <input data-sly-use.field="com.adobe.cq.wcm.core.components.models.form.Field"
        data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
-       data-sly-test.appendText="${field.name && 'name='}${field.name}${field.value && ' | value='}${field.value}"
+       data-sly-set.appendText="${field.name && 'name='}${field.name}${field.value && ' | value='}${field.value}"
        data-sly-call="${templates.placeholder @ isEmpty = true, classAppend, emptyTextAppend = appendText}"
        type="hidden" id="${field.id}" name="${field.name}" value="${field.value}" />
