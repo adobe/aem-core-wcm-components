@@ -86,7 +86,7 @@ public abstract class AbstractComponentImpl implements Component {
      *
      * Collision:
      * ---------
-     * P ~= (n2)/(2m) - where n is the number of items and m is the number of possibilities for each item.
+     * P ~= (n^2)/(2m) - where n is the number of items and m is the number of possibilities for each item.
      * m = 16^c - for a hexadecimal string, where c is the number of characters.
      *
      * say n = 1000 components on the page, with the same name.
@@ -121,6 +121,6 @@ public abstract class AbstractComponentImpl implements Component {
                 parentContext = parentContext.getParent();
             }
         }
-        return prefix + "-" + StringUtils.substring(DigestUtils.shaHex(path), 0, 10);
+        return prefix + "-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
     }
 }
