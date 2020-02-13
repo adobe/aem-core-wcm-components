@@ -21,6 +21,8 @@
     <head data-sly-call="${head.head @ page = page}"></head>
 
     <script type="text/javascript">
+        var dataLayer = window.dataLayer = window.dataLayer || [];
+
         dataLayer.push(${page.dataLayerJson @ context='unsafe'});
     </script>
 

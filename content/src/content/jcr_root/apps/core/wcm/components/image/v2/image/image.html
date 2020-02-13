@@ -48,5 +48,7 @@
 <sly data-sly-call="${templates.placeholder @ isEmpty = !image.src, classAppend = 'cmp-image cq-dd-image'}"></sly>
 
 <script type="text/javascript">
+    var dataLayer = window.dataLayer = window.dataLayer || [];
+
     dataLayer.push(${image.dataLayerJson @ context='unsafe'});
 </script>
