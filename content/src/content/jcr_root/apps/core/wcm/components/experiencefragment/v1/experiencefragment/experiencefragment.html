@@ -14,9 +14,11 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.fragment="com.adobe.cq.wcm.core.components.models.ExperienceFragment"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-test.localizedFragmentVariationPath=${fragment.localizedFragmentVariationPath}
      data-sly-resource="${@path=localizedFragmentVariationPath, selectors='content', wcmmode='disabled'}"
+     id="${component.id}"
      class="cmp-experiencefragment cmp-experiencefragment--${fragment.name}">
 </div>
 <sly data-sly-call="${template.placeholder @ isEmpty=!localizedFragmentVariationPath, classAppend='cmp-dd-experiencefragment'}"></sly>

@@ -14,9 +14,11 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <ul data-sly-use.list="com.adobe.cq.wcm.core.components.models.List"
-    data-sly-list.item="${list.listItems}"
+    data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
     data-sly-use.itemTemplate="item.html"
+    data-sly-list.item="${list.listItems}"
+    id="${component.id}"
     class="cmp-list">
     <li class="cmp-list__item" data-sly-call="${itemTemplate.item @ list = list, item = item}"></li>
 </ul>

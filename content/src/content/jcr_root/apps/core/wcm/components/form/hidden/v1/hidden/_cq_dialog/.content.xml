@@ -30,8 +30,8 @@
                     <identifier
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                        fieldDescription="The identifier should be unique on the page and can be used to bind scripts to this form field"
-                        fieldLabel="Identifier"
+                        fieldDescription="HTML ID attribute to apply to the component."
+                        fieldLabel="ID"
                         name="./id"/>
                 </items>
             </main>

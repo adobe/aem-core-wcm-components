@@ -14,8 +14,10 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <button data-sly-use.button="com.adobe.cq.wcm.core.components.models.Button"
+        data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
         data-sly-use.iconTemplate="icon.html"
         data-sly-element="${button.link ? 'a' : 'button'}"
+        id="${component.id}"
         class="cmp-button"
         href="${button.link}"
         aria-label="${button.accessibilityLabel}">
