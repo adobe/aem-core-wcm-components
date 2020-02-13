@@ -14,8 +14,10 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.download="com.adobe.cq.wcm.core.components.models.Download"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test.hasContent="${download.filename}"
+     id="${component.id}"
      class="cmp-download${!wcmmode.disabled ? ' cq-dd-file' : ''}">
     <h3 class="cmp-download__title" data-sly-test.title="${download.title}" data-sly-element="${download.titleType}">
         <a data-sly-unwrap="${!download.url}" class="cmp-download__title-link" href="${download.url}">${title}</a>

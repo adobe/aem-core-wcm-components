@@ -34,7 +34,8 @@ The component policy dialog allows definition of allowed components for the Tabs
 The following properties are written to JCR for this Tabs component and are expected to be available as `Resource` properties:
 
 1. `./activeItem` - defines the name of the item that is active by default.
-2. `./accessibilityLabel` - defines an accessibility label for the tabs.
+2. `./id` - defines the component HTML ID attribute.
+3. `./accessibilityLabel` - defines an accessibility label for the tabs.
 
 The edit dialog also allows editing of Tabs items (adding, removing, naming, re-ordering).
 

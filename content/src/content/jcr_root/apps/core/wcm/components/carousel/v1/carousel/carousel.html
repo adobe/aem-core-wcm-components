@@ -15,6 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.carousel="com.adobe.cq.wcm.core.components.models.Carousel"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     id="${carousel.id}"
      class="cmp-carousel"
      role="group"
      aria-label="${carousel.accessibilityLabel}"
@@ -27,6 +28,7 @@
          class="cmp-carousel__content">
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
+             id="${carousel.id}-item-${itemList.index}"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              role="tabpanel"
              aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
@@ -70,6 +72,7 @@
             <li data-sly-repeat.item="${carousel.items}"
                 class="cmp-carousel__indicator${itemList.first ? ' cmp-carousel__indicator--active' : ''}"
                 role="tab"
+                aria-controls="${carousel.id}-item-${itemList.index}"
                 aria-label="${'Slide {0}' @ format=[itemList.count], i18n}"
                 data-cmp-hook-carousel="indicator">${item.title}</li>
         </ol>

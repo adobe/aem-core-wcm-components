@@ -48,9 +48,9 @@ The following properties are written to JCR for this Container component and are
 1. `./layout` - defines the layout type, either `simple` (default) or `responsiveGrid`
 
 #### Common Properties
-1. `./id` - defines the component HTML ID attribute.
-2. `./backgroundImageReference` - defines the container background image.
-3. `./backgroundColor` - defines the container background color.
+1. `./backgroundImageReference` - defines the container background image.
+2. `./backgroundColor` - defines the container background color.
+3. `./id` - defines the component HTML ID attribute.
 
 ## BEM Description
 ```
