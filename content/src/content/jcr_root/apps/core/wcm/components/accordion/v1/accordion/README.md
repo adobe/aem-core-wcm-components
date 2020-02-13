@@ -42,8 +42,9 @@ It is also possible to define the allowed components for the Accordion.
 The following properties are written to JCR for this Accordion component and are expected to be available as `Resource` properties:
 
 1. `./singleExpansion` - `true` if one panel should be forced to be expanded at a time, `false` otherwise.
-1. `./expandedItems` - defines the names of the items that are expanded by default.
-2. `./headingElement` - defines the heading element to use for the accordion headers (`h2` - `h6`).
+2. `./expandedItems` - defines the names of the items that are expanded by default.
+3. `./headingElement` - defines the heading element to use for the accordion headers (`h2` - `h6`).
+4. `./id` - defines the component HTML ID attribute.
 
 The edit dialog also allows editing of Accordion items (adding, removing, naming, re-ordering).
 

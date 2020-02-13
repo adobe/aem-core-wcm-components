@@ -136,7 +136,8 @@ public class NavigationImpl implements Navigation {
                 } else if (liveCopiesIterator != null) {
                     while (liveCopiesIterator.hasNext()) {
                         LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
-                        if (currentPage.getPath().startsWith(relationship.getTargetPath() + "/")) {
+                        String currentPagePath = currentPage.getPath() + "/";
+                        if (currentPagePath.startsWith(relationship.getTargetPath() + "/")) {
                             Page liveCopyNavigationRoot = pageManager.getPage(relationship.getTargetPath());
                             if (liveCopyNavigationRoot != null) {
                                 navigationRoot = new NavigationRoot(liveCopyNavigationRoot, structureDepth);

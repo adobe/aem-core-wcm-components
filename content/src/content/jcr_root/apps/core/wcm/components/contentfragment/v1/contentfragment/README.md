@@ -36,6 +36,7 @@ The following JCR properties are used:
 4. `./paragraphScope` - defines if all or a range of paragraphs are to be rendered (only used in paragraph mode)
 5. `./paragraphRange` - defines the range(s) of paragraphs to be rendered (only used in paragraph mode and if paragraphs are restricted to ranges)
 6. `./paragraphHeadings` - defines if headings should count as paragraphs (only used in paragraph mode and if paragraphs are restricted to ranges)
+7. `./id` - defines the component HTML ID attribute.
 
 ## BEM description
 ```

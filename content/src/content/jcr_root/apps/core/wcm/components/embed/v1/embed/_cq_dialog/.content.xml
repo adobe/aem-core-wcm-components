@@ -160,6 +160,12 @@
                                                     cmp-embed-dialog-edit-type="true"
                                                     cmp-embed-dialog-edit-showhidetargetvalue="html"/>
                                             </html>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

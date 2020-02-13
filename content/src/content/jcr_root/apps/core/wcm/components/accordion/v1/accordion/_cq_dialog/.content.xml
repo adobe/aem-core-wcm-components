@@ -151,6 +151,12 @@
                                                     jcr:primaryType="nt:unstructured"
                                                     cmp-accordion-v1-dialog-edit-hook="headingElement"/>
                                             </headingElement>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>
