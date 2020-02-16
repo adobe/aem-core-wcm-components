@@ -1,0 +1,12 @@
+core.wcm.components.all-2.8.0.zip 
+
+https://github-production-release-asset-2e65be.s3.amazonaws.com/47184968/9310c000-175c-11ea-8c48-8e3fc5000d5e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200216%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200216T161257Z&X-Amz-Expires=300&X-Amz-Signature=d0181c78d1aa86d32bb38e3c04a62193175151e6e9608463c7f9174c8c71ec05&X-Amz-SignedHeaders=host&actor_id=47720598&response-content-disposition=attachment%3B%20filename%3Dcore.wcm.components.all-2.8.0.zip&response-content-type=application%2Foctet-stream
+core.wcm.components.core-2.8.0-javadoc.jar 
+https://github-production-release-asset-2e65be.s3.amazonaws.com/47184968/1802d600-176b-11ea-9abd-18a193dc3b32?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200216%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200216T161330Z&X-Amz-Expires=300&X-Amz-Signature=54193fa230ae8f8b80016267563ba8e78aa3e81257e8fdcd578f7b939af53e0f&X-Amz-SignedHeaders=host&actor_id=47720598&response-content-disposition=attachment%3B%20filename%3Dcore.wcm.components.core-2.8.0-javadoc.jar&response-content-type=application%2Foctet-stream
+core.wcm.components.examples-2.8.0.zip 
+https://github-production-release-asset-2e65be.s3.amazonaws.com/47184968/93a95680-175c-11ea-8852-35557f3c7f02?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20200216%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20200216T161411Z&X-Amz-Expires=300&X-Amz-Signature=72a8230c2f921719f4b0eb9897afeac83de791d5749ea9ee1947877c470c7c77&X-Amz-SignedHeaders=host&actor_id=47720598&response-content-disposition=attachment%3B%20filename%3Dcore.wcm.components.examples-2.8.0.zip&response-content-type=application%2Foctet-stream
+
+aem-core-wcm-components-core.wcm.components.reactor-2.8.0.zip
+https://codeload.github.com/adobe/aem-core-wcm-components/zip/core.wcm.components.reactor-2.8.0
+aem-core-wcm-components-core.wcm.components.reactor-2.8.0.tar.gz 
+https://codeload.github.com/adobe/aem-core-wcm-components/tar.gz/core.wcm.components.reactor-2.8.0
