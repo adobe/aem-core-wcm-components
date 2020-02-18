@@ -77,22 +77,27 @@ public abstract class AbstractComponentImpl implements Component {
     /**
      * Returns an auto generated component ID.
      *
-     * The ID is the first 10 digits of an SHA-1 hexadecimal hash of the component path,
+     * The ID is the first 10 characters of an SHA-1 hexadecimal hash of the component path,
      * prefixed with the component name. Example: title-810f3af321
      *
      * If the component is referenced, the path is taken to be a concatenation of the component path,
      * with the path of the first parent context resource that exists on the page or in the template.
      * This ensures the ID is unique if the same component is referenced multiple times on the same page or template.
      *
-     * Collision:
+     * Collision
      * ---------
-     * P ~= (n^2)/(2m) - where n is the number of items and m is the number of possibilities for each item.
-     * m = 16^c - for a hexadecimal string, where c is the number of characters.
+     * c = expected collisions
+     * c ~= (i^2)/(2m) - where i is the number of items and m is the number of possibilities for each item.
+     * m = 16^n - for a hexadecimal string, where n is the number of characters.
      *
-     * say n = 1000 components on the page, with the same name.
+     * For i = 1000 components with the same name:
      *
-     * P ~= (1000^2)(2*(16^10))
-     * P ~= 0.000000454747351
+     * c ~= (1000^2)/(2*(16^10))
+     * c ~= 0.00000045
+     *
+     * For n = 10:
+     *
+     * 1,482,910 = No. components with the same name per site before collision.
      *
      * @return the auto generated component ID
      */
