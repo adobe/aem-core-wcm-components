@@ -95,10 +95,6 @@ public abstract class AbstractComponentImpl implements Component {
      * c ~= (1000^2)/(2*(16^10))
      * c ~= 0.00000045
      *
-     * For n = 10:
-     *
-     * 1,482,910 = No. components with the same name per site before collision.
-     *
      * @return the auto generated component ID
      */
     private String generateId() {
