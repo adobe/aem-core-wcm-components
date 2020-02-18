@@ -90,7 +90,7 @@ public abstract class AbstractComponentImpl implements Component {
      * c ~= (i^2)/(2m) - where i is the number of items and m is the number of possibilities for each item.
      * m = 16^n - for a hexadecimal string, where n is the number of characters.
      *
-     * For i = 1000 components with the same name:
+     * For i = 1000 components with the same name, and n = 10 characters:
      *
      * c ~= (1000^2)/(2*(16^10))
      * c ~= 0.00000045
