@@ -23,6 +23,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.designer.ComponentStyle;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -85,8 +86,7 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
     /**
      * Effective resource
      */
-    private @Nullable
-    Resource efvResource;
+    private @Nullable Resource efvResource;
     
     /**
      * Number of columns set on the design or the default number of columns
@@ -137,7 +137,7 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
     @Override
     @JsonInclude
     public boolean isPathConfigured() {
-        return StringUtils.isNotBlank(properties.get(PN_FRAGMENT_PATH, StringUtils.EMPTY));
+        return StringUtils.isNotBlank(properties.get(PN_FRAGMENT_VARIATION_PATH, StringUtils.EMPTY));
     }
     
     /**
@@ -147,6 +147,7 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
      * AdobePatentID="P6273-US"
      */
     @Nonnull
+    @JsonIgnore
     public <T extends Resource> T getEffectiveResource() {
         if (resource instanceof TemplatedResource) {
             return (T) resource;
@@ -193,7 +194,7 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
         Resource effectiveResource = getEffectiveResource();
         
         
-        String pathToExperienceFragmentVariation = effectiveResource.getValueMap().get(PN_FRAGMENT_PATH, String.class);
+        String pathToExperienceFragmentVariation = effectiveResource.getValueMap().get(PN_FRAGMENT_VARIATION_PATH, String.class);
         
         if (StringUtils.isNotBlank(pathToExperienceFragmentVariation)) {
             final ResourceResolver resourceResolver = effectiveResource.getResourceResolver();
