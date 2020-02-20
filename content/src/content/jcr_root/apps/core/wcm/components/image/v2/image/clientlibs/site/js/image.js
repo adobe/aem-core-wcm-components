@@ -84,6 +84,9 @@
          * @type {String}
          */
         "src": {
+            "transform": function(value) {
+                return decodeURIComponent(value);
+            }
         }
     };
 

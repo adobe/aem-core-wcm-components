@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="1b744f3f-b9d0-41e0-bed2-dfd6a5b74c08">
+    jcr:uuid="f36774f5-4a60-4fe9-8d8a-6886958e0097">
     <jcr:content
         dam:assetState="processed"
+<<<<<<< HEAD
         jcr:lastModified="{Date}2019-12-19T17:36:29.915+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
@@ -17,10 +18,18 @@
             dc:title="Language Navigation"
             jcr:lastModified="{Date}2019-12-19T17:36:29.915+01:00"
             jcr:lastModifiedBy="admin"
+=======
+        jcr:lastModified="{Date}2020-01-14T15:20:47.108+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2020-01-14T15:20:46.821+01:00"
+            dam:sha1="434be0cdbe1b80dea29e9f1202ddcfeab409171f"
+            dam:size="{Long}2029"
+            dc:format="image/svg+xml"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
             jcr:mixinTypes="[cq:Taggable]"
-            jcr:primaryType="nt:unstructured">
-            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
-        </metadata>
+            jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="48df17de-20c0-48b7-8728-1841f20171cf">
+    jcr:uuid="7fab65e2-8307-4541-a4a8-87355e599e54">
     <jcr:content
         dam:assetState="processed"
+<<<<<<< HEAD
         jcr:lastModified="{Date}2019-12-19T17:36:30.359+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
@@ -17,10 +18,18 @@
             dc:title="Download"
             jcr:lastModified="{Date}2019-12-19T17:36:30.358+01:00"
             jcr:lastModifiedBy="admin"
+=======
+        jcr:lastModified="{Date}2020-01-14T15:21:37.857+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2020-01-14T15:21:37.481+01:00"
+            dam:sha1="795d8ea980a0dc8da812888416690233c8b594df"
+            dam:size="{Long}4652"
+            dc:format="image/svg+xml"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
             jcr:mixinTypes="[cq:Taggable]"
-            jcr:primaryType="nt:unstructured">
-            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
-        </metadata>
+            jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>

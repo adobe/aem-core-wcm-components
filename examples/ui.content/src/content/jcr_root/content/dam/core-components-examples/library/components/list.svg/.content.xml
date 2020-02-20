@@ -2,9 +2,10 @@
 <jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="c3364850-0c96-435c-919f-2610704bcf84">
+    jcr:uuid="ec254703-c26f-4ef9-825a-f299ce1b4d84">
     <jcr:content
         dam:assetState="processed"
+<<<<<<< HEAD
         jcr:lastModified="{Date}2019-12-19T17:36:30.822+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
@@ -17,6 +18,16 @@
             dc:title="List"
             jcr:lastModified="{Date}2019-12-19T17:36:30.822+01:00"
             jcr:lastModifiedBy="admin"
+=======
+        jcr:lastModified="{Date}2020-01-14T15:20:39.649+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2020-01-14T15:20:39.377+01:00"
+            dam:sha1="c91b906d0e10e53b8541f5c956f947b565ce7010"
+            dam:size="{Long}2868"
+            dc:format="image/svg+xml"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
