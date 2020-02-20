@@ -32,6 +32,7 @@
                     "jcr:lastModified": "Mon Oct 21 2019 07:54:15 GMT+0200",
                     "sling:resourceType": "core/wcm/components/experiencefragment/v2/experiencefragment",
                     "textIsRich": "true",
+                    "cq:cssClass": "testCssClass",
                     "fragmentVariationPath": "/content/experience-fragments/fragment/master"
                 }
             }

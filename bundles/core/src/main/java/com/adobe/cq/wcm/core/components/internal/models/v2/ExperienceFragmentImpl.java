@@ -162,14 +162,6 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
         }
     }
     
-    /**
-     * @deprecated
-     */
-    public String getResourceSuperType() {
-        return resource.getResourceSuperType();
-    }
-    
-    
     @Nonnull
     @Override
     public Map<String, ? extends ComponentExporter> getExportedItems() {
@@ -182,13 +174,6 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
         return children.isEmpty() ?
                 new String[0] : children.keySet().toArray(new String[children.size()]);
     }
-    
-    @Nonnull
-    @Override
-    public String getExportedType() {
-        return resource.getResourceType();
-    }
-    
     
     private void retrieveExperienceFragmentContentResource() {
         Resource effectiveResource = getEffectiveResource();
