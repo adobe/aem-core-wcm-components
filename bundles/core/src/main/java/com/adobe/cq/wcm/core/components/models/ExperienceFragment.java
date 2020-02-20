@@ -15,10 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+
+import javax.annotation.Nullable;
 
 /**
  * Defines the {@code ExperienceFragment} Sling Model used for the
@@ -72,5 +75,22 @@ public interface ExperienceFragment extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
+    
+    /**
+     * Generates some container class names (needed for SPA framework)
+     * @return Css Class names
+     * @since com.adobe.cq.wcm.core.components.models 12.13.0
+     */
+    @Nullable
+    default String getCssClassNames()  {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Simple boolean flag to check if the path is configured
+     * @return
+     * @since com.adobe.cq.wcm.core.components.models 12.13.0
+     */
+    default boolean isPathConfigured()  {throw new UnsupportedOperationException(); }
 
 }
