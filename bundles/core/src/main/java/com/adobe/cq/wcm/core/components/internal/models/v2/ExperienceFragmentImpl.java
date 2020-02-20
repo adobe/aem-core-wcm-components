@@ -48,7 +48,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.adobe.cq.wcm.core.components.internal.models.v2.ExperienceFragmentImpl.RESOURCE_TYPE_V2;
-import static com.adobe.cq.xf.ExperienceFragmentsConstants.PN_FRAGMENT_PATH;
 
 @Model(adaptables = SlingHttpServletRequest.class,
         defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
