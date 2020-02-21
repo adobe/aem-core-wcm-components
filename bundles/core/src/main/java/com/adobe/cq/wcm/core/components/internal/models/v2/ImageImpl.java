@@ -179,7 +179,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                 }
             }
         }
-        return Collections.unmodifiableList(areas);
+        if (areas != null) {
+            return Collections.unmodifiableList(areas);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @Override
