@@ -97,6 +97,7 @@
                                                 granite:class="cmp-image__editor-alt">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <alt
+                                                        granite:class="cmp-image__editor-alt-text"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                         fieldDescription="Textual alternative of the meaning or function of the image, for visually impaired readers."
