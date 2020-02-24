@@ -4,7 +4,7 @@
 [![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/master/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all)
 
-Set of standardized components for [Adobe Experience Manager (AEM) Sites](https://www.adobe.com/marketing/experience-manager-sites.html) to speed up development time and reduce maintenance cost of Web Content Management (WCM):  
+Set of standardized Web Content Management (WCM) components for [Adobe Experience Manager (AEM)](https://www.adobe.com/marketing/experience-manager.html) to speed up development time and reduce maintenance cost of websites:  
 The best code is the code you don't write!
 
 ## Welcome
