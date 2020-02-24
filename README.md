@@ -12,7 +12,7 @@ The best code is the code you don't write!
 * **Contributions** are welcome, read our [contributing guide](CONTRIBUTING.md) for more information.
 * **Ideas and questions** are discussed on our [public mailing list](https://groups.google.com/forum/#!forum/aem-core-components-dev); you can also [subscribe via email](mailto:aem-core-components-dev+subscribe@googlegroups.com).
 
-#### Usability Study 2020
+### Usability Study 2020
 
 We're conducting a usability study by using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability.  
 Please help us making the Core Components better by responding to our **[short usability questionnaire](https://s2.userzoom.com/m/MSBDNTc1MlMxMDk1)**. Thank you!
@@ -41,7 +41,7 @@ Please help us making the Core Components better by responding to our **[short u
 * **Versioning:** The [versioning policy](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) ensures we won't break your site when improving things that might impact you.
 * **Open Sourced:** If something is not as it should, [contribute](CONTRIBUTING.md) your improvements!
 
-#### Template Components
+### Template Components
 
 1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
 2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
@@ -49,7 +49,7 @@ Please help us making the Core Components better by responding to our **[short u
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
-#### Page Authoring Components
+### Page Authoring Components
 
 6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
@@ -65,14 +65,14 @@ Please help us making the Core Components better by responding to our **[short u
 17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
 18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
 
-#### Container Components
+### Container Components
 
 19. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
 20. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
 21. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
 22. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
 
-#### Form Components
+### Form Components
 
 23. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
 24. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
@@ -80,7 +80,7 @@ Please help us making the Core Components better by responding to our **[short u
 26. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
 27. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
-#### Roadmap
+### Roadmap
 
 To learn about the main upcoming components and features, visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki).
 
@@ -90,7 +90,7 @@ To include the Core Components in a new project, we strongly advise to use the [
 
 For existing projects, take example from the [AEM Project Archetype](https://github.com/adobe/aem-project-archetype) by looking at the `core.wcm.components` references in the main [`pom.xml`](https://github.com/adobe/aem-project-archetype/blob/master/src/main/archetype/pom.xml), in [`all/pom.xml`](https://github.com/adobe/aem-project-archetype/blob/master/src/main/archetype/all/pom.xml), and in [`ui.apps/pom.xml`](https://github.com/adobe/aem-project-archetype/blob/master/src/main/archetype/ui.apps/pom.xml). For the rest, make sure to create Proxy Components, to load the client libraries and to allow the components on the template, as instructed in [Using Core Components](https://docs.adobe.com/content/help/en/experience-manager-core-components/using/get-started/using.html).
 
-#### System Requirements
+### System Requirements
 
 Core Components | [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html) | [AEM 6.5](https://docs.adobe.com/content/help/en/experience-manager-65/user-guide/home.html) | [AEM 6.4](https://docs.adobe.com/content/help/en/experience-manager-64/user-guide/home.html) | AEM 6.3 | Java SE | Maven
 ---------|---------|---------|---------|---------|---------|---------
@@ -102,31 +102,30 @@ The Core Components require the use of [editable templates](https://docs.adobe.c
 
 Setup your local development environment for [AEM as a Cloud Service SDK](https://docs.adobe.com/content/help/en/experience-manager-learn/cloud-service/local-development-environment-set-up/overview.html) or for [older versions of AEM](https://docs.adobe.com/content/help/en/experience-manager-learn/foundation/development/set-up-a-local-aem-development-environment.html).
 
-#### Building
+### Building
 
 To compile your own version of the Core Components, you can build and install everything on your running AEM instance by issuing the following command in the top level folder of the project:
 
     mvn clean install -PautoInstallSinglePackage
 
-#### Maven Profiles
-
-For convenience, the following deployment profiles are provided when running the Maven install goal with `mvn install`:
- * `autoInstallSinglePackage`: Install everything to the AEM author instance.
- * `autoInstallSinglePackagePublish`: Install everything to the AEM publish instance.
- * `autoInstallPackage`: Install the `ui.content` and `ui.apps` content packages to the AEM author instance.
- * `autoInstallPackagePublish` - Install the `ui.content` and `ui.apps` content packages to the  AEM publish instance.
-
-The hostname and port of the instance can be changed with the following user defined properties:
- * `aem.host` and `aem.port` for the author instance.
- * `aem.publish.host` and `aem.publish.port` for the publish instance.
-
-#### Individual packages/bundles
+### Individual packages/bundles
 
 You can install individual packages/bundles by issuing the following command in the top-level folder of the project:
 
     mvn clean install -PautoInstallPackage -pl <project_name(s)> -am
 
 Note that:
+* `-pl/-projects` option specifies the list of projects that you want to install
+* `-am/-also-make` options specifies that dependencies should also be built
+ 
+### Maven Profiles
 
- * `-pl/-projects` option specifies the list of projects that you want to install
- * `-am/-also-make` options specifies that dependencies should also be built
+For convenience, the following deployment profiles are provided when running the Maven install goal with `mvn install`:
+* `autoInstallSinglePackage`: Install everything to the AEM author instance.
+* `autoInstallSinglePackagePublish`: Install everything to the AEM publish instance.
+* `autoInstallPackage`: Install the `ui.content` and `ui.apps` content packages to the AEM author instance.
+* `autoInstallPackagePublish` - Install the `ui.content` and `ui.apps` content packages to the  AEM publish instance.
+
+The hostname and port of the instance can be changed with the following user defined properties:
+* `aem.host` and `aem.port` for the author instance.
+* `aem.publish.host` and `aem.publish.port` for the publish instance.
