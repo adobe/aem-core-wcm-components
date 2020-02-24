@@ -108,17 +108,13 @@ To compile your own version of the Core Components, you can build and install ev
 
     mvn clean install -PautoInstallSinglePackage
 
-### Individual packages/bundles
-
-You can install individual packages/bundles by issuing the following command in the top-level folder of the project:
+You can also install individual packages/bundles by issuing the following command in the top-level folder of the project:
 
     mvn clean install -PautoInstallPackage -pl <project_name(s)> -am
 
 Note that:
 * `-pl/-projects` option specifies the list of projects that you want to install
 * `-am/-also-make` options specifies that dependencies should also be built
- 
-### Maven Profiles
 
 For convenience, the following deployment profiles are provided when running the Maven install goal with `mvn install`:
 * `autoInstallSinglePackage`: Install everything to the AEM author instance.
