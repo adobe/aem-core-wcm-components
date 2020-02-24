@@ -29,7 +29,7 @@ Please help us making the Core Components better by responding to our **[short u
 ## Features
 
 * **Production-Ready:** 27 robust components that are well tested, widely used, and that perform well.
-* **Cloud-Ready:** Whether in [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html), in [Adobe Managed Services](https://github.com/adobe/aem-project-archetype/tree/master/src/main/archetype/dispatcher.ams), or on-premise, it just works.
+* **Cloud-Ready:** Whether in [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html), in [Adobe Managed Services](https://github.com/adobe/aem-project-archetype/tree/master/src/main/archetype/dispatcher.ams), or on-premise, they just work.
 * **Versatile:** The components represent generic concepts with which the authors can assemble nearly any layout.
 * **Configurable:** Template-level [content policies](https://docs.adobe.com/content/help/en/experience-manager-65/developing/platform/templates/page-templates-editable.html#content-policies) define which features the page authors are allowed to use.
 * **Accessible:** They comply [WCAG 2.0 standard](https://www.w3.org/TR/WCAG20/), provide ARIA labels, and support keyboard navigation ([known issues](https://github.com/adobe/aem-core-wcm-components/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+accessibility+in%3Atitle)).
