@@ -120,7 +120,7 @@ For convenience, the following deployment profiles are provided when running the
 * `autoInstallSinglePackage`: Install everything to the AEM author instance.
 * `autoInstallSinglePackagePublish`: Install everything to the AEM publish instance.
 * `autoInstallPackage`: Install the `ui.content` and `ui.apps` content packages to the AEM author instance.
-* `autoInstallPackagePublish` - Install the `ui.content` and `ui.apps` content packages to the  AEM publish instance.
+* `autoInstallPackagePublish`: Install the `ui.content` and `ui.apps` content packages to the  AEM publish instance.
 
 The hostname and port of the instance can be changed with the following user defined properties:
 * `aem.host` and `aem.port` for the author instance.
