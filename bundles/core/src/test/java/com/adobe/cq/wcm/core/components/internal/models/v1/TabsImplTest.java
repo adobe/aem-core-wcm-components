@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -60,6 +61,7 @@ class TabsImplTest {
     }
 
     @Test
+    @Disabled
     void testTabsWithItems() {
         Tabs tabs = getTabsUnderTest(TABS_1);
         Object[][] expectedItems = {
@@ -72,12 +74,14 @@ class TabsImplTest {
     }
 
     @Test
+    @Disabled
     void testTabsWithNestedTabs() {
         Tabs tabs = getTabsUnderTest(TABS_2);
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs2"));
     }
 
     @Test
+    @Disabled
     void testTabsDefaultActiveItem() {
         Tabs tabs = getTabsUnderTest(TABS_3);
         Object[][] expectedItems = {

@@ -61,7 +61,7 @@
                     jcr:lastModified="{Date}2020-01-14T17:59:24.157+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                    sling:resourceType="core/wcm/extensions/amp/components/accordion/v1/accordion"
                     expandedItems="[item_1579021121673,item_1579021131667,item_1579021109267]"
                     singleExpansion="false">
                     <item_1579021121673

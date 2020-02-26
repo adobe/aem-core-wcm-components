@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2016 Adobe
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,8 +14,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<workspaceFilter version="1.0">
-    <filter root="/apps/core/wcm/components">
-        <exclude pattern="/apps/core/wcm/extensions"/>
-    </filter>
-</workspaceFilter>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    cq:icon="panel"
+    cq:isContainer="{Boolean}true"
+    jcr:description="Displays content as an accordion with AMP support"
+    jcr:primaryType="cq:Component"
+    jcr:title="Accordion (AMP v1)"
+    sling:resourceSuperType="core/wcm/components/accordion/v1/accordion"
+    componentGroup=".core-wcm"/>

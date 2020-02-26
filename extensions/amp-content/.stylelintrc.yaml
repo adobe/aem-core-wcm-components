@@ -1,0 +1,244 @@
+# enables all possible errors (https://stylelint.io/user-guide/rules/#possible-errors)
+extends: stylelint-config-recommended
+plugins: stylelint-selector-bem-pattern
+rules:
+    #
+    # limit language features (https://stylelint.io/user-guide/rules/#limit-language-features)
+    #
+
+    # color
+    color-named: null
+    color-no-hex: null
+
+    # function
+    function-blacklist: null
+    function-url-no-scheme-relative: null
+    function-url-scheme-blacklist: null
+    function-url-scheme-whitelist: null
+    function-whitelist: null
+
+    # number
+    number-max-precision: null
+
+    # time
+    time-min-milliseconds: null
+
+    # unit
+    unit-blacklist: null
+    unit-whitelist: null
+
+    # shorthand property
+    shorthand-property-no-redundant-values: true
+
+    # value
+    value-no-vendor-prefix: true
+
+    # custom property
+    custom-property-pattern: null
+
+    # property
+    property-blacklist: null
+    property-whitelist: null
+
+    # declaration
+    declaration-block-no-redundant-longhand-properties: true
+    declaration-no-important: true
+    declaration-property-unit-blacklist: null
+    declaration-property-unit-whitelist: null
+    declaration-property-value-blacklist: null
+    declaration-property-value-whitelist: null
+
+    # declaration block
+    declaration-block-single-line-max-declarations: 1
+
+    # selector
+    selector-attribute-operator-blacklist: null
+    selector-attribute-operator-whitelist: null
+    selector-class-pattern: null
+    selector-combinator-blacklist: null
+    selector-combinator-whitelist: null
+    selector-id-pattern: null
+    selector-max-attribute: null
+    selector-max-class: null
+    selector-max-combinators: null
+    selector-max-compound-selectors: null
+    selector-max-empty-lines: 0
+    selector-max-id: 0
+    selector-max-pseudo-class: null
+    selector-max-specificity: null
+    selector-max-type: 0
+    selector-max-universal: 0
+    selector-nested-pattern: null
+    selector-no-qualifying-type: true
+    selector-no-vendor-prefix: true
+    selector-pseudo-class-blacklist: null
+    selector-pseudo-class-whitelist: null
+    selector-pseudo-element-blacklist: null
+    selector-pseudo-element-whitelist: null
+
+    # media feature
+    media-feature-name-blacklist: null
+    media-feature-name-no-vendor-prefix: true
+    media-feature-name-whitelist: null
+
+    # custom media
+    custom-media-pattern: null
+
+    # @ rule
+    at-rule-blacklist: null
+    at-rule-no-vendor-prefix: true
+    at-rule-whitelist: null
+
+    # comment
+    comment-word-blacklist: null
+
+    # general
+    max-nesting-depth: null
+    no-unknown-animations: true
+
+    #
+    # stylistic (https://stylelint.io/user-guide/rules/#stylistic-issues)
+    #
+
+    # color
+    color-hex-case: lower
+    color-hex-length: short
+
+    # font
+    font-family-name-quotes: always-where-recommended
+    font-weight-notation: null
+
+    # function
+    function-comma-newline-after: null
+    function-comma-newline-before: null
+    function-comma-space-after: always
+    function-comma-space-before: never
+    function-max-empty-lines: 0
+    function-name-case: lower
+    function-parentheses-newline-inside: null
+    function-parentheses-space-inside: never
+    function-url-quotes: always
+    function-whitespace-after: always
+
+    # number
+    number-leading-zero: never
+    number-no-trailing-zeros: true
+
+    # string
+    string-quotes: double
+
+    # length
+    length-zero-no-unit: true
+
+    # unit
+    unit-case: lower
+
+    # value
+    value-keyword-case: lower
+
+    # value list
+    value-list-comma-newline-after: null
+    value-list-comma-newline-before: null
+    value-list-comma-space-after: always
+    value-list-comma-space-before: never
+    value-list-max-empty-lines: 0
+
+    # custom property
+    custom-property-empty-line-before: null
+
+    # property
+    property-case: lower
+
+    # declaration
+    declaration-bang-space-after: never
+    declaration-bang-space-before: always
+    declaration-colon-newline-after: null
+    declaration-colon-space-after: always
+    declaration-colon-space-before: never
+    declaration-empty-line-before: null
+
+    # declaration block
+    declaration-block-semicolon-newline-after: always-multi-line
+    declaration-block-semicolon-newline-before: null
+    declaration-block-semicolon-space-after: always-single-line
+    declaration-block-semicolon-space-before: never
+    declaration-block-trailing-semicolon: always
+
+    # block
+    block-closing-brace-empty-line-before: never
+    block-closing-brace-newline-after: always
+    block-closing-brace-newline-before: always-multi-line
+    block-closing-brace-space-after: null
+    block-closing-brace-space-before: always-single-line
+    block-opening-brace-newline-after: always-multi-line
+    block-opening-brace-newline-before: null
+    block-opening-brace-space-after: always-single-line
+    block-opening-brace-space-before: always
+
+    # selector
+    selector-attribute-brackets-space-inside: never
+    selector-attribute-operator-space-after: never
+    selector-attribute-operator-space-before: never
+    selector-attribute-quotes: always
+    selector-combinator-space-after: always
+    selector-combinator-space-before: always
+    selector-descendant-combinator-no-non-space: true
+    selector-pseudo-class-case: lower
+    selector-pseudo-class-parentheses-space-inside: never
+    selector-pseudo-element-case: lower
+    selector-pseudo-element-colon-notation: single
+    selector-type-case: lower
+
+    # selector list
+    selector-list-comma-newline-after: always-multi-line
+    selector-list-comma-newline-before: null
+    selector-list-comma-space-after: always
+    selector-list-comma-space-before: never
+
+    # rule
+    rule-empty-line-before:
+        - always-multi-line
+        - ignore:
+            - after-comment
+            - first-nested
+
+    # media feature
+    media-feature-colon-space-after: always
+    media-feature-colon-space-before: never
+    media-feature-name-case: lower
+    media-feature-parentheses-space-inside: never
+    media-feature-range-operator-space-after: always
+    media-feature-range-operator-space-before: always
+
+    # media query list
+    media-query-list-comma-newline-after: null
+    media-query-list-comma-newline-before: null
+    media-query-list-comma-space-after: always
+    media-query-list-comma-space-before: never
+
+    # @ rule
+    at-rule-empty-line-before: always
+    at-rule-name-case: lower
+    at-rule-name-newline-after: null
+    at-rule-name-space-after: always
+    at-rule-semicolon-newline-after: always
+    at-rule-semicolon-space-before: never
+
+    # comment
+    comment-empty-line-before: always
+    comment-whitespace-inside: always
+
+    # general
+    indentation: 4
+    max-empty-lines: 1
+    max-line-length: null
+    no-eol-whitespace: true
+    no-missing-end-of-source-newline: true
+
+    #
+    # plugin
+    #
+    plugin/selector-bem-pattern:
+        preset: bem
+        presetOptions:
+            namespace: 'cmp'
