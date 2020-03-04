@@ -19,6 +19,8 @@ import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.json.JsonObject;
+
 @ConsumerType
 public interface DataLayerProvider {
 

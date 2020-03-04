@@ -45,7 +45,7 @@ import java.util.Calendar;
        adapters = {Title.class, ComponentExporter.class},
        resourceType = {TitleImpl.RESOURCE_TYPE_V1, TitleImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TitleImpl extends AbstractDataLayerProvider implements Title {
+public class TitleImpl extends AbstractComponentImpl implements Title {
 
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/title/v1/title";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/title/v2/title";
@@ -138,16 +138,6 @@ public class TitleImpl extends AbstractDataLayerProvider implements Title {
     /*
      * DataLayerProvider implementation of field getters
      */
-
-    @Override
-    public String getDataLayerId() {
-        return resource.getPath();
-    }
-
-    @Override
-    public String getDataLayerType() {
-        return "title";
-    }
 
     @Override
     public String getDataLayerLinkUrl() {

@@ -44,7 +44,7 @@ import com.day.cq.wcm.api.designer.Style;
        resourceType = {LanguageNavigationImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME ,
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class LanguageNavigationImpl extends AbstractDataLayerProvider implements LanguageNavigation {
+public class LanguageNavigationImpl extends AbstractComponentImpl implements LanguageNavigation {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/languagenavigation/v1/languagenavigation";
 
@@ -143,16 +143,6 @@ public class LanguageNavigationImpl extends AbstractDataLayerProvider implements
     /*
      * DataLayerProvider implementation of field getters
      */
-
-    @Override
-    public String getDataLayerId() {
-        return request.getResource().getPath();
-    }
-
-    @Override
-    public String getDataLayerType() {
-        return "languageNavigation";
-    }
 
     @Override
     public String getDataLayerName() {

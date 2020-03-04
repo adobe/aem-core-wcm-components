@@ -64,27 +64,7 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
      */
 
     @Override
-    public String getDataLayerId() {
-        return getPath();
-    }
-
-    @Override
     public String getDataLayerType() {
         return "navigationItem";
-    }
-
-    @Override
-    public String getDataLayerName() {
-        return getName();
-    }
-
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getURL();
     }
 }

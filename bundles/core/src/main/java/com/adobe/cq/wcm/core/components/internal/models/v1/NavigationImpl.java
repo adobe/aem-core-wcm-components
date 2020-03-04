@@ -55,7 +55,7 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
        adapters = {Navigation.class, ComponentExporter.class},
        resourceType = {NavigationImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class NavigationImpl extends AbstractDataLayerProvider implements Navigation {
+public class NavigationImpl extends AbstractComponentImpl implements Navigation {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
 
@@ -270,16 +270,6 @@ public class NavigationImpl extends AbstractDataLayerProvider implements Navigat
     /*
      * DataLayerProvider implementation of field getters
      */
-
-    @Override
-    public String getDataLayerId() {
-        return request.getResource().getPath();
-    }
-
-    @Override
-    public String getDataLayerType() {
-        return "navigation";
-    }
 
     @Override
     public String getDataLayerName() {

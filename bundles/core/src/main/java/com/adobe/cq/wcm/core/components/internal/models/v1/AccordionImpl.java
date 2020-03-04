@@ -116,16 +116,6 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
      */
 
     @Override
-    public String getDataLayerId() {
-        return resource.getPath();
-    }
-
-    @Override
-    public String getDataLayerType() {
-        return "accordion";
-    }
-
-    @Override
     public String getDataLayerName() {
         return resource.getName();
     }

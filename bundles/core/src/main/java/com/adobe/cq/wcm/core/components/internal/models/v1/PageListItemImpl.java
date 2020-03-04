@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
@@ -113,8 +114,8 @@ public class PageListItemImpl extends AbstractDataLayerProvider implements ListI
 
     @Override
     public String getDataLayerId() {
-        return getPath();
-    } // or page.getPath() ?
+        return getDataLayerType() + "-" + StringUtils.substring(DigestUtils.sha1Hex(getPath()), 0, 10);
+    }
 
     @Override
     public String getDataLayerType() {

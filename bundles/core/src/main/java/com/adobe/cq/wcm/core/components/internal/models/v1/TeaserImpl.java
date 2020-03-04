@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -291,7 +293,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getDataLayerId() {
-        return resource.getPath();
+        return getDataLayerType() + "-" + StringUtils.substring(DigestUtils.sha1Hex(resource.getPath()), 0, 10);
     }
 
     @Override

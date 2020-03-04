@@ -38,28 +38,7 @@ public class BreadcrumbItemImpl extends NavigationItemImpl implements Navigation
      */
 
     @Override
-    public String getDataLayerId() {
-        return getPath();
-    }
-
-    @Override
     public String getDataLayerType() {
         return "breadcrumbItem";
     }
-
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerName() {
-        return getName();
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getURL();
-    }
-
 }

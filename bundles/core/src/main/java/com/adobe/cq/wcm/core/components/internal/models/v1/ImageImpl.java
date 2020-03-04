@@ -65,7 +65,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ImageImpl extends AbstractDataLayerProvider implements Image {
+public class ImageImpl extends AbstractComponentImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v1/image";
     private static final String DEFAULT_EXTENSION = "jpeg";
@@ -79,8 +79,8 @@ public class ImageImpl extends AbstractDataLayerProvider implements Image {
     @Self
     protected SlingHttpServletRequest request;
 
-    @Inject
-    protected Resource resource;
+//    @Inject
+//    protected Resource resource;
 
     @ScriptVariable
     protected PageManager pageManager;
@@ -376,16 +376,6 @@ public class ImageImpl extends AbstractDataLayerProvider implements Image {
     @Override
     public Resource getAssetResource() {
         return resource.getResourceResolver().getResource(fileReference);
-    }
-
-    @Override
-    public String getDataLayerId() {
-        return resource.getPath();
-    }
-
-    @Override
-    public String getDataLayerType() {
-        return "image";
     }
 
     @Override

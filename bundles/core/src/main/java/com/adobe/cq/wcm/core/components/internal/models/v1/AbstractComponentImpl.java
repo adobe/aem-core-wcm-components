@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -104,8 +105,8 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProvider im
         PageManager pageManager = currentPage.getPageManager();
         Page containingPage = pageManager.getContainingPage(resource);
         Template template = currentPage.getTemplate();
-        Boolean inCurrentPage = (containingPage != null && StringUtils.equals(containingPage.getPath(), currentPage.getPath()));
-        Boolean inTemplate = (template != null && path.startsWith(template.getPath()));
+        boolean inCurrentPage = (containingPage != null && StringUtils.equals(containingPage.getPath(), currentPage.getPath()));
+        boolean inTemplate = (template != null && path.startsWith(template.getPath()));
         if (!inCurrentPage && !inTemplate) {
             ComponentContext parentContext = componentContext.getParent();
             while (parentContext != null) {
@@ -123,5 +124,15 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProvider im
             }
         }
         return prefix + "-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
+    }
+
+    @Override
+    public final String getDataLayerId() {
+        return getId();
+    }
+
+    @Override
+    public final String getDataLayerType() {
+        return StringUtils.substringAfterLast(resource.getResourceType(), "/");
     }
 }

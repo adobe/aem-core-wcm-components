@@ -90,16 +90,6 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
      */
 
     @Override
-    public String getDataLayerId() {
-        return resource.getPath();
-    }
-
-    @Override
-    public String getDataLayerType() {
-        return "carousel";
-    }
-
-    @Override
     public String getDataLayerName() {
         return resource.getName();
     }

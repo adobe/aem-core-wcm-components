@@ -62,16 +62,6 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
      */
 
     @Override
-    public String getDataLayerId() {
-        return resource.getPath();
-    }
-
-    @Override
-    public String getDataLayerType() {
-        return "tabs";
-    }
-
-    @Override
     public String getDataLayerName() {
         return resource.getName();
     }
