@@ -1,8 +1,6 @@
 {
+    "id": "list-6df1b262c1",
     "dateFormatString": "yyyy-MM-dd",
-    "dataLayerId": "/content/list/listTypes/staticListType",
-    "dataLayerType": "list",
-    "dataLayerItemsCount": 2,
     "items": [
         {
             "path": "/content/list/pages/page_1",
@@ -19,6 +17,11 @@
             "title": "Page 2"
         }
     ],
+    "dataLayerJson": {
+        "id": "list-6df1b262c1",
+        "type": "list",
+        "itemsCount": 2
+    },
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

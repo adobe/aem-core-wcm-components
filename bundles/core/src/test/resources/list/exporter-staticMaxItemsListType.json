@@ -1,8 +1,6 @@
 {
+    "id": "list-2c3c3816c1",
     "dateFormatString": "yyyy-MM-dd",
-    "dataLayerId": "/content/list/listTypes/staticMaxItemsListType",
-    "dataLayerType": "list",
-    "dataLayerItemsCount": 1,
     "items": [
         {
             "path": "/content/list/pages/page_1",
@@ -12,6 +10,11 @@
             "title": "Page 1"
         }
     ],
+    "dataLayerJson": {
+        "id": "list-2c3c3816c1",
+        "type": "list",
+        "itemsCount": 1
+    },
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

@@ -1,8 +1,6 @@
 {
+    "id": "list-afb17e68e0",
     "dateFormatString": "yyyy-MM-dd",
-    "dataLayerId": "/content/list/listTypes/searchListType",
-    "dataLayerType": "list",
-    "dataLayerItemsCount": 1,
     "items": [
         {
             "path": "/content/list/pages/page_1",
@@ -12,6 +10,11 @@
             "title": "Page 1"
         }
     ],
+    "dataLayerJson": {
+        "id": "list-afb17e68e0",
+        "type": "list",
+        "itemsCount": 1
+    },
     "showDescription": false,
     "showModificationDate": false,
     "linkItems": false,

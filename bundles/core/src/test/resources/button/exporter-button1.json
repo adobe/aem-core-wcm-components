@@ -1,7 +1,13 @@
 {
+    "id": "button-0c81c1811d",
     "text": "Adobe",
     "link": "https://www.adobe.com",
     "icon": "adobe",
-    "dataLayerJson": "{\"id\":\"/content/button/jcr:content/root/responsivegrid/button-1\",\"type\":\"button\",\"text\":\"Adobe\",\"linkUrl\":\"https://www.adobe.com\"}",
+    "dataLayerJson": {
+        "linkUrl": "https://www.adobe.com",
+        "id": "button-0c81c1811d",
+        "text": "Adobe",
+        "type": "button"
+    },
     ":type": "core/wcm/components/button/v1/button"
 }

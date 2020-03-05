@@ -1,5 +1,9 @@
 {
+    "id": "title-d7b073638f",
     "linkDisabled": false,
-    "dataLayerJson": "{\"id\":\"/content/title/jcr:content/par/title-wrongtype\",\"type\":\"title\"}",
+    "dataLayerJson": {
+        "id": "title-d7b073638f",
+        "type": "title"
+    },
     ":type": "core/wcm/components/title/v1/title"
 }

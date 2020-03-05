@@ -1,8 +1,6 @@
 {
+    "id": "list-47a43e2288",
     "dateFormatString": "yyyy-MM-dd",
-    "dataLayerId": "/content/list/listTypes/staticOrderByTitleDescListType",
-    "dataLayerType": "list",
-    "dataLayerItemsCount": 2,
     "items": [
         {
             "path": "/content/list/pages/page_2",
@@ -19,6 +17,11 @@
             "title": "Page 1"
         }
     ],
+    "dataLayerJson": {
+        "id": "list-47a43e2288",
+        "type": "list",
+        "itemsCount": 2
+    },
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

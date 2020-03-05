@@ -3,7 +3,12 @@
     "autoplay": true,
     "delay": 7000,
     "autopauseDisabled": true,
-    "dataLayerJson": "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1\",\"type\":\"carousel\",\"itemCount\":3}",
+    "dataLayerJson": {
+        "name": "carousel-1",
+        "id": "carousel-e4eef01f3a",
+        "type": "carousel",
+        "itemsCount": 3
+    },
     ":itemsOrder": [
         "item_1",
         "item_2",
@@ -17,7 +22,12 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "dataLayerJson": "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1\",\"type\":\"teaser\",\"name\":\"item_1\",\"title\":\"Teaser 1\"}",
+            "dataLayerJson": {
+                "name": "item_1",
+                "id": "teaser-fa5e230013",
+                "type": "teaser",
+                "title": "Teaser 1"
+            },
             ":type": "core/wcm/components/teaser/v1/teaser",
             "cq:panelTitle": "Teaser 1"
         },
@@ -28,7 +38,12 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "dataLayerJson": "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2\",\"type\":\"teaser\",\"name\":\"item_2\",\"title\":\"Teaser 2\"}",
+            "dataLayerJson": {
+                "name": "item_2",
+                "id": "teaser-0df75f1927",
+                "type": "teaser",
+                "title": "Teaser 2"
+            },
             ":type": "core/wcm/components/teaser/v1/teaser",
             "cq:panelTitle": "Teaser 2"
         },
@@ -39,7 +54,12 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "dataLayerJson": "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3\",\"type\":\"teaser\",\"name\":\"item_3\",\"title\":\"Teaser 3\"}",
+            "dataLayerJson": {
+                "name": "item_3",
+                "id": "teaser-af9ead7a9b",
+                "type": "teaser",
+                "title": "Teaser 3"
+            },
             ":type": "core/wcm/components/teaser/v1/teaser",
             "cq:panelTitle": "Carousel Panel 3"
         }

@@ -20,6 +20,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
@@ -44,10 +45,10 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProvider im
     @SlingObject
     protected Resource resource;
 
-    @ScriptVariable
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     protected ComponentContext componentContext;
 
-    @ScriptVariable
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     private Page currentPage;
 
     private String id;
@@ -102,27 +103,31 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProvider im
         String resourceType = resource.getResourceType();
         String prefix = StringUtils.substringAfterLast(resourceType, "/");
         String path = resource.getPath();
-        PageManager pageManager = currentPage.getPageManager();
-        Page containingPage = pageManager.getContainingPage(resource);
-        Template template = currentPage.getTemplate();
-        boolean inCurrentPage = (containingPage != null && StringUtils.equals(containingPage.getPath(), currentPage.getPath()));
-        boolean inTemplate = (template != null && path.startsWith(template.getPath()));
-        if (!inCurrentPage && !inTemplate) {
-            ComponentContext parentContext = componentContext.getParent();
-            while (parentContext != null) {
-                Resource parentContextResource = parentContext.getResource();
-                if (parentContextResource != null) {
-                    Page parentContextPage = pageManager.getContainingPage(parentContextResource);
-                    inCurrentPage = (parentContextPage != null && StringUtils.equals(parentContextPage.getPath(), currentPage.getPath()));
-                    inTemplate = (template != null && parentContextResource.getPath().startsWith(template.getPath()));
-                    if (inCurrentPage || inTemplate) {
-                        path = parentContextResource.getPath().concat(resource.getPath());
-                        break;
+        if (currentPage != null && componentContext != null) {
+            PageManager pageManager = currentPage.getPageManager();
+            Page containingPage = pageManager.getContainingPage(resource);
+            Template template = currentPage.getTemplate();
+            boolean inCurrentPage = (containingPage != null && StringUtils.equals(containingPage.getPath(), currentPage.getPath()));
+            boolean inTemplate = (template != null && path.startsWith(template.getPath()));
+            if (!inCurrentPage && !inTemplate) {
+                ComponentContext parentContext = componentContext.getParent();
+                while (parentContext != null) {
+                    Resource parentContextResource = parentContext.getResource();
+                    if (parentContextResource != null) {
+                        Page parentContextPage = pageManager.getContainingPage(parentContextResource);
+                        inCurrentPage = (parentContextPage != null && StringUtils.equals(parentContextPage.getPath(), currentPage.getPath()));
+                        inTemplate = (template != null && parentContextResource.getPath().startsWith(template.getPath()));
+                        if (inCurrentPage || inTemplate) {
+                            path = parentContextResource.getPath().concat(resource.getPath());
+                            break;
+                        }
                     }
+                    parentContext = parentContext.getParent();
                 }
-                parentContext = parentContext.getParent();
             }
+
         }
+
         return prefix + "-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
     }
 

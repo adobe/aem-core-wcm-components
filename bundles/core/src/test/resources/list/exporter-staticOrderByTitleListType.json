@@ -1,8 +1,6 @@
 {
+    "id": "list-cdbedccf59",
     "dateFormatString": "yyyy-MM-dd",
-    "dataLayerId": "/content/list/listTypes/staticOrderByTitleListType",
-    "dataLayerType": "list",
-    "dataLayerItemsCount": 2,
     "items": [
         {
             "path": "/content/list/pages/page_1",
@@ -19,6 +17,11 @@
             "title": "Page 2"
         }
     ],
+    "dataLayerJson": {
+        "id": "list-cdbedccf59",
+        "type": "list",
+        "itemsCount": 2
+    },
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

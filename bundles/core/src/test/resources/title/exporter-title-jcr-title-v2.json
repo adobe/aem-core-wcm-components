@@ -1,6 +1,11 @@
 {
+    "id": "title-4bd79029e7",
     "linkDisabled": false,
     "text": "Hello World",
-    "dataLayerJson": "{\"id\":\"/content/title/jcr:content/par/title-jcr-title-v2\",\"type\":\"title\",\"text\":\"Hello World\"}",
+    "dataLayerJson": {
+        "id": "title-4bd79029e7",
+        "text": "Hello World",
+        "type": "title"
+    },
     ":type": "core/wcm/components/title/v2/title"
 }

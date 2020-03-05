@@ -1,4 +1,5 @@
 {
+  "id": "languagenavigation-c68a952542",
   "items": [
     {
       "children": [
@@ -14,7 +15,14 @@
           "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
           "description": null,
           "lastModified": null,
-          "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-1/LOCALE-5/about\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 5\",\"name\":\"about\",\"title\":\"LOCALE 5\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html\"}"
+          "dataLayerJson": {
+            "name": "about",
+            "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
+            "id": "languageNavigationItem-f7ed60dba3",
+            "text": "LOCALE 5",
+            "type": "languageNavigationItem",
+            "title": "LOCALE 5"
+          }
         },
         {
           "children": [],
@@ -28,7 +36,14 @@
           "path": "/content/languagenavigation/LOCALE-1/LOCALE-6",
           "description": null,
           "lastModified": null,
-          "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-1/LOCALE-6\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 6\",\"name\":\"LOCALE-6\",\"title\":\"LOCALE 6\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-1/LOCALE-6.html\"}"
+          "dataLayerJson": {
+            "name": "LOCALE-6",
+            "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-6.html",
+            "id": "languageNavigationItem-9e9b217a2a",
+            "text": "LOCALE 6",
+            "type": "languageNavigationItem",
+            "title": "LOCALE 6"
+          }
         }
       ],
       "level": 0,
@@ -41,7 +56,14 @@
       "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-1/LOCALE-5/about\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 1\",\"name\":\"about\",\"title\":\"LOCALE 1\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html\"}"
+      "dataLayerJson": {
+        "name": "about",
+        "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
+        "id": "languageNavigationItem-f7ed60dba3",
+        "text": "LOCALE 1",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 1"
+      }
     },
     {
       "children": [
@@ -57,7 +79,14 @@
           "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
           "description": null,
           "lastModified": null,
-          "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-2/LOCALE-5/about\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 5\",\"name\":\"about\",\"title\":\"LOCALE 5\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html\"}"
+          "dataLayerJson": {
+            "name": "about",
+            "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
+            "id": "languageNavigationItem-ae086001b7",
+            "text": "LOCALE 5",
+            "type": "languageNavigationItem",
+            "title": "LOCALE 5"
+          }
         },
         {
           "children": [],
@@ -71,7 +100,14 @@
           "path": "/content/languagenavigation/LOCALE-2/LOCALE-7",
           "description": null,
           "lastModified": null,
-          "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-2/LOCALE-7\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 7\",\"name\":\"LOCALE-7\",\"title\":\"LOCALE 7\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-2/LOCALE-7.html\"}"
+          "dataLayerJson": {
+            "name": "LOCALE-7",
+            "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-7.html",
+            "id": "languageNavigationItem-2ba8e0ef64",
+            "text": "LOCALE 7",
+            "type": "languageNavigationItem",
+            "title": "LOCALE 7"
+          }
         }
       ],
       "level": 0,
@@ -84,7 +120,14 @@
       "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-2/LOCALE-5/about\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 2\",\"name\":\"about\",\"title\":\"LOCALE 2\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html\"}"
+      "dataLayerJson": {
+        "name": "about",
+        "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
+        "id": "languageNavigationItem-ae086001b7",
+        "text": "LOCALE 2",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 2"
+      }
     },
     {
       "children": [
@@ -100,7 +143,14 @@
           "path": "/content/languagenavigation/LOCALE-3/LOCALE-8",
           "description": null,
           "lastModified": null,
-          "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-3/LOCALE-8\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 8\",\"name\":\"LOCALE-8\",\"title\":\"LOCALE 8\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-3/LOCALE-8.html\"}"
+          "dataLayerJson": {
+            "name": "LOCALE-8",
+            "linkUrl": "/core/content/languagenavigation/LOCALE-3/LOCALE-8.html",
+            "id": "languageNavigationItem-25f3a38cf2",
+            "text": "LOCALE 8",
+            "type": "languageNavigationItem",
+            "title": "LOCALE 8"
+          }
         }
       ],
       "level": 0,
@@ -113,7 +163,14 @@
       "path": "/content/languagenavigation/LOCALE-3",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-3\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 3\",\"name\":\"LOCALE-3\",\"title\":\"LOCALE 3\",\"linkUrl\":\"/core/LOCALE-3-vanity\"}"
+      "dataLayerJson": {
+        "name": "LOCALE-3",
+        "linkUrl": "/core/LOCALE-3-vanity",
+        "id": "languageNavigationItem-715681d1e2",
+        "text": "LOCALE 3",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 3"
+      }
     },
     {
       "children": [
@@ -129,7 +186,14 @@
           "path": "/content/languagenavigation/LOCALE-4/LOCALE-9",
           "description": null,
           "lastModified": null,
-          "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-4/LOCALE-9\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 9\",\"name\":\"LOCALE-9\",\"title\":\"LOCALE 9\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-4/LOCALE-9.html\"}"
+          "dataLayerJson": {
+            "name": "LOCALE-9",
+            "linkUrl": "/core/content/languagenavigation/LOCALE-4/LOCALE-9.html",
+            "id": "languageNavigationItem-718fa85cbd",
+            "text": "LOCALE 9",
+            "type": "languageNavigationItem",
+            "title": "LOCALE 9"
+          }
         }
       ],
       "level": 0,
@@ -142,9 +206,21 @@
       "path": "/content/languagenavigation/LOCALE-4",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-4\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 4\",\"name\":\"LOCALE-4\",\"title\":\"LOCALE 4\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-4.html\"}"
+      "dataLayerJson": {
+        "name": "LOCALE-4",
+        "linkUrl": "/core/content/languagenavigation/LOCALE-4.html",
+        "id": "languageNavigationItem-540d311dbc",
+        "text": "LOCALE 4",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 4"
+      }
     }
   ],
-  "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-3\",\"type\":\"languageNavigation\",\"name\":\"languagenavigation-component-3\",\"itemsCount\":4}",
+  "dataLayerJson": {
+    "name": "languagenavigation-component-3",
+    "id": "languagenavigation-c68a952542",
+    "type": "languagenavigation",
+    "itemsCount": 4
+  },
   ":type": "core/wcm/components/languagenavigation/v1/languagenavigation"
 }

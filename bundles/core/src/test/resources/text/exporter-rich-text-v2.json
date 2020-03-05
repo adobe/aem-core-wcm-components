@@ -1,6 +1,11 @@
 {
+    "id": "text-5acea9beed",
     "text": "<p>rich</p>",
     "richText": true,
-    "dataLayerJson": "{\"id\":\"/content/text/rich-text-v2\",\"type\":\"text\",\"text\":\"<p>rich</p>\"}",
+    "dataLayerJson": {
+        "id": "text-5acea9beed",
+        "text": "<p>rich</p>",
+        "type": "text"
+    },
     ":type": "core/wcm/components/text/v2/text"
 }

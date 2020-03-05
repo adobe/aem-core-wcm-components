@@ -1,4 +1,5 @@
 {
+    "id": "image-67ae775077",
     "alt": "Adobe Systems Logo and Wordmark in PNG format",
     "title": "Adobe Systems Logo and Wordmark",
     "src": "/core/content/test/_jcr_content/root/image24.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
@@ -31,6 +32,21 @@
     ],
     "widths": [],
     "lazyEnabled": false,
-    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image24\",\"src\":\"/core/content/test/_jcr_content/root/image24.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png\",\"type\":\"image\",\"name\":\"Adobe Systems Logo and Wordmark\"}",
+    "dataLayerJson": {
+        "src": "/core/content/test/_jcr_content/root/image24.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
+        "name": "Adobe Systems Logo and Wordmark",
+        "id": "image-67ae775077",
+        "type": "image",
+        "asset": {
+            "path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+            "name": "Adobe_Systems_logo_and_wordmark.png",
+            "id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+            "type": "image/png",
+            "url": "https://",
+            "tags": {
+                "": 1
+            }
+        }
+    },
     ":type": "core/wcm/components/image/v2/image"
 }

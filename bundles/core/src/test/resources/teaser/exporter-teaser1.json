@@ -8,6 +8,11 @@
   "titleLinkHidden": false,
   "actions": [],
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-1.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
-  "dataLayerJson": "{\"id\":\"/content/teasers/jcr:content/root/responsivegrid/teaser-1\",\"type\":\"teaser\",\"name\":\"teaser-1\",\"title\":\"Teaser\"}",
+  "dataLayerJson": {
+    "name": "teaser-1",
+    "id": "teaser-f266748f8a",
+    "type": "teaser",
+    "title": "Teaser"
+  },
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

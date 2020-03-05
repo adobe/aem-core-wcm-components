@@ -1,4 +1,5 @@
 {
+    "id": "page-df0b99830e",
     "designPath": "/etc/designs/mysite",
     "title": "Templated Page",
     "lastModifiedDate": 1453282416000,
@@ -6,7 +7,13 @@
     "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
     "cssClassNames": "class1 class2",
     "language": "en-GB",
-    "dataLayerJson": "{\"id\":\"/content/page/templated-page\",\"type\":\"page\",\"name\":\"Templated Page\",\"template\":\"/conf/coretest/settings/wcm/templates/product-page\",\"language\":\"en-GB\"}",
+    "dataLayerJson": {
+        "template": "/conf/coretest/settings/wcm/templates/product-page",
+        "name": "Templated Page",
+        "language": "en-GB",
+        "id": "page-df0b99830e",
+        "type": "page"
+    },
     ":itemsOrder": [
         "root"
     ],
@@ -18,9 +25,14 @@
             ],
             ":items": {
                 "text": {
+                    "id": "text-e772bd1e32",
                     "text": "<p>This is a test</p>",
                     "richText": true,
-                    "dataLayerJson": "{\"id\":\"/content/page/templated-page/jcr:content/root/text\",\"type\":\"text\",\"text\":\"<p>This is a test</p>\"}",
+                    "dataLayerJson": {
+                        "id": "text-e772bd1e32",
+                        "text": "<p>This is a test</p>",
+                        "type": "text"
+                    },
                     ":type": "core/wcm/components/text/v2/text"
                 }
             }

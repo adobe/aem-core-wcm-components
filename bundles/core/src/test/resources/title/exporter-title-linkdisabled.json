@@ -1,6 +1,11 @@
 {
+    "id": "title-76babd07b2",
     "linkDisabled": true,
     "linkURL": "https://www.adobe.com",
-    "dataLayerJson": "{\"id\":\"/content/title/jcr:content/par/title-jcr-title-link-v2\",\"type\":\"title\",\"linkUrl\":\"https://www.adobe.com\"}",
+    "dataLayerJson": {
+        "linkUrl": "https://www.adobe.com",
+        "id": "title-76babd07b2",
+        "type": "title"
+    },
     ":type": "core/wcm/components/title/v2/title"
 }

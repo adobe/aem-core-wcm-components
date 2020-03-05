@@ -1,5 +1,11 @@
 {
+  "id": "navigation-2e5c2c9391",
   "items": [],
-  "dataLayerJson": "{\"id\":\"/content/navigation/navigation-2/jcr:content/root/navigation-component-2\",\"type\":\"navigation\",\"name\":\"navigation-component-2\",\"itemsCount\":0}",
+  "dataLayerJson": {
+    "name": "navigation-component-2",
+    "id": "navigation-2e5c2c9391",
+    "type": "navigation",
+    "itemsCount": 0
+  },
   ":type": "core/wcm/components/navigation/v1/navigation"
 }

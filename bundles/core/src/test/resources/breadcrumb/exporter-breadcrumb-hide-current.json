@@ -1,12 +1,25 @@
 {
+    "id": "breadcrumb-9dba4a5f91",
     "items": [
         {
             "active": false,
             "url": "/content/breadcrumb/women.html",
             "title": "Women",
-            "dataLayerJson": "{\"id\":\"/content/breadcrumb/women\",\"type\":\"breadcrumbItem\",\"text\":\"Women\",\"name\":\"women\",\"title\":\"Women\",\"linkUrl\":\"/content/breadcrumb/women.html\"}"
+            "dataLayerJson": {
+                "name": "women",
+                "linkUrl": "/content/breadcrumb/women.html",
+                "id": "breadcrumbItem-4af5a3ef95",
+                "text": "Women",
+                "type": "breadcrumbItem",
+                "title": "Women"
+            }
         }
     ],
-    "dataLayerJson": "{\"id\":\"/content/breadcrumb/women/shirts/devi-sleeveless-shirt/jcr:content/header/breadcrumb-hide-current\",\"type\":\"breadcrumb\",\"name\":\"breadcrumb-hide-current\",\"itemsCount\":1}",
+    "dataLayerJson": {
+        "name": "breadcrumb-hide-current",
+        "id": "breadcrumb-9dba4a5f91",
+        "type": "breadcrumb",
+        "itemsCount": 1
+    },
     ":type": "core/wcm/components/breadcrumb"
 }

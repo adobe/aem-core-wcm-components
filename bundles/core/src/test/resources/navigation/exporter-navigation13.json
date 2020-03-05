@@ -1,4 +1,5 @@
 {
+    "id": "navigation-ae001b3a47",
     "items": [
         {
             "children": [
@@ -10,10 +11,17 @@
                             "active": false,
                             "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
                             "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
-                            "description": null,
                             "title": "Navigation 1.1.1",
+                            "description": null,
                             "lastModified": null,
-                            "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1\",\"type\":\"navigationItem\",\"text\":\"Navigation 1.1.1\",\"name\":\"navigation-1-1-1\",\"title\":\"Navigation 1.1.1\",\"linkUrl\":\"/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html\"}"
+                            "dataLayerJson": {
+                                "name": "navigation-1-1-1",
+                                "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
+                                "id": "navigationItem-fb1ada3ea5",
+                                "text": "Navigation 1.1.1",
+                                "type": "navigationItem",
+                                "title": "Navigation 1.1.1"
+                            }
                         },
                         {
                             "children": [
@@ -23,10 +31,17 @@
                                     "active": false,
                                     "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
                                     "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
-                                    "description": null,
                                     "title": "Navigation 1.1.2.2.1",
+                                    "description": null,
                                     "lastModified": null,
-                                    "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1\",\"type\":\"navigationItem\",\"text\":\"Navigation 1.1.2.2.1\",\"name\":\"navigation-1-1-2-2-1\",\"title\":\"Navigation 1.1.2.2.1\",\"linkUrl\":\"/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html\"}"
+                                    "dataLayerJson": {
+                                        "name": "navigation-1-1-2-2-1",
+                                        "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
+                                        "id": "navigationItem-133d201408",
+                                        "text": "Navigation 1.1.2.2.1",
+                                        "type": "navigationItem",
+                                        "title": "Navigation 1.1.2.2.1"
+                                    }
                                 },
                                 {
                                     "children": [],
@@ -34,40 +49,68 @@
                                     "active": false,
                                     "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
                                     "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
-                                    "description": null,
                                     "title": "Navigation 1.1.2.3",
+                                    "description": null,
                                     "lastModified": null,
-                                    "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3\",\"type\":\"navigationItem\",\"text\":\"Navigation 1.1.2.3\",\"name\":\"navigation-1-1-2-3\",\"title\":\"Navigation 1.1.2.3\",\"linkUrl\":\"/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html\"}"
+                                    "dataLayerJson": {
+                                        "name": "navigation-1-1-2-3",
+                                        "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
+                                        "id": "navigationItem-76b8218a66",
+                                        "text": "Navigation 1.1.2.3",
+                                        "type": "navigationItem",
+                                        "title": "Navigation 1.1.2.3"
+                                    }
                                 }
                             ],
                             "level": 2,
                             "active": false,
                             "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
                             "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
-                            "description": null,
                             "title": "Navigation 1.1.2",
+                            "description": null,
                             "lastModified": null,
-                            "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2\",\"type\":\"navigationItem\",\"text\":\"Navigation 1.1.2\",\"name\":\"navigation-1-1-2\",\"title\":\"Navigation 1.1.2\",\"linkUrl\":\"/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html\"}"
+                            "dataLayerJson": {
+                                "name": "navigation-1-1-2",
+                                "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
+                                "id": "navigationItem-064aa2d48d",
+                                "text": "Navigation 1.1.2",
+                                "type": "navigationItem",
+                                "title": "Navigation 1.1.2"
+                            }
                         }
                     ],
                     "level": 1,
                     "active": false,
                     "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
                     "path": "/content/navigation/navigation-1/navigation-1-1",
-                    "description": null,
                     "title": "Navigation 1.1",
+                    "description": null,
                     "lastModified": null,
-                    "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1/navigation-1-1\",\"type\":\"navigationItem\",\"text\":\"Navigation 1.1\",\"name\":\"navigation-1-1\",\"title\":\"Navigation 1.1\",\"linkUrl\":\"/core/content/navigation/navigation-1/navigation-1-1.html\"}"
+                    "dataLayerJson": {
+                        "name": "navigation-1-1",
+                        "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1.html",
+                        "id": "navigationItem-3366a5dc97",
+                        "text": "Navigation 1.1",
+                        "type": "navigationItem",
+                        "title": "Navigation 1.1"
+                    }
                 }
             ],
             "level": 0,
             "active": false,
             "url": "/core/navigation-1-vanity",
             "path": "/content/navigation/navigation-1",
-            "description": null,
             "title": "Navigation 1",
+            "description": null,
             "lastModified": null,
-            "dataLayerJson": "{\"id\":\"/content/navigation/navigation-1\",\"type\":\"navigationItem\",\"text\":\"Navigation 1\",\"name\":\"navigation-1\",\"title\":\"Navigation 1\",\"linkUrl\":\"/core/navigation-1-vanity\"}"
+            "dataLayerJson": {
+                "name": "navigation-1",
+                "linkUrl": "/core/navigation-1-vanity",
+                "id": "navigationItem-798ec51770",
+                "text": "Navigation 1",
+                "type": "navigationItem",
+                "title": "Navigation 1"
+            }
         },
         {
             "children": [],
@@ -75,12 +118,24 @@
             "active": false,
             "url": "/core/content/navigation/navigation-2.html",
             "path": "/content/navigation/navigation-2",
-            "description": null,
             "title": "Navigation 2",
+            "description": null,
             "lastModified": null,
-            "dataLayerJson": "{\"id\":\"/content/navigation/navigation-2\",\"type\":\"navigationItem\",\"text\":\"Navigation 2\",\"name\":\"navigation-2\",\"title\":\"Navigation 2\",\"linkUrl\":\"/core/content/navigation/navigation-2.html\"}"
+            "dataLayerJson": {
+                "name": "navigation-2",
+                "linkUrl": "/core/content/navigation/navigation-2.html",
+                "id": "navigationItem-378391f255",
+                "text": "Navigation 2",
+                "type": "navigationItem",
+                "title": "Navigation 2"
+            }
         }
     ],
-    "dataLayerJson": "{\"id\":\"/content/navigation/jcr:content/root/navigation-component-13\",\"type\":\"navigation\",\"name\":\"navigation-component-13\",\"itemsCount\":2}",
+    "dataLayerJson": {
+        "name": "navigation-component-13",
+        "id": "navigation-ae001b3a47",
+        "type": "navigation",
+        "itemsCount": 2
+    },
     ":type": "core/wcm/components/navigation/v1/navigation"
 }

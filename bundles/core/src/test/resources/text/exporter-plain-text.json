@@ -1,6 +1,11 @@
 {
+    "id": "text-8dd9f3fbc5",
     "text": "plain",
     "richText": false,
-    "dataLayerJson": "{\"id\":\"/content/text/plain-text\",\"type\":\"text\",\"text\":\"plain\"}",
+    "dataLayerJson": {
+        "id": "text-8dd9f3fbc5",
+        "text": "plain",
+        "type": "text"
+    },
     ":type": "core/wcm/components/text/v1/text"
 }

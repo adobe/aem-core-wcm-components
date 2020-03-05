@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,8 +30,9 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 
 @ExtendWith(AemContextExtension.class)
 class CarouselImplTest {
@@ -60,9 +63,9 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest();
         Object[][] expectedItems = {
-                {"item_1", "Teaser 1", "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1\",\"type\":\"resourceListItem\",\"name\":\"item_1\",\"title\":\"Teaser 1\"}"},
-                {"item_2", "Teaser 2", "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2\",\"type\":\"resourceListItem\",\"name\":\"item_2\",\"title\":\"Teaser 2\"}"},
-                {"item_3", "Carousel Panel 3", "{\"id\":\"/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3\",\"type\":\"resourceListItem\",\"name\":\"item_3\",\"title\":\"Carousel Panel 3\"}"},
+                {"item_1", "Teaser 1", "resourceListItem", "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1"},
+                {"item_2", "Teaser 2", "resourceListItem", "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2"},
+                {"item_3", "Carousel Panel 3", "resourceListItem", "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3"},
         };
         verifyCarouselItems(expectedItems, carousel.getItems());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
@@ -89,8 +92,22 @@ class CarouselImplTest {
                     expectedItems[index][0], item.getName());
             assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
                     expectedItems[index][1], item.getTitle());
-            assertEquals("The carousel item's data layer is not what was expected: " + item.getDataLayerJson(),
-                    expectedItems[index][2], item.getDataLayerJson());
+            assertEquals("The carousel item's path is not what was expected: " + item.getPath(),
+                expectedItems[index][3], item.getPath());
+
+
+
+            assertNotEquals("The carousel item's data layer string is empty", item.getDataLayerString(), "{}");
+
+            assertEquals("The carousel item's data layer name is not what was expected: " + item.getDataLayerName(),
+                    expectedItems[index][0], item.getDataLayerName());
+            assertEquals("The carousel item's data layer title is not what was expected: " + item.getDataLayerTitle(),
+                expectedItems[index][1], item.getDataLayerTitle());
+            assertEquals("The carousel item's data layer type is not what was expected: " + item.getDataLayerType(),
+                expectedItems[index][2], item.getDataLayerType());
+            assertEquals("The carousel item's data layer id is not what was expected: " + item.getDataLayerId(),
+                expectedItems[index][2] + "-" + StringUtils.substring(DigestUtils.sha1Hex((String)expectedItems[index][3]), 0, 10), item.getDataLayerId());
+
             index++;
         }
     }

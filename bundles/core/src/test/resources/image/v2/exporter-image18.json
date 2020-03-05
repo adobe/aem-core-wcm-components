@@ -1,4 +1,5 @@
 {
+    "id": "image-0cbb13a154",
     "src": "/core/content/test/_jcr_content/root/image18.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "srcUriTemplate": "/core/content/test/_jcr_content/root/image18.coreimg.82{.width}.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "areas": [],
@@ -13,6 +14,20 @@
         2048
     ],
     "lazyEnabled": true,
-    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image18\",\"src\":\"/core/content/test/_jcr_content/root/image18.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png\",\"type\":\"image\"}",
+    "dataLayerJson": {
+        "src": "/core/content/test/_jcr_content/root/image18.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+        "id": "image-0cbb13a154",
+        "type": "image",
+        "asset": {
+            "path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
+            "name": "Adobe_Systems_logo_and_wordmark",
+            "id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+            "type": "image/png",
+            "url": "https://",
+            "tags": {
+                "": 1
+            }
+        }
+    },
     ":type": "core/wcm/components/image/v2/image"
 }

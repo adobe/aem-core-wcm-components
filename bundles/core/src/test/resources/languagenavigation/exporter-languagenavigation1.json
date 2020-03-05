@@ -1,4 +1,5 @@
 {
+  "id": "languagenavigation-67a3e8f8b7",
   "items": [
     {
       "children": [],
@@ -12,7 +13,14 @@
       "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-1/LOCALE-5/about\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 1\",\"name\":\"about\",\"title\":\"LOCALE 1\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html\"}"
+      "dataLayerJson": {
+        "name": "about",
+        "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
+        "id": "languageNavigationItem-f7ed60dba3",
+        "text": "LOCALE 1",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 1"
+      }
     },
     {
       "children": [],
@@ -26,7 +34,14 @@
       "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-2/LOCALE-5/about\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 2\",\"name\":\"about\",\"title\":\"LOCALE 2\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html\"}"
+      "dataLayerJson": {
+        "name": "about",
+        "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
+        "id": "languageNavigationItem-ae086001b7",
+        "text": "LOCALE 2",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 2"
+      }
     },
     {
       "children": [],
@@ -40,7 +55,14 @@
       "path": "/content/languagenavigation/LOCALE-3",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-3\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 3\",\"name\":\"LOCALE-3\",\"title\":\"LOCALE 3\",\"linkUrl\":\"/core/LOCALE-3-vanity\"}"
+      "dataLayerJson": {
+        "name": "LOCALE-3",
+        "linkUrl": "/core/LOCALE-3-vanity",
+        "id": "languageNavigationItem-715681d1e2",
+        "text": "LOCALE 3",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 3"
+      }
     },
     {
       "children": [],
@@ -54,9 +76,21 @@
       "path": "/content/languagenavigation/LOCALE-4",
       "description": null,
       "lastModified": null,
-      "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-4\",\"type\":\"languageNavigationItem\",\"text\":\"LOCALE 4\",\"name\":\"LOCALE-4\",\"title\":\"LOCALE 4\",\"linkUrl\":\"/core/content/languagenavigation/LOCALE-4.html\"}"
+      "dataLayerJson": {
+        "name": "LOCALE-4",
+        "linkUrl": "/core/content/languagenavigation/LOCALE-4.html",
+        "id": "languageNavigationItem-540d311dbc",
+        "text": "LOCALE 4",
+        "type": "languageNavigationItem",
+        "title": "LOCALE 4"
+      }
     }
   ],
-  "dataLayerJson": "{\"id\":\"/content/languagenavigation/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-1\",\"type\":\"languageNavigation\",\"name\":\"languagenavigation-component-1\",\"itemsCount\":4}",
+  "dataLayerJson": {
+    "name": "languagenavigation-component-1",
+    "id": "languagenavigation-67a3e8f8b7",
+    "type": "languagenavigation",
+    "itemsCount": 4
+  },
   ":type": "core/wcm/components/languagenavigation/v1/languagenavigation"
 }

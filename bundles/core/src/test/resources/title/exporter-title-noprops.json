@@ -1,6 +1,10 @@
 {
+    "id": "title-a0f7ad260f",
     "linkDisabled": false,
     "type": "h2",
-    "dataLayerJson": "{\"id\":\"/content/title/jcr:content/par/title-noprops\",\"type\":\"title\"}",
+    "dataLayerJson": {
+        "id": "title-a0f7ad260f",
+        "type": "title"
+    },
     ":type": "core/wcm/components/title/v1/title"
 }

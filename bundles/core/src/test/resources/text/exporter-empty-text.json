@@ -1,5 +1,10 @@
 {
+    "id": "text-db49eea57b",
     "richText": false,
-    "dataLayerJson": "{\"id\":\"/content/text/empty-text\",\"type\":\"text\",\"text\":\"\"}",
+    "dataLayerJson": {
+        "id": "text-db49eea57b",
+        "text": "",
+        "type": "text"
+    },
     ":type": "core/wcm/components/text/v1/text"
 }

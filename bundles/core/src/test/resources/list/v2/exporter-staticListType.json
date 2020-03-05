@@ -1,34 +1,43 @@
 {
+    "id": "list-6df1b262c1",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
             "url": "/context/content/list/pages/page_1.html",
             "path": "/content/list/pages/page_1",
             "description": null,
-            "dataLayerId": "/content/list/pages/page_1",
-            "dataLayerType": "pageListItem",
-            "dataLayerName": "page_1",
-            "dataLayerText": "Page 1",
-            "dataLayerLinkUrl": "/context/content/list/pages/page_1.html",
+            "lastModified": 1474672365000,
             "title": "Page 1",
-            "lastModified": 1474672365000
+            "dataLayerJson": {
+                "name": "page_1",
+                "linkUrl": "/context/content/list/pages/page_1.html",
+                "id": "pageListItem-c53dbad311",
+                "text": "Page 1",
+                "type": "pageListItem",
+                "title": "Page 1"
+            }
         },
         {
             "url": "/context/content/list/pages/page_2.html",
             "path": "/content/list/pages/page_2",
             "description": null,
-            "dataLayerId": "/content/list/pages/page_2",
-            "dataLayerType": "pageListItem",
-            "dataLayerName": "page_2",
-            "dataLayerText": "Page 2",
-            "dataLayerLinkUrl": "/context/content/list/pages/page_2.html",
+            "lastModified": 1474499565000,
             "title": "Page 2",
-            "lastModified": 1474499565000
+            "dataLayerJson": {
+                "name": "page_2",
+                "linkUrl": "/context/content/list/pages/page_2.html",
+                "id": "pageListItem-61287e2a12",
+                "text": "Page 2",
+                "type": "pageListItem",
+                "title": "Page 2"
+            }
         }
     ],
-    "dataLayerId": "/content/list/listTypes/staticListType",
-    "dataLayerType": "list",
-    "dataLayerItemsCount": 2,
+    "dataLayerJson": {
+        "id": "list-6df1b262c1",
+        "type": "list",
+        "itemsCount": 2
+    },
     "showDescription": true,
     "showModificationDate": true,
     "linkItems": true,

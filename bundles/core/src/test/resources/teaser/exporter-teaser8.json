@@ -5,6 +5,10 @@
   "titleLinkHidden": false,
   "actions": [],
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-5.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
-  "dataLayerJson": "{\"id\":\"/content/teasers/jcr:content/root/responsivegrid/teaser-5\",\"type\":\"teaser\",\"name\":\"teaser-5\"}",
+  "dataLayerJson": {
+    "name": "teaser-5",
+    "id": "teaser-4d093d1508",
+    "type": "teaser"
+  },
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

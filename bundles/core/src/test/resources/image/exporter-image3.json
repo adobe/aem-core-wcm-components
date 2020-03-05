@@ -1,8 +1,15 @@
 {
+    "id": "image-184ebc4c15",
     "alt": "Adobe Logo",
     "title": "Adobe Logo",
     "src": "/core/content/test/_jcr_content/root/image3.img.82.600.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "link": "https://www.adobe.com",
-    "dataLayerJson": "{\"id\":\"/content/test/jcr:content/root/image3\",\"src\":\"/core/content/test/_jcr_content/root/image3.img.82.600.png/1490005239000/adobe-systems-logo-and-wordmark.png\",\"type\":\"image\",\"name\":\"Adobe Logo\",\"linkUrl\":\"https://www.adobe.com\"}",
+    "dataLayerJson": {
+        "src": "/core/content/test/_jcr_content/root/image3.img.82.600.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+        "name": "Adobe Logo",
+        "linkUrl": "https://www.adobe.com",
+        "id": "image-184ebc4c15",
+        "type": "image"
+    },
     ":type": "core/wcm/components/image/v1/image"
 }

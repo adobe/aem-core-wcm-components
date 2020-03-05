@@ -2,6 +2,10 @@
     "id": "test",
     "layout": "RESPONSIVE_GRID",
     "backgroundStyle": "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
+    "dataLayerJson": {
+        "id": "test",
+        "type": "container"
+    },
     ":itemsOrder": [
         "item_1",
         "item_2"
@@ -14,10 +18,12 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "dataLayerId": "/content/container/jcr:content/root/responsivegrid/container-1/item_1",
-            "dataLayerType": "teaser",
-            "dataLayerName": "item_1",
-            "dataLayerTitle": "Teaser 1",
+            "dataLayerJson": {
+                "name": "item_1",
+                "id": "teaser-3b5ae5eb14",
+                "type": "teaser",
+                "title": "Teaser 1"
+            },
             ":type": "core/wcm/components/teaser/v1/teaser"
         },
         "item_2": {
@@ -27,10 +33,12 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "dataLayerId": "/content/container/jcr:content/root/responsivegrid/container-1/item_2",
-            "dataLayerType": "teaser",
-            "dataLayerName": "item_2",
-            "dataLayerTitle": "Teaser 2",
+            "dataLayerJson": {
+                "name": "item_2",
+                "id": "teaser-9d837f2a99",
+                "type": "teaser",
+                "title": "Teaser 2"
+            },
             ":type": "core/wcm/components/teaser/v1/teaser"
         }
     },

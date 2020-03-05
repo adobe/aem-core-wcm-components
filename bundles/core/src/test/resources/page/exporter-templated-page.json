@@ -1,5 +1,5 @@
 {
-    "id":"page-df0b99830e",
+    "id": "page-df0b99830e",
     "designPath": "/etc/designs/mysite",
     "staticDesignPath": "/etc/designs/mysite/static.css",
     "title": "Templated Page",
@@ -7,27 +7,27 @@
     "templateName": "product-page",
     "language": "en-GB",
     "dataLayerJson": {
-        "id":"page-df0b99830e",
-        "type":"page",
-        "name":"Templated Page",
-        "template":"/conf/coretest/settings/wcm/templates/product-page",
-        "language":"en-GB"
+        "template": "/conf/coretest/settings/wcm/templates/product-page",
+        "name": "Templated Page",
+        "language": "en-GB",
+        "id": "page-df0b99830e",
+        "type": "page"
     },
+    ":type": "core/wcm/components/page/v1/page",
     ":itemsOrder": [
         "text"
     ],
     ":items": {
         "text": {
-            "id":"text-868efbcc97",
+            "id": "text-868efbcc97",
             "text": "<p>This is a test</p>",
             "richText": true,
             "dataLayerJson": {
-                "id":"text-868efbcc97",
-                "type":"text",
-                "text":"<p>This is a test</p>"
+                "id": "text-868efbcc97",
+                "text": "<p>This is a test</p>",
+                "type": "text"
             },
             ":type": "core/wcm/components/text/v1/text"
         }
-    },
-    ":type": "core/wcm/components/page/v1/page"
+    }
 }
