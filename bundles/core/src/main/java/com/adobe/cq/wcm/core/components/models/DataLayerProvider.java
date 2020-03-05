@@ -20,6 +20,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.json.JsonObject;
+import java.util.Map;
 
 @ConsumerType
 public interface DataLayerProvider {
@@ -99,7 +100,12 @@ public interface DataLayerProvider {
         throw new UnsupportedOperationException();
     }
 
-    default String getDataLayerJson() {
+    @JsonIgnore
+    default String getDataLayerString() {
+        throw new UnsupportedOperationException();
+    }
+
+    default Map<String, ?> getDataLayerJson() {
         throw new UnsupportedOperationException();
     }
 }

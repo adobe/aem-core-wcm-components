@@ -76,15 +76,6 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
         return accessibilityLabel;
     }
 
-    @Override
-    public String getDataLayerJson() {
-        JsonObjectBuilder data = Json.createObjectBuilder();
-        data.add("id", resource.getPath());
-        data.add("type", "carousel");
-        data.add("itemCount", getItems().size());
-        return  data.build().toString();
-    }
-
     /*
      * DataLayerProvider implementation of field getters
      */

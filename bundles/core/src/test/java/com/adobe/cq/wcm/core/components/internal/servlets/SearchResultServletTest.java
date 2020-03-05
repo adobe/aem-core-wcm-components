@@ -49,6 +49,7 @@ import com.google.common.collect.ImmutableMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import javax.json.Json;
+import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 import static org.junit.Assert.assertEquals;
@@ -134,7 +135,6 @@ public class SearchResultServletTest {
         SimpleModule module = new SimpleModule();
         module.setAbstractTypes(resolver);
         mapper.registerModule(module);
-        String responseString = response.getOutputAsString();
         ListItem[] listItems = mapper.readValue(response.getOutputAsString(), ListItem[].class);
         assertEquals(expected.size(), listItems.length);
 
@@ -154,7 +154,7 @@ public class SearchResultServletTest {
         private String description;
         private String lastModified;
         private String name;
-        private String dataLayerJson;
+        private Map<String, Object> dataLayerJson;
 
         public Item() {
         }
@@ -171,7 +171,7 @@ public class SearchResultServletTest {
             return title;
         }
 
-        public String getDataLayerJson() {
+        public Map<String, Object> getDataLayerJson() {
             return dataLayerJson;
         }
     }

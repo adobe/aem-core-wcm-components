@@ -17,162 +17,109 @@ package com.adobe.cq.wcm.core.components.internal;
 
 import com.adobe.cq.wcm.core.components.models.DataLayerProvider;
 import com.day.cq.dam.api.Asset;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.sling.api.resource.Resource;
 
-import javax.json.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.*;
 
 public class DataLayerFactory {
 
-    static public String build(DataLayerProvider provider) {
-
-        JsonObjectBuilderWrapper data = new JsonObjectBuilderWrapper();
-
-        Method[] providerMethods = DataLayerProvider.class.getMethods();
-
-        for (Method providerMethod : providerMethods) {
-            //System.out.println("methodName: " + providerMethod);
-            if (providerMethod.isAnnotationPresent(JsonIgnore.class) && providerMethod.getName().contains("getDataLayer")) {
-                String propertyName = providerMethod.getName().replace("getDataLayer", "");
-                propertyName = propertyName.substring(0, 1).toLowerCase() + propertyName.substring(1);
-
-                //System.out.println("Property: " + propertyName);
-
-                if ("asset, expandedItems".contains(propertyName)) {
-
-                    try {
-                        if ("assetResource".equals(propertyName)) {
-                            data.add( "asset", getAssetMetadata(provider));
-                        }
-
-                        if ("expandedItems".equals(propertyName)) {
-                            data.add( "expandedItems", getExpandedItems(provider));
-                        }
-
-                        //System.out.println("Added x property: " + propertyName);
-
-                    } catch (UnsupportedOperationException e) {
-                        //System.out.println("Unsupported op: " + propertyName);
-                        //e.printStackTrace();
-                    }
-
-                    continue;
-                }
-
-                try {
-                    Object result = providerMethod.invoke(provider);
-
-                    if (result instanceof Integer) {
-                        data.add(propertyName, (Integer) result);
-                    } else if (result instanceof String) {
-                        data.add(propertyName, (String) result);
-                    } else if (result instanceof JsonArray) {
-                        data.add(propertyName, (JsonArray) result);
-                    } else if (result instanceof JsonObject) {
-                        data.add(propertyName, (JsonObject) result);
-                    }
-
-                    //System.out.println("Added property :" + propertyName);
-
-
-                } catch (IllegalAccessException e) {
-                    //e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    //e.printStackTrace();
-                    //System.out.println("InvocationTargetException : " + propertyName);
-                }
-            }
-        }
-
-        return  data.build().toString();
+    static public Map<String, Object> build(DataLayerProvider provider) {
+        MapWrapper data = new MapWrapper();
+        data.put("id", invoke(provider, "getDataLayerId"));
+        data.put("type", invoke(provider, "getDataLayerType"));
+        data.put("name", invoke(provider, "getDataLayerName"));
+        data.put("title", invoke(provider, "getDataLayerTitle"));
+        data.put("template", invoke(provider, "getDataLayerTemplate"));
+        data.put("src", invoke(provider, "getDataLayerSrc"));
+        data.put("text", invoke(provider, "getDataLayerText"));
+        data.put("tags", invoke(provider, "getDataLayerTags"));
+        data.put("asset", getAssetMetadata(provider));
+        data.put("linkUrl", invoke(provider, "getDataLayerLinkUrl"));
+        data.put("language", invoke(provider, "getDataLayerLanguage"));
+        data.put("itemsCount", invoke(provider, "getDataLayerItemsCount"));
+        data.put("activeItem", invoke(provider, "getDataLayerActiveItem"));
+        data.put("expandedItems", getExpandedItems(provider));
+        return data.getMap();
     }
 
-    static private JsonObject getAssetMetadata(DataLayerProvider provider) throws UnsupportedOperationException{
-        JsonObject assetMetadataObject = null;
-        Resource assetResource = provider.getAssetResource(); //getResource().getResourceResolver().getResource(fileReference);
+    static private Object invoke(DataLayerProvider provider, String method) {
+        try {
+            Method providerMethod = provider.getClass().getMethod(method);
+            return providerMethod.invoke(provider);
+        } catch (UnsupportedOperationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return null;
+        }
+    }
+
+    static private Map<String, Object> getAssetMetadata(DataLayerProvider provider) {
+        Map<String, Object> assetMetadataObject = null;
+        Resource assetResource = null;
+        try {
+            assetResource = provider.getAssetResource();
+        } catch (UnsupportedOperationException e) {
+            // do nothing as we need to continue
+        }
         if (assetResource != null) {
             Asset asset = assetResource.adaptTo(Asset.class);
             if (asset != null) {
-                JsonObjectBuilderWrapper assetMetadata = new JsonObjectBuilderWrapper();
-                assetMetadata.add("id", asset.getID());
-                assetMetadata.add("name", asset.getName());
-                assetMetadata.add("path", asset.getPath());
-                assetMetadata.add("type", asset.getMimeType());
-                assetMetadata.add("url", "https://"); // aboslute URL
-                assetMetadata.add("tags", getAssetTags(asset));
-                assetMetadataObject = assetMetadata.build();
+                MapWrapper assetMetadata = new MapWrapper();
+                assetMetadata.put("id", asset.getID());
+                assetMetadata.put("name", asset.getName());
+                assetMetadata.put("path", asset.getPath());
+                assetMetadata.put("type", asset.getMimeType());
+                assetMetadata.put("url", "https://"); // aboslute URL
+                assetMetadata.put("tags", getAssetTags(asset));
+                assetMetadataObject = assetMetadata.getMap();
             }
         }
         return assetMetadataObject;
     }
 
-    static private JsonObject getAssetTags(Asset asset) {
-        JsonObjectBuilder assetTags = Json.createObjectBuilder();
+    static private Map<String, Object> getAssetTags(Asset asset) {
+        MapWrapper assetTags = new MapWrapper();
         String tagsValue = asset.getMetadataValueFromJcr("cq:tags");
         if (tagsValue != null) {
             String[] tags = tagsValue.split(",");
             for (String tag : tags) {
-                assetTags.add(tag, 1);
+                assetTags.put(tag, 1);
             }
         }
-        return assetTags.build();
+        return assetTags.getMap();
     }
 
-    static private JsonArray getExpandedItems(DataLayerProvider provider)  throws UnsupportedOperationException{
-        JsonArray obj = null;
-        String[] expandedItems = provider.getDataLayerExpandedItems();
+    static private ArrayList<Object> getExpandedItems(DataLayerProvider provider) {
+        ArrayList<Object> obj = null;
+        String[] expandedItems = null;
+        try {
+            expandedItems = provider.getDataLayerExpandedItems();
+        } catch (UnsupportedOperationException e) {
+            // do nothing as we need to continue
+        }
 
         if (expandedItems != null) {
-            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-            for (String expandedItem : expandedItems) {
-                arrayBuilder.add(expandedItem);
-            }
-            obj = arrayBuilder.build();
+            obj = new ArrayList<>();
+            Collections.addAll(obj, expandedItems);
         }
         return obj;
     }
 
-    static class JsonObjectBuilderWrapper {
-        private JsonObjectBuilder objectBuilder;
+    static class MapWrapper {
+        private Map<String, Object> map;
 
-        public JsonObjectBuilderWrapper() {
-            objectBuilder = Json.createObjectBuilder();
+        public MapWrapper() {
+            map = new HashMap<>();
         }
 
-        void add(String propName, String propValue) {
-            if (propValue != null) {
-                objectBuilder.add(propName, propValue);
+        public Map<String, Object> getMap() {
+            return map;
+        }
+
+        void put(String propName, Object propValue) {
+            if ((propValue instanceof Integer && (Integer) propValue >= 0) || propValue != null)  {
+                map.put(propName, propValue);
             }
-        }
-
-        void add(String propName, JsonObject propValue) {
-            if (propValue != null) {
-                objectBuilder.add(propName, propValue);
-            }
-        }
-
-        void add(String propName, JsonArray propValue) {
-            if (propValue != null) {
-                objectBuilder.add(propName, propValue);
-            }
-        }
-
-        void add(String propName, int propValue) {
-            if (propValue >= 0) {
-                objectBuilder.add(propName, propValue);
-            }
-        }
-
-        void add(String propName, Integer propValue) {
-            if (propValue >= 0) {
-                objectBuilder.add(propName, propValue);
-            }
-        }
-
-        JsonObject build() {
-            return objectBuilder.build();
         }
     }
 }

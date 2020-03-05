@@ -17,6 +17,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerFactory;
 import com.adobe.cq.wcm.core.components.models.DataLayerProvider;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.json.JsonObject;
+import java.util.Map;
 
 public abstract class AbstractDataLayerProvider implements DataLayerProvider {
 
@@ -26,10 +30,16 @@ public abstract class AbstractDataLayerProvider implements DataLayerProvider {
     }
 
     @Override
-    public String getDataLayerJson() {
+    public Map<String, Object> getDataLayerJson() {
         if (isDataLayerEnabled()) {
             return DataLayerFactory.build(this);
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @JsonIgnore
+    public String getDataLayerString() {
+        return getDataLayerJson().toString();
     }
 }
