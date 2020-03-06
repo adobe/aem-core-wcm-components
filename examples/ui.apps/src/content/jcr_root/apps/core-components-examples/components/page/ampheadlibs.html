@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.clientlib="${'com.adobe.cq.wcm.core.components.models.ClientLibrary' @ type='css', primaryPath='clientlibs/amp', fallbackPath='clientlibs/site', categories='cmp-examples.base.amp'}"/>
+<sly data-sly-use.clientlib="${'com.adobe.cq.wcm.core.extensions.amp.models.ClientLibrary' @ type='css', primaryPath='clientlibs/amp', fallbackPath='clientlibs/site', categories='cmp-examples.base.amp'}"/>
 <style amp-custom data-sly-test="${clientlib.inlineLimited}">
     ${clientlib.inlineLimited @ context = 'unsafe'}
 </style>

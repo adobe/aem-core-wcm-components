@@ -15,8 +15,7 @@
                 jcr:lastModified="{Date}2018-12-20T14:47:57.433Z"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="wcm/foundation/components/responsivegrid">
-            </responsivegrid>
+                sling:resourceType="wcm/foundation/components/responsivegrid"/>
         </root>
     </jcr:content>
 </jcr:root>

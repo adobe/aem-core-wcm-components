@@ -51,6 +51,11 @@
                             <artifactId>core.wcm.components.core</artifactId>
                             <target>/apps/core/wcm/install</target>
                         </embedded>
+                        <embedded>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>core.wcm.components.extensions.amp</artifactId>
+                            <target>/apps/core/wcm/install</target>
+                        </embedded>
                     </embeddeds>
                     <subPackages>
                         <subPackage>
@@ -61,6 +66,16 @@
                         <subPackage>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>core.wcm.components.config</artifactId>
+                            <filter>true</filter>
+                        </subPackage>
+                        <subPackage>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>core.wcm.components.extensions.amp.content</artifactId>
+                            <filter>true</filter>
+                        </subPackage>
+                        <subPackage>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>core.wcm.components.extensions.amp.config</artifactId>
                             <filter>true</filter>
                         </subPackage>
                     </subPackages>
@@ -151,6 +166,26 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.config</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.extensions.amp</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.extensions.amp.content</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.extensions.amp.config</artifactId>
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
