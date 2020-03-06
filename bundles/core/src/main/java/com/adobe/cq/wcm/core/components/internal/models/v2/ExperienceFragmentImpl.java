@@ -104,14 +104,22 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
         
         retrieveExperienceFragmentContentResource();
         
+        boolean isEmpty = true;
+        
         if (efvResource != null) {
             // Columns provided by the design
-            
-            efvResource.getChildren().forEach((childResource) -> {
-                children.put(childResource.getName(), modelFactory.getModelFromWrappedRequest(slingRequest, childResource, ComponentExporter.class));
-            });
-            
-        } else {
+    
+            for(Resource childResource : efvResource.getChildren()){
+                final ComponentExporter modelFromWrappedRequest = modelFactory.getModelFromWrappedRequest(slingRequest, childResource, ComponentExporter.class);
+                if(modelFromWrappedRequest != null){
+                    children.put(childResource.getName(), modelFromWrappedRequest);
+                    isEmpty = false;
+                }
+            }
+    
+        }
+        
+        if(isEmpty){
             classNames += " empty";
         }
         

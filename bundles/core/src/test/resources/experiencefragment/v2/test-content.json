@@ -34,6 +34,27 @@
                     "textIsRich": "true",
                     "cq:cssClass": "testCssClass",
                     "fragmentVariationPath": "/content/experience-fragments/fragment/master"
+                },
+                "experiencefragment-no-path": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "jcr:createdBy": "admin",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:created": "Mon Oct 21 2019 07:53:59 GMT+0200",
+                    "jcr:lastModified": "Mon Oct 21 2019 07:54:15 GMT+0200",
+                    "sling:resourceType": "core/wcm/components/experiencefragment/v2/experiencefragment",
+                    "textIsRich": "true",
+                    "cq:cssClass": "testCssClass"
+                },
+                "experiencefragment-empty": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "jcr:createdBy": "admin",
+                    "jcr:lastModifiedBy": "admin",
+                    "jcr:created": "Mon Oct 21 2019 07:53:59 GMT+0200",
+                    "jcr:lastModified": "Mon Oct 21 2019 07:54:15 GMT+0200",
+                    "sling:resourceType": "core/wcm/components/experiencefragment/v2/experiencefragment",
+                    "textIsRich": "true",
+                    "cq:cssClass": "testCssClass",
+                    "fragmentVariationPath": "/content/experience-fragments/empty-fragment/master"
                 }
             }
         }

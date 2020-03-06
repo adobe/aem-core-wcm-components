@@ -40,25 +40,51 @@ public class ExperienceFragmentImplTest {
     private static final String TEST_BASE = "/experiencefragment/v2";
     private static final String PAGE_PATH = "/content/experience-fragment-page";
     private static final String FRAGMENT_PAGE_LOCATION = "/content/experience-fragments/fragment";
+    private static final String EMPTY_FRAGMENT_PAGE_LOCATION = "/content/experience-fragments/empty-fragment";
     
-    private static final AemContext CONTEXT = CoreComponentTestContext.newAemContext();
+    private final AemContext context = CoreComponentTestContext.newAemContext();
     
     @BeforeEach
     void setUp(){
-        CONTEXT.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, PAGE_PATH);
-        CONTEXT.load().json(TEST_BASE + "/experiencefragment-test-fragment.json", FRAGMENT_PAGE_LOCATION);
-        CONTEXT.addModelsForPackage("com.adobe.cq.wcm.core.components.internal.models.dummy");
-        CONTEXT.addModelsForClasses("com.adobe.cq.wcm.core.components.internal.models.v2");
-        CONTEXT.currentPage(PAGE_PATH);
-        CONTEXT.currentResource( PAGE_PATH + "/" + JcrConstants.JCR_CONTENT + "/root/responsivegrid/experiencefragment");
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, PAGE_PATH);
+        context.load().json(TEST_BASE + "/experiencefragment-test-fragment.json", FRAGMENT_PAGE_LOCATION);
+        context.addModelsForPackage("com.adobe.cq.wcm.core.components.internal.models.dummy");
+        context.addModelsForClasses("com.adobe.cq.wcm.core.components.internal.models.v2");
     }
     
+    @Test
+    public void test_no_path(){
+    
+        context.currentResource( PAGE_PATH + "/" + JcrConstants.JCR_CONTENT + "/root/responsivegrid/experiencefragment-no-path");
+        ExperienceFragment exporter = context.request().adaptTo(ExperienceFragment.class);
+    
+        assertNotNull(exporter);
+    
+        assertTrue("Should contain empty class", exporter.getCssClassNames().contains("empty"));
+    
+    }
+    
+    @Test
+    public void test_empty(){
+        
+        context.load().json(TEST_BASE + "/experiencefragment-test-empty-fragment.json", EMPTY_FRAGMENT_PAGE_LOCATION);
+        context.currentResource( PAGE_PATH + "/" + JcrConstants.JCR_CONTENT + "/root/responsivegrid/experiencefragment-empty");
+        ExperienceFragment exporter = context.request().adaptTo(ExperienceFragment.class);
+        
+        assertNotNull(exporter);
+        
+        assertTrue("Should contain empty class", exporter.getCssClassNames().contains("empty"));
+        
+    }
     
     @Test
     public void test_export(){
     
+        context.currentPage(PAGE_PATH);
+        context.currentResource( PAGE_PATH + "/" + JcrConstants.JCR_CONTENT + "/root/responsivegrid/experiencefragment");
         
-        ContainerExporter exporter = CONTEXT.request().adaptTo(ContainerExporter.class);
+        
+        ContainerExporter exporter = context.request().adaptTo(ContainerExporter.class);
         
         assertNotNull(exporter);
         
@@ -78,7 +104,7 @@ public class ExperienceFragmentImplTest {
         assertEquals("Hi there", textExporter.getText());
         assertEquals("/content/dam/we-retail-journal/hq/thunder.png", imageExporter.getUrl());
         
-        ExperienceFragment experienceFragment = CONTEXT.request().adaptTo(ExperienceFragment.class);
+        ExperienceFragment experienceFragment = context.request().adaptTo(ExperienceFragment.class);
 
         String exportedCssClass =  experienceFragment.getCssClassNames();
 
