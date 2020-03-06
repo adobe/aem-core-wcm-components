@@ -18,8 +18,9 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.wcm.core.components.internal.DataLayerFactory;
 import com.adobe.cq.wcm.core.components.models.DataLayerProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.json.JsonObject;
 import java.util.Map;
 
 public abstract class AbstractDataLayerProvider implements DataLayerProvider {
@@ -40,6 +41,14 @@ public abstract class AbstractDataLayerProvider implements DataLayerProvider {
     @Override
     @JsonIgnore
     public String getDataLayerString() {
-        return getDataLayerJson().toString();
+        String json = null;
+
+        try {
+            json = new ObjectMapper().writeValueAsString(getDataLayerJson());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return json;
     }
 }
