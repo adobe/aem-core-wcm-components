@@ -26,6 +26,7 @@
         console.log("Data sent to launch: click recorded for image " + event.info.path);
     }
 
+    /*
     dataLayer.push({
         on: 'datalayer:change',
         handler: sendPageUpdateToLaunch
@@ -35,5 +36,7 @@
         on: 'image clicked',
         handler: sendImageClickToLaunch
     });
+
+     */
 
 }());
