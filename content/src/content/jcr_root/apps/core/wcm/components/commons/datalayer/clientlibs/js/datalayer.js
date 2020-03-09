@@ -18,20 +18,6 @@
 
     var dataLayer = window.dataLayer = window.dataLayer || [];
 
-    dataLayer.push({
-        on: "datalayer:change",
-        handler: function(event) {
-            console.log(event)
-        }
-    });
-
-    dataLayer.push({
-        on: "datalayer:event",
-        handler: function(event) {
-            console.log(event)
-        }
-    });
-
     function addComponentToDataLayer(component) {
         dataLayer.push({
             data: {
@@ -52,8 +38,7 @@
             var parentData = getComponentData(parentElement);
             elementData.parentId = parentData.id;
         }
-        component[elementData.type] = {};
-        component[elementData.type][generateUniqueID()] = elementData;
+        component[elementData.id] = elementData;
         return component;
     }
 
@@ -65,10 +50,6 @@
             event: elementData.type+':clicked',
             info: elementData
         });
-    }
-
-    function generateUniqueID() {
-        return Date.now() + "" + Math.trunc(Math.random() * 1000);
     }
 
     function getComponentData(element) {
@@ -97,6 +78,10 @@
         clickableElements.forEach(function (element) {
             attachClickEventListener(element)
         });
+
+        dataLayer.push({
+            event: "components:loaded"
+        })
     }
 
     if (document.readyState !== "loading") {
