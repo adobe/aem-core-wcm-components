@@ -368,6 +368,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
 
         @Override
+        public String getDataLayerPath() {
+            return getPath();
+        }
+
+        @Override
         public String getDataLayerLinkUrl() {
             return getURL();
         }

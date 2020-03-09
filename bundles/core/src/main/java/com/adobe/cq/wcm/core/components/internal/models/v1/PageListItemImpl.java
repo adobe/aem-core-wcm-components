@@ -128,6 +128,11 @@ public class PageListItemImpl extends AbstractDataLayerProvider implements ListI
     }
 
     @Override
+    public String getDataLayerPath() {
+        return getPath();
+    }
+
+    @Override
     public String getDataLayerTitle() {
         return getTitle();
     }
