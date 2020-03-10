@@ -139,4 +139,10 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProvider im
     public final String getDataLayerType() {
         return StringUtils.substringAfterLast(resource.getResourceType(), "/");
     }
+
+    @Override
+    public final String getDataLayerPath() {
+        return resource.getPath();
+    }
+
 }

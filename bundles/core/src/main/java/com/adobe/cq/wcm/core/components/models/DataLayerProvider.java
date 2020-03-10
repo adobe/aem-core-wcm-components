@@ -45,6 +45,11 @@ public interface DataLayerProvider {
     }
 
     @JsonIgnore
+    default String getDataLayerPath()  {
+        throw new UnsupportedOperationException();
+    }
+
+    @JsonIgnore
     default String getDataLayerSrc()  {
         throw new UnsupportedOperationException();
     }

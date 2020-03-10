@@ -30,9 +30,10 @@ public class DataLayerFactory {
         data.put("id", invoke(provider, "getDataLayerId"));
         data.put("type", invoke(provider, "getDataLayerType"));
         data.put("name", invoke(provider, "getDataLayerName"));
+        data.put("path", invoke(provider, "getDataLayerPath"));
         data.put("title", invoke(provider, "getDataLayerTitle"));
         data.put("template", invoke(provider, "getDataLayerTemplate"));
-        data.put("src", invoke(provider, "getDataLayerSrc"));
+//        data.put("src", invoke(provider, "getDataLayerSrc"));
         data.put("text", invoke(provider, "getDataLayerText"));
         data.put("tags", invoke(provider, "getDataLayerTags"));
         data.put("asset", getAssetMetadata(provider));

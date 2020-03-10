@@ -103,6 +103,11 @@ public class ResourceListItemImpl extends AbstractDataLayerProvider implements L
     }
 
     @Override
+    public String getDataLayerPath() {
+        return getPath();
+    }
+
+    @Override
     public String getDataLayerTitle() {
         return getTitle();
     }
