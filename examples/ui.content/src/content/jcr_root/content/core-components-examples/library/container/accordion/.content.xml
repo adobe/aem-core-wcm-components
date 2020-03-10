@@ -45,7 +45,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
@@ -61,7 +61,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
@@ -114,7 +114,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:11:51.267+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/accordion/v1/accordion">
+                            sling:resourceType="core-components-examples/components/accordion">
                             <item_021105873
                                 cq:panelTitle="Item 1"
                                 jcr:primaryType="nt:unstructured"
@@ -187,7 +187,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:12:10.691+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/accordion/v1/accordion">
+                            sling:resourceType="core-components-examples/components/accordion">
                             <item_617130698
                                 cq:panelTitle="Item 1"
                                 jcr:primaryType="nt:unstructured"
@@ -199,7 +199,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:13:13.580+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core-components-examples/components/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -234,7 +234,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:44.428+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core-components-examples/components/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -269,7 +269,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:50.727+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core-components-examples/components/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg">
                                     <cq:responsive jcr:primaryType="nt:unstructured">
                                         <default
@@ -351,7 +351,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:12:10.691+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                            sling:resourceType="core-components-examples/components/accordion"
                             expandedItems="[item_1]">
                             <item_1
                                 cq:panelTitle="Item 1"
@@ -444,7 +444,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:12:10.691+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                            sling:resourceType="core-components-examples/components/accordion"
                             expandedItems="[item_1,item_2,item_3]">
                             <item_1
                                 cq:panelTitle="Item 1"
@@ -537,7 +537,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:12:10.691+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/accordion/v1/accordion"
+                            sling:resourceType="core-components-examples/components/accordion"
                             expandedItems="[item_1]"
                             singleExpansion="{Boolean}true">
                             <item_1
@@ -631,7 +631,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:25:41.269+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/accordion/v1/accordion">
+                            sling:resourceType="core-components-examples/components/accordion">
                             <item_215402425
                                 cq:panelTitle="Item 1"
                                 jcr:primaryType="nt:unstructured"
@@ -643,7 +643,7 @@
                                     jcr:lastModified="{Date}2019-01-22T12:51:03.767+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/accordion/v1/accordion">
+                                    sling:resourceType="core-components-examples/components/accordion">
                                     <item_468781096
                                         cq:panelTitle="Item 1.1"
                                         jcr:primaryType="nt:unstructured"
@@ -672,7 +672,7 @@
                                     jcr:lastModified="{Date}2019-01-22T12:51:24.126+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/accordion/v1/accordion">
+                                    sling:resourceType="core-components-examples/components/accordion">
                                     <item_645266587
                                         cq:panelTitle="Item 2.1"
                                         jcr:primaryType="nt:unstructured"
@@ -701,7 +701,8 @@
                                     jcr:lastModified="{Date}2019-01-22T12:51:36.077+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/accordion/v1/accordion">
+                                    sling:resourceType="
+">
                                     <item_716487435
                                         cq:panelTitle="Item 3.1"
                                         jcr:primaryType="nt:unstructured"

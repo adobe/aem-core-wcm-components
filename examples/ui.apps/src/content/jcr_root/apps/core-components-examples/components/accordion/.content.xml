@@ -18,5 +18,5 @@
     jcr:description="Accordion Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Accordion"
-    sling:resourceSuperType="core/wcm/components/accordion/v1/accordion"
+    sling:resourceSuperType="core/wcm/extensions/amp/components/accordion/v1/accordion"
     componentGroup="Core Components Examples"/>

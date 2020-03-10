@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Page"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[cq.common.wcm,core.wcm.components.page.v2.editor,cq.wcm.msm.properties,granite.contexthub.configuration,cq.siteadmin.admin.properties]"
+    helpPath="https://www.adobe.com/go/aem_cmp_page_v2"
+    mode="edit"
+    trackingFeature="core-components:page:v2">
+    <content
+        granite:class="cq-dialog-content-page"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                granite:class="cq-siteadmin-admin-properties-tabs"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                size="L">
+                <items jcr:primaryType="nt:unstructured">
+                    <advanced
+                        cq:showOnCreate="{Boolean}true"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Advanced"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <settings
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/section1"/>
+                                    <configuration
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/configuration"/>
+                                    <templates
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/templates"/>
+                                    <authenticationrequirement
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/authenticationrequirement"/>
+                                    <export
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/advanced/items/column/items/export"/>
+                                    <amp
+                                        cq:showOnCreate="false"
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="Accelerated Mobile Pages"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <ampmode
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                composite="{Boolean}false"
+                                                fieldDescription="The mode in which AMP should be handled instead of what's defined in the Template's Page Policy. Paired AMP will serve an AMP page when the 'amp' selector is present and classic HTML page when not. No AMP will serve ONLY the HTML version of the page. AMP only will ONLY serve the AMP version of the page."
+                                                fieldLabel="AMP Mode"
+                                                name="./ampMode">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <inheritPageTemplate
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Inherit from Page Template"
+                                                        value=""/>
+                                                    <noAmp
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="No AMP"
+                                                        value="noAmp"/>
+                                                    <pairedAmp
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Paired AMP"
+                                                        value="pairedAmp"/>
+                                                    <ampOnly
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="AMP Only"
+                                                        value="ampOnly"/>
+                                                </items>
+                                            </ampmode>
+                                        </items>
+                                    </amp>
+                                </items>
+                            </column>
+                        </items>
+                    </advanced>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

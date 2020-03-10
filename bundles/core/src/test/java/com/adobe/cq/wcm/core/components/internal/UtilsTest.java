@@ -15,47 +15,28 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import static org.mockito.MockitoAnnotations.initMocks;
-import static org.mockito.Mockito.when;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.day.cq.wcm.foundation.AllowedComponentList;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.Resource;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.Template;
-import java.util.Set;
-import java.util.HashSet;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
-public class UtilsTest {
-    @Mock
-    private ResourceResolver resourceResolverMock;
-    @Mock
-    private Resource resourceMock;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
+class UtilsTest {
+
     @Mock
     private Page pageMock;
-    @Mock
-    private Template templateMock;
+
     @Mock
     private SlingHttpServletRequest slingHttpServletRequestMock;
+
     @Mock
     private PageManager pageManagerMock;
-
-    private String pathSample;
-    private String[] searchPathSample;
-    private String resourceTypeRegexSample;
-    private Set<String> resourceTypesSample;
 
     @BeforeEach
     void setUp() {
@@ -63,106 +44,17 @@ public class UtilsTest {
     }
 
     @Test
-    public void resolveResource_pathStartsWithSlash() {
-        this.pathSample = "/fake/path/for/testing";
+    void getURLExtended_pageNull() {
+        String pathSample = "fake/path/for/testing";
 
-        when(this.resourceResolverMock.getResource(this.pathSample))
-         .thenReturn(this.resourceMock);
-
-        assertEquals(this.resourceMock, Utils.resolveResource(this.resourceResolverMock, this.pathSample));
-    }
-
-    @Test
-    public void resolveResource_pathStartsWithoutSlashResourceNull() {
-        this.pathSample = "fake/path/for/testing";
-        this.searchPathSample = new String[] { "/base/fake/path" };
-
-        when(this.resourceResolverMock.getSearchPath())
-         .thenReturn(this.searchPathSample);
-        when(this.resourceResolverMock.getResource(this.searchPathSample[0] + this.pathSample))
+        when(this.pageManagerMock.getPage(pathSample))
          .thenReturn(null);
 
-        assertEquals(null, Utils.resolveResource(this.resourceResolverMock, this.pathSample));
+        assertEquals(pathSample, Utils.getURL(this.slingHttpServletRequestMock, this.pageManagerMock, pathSample));
     }
 
     @Test
-    public void resolveResource_pathStartsWithoutSlashResourceNotNull() {
-        this.pathSample = "fake/path/for/testing";
-        this.searchPathSample = new String[] { "/base/fake/path" };
-
-        when(this.resourceResolverMock.getSearchPath())
-         .thenReturn(this.searchPathSample);
-        when(this.resourceResolverMock.getResource(this.searchPathSample[0] + this.pathSample))
-         .thenReturn(this.resourceMock);
-
-        assertEquals(this.resourceMock, Utils.resolveResource(this.resourceResolverMock, this.pathSample));
-    }
-
-    @Test
-    public void getTemplateResourceTypes_pageNull() {
-        this.resourceTypesSample = new HashSet<String>();
-
-        this.resourceTypesSample.add("dummyType");
-        this.resourceTypesSample.add("fakeType");
-
-        when(this.pageMock.getTemplate())
-         .thenReturn(null);
-
-        assertEquals(this.resourceTypesSample, Utils.getTemplateResourceTypes(this.pageMock, this.resourceTypeRegexSample, this.resourceResolverMock, this.resourceTypesSample));
-    }
-
-    @Test
-    public void getTemplateResourceTypes_resourceNull() {
-        this.pathSample = "/fake/path/for/testing";
-        this.resourceTypesSample = new HashSet<String>();
-
-        this.resourceTypesSample.add("dummyType");
-        this.resourceTypesSample.add("fakeType");
-
-        when(this.pageMock.getTemplate())
-         .thenReturn(this.templateMock);
-        when(this.templateMock.getPath())
-         .thenReturn(this.pathSample);
-        when(this.resourceResolverMock.getResource(this.pathSample + AllowedComponentList.STRUCTURE_JCR_CONTENT))
-         .thenReturn(null);
-
-        assertEquals(this.resourceTypesSample, Utils.getTemplateResourceTypes(this.pageMock, this.resourceTypeRegexSample, this.resourceResolverMock, this.resourceTypesSample));
-    }
-
-    @Test
-    public void getResourceTypes_resourceNull() {
-        assertEquals(null, Utils.getResourceTypes(null, this.resourceTypeRegexSample, this.resourceTypesSample));
-    }
-
-    @Test
-    public void getResourceTypes_resourceCorrect() {
-        this.resourceTypesSample = new HashSet<String>();
-
-        this.resourceTypesSample.add("dummyType");
-
-        when(this.resourceMock.getResourceType())
-         .thenReturn("fakeType");
-
-        Set<String> resourceTypesResult = new HashSet<String>();
-
-        resourceTypesResult.add("dummyType");
-        resourceTypesResult.add("fakeType");
-
-        assertEquals(resourceTypesResult, Utils.getResourceTypes(this.resourceMock, this.resourceTypeRegexSample, this.resourceTypesSample));
-    }
-
-    @Test
-    public void getURLExtended_pageNull() {
-        this.pathSample = "fake/path/for/testing";
-
-        when(this.pageManagerMock.getPage(this.pathSample))
-         .thenReturn(null);
-
-        assertEquals(this.pathSample, Utils.getURL(this.slingHttpServletRequestMock, this.pageManagerMock, this.pathSample));
-    }
-
-    @Test
-    public void getURLExtended_vanityUrlEmpty() {
+    void getURLExtended_vanityUrlEmpty() {
         when(this.pageMock.getVanityUrl())
          .thenReturn("");
         when(this.pageMock.getPath())
@@ -174,7 +66,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void getURLExtended_vanityUrlCorrect() {
+    void getURLExtended_vanityUrlCorrect() {
         when(this.pageMock.getVanityUrl())
          .thenReturn("testPage.html");
         when(this.slingHttpServletRequestMock.getContextPath())
