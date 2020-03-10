@@ -19,7 +19,6 @@ import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.json.JsonObject;
 import java.util.Map;
 
 @ConsumerType

@@ -31,7 +31,6 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 
 @ExtendWith(AemContextExtension.class)
@@ -63,10 +62,12 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest();
         Object[][] expectedItems = {
-                {"item_1", "Teaser 1", "resourceListItem", "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1"},
-                {"item_2", "Teaser 2", "resourceListItem", "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2"},
-                {"item_3", "Carousel Panel 3", "resourceListItem", "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3"},
-        };
+                { "item_1", "Teaser 1", "resourceListItem",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1" },
+                { "item_2", "Teaser 2", "resourceListItem",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
+                { "item_3", "Carousel Panel 3", "resourceListItem",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
         verifyCarouselItems(expectedItems, carousel.getItems());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
@@ -85,28 +86,28 @@ class CarouselImplTest {
     }
 
     private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals("The carousel contains a different number of items than expected.", expectedItems.length, items.size());
+        assertEquals("The carousel contains a different number of items than expected.", expectedItems.length,
+                items.size());
         int index = 0;
         for (ListItem item : items) {
-            assertEquals("The carousel item's name is not what was expected.",
-                    expectedItems[index][0], item.getName());
+            assertEquals("The carousel item's name is not what was expected.", expectedItems[index][0], item.getName());
             assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
                     expectedItems[index][1], item.getTitle());
             assertEquals("The carousel item's path is not what was expected: " + item.getPath(),
-                expectedItems[index][3], item.getPath());
-
-
+                    expectedItems[index][3], item.getPath());
 
             assertNotEquals("The carousel item's data layer string is empty", item.getDataLayerString(), "{}");
 
             assertEquals("The carousel item's data layer name is not what was expected: " + item.getDataLayerName(),
                     expectedItems[index][0], item.getDataLayerName());
             assertEquals("The carousel item's data layer title is not what was expected: " + item.getDataLayerTitle(),
-                expectedItems[index][1], item.getDataLayerTitle());
+                    expectedItems[index][1], item.getDataLayerTitle());
             assertEquals("The carousel item's data layer type is not what was expected: " + item.getDataLayerType(),
-                expectedItems[index][2], item.getDataLayerType());
+                    expectedItems[index][2], item.getDataLayerType());
             assertEquals("The carousel item's data layer id is not what was expected: " + item.getDataLayerId(),
-                expectedItems[index][2] + "-" + StringUtils.substring(DigestUtils.sha1Hex((String)expectedItems[index][3]), 0, 10), item.getDataLayerId());
+                    expectedItems[index][2] + "-"
+                            + StringUtils.substring(DigestUtils.sha1Hex((String) expectedItems[index][3]), 0, 10),
+                    item.getDataLayerId());
 
             index++;
         }
