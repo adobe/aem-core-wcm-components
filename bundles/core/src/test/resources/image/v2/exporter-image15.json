@@ -7,7 +7,7 @@
     "widths": [],
     "lazyEnabled": false,
     "dataLayerJson": {
-        "src": "/core/content/test/_jcr_content/root/image15.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
+        "path": "/content/test/jcr:content/root/image15",
         "name": "Adobe Systems Logo and Wordmark",
         "id": "image-9865f999fd",
         "type": "image",

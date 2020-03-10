@@ -18,6 +18,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/list/listTypes/staticListType",
         "id": "list-6df1b262c1",
         "type": "list",
         "itemsCount": 2

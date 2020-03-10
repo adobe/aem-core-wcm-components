@@ -25,6 +25,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/list/listTypes/childrenListType",
         "id": "list-a072664ef8",
         "type": "list",
         "itemsCount": 3

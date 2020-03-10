@@ -3,6 +3,7 @@
     "text": "plain",
     "richText": false,
     "dataLayerJson": {
+        "path": "/content/text/plain-text",
         "id": "text-8dd9f3fbc5",
         "text": "plain",
         "type": "text"

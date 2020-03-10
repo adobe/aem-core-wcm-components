@@ -3,6 +3,7 @@
     "linkDisabled": false,
     "linkURL": "https://www.adobe.com",
     "dataLayerJson": {
+        "path": "/content/title/jcr:content/par/title-jcr-title-link-v2",
         "linkUrl": "https://www.adobe.com",
         "id": "title-76babd07b2",
         "type": "title"

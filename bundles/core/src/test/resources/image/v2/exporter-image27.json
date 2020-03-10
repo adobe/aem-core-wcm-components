@@ -11,7 +11,7 @@
     "lazyEnabled": false,
     "link": "https://www.adobe.com",
     "dataLayerJson": {
-        "src": "/core/content/test/_jcr_content/root/image27.coreimg.82.600.png/1490005239000.png",
+        "path": "/content/test/jcr:content/root/image27",
         "name": "Adobe Logo",
         "linkUrl": "https://www.adobe.com",
         "id": "image-f6c6448767",

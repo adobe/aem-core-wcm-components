@@ -4,6 +4,7 @@
     "link": "https://www.adobe.com",
     "icon": "adobe",
     "dataLayerJson": {
+        "path": "/content/button/jcr:content/root/responsivegrid/button-1",
         "linkUrl": "https://www.adobe.com",
         "id": "button-0c81c1811d",
         "text": "Adobe",

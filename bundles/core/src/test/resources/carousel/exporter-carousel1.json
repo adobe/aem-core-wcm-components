@@ -4,6 +4,7 @@
     "delay": 7000,
     "autopauseDisabled": true,
     "dataLayerJson": {
+        "path": "/content/carousel/jcr:content/root/responsivegrid/carousel-1",
         "name": "carousel-1",
         "id": "carousel-e4eef01f3a",
         "type": "carousel",

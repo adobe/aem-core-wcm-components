@@ -2,6 +2,7 @@
     "id": "tabs-5d4d947d94",
     "activeItem": "item_2",
     "dataLayerJson": {
+        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-1",
         "activeItem": "item_2",
         "name": "tabs-1",
         "id": "tabs-5d4d947d94",
@@ -14,7 +15,6 @@
     ],
     ":items": {
         "item_1": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -51,10 +51,10 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -91,6 +91,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab Panel 2"
         }
     },

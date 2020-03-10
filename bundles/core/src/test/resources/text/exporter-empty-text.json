@@ -2,6 +2,7 @@
     "id": "text-db49eea57b",
     "richText": false,
     "dataLayerJson": {
+        "path": "/content/text/empty-text",
         "id": "text-db49eea57b",
         "text": "",
         "type": "text"

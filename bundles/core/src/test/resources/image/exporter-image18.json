@@ -2,7 +2,7 @@
     "id": "image-0cbb13a154",
     "src": "/core/content/test/_jcr_content/root/image18.img.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "dataLayerJson": {
-        "src": "/core/content/test/_jcr_content/root/image18.img.png/1490005239000/adobe-systems-logo-and-wordmark.png",
+        "path": "/content/test/jcr:content/root/image18",
         "id": "image-0cbb13a154",
         "type": "image",
         "asset": {

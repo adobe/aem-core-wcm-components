@@ -16,7 +16,7 @@
     "lazyEnabled": false,
     "link": "/core/content/test-image.html",
     "dataLayerJson": {
-        "src": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.coreimg.png/structure/jcr%3acontent/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png",
+        "path": "/conf/coretest/settings/wcm/templates/testtemplate/structure/jcr:content/root/image_template",
         "name": "Adobe Systems Logo and Wordmark",
         "linkUrl": "/core/content/test-image.html",
         "id": "image-c6289a56b4",

@@ -6,6 +6,7 @@
             "url": "/content/breadcrumb/women.html",
             "title": "Women",
             "dataLayerJson": {
+                "path": "/content/breadcrumb/women",
                 "name": "women",
                 "linkUrl": "/content/breadcrumb/women.html",
                 "id": "breadcrumbItem-4af5a3ef95",
@@ -16,6 +17,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt/jcr:content/header/breadcrumb-hide-current",
         "name": "breadcrumb-hide-current",
         "id": "breadcrumb-9dba4a5f91",
         "type": "breadcrumb",

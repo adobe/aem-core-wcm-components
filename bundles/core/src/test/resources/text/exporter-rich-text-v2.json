@@ -3,6 +3,7 @@
     "text": "<p>rich</p>",
     "richText": true,
     "dataLayerJson": {
+        "path": "/content/text/rich-text-v2",
         "id": "text-5acea9beed",
         "text": "<p>rich</p>",
         "type": "text"

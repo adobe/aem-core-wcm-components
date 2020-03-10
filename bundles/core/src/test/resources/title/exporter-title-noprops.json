@@ -3,6 +3,7 @@
     "linkDisabled": false,
     "type": "h2",
     "dataLayerJson": {
+        "path": "/content/title/jcr:content/par/title-noprops",
         "id": "title-a0f7ad260f",
         "type": "title"
     },

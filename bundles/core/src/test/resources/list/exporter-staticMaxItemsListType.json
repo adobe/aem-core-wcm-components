@@ -11,6 +11,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/list/listTypes/staticMaxItemsListType",
         "id": "list-2c3c3816c1",
         "type": "list",
         "itemsCount": 1

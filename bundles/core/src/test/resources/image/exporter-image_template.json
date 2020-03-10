@@ -5,7 +5,7 @@
     "src": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.img.png/structure/jcr%3acontent/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png",
     "link": "/core/content/test-image.html",
     "dataLayerJson": {
-        "src": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.img.png/structure/jcr%3acontent/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png",
+        "path": "/conf/coretest/settings/wcm/templates/testtemplate/structure/jcr:content/root/image_template",
         "name": "Adobe Logo",
         "linkUrl": "/core/content/test-image.html",
         "id": "image-c6289a56b4",

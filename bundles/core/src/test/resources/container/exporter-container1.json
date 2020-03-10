@@ -3,6 +3,7 @@
     "layout": "RESPONSIVE_GRID",
     "backgroundStyle": "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
     "dataLayerJson": {
+        "path": "/content/container/jcr:content/root/responsivegrid/container-1",
         "id": "test",
         "type": "container"
     },

@@ -3,6 +3,7 @@
     "linkDisabled": false,
     "text": "Hello World",
     "dataLayerJson": {
+        "path": "/content/title/jcr:content/par/title-jcr-title",
         "id": "title-af55b2ad84",
         "text": "Hello World",
         "type": "title"

@@ -32,6 +32,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/list/listTypes/childrenListTypeWithDepth",
         "id": "list-131adde122",
         "type": "list",
         "itemsCount": 4

@@ -14,6 +14,7 @@
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
+        "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
         "name": "about",
         "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
         "id": "languageNavigationItem-f7ed60dba3",
@@ -35,6 +36,7 @@
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
+        "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
         "name": "about",
         "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
         "id": "languageNavigationItem-ae086001b7",
@@ -56,6 +58,7 @@
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
+        "path": "/content/languagenavigation/LOCALE-3",
         "name": "LOCALE-3",
         "linkUrl": "/core/LOCALE-3-vanity",
         "id": "languageNavigationItem-715681d1e2",
@@ -77,6 +80,7 @@
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
+        "path": "/content/languagenavigation/LOCALE-4",
         "name": "LOCALE-4",
         "linkUrl": "/core/content/languagenavigation/LOCALE-4.html",
         "id": "languageNavigationItem-540d311dbc",
@@ -87,6 +91,7 @@
     }
   ],
   "dataLayerJson": {
+    "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-1",
     "name": "languagenavigation-component-1",
     "id": "languagenavigation-67a3e8f8b7",
     "type": "languagenavigation",

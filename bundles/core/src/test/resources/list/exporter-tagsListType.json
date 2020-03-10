@@ -11,6 +11,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/list/listTypes/tagsListType",
         "id": "list-9c3e9178d3",
         "type": "list",
         "itemsCount": 1

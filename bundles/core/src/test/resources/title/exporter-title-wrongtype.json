@@ -2,6 +2,7 @@
     "id": "title-d7b073638f",
     "linkDisabled": false,
     "dataLayerJson": {
+        "path": "/content/title/jcr:content/par/title-wrongtype",
         "id": "title-d7b073638f",
         "type": "title"
     },

@@ -4,6 +4,7 @@
     "type": "h2",
     "text": "Hello World",
     "dataLayerJson": {
+        "path": "/content/title/jcr:content/par/title-jcr-title-type",
         "id": "title-b08dd9f4e5",
         "text": "Hello World",
         "type": "title"

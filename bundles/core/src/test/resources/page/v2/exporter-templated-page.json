@@ -9,6 +9,7 @@
     "language": "en-GB",
     "dataLayerJson": {
         "template": "/conf/coretest/settings/wcm/templates/product-page",
+        "path": "/content/page/templated-page/jcr:content",
         "name": "Templated Page",
         "language": "en-GB",
         "id": "page-df0b99830e",
@@ -19,7 +20,6 @@
     ],
     ":items": {
         "root": {
-            ":type": "wcm/foundation/components/responsivegrid",
             ":itemsOrder": [
                 "text"
             ],
@@ -29,13 +29,15 @@
                     "text": "<p>This is a test</p>",
                     "richText": true,
                     "dataLayerJson": {
+                        "path": "/content/page/templated-page/jcr:content/root/text",
                         "id": "text-e772bd1e32",
                         "text": "<p>This is a test</p>",
                         "type": "text"
                     },
                     ":type": "core/wcm/components/text/v2/text"
                 }
-            }
+            },
+            ":type": "wcm/foundation/components/responsivegrid"
         }
     },
     ":type": "core/wcm/components/page/v2/page"

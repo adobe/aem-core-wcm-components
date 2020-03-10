@@ -6,6 +6,7 @@
             "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
             "title": "Devi Sleeveless Shirt",
             "dataLayerJson": {
+                "path": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt",
                 "name": "devi-sleeveless-shirt",
                 "linkUrl": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
                 "id": "breadcrumbItem-aace97aaa4",
@@ -16,6 +17,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt/jcr:content/header/breadcrumb-style-based",
         "name": "breadcrumb-style-based",
         "id": "breadcrumb-8bb40c0686",
         "type": "breadcrumb",

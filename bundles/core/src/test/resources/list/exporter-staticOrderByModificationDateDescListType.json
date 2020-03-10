@@ -18,6 +18,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/list/listTypes/staticOrderByModificationDateDescListType",
         "id": "list-e8d13b74ae",
         "type": "list",
         "itemsCount": 2

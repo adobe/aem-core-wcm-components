@@ -8,6 +8,7 @@
     "language": "en-GB",
     "dataLayerJson": {
         "template": "/conf/coretest/settings/wcm/templates/product-page",
+        "path": "/content/page/templated-page/jcr:content",
         "name": "Templated Page",
         "language": "en-GB",
         "id": "page-df0b99830e",
@@ -23,6 +24,7 @@
             "text": "<p>This is a test</p>",
             "richText": true,
             "dataLayerJson": {
+                "path": "/content/page/templated-page/jcr:content/text",
                 "id": "text-868efbcc97",
                 "text": "<p>This is a test</p>",
                 "type": "text"

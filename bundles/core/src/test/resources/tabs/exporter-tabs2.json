@@ -2,6 +2,7 @@
     "id": "tabs-7e84106a6a",
     "activeItem": "item_2",
     "dataLayerJson": {
+        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2",
         "activeItem": "item_2",
         "name": "tabs-2",
         "id": "tabs-7e84106a6a",
@@ -39,6 +40,7 @@
                     "id": "tabs-e14a27b1c3",
                     "activeItem": "item_1_2_2",
                     "dataLayerJson": {
+                        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2",
                         "activeItem": "item_1_2_2",
                         "name": "item_1_2",
                         "id": "tabs-e14a27b1c3",
@@ -118,6 +120,7 @@
                                     "delay": 5000,
                                     "autopauseDisabled": false,
                                     "dataLayerJson": {
+                                        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2",
                                         "name": "item_1_2_2_2",
                                         "id": "carousel-b2fb964605",
                                         "type": "carousel",

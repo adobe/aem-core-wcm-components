@@ -18,6 +18,7 @@
         }
     ],
     "dataLayerJson": {
+        "path": "/content/list/listTypes/staticOrderByTitleDescListType",
         "id": "list-47a43e2288",
         "type": "list",
         "itemsCount": 2
