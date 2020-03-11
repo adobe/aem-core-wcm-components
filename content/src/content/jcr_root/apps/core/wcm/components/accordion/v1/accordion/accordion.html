@@ -22,6 +22,7 @@
          data-sly-repeat.item="${accordion.items}"
          class="cmp-accordion__item"
          data-cmp-hook-accordion="item"
+         id="${accordion.id}-panel-${item.name  @ context='uri'}"
          data-cmp-expanded="${item.name in accordion.expandedItems}">
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">
@@ -35,7 +36,6 @@
         </h3>
         <div data-sly-resource="${item.name @ decorationTagName='div'}"
              data-cmp-hook-accordion="panel"
-             id="${accordion.id}-panel-${itemList.index}"
              class="cmp-accordion__panel${item.name in accordion.expandedItems ? ' cmp-accordion__panel--expanded' : ' cmp-accordion__panel--hidden'}"
              role="region"
              aria-labelledby="${accordion.id}-button-${itemList.index}"></div>
