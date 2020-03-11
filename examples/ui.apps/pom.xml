@@ -240,5 +240,20 @@
             <classifier>apis</classifier>
             <scope>provided</scope>
         </dependency>
+        <!-- AEM Sites Core Components-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.core</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- AEM Core Components AMP Extension Bundle -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.extensions.amp</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 </project>

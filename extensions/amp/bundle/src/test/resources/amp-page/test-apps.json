@@ -1,0 +1,109 @@
+{
+    "text": {
+        "jcr:primaryType": "sling:Folder",
+        "v1": {
+            "jcr:primaryType": "nt:unstructured",
+            "text": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Text (v1)",
+                "sling:resourceSuperType": "core/wcm/components/text",
+                "componentGroup": ".core-wcm",
+                "customheadlibs.amp.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/html",
+                        "jcr:data": "<script>console.log('This is amp text component script')</script>"
+                    }
+                }
+            }
+        }
+    },
+    "sample": {
+        "jcr:primaryType": "sling:Folder",
+        "v1": {
+            "jcr:primaryType": "nt:unstructured",
+            "sample": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Sample (v1)",
+                "sling:resourceSuperType": "core/wcm/components/sample_super/v1/sample_super",
+                "componentGroup": ".core-wcm"
+            }
+        }
+    },
+    "sample_super": {
+        "jcr:primaryType": "sling:Folder",
+        "v1": {
+            "jcr:primaryType": "nt:unstructured",
+            "sample_super": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Sample Super (v1)",
+                "sling:resourceSuperType": "core/wcm/components/text",
+                "componentGroup": ".core-wcm",
+                "customheadlibs.amp.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/html",
+                        "jcr:data": "<script>console.log('This is amp text component script')</script>"
+                    }
+                }
+            }
+        }
+    },
+    "null-supertype": {
+        "jcr:primaryType": "sling:Folder",
+        "v1": {
+            "jcr:primaryType": "nt:unstructured",
+            "null-supertype": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Null Supertype (v1)",
+                "sling:resourceSuperType": "core/wcm/components/non-existing",
+                "componentGroup": ".core-wcm"
+            }
+        }
+    },
+    "no-supertype": {
+        "jcr:primaryType": "sling:Folder",
+        "v1": {
+            "jcr:primaryType": "nt:unstructured",
+            "no-supertype": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "No Supertype (v1)",
+                "componentGroup": ".core-wcm"
+            }
+        }
+    },
+    "no-local": {
+        "jcr:primaryType": "sling:Folder",
+        "v1": {
+            "jcr:primaryType": "nt:unstructured",
+            "no-local": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "No Local Headlib (v1)",
+                "componentGroup": ".core-wcm",
+                "sling:resourceSuperType":"core/wcm/components/no-supertype/v1/no-supertype"
+            }
+        }
+    },
+    "page": {
+        "jcr:primaryType": "sling:Folder",
+        "v2": {
+            "jcr:primaryType": "nt:unstructured",
+            "page": {
+                "jcr:primaryType": "cq:Component",
+                "jcr:title": "Page (v2)",
+                "sling:resourceSuperType": "wcm/foundation/components/basicpage/v1/basicpage",
+                "componentGroup": ".core-wcm",
+                "customheadlibs.amp.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/html",
+                        "jcr:data": "<script>console.log('This is amp page script')</script>"
+                    }
+                }
+            }
+        }
+    }
+}
