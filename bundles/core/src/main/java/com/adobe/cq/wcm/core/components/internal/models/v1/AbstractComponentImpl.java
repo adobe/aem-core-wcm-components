@@ -122,6 +122,6 @@ public abstract class AbstractComponentImpl implements Component {
                 parentContext = parentContext.getParent();
             }
         }
-        return prefix + "-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
+        return prefix + "-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
     }
 }
