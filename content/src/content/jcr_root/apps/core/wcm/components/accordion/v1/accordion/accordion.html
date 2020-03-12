@@ -14,6 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.accordion="com.adobe.cq.wcm.core.components.models.Accordion"
+     id="${accordion.id}"
      class="cmp-accordion"
      data-cmp-is="accordion"
      data-cmp-single-expansion="${accordion.singleExpansion}">
@@ -24,7 +25,9 @@
          data-cmp-expanded="${item.name in accordion.expandedItems}">
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">
-            <button class="cmp-accordion__button${item.name in accordion.expandedItems ? ' cmp-accordion__button--expanded' : ''}"
+            <button id="${accordion.id}-button-${itemList.index}"
+                    class="cmp-accordion__button${item.name in accordion.expandedItems ? ' cmp-accordion__button--expanded' : ''}"
+                    aria-controls="${accordion.id}-panel-${itemList.index}"
                     data-cmp-hook-accordion="button">
                 <span class="cmp-accordion__title">${item.title}</span>
                 <span class="cmp-accordion__icon"></span>
@@ -32,8 +35,10 @@
         </h3>
         <div data-sly-resource="${item.name @ decorationTagName='div'}"
              data-cmp-hook-accordion="panel"
+             id="${accordion.id}-panel-${itemList.index}"
              class="cmp-accordion__panel${item.name in accordion.expandedItems ? ' cmp-accordion__panel--expanded' : ' cmp-accordion__panel--hidden'}"
-             role="region"></div>
+             role="region"
+             aria-labelledby="${accordion.id}-button-${itemList.index}"></div>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
          data-sly-test="${(wcmmode.edit || wcmmode.preview) && accordion.items.size < 1}"></sly>

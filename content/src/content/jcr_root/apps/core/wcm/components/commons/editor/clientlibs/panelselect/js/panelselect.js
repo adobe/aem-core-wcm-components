@@ -418,7 +418,7 @@
     });
 
     channel.on("cq-layer-activated", function(event) {
-        if (event.layer === "Edit") {
+        if (event.layer === "Edit" || event.layer === "structure" || event.layer === "initial") {
             ns.EditorFrame.editableToolbar.registerAction("PANEL_SELECT", panelSelect);
         }
     });

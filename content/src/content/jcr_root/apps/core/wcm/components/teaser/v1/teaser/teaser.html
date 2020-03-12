@@ -14,6 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.teaser="com.adobe.cq.wcm.core.components.models.Teaser"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-use.imageTemplate="image.html"
      data-sly-use.pretitleTemplate="pretitle.html"
@@ -21,6 +22,7 @@
      data-sly-use.descriptionTemplate="description.html"
      data-sly-use.actionsTemplate="actions.html"
      data-sly-test.hasContent="${teaser.imageResource || teaser.pretitle || teaser.title || teaser.description || teaser.actions.size > 0}"
+     id="${component.id}"
      class="cmp-teaser${!wcmmode.disabled && teaser.imageResource ? ' cq-dd-image' : ''}">
     <sly data-sly-call="${imageTemplate.image @ teaser=teaser}"></sly>
     <div class="cmp-teaser__content">

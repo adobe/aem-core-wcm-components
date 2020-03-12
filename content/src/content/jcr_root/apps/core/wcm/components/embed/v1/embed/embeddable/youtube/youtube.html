@@ -18,4 +18,5 @@
         height="${properties.youtubeHeight || 390 @ context='scriptString'}"
         src="${'https://www.youtube.com/embed/{0}?origin={1}://{2}' @ format=[properties.youtubeVideoId, request.scheme, request.serverName]}"
         frameborder="0"
-        allowfullscreen></iframe>
+        allowfullscreen
+        aria-label="${'YouTube Video' @ i18n}"></iframe>

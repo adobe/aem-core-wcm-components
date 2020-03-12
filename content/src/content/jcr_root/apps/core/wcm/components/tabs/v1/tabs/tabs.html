@@ -15,6 +15,7 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.tabs="com.adobe.cq.wcm.core.components.models.Tabs"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     id="${tabs.id}"
      class="cmp-tabs"
      data-cmp-is="tabs">
     <ol data-sly-test="${tabs.items && tabs.items.size > 0}"
@@ -25,13 +26,17 @@
         aria-multiselectable="false">
         <sly data-sly-test.isActive="${tab.name == tabs.activeItem}"/>
         <li role="tab"
+            id="${tabs.id}-tab-${tabList.index}"
             class="cmp-tabs__tab${isActive ? ' cmp-tabs__tab--active' : ''}"
+            aria-controls="${tabs.id}-tabpanel-${tabList.index}"
             tabindex="${isActive ? '0' : '-1'}"
             data-cmp-hook-tabs="tab">${tab.title}</li>
     </ol>
     <div data-sly-repeat.item="${tabs.items}"
          data-sly-resource="${item.name @ decorationTagName='div'}"
+         id="${tabs.id}-tabpanel-${itemList.index}"
          role="tabpanel"
+         aria-labelledby="${tabs.id}-tab-${itemList.index}"
          tabindex="0"
          class="cmp-tabs__tabpanel${item.name == tabs.activeItem ? ' cmp-tabs__tabpanel--active' : ''}"
          data-cmp-hook-tabs="tabpanel"></div>

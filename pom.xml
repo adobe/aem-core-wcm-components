@@ -70,6 +70,7 @@
         <module>config</module>
         <module>all</module>
         <module>examples</module>
+        <module>extensions/amp</module>
     </modules>
 
 </project>

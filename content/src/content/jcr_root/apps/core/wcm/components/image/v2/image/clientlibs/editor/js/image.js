@@ -87,6 +87,12 @@
             }
             toggleAlternativeFieldsAndLink(isDecorative);
         }
+
+        $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
+            submittable: ".cmp-image__editor-alt-text",
+            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
+            exclusion: ".cmp-image__editor-alt-text *"
+        });
     });
 
     $(window).on("focus", function() {

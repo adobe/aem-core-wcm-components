@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.servlets.embed;
 
+import java.util.Iterator;
+
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
@@ -29,15 +31,17 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.servlets.TextValueDataResourceSource;
-import com.adobe.cq.wcm.core.components.internal.servlets.embed.AllowedEmbeddablesDataSourceServlet;
+import com.adobe.cq.wcm.core.components.testing.MockStyle;
+import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
+import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.google.common.base.Function;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,33 +57,87 @@ public class AllowedEmbeddablesDataSourceServletTest {
     private ContentPolicyManager contentPolicyManager;
 
     @Mock
+    private Designer designer;
+
+    @Mock
     private ContentPolicy contentPolicy;
+
+    private static final String CURRENT_PATH = "/apps/content/embed";
+
+    private ValueMap properties;
 
     @Before
     public void setUp() {
-        Resource policyResource = context.resourceResolver().getResource("/apps/conf/policy_1558011912823");
-        ValueMap properties = ResourceUtil.getValueMap(policyResource);
         dataSourceServlet = new AllowedEmbeddablesDataSourceServlet();
-        registerContentPolicyManager();
-        when(contentPolicyManager.getPolicy(context.currentResource())).thenReturn(contentPolicy);
-        when(contentPolicy.getProperties()).thenReturn(properties);
+        registerAdapter();
+        context.currentResource(CURRENT_PATH);
     }
 
     @Test
     public void testAllowedEmbeddablesDataSourceServlet() {
+        Resource policyResource = context.resourceResolver().getResource("/apps/conf/policy_1558011912823");
+        properties = ResourceUtil.getValueMap(policyResource);
+        when(contentPolicyManager.getPolicy(any(Resource.class))).thenReturn(contentPolicy);
+        when(contentPolicy.getProperties()).thenReturn(properties);
+        context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE, CURRENT_PATH);
         dataSourceServlet.doGet(context.request(), context.response());
         DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
         assertNotNull(dataSource);
-        dataSource.iterator().forEachRemaining(resource -> {
-            assertNotNull(resource);
-            assertTrue("Expected class", TextValueDataResourceSource.class.isAssignableFrom(resource.getClass()));
-            TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource) resource;
-            assertTrue(textValueDataResourceSource.getText().matches("Select|Chatbot|Social"));
-            assertTrue(textValueDataResourceSource.getValue().matches("^$|.*\\b(my-app)\\b.*"));
-        });
+        validateAllowedEmbeddables(dataSource, getExpectedAllowedEmbeddables(new String[][]{
+                {"Select", ""},
+                {"Chatbot", "/apps/my-app/chatbot"},
+                {"Social", "/apps/my-app/social"}
+        }));
     }
 
-    private void registerContentPolicyManager() {
+    @Test
+    public void testAllowedEmbeddablesDesignDataSourceServlet() {
+        Resource styleResource = context.resourceResolver().getResource("/apps/etc/designs/embed");
+        MockStyle mockStyle = new MockStyle(styleResource, styleResource.getValueMap());
+        when(designer.getStyle(any(Resource.class))).thenReturn(mockStyle);
+        context.request().setAttribute(Value.CONTENTPATH_ATTRIBUTE, CURRENT_PATH);
+        dataSourceServlet.doGet(context.request(), context.response());
+        DataSource dataSource = (DataSource) context.request().getAttribute(DataSource.class.getName());
+        assertNotNull(dataSource);
+        validateAllowedEmbeddables(dataSource, getExpectedAllowedEmbeddables(new String[][]{
+                {"Select", ""},
+                {"Chatbot", "/apps/my-app/chatbot"},
+                {"Social", "/apps/my-app/social"}
+        }));
+    }
+
+    private TextValueDataResourceSource[] getExpectedAllowedEmbeddables(String[][] expectedAllowedEmbeddables) {
+        TextValueDataResourceSource[] textValueDataResourceSources = new TextValueDataResourceSource[expectedAllowedEmbeddables.length];
+        for (int i = 0; i < expectedAllowedEmbeddables.length; i++) {
+            final int index = i;
+            textValueDataResourceSources[i] = new TextValueDataResourceSource(context.resourceResolver(), "", "") {
+                @Override
+                public String getText() {
+                    return expectedAllowedEmbeddables[index][0];
+                }
+
+                @Override
+                public String getValue() {
+                    return expectedAllowedEmbeddables[index][1];
+                }
+            };
+        }
+        return textValueDataResourceSources;
+    }
+
+    private void validateAllowedEmbeddables(DataSource dataSource, TextValueDataResourceSource ... textValueDataResourceSources) {
+        Iterator<Resource> iterator = dataSource.iterator();
+        int items = 0;
+        while (iterator.hasNext()) {
+            TextValueDataResourceSource textValueDataResourceSource = (TextValueDataResourceSource)iterator.next();
+            assertEquals(textValueDataResourceSources[items].getValue(), textValueDataResourceSource.getValue());
+            assertEquals(textValueDataResourceSources[items].getText(), textValueDataResourceSource.getText());
+            items++;
+        }
+        assertEquals(textValueDataResourceSources.length, items);
+    }
+
+    private void registerAdapter() {
         context.registerAdapter(ResourceResolver.class, ContentPolicyManager.class,
             new Function<ResourceResolver, ContentPolicyManager>() {
                 @Nullable
@@ -87,6 +145,12 @@ public class AllowedEmbeddablesDataSourceServletTest {
                 public ContentPolicyManager apply(@Nullable ResourceResolver input) {
                     return contentPolicyManager;
                 }
+            });
+        context.registerAdapter(ResourceResolver.class, Designer.class,
+            new Function<ResourceResolver, Designer>() {
+                @Nullable
+                @Override
+                public Designer apply(@Nullable ResourceResolver input) { return designer; }
             });
     }
 }

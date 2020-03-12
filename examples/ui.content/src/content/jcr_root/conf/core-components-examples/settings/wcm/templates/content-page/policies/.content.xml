@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-05-28T18:24:48.274+03:00"
+        cq:lastModified="{Date}2020-03-06T01:05:49.383+01:00"
         cq:lastModifiedBy="admin"
         cq:policy="core-components-examples/components/page/policy_212634895490169"
         jcr:primaryType="nt:unstructured"
@@ -42,14 +42,6 @@
                                         sling:resourceType="wcm/core/components/policies/mapping"/>
                                 </v2>
                             </text>
-                            <teaser jcr:primaryType="nt:unstructured">
-                                <v1 jcr:primaryType="nt:unstructured">
-                                    <teaser
-                                        cq:policy="core/wcm/components/teaser/v1/teaser/policy_1547060084604"
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="wcm/core/components/policies/mapping"/>
-                                </v1>
-                            </teaser>
                             <form jcr:primaryType="nt:unstructured">
                                 <text jcr:primaryType="nt:unstructured">
                                     <v2 jcr:primaryType="nt:unstructured">
@@ -68,14 +60,6 @@
                                         sling:resourceType="wcm/core/components/policies/mapping"/>
                                 </v1>
                             </separator>
-                            <download jcr:primaryType="nt:unstructured">
-                                <v1 jcr:primaryType="nt:unstructured">
-                                    <download
-                                        cq:policy="core/wcm/components/download/v1/download/policy_1559906471859"
-                                        jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="wcm/core/components/policies/mapping"/>
-                                </v1>
-                            </download>
                             <container jcr:primaryType="nt:unstructured">
                                 <v1 jcr:primaryType="nt:unstructured">
                                     <container
@@ -87,6 +71,22 @@
                         </components>
                     </wcm>
                 </core>
+                <core-components-examples jcr:primaryType="nt:unstructured">
+                    <components jcr:primaryType="nt:unstructured">
+                        <search
+                            cq:policy="core-components-examples/components/search/policy_1572547933941"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <teaser
+                            cq:policy="core-components-examples/components/teaser/policy_1547060084604"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                        <download
+                            cq:policy="core-components-examples/components/download/policy_1559906471859"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="wcm/core/components/policies/mapping"/>
+                    </components>
+                </core-components-examples>
             </responsivegrid>
             <responsivegrid_1409995310
                 cq:policy="wcm/foundation/components/responsivegrid/policy_1545309074617"

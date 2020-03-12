@@ -1,0 +1,85 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+ 
+@space-1: .5rem;
+@space-4: 2rem;
+@gray: #232323;
+ 
+amp-selector[role=tablist].tabs-with-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+amp-selector[role=tablist].tabs-with-flex [role=tab] {
+    flex-grow: 1;
+    text-align: center;
+    padding: var(@space-1);
+    margin: 0 50px 0 0;
+}
+
+amp-selector[role=tablist].tabs-with-flex [role=tabpanel] {
+    display: none;
+    width: 100%;
+    order: 1;
+    padding: var(@space-4);
+}
+amp-selector[role=tablist].tabs-with-flex [role=tab][selected] + [role=tabpanel] {
+    display: block;
+}
+
+amp-selector[role=tablist].tabs-with-selector {
+    display: flex;
+}
+
+amp-selector[role=tablist].tabs-with-selector [role=tab][selected] {
+    outline: none;
+}
+
+amp-selector[role=tablist].tabs-with-selector {
+    display: flex;
+}
+
+amp-selector[role=tablist].tabs-with-selector [role=tab] {
+    width: 100%;
+    text-align: center;
+    padding: var(@space-1);
+}
+
+amp-selector.tabpanels [role=tabpanel] {
+    display: none;
+    padding: var(@space-4);
+}
+
+amp-selector.tabpanels [role=tabpanel][selected] {
+    outline: none;
+    display: block;
+}
+
+amp-selector[role=tablist] [role=tab][selected] + [role=tabpanel] {
+    display: block;
+}
+
+amp-selector [option][selected] {
+    outline: none;
+}
+
+.cmp-tabs__tab {
+    &[selected] {
+        border: 0;
+        outline: none;
+        border-bottom: 2px solid @gray;
+        color: @gray;
+    }
+}

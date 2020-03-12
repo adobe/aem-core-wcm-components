@@ -13,10 +13,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div class="cmp-title"
-     data-sly-use.title="com.adobe.cq.wcm.core.components.models.Title"
+<div data-sly-use.title="com.adobe.cq.wcm.core.components.models.Title"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-test.text="${title.text}">
+     data-sly-test.text="${title.text}"
+     id="${component.id}"
+     class="cmp-title">
     <h1 class="cmp-title__text" data-sly-element="${title.type}"><a data-sly-unwrap="${!title.linkURL || title.linkDisabled}" class="cmp-title__link" href="${title.linkURL}">${text}</a></h1>
 </div>
 <sly data-sly-call="${template.placeholder @ isEmpty=!text, classAppend='cmp-title'}"></sly>

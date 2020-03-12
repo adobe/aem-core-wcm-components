@@ -119,7 +119,7 @@ window.CQ.CoreComponentsIT.Image.v2 = window.CQ.CoreComponentsIT.Image.v2 || {};
             .execTestCase(c.tcSaveConfigureDialog)
             .config.changeContext(c.getContentFrame)
             .asserts.isTrue(function() {
-                return h.find(".cmp-image__image").attr("alt") === "" && h.find(".cmp-image__link").size() === 0;
+                return h.find(".cmp-image__image[alt]").size() === 0 && h.find(".cmp-image__link").size() === 0;
             });
     };
 

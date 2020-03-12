@@ -13,8 +13,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<section class="cmp-search" role="search"
-         data-sly-use.search="com.adobe.cq.wcm.core.components.models.Search"
+<section data-sly-use.search="com.adobe.cq.wcm.core.components.models.Search"
+         data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
+         id="${component.id}"
+         class="cmp-search"
+         role="search"
          data-cmp-is="search"
          data-cmp-min-length="${search.searchTermMinimumLength}"
          data-cmp-results-size="${search.resultsSize}">

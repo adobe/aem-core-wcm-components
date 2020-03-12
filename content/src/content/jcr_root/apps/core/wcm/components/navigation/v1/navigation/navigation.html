@@ -13,14 +13,16 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<nav class="cmp-navigation"
-     role="navigation"
-     itemscope itemtype="http://schema.org/SiteNavigationElement"
+<nav data-sly-use.navigation="com.adobe.cq.wcm.core.components.models.Navigation"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
-     data-sly-use.navigation="com.adobe.cq.wcm.core.components.models.Navigation"
-     data-sly-test.hasContent="${navigation.items.size > 0}"
      data-sly-use.groupTemplate="group.html"
      data-sly-call="${groupTemplate.group @ items=navigation.items}"
+     data-sly-test.hasContent="${navigation.items.size > 0}"
+     id="${component.id}"
+     class="cmp-navigation"
+     role="navigation"
+     itemscope itemtype="http://schema.org/SiteNavigationElement"
      aria-label="${navigation.accessibilityLabel}">
 </nav>
 <sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-navigation'}"></sly>

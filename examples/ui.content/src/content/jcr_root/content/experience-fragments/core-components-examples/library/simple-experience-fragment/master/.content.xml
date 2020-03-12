@@ -21,7 +21,7 @@
                 jcr:lastModified="{Date}2019-07-17T15:17:32.534+02:00"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="core/wcm/components/text/v1/text"
+                sling:resourceType="core/wcm/components/text/v2/text"
                 text="&lt;p>Lava forming some rock.&lt;/p>&#xd;&#xa;"
                 textIsRich="true"/>
             <image
@@ -30,7 +30,7 @@
                 jcr:lastModified="{Date}2019-07-17T15:18:21.810+02:00"
                 jcr:lastModifiedBy="admin"
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="core/wcm/components/image/v2/image"
+                sling:resourceType="core-components-examples/components/image"
                 altValueFromDAM="true"
                 displayPopupTitle="true"
                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"

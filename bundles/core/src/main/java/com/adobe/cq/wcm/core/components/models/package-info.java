@@ -34,7 +34,7 @@
  *      version, is bound to this proxy component resource type.
  * </p>
  */
-@Version("12.12.0")
+@Version("12.14.0")
 package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.Version;

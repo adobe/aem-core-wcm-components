@@ -14,6 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.image="com.adobe.cq.wcm.core.components.models.Image"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
      data-sly-test="${image.src}"
      data-cmp-is="image"
@@ -23,6 +24,7 @@
      data-asset="${image.fileReference}"
      data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
+     id="${component.id}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
     <a data-sly-unwrap="${!image.link}"
@@ -32,7 +34,7 @@
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
             <img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
                  data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-                 alt="${image.alt || true}" title="${image.displayPopupTitle && image.title}"/>
+                 alt="${image.alt}" title="${image.displayPopupTitle && image.title}"/>
             <map data-sly-test="${image.areas}"
                  data-sly-list.area="${image.areas}"
                  name="${resource.path}"
