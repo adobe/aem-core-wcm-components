@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function () {
     "use strict";
 
     var dataLayer = window.dataLayer = window.dataLayer || [];
@@ -33,7 +33,7 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]'
     };
 
     var cssClasses = {
@@ -64,7 +64,7 @@
          */
         "singleExpansion": {
             "default": false,
-            "transform": function(value) {
+            "transform": function (value) {
                 return !(value === null || typeof value === "undefined");
             }
         }
@@ -133,7 +133,7 @@
                      * - check that the message data panel container type is correct and that the id (path) matches this specific Accordion component
                      * - if so, route the "navigate" operation to enact a navigation of the Accordion based on index data
                      */
-                    new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                    new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function (message) {
                         if (message.data && message.data.type === "cmp-accordion" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                             if (message.data.operation === "navigate") {
                                 // switch to single expansion mode when navigating in edit mode.
@@ -222,12 +222,12 @@
             var buttons = that._elements["button"];
             if (buttons) {
                 for (var i = 0; i < buttons.length; i++) {
-                    (function(index) {
-                        buttons[i].addEventListener("click", function(event) {
+                    (function (index) {
+                        buttons[i].addEventListener("click", function (event) {
                             toggle(index);
                             focusButton(index);
                         });
-                        buttons[i].addEventListener("keydown", function(event) {
+                        buttons[i].addEventListener("keydown", function (event) {
                             onButtonKeyDown(event, index);
                         });
                     })(i);
@@ -316,13 +316,13 @@
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
                 dataLayer.push({
-                    event: 'accordionItem:expanded',
+                    event: 'accordionItem:show',
                     info: JSON.parse(item.dataset.cmpDataLayer)
                 })
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
                 dataLayer.push({
-                    event: 'accordionItem:collapsed',
+                    event: 'accordionItem:hide',
                     info: JSON.parse(item.dataset.cmpDataLayer)
                 })
             }
@@ -490,15 +490,15 @@
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         var body = document.querySelector("body");
-        var observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function(addedNode) {
+                    nodesArray.forEach(function (addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function(element) {
+                            elementsArray.forEach(function (element) {
                                 new Accordion({ element: element, options: readData(element) });
                             });
                         }

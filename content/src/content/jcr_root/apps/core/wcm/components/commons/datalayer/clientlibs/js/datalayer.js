@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function () {
     "use strict";
 
     var dataLayer = window.dataLayer = window.dataLayer || [];
@@ -32,11 +32,24 @@
 
     function getComponentObject(element) {
         var component = {};
+        var parentData;
         var elementData = getComponentData(element);
-        var parentElement = element.parentNode.closest('[data-cmp-data-layer]');
+        var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
+
         if (parentElement) {
-            var parentData = getComponentData(parentElement);
-            elementData.parentId = parentData.id;
+
+            if (parentElement.tagName === "BODY") {
+                parentData = dataLayer.find(function (element) {
+                    return element.data !== undefined && element.data.page !== undefined;
+                });
+
+                if (parentData !== undefined) {
+                    elementData.parentId = parentData.data.page.id;
+                }
+            } else {
+                parentData = getComponentData(parentElement);
+                elementData.parentId = parentData.id;
+            }
         }
         component[elementData.id] = elementData;
         return component;
@@ -47,7 +60,7 @@
         var elementData = getClickData(element);
 
         dataLayer.push({
-            event: elementData.type+':clicked',
+            event: elementData.type + ":clicked",
             info: elementData
         });
     }
@@ -58,11 +71,11 @@
     }
 
     function getClickData(element) {
-        if(element.dataset.cmpDataLayer) {
+        if (element.dataset.cmpDataLayer) {
             return JSON.parse(element.dataset.cmpDataLayer);
         }
 
-        var componentElement = element.closest('[data-cmp-data-layer]');
+        var componentElement = element.closest("[data-cmp-data-layer]");
 
         return JSON.parse(componentElement.dataset.cmpDataLayer);
     }
@@ -72,16 +85,16 @@
         var clickableElements = document.querySelectorAll("[data-cmp-clickable]");
 
         components.forEach(function (component) {
-            addComponentToDataLayer(component)
+            addComponentToDataLayer(component);
         });
 
         clickableElements.forEach(function (element) {
-            attachClickEventListener(element)
+            attachClickEventListener(element);
         });
 
         dataLayer.push({
             event: "components:loaded"
-        })
+        });
     }
 
     if (document.readyState !== "loading") {
