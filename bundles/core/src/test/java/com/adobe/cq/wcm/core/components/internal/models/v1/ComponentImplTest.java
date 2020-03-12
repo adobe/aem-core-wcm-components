@@ -53,13 +53,13 @@ public class ComponentImplTest {
     @Test
     public void testComponentId() {
         Component component = getComponentUnderTest(XF_COMPONENT_1);
-        Assert.assertEquals("ID mismatch", "experiencefragment-77cae01492", component.getId());
+        Assert.assertEquals("ID mismatch", "experiencefragment-4d2d8fd496", component.getId());
     }
 
     @Test
     public void testReferencedComponentId() {
         Component component = getReferencedComponentUnderTest(XF_COMPONENT_1, TEST_PAGE_EN, XF_COMPONENT_10);
-        Assert.assertEquals("ID mismatch", "experiencefragment-5fba9a0f26", component.getId());
+        Assert.assertEquals("ID mismatch", "experiencefragment-789e0d5de3", component.getId());
     }
 
     private Component getComponentUnderTest(String resourcePath, Object ... properties) {
