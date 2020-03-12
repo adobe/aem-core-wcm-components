@@ -1,14 +1,12 @@
 {
-    "id": "accordion-dbb1cb7797",
-    "singleExpansion": false,
-    "expandedItems": [
-        "item_2"
-    ],
+    "id": "tabs-bd3cb85fb2",
+    "activeItem": "item_1",
+    "tabsId": "-root-responsivegrid-tabs-3",
     ":itemsOrder": [
         "item_1",
         "item_2"
     ],
-    ":type": "core/wcm/components/accordion/v1/accordion",
+    ":type": "core/wcm/components/tabs/v1/tabs",
     ":items": {
         "item_1": {
             ":itemsOrder": [
@@ -36,7 +34,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            "cq:panelTitle": "Accordion Item 1"
+            "cq:panelTitle": "Tab 1"
         },
         "item_2": {
             ":itemsOrder": [
@@ -64,7 +62,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            "cq:panelTitle": "Accordion Panel 2"
+            "cq:panelTitle": "Tab Panel 2"
         }
     }
 }

@@ -1,5 +1,5 @@
 {
-    "id": "tabs-7e84106a6a",
+    "id": "tabs-673620f4d1",
     "activeItem": "item_2",
     ":itemsOrder": [
         "item_1",
@@ -18,7 +18,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
-                    "id": "tabs-e14a27b1c3",
+                    "id": "tabs-c2dc9e45de",
                     "activeItem": "item_1_2_2",
                     ":itemsOrder": [
                         "item_1_2_1",
@@ -65,7 +65,7 @@
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
-                                    "id": "carousel-b2fb964605",
+                                    "id": "carousel-21953a9100",
                                     "autoplay": false,
                                     "delay": 5000,
                                     "autopauseDisabled": false,
