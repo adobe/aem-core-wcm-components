@@ -15,21 +15,22 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
-import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Calendar;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PageListItemImpl implements ListItem {
 
