@@ -15,26 +15,26 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Calendar;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Calendar;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class PageListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
+    private static final String PROPERTY_DISABLE_SHADOWING = "disableShadowing";
 
     protected SlingHttpServletRequest request;
     protected Page page;
@@ -43,7 +43,7 @@ public class PageListItemImpl implements ListItem {
         this.request = request;
         this.page = page;
         Page redirectTarget = getRedirectTarget(page);
-        if (redirectTarget != null && !redirectTarget.equals(page)) {
+        if (isShadowingEnabled(request) && redirectTarget != null && !redirectTarget.equals(page)) {
             this.page = redirectTarget;
         }
     }
@@ -107,4 +107,7 @@ public class PageListItemImpl implements ListItem {
         return result;
     }
 
+    private boolean isShadowingEnabled(@NotNull SlingHttpServletRequest request) {
+        return !request.getResource().getValueMap().get(PROPERTY_DISABLE_SHADOWING, false);
+    }
 }
