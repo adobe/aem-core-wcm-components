@@ -5,6 +5,20 @@
     jcr:uuid="474dca75-919c-496e-9afb-c0cba9d35c30">
     <jcr:content
         dam:assetState="processed"
+<<<<<<< HEAD
+        jcr:lastModified="{Date}2019-12-19T17:36:30.363+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2019-12-19T17:36:30.246+01:00"
+            dam:sha1="1be187ed7c94c16bb5d99952553de8c387ff1897"
+            dam:size="{Long}3726"
+            dc:format="image/svg+xml"
+            dc:modified="{Date}2019-05-29T13:19:08.710+02:00"
+            dc:title="Accordion"
+            jcr:lastModified="{Date}2019-12-19T17:36:28.889+01:00"
+            jcr:lastModifiedBy="admin"
+=======
         jcr:lastModified="{Date}2020-01-14T15:22:40.655+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
@@ -13,6 +27,7 @@
             dam:sha1="3a8e3c224643762372d6fc05f6e9c345fe920a9c"
             dam:size="{Long}2402"
             dc:format="image/svg+xml"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
