@@ -111,7 +111,7 @@
 
                 // Expand the item based on deep-link-id if it matches with any existing accordion item id
                 var deepLinkIdIndex = -1;
-                if (config.deepLinkId && config.deepLinkId.substring("-panel-") !== -1) {
+                if (config.deepLinkId && config.deepLinkId.substring("-item-item") !== -1) {
                     for (var i = 0; i < that._elements["item"].length; i++) {
                         var item = that._elements["item"][i];
                         if (item.id === config.deepLinkId) {
