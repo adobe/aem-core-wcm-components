@@ -64,6 +64,7 @@
                             <filter>true</filter>
                         </subPackage>
                     </subPackages>
+                    <packageType>container</packageType>
                 </configuration>
             </plugin>
             <plugin>

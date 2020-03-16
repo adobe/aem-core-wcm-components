@@ -6,5 +6,4 @@
     jcr:title="Core Components Tests"
     sling:resourceType="cq/tagging/components/tag">
     <component-type/>
-    <rep:policy/>
 </jcr:root>
