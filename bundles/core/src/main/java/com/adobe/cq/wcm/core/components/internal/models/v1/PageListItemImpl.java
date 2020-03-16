@@ -35,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class PageListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
-    private static final String PROPERTY_DISABLE_SHADOWING = "disableShadowing";
 
     protected SlingHttpServletRequest request;
     protected Page page;
@@ -44,7 +43,7 @@ public class PageListItemImpl implements ListItem {
         this.request = request;
         this.page = page;
         Page redirectTarget = getRedirectTarget(page);
-        if (isShadowingEnabled(request) && redirectTarget != null && !redirectTarget.equals(page)) {
+        if (redirectTarget != null && !redirectTarget.equals(page)) {
             this.page = redirectTarget;
         }
     }
@@ -106,9 +105,5 @@ public class PageListItemImpl implements ListItem {
             }
         }
         return result;
-    }
-
-    private boolean isShadowingEnabled(@NotNull SlingHttpServletRequest request) {
-        return !request.getResource().getValueMap().get(PROPERTY_DISABLE_SHADOWING, false);
     }
 }

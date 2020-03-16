@@ -48,6 +48,7 @@ public class BreadcrumbImpl implements Breadcrumb {
     protected static final boolean PROP_SHOW_HIDDEN_DEFAULT = false;
     protected static final boolean PROP_HIDE_CURRENT_DEFAULT = false;
     protected static final int PROP_START_LEVEL_DEFAULT = 2;
+    private static final boolean PROP_DISABLE_SHADOWING = false;
 
     @ScriptVariable
     private ValueMap properties;
@@ -64,6 +65,7 @@ public class BreadcrumbImpl implements Breadcrumb {
     private boolean showHidden;
     private boolean hideCurrent;
     private int startLevel;
+    private boolean isShadowingDisabled;
     private List<NavigationItem> items;
 
     @PostConstruct
@@ -71,6 +73,8 @@ public class BreadcrumbImpl implements Breadcrumb {
         startLevel = properties.get(PN_START_LEVEL, currentStyle.get(PN_START_LEVEL, PROP_START_LEVEL_DEFAULT));
         showHidden = properties.get(PN_SHOW_HIDDEN, currentStyle.get(PN_SHOW_HIDDEN, PROP_SHOW_HIDDEN_DEFAULT));
         hideCurrent = properties.get(PN_HIDE_CURRENT, currentStyle.get(PN_HIDE_CURRENT, PROP_HIDE_CURRENT_DEFAULT));
+        isShadowingDisabled = properties.get(PN_DISABLE_SHADOWING,
+            currentStyle.get(PN_DISABLE_SHADOWING, PROP_DISABLE_SHADOWING));
     }
 
     @Override
@@ -98,7 +102,8 @@ public class BreadcrumbImpl implements Breadcrumb {
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList());
+                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel,
+                        Collections.emptyList(), isShadowingDisabled);
                     items.add(navigationItem);
                 }
             }

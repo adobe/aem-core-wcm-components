@@ -58,6 +58,7 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 public class NavigationImpl implements Navigation {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
+    private static final boolean PROP_DISABLE_SHADOWING = false;
 
     @Self
     private SlingHttpServletRequest request;
@@ -87,6 +88,7 @@ public class NavigationImpl implements Navigation {
     private String navigationRootPage;
     private List<NavigationItem> items;
     private boolean skipNavigationRoot;
+    private boolean isShadowingDisabled;
     private int structureStart;
 
     @PostConstruct
@@ -108,6 +110,8 @@ public class NavigationImpl implements Navigation {
                 structureStart = 0;
             }
         }
+        isShadowingDisabled = properties.get(PN_DISABLE_SHADOWING,
+            currentStyle.get(PN_DISABLE_SHADOWING, PROP_DISABLE_SHADOWING));
     }
 
     @Override
@@ -185,7 +189,7 @@ public class NavigationImpl implements Navigation {
                 if (structureStart == 0) {
                     level = level + 1;
                 }
-                pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
+                pages.add(new NavigationItemImpl(page, isSelected, request, level, children, isShadowingDisabled));
             }
         }
         return pages;
@@ -200,7 +204,8 @@ public class NavigationImpl implements Navigation {
         }
         if (structureStart == 0) {
             boolean isSelected = checkSelected(navigationRoot.page);
-            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree);
+            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree,
+                isShadowingDisabled);
             itemTree = new ArrayList<>();
             itemTree.add(root);
         }
