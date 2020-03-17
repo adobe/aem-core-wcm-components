@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal;
 import com.adobe.cq.wcm.core.components.models.DataLayerProvider;
 import com.day.cq.dam.api.Asset;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,7 +34,7 @@ public class DataLayerFactory {
         data.put("path", invoke(provider, "getDataLayerPath"));
         data.put("title", invoke(provider, "getDataLayerTitle"));
         data.put("template", invoke(provider, "getDataLayerTemplate"));
-//        data.put("src", invoke(provider, "getDataLayerSrc"));
+        // data.put("src", invoke(provider, "getDataLayerSrc"));
         data.put("text", invoke(provider, "getDataLayerText"));
         data.put("tags", invoke(provider, "getDataLayerTags"));
         data.put("asset", getAssetMetadata(provider));
@@ -49,7 +50,8 @@ public class DataLayerFactory {
         try {
             Method providerMethod = provider.getClass().getMethod(method);
             return providerMethod.invoke(provider);
-        } catch (UnsupportedOperationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (UnsupportedOperationException | NoSuchMethodException | IllegalAccessException
+                | InvocationTargetException e) {
             return null;
         }
     }
@@ -70,8 +72,8 @@ public class DataLayerFactory {
                 assetMetadata.put("name", asset.getName());
                 assetMetadata.put("path", asset.getPath());
                 assetMetadata.put("type", asset.getMimeType());
-                assetMetadata.put("url", "https://"); // aboslute URL
                 assetMetadata.put("tags", getAssetTags(asset));
+                assetMetadata.put("modifyDate", getAssetLastModifiedDate(asset, assetResource));
                 assetMetadataObject = assetMetadata.getMap();
             }
         }
@@ -81,13 +83,28 @@ public class DataLayerFactory {
     static private Map<String, Object> getAssetTags(Asset asset) {
         MapWrapper assetTags = new MapWrapper();
         String tagsValue = asset.getMetadataValueFromJcr("cq:tags");
-        if (tagsValue != null) {
+        if (tagsValue != null && !tagsValue.equals("")) {
             String[] tags = tagsValue.split(",");
             for (String tag : tags) {
                 assetTags.put(tag, 1);
             }
         }
         return assetTags.getMap();
+    }
+
+    static private String getAssetLastModifiedDate(Asset asset, Resource assetResource) {
+        long assetLastModification = asset.getLastModified();
+        Calendar created = null;
+        if (assetLastModification == 0) {
+            ValueMap resourceMap = assetResource.adaptTo(ValueMap.class);
+            if (resourceMap != null) {
+                created = resourceMap.get("jcr:created", Calendar.class);
+            }
+
+            assetLastModification = (null != created) ? created.getTimeInMillis() : 0;
+        }
+
+        return new Date(assetLastModification).toInstant().toString();
     }
 
     static private ArrayList<Object> getExpandedItems(DataLayerProvider provider) {
@@ -118,7 +135,7 @@ public class DataLayerFactory {
         }
 
         void put(String propName, Object propValue) {
-            if ((propValue instanceof Integer && (Integer) propValue >= 0) || propValue != null)  {
+            if ((propValue instanceof Integer && (Integer) propValue >= 0) || propValue != null) {
                 map.put(propName, propValue);
             }
         }
