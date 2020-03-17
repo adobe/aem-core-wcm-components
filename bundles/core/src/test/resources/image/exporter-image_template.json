@@ -12,13 +12,11 @@
         "type": "image",
         "asset": {
             "path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+            "modifyDate": "2017-03-20T10:20:39Z",
             "name": "Adobe_Systems_logo_and_wordmark.png",
             "id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
             "type": "image/png",
-            "url": "https://",
-            "tags": {
-                "": 1
-            }
+            "tags": {}
         }
     },
     ":type": "core/wcm/components/image"

@@ -7,13 +7,11 @@
         "type": "image",
         "asset": {
             "path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.tiff",
+            "modifyDate": "2017-07-17T13:59:49Z",
             "name": "Adobe_Systems_logo_and_wordmark.tiff",
             "id": "ef64bc65-fb1b-4c31-9582-c177001eba0d",
             "type": "image/tiff",
-            "url": "https://",
-            "tags": {
-                "": 1
-            }
+            "tags": {}
         }
     },
     ":type": "core/wcm/components/image/v1/image"
