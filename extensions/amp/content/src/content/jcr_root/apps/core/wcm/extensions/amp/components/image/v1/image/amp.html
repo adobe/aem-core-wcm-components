@@ -37,7 +37,9 @@
         <amp-img src="${image.src}" class="cmp-image__image" itemprop="contentUrl" data-cmp-hook-image="image"
           alt="${image.alt || true}"
           data-sly-attribute.usemap="${image.areas ? usemap : ''}"
-          layout="fill"
+          layout="responsive"
+          width="300"
+          height="200"
           title="${image.displayPopupTitle && image.title}"/>
       </div>                  
 
