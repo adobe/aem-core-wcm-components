@@ -209,13 +209,23 @@
         function bindEvents() {
             if (that._elements["previous"]) {
                 that._elements["previous"].addEventListener("click", function() {
-                    navigate(getPreviousIndex());
+                    var index = getPreviousIndex();
+                    navigate(index);
+                    dataLayer.push({
+                        event: "carouselItem:navigated",
+                        info: JSON.parse(that._elements.item[index].dataset.cmpDataLayer)
+                    });
                 });
             }
 
             if (that._elements["next"]) {
                 that._elements["next"].addEventListener("click", function() {
-                    navigate(getNextIndex());
+                    var index = getNextIndex();
+                    navigate(index);
+                    dataLayer.push({
+                        event: "carouselItem:navigated",
+                        info: JSON.parse(that._elements.item[index].dataset.cmpDataLayer)
+                    });
                 });
             }
 
@@ -488,7 +498,7 @@
             focusWithoutScroll(that._elements["indicator"][index]);
 
             dataLayer.push({
-                event: 'carouselItem:navigated',
+                event: "carouselItem:navigated",
                 info: JSON.parse(that._elements.item[index].dataset.cmpDataLayer)
             });
         }
