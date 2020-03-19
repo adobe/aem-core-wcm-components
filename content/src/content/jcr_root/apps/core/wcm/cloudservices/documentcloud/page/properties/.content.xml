@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Document Cloud Configuration"
+        sling:resourceType="granite/ui/components/shell/propertiespage"
+        maximized="{Boolean}true">
+        <title
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="cq/gui/components/siteadmin/admin/properties/title"
+            path="${requestPathInfo.suffix}"/>
+        <head jcr:primaryType="nt:unstructured">
+            <clientlibs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/includeclientlibs"
+                categories="[coralui3,cq.siteadmin.common,granite.ui.coral.foundation]"/>
+        </head>
+        <editcondition
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/renderconditions/simple"
+            expression="{Boolean}false"/>
+        <content
+            granite:class="properties-container"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/form"
+            dataPath="${requestPathInfo.suffix}"
+            margin="{Boolean}true"
+            maximized="{Boolean}true"
+            style="aligned">
+            <items jcr:primaryType="nt:unstructured">
+                <clientId
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                    disabled="{Boolean}true"
+                    fieldLabel="Client Id"
+                    name="./clientId"/>
+            </items>
+        </content>
+    </jcr:content>
+</jcr:root>

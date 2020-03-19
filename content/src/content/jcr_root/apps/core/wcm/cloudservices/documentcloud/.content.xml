@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <clientlib/>
+    <meta/>
+    <page/>
+    <properties/>
+    <template/>
+    <views/>
+    <recaptcha.png/>
+    <createcloudconfigwizard/>
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        jcr:title="AEM | Document Cloud Configurations"
+        sling:resourceType="granite/ui/components/shell/collectionpage"
+        consoleId="cq-document-cloud-configurations"
+        contentPath="${requestPathInfo.suffix}"
+        currentView="${state[&quot;document-cloudconfig.shell.collectionpage.layoutId&quot;].string}"
+        modeGroup="cq-confadmin-admin-childpages"
+        pageURITemplate="/mnt/overlay/core/wcm/cloudservices/documentcloud.html{+id}"
+        targetCollection=".cq-confadmin-admin-childpages">
+        <redirector
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/admin/contentchecker"
+            allowed="^(/conf|/conf/(.*))$"
+            path="${requestPathInfo.suffix}"
+            redirectWhenEmpty="/mnt/overlay/core/wcm/cloudservices/documentcloud.html/conf"/>
+        <head jcr:primaryType="nt:unstructured">
+            <clientlibs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/foundation/includeclientlibs"
+                categories="[cq.common.wcm]"/>
+        </head>
+        <views jcr:primaryType="nt:unstructured">
+            <column
+                granite:rel="cq-confadmin-admin-childpages"
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Column View"
+                sling:resourceType="granite/ui/components/coral/foundation/columnview"
+                icon="viewColumn"
+                limit="{Long}40"
+                loadAncestors="{Boolean}true"
+                metaResourceType="core/wcm/cloudservices/documentcloud/meta"
+                modeGroup="cq-confadmin-admin-childpages"
+                path="${empty requestPathInfo.suffix ? &quot;/conf&quot; : requestPathInfo.suffix}"
+                previewSrc="/mnt/overlay/core/wcm/cloudservices/documentcloud/createcloudconfigwizard/commons/columnpreview.html{+id}"
+                rootPath="/conf"
+                selectionCount="single"
+                size="${empty requestPathInfo.selectors[1] ? &quot;40&quot; : requestPathInfo.selectors[1]}"
+                src="/mnt/overlay/core/wcm/cloudservices/documentcloud/jcr:content/views/column{.offset,limit}.html{+id}">
+                <granite:data
+                    jcr:primaryType="nt:unstructured"
+                    allowedResourceTypes="[core/wcm/cloudservices/documentcloud/page]"
+                    group="documentcloud"/>
+                <datasource
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="cq/cloudconfig/components/admin/datasources/configurations"
+                    itemResourceType="core/wcm/cloudservices/documentcloud/views/column"
+                    limit="${empty requestPathInfo.selectors[1] ? &quot;41&quot; : requestPathInfo.selectors[1] + 1}"
+                    offset="${requestPathInfo.selectors[0]}"
+                    path="${requestPathInfo.suffix}"/>
+            </column>
+            <card
+                granite:rel="cq-confadmin-admin-childpages"
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Card View"
+                sling:resourceType="granite/ui/components/coral/foundation/masonry"
+                icon="viewCard"
+                layoutId="card"
+                limit="{Long}20"
+                metaResourceType="core/wcm/cloudservices/documentcloud/meta"
+                modeGroup="cq-confadmin-admin-childpages"
+                path="${requestPathInfo.suffix}"
+                selectionCount="single"
+                selectionMode="${state[&quot;documentcloud-cloudconfig.shell.collectionpage.selectionMode&quot;].boolean}"
+                size="${empty requestPathInfo.selectors[1] ? &quot;20&quot; : requestPathInfo.selectors[1]}"
+                src="/mnt/overlay/core/wcm/cloudservices/documentcloud/jcr:content/views/card{.offset,limit}.html{+id}"
+                stateId="documentcloud-cloudconfig.shell.collectionpage">
+                <granite:data
+                    jcr:primaryType="nt:unstructured"
+                    allowedResourceTypes="[core/wcm/cloudservices/documentcloud/page]"
+                    group="documentcloud"/>
+                <datasource
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="cq/cloudconfig/components/admin/datasources/configurations"
+                    itemResourceType="core/wcm/cloudservices/documentcloud/views/card"/>
+            </card>
+            <list
+                granite:rel="cq-confadmin-admin-childpages"
+                jcr:primaryType="nt:unstructured"
+                jcr:title="List View"
+                sling:resourceType="granite/ui/components/coral/foundation/table"
+                icon="viewList"
+                layoutId="list"
+                limit="{Long}40"
+                metaResourceType="core/wcm/cloudservices/documentcloud/meta"
+                modeGroup="cq-confadmin-admin-childpages"
+                path="${requestPathInfo.suffix}"
+                selectionCount="single"
+                selectionMode="row"
+                size="${empty requestPathInfo.selectors[1] ? &quot;40&quot; : requestPathInfo.selectors[1]}"
+                sortMode="remote"
+                src="/mnt/overlay/core/wcm/cloudservices/documentcloud/jcr:content/views/list{.offset,limit}.html{+id}{?sortName,sortDir}"
+                stateId="recaptcha-cloudconfig.shell.collectionpage">
+                <granite:data
+                    jcr:primaryType="nt:unstructured"
+                    allowedResourceTypes="[core/wcm/cloudservices/documentcloud/page]"
+                    group="documentcloud"/>
+                <columns jcr:primaryType="nt:unstructured">
+                    <select
+                        jcr:primaryType="nt:unstructured"
+                        select="{Boolean}true"/>
+                    <title
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Title"
+                        sortable="{Boolean}true"/>
+                    <modified
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Modified"
+                        sortable="{Boolean}true"
+                        sortType="date"/>
+                </columns>
+                <datasource
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="cq/cloudconfig/components/admin/datasources/configurations"
+                    itemResourceType="core/wcm/cloudservices/documentcloud/views/row"/>
+            </list>
+        </views>
+        <breadcrumbs
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="cq/cloudconfig/components/admin/datasources/breadcrumbs"
+            rootPath="/conf"
+            rootTitle="Configurations"/>
+        <actions jcr:primaryType="nt:unstructured">
+            <primary jcr:primaryType="nt:unstructured"/>
+            <secondary jcr:primaryType="nt:unstructured">
+                <create
+                    granite:class="cq-confadmin-actions-createconfig-activator"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/collection/action"
+                    action="foundation.link"
+                    relScope="collection"
+                    target=".cq-confadmin-admin-childpages"
+                    text="Create"
+                    variant="primary">
+                    <data
+                        jcr:primaryType="nt:unstructured"
+                        href.uritemplate="/mnt/overlay/core/wcm/cloudservices/documentcloud/createcloudconfigwizard/cloudservices.html{+id}"/>
+                </create>
+            </secondary>
+            <selection jcr:primaryType="nt:unstructured">
+                <viewproperties
+                    granite:class="cq-confadmin-actions-properties-activator"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/collection/action"
+                    action="foundation.link"
+                    icon="infoCircle"
+                    target=".cq-confadmin-admin-childpages"
+                    text="Properties"
+                    variant="actionBar">
+                    <data
+                        jcr:primaryType="nt:unstructured"
+                        href.uritemplate="/mnt/overlay/core/wcm/cloudservices/documentcloud/properties.html{?item*}"/>
+                </viewproperties>
+            </selection>
+        </actions>
+    </jcr:content>
+</jcr:root>

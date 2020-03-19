@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Create Documentcloud Configuration"
+        sling:resourceType="cq/gui/components/siteadmin/admin/createpagewizard/page">
+        <head jcr:primaryType="nt:unstructured">
+            <viewport
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/admin/page/viewport"/>
+            <favicon
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/page/favicon"/>
+            <clientlibs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/includeclientlibs"
+                categories="[coralui3,cq.siteadmin.common,granite.ui.coral.foundation,cq.widgets,core.wcm.cloudservices.documentcloud]"/>
+        </head>
+        <body
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/page/body">
+            <items jcr:primaryType="nt:unstructured">
+                <form
+                    granite:class="cq-confadmin-create-documentcloud-config-item"
+                    granite:comment="We set &quot;novalidate&quot; = true as the wizard is doing validation already, to avoid double validation"
+                    granite:id="documentcloud-cloudconfig-form"
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/form"
+                    action="${requestPathInfo.suffix}"
+                    autosubmitForm="{Boolean}false"
+                    foundationForm="{Boolean}true"
+                    maximized="{Boolean}true"
+                    method="post"
+                    novalidate="{Boolean}true"
+                    style="vertical">
+                    <items jcr:primaryType="nt:unstructured">
+                        <charset
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            name="_charset_"
+                            value="utf-8"/>
+                        <template
+                            granite:id="documentcloud-cloudconfiguration-template"
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            name="./cq:template"
+                            value="/mnt/overlay/core/wcm/cloudservices/documentcloud/template"/>
+                        <resourceType
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            name="./sling:resourceType"
+                            value="core/wcm/cloudservices/documentcloud/page"/>
+                        <jcrcontent
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            name="./jcr:primaryType"
+                            value="cq:PageContent"/>
+                        <nodetype
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            ignoreData="{Boolean}true"
+                            name="../jcr:primaryType"
+                            value="cq:Page"/>
+                        <wizard
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Create Documentcloud Configuration"
+                            sling:resourceType="granite/ui/components/coral/foundation/wizard"
+                            cancelHref="${empty header.Referer ? granite:url(granite:concat(&quot;/mnt/overlay/core/wcm/cloudservices/documentcloud.html&quot;, granite:encodeURIPath(requestPathInfo.suffix))) : header.Referer}">
+                            <items jcr:primaryType="nt:unstructured">
+                                <general
+                                    granite:class="general"
+                                    jcr:primaryType="nt:unstructured"
+                                    jcr:title="General"
+                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                    maximized="{Boolean}true">
+                                    <items jcr:primaryType="nt:unstructured">
+                                        <fixedcolumns
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                            maximized="{Boolean}true">
+                                            <items jcr:primaryType="nt:unstructured">
+                                                <container
+                                                    granite:class="properties"
+                                                    jcr:primaryType="nt:unstructured"
+                                                    sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                    <items jcr:primaryType="nt:unstructured">
+                                                        <general
+                                                            jcr:primaryType="nt:unstructured"
+                                                            sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                                            <items jcr:primaryType="nt:unstructured">
+                                                                <title
+                                                                    granite:id="documentcloud-cloudconfiguration-title"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                    fieldLabel="Title"
+                                                                    name="./jcr:title"/>
+                                                                <name
+                                                                    granite:id="documentcloud-cloudconfiguration-name"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                    fieldLabel="Name"
+                                                                    name="./name"
+                                                                    required="{Boolean}true"
+                                                                    validation="[foundation.jcr.name ,documentcloud.cloud.config]"/>
+                                                                <clientId
+                                                                    granite:id="recaptcha-cloudconfiguration-site-key"
+                                                                    jcr:primaryType="nt:unstructured"
+                                                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                                    fieldLabel="Client Id"
+                                                                    name="./clientId"
+                                                                    required="{Boolean}true"
+                                                                    validation="documentcloud.cloud.config"/>
+                                                            </items>
+                                                        </general>
+                                                    </items>
+                                                </container>
+                                            </items>
+                                        </fixedcolumns>
+                                    </items>
+                                    <parentConfig jcr:primaryType="nt:unstructured">
+                                        <next
+                                            granite:class="foundation-wizard-control"
+                                            granite:id="documentcloud-cloudconfig-form-create-button"
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/button"
+                                            disabled="{Boolean}true"
+                                            text="Create"
+                                            type="submit"
+                                            variant="primary">
+                                            <granite:data
+                                                jcr:primaryType="nt:unstructured"
+                                                foundation-wizard-control-action="next"
+                                                foundation-wizard-step-validation="{Boolean}true"/>
+                                        </next>
+                                    </parentConfig>
+                                </general>
+                            </items>
+                        </wizard>
+                        <commondialog
+                            granite:id="recaptcha-common-dialog"
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Error"
+                            sling:resourceType="granite/ui/components/coral/foundation/dialog"
+                            closable="{Boolean}true"
+                            variant="error">
+                            <items jcr:primaryType="nt:unstructured">
+                                <existmessage
+                                    granite:hidden="{Boolean}true"
+                                    granite:id="documentcloud-cloudconfiguration-already-exist-message"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/text"
+                                    text="Configuration with same name already exist."/>
+                                <errormessage
+                                    granite:hidden="{Boolean}true"
+                                    granite:id="documentcloud-cloudconfiguration-error-message"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/text"
+                                    text=""/>
+                            </items>
+                            <footer jcr:primaryType="nt:unstructured">
+                                <ok
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/button"
+                                    text="Ok">
+                                    <parentConfig
+                                        jcr:primaryType="nt:unstructured"
+                                        close="{Boolean}true"/>
+                                </ok>
+                            </footer>
+                        </commondialog>
+                        <lastmodified
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            name="./jcr:lastModified"/>
+                        <lastmodifiedby
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            name="./jcr:lastModifiedBy"/>
+                        <groupnametype
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            name="../../jcr:primaryType"
+                            value="sling:Folder"/>
+                        <documentcloudfoldermergelist
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            ignoreData="{Boolean}true"
+                            name="../../mergeList"
+                            value="true"/>
+                        <documentcloudfoldermergelisttype
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                            ignoreData="{Boolean}true"
+                            name="../../mergeList@TypeHint"
+                            value="Boolean"/>
+                    </items>
+                </form>
+            </items>
+        </body>
+    </jcr:content>
+</jcr:root>

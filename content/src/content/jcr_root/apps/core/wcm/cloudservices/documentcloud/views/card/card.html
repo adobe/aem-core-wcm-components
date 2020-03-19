@@ -1,0 +1,56 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2020 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly data-sly-use.configuration="com.adobe.forms.foundation.cloudconfig.IConfMeta">
+
+<!--/* folder */-->
+<coral-card data-sly-test="${resource['jcr:primaryType'] != 'cq:Page'}"
+     class="foundation-collection-navigator" variant="inverted"
+     data-foundation-collection-item-id="${resource.path}">
+    <coral-card-content>
+        <coral-card-context data-sly-test="${resource['jcr:primaryType'] != 'cq:Page'}" class="coral-Card-context">${'Folder' @ i18n, locale=request.locale}</coral-card-context>
+        <coral-card-title class="foundation-collection-item-title">${configuration.title}</coral-card-title>
+    </coral-card-content>
+    <meta class="foundation-collection-quickactions" data-foundation-collection-quickactions-rel="${configuration.quickactionsRels.isEmpty ? 'none' : configuration.quickactionsRels @join=' '}">
+</coral-card>
+
+
+<!--/* configuration */-->
+<coral-card data-sly-test="${resource['jcr:primaryType'] == 'cq:Page'}"
+            data-foundation-collection-item-id="${resource.path}">
+    <coral-card-asset>
+        <img src="/mnt/overlay/core/wcm/cloudservices/documentcloud/documentcloud.png">
+    </coral-card-asset>
+    <coral-card-info></coral-card-info>
+    <coral-card-content>
+        <coral-card-context class="coral-Card-context">${'Document Cloud Configuration Setting' @ i18n, locale=request.locale}</coral-card-context>
+        <coral-card-title class="foundation-collection-item-title">${configuration.title}</coral-card-title>
+        <coral-card-propertylist>
+            <coral-card-property data-sly-test="${configuration.lastModifiedDate}" icon="edit" title="${'Modified' @ i18n, locale=request.locale}">
+                <time data-sly-use.modified="${'com.adobe.cq.cloudconfig.ui.commons.DateFormatter' @ date=configuration.lastModifiedDate, relativeFormat='r'}"
+                      datetime="${configuration.lastModifiedDate.timeInMillis}">
+                    ${modified.date}
+                </time>
+            </coral-card-property>
+        </coral-card-propertylist>
+    </coral-card-content>
+    <meta class="foundation-collection-quickactions" data-foundation-collection-quickactions-rel="${configuration.quickactionsRels.isEmpty ? 'none' : configuration.quickactionsRels @join=' '}">
+</coral-card>
+
+<coral-quickactions target="_prev" alignmy="left top" alignat="left top">
+    <coral-quickactions-item icon="check" class="foundation-collection-item-activator">${'Select' @ i18n, locale=request.locale}</coral-quickactions-item>
+</coral-quickactions>
+
+</sly>

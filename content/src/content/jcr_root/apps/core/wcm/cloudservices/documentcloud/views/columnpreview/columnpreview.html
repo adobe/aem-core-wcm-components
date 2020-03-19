@@ -1,0 +1,42 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2020 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly data-sly-use.configuration="${'com.adobe.forms.foundation.cloudconfig.IConfMeta' @ useResource=request.requestPathInfo.suffixResource}"
+     data-sly-use.meta="${'com.adobe.forms.foundation.cloudconfig.IMeta'}">
+    <coral-columnview-preview>
+        <coral-columnview-preview-content>
+            <coral-columnview-preview-asset>
+                <coral-icon data-sly-test="${request.requestPathInfo.suffixResource['jcr:primaryType'] != 'cq:Page'}" class="foundation-collection-item-thumbnail" icon="folder" size="XL" role="img"></coral-icon>
+                <coral-icon data-sly-test="${request.requestPathInfo.suffixResource['jcr:primaryType'] == 'cq:Page'}" class="foundation-collection-page-thumbnail" icon="page" size="XL" role="img"></coral-icon>
+            </coral-columnview-preview-asset>
+            <coral-columnView-preview-label data-sly-test="${configuration.title}">${"Title" @ i18n, locale=request.locale}</coral-columnView-preview-label>
+            <coral-columnview-preview-value data-sly-test="${configuration.title}">${configuration.title}&nbsp;</coral-columnview-preview-value>
+            <coral-columnView-preview-label>${"Name" @ i18n, locale=request.locale}</coral-columnView-preview-label>
+            <coral-columnview-preview-value>${request.requestPathInfo.suffixResource.name}&nbsp;</coral-columnview-preview-value>
+            <coral-columnView-preview-label data-sly-test="${configuration.lastModifiedDate}">${"Modified" @ i18n, locale=request.locale}</coral-columnView-preview-label>
+            <coral-columnview-preview-value data-sly-test="${configuration.lastModifiedDate}"
+                    data-sly-use.modified="${'com.adobe.cq.cloudconfig.ui.commons.DateFormatter' @ date=configuration.lastModifiedDate, relativeFormat='r'}"
+                    datetime="${configuration.lastModifiedDate.timeInMillis}">
+                ${modified.date}&nbsp;
+            </coral-columnview-preview-value>
+            <coral-columnView-preview-label data-sly-test="${configuration.lastModifiedBy}">${"Modified By" @ i18n, locale=request.locale}</coral-columnView-preview-label>
+            <coral-columnview-preview-value data-sly-test="${configuration.lastModifiedBy}">${configuration.lastModifiedBy}&nbsp;</coral-columnview-preview-value>
+            <div hidden="hidden" class="foundation-collection-meta" data-foundation-collection-meta-title="${configuration.title}"
+                 data-foundation-collection-meta-rel="${meta.actionsRels.isEmpty ? 'none' : meta.actionsRels @join=' '}">
+                <coral-icon class="foundation-collection-item-thumbnail" icon="folder" size="XL" role="img"></coral-icon>
+            </div>
+        </coral-columnview-preview-content>
+    </coral-columnview-preview>
+</sly>

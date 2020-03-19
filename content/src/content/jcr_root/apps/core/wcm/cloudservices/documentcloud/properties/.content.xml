@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Document Cloud Configuration Properties"
+        sling:resourceType="granite/ui/components/shell/propertiespage"
+        backHref="${empty header.Referer ? granite:url(granite:concat(&quot;/mnt/overlay/core/wcm/cloudservices/documentcloud.html&quot;, granite:encodeURIPath(granite:relativeParent(param.item, 4)))) : header.Referer}"
+        formId="documentcloud-properties-page"
+        maximized="{Boolean}true"
+        simpleSave="{Boolean}false">
+        <head jcr:primaryType="nt:unstructured">
+            <clientlibs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/includeclientlibs"
+                categories="[coralui3,cq.siteadmin.common,granite.ui.coral.foundation,core.wcm.cloudservices.documentcloud]"/>
+        </head>
+        <title
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="cq/gui/components/siteadmin/admin/properties/title"
+            path="${param.item}"/>
+        <content
+            granite:id="recaptcha-properties-form"
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="cq/gui/components/siteadmin/admin/properties/form"
+            foundationForm="{Boolean}true"
+            margin="{Boolean}true"
+            maximized="{Boolean}true"
+            novalidate="{Boolean}false"
+            path="${param.item}"
+            style="vertical">
+            <items jcr:primaryType="nt:unstructured">
+                <general
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/include"
+                    path="core/wcm/cloudservices/documentcloud/createcloudconfigwizard/cloudservices/jcr:content/body/items/form/items/wizard/items/general"
+                    resourceType="granite/ui/components/coral/foundation/fixedcolumns"/>
+                <commondialog
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/include"
+                    path="core/wcm/cloudservices/documentcloud/createcloudconfigwizard/cloudservices/jcr:content/body/items/form/items/commondialog"/>
+            </items>
+        </content>
+    </jcr:content>
+</jcr:root>

@@ -146,6 +146,7 @@
                                         <!-- private enum; cannot test valueOf / values -->
                                         <exclude>com/adobe/cq/wcm/core/components/internal/models/v1/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
                                         <exclude>com/adobe/cq/wcm/core/components/internal/servlets/AdaptiveImageServlet$Source.class</exclude>
+                                        <exclude>com/adobe/cq/wcm/core/components/internal/models/v1/DocumentCloudImpl.class</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
