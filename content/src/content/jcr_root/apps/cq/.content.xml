@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="sling:Folder">
+    <core jcr:primaryType="nt:folder">
+        <content jcr:primaryType="sling:OrderedFolder">
+            <nav jcr:primaryType="nt:unstructured">
+                <tools jcr:primaryType="nt:unstructured">
+                    <cloudservices jcr:primaryType="nt:unstructured">
+                        <documetcloud
+                            jcr:description="Document Cloud Viewer SDK Configuration"
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Document Cloud Viewer SDK"
+                            href="/mnt/overlay/core/wcm/cloudservices/documentcloud.html/conf"
+                            icon="cloud"
+                            id="documentcloud-configurations"/>
+                    </cloudservices>
+                </tools>
+            </nav>
+        </content>
+    </core>
+</jcr:root>
