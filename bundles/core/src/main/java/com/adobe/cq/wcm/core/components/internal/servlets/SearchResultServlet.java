@@ -64,6 +64,8 @@ import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT;
+
 @Component(
         service = Servlet.class,
         property = {
@@ -206,7 +208,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                     Resource hitRes = hit.getResource();
                     Page page = getPage(hitRes);
                     if (page != null) {
-                        results.add(new PageListItemImpl(request, page));
+                        results.add(new PageListItemImpl(request, page, PROP_DISABLE_SHADOWING_DEFAULT));
                     }
                 } catch (RepositoryException e) {
                     LOGGER.error("Unable to retrieve search results for query.", e);

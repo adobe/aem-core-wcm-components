@@ -54,13 +54,6 @@ public interface Breadcrumb extends ComponentExporter {
     String PN_START_LEVEL = "startLevel";
 
     /**
-     * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
-     * Property is false by default.
-     * If `true` - original page is returned. If `false` or not configured - redirect target page.
-     */
-    String PN_DISABLE_SHADOWING = "disableShadowing";
-
-    /**
      * Creates collection of pages(from site hierarchy of current page) for the breadcrumb component
      *
      * @return {@link Collection} of breadcrumb items

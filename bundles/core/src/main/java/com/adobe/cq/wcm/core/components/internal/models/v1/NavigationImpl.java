@@ -51,6 +51,9 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 
+import static com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl.PN_DISABLE_SHADOWING;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT;
+
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Navigation.class, ComponentExporter.class},
        resourceType = {NavigationImpl.RESOURCE_TYPE})
@@ -58,7 +61,6 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 public class NavigationImpl implements Navigation {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
-    private static final boolean PROP_DISABLE_SHADOWING = false;
 
     @Self
     private SlingHttpServletRequest request;
@@ -111,7 +113,7 @@ public class NavigationImpl implements Navigation {
             }
         }
         isShadowingDisabled = properties.get(PN_DISABLE_SHADOWING,
-            currentStyle.get(PN_DISABLE_SHADOWING, PROP_DISABLE_SHADOWING));
+            currentStyle.get(PN_DISABLE_SHADOWING, PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     @Override

@@ -73,12 +73,6 @@ public interface Navigation extends ComponentExporter {
     String PN_STRUCTURE_DEPTH = "structureDepth";
 
     /**
-     * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
-     * Property is false by default.
-     * If `true` - original page is returned. If `false` or not configured - redirect target page.
-     */
-    String PN_DISABLE_SHADOWING = "disableShadowing";
-    /**
      * Returns the list of navigation items.
      *
      * @return a list of navigation items

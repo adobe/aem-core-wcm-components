@@ -32,6 +32,8 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ListImpl implements List {
@@ -49,7 +51,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         Collection<Page> pages = getPages();
         for (Page page : pages) {
             if (page != null) {
-                listItems.add(new PageListItemImpl(request, page));
+                listItems.add(new PageListItemImpl(request, page, PROP_DISABLE_SHADOWING_DEFAULT));
             }
         }
         return listItems;

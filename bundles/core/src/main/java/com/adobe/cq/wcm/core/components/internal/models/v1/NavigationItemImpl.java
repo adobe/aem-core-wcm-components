@@ -32,18 +32,16 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
 
     public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level,
                               List<NavigationItem> children) {
-        super(request, page);
-        this.active = active;
-        this.level = level;
-        this.children = children;
+        this(page, active, request, level, children, PROP_DISABLE_SHADOWING_DEFAULT);
     }
 
     public NavigationItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level,
                               List<NavigationItem> children, boolean isShadowingDisabled) {
-        this(page, active, request, level, children);
-        if (isShadowingDisabled) {
-            this.page = page;
-        }
+
+        super(request, page, isShadowingDisabled);
+        this.active = active;
+        this.level = level;
+        this.children = children;
     }
 
     @Override
