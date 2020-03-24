@@ -1,6 +1,7 @@
 {
-    "id": "tabs-673620f4d1",
+    "id": "tabs-7e84106a6a",
     "activeItem": "item_2",
+    "tabsId": "-root-responsivegrid-tabs-2",
     "dataLayerJson": {
         "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2",
         "activeItem": "tabs-7e84106a6a-item-da203036a1",
@@ -9,13 +10,13 @@
         "type": "tabs",
         "itemsCount": 2
     },
-    "tabsId": "-root-responsivegrid-tabs-2",
     ":itemsOrder": [
         "item_1",
         "item_2"
     ],
     ":items": {
         "item_1": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -37,8 +38,9 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
-                    "id": "tabs-c2dc9e45de",
+                    "id": "tabs-e14a27b1c3",
                     "activeItem": "item_1_2_2",
+                    "tabsId": "-root-responsivegrid-tabs-2-item_1-item_1_2",
                     "dataLayerJson": {
                         "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2",
                         "activeItem": "tabs-e14a27b1c3-item-2fd95e5ddd",
@@ -47,13 +49,13 @@
                         "type": "tabs",
                         "itemsCount": 2
                     },
-                    "tabsId": "-root-responsivegrid-tabs-2-item_1-item_1_2",
                     ":itemsOrder": [
                         "item_1_2_1",
                         "item_1_2_2"
                     ],
                     ":items": {
                         "item_1_2_1": {
+                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_1_1",
                                 "item_1_2_1_2"
@@ -90,10 +92,10 @@
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
-                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.1"
                         },
                         "item_1_2_2": {
+                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_2_1",
                                 "item_1_2_2_2"
@@ -115,7 +117,7 @@
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
-                                    "id": "carousel-21953a9100",
+                                    "id": "carousel-b2fb964605",
                                     "autoplay": false,
                                     "delay": 5000,
                                     "autopauseDisabled": false,
@@ -185,17 +187,16 @@
                                     ":type": "core/wcm/components/carousel/v1/carousel"
                                 }
                             },
-                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.2"
                         }
                     },
                     ":type": "core/wcm/components/tabs/v1/tabs"
                 }
             },
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -232,7 +233,6 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 2"
         }
     },

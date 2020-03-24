@@ -1,5 +1,5 @@
 {
-    "id": "accordion-96bc1a6527",
+    "id": "accordion-04593f189f",
     "singleExpansion": true,
     "expandedItems": [
         "item_2"
@@ -20,6 +20,7 @@
     ],
     ":items": {
         "item_1": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -56,10 +57,10 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Accordion Item 1"
         },
         "item_2": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -96,7 +97,6 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Accordion Panel 2"
         }
     },

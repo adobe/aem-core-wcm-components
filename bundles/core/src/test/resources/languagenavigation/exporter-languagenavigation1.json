@@ -12,13 +12,13 @@
       "language": "en-US",
       "url": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
       "id": "languagenavigation-67a3e8f8b7-item-f7ed60dba3",
-      "lastModified": null,
       "description": null,
+      "lastModified": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
         "name": "about",
         "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
-        "id": "languageNavigationItem-f7ed60dba3",
+        "id": "languagenavigation-67a3e8f8b7-item-f7ed60dba3",
         "text": "LOCALE 1",
         "type": "languageNavigationItem",
         "title": "LOCALE 1"
@@ -35,13 +35,13 @@
       "language": "en-CA",
       "url": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
       "id": "languagenavigation-67a3e8f8b7-item-ae086001b7",
-      "lastModified": null,
       "description": null,
+      "lastModified": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
         "name": "about",
         "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
-        "id": "languageNavigationItem-ae086001b7",
+        "id": "languagenavigation-67a3e8f8b7-item-ae086001b7",
         "text": "LOCALE 2",
         "type": "languageNavigationItem",
         "title": "LOCALE 2"
@@ -58,13 +58,13 @@
       "language": "de-CH",
       "url": "/core/LOCALE-3-vanity",
       "id": "languagenavigation-67a3e8f8b7-item-715681d1e2",
-      "lastModified": null,
       "description": null,
+      "lastModified": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-3",
         "name": "LOCALE-3",
         "linkUrl": "/core/LOCALE-3-vanity",
-        "id": "languageNavigationItem-715681d1e2",
+        "id": "languagenavigation-67a3e8f8b7-item-715681d1e2",
         "text": "LOCALE 3",
         "type": "languageNavigationItem",
         "title": "LOCALE 3"
@@ -81,13 +81,13 @@
       "language": "de-DE",
       "url": "/core/content/languagenavigation/LOCALE-4.html",
       "id": "languagenavigation-67a3e8f8b7-item-540d311dbc",
-      "lastModified": null,
       "description": null,
+      "lastModified": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-4",
         "name": "LOCALE-4",
         "linkUrl": "/core/content/languagenavigation/LOCALE-4.html",
-        "id": "languageNavigationItem-540d311dbc",
+        "id": "languagenavigation-67a3e8f8b7-item-540d311dbc",
         "text": "LOCALE 4",
         "type": "languageNavigationItem",
         "title": "LOCALE 4"

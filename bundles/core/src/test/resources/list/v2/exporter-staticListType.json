@@ -5,15 +5,15 @@
         {
             "path": "/content/list/pages/page_1",
             "url": "/context/content/list/pages/page_1.html",
-            "title": "Page 1",
             "description": null,
             "lastModified": 1474672365000,
+            "title": "Page 1",
             "id": "list-6df1b262c1-item-c53dbad311",
             "dataLayerJson": {
                 "path": "/content/list/pages/page_1",
                 "name": "page_1",
                 "linkUrl": "/context/content/list/pages/page_1.html",
-                "id": "pageListItem-c53dbad311",
+                "id": "list-6df1b262c1-item-c53dbad311",
                 "text": "Page 1",
                 "type": "pageListItem",
                 "title": "Page 1"
@@ -22,15 +22,15 @@
         {
             "path": "/content/list/pages/page_2",
             "url": "/context/content/list/pages/page_2.html",
-            "title": "Page 2",
             "description": null,
             "lastModified": 1474499565000,
+            "title": "Page 2",
             "id": "list-6df1b262c1-item-61287e2a12",
             "dataLayerJson": {
                 "path": "/content/list/pages/page_2",
                 "name": "page_2",
                 "linkUrl": "/context/content/list/pages/page_2.html",
-                "id": "pageListItem-61287e2a12",
+                "id": "list-6df1b262c1-item-61287e2a12",
                 "text": "Page 2",
                 "type": "pageListItem",
                 "title": "Page 2"
