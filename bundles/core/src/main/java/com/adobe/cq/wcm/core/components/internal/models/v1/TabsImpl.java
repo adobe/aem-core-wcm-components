@@ -68,7 +68,18 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     @Override
     public String getDataLayerActiveItem() {
-        return getActiveItem();
+        String activeItemName = getActiveItem();
+
+        if (activeItemName == null) {
+            return getItems().get(0).getDataLayerId();
+        }
+
+        String activeItemId = getItems().stream()
+            .filter(e -> e.getName().equals(activeItemName))
+            .findFirst()
+            .get().getDataLayerId();
+
+        return activeItemId;
     }
 
     @Override

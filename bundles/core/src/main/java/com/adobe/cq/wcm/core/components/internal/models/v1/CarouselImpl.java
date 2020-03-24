@@ -16,8 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.annotation.PostConstruct;
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
@@ -88,5 +86,10 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     @Override
     public int getDataLayerItemsCount() {
         return getItems().size();
+    }
+
+    @Override
+    public String getDataLayerActiveItem() {
+        return getItems().get(0).getDataLayerId();
     }
 }

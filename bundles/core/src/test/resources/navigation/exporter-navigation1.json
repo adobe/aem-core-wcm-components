@@ -2,17 +2,21 @@
   "id": "navigation-29524bfc42",
   "items": [
     {
+      "path": "/content/navigation",
       "children": [
         {
+          "path": "/content/navigation/navigation-1",
           "children": [
             {
+              "path": "/content/navigation/navigation-1/navigation-1-1",
               "children": [
                 {
+                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
                   "children": [],
                   "level": 3,
                   "active": false,
                   "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
-                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
+                  "id": "navigation-29524bfc42-item-fb1ada3ea5",
                   "description": null,
                   "title": "Navigation 1.1.1",
                   "lastModified": null,
@@ -27,13 +31,15 @@
                   }
                 },
                 {
+                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
                   "children": [
                     {
+                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
                       "children": [],
                       "level": 4,
                       "active": false,
                       "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
-                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
+                      "id": "navigation-29524bfc42-item-9426a0ce95",
                       "description": null,
                       "title": "Navigation 1.1.2.2.1",
                       "lastModified": null,
@@ -48,11 +54,12 @@
                       }
                     },
                     {
+                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
                       "children": [],
                       "level": 4,
                       "active": false,
                       "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
-                      "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
+                      "id": "navigation-29524bfc42-item-76b8218a66",
                       "description": null,
                       "title": "Navigation 1.1.2.3",
                       "lastModified": null,
@@ -70,7 +77,7 @@
                   "level": 3,
                   "active": false,
                   "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
-                  "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
+                  "id": "navigation-29524bfc42-item-064aa2d48d",
                   "description": null,
                   "title": "Navigation 1.1.2",
                   "lastModified": null,
@@ -88,7 +95,7 @@
               "level": 2,
               "active": false,
               "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
-              "path": "/content/navigation/navigation-1/navigation-1-1",
+              "id": "navigation-29524bfc42-item-3366a5dc97",
               "description": null,
               "title": "Navigation 1.1",
               "lastModified": null,
@@ -106,7 +113,7 @@
           "level": 1,
           "active": false,
           "url": "/core/navigation-1-vanity",
-          "path": "/content/navigation/navigation-1",
+          "id": "navigation-29524bfc42-item-798ec51770",
           "description": null,
           "title": "Navigation 1",
           "lastModified": null,
@@ -121,11 +128,12 @@
           }
         },
         {
+          "path": "/content/navigation/navigation-2",
           "children": [],
           "level": 1,
           "active": false,
           "url": "/core/content/navigation/navigation-2.html",
-          "path": "/content/navigation/navigation-2",
+          "id": "navigation-29524bfc42-item-378391f255",
           "description": null,
           "title": "Navigation 2",
           "lastModified": null,
@@ -143,7 +151,7 @@
       "level": 0,
       "active": true,
       "url": "/core/content/navigation.html",
-      "path": "/content/navigation",
+      "id": "navigation-29524bfc42-item-becbc7f439",
       "description": null,
       "title": "Navigation",
       "lastModified": null,

@@ -3,11 +3,12 @@
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
-            "url": "/context/content/list/pages/page_1.html",
             "path": "/content/list/pages/page_1",
-            "description": null,
+            "url": "/context/content/list/pages/page_1.html",
             "title": "Page 1",
+            "description": null,
             "lastModified": 1474672365000,
+            "id": "list-6df1b262c1-item-c53dbad311",
             "dataLayerJson": {
                 "path": "/content/list/pages/page_1",
                 "name": "page_1",
@@ -19,11 +20,12 @@
             }
         },
         {
-            "url": "/context/content/list/pages/page_2.html",
             "path": "/content/list/pages/page_2",
-            "description": null,
+            "url": "/context/content/list/pages/page_2.html",
             "title": "Page 2",
+            "description": null,
             "lastModified": 1474499565000,
+            "id": "list-6df1b262c1-item-61287e2a12",
             "dataLayerJson": {
                 "path": "/content/list/pages/page_2",
                 "name": "page_2",

@@ -2,6 +2,7 @@
   "id": "languagenavigation-67a3e8f8b7",
   "items": [
     {
+      "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
       "children": [],
       "level": 0,
       "active": true,
@@ -10,9 +11,9 @@
       "country": "US",
       "language": "en-US",
       "url": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
-      "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
-      "description": null,
+      "id": "languagenavigation-67a3e8f8b7-item-f7ed60dba3",
       "lastModified": null,
+      "description": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
         "name": "about",
@@ -24,6 +25,7 @@
       }
     },
     {
+      "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
       "children": [],
       "level": 0,
       "active": false,
@@ -32,9 +34,9 @@
       "country": "CA",
       "language": "en-CA",
       "url": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
-      "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
-      "description": null,
+      "id": "languagenavigation-67a3e8f8b7-item-ae086001b7",
       "lastModified": null,
+      "description": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
         "name": "about",
@@ -46,6 +48,7 @@
       }
     },
     {
+      "path": "/content/languagenavigation/LOCALE-3",
       "children": [],
       "level": 0,
       "active": false,
@@ -54,9 +57,9 @@
       "country": "CH",
       "language": "de-CH",
       "url": "/core/LOCALE-3-vanity",
-      "path": "/content/languagenavigation/LOCALE-3",
-      "description": null,
+      "id": "languagenavigation-67a3e8f8b7-item-715681d1e2",
       "lastModified": null,
+      "description": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-3",
         "name": "LOCALE-3",
@@ -68,6 +71,7 @@
       }
     },
     {
+      "path": "/content/languagenavigation/LOCALE-4",
       "children": [],
       "level": 0,
       "active": false,
@@ -76,9 +80,9 @@
       "country": "DE",
       "language": "de-DE",
       "url": "/core/content/languagenavigation/LOCALE-4.html",
-      "path": "/content/languagenavigation/LOCALE-4",
-      "description": null,
+      "id": "languagenavigation-67a3e8f8b7-item-540d311dbc",
       "lastModified": null,
+      "description": null,
       "dataLayerJson": {
         "path": "/content/languagenavigation/LOCALE-4",
         "name": "LOCALE-4",

@@ -112,7 +112,7 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
                 if (localizedPage != null) {
                     page = localizedPage;
                 }
-                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title));
+                pages.add(new LanguageNavigationItemImpl(page, active, request, level, children, title, getId()));
             }
         }
 

@@ -25,6 +25,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -206,7 +207,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                     Resource hitRes = hit.getResource();
                     Page page = getPage(hitRes);
                     if (page != null) {
-                        results.add(new PageListItemImpl(request, page));
+                        results.add(new PageListItemImpl(request, page, getId(searchResource)));
                     }
                 } catch (RepositoryException e) {
                     LOGGER.error("Unable to retrieve search results for query.", e);
@@ -214,6 +215,10 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             }
         }
         return results;
+    }
+
+    private String getId(Resource resource) {
+        return "search-" + StringUtils.substring(DigestUtils.sha1Hex(resource.getPath()), 0, 10);
     }
 
     private String getSearchRootPagePath(String searchRoot, Page currentPage) {

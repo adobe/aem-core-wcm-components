@@ -139,7 +139,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     protected List<ListItem> readItems() {
         List<ListItem> items = new LinkedList<>();
         getChildren().forEach(res -> {
-            items.add(new ResourceListItemImpl(request, res));
+            items.add(new ResourceListItemImpl(request, res, getId()));
         });
         return items;
     }

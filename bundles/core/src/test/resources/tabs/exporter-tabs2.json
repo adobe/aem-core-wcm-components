@@ -3,7 +3,7 @@
     "activeItem": "item_2",
     "dataLayerJson": {
         "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2",
-        "activeItem": "item_2",
+        "activeItem": "tabs-7e84106a6a-item-da203036a1",
         "name": "tabs-2",
         "id": "tabs-7e84106a6a",
         "type": "tabs",
@@ -15,7 +15,6 @@
     ],
     ":items": {
         "item_1": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -41,7 +40,7 @@
                     "activeItem": "item_1_2_2",
                     "dataLayerJson": {
                         "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2",
-                        "activeItem": "item_1_2_2",
+                        "activeItem": "tabs-e14a27b1c3-item-2fd95e5ddd",
                         "name": "item_1_2",
                         "id": "tabs-e14a27b1c3",
                         "type": "tabs",
@@ -53,7 +52,6 @@
                     ],
                     ":items": {
                         "item_1_2_1": {
-                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_1_1",
                                 "item_1_2_1_2"
@@ -90,10 +88,10 @@
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
+                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.1"
                         },
                         "item_1_2_2": {
-                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_2_1",
                                 "item_1_2_2_2"
@@ -121,6 +119,7 @@
                                     "autopauseDisabled": false,
                                     "dataLayerJson": {
                                         "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2",
+                                        "activeItem": "carousel-b2fb964605-item-92a997f236",
                                         "name": "item_1_2_2_2",
                                         "id": "carousel-b2fb964605",
                                         "type": "carousel",
@@ -184,16 +183,17 @@
                                     ":type": "core/wcm/components/carousel/v1/carousel"
                                 }
                             },
+                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.2"
                         }
                     },
                     ":type": "core/wcm/components/tabs/v1/tabs"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -230,6 +230,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 2"
         }
     },

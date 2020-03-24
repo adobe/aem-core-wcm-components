@@ -29,6 +29,17 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface ListItem extends DataLayerProvider {
 
     /**
+     * Returns the ID of this {@code ListItem}.
+     *
+     * @return the ID of this list item or {@code null}
+     * @since com.adobe.cq.wcm.core.components.models 12.12.0
+     */
+    @Nullable
+    default String getId() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns the URL of this {@code ListItem}.
      *
      * @return the URL of this list item or {@code null}

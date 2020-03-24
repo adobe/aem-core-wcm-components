@@ -33,16 +33,18 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class PageListItemImpl extends AbstractDataLayerProvider implements ListItem {
+public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
 
     protected SlingHttpServletRequest request;
     protected Page page;
 
-    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
+    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId) {
+        super(parentId, page.getPath());
         this.request = request;
         this.page = page;
+        this.parentId = parentId;
         Page redirectTarget = getRedirectTarget(page);
         if (redirectTarget != null && !redirectTarget.equals(page)) {
             this.page = redirectTarget;

@@ -7,11 +7,23 @@
   "actions": [
     {
       "title": "Adobe",
-      "url": "http://www.adobe.com"
+      "url": "http://www.adobe.com",
+      "dataLayerJson": {
+        "linkUrl": "http://www.adobe.com",
+        "id": "teaserAction-b197b7ca93",
+        "type": "teaserAction",
+        "title": "Adobe"
+      }
     },
     {
       "title": "Teasers",
-      "url": "/core/content/teasers.html"
+      "url": "/core/content/teasers.html",
+      "dataLayerJson": {
+        "linkUrl": "/core/content/teasers.html",
+        "id": "teaserAction-b197b7ca93",
+        "type": "teaserAction",
+        "title": "Teasers"
+      }
     }
   ],
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-7.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",

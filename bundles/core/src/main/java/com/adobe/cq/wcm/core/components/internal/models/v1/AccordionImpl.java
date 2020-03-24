@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -64,6 +65,7 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
      * The cached node names of the expanded items for which there is a valid matching child resource.
      */
     private String[] expandedItemNames;
+    private String[] expandedItemIds;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the HTML element
@@ -127,6 +129,25 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
 
     @Override
     public String[] getDataLayerExpandedItems() {
-        return getExpandedItems();
+        if (expandedItems == null) {
+            return new String[0];
+        }
+
+        if (expandedItemIds == null) {
+            List<String> expandedItemsName = Arrays.asList(expandedItems);
+            List<String> expandedItemsIds = this.getItems().stream()
+                .filter(item -> expandedItemsName.contains(item.getName()))
+                .map(item -> item.getDataLayerId())
+                .collect(Collectors.toList());
+
+            String[] expandedItems = new String[expandedItemsIds.size()];
+
+            for (int i =0; i < expandedItemsIds.size(); i++)
+                expandedItems[i] = expandedItemsIds.get(i);
+
+            expandedItemIds = expandedItems;
+        }
+
+        return Arrays.copyOf(expandedItemIds, expandedItemIds.length);
     }
 }

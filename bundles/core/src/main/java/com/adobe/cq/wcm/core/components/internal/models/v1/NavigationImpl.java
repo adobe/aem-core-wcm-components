@@ -185,7 +185,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
                 if (structureStart == 0) {
                     level = level + 1;
                 }
-                pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
+                pages.add(new NavigationItemImpl(page, isSelected, request, level, children, getId()));
             }
         }
         return pages;
@@ -200,7 +200,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         }
         if (structureStart == 0) {
             boolean isSelected = checkSelected(navigationRoot.page);
-            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree);
+            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree, getId());
             itemTree = new ArrayList<>();
             itemTree.add(root);
         }

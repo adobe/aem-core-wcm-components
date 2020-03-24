@@ -302,6 +302,24 @@
                 } else {
                     setItemExpanded(item, !getItemExpanded(item));
                 }
+
+                var accordionId = that._elements.self.id;
+
+                if (dataLayer.hasOwnProperty("getState")) {
+                    var expandedItems = getExpandedItems()
+                        .map(function (item) {
+                            return JSON.parse(item.dataset.cmpDataLayer).id;
+                        });
+
+                    var uploadPayload = { data: { component: {} } };
+                    uploadPayload.data.component[accordionId] = { expandedItems: expandedItems };
+
+                    var removePayload = { data: { component: {} } };
+                    removePayload.data.component[accordionId] = { expandedItems: undefined };
+
+                    dataLayer.push(removePayload);
+                    dataLayer.push(uploadPayload);
+                }
             }
         }
 
@@ -316,15 +334,16 @@
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
                 dataLayer.push({
-                    event: 'accordionItem:show',
+                    event: "accordionItem:show",
                     info: JSON.parse(item.dataset.cmpDataLayer)
-                })
+                });
+
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
                 dataLayer.push({
-                    event: 'accordionItem:hide',
+                    event: "accordionItem:hide",
                     info: JSON.parse(item.dataset.cmpDataLayer)
-                })
+                });
             }
             refreshItem(item);
         }

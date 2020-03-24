@@ -98,7 +98,7 @@ public class BreadcrumbImpl extends AbstractComponentImpl implements Breadcrumb 
                     break;
                 }
                 if (checkIfNotHidden(page)) {
-                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList());
+                    NavigationItem navigationItem = new BreadcrumbItemImpl(page, isActivePage, request, currentLevel, Collections.emptyList(), getId());
                     items.add(navigationItem);
                 }
             }

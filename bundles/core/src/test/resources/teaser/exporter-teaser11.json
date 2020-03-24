@@ -8,16 +8,29 @@
   "actions": [
     {
       "title": "Teasers",
-      "url": "/core/content/teasers.html"
+      "url": "/core/content/teasers.html",
+      "dataLayerJson": {
+        "linkUrl": "/core/content/teasers.html",
+        "id": "teaserAction-008eeb823c",
+        "type": "teaserAction",
+        "title": "Teasers"
+      }
     },
     {
       "title": "Adobe",
-      "url": "http://www.adobe.com"
+      "url": "http://www.adobe.com",
+      "dataLayerJson": {
+        "linkUrl": "http://www.adobe.com",
+        "id": "teaserAction-008eeb823c",
+        "type": "teaserAction",
+        "title": "Adobe"
+      }
     }
   ],
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-8.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "dataLayerJson": {
     "name": "teaser-8",
+    "linkUrl": "/core/content/teasers.html",
     "id": "teaser-008eeb823c",
     "type": "teaser",
     "title": "Teasers Test"

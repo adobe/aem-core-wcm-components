@@ -68,7 +68,7 @@ class CarouselImplTest {
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
                 { "item_3", "Carousel Panel 3", "resourceListItem",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
-        verifyCarouselItems(expectedItems, carousel.getItems());
+        verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
 
@@ -85,7 +85,7 @@ class CarouselImplTest {
         return context.request().adaptTo(Carousel.class);
     }
 
-    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items) {
+    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items, String carouselId) {
         assertEquals("The carousel contains a different number of items than expected.", expectedItems.length,
                 items.size());
         int index = 0;
@@ -105,8 +105,7 @@ class CarouselImplTest {
             assertEquals("The carousel item's data layer type is not what was expected: " + item.getDataLayerType(),
                     expectedItems[index][2], item.getDataLayerType());
             assertEquals("The carousel item's data layer id is not what was expected: " + item.getDataLayerId(),
-                    expectedItems[index][2] + "-"
-                            + StringUtils.substring(DigestUtils.sha1Hex((String) expectedItems[index][3]), 0, 10),
+                carouselId + "-item-" + StringUtils.substring(DigestUtils.sha1Hex((String) expectedItems[index][3]), 0, 10),
                     item.getDataLayerId());
 
             index++;

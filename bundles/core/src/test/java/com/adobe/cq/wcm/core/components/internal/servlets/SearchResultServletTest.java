@@ -148,6 +148,7 @@ public class SearchResultServletTest {
     }
 
     private static class Item implements ListItem {
+        private String id;
         private String url;
         private String title;
         private String path;
@@ -157,6 +158,12 @@ public class SearchResultServletTest {
         private Map<String, Object> dataLayerJson;
 
         public Item() {
+        }
+
+        @Nullable
+        @Override
+        public String getId() {
+            return id;
         }
 
         @Nullable

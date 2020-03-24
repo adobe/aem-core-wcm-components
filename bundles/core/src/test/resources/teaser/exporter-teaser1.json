@@ -10,6 +10,7 @@
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-1.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "dataLayerJson": {
     "name": "teaser-1",
+    "linkUrl": "https://www.adobe.com",
     "id": "teaser-f266748f8a",
     "type": "teaser",
     "title": "Teaser"

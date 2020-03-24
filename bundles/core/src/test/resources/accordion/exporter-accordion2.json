@@ -10,7 +10,7 @@
         "id": "accordion-4e87b93aff",
         "type": "accordion",
         "expandedItems": [
-            "item_2"
+            "accordion-4e87b93aff-item-d1eadb4658"
         ],
         "itemsCount": 2
     },
@@ -52,7 +52,7 @@
                         "id": "accordion-d95ca85950",
                         "type": "accordion",
                         "expandedItems": [
-                            "item_1_2_2"
+                            "accordion-d95ca85950-item-1cd65a959a"
                         ],
                         "itemsCount": 2
                     },
@@ -129,6 +129,7 @@
                                     "autopauseDisabled": false,
                                     "dataLayerJson": {
                                         "path": "/content/accordion/jcr:content/root/responsivegrid/accordion-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2",
+                                        "activeItem": "carousel-87fe1dbabd-item-6b279fa1a0",
                                         "name": "item_1_2_2_2",
                                         "id": "carousel-87fe1dbabd",
                                         "type": "carousel",

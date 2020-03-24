@@ -71,6 +71,6 @@ public class TextImpl extends AbstractComponentImpl implements Text {
     @Override
     public String getDataLayerText() {
         String text = getText();
-        return text != null ? text.length() > 100 ? text.substring(0, 100) : text : "";
+        return text != null ? text : "";
     }
 }

@@ -25,7 +25,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceMetadata;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.annotations.Exporter;
@@ -311,18 +310,20 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return getTitle();
     }
 
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLinkURL();
+    }
+
 
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
-    public class Action implements ListItem {
+    public class Action extends AbstractDataLayerProvider implements ListItem {
         ValueMap properties;
         String title;
         String url;
-        String path;
         Page page;
 
         public Action(Resource actionRes) {
-            ResourceMetadata m = actionRes.getResourceMetadata();
-            path = m.getResolutionPath();
             properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
             url = properties.get(PN_ACTION_LINK, String.class);
@@ -359,17 +360,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         @Override
         public String getDataLayerId() {
-            return path;
+            return getDataLayerType() + "-" + StringUtils.substring(DigestUtils.sha1Hex(resource.getPath()), 0, 10);
         }
 
         @Override
         public String getDataLayerType() {
-            return "teaserActionItem";
-        }
-
-        @Override
-        public String getDataLayerPath() {
-            return getPath();
+            return "teaserAction";
         }
 
         @Override

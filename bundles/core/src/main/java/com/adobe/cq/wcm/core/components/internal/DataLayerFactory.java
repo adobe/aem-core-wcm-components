@@ -49,7 +49,8 @@ public class DataLayerFactory {
     static private Object invoke(DataLayerProvider provider, String method) {
         try {
             Method providerMethod = provider.getClass().getMethod(method);
-            return providerMethod.invoke(provider);
+            Object result = providerMethod.invoke(provider);
+            return result;
         } catch (UnsupportedOperationException | NoSuchMethodException | IllegalAccessException
                 | InvocationTargetException e) {
             return null;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function() {
+(function () {
     "use strict";
 
     var dataLayer = window.dataLayer = window.dataLayer || [];
@@ -31,7 +31,7 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]',
+        self: "[data-" + NS + '-is="' + IS + '"]',
         active: {
             tab: "cmp-tabs__tab--active",
             tabpanel: "cmp-tabs__tabpanel--active"
@@ -85,7 +85,7 @@
                  * - check that the message data panel container type is correct and that the id (path) matches this specific Tabs component
                  * - if so, route the "navigate" operation to enact a navigation of the Tabs based on index data
                  */
-                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
+                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function (message) {
                     if (message.data && message.data.type === "cmp-tabs" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                         if (message.data.operation === "navigate") {
                             navigate(message.data.index);
@@ -151,11 +151,11 @@
             var tabs = that._elements["tab"];
             if (tabs) {
                 for (var i = 0; i < tabs.length; i++) {
-                    (function(index) {
-                        tabs[i].addEventListener("click", function(event) {
+                    (function (index) {
+                        tabs[i].addEventListener("click", function (event) {
                             navigateAndFocusTab(index);
                         });
-                        tabs[i].addEventListener("keydown", function(event) {
+                        tabs[i].addEventListener("keydown", function (event) {
                             onKeyDown(event);
                         });
                     })(i);
@@ -269,15 +269,24 @@
             navigate(index);
             focusWithoutScroll(that._elements["tab"][index]);
 
+            var activeItem = JSON.parse(that._elements.tabpanel[index].dataset.cmpDataLayer);
+
             dataLayer.push({
-                event: 'tabsItem:show',
-                info: JSON.parse(that._elements.tabpanel[index].dataset.cmpDataLayer)
+                event: "tabsItem:show",
+                info: activeItem
             });
 
             dataLayer.push({
-                event: 'tabsItem:hide',
+                event: "tabsItem:hide",
                 info: JSON.parse(that._elements.tabpanel[exActive].dataset.cmpDataLayer)
             });
+
+            var tabId = that._elements.self.id;
+            if (dataLayer.hasOwnProperty("getState")) {
+                var uploadPayload = { data: { component: {} } };
+                uploadPayload.data.component[tabId] = { activeItem: activeItem };
+                dataLayer.push(uploadPayload);
+            }
         }
     }
 
@@ -326,15 +335,15 @@
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         var body = document.querySelector("body");
-        var observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function(addedNode) {
+                    nodesArray.forEach(function (addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function(element) {
+                            elementsArray.forEach(function (element) {
                                 new Tabs({ element: element, options: readData(element) });
                             });
                         }
