@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.configuration="com.adobe.forms.foundation.cloudconfig.IConfMeta">
+<sly data-sly-use.configuration="com.adobe.cq.wcm.core.components.models.CloudConfig">
 
 <coral-columnview-item class="foundation-collection-item"
     data-sly-attribute.variant="${configuration.hasChildren ? 'drilldown' : ''}"
@@ -27,7 +27,7 @@
             ${configuration.title}
         </div>
     </coral-columnview-item-content>
-    <meta class="foundation-collection-quickactions" data-foundation-collection-quickactions-rel="${configuration.quickactionsRels.isEmpty ? 'none' : configuration.quickactionsRels @join=' '}">
+    <meta class="foundation-collection-quickactions" data-foundation-collection-quickactions-rel="cq-confadmin-actions-properties-activator">
     <meta itemprop="lastmodified" content="${configuration.lastModifiedDate}">
     <meta itemprop="lastmodifiedby" content="${configuration.lastModifiedBy}">
 </coral-columnview-item>

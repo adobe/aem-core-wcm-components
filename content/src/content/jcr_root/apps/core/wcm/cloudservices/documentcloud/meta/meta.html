@@ -14,7 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div class="foundation-collection-meta"
-     data-sly-use.meta="com.adobe.forms.foundation.cloudconfig.IMeta"
-     data-foundation-collection-meta-title="${meta.title}"
-     data-foundation-collection-meta-folder="${meta.isFolder ? 'true' : 'false'}"
-     data-foundation-collection-meta-rel="${meta.actionsRels.isEmpty ? 'none' : meta.actionsRels @join=' '}" hidden="hidden"></div>
+     data-sly-use.configuration="${'com.adobe.cq.wcm.core.components.models.CloudConfig' @ useResource=request.requestPathInfo.suffixResource}"
+     data-foundation-collection-meta-title="${configuration.title}"
+     data-foundation-collection-meta-folder="${configuration.isFolder ? 'true' : 'false'}"
+     data-foundation-collection-meta-rel="${configuration.actionsRels.isEmpty ? 'none' : meta.actionsRels @join=' '}" hidden="hidden"></div>

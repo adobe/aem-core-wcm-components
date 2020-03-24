@@ -80,9 +80,6 @@
                                 <allowedExpressionOption>decorationTagName</allowedExpressionOption>
                                 <allowedExpressionOption>wcmmode</allowedExpressionOption>
                             </allowedExpressionOptions>
-                            <excludes>
-                                <exclude>apps/core/wcm/cloudservices/documentcloud/**/*.html</exclude>
-                            </excludes>
                         </configuration>
                     </execution>
                 </executions>

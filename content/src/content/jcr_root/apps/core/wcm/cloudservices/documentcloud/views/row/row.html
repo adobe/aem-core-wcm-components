@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.configuration="com.adobe.forms.foundation.cloudconfig.IConfMeta">
+<sly data-sly-use.configuration="com.adobe.cq.wcm.core.components.models.CloudConfig">
 
 <tr is="coral-table-row" class="foundation-collection-item ${resource['jcr:primaryType'] == 'cq:Page' ? '' : 'foundation-collection-navigator'}"
     data-foundation-collection-item-id="${resource.path}">
@@ -24,7 +24,7 @@
     <td is="coral-table-cell" class="foundation-collection-item-title"  value="${configuration.title}">
         ${configuration.title}
         <meta class="foundation-collection-quickactions"
-              data-foundation-collection-quickactions-rel="${configuration.quickactionsRels.isEmpty ? 'none' : configuration.quickactionsRels @join=' '}">
+              data-foundation-collection-quickactions-rel="cq-confadmin-actions-properties-activator">
     </td>
     <td is="coral-table-cell"
         data-sly-use.modified="${'com.adobe.cq.cloudconfig.ui.commons.DateFormatter' @ date=configuration.lastModifiedDate, relativeFormat='r'}">

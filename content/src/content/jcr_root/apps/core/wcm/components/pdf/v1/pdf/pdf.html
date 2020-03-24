@@ -13,7 +13,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<div data-sly-use.documentcloud="com.adobe.cq.wcm.core.components.models.DocumentCloud" id="adobe-dc-view"></div>
+<div data-sly-use.documentcloud="com.adobe.cq.wcm.core.components.models.DocumentCloud"
+     data-sly-use.template="core/wcm/components/commons/v1/templates.html" id="adobe-dc-view"></div>
 <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
 <script type="text/javascript">
     document.addEventListener("adobe_dc_view_sdk.ready", function(){
@@ -24,3 +25,4 @@
         }, {});
     });
 </script>
+<sly data-sly-call="${template.placeholder @ isEmpty = !documentcloud.fileUrl, classAppend='cmp-breadcrumb'}"></sly>

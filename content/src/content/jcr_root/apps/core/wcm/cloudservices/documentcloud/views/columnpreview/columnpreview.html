@@ -13,8 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.configuration="${'com.adobe.forms.foundation.cloudconfig.IConfMeta' @ useResource=request.requestPathInfo.suffixResource}"
-     data-sly-use.meta="${'com.adobe.forms.foundation.cloudconfig.IMeta'}">
+<sly data-sly-use.configuration="${'com.adobe.cq.wcm.core.components.models.CloudConfig' @ useResource=request.requestPathInfo.suffixResource}">
     <coral-columnview-preview>
         <coral-columnview-preview-content>
             <coral-columnview-preview-asset>
@@ -34,7 +33,7 @@
             <coral-columnView-preview-label data-sly-test="${configuration.lastModifiedBy}">${"Modified By" @ i18n, locale=request.locale}</coral-columnView-preview-label>
             <coral-columnview-preview-value data-sly-test="${configuration.lastModifiedBy}">${configuration.lastModifiedBy}&nbsp;</coral-columnview-preview-value>
             <div hidden="hidden" class="foundation-collection-meta" data-foundation-collection-meta-title="${configuration.title}"
-                 data-foundation-collection-meta-rel="${meta.actionsRels.isEmpty ? 'none' : meta.actionsRels @join=' '}">
+                 data-foundation-collection-meta-rel="cq-confadmin-actions-properties-activator">
                 <coral-icon class="foundation-collection-item-thumbnail" icon="folder" size="XL" role="img"></coral-icon>
             </div>
         </coral-columnview-preview-content>

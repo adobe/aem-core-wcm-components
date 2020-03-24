@@ -13,7 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.configuration="com.adobe.forms.foundation.cloudconfig.IConfMeta">
+<sly data-sly-use.configuration="com.adobe.cq.wcm.core.components.models.CloudConfig">
 
 <!--/* folder */-->
 <coral-card data-sly-test="${resource['jcr:primaryType'] != 'cq:Page'}"
@@ -23,11 +23,8 @@
         <coral-card-context data-sly-test="${resource['jcr:primaryType'] != 'cq:Page'}" class="coral-Card-context">${'Folder' @ i18n, locale=request.locale}</coral-card-context>
         <coral-card-title class="foundation-collection-item-title">${configuration.title}</coral-card-title>
     </coral-card-content>
-    <meta class="foundation-collection-quickactions" data-foundation-collection-quickactions-rel="${configuration.quickactionsRels.isEmpty ? 'none' : configuration.quickactionsRels @join=' '}">
+    <meta class="foundation-collection-quickactions" data-foundation-collection-quickactions-rel="cq-confadmin-actions-properties-activator">
 </coral-card>
-
-
-<!--/* configuration */-->
 <coral-card data-sly-test="${resource['jcr:primaryType'] == 'cq:Page'}"
             data-foundation-collection-item-id="${resource.path}">
     <coral-card-asset>
@@ -46,7 +43,6 @@
             </coral-card-property>
         </coral-card-propertylist>
     </coral-card-content>
-    <meta class="foundation-collection-quickactions" data-foundation-collection-quickactions-rel="${configuration.quickactionsRels.isEmpty ? 'none' : configuration.quickactionsRels @join=' '}">
 </coral-card>
 
 <coral-quickactions target="_prev" alignmy="left top" alignat="left top">

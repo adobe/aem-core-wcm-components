@@ -101,19 +101,6 @@
 
         contentLoaded = true;
 
-        // for IE9 case special handling of del key and backspace key as IE9 doesn"t
-        // trigger input event on pressing these keys.
-        $(document).on("keyup", "#documentcloud-cloudconfiguration-name" + "," + "#documentcloud-cloudconfiguration-title", function(e) {
-            var specialKeys = [8, 46]; // 8 - backspace & 46 - delete
-            if (e.keyCode) {
-                for (var i = 0; i < specialKeys.length; i++) {
-                    if (specialKeys[i] === e.keyCode) {
-                        $(this).trigger("input");
-                    }
-                }
-            }
-        });
-
         $(document).on("keypress", "#documentcloud-cloudconfiguration-name", function(e) {
             if (isRestricted(e.charCode, e.keyCode)) {
                 e.preventDefault();
