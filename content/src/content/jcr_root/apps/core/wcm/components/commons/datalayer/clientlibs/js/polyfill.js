@@ -28,7 +28,7 @@ if (!Element.prototype.matches) {
  * https://developer.mozilla.org/enUS/docs/Web/API/Element/closest#Polyfill
  */
 if (!Element.prototype.closest) {
-    Element.prototype.closest = function (s) {
+    Element.prototype.closest = function(s) {
         "use strict";
         var el = this;
         if (!document.documentElement.contains(el)) {
@@ -46,8 +46,9 @@ if (!Element.prototype.closest) {
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 if (!Array.prototype.find) {
-    Object.defineProperty(Array.prototype, 'find', {
-        value: function (predicate) {
+    Object.defineProperty(Array.prototype, "find", {
+        value: function(predicate) {
+            "use strict";
             // 1. Let O be ? ToObject(this value).
             if (this == null) {
                 throw TypeError('"this" is null or not defined');
@@ -59,8 +60,8 @@ if (!Array.prototype.find) {
             var len = o.length >>> 0;
 
             // 3. If IsCallable(predicate) is false, throw a TypeError exception.
-            if (typeof predicate !== 'function') {
-                throw TypeError('predicate must be a function');
+            if (typeof predicate !== "function") {
+                throw TypeError("predicate must be a function");
             }
 
             // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.

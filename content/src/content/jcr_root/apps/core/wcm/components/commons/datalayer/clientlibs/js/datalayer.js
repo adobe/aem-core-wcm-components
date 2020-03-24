@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
+(function() {
     "use strict";
 
     var dataLayer = window.dataLayer = window.dataLayer || [];
@@ -39,7 +39,7 @@
         if (parentElement) {
 
             if (parentElement.tagName === "BODY") {
-                parentData = dataLayer.find(function (element) {
+                parentData = dataLayer.find(function(element) {
                     return element.data !== undefined && element.data.page !== undefined;
                 });
 
@@ -84,11 +84,11 @@
         var components = document.querySelectorAll("[data-cmp-data-layer]");
         var clickableElements = document.querySelectorAll("[data-cmp-clickable]");
 
-        components.forEach(function (component) {
+        components.forEach(function(component) {
             addComponentToDataLayer(component);
         });
 
-        clickableElements.forEach(function (element) {
+        clickableElements.forEach(function(element) {
             attachClickEventListener(element);
         });
 

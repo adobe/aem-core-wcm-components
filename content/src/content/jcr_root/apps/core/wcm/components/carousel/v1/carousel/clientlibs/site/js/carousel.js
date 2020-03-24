@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-(function () {
+(function() {
     "use strict";
 
     var dataLayer = window.dataLayer = window.dataLayer || [];
@@ -45,7 +45,7 @@
          */
         "autoplay": {
             "default": false,
-            "transform": function (value) {
+            "transform": function(value) {
                 return !(value === null || typeof value === "undefined");
             }
         },
@@ -58,7 +58,7 @@
          */
         "delay": {
             "default": 5000,
-            "transform": function (value) {
+            "transform": function(value) {
                 value = parseFloat(value);
                 return !isNaN(value) ? value : null;
             }
@@ -72,7 +72,7 @@
          */
         "autopauseDisabled": {
             "default": false,
-            "transform": function (value) {
+            "transform": function(value) {
                 return !(value === null || typeof value === "undefined");
             }
         }
@@ -130,7 +130,7 @@
                  * - check that the message data panel container type is correct and that the id (path) matches this specific Carousel component
                  * - if so, route the "navigate" operation to enact a navigation of the Carousel based on index data
                  */
-                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function (message) {
+                new window.Granite.author.MessageChannel("cqauthor", window).subscribeRequestMessage("cmp.panelcontainer", function(message) {
                     if (message.data && message.data.type === "cmp-carousel" && message.data.id === that._elements.self.dataset["cmpPanelcontainerId"]) {
                         if (message.data.operation === "navigate") {
                             navigate(message.data.index);
@@ -208,7 +208,7 @@
          */
         function bindEvents() {
             if (that._elements["previous"]) {
-                that._elements["previous"].addEventListener("click", function () {
+                that._elements["previous"].addEventListener("click", function() {
                     var index = getPreviousIndex();
                     navigate(index);
                     dataLayer.push({
@@ -219,7 +219,7 @@
             }
 
             if (that._elements["next"]) {
-                that._elements["next"].addEventListener("click", function () {
+                that._elements["next"].addEventListener("click", function() {
                     var index = getNextIndex();
                     navigate(index);
                     dataLayer.push({
@@ -232,8 +232,8 @@
             var indicators = that._elements["indicator"];
             if (indicators) {
                 for (var i = 0; i < indicators.length; i++) {
-                    (function (index) {
-                        indicators[i].addEventListener("click", function (event) {
+                    (function(index) {
+                        indicators[i].addEventListener("click", function(event) {
                             navigateAndFocusIndicator(index);
                         });
                     })(i);
@@ -521,7 +521,7 @@
                 return;
             }
             clearAutoplayInterval();
-            that._autoplayIntervalId = window.setInterval(function () {
+            that._autoplayIntervalId = window.setInterval(function() {
                 if (document.visibilityState && document.hidden) {
                     return;
                 }
@@ -611,15 +611,15 @@
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         var body = document.querySelector("body");
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);
                 if (nodesArray.length > 0) {
-                    nodesArray.forEach(function (addedNode) {
+                    nodesArray.forEach(function(addedNode) {
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
-                            elementsArray.forEach(function (element) {
+                            elementsArray.forEach(function(element) {
                                 new Carousel({ element: element, options: readData(element) });
                             });
                         }

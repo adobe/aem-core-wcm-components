@@ -30,4 +30,9 @@ public abstract class AbstractListItemImpl extends AbstractDataLayerProvider {
     public String getId() {
         return parentId + "-item-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
     }
+
+    @Override
+    public String getDataLayerId() {
+        return getId();
+    }
 }

@@ -115,11 +115,6 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
      */
 
     @Override
-    public String getDataLayerId() {
-        return getDataLayerType() + "-" + StringUtils.substring(DigestUtils.sha1Hex(getPath()), 0, 10);
-    }
-
-    @Override
     public String getDataLayerType() {
         return "pageListItem";
     }
