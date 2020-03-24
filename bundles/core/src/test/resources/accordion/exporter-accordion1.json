@@ -20,7 +20,6 @@
     ],
     ":items": {
         "item_1": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -33,6 +32,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-5dc95c9099",
                     "dataLayerJson": {
                         "name": "item_1_1",
                         "id": "teaser-5dc95c9099",
@@ -48,6 +48,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-f008821049",
                     "dataLayerJson": {
                         "name": "item_1_2",
                         "id": "teaser-f008821049",
@@ -57,10 +58,10 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Accordion Item 1"
         },
         "item_2": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -73,6 +74,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-bb8dc8a6f5",
                     "dataLayerJson": {
                         "name": "item_2_1",
                         "id": "teaser-bb8dc8a6f5",
@@ -88,6 +90,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-ec7d51f96d",
                     "dataLayerJson": {
                         "name": "item_2_2",
                         "id": "teaser-ec7d51f96d",
@@ -97,6 +100,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Accordion Panel 2"
         }
     },

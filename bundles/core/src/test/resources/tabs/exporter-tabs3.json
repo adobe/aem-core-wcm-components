@@ -16,7 +16,6 @@
     ],
     ":items": {
         "item_1": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -29,6 +28,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-1af0260b68",
                     "dataLayerJson": {
                         "name": "item_1_1",
                         "id": "teaser-1af0260b68",
@@ -44,6 +44,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-a47ad8dddc",
                     "dataLayerJson": {
                         "name": "item_1_2",
                         "id": "teaser-a47ad8dddc",
@@ -53,10 +54,10 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -69,6 +70,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-4e48d10e94",
                     "dataLayerJson": {
                         "name": "item_2_1",
                         "id": "teaser-4e48d10e94",
@@ -84,6 +86,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-8b07f38b51",
                     "dataLayerJson": {
                         "name": "item_2_2",
                         "id": "teaser-8b07f38b51",
@@ -93,6 +96,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab Panel 2"
         }
     },

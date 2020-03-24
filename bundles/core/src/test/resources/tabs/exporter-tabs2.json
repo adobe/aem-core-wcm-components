@@ -16,7 +16,6 @@
     ],
     ":items": {
         "item_1": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -29,6 +28,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-17e977eb97",
                     "dataLayerJson": {
                         "name": "item_1_1",
                         "id": "teaser-17e977eb97",
@@ -55,7 +55,6 @@
                     ],
                     ":items": {
                         "item_1_2_1": {
-                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_1_1",
                                 "item_1_2_1_2"
@@ -68,6 +67,7 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-0ccf827f99",
                                     "dataLayerJson": {
                                         "name": "item_1_2_1_1",
                                         "id": "teaser-0ccf827f99",
@@ -83,6 +83,7 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-e00f37311e",
                                     "dataLayerJson": {
                                         "name": "item_1_2_1_2",
                                         "id": "teaser-e00f37311e",
@@ -92,10 +93,10 @@
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
+                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.1"
                         },
                         "item_1_2_2": {
-                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_2_1",
                                 "item_1_2_2_2"
@@ -108,6 +109,7 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-ad7ea75e08",
                                     "dataLayerJson": {
                                         "name": "item_1_2_2_1",
                                         "id": "teaser-ad7ea75e08",
@@ -142,6 +144,7 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-92a997f236",
                                             "dataLayerJson": {
                                                 "name": "item_1_2_2_2_1",
                                                 "id": "teaser-92a997f236",
@@ -158,6 +161,7 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-ab69e5ed75",
                                             "dataLayerJson": {
                                                 "name": "item_1_2_2_2_2",
                                                 "id": "teaser-ab69e5ed75",
@@ -174,6 +178,7 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-d699b60480",
                                             "dataLayerJson": {
                                                 "name": "item_1_2_2_2_3",
                                                 "id": "teaser-d699b60480",
@@ -187,16 +192,17 @@
                                     ":type": "core/wcm/components/carousel/v1/carousel"
                                 }
                             },
+                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.2"
                         }
                     },
                     ":type": "core/wcm/components/tabs/v1/tabs"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
-            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -209,6 +215,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-0b379f6a44",
                     "dataLayerJson": {
                         "name": "item_2_1",
                         "id": "teaser-0b379f6a44",
@@ -224,6 +231,7 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-cd971022da",
                     "dataLayerJson": {
                         "name": "item_2_2",
                         "id": "teaser-cd971022da",
@@ -233,6 +241,7 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
+            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 2"
         }
     },

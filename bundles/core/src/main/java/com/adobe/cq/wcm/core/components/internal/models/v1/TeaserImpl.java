@@ -205,9 +205,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
             for (Resource actionRes : actionsNode.getChildren()) {
-                actions.add(new Action(actionRes));
+                actions.add(new Action(actionRes, this.getId()));
             }
         }
+    }
+
+    public String getId() {
+        return "teaser-" + StringUtils.substring(DigestUtils.sha1Hex(resource.getPath()), 0, 10);
     }
 
     @Override
@@ -292,7 +296,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getDataLayerId() {
-        return getDataLayerType() + "-" + StringUtils.substring(DigestUtils.sha1Hex(resource.getPath()), 0, 10);
+        return getId();
     }
 
     @Override
@@ -321,12 +325,16 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         ValueMap properties;
         String title;
         String url;
+        String path;
         Page page;
+        String parentId;
 
-        public Action(Resource actionRes) {
+        public Action(Resource actionRes, String parentId) {
+            this.parentId = parentId;
             properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
             url = properties.get(PN_ACTION_LINK, String.class);
+            path = actionRes.getPath();
             if (url != null && url.startsWith("/")) {
                 page = pageManager.getPage(url);
             }
@@ -354,13 +362,17 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
+        public String getId() {
+            return parentId + "-cta-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
+        }
+
         /*
          * DataLayerProvider implementation of field getters
          */
 
         @Override
         public String getDataLayerId() {
-            return getDataLayerType() + "-" + StringUtils.substring(DigestUtils.sha1Hex(resource.getPath()), 0, 10);
+            return getId();
         }
 
         @Override
@@ -371,6 +383,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Override
         public String getDataLayerLinkUrl() {
             return getURL();
+        }
+
+        @Override
+        public String getDataLayerPath() {
+            return path;
         }
 
         @Override

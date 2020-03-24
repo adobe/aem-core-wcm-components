@@ -29,7 +29,7 @@
          class="cmp-carousel__content">
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
-             id="${carousel.id}-item-${itemList.index}"
+             id="${item.id}"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              role="tabpanel"
              aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
