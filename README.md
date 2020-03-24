@@ -64,6 +64,27 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for the main upcoming components and features.
 
+## Extensions
+
+### AMP
+
+Learn more about AMP [here](https://amp.dev/).
+
+The [Component Library](https://www.adobe.com/go/aem_cmp_library) and [its code](examples/src/content/jcr_root/apps/core-components-examples) in this repository show how it can be used. 
+
+#### AMP behavior control
+
+For AEM users to control if they want their pages to be / not be AMP, an author with sufficient permissions can go un the page template's Page Policy and select the **AMP Mode**. It has the following options:
+
+1. ***No AMP***: This is the default. Pages will still render as usual and if a page is requested with the `amp` selector, its HTML version will be rendered and the proper metadata in the `<head>` will inform there is no AMP version for this page.
+2. ***Paired AMP***: This mode will allow delivery of **both** HTML and AMP pages relying on the `amp` sling selector to render a `page.html` and `page.amp.html` (see [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md) for more details)
+3. ***AMP Only***: The opposite of "No AMP". Pages requested will attempt to render their AMP version regardless of the request containing the `.amp` selector or not.
+
+All pages using the template where this is specified will inherit the behavior. This can also be overwritten at the page level by going to the page properties, under the "Advanced" tab and changing the "AMP Mode" from "Inherit from Page template" to something else. This will let Authors control if they want certain pages to have a different behavior than the one specified by the template.
+
+**Read more about the [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md)**
+
+
 ## Component Versioning
 
 The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.

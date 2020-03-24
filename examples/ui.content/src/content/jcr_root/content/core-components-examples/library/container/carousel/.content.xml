@@ -45,11 +45,11 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_carousel_v1"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -61,7 +61,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
@@ -113,7 +113,7 @@
                             jcr:lastModified="{Date}2019-01-15T14:12:32.561+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/carousel/v1/carousel"
+                            sling:resourceType="core-components-examples/components/carousel"
                             autopauseDisabled="false"
                             autoplay="false"
                             delay="5000">
@@ -124,7 +124,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:47:21.991+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 altValueFromDAM="true"
                                 displayPopupTitle="true"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
@@ -136,7 +136,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:47:15.955+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             <image_1533234440
                                 jcr:created="{Date}2018-12-06T19:32:33.312+01:00"
@@ -144,13 +144,13 @@
                                 jcr:lastModified="{Date}2018-12-06T19:47:05.017+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
                         </carousel>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -203,7 +203,7 @@
                             jcr:lastModified="{Date}2019-01-22T13:37:48.966+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/carousel/v1/carousel"
+                            sling:resourceType="core-components-examples/components/carousel"
                             autopauseDisabled="false"
                             autoplay="false"
                             delay="5000">
@@ -216,7 +216,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="First Teaser Title"
-                                sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                                sling:resourceType="core-components-examples/components/teaser"
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
@@ -232,7 +232,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Second Teaser Title"
-                                sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                                sling:resourceType="core-components-examples/components/teaser"
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
@@ -248,7 +248,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Third Teaser Title"
-                                sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                                sling:resourceType="core-components-examples/components/teaser"
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
@@ -259,7 +259,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -312,7 +312,7 @@
                             jcr:lastModified="{Date}2019-01-14T21:10:38.710+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/carousel/v1/carousel"
+                            sling:resourceType="core-components-examples/components/carousel"
                             autopauseDisabled="false"
                             autoplay="true"
                             delay="5000">
@@ -322,7 +322,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:01.312+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
                             <image_1072016967
                                 jcr:created="{Date}2018-12-06T19:32:52.544+01:00"
@@ -330,7 +330,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:06.410+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             <image
                                 jcr:created="{Date}2018-12-06T19:32:50.631+01:00"
@@ -338,13 +338,13 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:13.084+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
                         </carousel_7304850024>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -397,7 +397,7 @@
                             jcr:lastModified="{Date}2019-01-14T21:10:54.093+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/carousel/v1/carousel"
+                            sling:resourceType="core-components-examples/components/carousel"
                             autopauseDisabled="true"
                             autoplay="true"
                             delay="5000">
@@ -407,7 +407,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:18.797+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
                             <image_1321018784
                                 jcr:created="{Date}2018-12-06T19:33:14.961+01:00"
@@ -415,7 +415,7 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:24.034+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             <image
                                 jcr:created="{Date}2018-12-06T19:33:13.071+01:00"
@@ -423,13 +423,13 @@
                                 jcr:lastModified="{Date}2018-12-06T19:48:29.338+01:00"
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="core/wcm/components/image/v2/image"
+                                sling:resourceType="core-components-examples/components/image"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"/>
                         </carousel_1655133361>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
