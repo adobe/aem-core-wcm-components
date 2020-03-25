@@ -12,8 +12,8 @@
           "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
           "id": "navigation-f65c5ba806-item-fb1ada3ea5",
           "description": null,
-          "lastModified": null,
           "title": "Navigation 1.1.1",
+          "lastModified": null,
           "dataLayerJson": {
             "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
             "name": "navigation-1-1-1",
@@ -21,7 +21,8 @@
             "id": "navigation-f65c5ba806-item-fb1ada3ea5",
             "text": "Navigation 1.1.1",
             "type": "navigationItem",
-            "title": "Navigation 1.1.1"
+            "title": "Navigation 1.1.1",
+            "itemsCount": 0
           }
         },
         {
@@ -35,8 +36,8 @@
               "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
               "id": "navigation-f65c5ba806-item-9426a0ce95",
               "description": null,
-              "lastModified": null,
               "title": "Navigation 1.1.2.2.1",
+              "lastModified": null,
               "dataLayerJson": {
                 "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
                 "name": "navigation-1-1-2-2-1",
@@ -44,7 +45,8 @@
                 "id": "navigation-f65c5ba806-item-9426a0ce95",
                 "text": "Navigation 1.1.2.2.1",
                 "type": "navigationItem",
-                "title": "Navigation 1.1.2.2.1"
+                "title": "Navigation 1.1.2.2.1",
+                "itemsCount": 0
               }
             },
             {
@@ -55,8 +57,8 @@
               "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
               "id": "navigation-f65c5ba806-item-76b8218a66",
               "description": null,
-              "lastModified": null,
               "title": "Navigation 1.1.2.3",
+              "lastModified": null,
               "dataLayerJson": {
                 "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
                 "name": "navigation-1-1-2-3",
@@ -64,7 +66,8 @@
                 "id": "navigation-f65c5ba806-item-76b8218a66",
                 "text": "Navigation 1.1.2.3",
                 "type": "navigationItem",
-                "title": "Navigation 1.1.2.3"
+                "title": "Navigation 1.1.2.3",
+                "itemsCount": 0
               }
             }
           ],
@@ -73,8 +76,8 @@
           "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
           "id": "navigation-f65c5ba806-item-064aa2d48d",
           "description": null,
-          "lastModified": null,
           "title": "Navigation 1.1.2",
+          "lastModified": null,
           "dataLayerJson": {
             "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
             "name": "navigation-1-1-2",
@@ -82,7 +85,8 @@
             "id": "navigation-f65c5ba806-item-064aa2d48d",
             "text": "Navigation 1.1.2",
             "type": "navigationItem",
-            "title": "Navigation 1.1.2"
+            "title": "Navigation 1.1.2",
+            "itemsCount": 2
           }
         }
       ],
@@ -91,8 +95,8 @@
       "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
       "id": "navigation-f65c5ba806-item-3366a5dc97",
       "description": null,
-      "lastModified": null,
       "title": "Navigation 1.1",
+      "lastModified": null,
       "dataLayerJson": {
         "path": "/content/navigation/navigation-1/navigation-1-1",
         "name": "navigation-1-1",
@@ -100,7 +104,8 @@
         "id": "navigation-f65c5ba806-item-3366a5dc97",
         "text": "Navigation 1.1",
         "type": "navigationItem",
-        "title": "Navigation 1.1"
+        "title": "Navigation 1.1",
+        "itemsCount": 2
       }
     }
   ],

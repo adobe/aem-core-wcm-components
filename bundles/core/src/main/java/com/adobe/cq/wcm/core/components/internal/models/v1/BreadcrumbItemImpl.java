@@ -41,4 +41,9 @@ public class BreadcrumbItemImpl extends NavigationItemImpl implements Navigation
     public String getDataLayerType() {
         return "breadcrumbItem";
     }
+
+    @Override
+    public int getDataLayerItemsCount() {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -22,7 +22,8 @@
         "id": "languagenavigation-67a3e8f8b7-item-f7ed60dba3",
         "text": "LOCALE 1",
         "type": "languageNavigationItem",
-        "title": "LOCALE 1"
+        "title": "LOCALE 1",
+        "itemsCount": 0
       }
     },
     {
@@ -46,7 +47,8 @@
         "id": "languagenavigation-67a3e8f8b7-item-ae086001b7",
         "text": "LOCALE 2",
         "type": "languageNavigationItem",
-        "title": "LOCALE 2"
+        "title": "LOCALE 2",
+        "itemsCount": 0
       }
     },
     {
@@ -70,7 +72,8 @@
         "id": "languagenavigation-67a3e8f8b7-item-715681d1e2",
         "text": "LOCALE 3",
         "type": "languageNavigationItem",
-        "title": "LOCALE 3"
+        "title": "LOCALE 3",
+        "itemsCount": 0
       }
     },
     {
@@ -94,7 +97,8 @@
         "id": "languagenavigation-67a3e8f8b7-item-540d311dbc",
         "text": "LOCALE 4",
         "type": "languageNavigationItem",
-        "title": "LOCALE 4"
+        "title": "LOCALE 4",
+        "itemsCount": 0
       }
     }
   ],

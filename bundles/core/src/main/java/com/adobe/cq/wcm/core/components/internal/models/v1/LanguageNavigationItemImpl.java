@@ -83,4 +83,9 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     public String getDataLayerLanguage() {
         return getLanguage();
     }
+
+    @Override
+    public int getDataLayerItemsCount() {
+        return getChildren().size();
+    }
 }

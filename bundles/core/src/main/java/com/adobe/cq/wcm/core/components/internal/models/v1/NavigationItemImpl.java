@@ -67,4 +67,9 @@ public class NavigationItemImpl extends PageListItemImpl implements NavigationIt
     public String getDataLayerType() {
         return "navigationItem";
     }
+
+    @Override
+    public int getDataLayerItemsCount() {
+        return getChildren().size();
+    }
 }
