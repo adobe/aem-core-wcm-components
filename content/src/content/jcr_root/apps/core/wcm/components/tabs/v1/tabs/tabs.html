@@ -27,9 +27,9 @@
         aria-multiselectable="false">
         <sly data-sly-test.isActive="${tab.name == tabs.activeItem}"/>
         <li role="tab"
-            id="${tabs.id}-tab-${tabList.index}"
+            id="${tab.id}-tab"
             class="cmp-tabs__tab${isActive ? ' cmp-tabs__tab--active' : ''}"
-            aria-controls="${tabs.id}-tabpanel-${tabList.index}"
+            aria-controls="${tab.id}-tabpanel"
             tabindex="${isActive ? '0' : '-1'}"
             data-cmp-hook-tabs="tab">${tab.title}</li>
     </ol>
