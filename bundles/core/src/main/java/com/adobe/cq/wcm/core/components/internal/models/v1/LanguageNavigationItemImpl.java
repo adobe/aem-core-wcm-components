@@ -78,4 +78,9 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
     public String getDataLayerType() {
         return "languageNavigationItem";
     }
+
+    @Override
+    public String getDataLayerLanguage() {
+        return getLanguage();
+    }
 }
