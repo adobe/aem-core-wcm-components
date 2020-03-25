@@ -32,7 +32,11 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
             String jcrTitle = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            title = valueMap.get(PN_PANEL_TITLE, jcrTitle);
+            if (jcrTitle == null) {
+                title = valueMap.get(PN_PANEL_TITLE, String.class);
+            } else {
+                title = valueMap.get(PN_PANEL_TITLE, jcrTitle);
+            }
         }
     }
 }
