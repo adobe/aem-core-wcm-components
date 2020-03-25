@@ -43,6 +43,7 @@ class TabsImplTest {
     private static final String TABS_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-1";
     private static final String TABS_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-2";
     private static final String TABS_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-3";
+    private static final String TABS_4 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-4";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
@@ -88,6 +89,16 @@ class TabsImplTest {
         verifyTabItems(expectedItems, tabs.getItems());
         assertEquals("item_1", tabs.getActiveItem());
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs3"));
+    }
+
+    @Test
+    void testTabsEmptyTitleItem() {
+        Tabs tabs = getTabsUnderTest(TABS_4);
+        Object[][] expectedItems = {
+            {"item_1", null},
+            {"item_2", "Tab Panel 2"},
+        };
+        verifyTabItems(expectedItems, tabs.getItems());
     }
 
     private Tabs getTabsUnderTest(String resourcePath) {
