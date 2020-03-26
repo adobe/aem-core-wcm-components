@@ -31,12 +31,7 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
         super(request, resource);
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         if (valueMap != null) {
-            String jcrTitle = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            if (jcrTitle == null) {
-                title = valueMap.get(PN_PANEL_TITLE, String.class);
-            } else {
-                title = valueMap.get(PN_PANEL_TITLE, jcrTitle);
-            }
+            title = valueMap.get(PN_PANEL_TITLE, valueMap.get(JcrConstants.JCR_TITLE, ""));
         }
     }
 }
