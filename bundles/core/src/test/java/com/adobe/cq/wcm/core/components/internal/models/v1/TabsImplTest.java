@@ -95,7 +95,7 @@ class TabsImplTest {
     void testTabsEmptyTitleItem() {
         Tabs tabs = getTabsUnderTest(TABS_4);
         Object[][] expectedItems = {
-            {"item_1", null},
+            {"item_1", ""},
             {"item_2", "Tab Panel 2"},
         };
         verifyTabItems(expectedItems, tabs.getItems());
