@@ -29,9 +29,6 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
 
     public PanelContainerItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
         super(request, resource);
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
-        if (valueMap != null) {
-            title = valueMap.get(PN_PANEL_TITLE, valueMap.get(JcrConstants.JCR_TITLE, ""));
-        }
+        title = resource.getValueMap().get(PN_PANEL_TITLE, resource.getValueMap().get(JcrConstants.JCR_TITLE, ""));
     }
 }
