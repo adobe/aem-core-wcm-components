@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
@@ -57,14 +58,25 @@ public interface TableOfContent extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
+
     /**
-     * Returns the message to be displayed when the constraint specified by {@link #getType()} is not fulfilled.
+     * Returns the Table of Content title.
      *
-     * @return the message to be displayed when the constraint specified by {@link #getType()} is not fulfilled
-     * @since com.adobe.cq.wcm.core.components.models.form 13.0.0; marked <code>default</code> in 14.1.0
+     * @return the button text
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
-    default String getConstraintMessage() {
+    default String getTitle() {
         throw new UnsupportedOperationException();
     }
 
+
+    /**
+     * @see ComponentExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.8.0
+     */
+    @NotNull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
 }

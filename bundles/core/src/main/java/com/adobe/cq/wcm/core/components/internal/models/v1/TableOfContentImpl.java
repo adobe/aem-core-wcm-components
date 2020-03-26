@@ -15,9 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.models.TableOfContent;
+import com.day.cq.wcm.api.PageManager;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Default;
@@ -34,51 +37,30 @@ import com.adobe.cq.wcm.core.components.models.form.Text;
 import com.day.cq.wcm.foundation.forms.FormStructureHelperFactory;
 import com.day.cq.wcm.foundation.forms.FormsHelper;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-    adapters = {Text.class, ComponentExporter.class},
-    resourceType = {FormConstants.RT_CORE_FORM_TEXT_V1, FormConstants.RT_CORE_FORM_TEXT_V2})
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-    extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TextImpl extends AbstractFieldImpl implements Text, ComponentExporter {
+import java.util.ArrayList;
 
-    private static final String ID_PREFIX = "table-of-content";
-    private static final String PROP_NAME_DEFAULT = "table-of-content";
-    private static final String PROP_VALUE_DEFAULT = "";
-    private static final String PROP_TITLE_DEFAULT = "Table of Content";
-    private static final boolean PROP_READONLY_DEFAULT = false;
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = {TableOfContent.class, ComponentExporter.class},
+    resourceType = {TableOfContentImpl.RESOURCE_TYPE}
+    )
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+    extensions = ExporterConstants.SLING_MODEL_EXTENSION
+)
+public class TableOfContentImpl implements  TableOfContent {
+
+
+    public static final String RESOURCE_TYPE = "core/wcm/components/tableOfContent/v1/tableOfContent";
     private static final boolean PROP_REQUIRED_DEFAULT = false;
     private static final String PROP_REQUIRED_MESSAGE_DEFAULT = "";
-    private static final String PROP_CONSTRAINT_MESSAGE_DEFAULT = "";
-    private static final String PROP_HELP_MESSAGE_DEFAULT = "";
-    private static final boolean PROP_USE_PLACEHOLDER_DEFAULT = false;
+    private static final String PROP_PLACEHOLDER_DEFAULT = "";
+    private static final String PROP_DEFAULT_TITLE = "Table of Content";
+    private static final String [] PROP_DEFAULT_CONTENT_ITEMS = {""};
 
     @Self
     private SlingHttpServletRequest slingRequest;
 
     @ScriptVariable
-    private Resource resource;
-
-    @Inject
-    private FormStructureHelperFactory formStructureHelperFactory;
-
-    private String[] prefillValues;
-
-    @ValueMapValue
-    @Default(values = PROP_HELP_MESSAGE_DEFAULT)
-    private String helpMessage;
-    private String placeholder;
-
-    @ValueMapValue
-    @Default(booleanValues = PROP_USE_PLACEHOLDER_DEFAULT)
-    private boolean usePlaceholder;
-
-    @ValueMapValue
-    @Default(values = PROP_TYPE_DEFAULT)
-    private String type;
-
-    @ValueMapValue
-    @Default(booleanValues = PROP_READONLY_DEFAULT)
-    private boolean readOnly;
+    private PageManager pageManager;
 
     @ValueMapValue
     @Default(booleanValues = PROP_REQUIRED_DEFAULT)
@@ -89,48 +71,13 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     private String requiredMessage;
 
     @ValueMapValue
-    @Default(values = PROP_CONSTRAINT_MESSAGE_DEFAULT)
-    private String constraintMessage;
+    @Default(values = PROP_PLACEHOLDER_DEFAULT)
+    private String placeholder;
 
     @ValueMapValue
-    @Default(intValues = PROP_ROWS_DEFAULT)
-    private int rows;
+    @Default(values = PROP_DEFAULT_TITLE)
+    private String title;
 
-    @ValueMapValue
-    @Default(booleanValues = PROP_HIDE_TITLE_DEFAULT)
-    private boolean hideTitle;
-
-    @PostConstruct
-    private void initModel() {
-        slingRequest.setAttribute(FormsHelper.REQ_ATTR_FORM_STRUCTURE_HELPER,
-            formStructureHelperFactory.getFormStructureHelper(resource));
-        prefillValues = FormsHelper.getValues(slingRequest, resource);
-        if (prefillValues == null) {
-            prefillValues = new String[]{this.getDefaultValue()};
-        }
-        if (usePlaceholder) {
-            placeholder = helpMessage;
-        }
-    }
-
-    @Override
-    public String getValue() {
-        String value = super.getValue();
-        if (value.equals(PROP_VALUE_DEFAULT) && prefillValues.length > 0) {
-            value = prefillValues[0];
-        }
-        return value;
-    }
-
-    @Override
-    public String getDefaultValue() {
-        return PROP_VALUE_DEFAULT;
-    }
-
-    @Override
-    public String getPlaceholder() {
-        return placeholder;
-    }
 
     @Override
     public boolean isRequired() {
@@ -143,28 +90,22 @@ public class TextImpl extends AbstractFieldImpl implements Text, ComponentExport
     }
 
     @Override
-    public String getConstraintMessage() {
-        return constraintMessage;
+    public String getPlaceholder() {
+        return placeholder;
     }
 
     @Override
-    public String getHelpMessage() {
-        return helpMessage;
-    }
+    public String getTitle() { return title; }
 
+
+
+    @Nonnull
     @Override
-    protected String getIDPrefix() {
-        return ID_PREFIX;
+    public String getExportedType() {
+        return slingRequest.getResource().getResourceType();
     }
 
-    @Override
-    protected String getDefaultName() {
-        return PROP_NAME_DEFAULT;
-    }
-
-    @Override
-    protected String getDefaultTitle() {
-        return PROP_TITLE_DEFAULT;
-    }
-
+    /*protected void populateContentItems() {
+        contentItems = new ArrayList<>()
+    } */
 }
