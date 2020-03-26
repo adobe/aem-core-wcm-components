@@ -32,30 +32,40 @@ public interface CloudConfig {
      * @return title of the cloud configuration resource
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    String getTitle();
+    default String getTitle() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * @return last modification date of the cloud configuration resource
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    Calendar getLastModifiedDate();
+    default Calendar getLastModifiedDate() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * @return {@code true} if the cloud configuration resource has children, otherwise {@code false}
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    boolean hasChildren();
+    default boolean hasChildren() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      *
      * @return {@code true} if current resource is a folder, otherwise {@code false}
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    boolean isFolder();
+    default boolean isFolder() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * @return return set of allowed actions
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    Set<String> getActionsRels();
+    default Set<String> getActionsRels() {
+        throw new UnsupportedOperationException();
+    }
 }
