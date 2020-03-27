@@ -111,7 +111,6 @@
                                                         granite:class="cloudviewer-controls cloudviewer-showAnnotationTools"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                        checked="{Boolean}true"
                                                         fieldDescription="Toggle to display annotation tools."
                                                         name="./showAnnotationTools"
                                                         text="Annotation Tools"
