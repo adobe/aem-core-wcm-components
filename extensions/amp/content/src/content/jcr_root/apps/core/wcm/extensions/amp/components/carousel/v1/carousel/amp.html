@@ -23,9 +23,9 @@
               autoplay="${carousel.autoplay}"
               delay="${carousel.delay}"
               loop
-              layout="responsive"
-              width="350"
-              height="200">
+              layout="intrinsic"
+              width="800"
+              height="450">
     <div data-sly-repeat.item="${carousel.items}"
          data-sly-resource="${item.name @ decorationTagName='div', selectors='amp'}"
          class="cmp-carousel__item"
