@@ -46,7 +46,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
@@ -62,7 +62,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
@@ -114,14 +114,14 @@
                             jcr:lastModified="{Date}2019-05-21T10:21:29.728+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="false"
                             showHidden="false"
                             startLevel="2"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -174,14 +174,14 @@
                             jcr:lastModified="{Date}2019-05-21T10:21:36.131+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="false"
                             showHidden="false"
                             startLevel="3"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -234,14 +234,14 @@
                             jcr:lastModified="{Date}2019-05-21T10:22:19.080+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="false"
                             showHidden="true"
                             startLevel="2"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -294,14 +294,14 @@
                             jcr:lastModified="{Date}2019-05-21T15:14:14.179+03:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/breadcrumb/v2/breadcrumb"
+                            sling:resourceType="core-components-examples/components/breadcrumb"
                             hideCurrent="true"
                             showHidden="false"
                             startLevel="2"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

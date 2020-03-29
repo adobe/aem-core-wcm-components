@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+    jcr:primaryType="dam:Asset"
+    jcr:uuid="4fd40205-b86f-4ad3-a741-4720613b7e5e">
+    <jcr:content
+        dam:assetState="processed"
+        jcr:lastModified="{Date}2020-01-16T18:11:54.651+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2020-01-16T18:11:44.420+01:00"
+            dam:sha1="884f66e46c0730b1d79e4f243df88e6d1f9ede2e"
+            dam:size="{Long}4014"
+            dc:format="image/svg+xml"
+            dc:modified="{Date}2020-01-16T18:11:54.651+01:00"
+            dc:title="Form Input"
+            jcr:lastModified="{Date}2020-01-16T18:11:54.651+01:00"
+            jcr:lastModifiedBy="admin"
+            jcr:mixinTypes="[cq:Taggable]"
+            jcr:primaryType="nt:unstructured"/>
+        <related jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

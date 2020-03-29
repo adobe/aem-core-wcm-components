@@ -2,6 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:rep="internal"
     jcr:mixinTypes="[rep:AccessControllable]"
     jcr:primaryType="cq:Page">
+    <rep:policy/>
     <wcm jcr:primaryType="nt:unstructured">
         <foundation jcr:primaryType="nt:unstructured">
             <components jcr:primaryType="nt:unstructured">
@@ -21,7 +22,7 @@
                                     assetGroup="media"
                                     assetMimetype="image/*"
                                     droptarget="image"
-                                    resourceType="core/wcm/components/image/v2/image"/>
+                                    resourceType="core-components-examples/components/image"/>
                             </assetToComponentMapping>
                         </cq:authoring>
                         <jcr:content
@@ -44,7 +45,7 @@
                                     assetGroup="media"
                                     assetMimetype="image/*"
                                     droptarget="image"
-                                    resourceType="core/wcm/components/image/v2/image"/>
+                                    resourceType="core-components-examples/components/image"/>
                             </assetToComponentMapping>
                         </cq:authoring>
                         <cq:styleGroups jcr:primaryType="nt:unstructured">
@@ -61,11 +62,6 @@
                                         cq:styleClasses="cmp-examples-structure__main"
                                         cq:styleId="1545309110033"
                                         cq:styleLabel="Main"
-                                        jcr:primaryType="nt:unstructured"/>
-                                    <item2
-                                        cq:styleClasses="cmp-examples-structure__aside"
-                                        cq:styleId="1545309119491"
-                                        cq:styleLabel="Aside"
                                         jcr:primaryType="nt:unstructured"/>
                                     <item3
                                         cq:styleClasses="cmp-examples-structure__footer"
@@ -291,38 +287,6 @@
                         </text>
                     </v2>
                 </text>
-                <teaser jcr:primaryType="nt:unstructured">
-                    <v1 jcr:primaryType="nt:unstructured">
-                        <teaser jcr:primaryType="nt:unstructured">
-                            <policy_1547060084604
-                                jcr:lastModified="{Date}2019-01-09T19:55:10.729+01:00"
-                                jcr:lastModifiedBy="admin"
-                                jcr:primaryType="nt:unstructured"
-                                jcr:title="Core Components Examples - Teaser"
-                                sling:resourceType="wcm/core/components/policy/policy">
-                                <jcr:content jcr:primaryType="nt:unstructured"/>
-                                <cq:styleGroups jcr:primaryType="nt:unstructured">
-                                    <item0
-                                        cq:styleGroupLabel="Variant"
-                                        jcr:primaryType="nt:unstructured">
-                                        <cq:styles jcr:primaryType="nt:unstructured">
-                                            <item0
-                                                cq:styleClasses="cmp-examples-teaser--component"
-                                                cq:styleId="1547060090076"
-                                                cq:styleLabel="Component"
-                                                jcr:primaryType="nt:unstructured"/>
-                                            <item1
-                                                cq:styleClasses="cmp-examples-teaser--document"
-                                                cq:styleId="1550165685463"
-                                                cq:styleLabel="Document"
-                                                jcr:primaryType="nt:unstructured"/>
-                                        </cq:styles>
-                                    </item0>
-                                </cq:styleGroups>
-                            </policy_1547060084604>
-                        </teaser>
-                    </v1>
-                </teaser>
                 <form jcr:primaryType="nt:unstructured">
                     <text jcr:primaryType="nt:unstructured">
                         <v2 jcr:primaryType="nt:unstructured">
@@ -377,24 +341,6 @@
                         </separator>
                     </v1>
                 </separator>
-                <download jcr:primaryType="nt:unstructured">
-                    <v1 jcr:primaryType="nt:unstructured">
-                        <download jcr:primaryType="nt:unstructured">
-                            <policy_1559906471859
-                                jcr:lastModified="{Date}2019-06-07T13:36:21.106+02:00"
-                                jcr:lastModifiedBy="admin"
-                                jcr:primaryType="nt:unstructured"
-                                jcr:title="download"
-                                sling:resourceType="wcm/core/components/policy/policy"
-                                allowUpload="true"
-                                displayFilename="true"
-                                displayFormat="true"
-                                displaySize="true">
-                                <jcr:content jcr:primaryType="nt:unstructured"/>
-                            </policy_1559906471859>
-                        </download>
-                    </v1>
-                </download>
                 <container jcr:primaryType="nt:unstructured">
                     <v1 jcr:primaryType="nt:unstructured">
                         <container jcr:primaryType="nt:unstructured">
@@ -434,11 +380,67 @@
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Core Components Examples - Page"
                     sling:resourceType="wcm/core/components/policy/policy"
+                    ampMode="pairedAmp"
                     appResourcesClientlib="cmp-examples.site"
                     clientlibs="cmp-examples.base">
                     <jcr:content jcr:primaryType="nt:unstructured"/>
                 </policy_212634895490169>
             </page>
+            <search jcr:primaryType="nt:unstructured">
+                <policy_1572547933941
+                    jcr:lastModified="{Date}2019-10-31T12:58:04.144-06:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Core Components Examples - Search"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    resultsSize="30"
+                    searchRoot="/content/core-components-examples/library"
+                    searchTermMinimumLength="1">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1572547933941>
+            </search>
+            <teaser jcr:primaryType="nt:unstructured">
+                <policy_1547060084604
+                    jcr:lastModified="{Date}2020-03-06T00:50:36.952+01:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="Core Components Examples - Teaser"
+                    sling:resourceType="wcm/core/components/policy/policy">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                    <cq:styleGroups jcr:primaryType="nt:unstructured">
+                        <item0
+                            cq:styleGroupLabel="Variant"
+                            jcr:primaryType="nt:unstructured">
+                            <cq:styles jcr:primaryType="nt:unstructured">
+                                <item0
+                                    cq:styleClasses="cmp-examples-teaser--component"
+                                    cq:styleId="1547060090076"
+                                    cq:styleLabel="Component"
+                                    jcr:primaryType="nt:unstructured"/>
+                                <item1
+                                    cq:styleClasses="cmp-examples-teaser--document"
+                                    cq:styleId="1550165685463"
+                                    cq:styleLabel="Document"
+                                    jcr:primaryType="nt:unstructured"/>
+                            </cq:styles>
+                        </item0>
+                    </cq:styleGroups>
+                </policy_1547060084604>
+            </teaser>
+            <download jcr:primaryType="nt:unstructured">
+                <policy_1559906471859
+                    jcr:lastModified="{Date}2019-06-07T13:36:21.106+02:00"
+                    jcr:lastModifiedBy="admin"
+                    jcr:primaryType="nt:unstructured"
+                    jcr:title="download"
+                    sling:resourceType="wcm/core/components/policy/policy"
+                    allowUpload="true"
+                    displayFilename="true"
+                    displayFormat="true"
+                    displaySize="true">
+                    <jcr:content jcr:primaryType="nt:unstructured"/>
+                </policy_1559906471859>
+            </download>
         </components>
     </core-components-examples>
 </jcr:root>

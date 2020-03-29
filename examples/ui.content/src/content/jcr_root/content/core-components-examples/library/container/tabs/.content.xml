@@ -9,7 +9,8 @@
         jcr:description="Switchable content panels"
         jcr:primaryType="cq:PageContent"
         jcr:title="Tabs"
-        sling:resourceType="core-components-examples/components/page">
+        sling:resourceType="core-components-examples/components/page"
+        ampMode="noAmp">
         <root
             jcr:primaryType="nt:unstructured"
             sling:resourceType="wcm/foundation/components/responsivegrid">
@@ -45,11 +46,11 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_tabs_v1"
+                    linkURL="https://github.com/adobe/aem-core-wcm-components/blob/master/content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -61,7 +62,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
+                    sling:resourceType="core-components-examples/components/teaser"
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
@@ -113,7 +114,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:11:51.267+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                             <item_1
                                 cq:panelTitle="Tab 1"
                                 jcr:primaryType="nt:unstructured"
@@ -132,7 +133,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -185,7 +186,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:12:10.691+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                             <item_1
                                 cq:panelTitle="Tab 1"
                                 jcr:primaryType="nt:unstructured"
@@ -206,7 +207,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:13:13.580+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core-components-examples/components/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"/>
                             </item_1>
                             <item_2
@@ -229,7 +230,7 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:44.428+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core-components-examples/components/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"/>
                             </item_2>
                             <item_1544184727261
@@ -252,14 +253,14 @@
                                     jcr:lastModified="{Date}2018-12-07T13:14:50.727+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/image/v2/image"
+                                    sling:resourceType="core-components-examples/components/image"
                                     fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"/>
                             </item_1544184727261>
                         </tabs>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -312,7 +313,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:15:45.655+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs"
+                            sling:resourceType="core-components-examples/components/tabs"
                             activeItem="item_1544184936449">
                             <item_1
                                 cq:panelTitle="Tab 1"
@@ -333,7 +334,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"
@@ -386,7 +387,7 @@
                             jcr:lastModified="{Date}2018-12-07T13:25:41.269+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            sling:resourceType="core-components-examples/components/tabs">
                             <item_1
                                 cq:panelTitle="Tab 1"
                                 jcr:primaryType="nt:unstructured"
@@ -398,7 +399,7 @@
                                     jcr:lastModified="{Date}2019-01-22T12:51:03.767+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                                    sling:resourceType="core-components-examples/components/tabs">
                                     <item_1
                                         cq:panelTitle="Tab 1.1"
                                         jcr:primaryType="nt:unstructured"
@@ -427,7 +428,7 @@
                                     jcr:lastModified="{Date}2019-01-22T12:51:24.126+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                                    sling:resourceType="core-components-examples/components/tabs">
                                     <item_1
                                         cq:panelTitle="Tab 2.1"
                                         jcr:primaryType="nt:unstructured"
@@ -456,7 +457,7 @@
                                     jcr:lastModified="{Date}2019-01-22T12:51:36.077+01:00"
                                     jcr:lastModifiedBy="admin"
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                                    sling:resourceType="core-components-examples/components/tabs">
                                     <item_1
                                         cq:panelTitle="Tab 3.1"
                                         jcr:primaryType="nt:unstructured"
@@ -478,7 +479,7 @@
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                        sling:resourceType="core-components-examples/components/tabs">
                         <properties
                             cq:panelTitle="Properties"
                             jcr:primaryType="nt:unstructured"

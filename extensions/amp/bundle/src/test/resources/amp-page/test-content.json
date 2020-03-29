@@ -1,0 +1,65 @@
+{
+    "paired-amp": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "pairedAmp"
+        }
+    },
+    "amp-selector-with-amp-mode-no-component": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "ampOnly",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "responsivegrid": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "sample": {
+                        "jcr:primaryType": "core/wcm/components/sample/v1/sample"
+                    }
+                }
+            }
+        }
+    },
+    "amp-selector-with-amp-mode-null-supertype": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "ampOnly",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "responsivegrid": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "null-supertype": {
+                        "jcr:primaryType": "core/wcm/components/null-supertype/v1/null-supertype"
+                    }
+                }
+            }
+        }
+    },
+    "amp-selector-with-amp-mode-no-supertype": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Filter Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "ampMode": "ampOnly",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
+                "responsivegrid": {
+                    "jcr:primaryType": "nt:unstructured",
+                    "null-supertype": {
+                        "jcr:primaryType": "core/wcm/components/no-local/v1/no-local"
+                    }
+                }
+            }
+        }
+    }
+}
