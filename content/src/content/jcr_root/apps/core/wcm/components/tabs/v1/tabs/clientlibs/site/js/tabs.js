@@ -76,6 +76,18 @@
                 bindEvents();
             }
 
+            // Show the tab based on deep-link-id if it matches with any existing tab item id
+            if (config.deepLinkId && config.deepLinkId.substring("-tab-") !== -1) {
+                if (that._elements["tab"][that._active].id !== config.deepLinkId) {
+                    for (var tabIndex = 0; that._elements["tab"].length > tabIndex; tabIndex++) {
+                        if (that._elements["tab"][tabIndex].id === config.deepLinkId) {
+                            navigateAndFocusTab(tabIndex);
+                        }
+                    }
+                }
+            }
+
+
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
                 /*
                  * Editor message handling:
@@ -301,14 +313,28 @@
     }
 
     /**
+     * Parses the url to extract the deep-link-id and returns deep-link-id
+     *
+     * @private
+     * @returns {String} deep-link-id if found otherwise undefined
+     */
+    function getDeepLinkId() {
+        if (window.location.hash) {
+            var uriParts = document.URL.split("#");
+            return uriParts[uriParts.length - 1];
+        }
+    }
+
+    /**
      * Document ready handler and DOM mutation observers. Initializes Tabs components as necessary.
      *
      * @private
      */
     function onDocumentReady() {
+        var deepLinkId = getDeepLinkId();
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
-            new Tabs({ element: elements[i], options: readData(elements[i]) });
+            new Tabs({ element: elements[i], options: readData(elements[i]), deepLinkId: deepLinkId });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -322,7 +348,7 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Tabs({ element: element, options: readData(element) });
+                                new Tabs({ element: element, options: readData(element), deepLinkId: deepLinkId });
                             });
                         }
                     });
