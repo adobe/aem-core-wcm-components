@@ -20,8 +20,8 @@
         <sly data-sly-test="${options.type.value == 'checkbox' || options.type.value == 'radio'}">
             <legend class="cmp-form-options__legend">${options.title}</legend>
             <label class="cmp-form-options__field-label" data-sly-repeat.optionItem="${options.items}">
-                <input class="cmp-form-options__field cmp-form-options__field--${options.type.value}" type="${options.type.value}" name="${options.name}"
-                       value="${optionItem.value}" checked="${optionItem.selected}" disabled="${optionItem.disabled}"/>
+                <input class="cmp-form-options__field cmp-form-options__field--${options.type.value}" name="${options.name}"
+                       value="${optionItem.value}" checked="${optionItem.selected}" disabled="${optionItem.disabled}" type="${options.type.value}"/>
                 <span class="cmp-form-options__field-description">${optionItem.text}</span>
             </label>
         </sly>

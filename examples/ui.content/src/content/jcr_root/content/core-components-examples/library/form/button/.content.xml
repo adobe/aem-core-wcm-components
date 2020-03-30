@@ -117,7 +117,7 @@
                             jcr:lastModified="{Date}2019-12-12T15:11:07.764+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/form/container/v2/container"
+                            sling:resourceType="core-components-examples/components/form/container"
                             action="/content/usergenerated/core-components-examples/library/form/cq-gen1576159867766/"
                             actionType="foundation/components/form/actions/store">
                             <cq:responsive jcr:primaryType="nt:unstructured"/>
@@ -227,7 +227,7 @@
                             jcr:lastModified="{Date}2019-12-12T14:31:12.108+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/form/container/v2/container"
+                            sling:resourceType="core-components-examples/components/form/container"
                             action="/content/usergenerated/core-components-examples/library/form/cq-gen1576157004947/"
                             actionType="foundation/components/form/actions/store">
                             <cq:responsive jcr:primaryType="nt:unstructured"/>
@@ -238,7 +238,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="Name"
-                                sling:resourceType="core/wcm/components/form/text/v2/text"
+                                sling:resourceType="core-components-examples/components/form/text"
                                 helpMessage="First Name"
                                 name="firstName"
                                 rows="2"
@@ -251,7 +251,7 @@
                                 jcr:lastModifiedBy="admin"
                                 jcr:primaryType="nt:unstructured"
                                 jcr:title="E-Mail"
-                                sling:resourceType="core/wcm/components/form/text/v2/text"
+                                sling:resourceType="core-components-examples/components/form/text"
                                 helpMessage="E-Mail"
                                 name="email"
                                 required="true"
