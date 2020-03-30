@@ -117,7 +117,7 @@
                             jcr:lastModified="{Date}2019-12-19T13:48:54.926+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/form/container/v2/container"
+                            sling:resourceType="core-components-examples/components/form/container"
                             action="/content/usergenerated/core-components-examples/library/form-options/cq-gen1576759734929/"
                             actionType="foundation/components/form/actions/store">
                             <cq:responsive jcr:primaryType="nt:unstructured"/>
@@ -223,7 +223,7 @@
                             jcr:lastModified="{Date}2019-12-12T15:11:07.764+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/form/container/v2/container"
+                            sling:resourceType="core-components-examples/components/form/container"
                             action="/content/usergenerated/core-components-examples/library/form/cq-gen1576159867766/"
                             actionType="foundation/components/form/actions/store">
                             <cq:responsive jcr:primaryType="nt:unstructured"/>
@@ -313,7 +313,7 @@
                             jcr:lastModified="{Date}2019-12-12T15:43:05.598+01:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/form/container/v2/container"
+                            sling:resourceType="core-components-examples/components/form/container"
                             action="/content/usergenerated/core-components-examples/library/form/cq-gen1576161785602/"
                             actionType="foundation/components/form/actions/store">
                             <cq:responsive jcr:primaryType="nt:unstructured"/>
@@ -402,7 +402,7 @@
                     jcr:lastModified="{Date}2019-12-19T14:59:40.411+01:00"
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/form/container/v2/container"
+                    sling:resourceType="core-components-examples/components/form/container"
                     action="/content/usergenerated/core-components-examples/library/form-options/cq-gen1576763980417/"
                     actionType="foundation/components/form/actions/store">
                     <cq:responsive jcr:primaryType="nt:unstructured"/>
