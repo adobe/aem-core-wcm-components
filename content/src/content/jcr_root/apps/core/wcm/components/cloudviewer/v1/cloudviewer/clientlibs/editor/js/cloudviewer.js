@@ -62,9 +62,12 @@
 
     function onTypeChange() {
         var value = type.find("coral-select-item:selected")[0].value;
+        controls.attr("disabled", false);
         switch (value) {
             case "SIZED_CONTAINER":
                 showControls(["viewerHeight", "showFullScreen", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
+                controls.attr("checked", true);
+                controls.attr("disabled", true);
                 break;
             case "IN_LINE":
                 showControls(["downloadPdf", "printPdf"]);
