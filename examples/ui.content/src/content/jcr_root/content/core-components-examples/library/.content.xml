@@ -46,7 +46,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     jcr:title="Search Components"
-                    sling:resourceType="core/wcm/components/form/text/v2/text"
+                    sling:resourceType="core-components-examples/components/form/text"
                     helpMessage="Search Components"
                     hideTitle="true"
                     name="cmp-examples-component-search"
