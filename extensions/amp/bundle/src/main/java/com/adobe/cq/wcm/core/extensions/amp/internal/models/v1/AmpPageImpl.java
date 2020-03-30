@@ -40,6 +40,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.factory.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +64,9 @@ public class AmpPageImpl implements AmpPage {
 
     @OSGiService
     private ClientLibraryAggregatorService aggregatorService;
+
+    @OSGiService
+    private ModelFactory modelFactory;
 
     private Map<String, String> pageLinkAttrs;
     private Set<String> headlibIncludes;
@@ -91,7 +95,7 @@ public class AmpPageImpl implements AmpPage {
                 aggregatorService.getResourceTypeRegex(), new HashSet<>());
 
             try (ResourceResolver resolver = aggregatorService.getClientlibResourceResolver()) {
-                AmpUtil.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
+                AmpUtil.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), request, modelFactory,
                     resourceTypes);
                 // Last part of any headlib path.
                 String headLibRelPath = "/" + aggregatorService.getHeadlibName();
