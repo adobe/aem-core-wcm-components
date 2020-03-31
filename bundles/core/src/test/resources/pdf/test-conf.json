@@ -1,0 +1,9 @@
+{
+  "jcr:primaryType": "nt:unstructured",
+  "jcr:createdBy": "admin",
+  "jcr:lastModifiedBy": "admin",
+  "jcr:created": "Tue Mar 31 2020 12:10:47 GMT+0200",
+  "clientId": "1234",
+  "jcr:lastModified": "Tue Mar 31 2020 13:35:44 GMT+0200",
+  "sling:configPropertyInherit": false
+}

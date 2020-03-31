@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2019 Adobe
+ ~ Copyright 2020 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@ import org.apache.sling.caconfig.annotation.Configuration;
 import org.apache.sling.caconfig.annotation.Property;
 
 /**
- * Config for the Document Cloud View SDK integration
+ * Config for the Document Cloud Viewer SDK integration
  */
-@Configuration(label = "Document Cloud Config", description = "Configuration for the Document Cloud View SDK integration")
+@Configuration(label = "Document Cloud Config", description = "Configuration for the Document Cloud Viewer SDK integration")
 public @ interface DocumentCloud {
     /**
      * @return String parameter
      */
-    @Property(label = "Client Id", description = "The client ID of the Document Cloud View SDK integration", order = 1)
+    @Property(label = "Client Id", description = "The client ID of the Document Cloud Viewer SDK integration", order = 1)
     String clientId();
 }

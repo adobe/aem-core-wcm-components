@@ -1,0 +1,6 @@
+{
+  "fileUrl": "https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf",
+  "fileName": "Bodea Brochure.pdf",
+  "clientId": "1234",
+  ":type": "core/wcm/components/pdf/v1/pdf"
+}

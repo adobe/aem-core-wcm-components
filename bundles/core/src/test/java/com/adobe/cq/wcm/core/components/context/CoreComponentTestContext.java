@@ -36,6 +36,8 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.aem.junit.AemContextCallback;
 import io.wcm.testing.mock.aem.junit5.AemContextBuilder;
 
+import static org.apache.sling.testing.mock.caconfig.ContextPlugins.CACONFIG;
+
 /**
  * Provides a context for unit tests.
  */
@@ -80,7 +82,7 @@ public final class CoreComponentTestContext {
     }
 
     public static io.wcm.testing.mock.aem.junit5.AemContext newAemContext() {
-        return new AemContextBuilder().resourceResolverType(ResourceResolverType.JCR_MOCK)
+        return new AemContextBuilder().plugin(CACONFIG).resourceResolverType(ResourceResolverType.JCR_MOCK)
                 .<io.wcm.testing.mock.aem.junit5.AemContext>afterSetUp(context -> {
                             context.addModelsForClasses(MockResponsiveGrid.class);
                             context.addModelsForPackage("com.adobe.cq.wcm.core.components.models");

@@ -37,9 +37,6 @@ import com.adobe.cq.wcm.core.config.DocumentCloud;
 public class DocumentCloudViewerImpl implements DocumentCloudViewer {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/pdf/v1/pdf";
-    private static final String BUCKET_NAME = "settings";
-    private static final String CONFIG_NAME = "cloudconfigs/documentcloud/";
-    private static final String PN_CLIENT_ID = "clientId";
 
     @Self
     private SlingHttpServletRequest request;

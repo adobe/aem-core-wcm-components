@@ -1,12 +1,21 @@
 {
-  "pdf" : {
-    "jcr:primaryType": "nt:unstructured",
+  "jcr:content": {
+    "sling:configRef": "/conf/pdf",
+    "cq:lastModified": "Wed Jun 29 2016 14:20:45 GMT+0200",
+    "cq:lastModifiedBy": "admin",
+    "jcr:created": "Mon Jul 18 2016 14:30:46 GMT+0200",
     "jcr:createdBy": "admin",
-    "jcr:lastModifiedBy": "admin",
-    "fileUrl": "https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf",
-    "fileName": "Bodea Brochure.pdf",
-    "jcr:created": "Tue Mar 31 2020 13:29:28 GMT+0200",
-    "jcr:lastModified": "Tue Mar 31 2020 13:34:31 GMT+0200",
-    "sling:resourceType": "core/wcm/components/pdf/v1/pdf"
+    "jcr:primaryType": "cq:PageContent",
+    "jcr:title": "Women",
+    "pdf": {
+      "jcr:primaryType": "nt:unstructured",
+      "jcr:createdBy": "admin",
+      "jcr:lastModifiedBy": "admin",
+      "fileUrl": "https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf",
+      "fileName": "Bodea Brochure.pdf",
+      "jcr:created": "Tue Mar 31 2020 13:29:28 GMT+0200",
+      "jcr:lastModified": "Tue Mar 31 2020 13:34:31 GMT+0200",
+      "sling:resourceType": "core/wcm/components/pdf/v1/pdf"
+    }
   }
 }
