@@ -2420,5 +2420,4 @@
             return style_html(html_source, options, global.js_beautify, global.css_beautify);
         };
     }
-
 }());

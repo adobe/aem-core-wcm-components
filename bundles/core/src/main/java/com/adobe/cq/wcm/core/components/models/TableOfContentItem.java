@@ -27,7 +27,7 @@ import java.util.List;
  * @since com.adobe.cq.wcm.core.components.models
  */
 @ConsumerType
-public interface TableOfContent extends ComponentExporter {
+public interface TableOfContentItem {
 
     /**
      * Returns the Table of Content title.
@@ -44,20 +44,9 @@ public interface TableOfContent extends ComponentExporter {
      *
      * @return the List of TableOfContentItem
      */
-    default List<TableOfContentItem> getItems() {
+    default String getId() {
         throw new UnsupportedOperationException();
     }
 
-
-
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 
 }

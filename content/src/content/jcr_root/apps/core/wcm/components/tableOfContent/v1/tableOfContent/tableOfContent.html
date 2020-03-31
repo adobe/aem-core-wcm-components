@@ -15,15 +15,13 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.tableOfContent="com.adobe.cq.wcm.core.components.models.TableOfContent"
      id="tableOfContent.id"
-     class="cmp-tableOfContent">
-    <p class="cmp-tableOfContent__header">${tableOfContent.title}</p>
-    <ul class="cmp-tableOfContent__ul">
-        <li data-sly-repeat.item="${tableOfContent.items}"
-            class="cmp-tableOfContent__item"
-            cmp-data-hook-tableOfContent="item"
-            id="${tableOfContent.id}-item-${item.name @ context='uri'}">
-            <a>
-                <span class="cmp-tableOfContent_item_title">${item.title}</span>
+     class="cmp-tableOfContent"
+>
+    <h1 class="cmp-tableOfContent__header" data-sly-element="${tableOfContent.type}">${tableOfContent.title}</h1>
+    <ul class="cmp-tableOfContent__ul" data-sly-list="${tableOfContent.items}">
+        <li class="cmp-tableOfContent__items">
+            <a href="#${item.id}" title="${item.title}" class="cmp-tableOfContent__items__item">
+                ${item.title}
             </a>
         </li>
 
