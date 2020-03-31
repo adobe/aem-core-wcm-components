@@ -1,5 +1,5 @@
 {
-    "id": "image-d43cdd446b",
+    "id": "image-af6aa44639",
     "title": "Adobe Systems Logo and Wordmark",
     "src": "/core/content/test/_jcr_content/root/image4.coreimg.png/1494867377756/adobe-systems-logo-and-wordmark.png",
     "srcUriTemplate": "/core/content/test/_jcr_content/root/image4.coreimg{.width}.png/1494867377756/adobe-systems-logo-and-wordmark.png",
@@ -7,17 +7,16 @@
     "widths": [],
     "lazyEnabled": false,
     "dataLayerJson": {
-        "path": "/content/test/jcr:content/root/image4",
-        "name": "Adobe Systems Logo and Wordmark",
-        "id": "image-d43cdd446b",
-        "type": "image",
-        "asset": {
-            "path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
-            "modifyDate": "2017-03-20T10:20:39Z",
-            "name": "Adobe_Systems_logo_and_wordmark.png",
-            "id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
-            "type": "image/png",
-            "tags": {}
+        "image-af6aa44639": {
+            "type": "core/wcm/components/image/v2/image",
+            "title": "Adobe Systems Logo and Wordmark",
+            "asset": {
+                "modifyDate": "2017-03-20T10:20:39Z",
+                "format": "image/png",
+                "id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+                "url": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                "tags": {}
+            }
         }
     },
     ":type": "core/wcm/components/image/v2/image"

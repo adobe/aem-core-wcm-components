@@ -15,12 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.Teaser;
+import com.day.cq.commons.DownloadResource;
+import com.day.cq.commons.ImageResource;
+import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.designer.Style;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -39,21 +48,11 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.Teaser;
-import com.day.cq.commons.DownloadResource;
-import com.day.cq.commons.ImageResource;
-import com.day.cq.commons.jcr.JcrConstants;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.designer.Style;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -211,7 +210,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     }
 
     public String getId() {
-        return "teaser-" + StringUtils.substring(DigestUtils.sha1Hex(resource.getPath()), 0, 10);
+        return "teaser-" + StringUtils.substring(DigestUtils.sha256Hex(resource.getPath()), 0, 10);
     }
 
     @Override
@@ -301,12 +300,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @Override
     public String getDataLayerType() {
-        return "teaser";
-    }
-
-    @Override
-    public String getDataLayerName() {
-        return resource.getName();
+        return resource.getResourceType();
     }
 
     @Override
@@ -321,7 +315,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
 
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
-    public class Action extends AbstractDataLayerProvider implements ListItem {
+    public class Action extends AbstractListItemImpl implements ListItem {
         ValueMap properties;
         String title;
         String url;
@@ -330,6 +324,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         String parentId;
 
         public Action(Resource actionRes, String parentId) {
+            super(parentId, actionRes);
             this.parentId = parentId;
             properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
@@ -363,7 +358,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
 
         public String getId() {
-            return parentId + "-cta-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
+            return parentId + "-cta-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
         }
 
         /*
@@ -376,18 +371,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         }
 
         @Override
-        public String getDataLayerType() {
-            return "teaserAction";
-        }
-
-        @Override
         public String getDataLayerLinkUrl() {
             return getURL();
-        }
-
-        @Override
-        public String getDataLayerPath() {
-            return path;
         }
 
         @Override

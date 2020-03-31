@@ -3,9 +3,9 @@
     "layout": "RESPONSIVE_GRID",
     "backgroundStyle": "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
     "dataLayerJson": {
-        "path": "/content/container/jcr:content/root/responsivegrid/container-1",
-        "id": "test",
-        "type": "container"
+        "test": {
+            "type": "core/wcm/components/container/v1/container"
+        }
     },
     ":itemsOrder": [
         "item_1",
@@ -19,12 +19,12 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "id": "teaser-3b5ae5eb14",
+            "id": "teaser-d00b134df3",
             "dataLayerJson": {
-                "name": "item_1",
-                "id": "teaser-3b5ae5eb14",
-                "type": "teaser",
-                "title": "Teaser 1"
+                "teaser-d00b134df3": {
+                    "type": "core/wcm/components/teaser/v1/teaser",
+                    "title": "Teaser 1"
+                }
             },
             ":type": "core/wcm/components/teaser/v1/teaser"
         },
@@ -35,12 +35,12 @@
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
-            "id": "teaser-9d837f2a99",
+            "id": "teaser-fd6086a850",
             "dataLayerJson": {
-                "name": "item_2",
-                "id": "teaser-9d837f2a99",
-                "type": "teaser",
-                "title": "Teaser 2"
+                "teaser-fd6086a850": {
+                    "type": "core/wcm/components/teaser/v1/teaser",
+                    "title": "Teaser 2"
+                }
             },
             ":type": "core/wcm/components/teaser/v1/teaser"
         }

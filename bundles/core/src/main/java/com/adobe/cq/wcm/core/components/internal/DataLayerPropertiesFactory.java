@@ -15,8 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import com.adobe.cq.wcm.core.components.models.DataLayerProvider;
+import com.adobe.cq.wcm.core.components.models.DataLayerProperties;
 import com.day.cq.dam.api.Asset;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 
@@ -24,29 +25,49 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class DataLayerFactory {
+/**
+ * Builder class for generating the final dataLayer representation of a model
+ *
+ */
+public class DataLayerPropertiesFactory {
 
-    static public Map<String, Object> build(DataLayerProvider provider) {
+    /**
+     * Builds a dataLayer Map representation of the model passed as argument
+     *
+     * @return the dataLayer Map
+     */
+    static public Map<String, Map<String, Object>> build(DataLayerProperties provider) {
         MapWrapper data = new MapWrapper();
-        data.put("id", invoke(provider, "getDataLayerId"));
-        data.put("type", invoke(provider, "getDataLayerType"));
-        data.put("name", invoke(provider, "getDataLayerName"));
-        data.put("path", invoke(provider, "getDataLayerPath"));
-        data.put("title", invoke(provider, "getDataLayerTitle"));
-        data.put("template", invoke(provider, "getDataLayerTemplate"));
-        // data.put("src", invoke(provider, "getDataLayerSrc"));
-        data.put("text", invoke(provider, "getDataLayerText"));
-        data.put("tags", invoke(provider, "getDataLayerTags"));
-        data.put("asset", getAssetMetadata(provider));
-        data.put("linkUrl", invoke(provider, "getDataLayerLinkUrl"));
-        data.put("language", invoke(provider, "getDataLayerLanguage"));
-        data.put("itemsCount", invoke(provider, "getDataLayerItemsCount"));
-        data.put("activeItem", invoke(provider, "getDataLayerActiveItem"));
-        data.put("expandedItems", getExpandedItems(provider));
-        return data.getMap();
+        Map<String, Map<String, Object>> result = new HashMap<>();
+
+        if (provider != null) {
+            String id = (String)invoke(provider, "getDataLayerId");
+            if (id != null) {
+                data.put("type", invoke(provider, "getDataLayerType"));
+                data.put("name", invoke(provider, "getDataLayerName"));
+                data.put("path", invoke(provider, "getDataLayerPath"));
+                data.put("title", invoke(provider, "getDataLayerTitle"));
+                data.put("templatePath", invoke(provider, "getDataLayerTemplatePath"));
+                data.put("text", invoke(provider, "getDataLayerText"));
+                data.put("tags", invoke(provider, "getDataLayerTags"));
+                data.put("asset", getAssetMetadata(provider));
+                data.put("linkUrl", invoke(provider, "getDataLayerLinkUrl"));
+                data.put("language", invoke(provider, "getDataLayerLanguage"));
+                data.put("shownItems", getShownItems(provider));
+
+                result.put(id, data.getMap());
+            }
+        }
+
+        return result;
     }
 
-    static private Object invoke(DataLayerProvider provider, String method) {
+    /**
+     * Helper method for invoking dataLayer specific methods of the model
+     *
+     * @return the dataLayer property value
+     */
+    static private Object invoke(DataLayerProperties provider, String method) {
         try {
             Method providerMethod = provider.getClass().getMethod(method);
             Object result = providerMethod.invoke(provider);
@@ -57,7 +78,13 @@ public class DataLayerFactory {
         }
     }
 
-    static private Map<String, Object> getAssetMetadata(DataLayerProvider provider) {
+    /**
+     * Helper method for getting asset metadata where it applies (ex
+     * {@link com.adobe.cq.wcm.core.components.models.Image}
+     *
+     * @return the metadata Map
+     */
+    static private Map<String, Object> getAssetMetadata(DataLayerProperties provider) {
         Map<String, Object> assetMetadataObject = null;
         Resource assetResource = null;
         try {
@@ -70,9 +97,8 @@ public class DataLayerFactory {
             if (asset != null) {
                 MapWrapper assetMetadata = new MapWrapper();
                 assetMetadata.put("id", asset.getID());
-                assetMetadata.put("name", asset.getName());
-                assetMetadata.put("path", asset.getPath());
-                assetMetadata.put("type", asset.getMimeType());
+                assetMetadata.put("url", asset.getPath());
+                assetMetadata.put("format", asset.getMimeType());
                 assetMetadata.put("tags", getAssetTags(asset));
                 assetMetadata.put("modifyDate", getAssetLastModifiedDate(asset, assetResource));
                 assetMetadataObject = assetMetadata.getMap();
@@ -81,10 +107,16 @@ public class DataLayerFactory {
         return assetMetadataObject;
     }
 
+    /**
+     * Helper method for getting asset tags where it applies (ex
+     * {@link com.adobe.cq.wcm.core.components.models.Image}
+     *
+     * @return the asset tags Map
+     */
     static private Map<String, Object> getAssetTags(Asset asset) {
         MapWrapper assetTags = new MapWrapper();
         String tagsValue = asset.getMetadataValueFromJcr("cq:tags");
-        if (tagsValue != null && !tagsValue.equals("")) {
+        if (StringUtils.isNotEmpty(tagsValue)) {
             String[] tags = tagsValue.split(",");
             for (String tag : tags) {
                 assetTags.put(tag, 1);
@@ -93,6 +125,12 @@ public class DataLayerFactory {
         return assetTags.getMap();
     }
 
+    /**
+     * Helper method for getting asset modified date where it applies (ex
+     * {@link com.adobe.cq.wcm.core.components.models.Image}
+     *
+     * @return the asset modified date
+     */
     static private String getAssetLastModifiedDate(Asset asset, Resource assetResource) {
         long assetLastModification = asset.getLastModified();
         Calendar created = null;
@@ -108,11 +146,17 @@ public class DataLayerFactory {
         return new Date(assetLastModification).toInstant().toString();
     }
 
-    static private ArrayList<Object> getExpandedItems(DataLayerProvider provider) {
+    /**
+     * Helper method for getting a list of IDs where it applies (ex
+     * {@link com.adobe.cq.wcm.core.components.models.Accordion}
+     *
+     * @return the array of expanded items IDs
+     */
+    static private ArrayList<Object> getShownItems(DataLayerProperties provider) {
         ArrayList<Object> obj = null;
         String[] expandedItems = null;
         try {
-            expandedItems = provider.getDataLayerExpandedItems();
+            expandedItems = provider.getDataLayerShownItems();
         } catch (UnsupportedOperationException e) {
             // do nothing as we need to continue
         }
@@ -124,6 +168,10 @@ public class DataLayerFactory {
         return obj;
     }
 
+    /**
+     * Wrapper class for storing dataLayer properties
+     *
+     */
     static class MapWrapper {
         private Map<String, Object> map;
 
@@ -136,7 +184,7 @@ public class DataLayerFactory {
         }
 
         void put(String propName, Object propValue) {
-            if ((propValue instanceof Integer && (Integer) propValue >= 0) || propValue != null) {
+            if (propName != null && propValue != null) {
                 map.put(propName, propValue);
             }
         }

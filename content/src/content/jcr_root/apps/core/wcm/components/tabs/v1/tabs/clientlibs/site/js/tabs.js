@@ -269,22 +269,31 @@
             navigate(index);
             focusWithoutScroll(that._elements["tab"][index]);
 
-            var activeItem = JSON.parse(that._elements.tabpanel[index].dataset.cmpDataLayer);
+            var activeItem = getDataLayerId(that._elements.tabpanel[index].dataset.cmpDataLayer);
 
             dataLayer.push({
-                event: "tabsItem:show",
-                info: activeItem
+                event: "cmp:show",
+                info: {
+                    id: activeItem
+                }
             });
 
             dataLayer.push({
-                event: "tabsItem:hide",
-                info: JSON.parse(that._elements.tabpanel[exActive].dataset.cmpDataLayer)
+                event: "cmp:hide",
+                info: {
+                    id: getDataLayerId(that._elements.tabpanel[exActive].dataset.cmpDataLayer)
+                }
             });
 
-            var tabId = that._elements.self.id;
+            var tabsId = that._elements.self.id;
             if (dataLayer.hasOwnProperty("getState")) {
                 var uploadPayload = { data: { component: {} } };
-                uploadPayload.data.component[tabId] = { activeItem: activeItem };
+                uploadPayload.data.component[tabsId] = { shownItems: [activeItem] };
+
+                var removePayload = { data: { component: {} } };
+                removePayload.data.component[tabsId] = { shownItems: undefined };
+
+                dataLayer.push(removePayload);
                 dataLayer.push(uploadPayload);
             }
         }
@@ -320,6 +329,17 @@
         }
 
         return options;
+    }
+
+    /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
     }
 
     /**

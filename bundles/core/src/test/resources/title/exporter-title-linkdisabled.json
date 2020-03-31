@@ -1,12 +1,12 @@
 {
-    "id": "title-76babd07b2",
+    "id": "title-6032c7e80a",
     "linkDisabled": true,
     "linkURL": "https://www.adobe.com",
     "dataLayerJson": {
-        "path": "/content/title/jcr:content/par/title-jcr-title-link-v2",
-        "linkUrl": "https://www.adobe.com",
-        "id": "title-76babd07b2",
-        "type": "title"
+        "title-6032c7e80a": {
+            "linkUrl": "https://www.adobe.com",
+            "type": "core/wcm/components/title/v2/title"
+        }
     },
     ":type": "core/wcm/components/title/v2/title"
 }

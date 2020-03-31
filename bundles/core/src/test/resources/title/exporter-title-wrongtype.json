@@ -1,10 +1,10 @@
 {
-    "id": "title-d7b073638f",
+    "id": "title-1f9c6e70b8",
     "linkDisabled": false,
     "dataLayerJson": {
-        "path": "/content/title/jcr:content/par/title-wrongtype",
-        "id": "title-d7b073638f",
-        "type": "title"
+        "title-1f9c6e70b8": {
+            "type": "core/wcm/components/title/v1/title"
+        }
     },
     ":type": "core/wcm/components/title/v1/title"
 }

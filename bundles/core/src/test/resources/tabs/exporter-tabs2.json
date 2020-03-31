@@ -1,14 +1,14 @@
 {
-    "id": "tabs-7e84106a6a",
+    "id": "tabs-673620f4d1",
     "activeItem": "item_2",
     "tabsId": "-root-responsivegrid-tabs-2",
     "dataLayerJson": {
-        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2",
-        "activeItem": "tabs-7e84106a6a-item-da203036a1",
-        "name": "tabs-2",
-        "id": "tabs-7e84106a6a",
-        "type": "tabs",
-        "itemsCount": 2
+        "tabs-673620f4d1": {
+            "type": "core/wcm/components/tabs/v1/tabs",
+            "shownItems": [
+                "tabs-673620f4d1-item-0ae34790af"
+            ]
+        }
     },
     ":itemsOrder": [
         "item_1",
@@ -28,26 +28,26 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    "id": "teaser-17e977eb97",
+                    "id": "teaser-03d502f197",
                     "dataLayerJson": {
-                        "name": "item_1_1",
-                        "id": "teaser-17e977eb97",
-                        "type": "teaser",
-                        "title": "Teaser 1"
+                        "teaser-03d502f197": {
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 1"
+                        }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
-                    "id": "tabs-e14a27b1c3",
+                    "id": "tabs-c2dc9e45de",
                     "activeItem": "item_1_2_2",
                     "tabsId": "-root-responsivegrid-tabs-2-item_1-item_1_2",
                     "dataLayerJson": {
-                        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2",
-                        "activeItem": "tabs-e14a27b1c3-item-2fd95e5ddd",
-                        "name": "item_1_2",
-                        "id": "tabs-e14a27b1c3",
-                        "type": "tabs",
-                        "itemsCount": 2
+                        "tabs-c2dc9e45de": {
+                            "type": "core/wcm/components/tabs/v1/tabs",
+                            "shownItems": [
+                                "tabs-c2dc9e45de-item-913daa91d5"
+                            ]
+                        }
                     },
                     ":itemsOrder": [
                         "item_1_2_1",
@@ -67,12 +67,12 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
-                                    "id": "teaser-0ccf827f99",
+                                    "id": "teaser-57dd562f53",
                                     "dataLayerJson": {
-                                        "name": "item_1_2_1_1",
-                                        "id": "teaser-0ccf827f99",
-                                        "type": "teaser",
-                                        "title": "Teaser 1"
+                                        "teaser-57dd562f53": {
+                                            "type": "core/wcm/components/teaser/v1/teaser",
+                                            "title": "Teaser 1"
+                                        }
                                     },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
@@ -83,12 +83,12 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
-                                    "id": "teaser-e00f37311e",
+                                    "id": "teaser-716dd6dc8a",
                                     "dataLayerJson": {
-                                        "name": "item_1_2_1_2",
-                                        "id": "teaser-e00f37311e",
-                                        "type": "teaser",
-                                        "title": "Teaser 2"
+                                        "teaser-716dd6dc8a": {
+                                            "type": "core/wcm/components/teaser/v1/teaser",
+                                            "title": "Teaser 2"
+                                        }
                                     },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
@@ -109,27 +109,27 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
-                                    "id": "teaser-ad7ea75e08",
+                                    "id": "teaser-74587f333a",
                                     "dataLayerJson": {
-                                        "name": "item_1_2_2_1",
-                                        "id": "teaser-ad7ea75e08",
-                                        "type": "teaser",
-                                        "title": "Teaser 1"
+                                        "teaser-74587f333a": {
+                                            "type": "core/wcm/components/teaser/v1/teaser",
+                                            "title": "Teaser 1"
+                                        }
                                     },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
-                                    "id": "carousel-b2fb964605",
+                                    "id": "carousel-21953a9100",
                                     "autoplay": false,
                                     "delay": 5000,
                                     "autopauseDisabled": false,
                                     "dataLayerJson": {
-                                        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-2/item_1/item_1_2/item_1_2_2/item_1_2_2_2",
-                                        "activeItem": "carousel-b2fb964605-item-92a997f236",
-                                        "name": "item_1_2_2_2",
-                                        "id": "carousel-b2fb964605",
-                                        "type": "carousel",
-                                        "itemsCount": 3
+                                        "carousel-21953a9100": {
+                                            "type": "core/wcm/components/carousel/v1/carousel",
+                                            "shownItems": [
+                                                "carousel-21953a9100-item-260a2da9e8"
+                                            ]
+                                        }
                                     },
                                     ":itemsOrder": [
                                         "item_1_2_2_2_1",
@@ -144,12 +144,12 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
-                                            "id": "teaser-92a997f236",
+                                            "id": "teaser-260a2da9e8",
                                             "dataLayerJson": {
-                                                "name": "item_1_2_2_2_1",
-                                                "id": "teaser-92a997f236",
-                                                "type": "teaser",
-                                                "title": "Teaser 1"
+                                                "teaser-260a2da9e8": {
+                                                    "type": "core/wcm/components/teaser/v1/teaser",
+                                                    "title": "Teaser 1"
+                                                }
                                             },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 1"
@@ -161,12 +161,12 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
-                                            "id": "teaser-ab69e5ed75",
+                                            "id": "teaser-52bb4ad862",
                                             "dataLayerJson": {
-                                                "name": "item_1_2_2_2_2",
-                                                "id": "teaser-ab69e5ed75",
-                                                "type": "teaser",
-                                                "title": "Teaser 2"
+                                                "teaser-52bb4ad862": {
+                                                    "type": "core/wcm/components/teaser/v1/teaser",
+                                                    "title": "Teaser 2"
+                                                }
                                             },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 2"
@@ -178,12 +178,12 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
-                                            "id": "teaser-d699b60480",
+                                            "id": "teaser-9e643c8adc",
                                             "dataLayerJson": {
-                                                "name": "item_1_2_2_2_3",
-                                                "id": "teaser-d699b60480",
-                                                "type": "teaser",
-                                                "title": "Teaser 3"
+                                                "teaser-9e643c8adc": {
+                                                    "type": "core/wcm/components/teaser/v1/teaser",
+                                                    "title": "Teaser 3"
+                                                }
                                             },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 3"
@@ -215,12 +215,12 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    "id": "teaser-0b379f6a44",
+                    "id": "teaser-b26e2145ab",
                     "dataLayerJson": {
-                        "name": "item_2_1",
-                        "id": "teaser-0b379f6a44",
-                        "type": "teaser",
-                        "title": "Teaser 1"
+                        "teaser-b26e2145ab": {
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 1"
+                        }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
@@ -231,12 +231,12 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    "id": "teaser-cd971022da",
+                    "id": "teaser-c900ee9cbc",
                     "dataLayerJson": {
-                        "name": "item_2_2",
-                        "id": "teaser-cd971022da",
-                        "type": "teaser",
-                        "title": "Teaser 2"
+                        "teaser-c900ee9cbc": {
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 2"
+                        }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }

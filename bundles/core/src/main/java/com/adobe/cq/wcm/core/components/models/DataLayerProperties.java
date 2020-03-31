@@ -21,94 +21,137 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Map;
 
+/**
+ * A base interface to be extended by components that need to enable dataLayer population.
+ */
 @ConsumerType
-public interface DataLayerProvider {
+public interface DataLayerProperties {
 
+    /**
+     * Indicates if the component will populate the dataLayer
+     *
+     * @return {@code true} if the model will populate the dataLayer
+     */
     @JsonIgnore
-    default boolean isDataLayerEnabled()  {
+    default boolean isDataLayerEnabled() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Method used to return a resource's asset (ex {@link Image})
+     *
+     * @return {@code Resource} of the asset
+     */
     @JsonIgnore
     default Resource getAssetResource() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Method used to return a model's ID
+     *
+     * @return string ID
+     */
     @JsonIgnore
-    default String getDataLayerId()  {
+    default String getDataLayerId() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Method used to return a model's type
+     *
+     * @return type
+     */
     @JsonIgnore
     default String getDataLayerType() {
         throw new UnsupportedOperationException();
     }
 
-    @JsonIgnore
-    default String getDataLayerPath()  {
-        throw new UnsupportedOperationException();
-    }
-
-    @JsonIgnore
-    default String getDataLayerSrc()  {
-        throw new UnsupportedOperationException();
-    }
-
-    @JsonIgnore
-    default String getDataLayerName() {
-        throw new UnsupportedOperationException();
-    }
-
+    /**
+     * Method used to return a model's link (ex {@link Image})
+     *
+     * @return src
+     */
     @JsonIgnore
     default String getDataLayerTitle() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Method used to return a model's text where it applies (ex {@link Text})
+     *
+     * @return text
+     */
     @JsonIgnore
     default String getDataLayerText() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Method used to return a model's tags where it applies (ex {@link Page})
+     *
+     * @return tags array
+     */
     @JsonIgnore
-    default String getDataLayerTags() {
+    default String[] getDataLayerTags() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Method used to return a model's link where a URL is present
+     *
+     * @return link URL
+     */
     @JsonIgnore
     default String getDataLayerLinkUrl() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Method used to return a page's template path
+     *
+     * @return JCR template path
+     */
     @JsonIgnore
-    default String getDataLayerTemplate() {
+    default String getDataLayerTemplatePath() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Get a model's language where it applies (ex {@link Page}
+     *
+     * @return language
+     */
     @JsonIgnore
     default String getDataLayerLanguage() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Get an {@link Carousel} or {@link Tabs} active item IDs
+     *
+     * @return item ID
+     */
     @JsonIgnore
-    default String[] getDataLayerExpandedItems() {
+    default String[] getDataLayerShownItems() {
         throw new UnsupportedOperationException();
     }
 
-    @JsonIgnore
-    default String getDataLayerActiveItem() {
-        throw new UnsupportedOperationException();
-    }
-
-    @JsonIgnore
-    default int getDataLayerItemsCount() {
-        throw new UnsupportedOperationException();
-    }
-
+    /**
+     * Used to generate a JSON string of the dataLayer representation of the model
+     *
+     * @return JSON string
+     */
     @JsonIgnore
     default String getDataLayerString() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Used to generate a Map of the dataLayer representation of the model
+     *
+     * @return dataLayer Map
+     */
     default Map<String, ?> getDataLayerJson() {
         throw new UnsupportedOperationException();
     }

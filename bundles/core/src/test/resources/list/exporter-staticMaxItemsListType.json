@@ -1,5 +1,5 @@
 {
-    "id": "list-2c3c3816c1",
+    "id": "list-513f2340c1",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
@@ -11,10 +11,9 @@
         }
     ],
     "dataLayerJson": {
-        "path": "/content/list/listTypes/staticMaxItemsListType",
-        "id": "list-2c3c3816c1",
-        "type": "list",
-        "itemsCount": 1
+        "list-513f2340c1": {
+            "type": "core/wcm/components/list"
+        }
     },
     "showDescription": true,
     "showModificationDate": true,

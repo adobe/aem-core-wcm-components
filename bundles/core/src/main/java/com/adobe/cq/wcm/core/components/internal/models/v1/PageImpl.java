@@ -54,11 +54,9 @@ import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Page.class, ContainerExporter.class},
-       resourceType = PageImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = { Page.class,
+        ContainerExporter.class }, resourceType = PageImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl extends AbstractComponentImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v1/page";
@@ -144,10 +142,10 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         return templateName;
     }
 
-
     @Override
     public String getLanguage() {
-        return currentPage == null ? Locale.getDefault().toLanguageTag() : currentPage.getLanguage(false).toLanguageTag();
+        return currentPage == null ? Locale.getDefault().toLanguageTag()
+                : currentPage.getLanguage(false).toLanguageTag();
     }
 
     @Override
@@ -233,15 +231,17 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     }
 
     /**
-     * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
+     * Returns a map (resource name => Sling Model class) of the given resource
+     * children's Sling Models that can be adapted to {@link T}.
      *
      * @param slingRequest the current request
-     * @param modelClass the Sling Model class to be adapted to
-     * @return a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}
+     * @param modelClass   the Sling Model class to be adapted to
+     * @return a map (resource name => Sling Model class) of the given resource
+     *         children's Sling Models that can be adapted to {@link T}
      */
     @NotNull
     private <T> Map<String, T> getChildModels(@NotNull SlingHttpServletRequest slingRequest,
-                                              @NotNull Class<T> modelClass) {
+            @NotNull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
         for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {
@@ -298,12 +298,22 @@ public class PageImpl extends AbstractComponentImpl implements Page {
      */
 
     @Override
-    public String getDataLayerName() {
+    public String getDataLayerTitle() {
         return getTitle();
     }
 
     @Override
-    public String getDataLayerTemplate() {
+    public String[] getDataLayerTags() {
+        return Arrays.copyOf(keywords, keywords.length);
+    }
+
+    @Override
+    public String getDataLayerText() {
+        return pageProperties.get(NameConstants.PN_DESCRIPTION, String.class);
+    }
+
+    @Override
+    public String getDataLayerTemplatePath() {
         return currentPage.getTemplate().getPath();
     }
 

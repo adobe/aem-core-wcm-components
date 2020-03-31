@@ -1,11 +1,11 @@
 {
-    "id": "text-db49eea57b",
+    "id": "text-aa6e485483",
     "richText": false,
     "dataLayerJson": {
-        "path": "/content/text/empty-text",
-        "id": "text-db49eea57b",
-        "text": "",
-        "type": "text"
+        "text-aa6e485483": {
+            "text": "",
+            "type": "core/wcm/components/text/v1/text"
+        }
     },
     ":type": "core/wcm/components/text/v1/text"
 }

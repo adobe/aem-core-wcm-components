@@ -30,7 +30,7 @@ import com.day.cq.wcm.api.Page;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface List extends ComponentExporter, DataLayerProvider {
+public interface List extends ComponentExporter, DataLayerProperties {
 
     /**
      * Name of the resource property indicating how the list will be built. Possible values are:

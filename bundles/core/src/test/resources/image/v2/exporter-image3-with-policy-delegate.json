@@ -1,5 +1,5 @@
 {
-    "id": "image-184ebc4c15",
+    "id": "image-4fdb43cd81",
     "alt": "Adobe Logo",
     "title": "Adobe Logo",
     "src": "/core/content/test/_jcr_content/root/image3.coreimg.82.600.png?contentPolicyDelegatePath=/content/test/jcr:content/root/image0",
@@ -11,11 +11,11 @@
     "lazyEnabled": false,
     "link": "https://www.adobe.com",
     "dataLayerJson": {
-        "path": "/content/test/jcr:content/root/image3",
-        "name": "Adobe Logo",
-        "linkUrl": "https://www.adobe.com",
-        "id": "image-184ebc4c15",
-        "type": "image"
+        "image-4fdb43cd81": {
+            "linkUrl": "https://www.adobe.com",
+            "type": "core/wcm/components/image/v2/image",
+            "title": "Adobe Logo"
+        }
     },
     ":type": "core/wcm/components/image/v2/image"
 }

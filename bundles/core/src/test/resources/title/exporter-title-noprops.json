@@ -1,11 +1,11 @@
 {
-    "id": "title-a0f7ad260f",
+    "id": "title-826fc94cbc",
     "linkDisabled": false,
     "type": "h2",
     "dataLayerJson": {
-        "path": "/content/title/jcr:content/par/title-noprops",
-        "id": "title-a0f7ad260f",
-        "type": "title"
+        "title-826fc94cbc": {
+            "type": "core/wcm/components/title/v1/title"
+        }
     },
     ":type": "core/wcm/components/title/v1/title"
 }

@@ -212,8 +212,10 @@
                     var index = getPreviousIndex();
                     navigate(index);
                     dataLayer.push({
-                        event: "carouselItem:navigated",
-                        info: JSON.parse(that._elements.item[index].dataset.cmpDataLayer)
+                        event: "cmp:show",
+                        info: {
+                            id: getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                        }
                     });
                 });
             }
@@ -223,8 +225,10 @@
                     var index = getNextIndex();
                     navigate(index);
                     dataLayer.push({
-                        event: "carouselItem:navigated",
-                        info: JSON.parse(that._elements.item[index].dataset.cmpDataLayer)
+                        event: "cmp:show",
+                        info: {
+                            id: getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                        }
                     });
                 });
             }
@@ -483,7 +487,12 @@
             var activeItem = JSON.parse(that._elements.item[index].dataset.cmpDataLayer).id;
             if (dataLayer.hasOwnProperty("getState")) {
                 var uploadPayload = { data: { component: {} } };
-                uploadPayload.data.component[carouselId] = { activeItem: activeItem };
+                uploadPayload.data.component[carouselId] = { shownItems: [activeItem] };
+
+                var removePayload = { data: { component: {} } };
+                removePayload.data.component[carouselId] = { shownItems: undefined };
+
+                dataLayer.push(removePayload);
                 dataLayer.push(uploadPayload);
             }
 
@@ -506,8 +515,10 @@
             focusWithoutScroll(that._elements["indicator"][index]);
 
             dataLayer.push({
-                event: "carouselItem:navigated",
-                info: JSON.parse(that._elements.item[index].dataset.cmpDataLayer)
+                event: "cmp:show",
+                info: {
+                    id: getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                }
             });
         }
 
@@ -596,6 +607,17 @@
         }
 
         return options;
+    }
+
+    /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
     }
 
     /**

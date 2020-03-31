@@ -15,16 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.List;
-import java.util.Locale;
-
+import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
+import com.adobe.cq.wcm.core.components.models.NavigationItem;
+import com.day.cq.wcm.api.Page;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.models.LanguageNavigationItem;
-import com.adobe.cq.wcm.core.components.models.NavigationItem;
-import com.day.cq.wcm.api.Page;
+import java.util.List;
+import java.util.Locale;
 
 public class LanguageNavigationItemImpl extends NavigationItemImpl implements LanguageNavigationItem {
 
@@ -75,17 +74,7 @@ public class LanguageNavigationItemImpl extends NavigationItemImpl implements La
      */
 
     @Override
-    public String getDataLayerType() {
-        return "languageNavigationItem";
-    }
-
-    @Override
     public String getDataLayerLanguage() {
         return getLanguage();
-    }
-
-    @Override
-    public int getDataLayerItemsCount() {
-        return getChildren().size();
     }
 }

@@ -39,8 +39,6 @@ import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Calendar;
-
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Title.class, ComponentExporter.class},
        resourceType = {TitleImpl.RESOURCE_TYPE_V1, TitleImpl.RESOURCE_TYPE_V2})

@@ -15,16 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.jcr.RangeIterator;
-
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
+import com.adobe.cq.wcm.core.components.models.Navigation;
+import com.adobe.cq.wcm.core.components.models.NavigationItem;
+import com.day.cq.wcm.api.*;
+import com.day.cq.wcm.api.designer.Style;
+import com.day.cq.wcm.msm.api.LiveRelationship;
+import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -37,19 +36,9 @@ import org.apache.sling.models.annotations.injectorspecific.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
-import com.adobe.cq.wcm.core.components.models.Navigation;
-import com.adobe.cq.wcm.core.components.models.NavigationItem;
-import com.day.cq.wcm.api.LanguageManager;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageFilter;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.WCMException;
-import com.day.cq.wcm.api.designer.Style;
-import com.day.cq.wcm.msm.api.LiveRelationship;
-import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import javax.annotation.PostConstruct;
+import javax.jcr.RangeIterator;
+import java.util.*;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Navigation.class, ComponentExporter.class},
@@ -266,21 +255,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         }
         return null;
     }
-
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
-    @Override
-    public String getDataLayerName() {
-        return request.getResource().getName();
-    }
-
-    @Override
-    public int getDataLayerItemsCount() {
-        return getItems().size();
-    }
-
 
     private class NavigationRoot {
         final Page page;

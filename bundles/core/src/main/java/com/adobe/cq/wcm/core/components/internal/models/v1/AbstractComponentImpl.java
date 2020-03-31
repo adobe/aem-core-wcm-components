@@ -15,6 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.models.Component;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.api.components.ComponentContext;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -27,17 +32,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.api.components.ComponentContext;
-
-import com.adobe.cq.wcm.core.components.models.Component;
-
 /**
  * Abstract class that can be used as a base class for {@link Component} implementations.
  */
-public abstract class AbstractComponentImpl extends AbstractDataLayerProvider implements Component {
+public abstract class AbstractComponentImpl extends AbstractDataLayerProperties implements Component {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractComponentImpl.class);
 
@@ -127,7 +125,7 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProvider im
 
         }
 
-        return prefix + "-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
+        return prefix + "-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
     }
 
     @Override
@@ -137,12 +135,6 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProvider im
 
     @Override
     public final String getDataLayerType() {
-        return StringUtils.substringAfterLast(resource.getResourceType(), "/");
+        return resource.getResourceType();
     }
-
-    @Override
-    public final String getDataLayerPath() {
-        return resource.getPath();
-    }
-
 }

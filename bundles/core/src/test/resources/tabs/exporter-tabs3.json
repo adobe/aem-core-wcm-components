@@ -1,14 +1,14 @@
 {
-    "id": "tabs-bd3cb85fb2",
+    "id": "tabs-73c57b3627",
     "activeItem": "item_1",
     "tabsId": "-root-responsivegrid-tabs-3",
     "dataLayerJson": {
-        "path": "/content/tabs/jcr:content/root/responsivegrid/tabs-3",
-        "activeItem": "tabs-bd3cb85fb2-item-972cf052d5",
-        "name": "tabs-3",
-        "id": "tabs-bd3cb85fb2",
-        "type": "tabs",
-        "itemsCount": 2
+        "tabs-73c57b3627": {
+            "type": "core/wcm/components/tabs/v1/tabs",
+            "shownItems": [
+                "tabs-73c57b3627-item-25f537bb7f"
+            ]
+        }
     },
     ":itemsOrder": [
         "item_1",
@@ -28,12 +28,12 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    "id": "teaser-1af0260b68",
+                    "id": "teaser-4bf56a19b1",
                     "dataLayerJson": {
-                        "name": "item_1_1",
-                        "id": "teaser-1af0260b68",
-                        "type": "teaser",
-                        "title": "Teaser 1"
+                        "teaser-4bf56a19b1": {
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 1"
+                        }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
@@ -44,12 +44,12 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    "id": "teaser-a47ad8dddc",
+                    "id": "teaser-432f0bf9f0",
                     "dataLayerJson": {
-                        "name": "item_1_2",
-                        "id": "teaser-a47ad8dddc",
-                        "type": "teaser",
-                        "title": "Teaser 2"
+                        "teaser-432f0bf9f0": {
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 2"
+                        }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
@@ -70,12 +70,12 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    "id": "teaser-4e48d10e94",
+                    "id": "teaser-348840fc63",
                     "dataLayerJson": {
-                        "name": "item_2_1",
-                        "id": "teaser-4e48d10e94",
-                        "type": "teaser",
-                        "title": "Teaser 1"
+                        "teaser-348840fc63": {
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 1"
+                        }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
@@ -86,12 +86,12 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
-                    "id": "teaser-8b07f38b51",
+                    "id": "teaser-4b653f1c72",
                     "dataLayerJson": {
-                        "name": "item_2_2",
-                        "id": "teaser-8b07f38b51",
-                        "type": "teaser",
-                        "title": "Teaser 2"
+                        "teaser-4b653f1c72": {
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 2"
+                        }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }

@@ -15,11 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.models.Accordion;
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.wcm.api.designer.Style;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -29,12 +31,10 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.models.Accordion;
-import com.day.cq.wcm.api.designer.Style;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
@@ -65,6 +65,10 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
      * The cached node names of the expanded items for which there is a valid matching child resource.
      */
     private String[] expandedItemNames;
+
+    /**
+     * The cached model IDs of the expanded items for which there is a valid matching child resource.
+     */
     private String[] expandedItemIds;
 
     /**
@@ -118,34 +122,26 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
      */
 
     @Override
-    public String getDataLayerName() {
-        return resource.getName();
-    }
-
-    @Override
-    public int getDataLayerItemsCount() {
-        return getItems().size();
-    }
-
-    @Override
-    public String[] getDataLayerExpandedItems() {
+    public String[] getDataLayerShownItems() {
         if (expandedItems == null) {
             return new String[0];
         }
 
         if (expandedItemIds == null) {
             List<String> expandedItemsName = Arrays.asList(expandedItems);
-            List<String> expandedItemsIds = this.getItems().stream()
-                .filter(item -> expandedItemsName.contains(item.getName()))
-                .map(item -> item.getDataLayerId())
-                .collect(Collectors.toList());
+            List<ListItem> items = this.getItems();
 
-            String[] expandedItems = new String[expandedItemsIds.size()];
+            if (items != null) {
+                List<String> expandedItemIdsList = items.stream()
+                    .filter(item -> expandedItemsName.contains(item.getName()))
+                    .map(item -> item.getDataLayerId())
+                    .collect(Collectors.toList());
 
-            for (int i =0; i < expandedItemsIds.size(); i++)
-                expandedItems[i] = expandedItemsIds.get(i);
+                expandedItemIds = expandedItemIdsList.toArray(new String[expandedItemIdsList.size()]);
+            } else {
+                expandedItemIds = new String[0];
+            }
 
-            expandedItemIds = expandedItems;
         }
 
         return Arrays.copyOf(expandedItemIds, expandedItemIds.length);

@@ -335,14 +335,14 @@
                 if (dataLayer.hasOwnProperty("getState")) {
                     var expandedItems = getExpandedItems()
                         .map(function(item) {
-                            return JSON.parse(item.dataset.cmpDataLayer).id;
+                            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
                         });
 
                     var uploadPayload = { data: { component: {} } };
-                    uploadPayload.data.component[accordionId] = { expandedItems: expandedItems };
+                    uploadPayload.data.component[accordionId] = { shownItems: expandedItems };
 
                     var removePayload = { data: { component: {} } };
-                    removePayload.data.component[accordionId] = { expandedItems: undefined };
+                    removePayload.data.component[accordionId] = { shownItems: undefined };
 
                     dataLayer.push(removePayload);
                     dataLayer.push(uploadPayload);
@@ -361,15 +361,19 @@
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
                 dataLayer.push({
-                    event: "accordionItem:show",
-                    info: JSON.parse(item.dataset.cmpDataLayer)
+                    event: "cmp:show",
+                    info: {
+                        id: getDataLayerId(item.dataset.cmpDataLayer)
+                    }
                 });
 
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
                 dataLayer.push({
-                    event: "accordionItem:hide",
-                    info: JSON.parse(item.dataset.cmpDataLayer)
+                    event: "cmp:hide",
+                    info: {
+                        id: getDataLayerId(item.dataset.cmpDataLayer)
+                    }
                 });
             }
             refreshItem(item);
@@ -534,6 +538,17 @@
             var uriParts = document.URL.split("#");
             return uriParts[uriParts.length - 1];
         }
+    }
+
+    /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
     }
 
     /**

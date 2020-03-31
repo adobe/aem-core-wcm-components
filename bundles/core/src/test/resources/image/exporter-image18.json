@@ -1,17 +1,16 @@
 {
-    "id": "image-0cbb13a154",
+    "id": "image-dd0253e3cc",
     "src": "/core/content/test/_jcr_content/root/image18.img.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "dataLayerJson": {
-        "path": "/content/test/jcr:content/root/image18",
-        "id": "image-0cbb13a154",
-        "type": "image",
-        "asset": {
-            "path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
-            "modifyDate": "2017-03-20T10:20:39Z",
-            "name": "Adobe_Systems_logo_and_wordmark",
-            "id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
-            "type": "image/png",
-            "tags": {}
+        "image-dd0253e3cc": {
+            "type": "core/wcm/components/image/v1/image",
+            "asset": {
+                "modifyDate": "2017-03-20T10:20:39Z",
+                "format": "image/png",
+                "id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+                "url": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark",
+                "tags": {}
+            }
         }
     },
     ":type": "core/wcm/components/image/v1/image"

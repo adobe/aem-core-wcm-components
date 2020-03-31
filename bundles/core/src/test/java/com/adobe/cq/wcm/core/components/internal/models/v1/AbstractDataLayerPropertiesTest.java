@@ -20,17 +20,17 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class AbstractDataLayerProviderTest {
+public class AbstractDataLayerPropertiesTest {
 
     @Test
     public void testThrowsException() {
-        AbstractDataLayerProvider adlp = new MockAbstractDataLayerProvider();
+        AbstractDataLayerProperties adlp = new MockAbstractDataLayerProperties();
 
         assertThrows(UnsupportedOperationException.class, adlp::getDataLayerJson, "The data layer provider does not throw exception");
     }
 
 
-    private static class MockAbstractDataLayerProvider extends AbstractDataLayerProvider {
+    private static class MockAbstractDataLayerProperties extends AbstractDataLayerProperties {
 
         @Override
         public boolean isDataLayerEnabled() {

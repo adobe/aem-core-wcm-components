@@ -1,12 +1,12 @@
 {
-    "id": "text-b41922c4e6",
+    "id": "text-5bafbc4f83",
     "text": "<p>rich</p>",
     "richText": true,
     "dataLayerJson": {
-        "path": "/content/text/rich-text",
-        "id": "text-b41922c4e6",
-        "text": "<p>rich</p>",
-        "type": "text"
+        "text-5bafbc4f83": {
+            "text": "<p>rich</p>",
+            "type": "core/wcm/components/text/v1/text"
+        }
     },
     ":type": "core/wcm/components/text/v1/text"
 }

@@ -31,9 +31,9 @@
     }
 
     function getComponentObject(element) {
-        var component = {};
         var parentData;
-        var elementData = getComponentData(element);
+        var component = getComponentData(element);
+        var componentID = Object.keys(component)[0];
         var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
 
         if (parentElement) {
@@ -44,24 +44,26 @@
                 });
 
                 if (parentData !== undefined) {
-                    elementData.parentId = parentData.data.page.id;
+                    component[componentID].parentId = Object.keys(parentData.data.page)[0];
                 }
             } else {
                 parentData = getComponentData(parentElement);
-                elementData.parentId = parentData.id;
+                component[componentID].parentId = Object.keys(parentData)[0];
             }
         }
-        component[elementData.id] = elementData;
+
         return component;
     }
 
     function addClickToDataLayer(event) {
         var element = event.currentTarget;
-        var elementData = getClickData(element);
+        var componentId = getClickId(element);
 
         dataLayer.push({
-            event: elementData.type + ":clicked",
-            info: elementData
+            event: "cmp:click",
+            info: {
+                id: componentId
+            }
         });
     }
 
@@ -70,14 +72,14 @@
         return JSON.parse(dataLayerJson);
     }
 
-    function getClickData(element) {
+    function getClickId(element) {
         if (element.dataset.cmpDataLayer) {
-            return JSON.parse(element.dataset.cmpDataLayer);
+            return Object.keys(JSON.parse(element.dataset.cmpDataLayer))[0];
         }
 
         var componentElement = element.closest("[data-cmp-data-layer]");
 
-        return JSON.parse(componentElement.dataset.cmpDataLayer);
+        return Object.keys(JSON.parse(componentElement.dataset.cmpDataLayer))[0];
     }
 
     function onDocumentReady() {
@@ -93,7 +95,7 @@
         });
 
         dataLayer.push({
-            event: "components:loaded"
+            event: "cmp:loaded"
         });
     }
 

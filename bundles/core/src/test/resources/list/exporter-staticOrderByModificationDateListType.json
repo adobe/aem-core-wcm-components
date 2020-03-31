@@ -1,5 +1,5 @@
 {
-    "id": "list-3056969a76",
+    "id": "list-1e71cd25fd",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
@@ -18,10 +18,9 @@
         }
     ],
     "dataLayerJson": {
-        "path": "/content/list/listTypes/staticOrderByModificationDateListType",
-        "id": "list-3056969a76",
-        "type": "list",
-        "itemsCount": 2
+        "list-1e71cd25fd": {
+            "type": "core/wcm/components/list"
+        }
     },
     "showDescription": true,
     "showModificationDate": true,

@@ -1,5 +1,5 @@
 {
-    "id": "list-afb17e68e0",
+    "id": "list-20f143d89d",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
@@ -11,10 +11,9 @@
         }
     ],
     "dataLayerJson": {
-        "path": "/content/list/listTypes/searchListType",
-        "id": "list-afb17e68e0",
-        "type": "list",
-        "itemsCount": 1
+        "list-20f143d89d": {
+            "type": "core/wcm/components/list"
+        }
     },
     "showDescription": false,
     "showModificationDate": false,

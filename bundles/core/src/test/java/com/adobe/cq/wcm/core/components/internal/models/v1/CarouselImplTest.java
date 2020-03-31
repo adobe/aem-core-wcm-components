@@ -15,20 +15,19 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.List;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -62,11 +61,11 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest();
         Object[][] expectedItems = {
-                { "item_1", "Teaser 1", "resourceListItem",
+                { "item_1", "Teaser 1", "core/wcm/components/teaser/v1/teaser",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1" },
-                { "item_2", "Teaser 2", "resourceListItem",
+                { "item_2", "Teaser 2", "core/wcm/components/teaser/v1/teaser",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
-                { "item_3", "Carousel Panel 3", "resourceListItem",
+                { "item_3", "Carousel Panel 3", "core/wcm/components/teaser/v1/teaser",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
         verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
@@ -98,14 +97,12 @@ class CarouselImplTest {
 
             assertNotEquals("The carousel item's data layer string is empty", item.getDataLayerString(), "{}");
 
-            assertEquals("The carousel item's data layer name is not what was expected: " + item.getDataLayerName(),
-                    expectedItems[index][0], item.getDataLayerName());
             assertEquals("The carousel item's data layer title is not what was expected: " + item.getDataLayerTitle(),
                     expectedItems[index][1], item.getDataLayerTitle());
             assertEquals("The carousel item's data layer type is not what was expected: " + item.getDataLayerType(),
                     expectedItems[index][2], item.getDataLayerType());
             assertEquals("The carousel item's data layer id is not what was expected: " + item.getDataLayerId(),
-                carouselId + "-item-" + StringUtils.substring(DigestUtils.sha1Hex((String) expectedItems[index][3]), 0, 10),
+                carouselId + "-item-" + StringUtils.substring(DigestUtils.sha256Hex((String) expectedItems[index][3]), 0, 10),
                     item.getDataLayerId());
 
             index++;

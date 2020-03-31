@@ -15,16 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.scripting.SlingBindings;
-import org.apache.sling.testing.resourceresolver.MockValueMap;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
@@ -37,6 +27,15 @@ import com.adobe.cq.wcm.core.components.testing.MockStyle;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.testing.resourceresolver.MockValueMap;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -94,7 +93,7 @@ public class LayoutContainerImplTest {
     @Test
     public void testContainerNoProperties() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_2, null);
-        assertEquals("ID mismatch", "container-1fe48feca7", container.getId());
+        assertEquals("ID mismatch", "container-2611f8dc62", container.getId());
         assertNull("Style", container.getBackgroundStyle());
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.SIMPLE,
@@ -104,7 +103,7 @@ public class LayoutContainerImplTest {
     @Test
     public void testContainerWithPropertiesAndNoPolicy() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_3, null);
-        assertEquals("ID mismatch", "container-0880528a35", container.getId());
+        assertEquals("ID mismatch", "container-d7eba9c61f", container.getId());
         assertNull("Style", container.getBackgroundStyle());
     }
 

@@ -1,43 +1,37 @@
 {
-    "id": "breadcrumb-69a4ab52d0",
+    "id": "breadcrumb-be02fd85b6",
     "items": [
         {
             "active": false,
             "url": "/content/breadcrumb/women/shirts.html",
-            "id": "breadcrumb-69a4ab52d0-item-19b2dae1f1",
+            "id": "breadcrumb-be02fd85b6-item-0b751aeddc",
             "title": "Shirts",
             "dataLayerJson": {
-                "path": "/content/breadcrumb/women/shirts",
-                "name": "shirts",
-                "linkUrl": "/content/breadcrumb/women/shirts.html",
-                "id": "breadcrumb-69a4ab52d0-item-19b2dae1f1",
-                "text": "Shirts",
-                "type": "breadcrumbItem",
-                "title": "Shirts"
+                "breadcrumb-be02fd85b6-item-0b751aeddc": {
+                    "linkUrl": "/content/breadcrumb/women/shirts.html",
+                    "type": "coretest/components/structure/page",
+                    "title": "Shirts"
+                }
             }
         },
         {
             "active": true,
             "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
-            "id": "breadcrumb-69a4ab52d0-item-aace97aaa4",
+            "id": "breadcrumb-be02fd85b6-item-a66a50bca8",
             "title": "Devi Sleeveless Shirt",
             "dataLayerJson": {
-                "path": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt",
-                "name": "devi-sleeveless-shirt",
-                "linkUrl": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
-                "id": "breadcrumb-69a4ab52d0-item-aace97aaa4",
-                "text": "Devi Sleeveless Shirt",
-                "type": "breadcrumbItem",
-                "title": "Devi Sleeveless Shirt"
+                "breadcrumb-be02fd85b6-item-a66a50bca8": {
+                    "linkUrl": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
+                    "type": "coretest/components/structure/page",
+                    "title": "Devi Sleeveless Shirt"
+                }
             }
         }
     ],
     "dataLayerJson": {
-        "path": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt/jcr:content/header/breadcrumb-start-level",
-        "name": "breadcrumb-start-level",
-        "id": "breadcrumb-69a4ab52d0",
-        "type": "breadcrumb",
-        "itemsCount": 2
+        "breadcrumb-be02fd85b6": {
+            "type": "core/wcm/components/breadcrumb"
+        }
     },
     ":type": "core/wcm/components/breadcrumb"
 }

@@ -6,14 +6,14 @@
   "imageLinkHidden": false,
   "titleLinkHidden": false,
   "actions": [],
-  "id": "teaser-b197b7ca93",
+  "id": "teaser-6a61ad8d2f",
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-7.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "dataLayerJson": {
-    "name": "teaser-7",
-    "linkUrl": "/core/content/teasers.html",
-    "id": "teaser-b197b7ca93",
-    "type": "teaser",
-    "title": "Teaser"
+    "teaser-6a61ad8d2f": {
+      "linkUrl": "/core/content/teasers.html",
+      "type": "core/wcm/components/teaser/v1/teaser",
+      "title": "Teaser"
+    }
   },
   ":type": "core/wcm/components/teaser/v1/teaser"
 }

@@ -15,12 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import javax.annotation.PostConstruct;
-
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
+import com.adobe.cq.wcm.core.components.models.NavigationItem;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageFilter;
+import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.designer.Style;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
@@ -30,14 +32,11 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.LanguageNavigation;
-import com.adobe.cq.wcm.core.components.models.NavigationItem;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageFilter;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.designer.Style;
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {LanguageNavigation.class, ComponentExporter.class},
@@ -138,19 +137,5 @@ public class LanguageNavigationImpl extends AbstractComponentImpl implements Lan
             localizedPage = pageManager.getPage(path);
         }
         return localizedPage;
-    }
-
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
-    @Override
-    public String getDataLayerName() {
-        return request.getResource().getName();
-    }
-
-    @Override
-    public int getDataLayerItemsCount() {
-        return getItems().size();
     }
 }

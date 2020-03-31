@@ -107,7 +107,7 @@ public class ButtonImpl extends AbstractComponentImpl implements Button {
      */
 
     @Override
-    public String getDataLayerText() {
+    public String getDataLayerTitle() {
         return getText();
     }
 

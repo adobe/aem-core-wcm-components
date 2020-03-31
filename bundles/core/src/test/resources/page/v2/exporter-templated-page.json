@@ -1,5 +1,5 @@
 {
-    "id": "page-df0b99830e",
+    "id": "page-bb590de134",
     "designPath": "/etc/designs/mysite",
     "title": "Templated Page",
     "lastModifiedDate": 1453282416000,
@@ -8,12 +8,18 @@
     "cssClassNames": "class1 class2",
     "language": "en-GB",
     "dataLayerJson": {
-        "template": "/conf/coretest/settings/wcm/templates/product-page",
-        "path": "/content/page/templated-page/jcr:content",
-        "name": "Templated Page",
-        "language": "en-GB",
-        "id": "page-df0b99830e",
-        "type": "page"
+        "page-bb590de134": {
+            "language": "en-GB",
+            "text": "Description",
+            "type": "core/wcm/components/page/v2/page",
+            "title": "Templated Page",
+            "templatePath": "/conf/coretest/settings/wcm/templates/product-page",
+            "tags": [
+                "two",
+                "three",
+                "one"
+            ]
+        }
     },
     ":itemsOrder": [
         "root"
@@ -25,14 +31,14 @@
             ],
             ":items": {
                 "text": {
-                    "id": "text-e772bd1e32",
+                    "id": "text-41bcd02e64",
                     "text": "<p>This is a test</p>",
                     "richText": true,
                     "dataLayerJson": {
-                        "path": "/content/page/templated-page/jcr:content/root/text",
-                        "id": "text-e772bd1e32",
-                        "text": "<p>This is a test</p>",
-                        "type": "text"
+                        "text-41bcd02e64": {
+                            "text": "<p>This is a test</p>",
+                            "type": "core/wcm/components/text/v2/text"
+                        }
                     },
                     ":type": "core/wcm/components/text/v2/text"
                 }

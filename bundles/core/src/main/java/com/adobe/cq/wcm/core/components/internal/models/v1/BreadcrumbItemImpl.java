@@ -32,18 +32,4 @@ public class BreadcrumbItemImpl extends NavigationItemImpl implements Navigation
     public BreadcrumbItemImpl(Page page, boolean active, SlingHttpServletRequest request, int level, List<NavigationItem> children, String parentId) {
         super(page, active, request, level, children, parentId);
     }
-
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
-    @Override
-    public String getDataLayerType() {
-        return "breadcrumbItem";
-    }
-
-    @Override
-    public int getDataLayerItemsCount() {
-        throw new UnsupportedOperationException();
-    }
 }

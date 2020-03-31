@@ -15,6 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.Tabs;
+import com.day.cq.wcm.api.components.Component;
+import com.day.cq.wcm.api.components.ComponentManager;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -24,13 +31,7 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.Tabs;
-
-import com.day.cq.wcm.api.components.Component;
-import com.day.cq.wcm.api.components.ComponentManager;
+import java.util.List;
 
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 
@@ -88,31 +89,26 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
      */
 
     @Override
-    public String getDataLayerName() {
-        return resource.getName();
-    }
-
-    @Override
-    public String getDataLayerActiveItem() {
+    public String[] getDataLayerShownItems() {
         String activeItemName = getActiveItem();
+        List<ListItem> items = getItems();
+        String activeItemId = null;
 
-        if (activeItemName == null) {
-            return getItems().get(0).getDataLayerId();
+        if (items != null) {
+            if (activeItemName == null) {
+                return new String[] { getItems().get(0).getDataLayerId() };
+            }
+
+
+            activeItemId = items.stream()
+                .filter(e -> e.getName().equals(activeItemName))
+                .findFirst()
+                .get().getDataLayerId();
         }
 
-        String activeItemId = getItems().stream()
-            .filter(e -> e.getName().equals(activeItemName))
-            .findFirst()
-            .get().getDataLayerId();
-
-        return activeItemId;
+        return new String[] { activeItemId };
     }
 
-    @Override
-    public int getDataLayerItemsCount() {
-        return getItems().size();
-    }
-    
     @Override
     public String getTabsId() {
         String resourcePath = resource.getPath();

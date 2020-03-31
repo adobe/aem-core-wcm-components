@@ -15,23 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Calendar;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.sling.api.SlingHttpServletRequest;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Calendar;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
@@ -41,7 +39,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     protected Page page;
 
     public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId) {
-        super(parentId, page.getPath());
+        super(parentId, page.getContentResource());
         this.request = request;
         this.page = page;
         this.parentId = parentId;
@@ -98,7 +96,8 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
         PageManager pageManager = page.getPageManager();
         Set<String> redirectCandidates = new LinkedHashSet<>();
         redirectCandidates.add(page.getPath());
-        while (result != null && StringUtils.isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
+        while (result != null && StringUtils
+                .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
             result = pageManager.getPage(redirectTarget);
             if (result != null) {
                 if (!redirectCandidates.add(result.getPath())) {
@@ -113,29 +112,9 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /*
      * DataLayerProvider implementation of field getters
      */
-
-    @Override
-    public String getDataLayerType() {
-        return "pageListItem";
-    }
-
-    @Override
-    public String getDataLayerName() {
-        return getName();
-    }
-
-    @Override
-    public String getDataLayerPath() {
-        return getPath();
-    }
-
+    
     @Override
     public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerText() {
         return getTitle();
     }
 

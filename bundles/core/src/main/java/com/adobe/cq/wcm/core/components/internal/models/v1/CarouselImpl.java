@@ -15,8 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import javax.annotation.PostConstruct;
-
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
+import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.models.Carousel;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
@@ -25,10 +27,7 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ContainerExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.Carousel;
+import javax.annotation.PostConstruct;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -79,17 +78,7 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
      */
 
     @Override
-    public String getDataLayerName() {
-        return resource.getName();
-    }
-
-    @Override
-    public int getDataLayerItemsCount() {
-        return getItems().size();
-    }
-
-    @Override
-    public String getDataLayerActiveItem() {
-        return getItems().get(0).getDataLayerId();
+    public String[] getDataLayerShownItems() {
+        return  getItems() != null ? new String[]{getItems().get(0).getDataLayerId()} : new String[0];
     }
 }

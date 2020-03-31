@@ -1,5 +1,5 @@
 {
-    "id": "list-6df1b262c1",
+    "id": "list-e07bd4e270",
     "dateFormatString": "yyyy-MM-dd",
     "items": [
         {
@@ -18,10 +18,9 @@
         }
     ],
     "dataLayerJson": {
-        "path": "/content/list/listTypes/staticListType",
-        "id": "list-6df1b262c1",
-        "type": "list",
-        "itemsCount": 2
+        "list-e07bd4e270": {
+            "type": "core/wcm/components/list"
+        }
     },
     "showDescription": true,
     "showModificationDate": true,

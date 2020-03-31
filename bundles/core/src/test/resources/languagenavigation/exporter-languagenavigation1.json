@@ -1,5 +1,5 @@
 {
-  "id": "languagenavigation-67a3e8f8b7",
+  "id": "languagenavigation-69e9a38414",
   "items": [
     {
       "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
@@ -11,19 +11,16 @@
       "country": "US",
       "language": "en-US",
       "url": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
-      "id": "languagenavigation-67a3e8f8b7-item-f7ed60dba3",
+      "id": "languagenavigation-69e9a38414-item-4892d4b418",
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
-        "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about",
-        "name": "about",
-        "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
-        "language": "en-US",
-        "id": "languagenavigation-67a3e8f8b7-item-f7ed60dba3",
-        "text": "LOCALE 1",
-        "type": "languageNavigationItem",
-        "title": "LOCALE 1",
-        "itemsCount": 0
+        "languagenavigation-69e9a38414-item-4892d4b418": {
+          "linkUrl": "/core/content/languagenavigation/LOCALE-1/LOCALE-5/about.html",
+          "language": "en-US",
+          "type": "cq:PageContent",
+          "title": "LOCALE 1"
+        }
       }
     },
     {
@@ -36,19 +33,16 @@
       "country": "CA",
       "language": "en-CA",
       "url": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
-      "id": "languagenavigation-67a3e8f8b7-item-ae086001b7",
+      "id": "languagenavigation-69e9a38414-item-ef2da5f3fb",
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
-        "path": "/content/languagenavigation/LOCALE-2/LOCALE-5/about",
-        "name": "about",
-        "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
-        "language": "en-CA",
-        "id": "languagenavigation-67a3e8f8b7-item-ae086001b7",
-        "text": "LOCALE 2",
-        "type": "languageNavigationItem",
-        "title": "LOCALE 2",
-        "itemsCount": 0
+        "languagenavigation-69e9a38414-item-ef2da5f3fb": {
+          "linkUrl": "/core/content/languagenavigation/LOCALE-2/LOCALE-5/about.html",
+          "language": "en-CA",
+          "type": "cq:PageContent",
+          "title": "LOCALE 2"
+        }
       }
     },
     {
@@ -61,19 +55,16 @@
       "country": "CH",
       "language": "de-CH",
       "url": "/core/LOCALE-3-vanity",
-      "id": "languagenavigation-67a3e8f8b7-item-715681d1e2",
+      "id": "languagenavigation-69e9a38414-item-ae3df3ca12",
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
-        "path": "/content/languagenavigation/LOCALE-3",
-        "name": "LOCALE-3",
-        "linkUrl": "/core/LOCALE-3-vanity",
-        "language": "de-CH",
-        "id": "languagenavigation-67a3e8f8b7-item-715681d1e2",
-        "text": "LOCALE 3",
-        "type": "languageNavigationItem",
-        "title": "LOCALE 3",
-        "itemsCount": 0
+        "languagenavigation-69e9a38414-item-ae3df3ca12": {
+          "linkUrl": "/core/LOCALE-3-vanity",
+          "language": "de-CH",
+          "type": "cq:PageContent",
+          "title": "LOCALE 3"
+        }
       }
     },
     {
@@ -86,28 +77,23 @@
       "country": "DE",
       "language": "de-DE",
       "url": "/core/content/languagenavigation/LOCALE-4.html",
-      "id": "languagenavigation-67a3e8f8b7-item-540d311dbc",
+      "id": "languagenavigation-69e9a38414-item-ce10a8f9c0",
       "description": null,
       "lastModified": null,
       "dataLayerJson": {
-        "path": "/content/languagenavigation/LOCALE-4",
-        "name": "LOCALE-4",
-        "linkUrl": "/core/content/languagenavigation/LOCALE-4.html",
-        "language": "de-DE",
-        "id": "languagenavigation-67a3e8f8b7-item-540d311dbc",
-        "text": "LOCALE 4",
-        "type": "languageNavigationItem",
-        "title": "LOCALE 4",
-        "itemsCount": 0
+        "languagenavigation-69e9a38414-item-ce10a8f9c0": {
+          "linkUrl": "/core/content/languagenavigation/LOCALE-4.html",
+          "language": "de-DE",
+          "type": "cq:PageContent",
+          "title": "LOCALE 4"
+        }
       }
     }
   ],
   "dataLayerJson": {
-    "path": "/content/languagenavigation/LOCALE-1/LOCALE-5/about/jcr:content/root/languagenavigation-component-1",
-    "name": "languagenavigation-component-1",
-    "id": "languagenavigation-67a3e8f8b7",
-    "type": "languagenavigation",
-    "itemsCount": 4
+    "languagenavigation-69e9a38414": {
+      "type": "core/wcm/components/languagenavigation/v1/languagenavigation"
+    }
   },
   ":type": "core/wcm/components/languagenavigation/v1/languagenavigation"
 }

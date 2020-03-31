@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe
+ ~ Copyright 2020 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -17,22 +17,40 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.resource.Resource;
 
-public abstract class AbstractListItemImpl extends AbstractDataLayerProvider {
+/**
+ * Abstract helper class for ListItem implementations.
+ * Generates an ID for the item containing the Container ID
+ *
+ */
+public abstract class AbstractListItemImpl extends AbstractDataLayerProperties {
     protected String parentId;
     protected String path;
+    protected Resource resource;
 
-    public AbstractListItemImpl(String parentId, String path) {
+    public AbstractListItemImpl(String parentId, Resource resource) {
         this.parentId = parentId;
-        this.path = path;
+        this.path = resource.getPath();
+        this.resource = resource;
     }
 
+    /**
+     * Generates an ID for the item containing the Container ID
+     *
+     * @return a string ID
+     */
     public String getId() {
-        return parentId + "-item-" + StringUtils.substring(DigestUtils.sha1Hex(path), 0, 10);
+        return parentId + "-item-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
     }
 
     @Override
     public String getDataLayerId() {
         return getId();
+    }
+
+    @Override
+    public final String getDataLayerType() {
+        return resource.getResourceType();
     }
 }
