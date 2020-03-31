@@ -48,5 +48,14 @@ public interface TableOfContentItem {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Returns the Level of the Table of Content item.
+     *
+     * @return an INT of the level of TableOfContentItem
+     */
+    default int getLevel() {
+        throw new UnsupportedOperationException();
+    }
+
 
 }

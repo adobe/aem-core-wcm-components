@@ -38,6 +38,12 @@ public class TableOfContentItemImpl implements  TableOfContentItem {
     private static final String PROP_DEFAULT_TITLE = "";
     private static final String PROP_DEFAULT_ID = "";
 
+    protected int level;
+
+    public TableOfContentItemImpl(int level) {
+        this.level = level;
+    }
+
     @ValueMapValue
     @Default(values = PROP_DEFAULT_TITLE)
     private String title;
@@ -52,5 +58,8 @@ public class TableOfContentItemImpl implements  TableOfContentItem {
 
     @Override
     public String getId() { return id; }
+
+    @Override
+    public int getLevel() { return level; }
 
 }

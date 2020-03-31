@@ -19,8 +19,10 @@ import javax.annotation.Nonnull;
 
 import com.adobe.cq.wcm.core.components.models.TableOfContent;
 import com.adobe.cq.wcm.core.components.models.TableOfContentItem;
-import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Page;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
@@ -31,6 +33,7 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Model(adaptables = SlingHttpServletRequest.class,
@@ -45,27 +48,76 @@ public class TableOfContentImpl implements  TableOfContent {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/tableOfContent/v1/tableOfContent";
     private static final String PROP_DEFAULT_TITLE = "Table of Content";
+    private static final String TITLE_V1 = "core/wcm/components/title/v1/title";
+    private static final String TITLE_V2 = "core/wcm/components/title/v2/title";
 
     @Self
     private SlingHttpServletRequest slingRequest;
 
-    @ScriptVariable
-    private PageManager pageManager;
+    private List<TableOfContentItem> items;
 
     @ValueMapValue
     @Default(values = PROP_DEFAULT_TITLE)
     private String title;
-
-    @ValueMapValue
-    @Default(values = PROP_DEFAULT_TITLE)
-    private List<TableOfContentItem> content;
 
 
     @Override
     public String getTitle() { return title; }
 
     @Override
-    public List<TableOfContentItem> getItems() { return content; }
+    public List<TableOfContentItem> getItems() {
+        if (items == null) {
+            items = new ArrayList<>();
+            Resource parent = slingRequest.getResource().getParent();
+            if (parent != null) {
+            Iterable<Resource> children = parent.getChildren();
+
+                for(Resource resource : children) {
+                    String resourceType = resource.getResourceType();
+                    if (resourceType.equals(TITLE_V1) || resourceType.equals(TITLE_V2)) {
+                        TableOfContentItem item = getItemLevel(resource);
+                        items.add(item);
+                    }
+                }
+            }
+        }
+        return items;
+    }
+
+    private TableOfContentItem getItemLevel(Resource resource) {
+        String type = null;
+        int level = -1;
+        ValueMap properties = resource.adaptTo(ValueMap.class);
+        if(properties!= null) {
+            type = properties.get("./type", String.class);
+        }
+        if(type != null) {
+            switch (type) {
+                case "h1":
+                    level = 1;
+                    break;
+                case "h2":
+                    level = 2;
+                    break;
+                case "h3":
+                    level = 3;
+                    break;
+                case "h4":
+                    level = 4;
+                    break;
+                case "h5":
+                    level = 5;
+                    break;
+                case "h6":
+                    level = 6;
+                    break;
+                default:
+                    level = 1;
+                    break;
+            }
+        }
+        return new TableOfContentItemImpl(level);
+    }
 
     @Nonnull
     @Override

@@ -49,7 +49,6 @@ public interface TableOfContent extends ComponentExporter {
     }
 
 
-
     /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
