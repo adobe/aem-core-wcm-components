@@ -56,6 +56,16 @@
                             <artifactId>core.wcm.components.extensions.amp</artifactId>
                             <target>/apps/core/wcm/install</target>
                         </embedded>
+                        <embedded>
+                            <groupId>io.wcm</groupId>
+                            <artifactId>io.wcm.caconfig.editor</artifactId>
+                            <target>/apps/core/wcm/install</target>
+                        </embedded>
+                        <embedded>
+                            <groupId>io.wcm</groupId>
+                            <artifactId>io.wcm.caconfig.extensions</artifactId>
+                            <target>/apps/core/wcm/install</target>
+                        </embedded>
                     </embeddeds>
                     <subPackages>
                         <subPackage>
@@ -189,6 +199,18 @@
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- wcm.io Context-Aware Configuration -->
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.caconfig.editor</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.wcm</groupId>
+            <artifactId>io.wcm.caconfig.extensions</artifactId>
+            <version>1.6.0</version>
         </dependency>
     </dependencies>
 </project>

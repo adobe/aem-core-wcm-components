@@ -58,7 +58,10 @@
                     <exportScr>true</exportScr>
                     <instructions>
                         <!-- Enable registration of Sling Models classes via bnd plugin -->
-                        <_plugin>org.apache.sling.bnd.models.ModelsScannerPlugin</_plugin>
+                        <_plugin>
+                            org.apache.sling.bnd.models.ModelsScannerPlugin,
+                            org.apache.sling.caconfig.bndplugin.ConfigurationClassScannerPlugin
+                        </_plugin>
                         <!-- Enable processing of OSGI DS component annotations -->
                         <_dsannotations>*</_dsannotations>
                         <!-- Enable processing of OSGI metatype annotations -->
@@ -75,6 +78,11 @@
                         <groupId>org.apache.sling</groupId>
                         <artifactId>org.apache.sling.bnd.models</artifactId>
                         <version>1.0.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.sling</groupId>
+                        <artifactId>org.apache.sling.caconfig.bnd-plugin</artifactId>
+                        <version>1.0.2</version>
                     </dependency>
                 </dependencies>
             </plugin>

@@ -1,0 +1,12 @@
+{
+  "pdf" : {
+    "jcr:primaryType": "nt:unstructured",
+    "jcr:createdBy": "admin",
+    "jcr:lastModifiedBy": "admin",
+    "fileUrl": "https://documentcloud.adobe.com/view-sdk-demo/PDFs/Bodea Brochure.pdf",
+    "fileName": "Bodea Brochure.pdf",
+    "jcr:created": "Tue Mar 31 2020 13:29:28 GMT+0200",
+    "jcr:lastModified": "Tue Mar 31 2020 13:34:31 GMT+0200",
+    "sling:resourceType": "core/wcm/components/pdf/v1/pdf"
+  }
+}
