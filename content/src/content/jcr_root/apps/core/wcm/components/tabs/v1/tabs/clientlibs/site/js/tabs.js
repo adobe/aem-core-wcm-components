@@ -270,18 +270,19 @@
             focusWithoutScroll(that._elements["tab"][index]);
 
             var activeItem = getDataLayerId(that._elements.tabpanel[index].dataset.cmpDataLayer);
+            var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive].dataset.cmpDataLayer);
 
             dataLayer.push({
                 event: "cmp:show",
                 info: {
-                    id: activeItem
+                    path: "component." + activeItem
                 }
             });
 
             dataLayer.push({
                 event: "cmp:hide",
                 info: {
-                    id: getDataLayerId(that._elements.tabpanel[exActive].dataset.cmpDataLayer)
+                    path: "component." + exActiveItem
                 }
             });
 

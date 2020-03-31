@@ -363,7 +363,7 @@
                 dataLayer.push({
                     event: "cmp:show",
                     info: {
-                        id: getDataLayerId(item.dataset.cmpDataLayer)
+                        path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
                     }
                 });
 
@@ -372,7 +372,7 @@
                 dataLayer.push({
                     event: "cmp:hide",
                     info: {
-                        id: getDataLayerId(item.dataset.cmpDataLayer)
+                        path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
                     }
                 });
             }

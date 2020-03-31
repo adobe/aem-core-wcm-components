@@ -62,7 +62,7 @@
         dataLayer.push({
             event: "cmp:click",
             info: {
-                id: componentId
+                path: "component." + componentId
             }
         });
     }

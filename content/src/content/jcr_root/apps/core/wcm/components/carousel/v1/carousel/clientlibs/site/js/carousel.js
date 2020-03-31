@@ -214,7 +214,7 @@
                     dataLayer.push({
                         event: "cmp:show",
                         info: {
-                            id: getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                            path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
                         }
                     });
                 });
@@ -227,7 +227,7 @@
                     dataLayer.push({
                         event: "cmp:show",
                         info: {
-                            id: getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                            path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
                         }
                     });
                 });
@@ -517,7 +517,7 @@
             dataLayer.push({
                 event: "cmp:show",
                 info: {
-                    id: getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                    path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
                 }
             });
         }
