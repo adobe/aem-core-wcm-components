@@ -484,16 +484,16 @@
             refreshActive();
 
             var carouselId = that._elements.self.id;
-            var activeItem = JSON.parse(that._elements.item[index].dataset.cmpDataLayer).id;
+            var activeItem = getDataLayerId(that._elements.item[index].dataset.cmpDataLayer);
             if (dataLayer.hasOwnProperty("getState")) {
-                var uploadPayload = { data: { component: {} } };
-                uploadPayload.data.component[carouselId] = { shownItems: [activeItem] };
+                var updatePayload = { data: { component: {} } };
+                updatePayload.data.component[carouselId] = { shownItems: [activeItem] };
 
                 var removePayload = { data: { component: {} } };
                 removePayload.data.component[carouselId] = { shownItems: undefined };
 
                 dataLayer.push(removePayload);
-                dataLayer.push(uploadPayload);
+                dataLayer.push(updatePayload);
             }
 
             // reset the autoplay transition interval following navigation, if not already hovering the carousel
