@@ -15,11 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Map;
+
 import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A base interface to be extended by components that need to enable dataLayer population.

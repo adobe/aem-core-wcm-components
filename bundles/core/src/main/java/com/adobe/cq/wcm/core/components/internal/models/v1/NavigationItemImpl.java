@@ -15,13 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.sling.api.SlingHttpServletRequest;
+
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.sling.api.SlingHttpServletRequest;
-
-import java.util.Collections;
-import java.util.List;
 
 public class NavigationItemImpl extends PageListItemImpl implements NavigationItem {
 

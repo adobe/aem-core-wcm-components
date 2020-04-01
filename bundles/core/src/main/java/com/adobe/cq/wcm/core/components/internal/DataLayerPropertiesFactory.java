@@ -15,15 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import com.adobe.cq.wcm.core.components.models.DataLayerProperties;
-import com.day.cq.dam.api.Asset;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
+import com.adobe.cq.wcm.core.components.models.DataLayerProperties;
+import com.day.cq.dam.api.Asset;
 
 /**
  * Builder class for generating the final dataLayer representation of a model
@@ -44,8 +45,6 @@ public class DataLayerPropertiesFactory {
             String id = (String)invoke(provider, "getDataLayerId");
             if (id != null) {
                 data.put("type", invoke(provider, "getDataLayerType"));
-                data.put("name", invoke(provider, "getDataLayerName"));
-                data.put("path", invoke(provider, "getDataLayerPath"));
                 data.put("title", invoke(provider, "getDataLayerTitle"));
                 data.put("templatePath", invoke(provider, "getDataLayerTemplatePath"));
                 data.put("text", invoke(provider, "getDataLayerText"));
@@ -100,7 +99,7 @@ public class DataLayerPropertiesFactory {
                 assetMetadata.put("url", asset.getPath());
                 assetMetadata.put("format", asset.getMimeType());
                 assetMetadata.put("tags", getAssetTags(asset));
-                assetMetadata.put("modifyDate", getAssetLastModifiedDate(asset, assetResource));
+                assetMetadata.put("lastModifiedDate", getAssetLastModifiedDate(asset, assetResource));
                 assetMetadataObject = assetMetadata.getMap();
             }
         }

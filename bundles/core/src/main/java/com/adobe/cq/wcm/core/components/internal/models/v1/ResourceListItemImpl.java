@@ -15,8 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.day.cq.commons.jcr.JcrConstants;
+import java.util.Calendar;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -24,7 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.day.cq.commons.jcr.JcrConstants;
 
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 

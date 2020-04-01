@@ -15,15 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -45,6 +38,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
@@ -315,6 +309,11 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @Override
     public String getDataLayerTemplatePath() {
         return currentPage.getTemplate().getPath();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return Utils.getURL(request, currentPage);
     }
 
     @Override

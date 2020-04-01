@@ -26,8 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Component;
-import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.components.ComponentContext;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
