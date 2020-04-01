@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Calendar;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
@@ -28,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.Component;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
@@ -137,5 +140,25 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProperties 
     @Override
     public final String getDataLayerType() {
         return resource.getResourceType();
+    }
+
+    @Override
+    public final String getDataLayerLastModifiedDate() {
+        ValueMap valueMap = resource.adaptTo(ValueMap.class);
+        Calendar lastModified = null;
+
+        if (valueMap != null) {
+            lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+
+            if (lastModified == null) {
+                lastModified = valueMap.get(JcrConstants.JCR_CREATED, Calendar.class);
+            }
+        }
+
+        if (lastModified != null) {
+            return lastModified.toInstant().toString();
+        }
+
+        return null;
     }
 }

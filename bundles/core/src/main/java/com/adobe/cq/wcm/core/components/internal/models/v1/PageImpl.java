@@ -302,7 +302,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     }
 
     @Override
-    public String getDataLayerText() {
+    public String getDataLayerDescription() {
         return pageProperties.get(NameConstants.PN_DESCRIPTION, String.class);
     }
 

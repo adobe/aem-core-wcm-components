@@ -4,6 +4,7 @@
     "text": "Hello World",
     "dataLayerJson": {
         "title-7968bee19c": {
+            "lastModifiedDate": "2016-01-13T15:14:51Z",
             "text": "Hello World",
             "type": "core/wcm/components/title/v1/title"
         }

@@ -7,28 +7,30 @@
   "titleLinkHidden": false,
   "actions": [
     {
+      "id": "teaser-84f85e5d32-cta-4a426bc86e",
       "title": "Teasers",
       "url": "/core/content/teasers.html",
-      "id": "teaser-84f85e5d32-cta-4a426bc86e",
       "dataLayerJson": {
         "teaser-84f85e5d32-cta-4a426bc86e": {
           "linkUrl": "/core/content/teasers.html",
           "type": "nt:unstructured",
           "title": "Teasers"
         }
-      }
+      },
+      ":type": "nt:unstructured"
     },
     {
+      "id": "teaser-84f85e5d32-cta-ed27c8e4b7",
       "title": "Adobe",
       "url": "http://www.adobe.com",
-      "id": "teaser-84f85e5d32-cta-ed27c8e4b7",
       "dataLayerJson": {
         "teaser-84f85e5d32-cta-ed27c8e4b7": {
           "linkUrl": "http://www.adobe.com",
           "type": "nt:unstructured",
           "title": "Adobe"
         }
-      }
+      },
+      ":type": "nt:unstructured"
     }
   ],
   "id": "teaser-84f85e5d32",
@@ -36,6 +38,7 @@
   "dataLayerJson": {
     "teaser-84f85e5d32": {
       "linkUrl": "/core/content/teasers.html",
+      "description": "Teasers description",
       "type": "core/wcm/components/teaser/v1/teaser",
       "title": "Teasers Test"
     }

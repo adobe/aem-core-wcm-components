@@ -22,6 +22,7 @@
             "id": "teaser-d00b134df3",
             "dataLayerJson": {
                 "teaser-d00b134df3": {
+                    "description": "Teaser 1 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
                     "title": "Teaser 1"
                 }
@@ -38,6 +39,7 @@
             "id": "teaser-fd6086a850",
             "dataLayerJson": {
                 "teaser-fd6086a850": {
+                    "description": "Teaser 2 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
                     "title": "Teaser 2"
                 }

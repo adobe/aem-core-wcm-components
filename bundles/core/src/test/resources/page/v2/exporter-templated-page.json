@@ -9,8 +9,9 @@
     "language": "en-GB",
     "dataLayerJson": {
         "page-bb590de134": {
+            "linkUrl": "/core/content/page/templated-page.html",
+            "description": "Description",
             "language": "en-GB",
-            "text": "Description",
             "type": "core/wcm/components/page/v2/page",
             "title": "Templated Page",
             "templatePath": "/conf/coretest/settings/wcm/templates/product-page",
@@ -26,6 +27,7 @@
     ],
     ":items": {
         "root": {
+            ":type": "wcm/foundation/components/responsivegrid",
             ":itemsOrder": [
                 "text"
             ],
@@ -36,14 +38,14 @@
                     "richText": true,
                     "dataLayerJson": {
                         "text-41bcd02e64": {
+                            "lastModifiedDate": "2016-01-18T15:59:43Z",
                             "text": "<p>This is a test</p>",
                             "type": "core/wcm/components/text/v2/text"
                         }
                     },
                     ":type": "core/wcm/components/text/v2/text"
                 }
-            },
-            ":type": "wcm/foundation/components/responsivegrid"
+            }
         }
     },
     ":type": "core/wcm/components/page/v2/page"

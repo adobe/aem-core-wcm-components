@@ -27,6 +27,7 @@
             "id": "teaser-6204f971ea",
             "dataLayerJson": {
                 "teaser-6204f971ea": {
+                    "description": "Teaser 1 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
                     "title": "Teaser 1"
                 }
@@ -44,6 +45,7 @@
             "id": "teaser-7d7da28085",
             "dataLayerJson": {
                 "teaser-7d7da28085": {
+                    "description": "Teaser 2 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
                     "title": "Teaser 2"
                 }
@@ -61,6 +63,7 @@
             "id": "teaser-aeaad4f462",
             "dataLayerJson": {
                 "teaser-aeaad4f462": {
+                    "description": "Teaser 3 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
                     "title": "Teaser 3"
                 }

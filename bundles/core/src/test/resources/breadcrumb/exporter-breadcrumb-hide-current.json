@@ -2,9 +2,9 @@
     "id": "breadcrumb-8a0c707b3e",
     "items": [
         {
+            "id": "breadcrumb-8a0c707b3e-item-11c305ace0",
             "active": false,
             "url": "/content/breadcrumb/women.html",
-            "id": "breadcrumb-8a0c707b3e-item-11c305ace0",
             "title": "Women",
             "dataLayerJson": {
                 "breadcrumb-8a0c707b3e-item-11c305ace0": {
@@ -12,11 +12,13 @@
                     "type": "cq:PageContent",
                     "title": "Women"
                 }
-            }
+            },
+            ":type": "cq:PageContent"
         }
     ],
     "dataLayerJson": {
         "breadcrumb-8a0c707b3e": {
+            "lastModifiedDate": "2016-01-11T15:21:45Z",
             "type": "core/wcm/components/breadcrumb"
         }
     },

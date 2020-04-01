@@ -16,6 +16,7 @@
     ],
     ":items": {
         "item_1": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
@@ -31,6 +32,7 @@
                     "id": "teaser-5e80f2b18f",
                     "dataLayerJson": {
                         "teaser-5e80f2b18f": {
+                            "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
                             "title": "Teaser 1"
                         }
@@ -47,6 +49,7 @@
                     "id": "teaser-c4c744ca71",
                     "dataLayerJson": {
                         "teaser-c4c744ca71": {
+                            "description": "Teaser 2 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
                             "title": "Teaser 2"
                         }
@@ -54,10 +57,10 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
@@ -73,6 +76,7 @@
                     "id": "teaser-af667597f0",
                     "dataLayerJson": {
                         "teaser-af667597f0": {
+                            "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
                             "title": "Teaser 1"
                         }
@@ -89,6 +93,7 @@
                     "id": "teaser-71ba02337b",
                     "dataLayerJson": {
                         "teaser-71ba02337b": {
+                            "description": "Teaser 2 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
                             "title": "Teaser 2"
                         }
@@ -96,7 +101,6 @@
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab Panel 2"
         }
     },

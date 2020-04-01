@@ -12,6 +12,7 @@
   "dataLayerJson": {
     "teaser-99c7d15e82": {
       "linkUrl": "https://www.adobe.com",
+      "description": "Description",
       "type": "core/wcm/components/teaser/v1/teaser",
       "title": "Teaser"
     }

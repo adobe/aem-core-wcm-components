@@ -85,11 +85,6 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
      */
 
     @Override
-    public String getDataLayerId() {
-        return getId();
-    }
-
-    @Override
     public String getDataLayerTitle() {
         return getTitle();
     }

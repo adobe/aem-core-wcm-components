@@ -315,6 +315,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return getLinkURL();
     }
 
+    @Override
+    public String getDataLayerDescription() {
+        return getDescription();
+    }
+
 
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action extends AbstractListItemImpl implements ListItem {
@@ -366,11 +371,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         /*
          * DataLayerProvider implementation of field getters
          */
-
-        @Override
-        public String getDataLayerId() {
-            return getId();
-        }
 
         @Override
         public String getDataLayerLinkUrl() {

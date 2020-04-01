@@ -46,6 +46,8 @@ public class DataLayerPropertiesFactory {
             if (id != null) {
                 data.put("type", invoke(provider, "getDataLayerType"));
                 data.put("title", invoke(provider, "getDataLayerTitle"));
+                data.put("description", invoke(provider, "getDataLayerDescription"));
+                data.put("lastModifiedDate", invoke(provider, "getDataLayerLastModifiedDate"));
                 data.put("templatePath", invoke(provider, "getDataLayerTemplatePath"));
                 data.put("text", invoke(provider, "getDataLayerText"));
                 data.put("tags", invoke(provider, "getDataLayerTags"));

@@ -24,10 +24,9 @@ import org.apache.sling.api.resource.Resource;
  * Generates an ID for the item containing the Container ID
  *
  */
-public abstract class AbstractListItemImpl extends AbstractDataLayerProperties {
+public abstract class AbstractListItemImpl extends AbstractComponentImpl {
     protected String parentId;
     protected String path;
-    protected Resource resource;
 
     public AbstractListItemImpl(String parentId, Resource resource) {
         this.parentId = parentId;
@@ -44,13 +43,4 @@ public abstract class AbstractListItemImpl extends AbstractDataLayerProperties {
         return parentId + "-item-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
     }
 
-    @Override
-    public String getDataLayerId() {
-        return getId();
-    }
-
-    @Override
-    public final String getDataLayerType() {
-        return resource.getResourceType();
-    }
 }

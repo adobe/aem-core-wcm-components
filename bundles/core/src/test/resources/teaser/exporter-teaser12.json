@@ -10,6 +10,7 @@
   "dataLayerJson": {
     "teaser-c8b7c5c73f": {
       "linkUrl": "/core/content/teasers.html",
+      "description": "Description",
       "type": "core/wcm/components/teaser/v1/teaser",
       "title": "Teaser"
     }

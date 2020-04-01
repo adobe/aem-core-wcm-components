@@ -2,133 +2,126 @@
     "id": "navigation-3548d11f26",
     "items": [
         {
+            "id": "navigation-3548d11f26-item-4885a69181",
             "path": "/content/navigation/navigation-1",
             "children": [
                 {
+                    "id": "navigation-3548d11f26-item-6a9edbe69f",
                     "path": "/content/navigation/navigation-1/navigation-1-1",
                     "children": [
                         {
+                            "id": "navigation-3548d11f26-item-dfa9068b94",
                             "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1",
                             "children": [],
                             "level": 2,
                             "active": false,
                             "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
-                            "id": "navigation-3548d11f26-item-dfa9068b94",
-                            "description": null,
                             "title": "Navigation 1.1.1",
-                            "lastModified": null,
                             "dataLayerJson": {
                                 "navigation-3548d11f26-item-dfa9068b94": {
                                     "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html",
                                     "type": "cq:PageContent",
                                     "title": "Navigation 1.1.1"
                                 }
-                            }
+                            },
+                            ":type": "cq:PageContent"
                         },
                         {
+                            "id": "navigation-3548d11f26-item-8b011a2258",
                             "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2",
                             "children": [
                                 {
+                                    "id": "navigation-3548d11f26-item-aa180e7f2f",
                                     "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1",
                                     "children": [],
                                     "level": 3,
                                     "active": false,
                                     "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
-                                    "id": "navigation-3548d11f26-item-aa180e7f2f",
-                                    "description": null,
                                     "title": "Navigation 1.1.2.2.1",
-                                    "lastModified": null,
                                     "dataLayerJson": {
                                         "navigation-3548d11f26-item-aa180e7f2f": {
                                             "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html",
                                             "type": "cq:PageContent",
                                             "title": "Navigation 1.1.2.2.1"
                                         }
-                                    }
+                                    },
+                                    ":type": "cq:PageContent"
                                 },
                                 {
+                                    "id": "navigation-3548d11f26-item-1526eaa1b9",
                                     "path": "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3",
                                     "children": [],
                                     "level": 3,
                                     "active": false,
                                     "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
-                                    "id": "navigation-3548d11f26-item-1526eaa1b9",
-                                    "description": null,
                                     "title": "Navigation 1.1.2.3",
-                                    "lastModified": null,
                                     "dataLayerJson": {
                                         "navigation-3548d11f26-item-1526eaa1b9": {
                                             "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html",
                                             "type": "cq:PageContent",
                                             "title": "Navigation 1.1.2.3"
                                         }
-                                    }
+                                    },
+                                    ":type": "cq:PageContent"
                                 }
                             ],
                             "level": 2,
                             "active": false,
                             "url": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
-                            "id": "navigation-3548d11f26-item-8b011a2258",
-                            "description": null,
                             "title": "Navigation 1.1.2",
-                            "lastModified": null,
                             "dataLayerJson": {
                                 "navigation-3548d11f26-item-8b011a2258": {
                                     "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html",
                                     "type": "cq:PageContent",
                                     "title": "Navigation 1.1.2"
                                 }
-                            }
+                            },
+                            ":type": "cq:PageContent"
                         }
                     ],
                     "level": 1,
                     "active": false,
                     "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
-                    "id": "navigation-3548d11f26-item-6a9edbe69f",
-                    "description": null,
                     "title": "Navigation 1.1",
-                    "lastModified": null,
                     "dataLayerJson": {
                         "navigation-3548d11f26-item-6a9edbe69f": {
                             "linkUrl": "/core/content/navigation/navigation-1/navigation-1-1.html",
                             "type": "cq:PageContent",
                             "title": "Navigation 1.1"
                         }
-                    }
+                    },
+                    ":type": "cq:PageContent"
                 }
             ],
             "level": 0,
             "active": false,
             "url": "/core/navigation-1-vanity",
-            "id": "navigation-3548d11f26-item-4885a69181",
-            "description": null,
             "title": "Navigation 1",
-            "lastModified": null,
             "dataLayerJson": {
                 "navigation-3548d11f26-item-4885a69181": {
                     "linkUrl": "/core/navigation-1-vanity",
                     "type": "cq:PageContent",
                     "title": "Navigation 1"
                 }
-            }
+            },
+            ":type": "cq:PageContent"
         },
         {
+            "id": "navigation-3548d11f26-item-196ac37bae",
             "path": "/content/navigation/navigation-2",
             "children": [],
             "level": 0,
             "active": false,
             "url": "/core/content/navigation/navigation-2.html",
-            "id": "navigation-3548d11f26-item-196ac37bae",
-            "description": null,
             "title": "Navigation 2",
-            "lastModified": null,
             "dataLayerJson": {
                 "navigation-3548d11f26-item-196ac37bae": {
                     "linkUrl": "/core/content/navigation/navigation-2.html",
                     "type": "cq:PageContent",
                     "title": "Navigation 2"
                 }
-            }
+            },
+            ":type": "cq:PageContent"
         }
     ],
     "dataLayerJson": {

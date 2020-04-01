@@ -79,6 +79,26 @@ public interface DataLayerProperties {
     }
 
     /**
+     * Method used to return a model's description (ex {@link Page})
+     *
+     * @return description
+     */
+    @JsonIgnore
+    default String getDataLayerDescription() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Method used to return an ISO 8601 representation of the model's last modified date
+     *
+     * @return lastModifiedDate
+     */
+    @JsonIgnore
+    default String getDataLayerLastModifiedDate() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Method used to return a model's text where it applies (ex {@link Text})
      *
      * @return text

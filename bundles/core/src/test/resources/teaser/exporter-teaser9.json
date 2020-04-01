@@ -6,34 +6,37 @@
   "titleLinkHidden": false,
   "actions": [
     {
+      "id": "teaser-6a61ad8d2f-cta-fd5b402eb7",
       "title": "Adobe",
       "url": "http://www.adobe.com",
-      "id": "teaser-6a61ad8d2f-cta-fd5b402eb7",
       "dataLayerJson": {
         "teaser-6a61ad8d2f-cta-fd5b402eb7": {
           "linkUrl": "http://www.adobe.com",
           "type": "nt:unstructured",
           "title": "Adobe"
         }
-      }
+      },
+      ":type": "nt:unstructured"
     },
     {
+      "id": "teaser-6a61ad8d2f-cta-9e69f6452d",
       "title": "Teasers",
       "url": "/core/content/teasers.html",
-      "id": "teaser-6a61ad8d2f-cta-9e69f6452d",
       "dataLayerJson": {
         "teaser-6a61ad8d2f-cta-9e69f6452d": {
           "linkUrl": "/core/content/teasers.html",
           "type": "nt:unstructured",
           "title": "Teasers"
         }
-      }
+      },
+      ":type": "nt:unstructured"
     }
   ],
   "id": "teaser-6a61ad8d2f",
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-7.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "dataLayerJson": {
     "teaser-6a61ad8d2f": {
+      "description": "Description",
       "type": "core/wcm/components/teaser/v1/teaser",
       "title": "Teaser"
     }

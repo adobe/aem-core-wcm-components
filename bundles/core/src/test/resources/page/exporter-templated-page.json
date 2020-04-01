@@ -8,8 +8,9 @@
     "language": "en-GB",
     "dataLayerJson": {
         "page-bb590de134": {
+            "linkUrl": "/core/content/page/templated-page.html",
+            "description": "Description",
             "language": "en-GB",
-            "text": "Description",
             "type": "core/wcm/components/page/v1/page",
             "title": "Templated Page",
             "templatePath": "/conf/coretest/settings/wcm/templates/product-page",
@@ -20,6 +21,7 @@
             ]
         }
     },
+    ":type": "core/wcm/components/page/v1/page",
     ":itemsOrder": [
         "text"
     ],
@@ -30,12 +32,12 @@
             "richText": true,
             "dataLayerJson": {
                 "text-fb32b028de": {
+                    "lastModifiedDate": "2016-01-18T15:59:43Z",
                     "text": "<p>This is a test</p>",
                     "type": "core/wcm/components/text/v1/text"
                 }
             },
             ":type": "core/wcm/components/text/v1/text"
         }
-    },
-    ":type": "core/wcm/components/page/v1/page"
+    }
 }

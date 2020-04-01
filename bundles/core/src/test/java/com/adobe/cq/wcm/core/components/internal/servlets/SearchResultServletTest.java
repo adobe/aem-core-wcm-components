@@ -41,6 +41,7 @@ import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -143,6 +144,7 @@ public class SearchResultServletTest {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Item implements ListItem {
         private String id;
         private String url;

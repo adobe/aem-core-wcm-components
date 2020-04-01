@@ -11,6 +11,7 @@
   "dataLayerJson": {
     "teaser-232410b0b2": {
       "linkUrl": "/core/content/teasers.html",
+      "description": "Description",
       "type": "core/wcm/components/teaser/v1/teaser",
       "title": "Teaser"
     }
