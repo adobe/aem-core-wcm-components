@@ -86,10 +86,12 @@ public class TableOfContentImpl implements  TableOfContent {
 
     private TableOfContentItem getItemLevel(Resource resource) {
         String type = null;
+        String title = null;
         int level = -1;
         ValueMap properties = resource.adaptTo(ValueMap.class);
         if(properties!= null) {
-            type = properties.get("./type", String.class);
+            type = properties.get("type", String.class);
+            title = properties.get("jcr:title", String.class);
         }
         if(type != null) {
             switch (type) {
@@ -116,7 +118,7 @@ public class TableOfContentImpl implements  TableOfContent {
                     break;
             }
         }
-        return new TableOfContentItemImpl(level);
+        return new TableOfContentItemImpl(level, title);
     }
 
     @Nonnull

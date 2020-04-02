@@ -35,29 +35,18 @@ public class TableOfContentItemImpl implements  TableOfContentItem {
 
 
     public static final String RESOURCE_TYPE = "core/wcm/components/tableOfContent/v1/tableOfContent";
-    private static final String PROP_DEFAULT_TITLE = "";
-    private static final String PROP_DEFAULT_ID = "";
 
     protected int level;
+    protected String title;
 
-    public TableOfContentItemImpl(int level) {
+    public TableOfContentItemImpl(int level, String title) {
         this.level = level;
+        this.title = title;
     }
-
-    @ValueMapValue
-    @Default(values = PROP_DEFAULT_TITLE)
-    private String title;
-
-    @ValueMapValue
-    @Default(values = PROP_DEFAULT_ID)
-    private String id;
-
 
     @Override
     public String getTitle() { return title; }
 
-    @Override
-    public String getId() { return id; }
 
     @Override
     public int getLevel() { return level; }

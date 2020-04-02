@@ -40,15 +40,6 @@ public interface TableOfContentItem {
     }
 
     /**
-     * Returns the Table of Content content.
-     *
-     * @return the List of TableOfContentItem
-     */
-    default String getId() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * Returns the Level of the Table of Content item.
      *
      * @return an INT of the level of TableOfContentItem
