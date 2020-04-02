@@ -17,9 +17,9 @@
 <template data-sly-template.item="${@ item='The table of content item'}"
           data-sly-use.groupTemplate="group.html"
           data-sly-use.itemContentTemplate="itemContent.html">
-    <li class="cmp-tableOfContent__items--level-${item.level}">
+    <li class="cmp-tableOfContent__item cmp-tableOfContent__item--level-${item.level}">
         <sly data-sly-call="${itemContentTemplate.itemContent @ item = item}"></sly>
-        <sly data-sly-test="${item.items.size > 0}" data-sly-call="${groupTemplate.group @ items = item.children}"></sly>
+        <sly data-sly-test="${item.items.size > 0}" data-sly-call="${groupTemplate.group @ items = item.items}"></sly>
     </li>
 </template>
 

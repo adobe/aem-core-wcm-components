@@ -71,14 +71,16 @@ public class TableOfContentImpl implements  TableOfContent {
             Resource parent = slingRequest.getResource().getParent();
             if (parent != null) {
             Iterable<Resource> children = parent.getChildren();
-
-                for(Resource resource : children) {
-                    String resourceType = resource.getResourceType();
-                    if (resourceType.equals(TITLE_V1) || resourceType.equals(TITLE_V2)) {
-                        TableOfContentItem item = getItemLevel(resource);
-                        items.add(item);
+                if(children!=null){
+                    for(Resource resource : children) {
+                        String resourceType = resource.getResourceType();
+                        if (resourceType.equals(TITLE_V1) || resourceType.equals(TITLE_V2)) {
+                            TableOfContentItem item = getItemLevel(resource);
+                            items.add(item);
+                        }
                     }
                 }
+
             }
         }
         return items;
@@ -87,7 +89,7 @@ public class TableOfContentImpl implements  TableOfContent {
     private TableOfContentItem getItemLevel(Resource resource) {
         String type = null;
         String title = null;
-        int level = -1;
+        int level = 1;
         ValueMap properties = resource.adaptTo(ValueMap.class);
         if(properties!= null) {
             type = properties.get("type", String.class);
@@ -114,7 +116,6 @@ public class TableOfContentImpl implements  TableOfContent {
                     level = 6;
                     break;
                 default:
-                    level = 0;
                     break;
             }
         }
