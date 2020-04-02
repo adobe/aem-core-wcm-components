@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public interface DataLayerProperties {
 
     /**
-     * Indicates if the component will populate the dataLayer
+     * Checks if the data layer is enabled
      *
      * @return {@code true} if the model will populate the dataLayer
      */
@@ -39,7 +39,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a resource's asset (ex {@link Image})
+     * Returns the resource's asset
      *
      * @return {@code Resource} of the asset
      */
@@ -49,7 +49,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a model's ID
+     * Returns the resource's ID used in the data layer
      *
      * @return string ID
      */
@@ -59,7 +59,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a model's type
+     * Returns the resource's type used in the data layer
      *
      * @return type
      */
@@ -69,7 +69,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a model's link (ex {@link Image})
+     * Returns the resource's title used in the data layer
      *
      * @return src
      */
@@ -79,7 +79,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a model's description (ex {@link Page})
+     * Returns the resource's description used in the data layer
      *
      * @return description
      */
@@ -89,7 +89,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return an ISO 8601 representation of the model's last modified date
+     * Returns the resource's last modified date using ISO 8601 standard
      *
      * @return lastModifiedDate
      */
@@ -99,7 +99,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a model's text where it applies (ex {@link Text})
+     * Returns the resource's text used in the data layer
      *
      * @return text
      */
@@ -109,7 +109,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a model's tags where it applies (ex {@link Page})
+     * Returns the resource's tags used in the data layer
      *
      * @return tags array
      */
@@ -119,7 +119,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a model's link where a URL is present
+     * Returns the resource's URL used in the data layer
      *
      * @return link URL
      */
@@ -129,7 +129,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Method used to return a page's template path
+     * Returns the page template used in the data layer
      *
      * @return JCR template path
      */
@@ -139,7 +139,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Get a model's language where it applies (ex {@link Page}
+     * Returns the page language used in the data layer
      *
      * @return language
      */
@@ -149,7 +149,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Get an {@link Carousel} or {@link Tabs} active item IDs
+     * Returns the shown items of the Carousel, Accordion or Tabs used in the data layer
      *
      * @return item ID
      */
@@ -159,7 +159,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Used to generate a JSON string of the dataLayer representation of the model
+     * Returns the JSON string of the resource's properties used in the data layer
      *
      * @return JSON string
      */
@@ -169,7 +169,7 @@ public interface DataLayerProperties {
     }
 
     /**
-     * Used to generate a Map of the dataLayer representation of the model
+     * Returns the Map of the resource's properties used in the data layer
      *
      * @return dataLayer Map
      */
