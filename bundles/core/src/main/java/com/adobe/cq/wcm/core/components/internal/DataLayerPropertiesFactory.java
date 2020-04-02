@@ -53,6 +53,7 @@ public class DataLayerPropertiesFactory {
                 data.put("tags", invoke(provider, "getDataLayerTags"));
                 data.put("asset", getAssetMetadata(provider));
                 data.put("linkUrl", invoke(provider, "getDataLayerLinkUrl"));
+                data.put("url", invoke(provider, "getDataLayerUrl"));
                 data.put("language", invoke(provider, "getDataLayerLanguage"));
                 data.put("shownItems", getShownItems(provider));
 

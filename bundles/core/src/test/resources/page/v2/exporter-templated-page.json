@@ -9,12 +9,12 @@
     "language": "en-GB",
     "dataLayerJson": {
         "page-bb590de134": {
-            "linkUrl": "/core/content/page/templated-page.html",
             "description": "Description",
             "language": "en-GB",
             "type": "core/wcm/components/page/v2/page",
             "title": "Templated Page",
             "templatePath": "/conf/coretest/settings/wcm/templates/product-page",
+            "url": "/core/content/page/templated-page.html",
             "tags": [
                 "two",
                 "three",

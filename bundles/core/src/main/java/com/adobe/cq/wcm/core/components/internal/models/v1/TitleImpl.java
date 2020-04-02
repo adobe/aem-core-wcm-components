@@ -143,7 +143,7 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
     }
 
     @Override
-    public String getDataLayerText() {
+    public String getDataLayerTitle() {
         return getText();
     }
 }

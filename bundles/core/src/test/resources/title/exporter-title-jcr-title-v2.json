@@ -5,8 +5,8 @@
     "dataLayerJson": {
         "title-614d9def2d": {
             "lastModifiedDate": "2016-01-13T15:14:51Z",
-            "text": "Hello World",
-            "type": "core/wcm/components/title/v2/title"
+            "type": "core/wcm/components/title/v2/title",
+            "title": "Hello World"
         }
     },
     ":type": "core/wcm/components/title/v2/title"

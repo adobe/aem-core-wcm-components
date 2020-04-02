@@ -103,6 +103,7 @@ public interface DataLayerProperties {
      *
      * @return text
      */
+
     @JsonIgnore
     default String getDataLayerText() {
         throw new UnsupportedOperationException();
@@ -113,6 +114,7 @@ public interface DataLayerProperties {
      *
      * @return tags array
      */
+
     @JsonIgnore
     default String[] getDataLayerTags() {
         throw new UnsupportedOperationException();
@@ -120,6 +122,16 @@ public interface DataLayerProperties {
 
     /**
      * Returns the resource's URL used in the data layer
+     *
+     * @return link URL
+     */
+    @JsonIgnore
+    default String getDataLayerUrl() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the resource's link URL used in the data layer
      *
      * @return link URL
      */

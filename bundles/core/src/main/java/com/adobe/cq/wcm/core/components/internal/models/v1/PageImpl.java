@@ -312,7 +312,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     }
 
     @Override
-    public String getDataLayerLinkUrl() {
+    public String getDataLayerUrl() {
         return Utils.getURL(request, currentPage);
     }
 
