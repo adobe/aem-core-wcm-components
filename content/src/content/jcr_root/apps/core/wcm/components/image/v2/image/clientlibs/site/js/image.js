@@ -144,7 +144,7 @@
             }
 
             window.addEventListener("resize", onWindowResize);
-            ['focus', 'click', 'load', 'transitionend', 'animationend', 'scroll'].forEach(function(name){
+            ["focus", "click", "load", "transitionend", "animationend", "scroll"].forEach(function(name) {
                 document.addEventListener(name, that.update);
             });
 
