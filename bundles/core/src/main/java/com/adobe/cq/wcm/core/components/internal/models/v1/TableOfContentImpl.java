@@ -112,7 +112,7 @@ public class TableOfContentImpl implements  TableOfContent {
                     level = 6;
                     break;
                 default:
-                    level = 1;
+                    level = 0;
                     break;
             }
         }

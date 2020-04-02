@@ -14,6 +14,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.group="${@ items='The table of content items for the current level'}" data-sly-use.itemTemplate="item.html">
+    <h1 class="cmp-tableOfContent__header">${tableOfContent.title}</h1>
     <ul class="cmp-tableOfContent__group" data-sly-list="${items}">
         <sly data-sly-call="${itemTemplate.item @ item=item}"></sly>
     </ul>
