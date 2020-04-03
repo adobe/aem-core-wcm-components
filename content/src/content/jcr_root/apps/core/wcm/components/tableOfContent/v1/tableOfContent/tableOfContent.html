@@ -17,7 +17,6 @@
      data-sly-use.template="core/wcm/components/commons/v1/templates.html"
      data-sly-use.tableOfContent="com.adobe.cq.wcm.core.components.models.TableOfContent"
      data-sly-use.groupTemplate="group.html"
-
 >
     <h1 class="cmp-tableOfContent__header">${tableOfContent.title}</h1>
     <sly data-sly-call="${groupTemplate.group @ items=tableOfContent.items}">
