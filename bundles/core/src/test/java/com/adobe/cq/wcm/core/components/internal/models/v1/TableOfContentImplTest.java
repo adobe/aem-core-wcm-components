@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.models.TableOfContent;
 import com.adobe.cq.wcm.core.components.models.Title;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
@@ -33,14 +34,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ExtendWith(AemContextExtension.class)
 class TableOfContentImplTest {
 
-    private static final String TEST_BASE = "/title";
-    private static final String TEST_PAGE = "/content/title";
+    private static final String TEST_BASE = "/tableOfContent";
+    private static final String TEST_PAGE = "/content/tableOfContent";
     private static final String TITLE_RESOURCE_JCR_TITLE = TEST_PAGE + "/jcr:content/par/title-jcr-title";
     private static final String TITLE_RESOURCE_JCR_TITLE_TYPE = TEST_PAGE + "/jcr:content/par/title-jcr-title-type";
     private static final String TITLE_NOPROPS = TEST_PAGE + "/jcr:content/par/title-noprops";
     private static final String TITLE_WRONGTYPE = TEST_PAGE + "/jcr:content/par/title-wrongtype";
     private static final String TITLE_RESOURCE_JCR_TITLE_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-v2";
     private static final String TITLE_RESOURCE_JCR_TITLE_LINK_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-link-v2";
+    private static final String TABLE_OF_CONTENT_DEFAULT_TITLE = "Table of Content";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -51,61 +53,24 @@ class TableOfContentImplTest {
 
     @Test
     void testExportedType() {
-        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
-        assertEquals(TitleImpl.RESOURCE_TYPE_V1, title.getExportedType());
+        TableOfContent tableOfContent = getTableOfContentUnderTest(TITLE_RESOURCE_JCR_TITLE);
+        assertEquals(TitleImpl.RESOURCE_TYPE_V1, tableOfContent.getExportedType());
     }
 
     @Test
-    void testGetTitleFromResource() {
-        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
-        assertNull(title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
+    void testGetTitle() {
+        TableOfContent tableOfContent = new TableOfContentImpl();
+        assertEquals(TABLE_OF_CONTENT_DEFAULT_TITLE, tableOfContent.getTitle());
+       // Utils.testJSONExport(tableOfContent, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
     }
 
-    @Test
-    void testGetTitleFromResourceWithElementInfo() {
-        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_TYPE);
-        assertEquals("Hello World", title.getText());
-        assertEquals("h2", title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_TYPE));
-    }
-
-    @Test
-    void testGetTitleResourcePageStyleType() {
-        Title title = getTitleUnderTest(TITLE_NOPROPS,
-                Title.PN_DESIGN_DEFAULT_TYPE, "h2");
-        assertEquals("h2", title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_NOPROPS));
-    }
-
-    @Test
-    void testGetTitleFromCurrentPageWithWrongElementInfo() {
-        Title title = getTitleUnderTest(TITLE_WRONGTYPE);
-        assertNull(title.getType());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_WRONGTYPE));
-    }
-
-    @Test
-    void testV2JSONExport() {
-        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_V2);
-        assertNull(title.getLinkURL());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_V2));
-    }
-
-    @Test
-    void testGetLink() {
-        Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE_LINK_V2);
-        assertEquals("https://www.adobe.com", title.getLinkURL());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE_LINK_V2));
-    }
-
-
-    private Title getTitleUnderTest(String resourcePath, Object ... properties) {
+   private TableOfContent getTableOfContentUnderTest(String resourcePath, Object ... properties) {
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);
         }
         MockSlingHttpServletRequest request = context.request();
-        return request.adaptTo(Title.class);
+        return request.adaptTo(TableOfContent.class);
     }
+
 }
