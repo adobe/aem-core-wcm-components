@@ -112,6 +112,12 @@
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/foundation/form/autocomplete/list"/>
                             </appResourcesClientlib>
+                            <mainContentSelector
+                                jcr:primaryType="nt:unstructured"
+                                valueType="string"
+                                fieldLabel="Skip to main content ID selector"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                name="./mainContentSelector"/>
                         </items>
                     </properties>
                     <styletab

@@ -134,6 +134,12 @@
                                         value="ampOnly"/>
                                 </items>
                             </ampmode>
+                            <mainContentSelector
+                                jcr:primaryType="nt:unstructured"
+                                valueType="string"
+                                fieldLabel="Skip to main content ID selector"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                name="./mainContentSelector"/>
                         </items>
                     </properties>
                 </items>
