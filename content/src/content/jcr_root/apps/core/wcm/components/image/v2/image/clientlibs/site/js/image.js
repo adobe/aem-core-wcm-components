@@ -143,9 +143,11 @@
                 that._elements.image.addEventListener("load", onLoad);
             }
 
-            window.addEventListener("scroll", that.update);
             window.addEventListener("resize", onWindowResize);
-            window.addEventListener("update", that.update);
+            ["focus", "click", "load", "transitionend", "animationend", "scroll"].forEach(function(name) {
+                document.addEventListener(name, that.update);
+            });
+
             that._elements.image.addEventListener("cmp-image-redraw", that.update);
             that.update();
         }

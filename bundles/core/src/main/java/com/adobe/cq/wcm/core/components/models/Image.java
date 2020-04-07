@@ -299,4 +299,9 @@ public interface Image extends ComponentExporter, DataLayerProperties {
     default boolean isDecorative() {
         throw new UnsupportedOperationException();
     };
+
+    default String getDataLayerJson() {
+        throw new UnsupportedOperationException();
+    }
+
 }

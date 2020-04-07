@@ -15,12 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -187,4 +186,18 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getUuid() {
         return uuid;
     }
+
+    @Override
+    public String getDataLayerJson() {
+        JsonObjectBuilder image = Json.createObjectBuilder();
+        JsonObjectBuilder imageProperties = Json.createObjectBuilder();
+        imageProperties.add("path", resource.getPath());
+        imageProperties.add("fileReference", fileReference);
+        imageProperties.add("src", src);
+        imageProperties.add("title", title);
+        String imageId = "image_" + Calendar.getInstance().getTimeInMillis();
+        image.add(imageId, imageProperties);
+        return  image.build().toString();
+    }
+
 }
