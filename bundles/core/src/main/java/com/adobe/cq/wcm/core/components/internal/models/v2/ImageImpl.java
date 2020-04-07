@@ -186,18 +186,4 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getUuid() {
         return uuid;
     }
-
-    @Override
-    public String getDataLayerJson() {
-        JsonObjectBuilder image = Json.createObjectBuilder();
-        JsonObjectBuilder imageProperties = Json.createObjectBuilder();
-        imageProperties.add("path", resource.getPath());
-        imageProperties.add("fileReference", fileReference);
-        imageProperties.add("src", src);
-        imageProperties.add("title", title);
-        String imageId = "image_" + Calendar.getInstance().getTimeInMillis();
-        image.add(imageId, imageProperties);
-        return  image.build().toString();
-    }
-
 }

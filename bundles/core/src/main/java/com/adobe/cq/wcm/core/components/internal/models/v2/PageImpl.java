@@ -191,13 +191,4 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return hasCloudconfigSupport;
     }
-
-    @Override
-    public String getDataLayerJson() {
-        JsonObjectBuilder pageData = Json.createObjectBuilder();
-        pageData.add("id", currentPage.getPath());
-        pageData.add("siteLanguage", getLanguage());
-        pageData.add("pageName", getTitle());
-        return  pageData.build().toString();
-    }
 }
