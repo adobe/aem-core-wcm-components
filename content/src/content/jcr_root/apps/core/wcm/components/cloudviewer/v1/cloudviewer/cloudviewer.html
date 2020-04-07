@@ -16,7 +16,7 @@
 <sly data-sly-use.cloudViewerModel="com.adobe.cq.wcm.core.components.models.CloudViewer"/>
 
 <style>
-     .cloudviewer:not(.cq-Editable-dom) .adobe-dc-view-full-window {
+     .cloudviewer:not(.cq-Editable-dom) .adobe-dc-view-full-window-borderless {
           height: 100vh;
           position: fixed;
           width: 100vw;
@@ -25,7 +25,7 @@
           z-index: 9999;
      }
 
-     .adobe-dc-view-sized-container {
+     .adobe-dc-view-full-window, .adobe-dc-view-sized-container {
           height: ${cloudViewerModel.viewerHeight @ context='styleToken'} !important;
      }
 </style>

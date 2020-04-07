@@ -51,6 +51,10 @@ public interface CloudViewer extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
+    default boolean getBorderless() {
+        throw new UnsupportedOperationException();
+    }
+
     default boolean getShowAnnotationTools() {
         throw new UnsupportedOperationException();
     }

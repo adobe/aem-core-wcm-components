@@ -54,6 +54,9 @@ public class CloudViewerImpl implements CloudViewer {
     private String viewerHeight;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    private boolean borderless;
+
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private boolean showAnnotationTools;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -115,6 +118,11 @@ public class CloudViewerImpl implements CloudViewer {
     @Override
     public String getViewerHeight() {
         return viewerHeight;
+    }
+
+    @Override
+    public boolean getBorderless() {
+        return borderless;
     }
 
     @Override
@@ -180,19 +188,17 @@ public class CloudViewerImpl implements CloudViewer {
 
     @Override
     public String getContainerClass() {
-        String str = "";
-        switch (type) {
-            case "SIZED_CONTAINER":
-                str = "adobe-dc-view-sized-container";
-                break;
-            case "IN_LINE":
-                str = "";
-                break;
-            case "FULL_WINDOW":
-            default:
-                str = "adobe-dc-view-full-window";
-       }
-       return str;
+        String str = "adobe-dc-view-full-window";
+
+        if (type.equals("FULL_WINDOW") && borderless) {
+            str = "adobe-dc-view-full-window-borderless";
+        } else if (type.equals("SIZED_CONTAINER")) {
+           str = "adobe-dc-view-sized-container";
+        } else if (type.equals("IN_LINE")) {
+           str = "";
+        }
+
+        return str;
     }
 
     @NotNull

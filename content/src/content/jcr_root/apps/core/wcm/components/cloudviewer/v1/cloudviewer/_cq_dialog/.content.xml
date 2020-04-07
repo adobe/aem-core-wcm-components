@@ -107,6 +107,15 @@
                                                         fieldLabel="Viewer Height"
                                                         name="./viewerHeight"
                                                         value="500px"/>
+                                                    <borderless
+                                                        granite:class="cloudviewer-controls cloudviewer-borderless"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        fieldDescription="Toggle for viewer to take up full height/width of viewport."
+                                                        name="./borderless"
+                                                        text="Full Screen"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
                                                     <showAnnotationTools
                                                         granite:class="cloudviewer-controls cloudviewer-showAnnotationTools"
                                                         jcr:primaryType="nt:unstructured"

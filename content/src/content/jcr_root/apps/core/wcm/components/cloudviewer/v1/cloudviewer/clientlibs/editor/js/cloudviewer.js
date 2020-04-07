@@ -41,6 +41,7 @@
         selectors = {
             defaultViewMode: $(".cloudviewer-defaultViewMode").parent(),
             viewerHeight: $(".cloudviewer-viewerHeight").parent(),
+            borderless: $(".cloudviewer-borderless").parent(),
             annotationTools: $(".cloudviewer-showAnnotationTools").parent(),
             showFullScreen: $(".cloudviewer-showFullScreen").parent(),
             leftHandPanel: $(".cloudviewer-showLeftHandPanel").parent(),
@@ -74,7 +75,7 @@
                 break;
             case "FULL_WINDOW":
             default:
-                showControls(["defaultViewMode", "annotationTools", "leftHandPanel", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
+                showControls(["defaultViewMode", "viewerHeight", "borderless", "annotationTools", "leftHandPanel", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
         }
         onPageControlChange();
     }
