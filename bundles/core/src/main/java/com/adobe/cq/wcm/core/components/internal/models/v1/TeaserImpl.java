@@ -18,9 +18,11 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -204,9 +206,13 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
             for (Resource actionRes : actionsNode.getChildren()) {
-                actions.add(new Action(actionRes));
+                actions.add(new Action(actionRes, this.getId()));
             }
         }
+    }
+
+    public String getId() {
+        return "teaser-" + StringUtils.substring(DigestUtils.sha256Hex(resource.getPath()), 0, 10);
     }
 
     @Override
@@ -285,17 +291,52 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return request.getResource().getResourceType();
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerId() {
+        return getId();
+    }
+
+    @Override
+    public String getDataLayerType() {
+        return resource.getResourceType();
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLinkURL();
+    }
+
+    @Override
+    public String getDataLayerDescription() {
+        return getDescription();
+    }
+
+
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
-    public class Action implements ListItem {
+    public class Action extends AbstractListItemImpl implements ListItem {
         ValueMap properties;
         String title;
         String url;
+        String path;
         Page page;
+        String parentId;
 
-        public Action(Resource actionRes) {
+        public Action(Resource actionRes, String parentId) {
+            super(parentId, actionRes);
+            this.parentId = parentId;
             properties = actionRes.getValueMap();
             title = properties.get(PN_ACTION_TEXT, String.class);
             url = properties.get(PN_ACTION_LINK, String.class);
+            path = actionRes.getPath();
             if (url != null && url.startsWith("/")) {
                 page = pageManager.getPage(url);
             }
@@ -323,5 +364,22 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
+        public String getId() {
+            return parentId + "-cta-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
+        }
+
+        /*
+         * DataLayerProvider implementation of field getters
+         */
+
+        @Override
+        public String getDataLayerLinkUrl() {
+            return getURL();
+        }
+
+        @Override
+        public String getDataLayerTitle() {
+            return getTitle();
+        }
     }
 }

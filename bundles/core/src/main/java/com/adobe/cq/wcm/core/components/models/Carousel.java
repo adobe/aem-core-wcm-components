@@ -85,5 +85,4 @@ public interface Carousel extends Container {
     default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
-
 }

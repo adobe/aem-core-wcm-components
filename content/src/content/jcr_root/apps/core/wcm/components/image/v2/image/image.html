@@ -25,10 +25,12 @@
      data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
      id="${component.id}"
+     data-cmp-data-layer="${image.dataLayerString}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
     <a data-sly-unwrap="${!image.link}"
        class="cmp-image__link" href="${image.link}"
+       data-cmp-clickable
        data-cmp-hook-image="link">
         <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1 && !image.areas}" data-cmp-hook-image="noscript">
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>

@@ -16,6 +16,8 @@
 (function() {
     "use strict";
 
+    var dataLayer = window.dataLayer = window.dataLayer || [];
+
     var NS = "cmp";
     var IS = "tabs";
 
@@ -29,7 +31,7 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]',
+        self: "[data-" + NS + '-is="' + IS + '"]',
         active: {
             tab: "cmp-tabs__tab--active",
             tabpanel: "cmp-tabs__tabpanel--active"
@@ -263,8 +265,38 @@
          * @param {Number} index The index of the item to navigate to
          */
         function navigateAndFocusTab(index) {
+            var exActive = that._active;
             navigate(index);
             focusWithoutScroll(that._elements["tab"][index]);
+
+            var activeItem = getDataLayerId(that._elements.tabpanel[index].dataset.cmpDataLayer);
+            var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive].dataset.cmpDataLayer);
+
+            dataLayer.push({
+                event: "cmp:show",
+                info: {
+                    path: "component." + activeItem
+                }
+            });
+
+            dataLayer.push({
+                event: "cmp:hide",
+                info: {
+                    path: "component." + exActiveItem
+                }
+            });
+
+            var tabsId = that._elements.self.id;
+            if (dataLayer.hasOwnProperty("getState")) {
+                var uploadPayload = { data: { component: {} } };
+                uploadPayload.data.component[tabsId] = { shownItems: [activeItem] };
+
+                var removePayload = { data: { component: {} } };
+                removePayload.data.component[tabsId] = { shownItems: undefined };
+
+                dataLayer.push(removePayload);
+                dataLayer.push(uploadPayload);
+            }
         }
     }
 
@@ -298,6 +330,17 @@
         }
 
         return options;
+    }
+
+    /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
     }
 
     /**

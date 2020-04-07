@@ -17,18 +17,20 @@
      id="${accordion.id}"
      class="cmp-accordion"
      data-cmp-is="accordion"
+     data-cmp-data-layer="${accordion.dataLayerString}"
      data-cmp-single-expansion="${accordion.singleExpansion}">
     <div data-sly-test="${accordion.items.size > 0}"
          data-sly-repeat.item="${accordion.items}"
          class="cmp-accordion__item"
          data-cmp-hook-accordion="item"
-         id="${accordion.id}-item-${item.name  @ context='uri'}"
+         data-cmp-data-layer="${item.dataLayerString}"
+         id="${item.id}"
          data-cmp-expanded="${item.name in accordion.expandedItems}">
         <h3 data-sly-element="${accordion.headingElement @ context='elementName'}"
             class="cmp-accordion__header">
-            <button id="${accordion.id}-button-${item.name  @ context='uri'}"
+            <button id="${item.id}-button"
                     class="cmp-accordion__button${item.name in accordion.expandedItems ? ' cmp-accordion__button--expanded' : ''}"
-                    aria-controls="${accordion.id}-panel-${item.name  @ context='uri'}"
+                    aria-controls="${item.id}-panel"
                     data-cmp-hook-accordion="button">
                 <span class="cmp-accordion__title">${item.title}</span>
                 <span class="cmp-accordion__icon"></span>
@@ -36,10 +38,10 @@
         </h3>
         <div data-sly-resource="${item.name @ decorationTagName='div'}"
              data-cmp-hook-accordion="panel"
-             id="${accordion.id}-panel-${item.name  @ context='uri'}"
+             id="${item.id}-panel"
              class="cmp-accordion__panel${item.name in accordion.expandedItems ? ' cmp-accordion__panel--expanded' : ' cmp-accordion__panel--hidden'}"
              role="region"
-             aria-labelledby="${accordion.id}-button-${item.name  @ context='uri'}"></div>
+             aria-labelledby="${item.id}-button"></div>
     </div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
          data-sly-test="${(wcmmode.edit || wcmmode.preview) && accordion.items.size < 1}"></sly>

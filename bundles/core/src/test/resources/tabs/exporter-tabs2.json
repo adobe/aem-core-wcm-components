@@ -2,12 +2,25 @@
     "id": "tabs-673620f4d1",
     "activeItem": "item_2",
     "tabsId": "-root-responsivegrid-tabs-2",
+    "dataLayerJson": {
+        "tabs-673620f4d1": {
+            "type": "core/wcm/components/tabs/v1/tabs",
+            "shownItems": [
+                "tabs-673620f4d1-item-0ae34790af"
+            ]
+        }
+    },
     ":itemsOrder": [
         "item_1",
         "item_2"
     ],
     ":items": {
         "item_1": {
+            ":type": "core/wcm/components/responsivegrid",
+            ":itemsOrder": [
+                "item_1_1",
+                "item_1_2"
+            ],
             ":items": {
                 "item_1_1": {
                     "title": "Teaser 1",
@@ -16,18 +29,39 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-03d502f197",
+                    "dataLayerJson": {
+                        "teaser-03d502f197": {
+                            "description": "Teaser 1 description",
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 1"
+                        }
+                    },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
                     "id": "tabs-c2dc9e45de",
                     "activeItem": "item_1_2_2",
                     "tabsId": "-root-responsivegrid-tabs-2-item_1-item_1_2",
+                    "dataLayerJson": {
+                        "tabs-c2dc9e45de": {
+                            "type": "core/wcm/components/tabs/v1/tabs",
+                            "shownItems": [
+                                "tabs-c2dc9e45de-item-913daa91d5"
+                            ]
+                        }
+                    },
                     ":itemsOrder": [
                         "item_1_2_1",
                         "item_1_2_2"
                     ],
                     ":items": {
                         "item_1_2_1": {
+                            ":type": "core/wcm/components/responsivegrid",
+                            ":itemsOrder": [
+                                "item_1_2_1_1",
+                                "item_1_2_1_2"
+                            ],
                             ":items": {
                                 "item_1_2_1_1": {
                                     "title": "Teaser 1",
@@ -36,6 +70,14 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-57dd562f53",
+                                    "dataLayerJson": {
+                                        "teaser-57dd562f53": {
+                                            "description": "Teaser 1 description",
+                                            "type": "core/wcm/components/teaser/v1/teaser",
+                                            "title": "Teaser 1"
+                                        }
+                                    },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_1_2": {
@@ -45,17 +87,25 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-716dd6dc8a",
+                                    "dataLayerJson": {
+                                        "teaser-716dd6dc8a": {
+                                            "description": "Teaser 2 description",
+                                            "type": "core/wcm/components/teaser/v1/teaser",
+                                            "title": "Teaser 2"
+                                        }
+                                    },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
-                            ":itemsOrder": [
-                                "item_1_2_1_1",
-                                "item_1_2_1_2"
-                            ],
-                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.1"
                         },
                         "item_1_2_2": {
+                            ":type": "core/wcm/components/responsivegrid",
+                            ":itemsOrder": [
+                                "item_1_2_2_1",
+                                "item_1_2_2_2"
+                            ],
                             ":items": {
                                 "item_1_2_2_1": {
                                     "title": "Teaser 1",
@@ -64,6 +114,14 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-74587f333a",
+                                    "dataLayerJson": {
+                                        "teaser-74587f333a": {
+                                            "description": "Teaser 1 description",
+                                            "type": "core/wcm/components/teaser/v1/teaser",
+                                            "title": "Teaser 1"
+                                        }
+                                    },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
@@ -71,6 +129,14 @@
                                     "autoplay": false,
                                     "delay": 5000,
                                     "autopauseDisabled": false,
+                                    "dataLayerJson": {
+                                        "carousel-21953a9100": {
+                                            "type": "core/wcm/components/carousel/v1/carousel",
+                                            "shownItems": [
+                                                "carousel-21953a9100-item-260a2da9e8"
+                                            ]
+                                        }
+                                    },
                                     ":itemsOrder": [
                                         "item_1_2_2_2_1",
                                         "item_1_2_2_2_2",
@@ -84,6 +150,14 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-260a2da9e8",
+                                            "dataLayerJson": {
+                                                "teaser-260a2da9e8": {
+                                                    "description": "Teaser 1 description",
+                                                    "type": "core/wcm/components/teaser/v1/teaser",
+                                                    "title": "Teaser 1"
+                                                }
+                                            },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 1"
                                         },
@@ -94,6 +168,14 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-52bb4ad862",
+                                            "dataLayerJson": {
+                                                "teaser-52bb4ad862": {
+                                                    "description": "Teaser 2 description",
+                                                    "type": "core/wcm/components/teaser/v1/teaser",
+                                                    "title": "Teaser 2"
+                                                }
+                                            },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 2"
                                         },
@@ -104,6 +186,14 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-9e643c8adc",
+                                            "dataLayerJson": {
+                                                "teaser-9e643c8adc": {
+                                                    "description": "Teaser 3 description",
+                                                    "type": "core/wcm/components/teaser/v1/teaser",
+                                                    "title": "Teaser 3"
+                                                }
+                                            },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 3"
                                         }
@@ -111,25 +201,20 @@
                                     ":type": "core/wcm/components/carousel/v1/carousel"
                                 }
                             },
-                            ":itemsOrder": [
-                                "item_1_2_2_1",
-                                "item_1_2_2_2"
-                            ],
-                            ":type": "core/wcm/components/responsivegrid",
                             "cq:panelTitle": "Tab 1.2"
                         }
                     },
                     ":type": "core/wcm/components/tabs/v1/tabs"
                 }
             },
-            ":itemsOrder": [
-                "item_1_1",
-                "item_1_2"
-            ],
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
+            ":type": "core/wcm/components/responsivegrid",
+            ":itemsOrder": [
+                "item_2_1",
+                "item_2_2"
+            ],
             ":items": {
                 "item_2_1": {
                     "title": "Teaser 1",
@@ -138,6 +223,14 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-b26e2145ab",
+                    "dataLayerJson": {
+                        "teaser-b26e2145ab": {
+                            "description": "Teaser 1 description",
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 1"
+                        }
+                    },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_2_2": {
@@ -147,14 +240,17 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-c900ee9cbc",
+                    "dataLayerJson": {
+                        "teaser-c900ee9cbc": {
+                            "description": "Teaser 2 description",
+                            "type": "core/wcm/components/teaser/v1/teaser",
+                            "title": "Teaser 2"
+                        }
+                    },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
-            ":itemsOrder": [
-                "item_2_1",
-                "item_2_2"
-            ],
-            ":type": "core/wcm/components/responsivegrid",
             "cq:panelTitle": "Tab 2"
         }
     },

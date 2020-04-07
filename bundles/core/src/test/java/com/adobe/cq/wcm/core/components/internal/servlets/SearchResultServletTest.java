@@ -41,6 +41,7 @@ import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -87,7 +88,7 @@ public class SearchResultServletTest {
         underTest = new SearchResultServlet();
         when(mockQueryBuilder.createQuery(any(), any())).thenReturn(mockQuery);
         when(mockQuery.getResult()).thenReturn(mockSearchResult);
-        when(mockSearchResult.getHits()).thenReturn(Arrays.asList(new Hit[]{mockHit}));
+        when(mockSearchResult.getHits()).thenReturn(Arrays.asList(new Hit[] { mockHit }));
         Utils.setInternalState(underTest, "queryBuilder", mockQueryBuilder);
         Utils.setInternalState(underTest, "languageManager", new MockLanguageManager());
         Utils.setInternalState(underTest, "relationshipManager", mockLiveRelationshipManager);
@@ -102,12 +103,8 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList.of(
-                ImmutableMap.of(
-                        "url", "null/content/en/search/page.html",
-                        "title", "Page"
-                )
-        );
+        List<Map<String, String>> expected = ImmutableList
+                .of(ImmutableMap.of("url", "null/content/en/search/page.html", "title", "Page"));
 
         validateResponse(context.response(), expected);
     }
@@ -121,17 +118,14 @@ public class SearchResultServletTest {
         MockRequestPathInfo requestPathInfo = (MockRequestPathInfo) request.getRequestPathInfo();
         requestPathInfo.setSuffix("jcr:content/search");
         underTest.doGet(request, context.response());
-        List<Map<String, String>> expected = ImmutableList.of(
-                ImmutableMap.of(
-                        "url", "null/content/en/search/page-template.html",
-                        "title", "Page"
-                )
-        );
+        List<Map<String, String>> expected = ImmutableList
+                .of(ImmutableMap.of("url", "null/content/en/search/page-template.html", "title", "Page"));
 
         validateResponse(context.response(), expected);
     }
 
-    private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected) throws IOException {
+    private void validateResponse(MockSlingHttpServletResponse response, List<Map<String, String>> expected)
+            throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SimpleAbstractTypeResolver resolver = new SimpleAbstractTypeResolver();
         resolver.addMapping(ListItem.class, Item.class);
@@ -150,15 +144,24 @@ public class SearchResultServletTest {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Item implements ListItem {
+        private String id;
         private String url;
         private String title;
         private String path;
         private String description;
         private String lastModified;
         private String name;
+        private Map<String, Object> dataLayerJson;
 
         public Item() {
+        }
+
+        @Nullable
+        @Override
+        public String getId() {
+            return id;
         }
 
         @Nullable
@@ -171,6 +174,10 @@ public class SearchResultServletTest {
         @Override
         public String getTitle() {
             return title;
+        }
+
+        public Map<String, Object> getDataLayerJson() {
+            return dataLayerJson;
         }
     }
 }

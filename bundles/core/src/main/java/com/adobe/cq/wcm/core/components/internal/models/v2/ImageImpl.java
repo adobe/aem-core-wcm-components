@@ -107,7 +107,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
-            } 
+            }
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                 SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                 (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
@@ -186,18 +186,4 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getUuid() {
         return uuid;
     }
-
-    @Override
-    public String getDataLayerJson() {
-        JsonObjectBuilder image = Json.createObjectBuilder();
-        JsonObjectBuilder imageProperties = Json.createObjectBuilder();
-        imageProperties.add("path", resource.getPath());
-        imageProperties.add("fileReference", fileReference);
-        imageProperties.add("src", src);
-        imageProperties.add("title", title);
-        String imageId = "image_" + Calendar.getInstance().getTimeInMillis();
-        image.add(imageId, imageProperties);
-        return  image.build().toString();
-    }
-
 }

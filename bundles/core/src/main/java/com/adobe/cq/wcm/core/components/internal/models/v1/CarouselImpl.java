@@ -29,7 +29,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
-import com.day.cq.wcm.api.designer.Style;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -73,5 +72,14 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     @Override
     public String getAccessibilityLabel() {
         return accessibilityLabel;
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String[] getDataLayerShownItems() {
+        return  getItems() != null ? new String[]{getItems().get(0).getDataLayerId()} : new String[0];
     }
 }

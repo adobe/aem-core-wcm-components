@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.StringReader;
+
 import javax.json.Json;
 import javax.json.JsonReader;
 

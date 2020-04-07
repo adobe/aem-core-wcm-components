@@ -32,16 +32,18 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class PageListItemImpl implements ListItem {
+public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
 
     protected SlingHttpServletRequest request;
     protected Page page;
 
-    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
+    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId) {
+        super(parentId, page.getContentResource());
         this.request = request;
         this.page = page;
+        this.parentId = parentId;
         Page redirectTarget = getRedirectTarget(page);
         if (redirectTarget != null && !redirectTarget.equals(page)) {
             this.page = redirectTarget;
@@ -95,7 +97,8 @@ public class PageListItemImpl implements ListItem {
         PageManager pageManager = page.getPageManager();
         Set<String> redirectCandidates = new LinkedHashSet<>();
         redirectCandidates.add(page.getPath());
-        while (result != null && StringUtils.isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
+        while (result != null && StringUtils
+                .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
             result = pageManager.getPage(redirectTarget);
             if (result != null) {
                 if (!redirectCandidates.add(result.getPath())) {
@@ -107,4 +110,17 @@ public class PageListItemImpl implements ListItem {
         return result;
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getURL();
+    }
 }

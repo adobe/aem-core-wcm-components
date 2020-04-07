@@ -15,10 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Calendar;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
@@ -26,27 +29,27 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.models.Component;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
 
-import com.adobe.cq.wcm.core.components.models.Component;
-
 /**
  * Abstract class that can be used as a base class for {@link Component} implementations.
  */
-public abstract class AbstractComponentImpl implements Component {
+public abstract class AbstractComponentImpl extends AbstractDataLayerProperties implements Component {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractComponentImpl.class);
 
     @SlingObject
     protected Resource resource;
 
-    @ScriptVariable
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     protected ComponentContext componentContext;
 
-    @ScriptVariable
+    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     private Page currentPage;
 
     private String id;
@@ -101,27 +104,61 @@ public abstract class AbstractComponentImpl implements Component {
         String resourceType = resource.getResourceType();
         String prefix = StringUtils.substringAfterLast(resourceType, "/");
         String path = resource.getPath();
-        PageManager pageManager = currentPage.getPageManager();
-        Page containingPage = pageManager.getContainingPage(resource);
-        Template template = currentPage.getTemplate();
-        Boolean inCurrentPage = (containingPage != null && StringUtils.equals(containingPage.getPath(), currentPage.getPath()));
-        Boolean inTemplate = (template != null && path.startsWith(template.getPath()));
-        if (!inCurrentPage && !inTemplate) {
-            ComponentContext parentContext = componentContext.getParent();
-            while (parentContext != null) {
-                Resource parentContextResource = parentContext.getResource();
-                if (parentContextResource != null) {
-                    Page parentContextPage = pageManager.getContainingPage(parentContextResource);
-                    inCurrentPage = (parentContextPage != null && StringUtils.equals(parentContextPage.getPath(), currentPage.getPath()));
-                    inTemplate = (template != null && parentContextResource.getPath().startsWith(template.getPath()));
-                    if (inCurrentPage || inTemplate) {
-                        path = parentContextResource.getPath().concat(resource.getPath());
-                        break;
+        if (currentPage != null && componentContext != null) {
+            PageManager pageManager = currentPage.getPageManager();
+            Page containingPage = pageManager.getContainingPage(resource);
+            Template template = currentPage.getTemplate();
+            boolean inCurrentPage = (containingPage != null && StringUtils.equals(containingPage.getPath(), currentPage.getPath()));
+            boolean inTemplate = (template != null && path.startsWith(template.getPath()));
+            if (!inCurrentPage && !inTemplate) {
+                ComponentContext parentContext = componentContext.getParent();
+                while (parentContext != null) {
+                    Resource parentContextResource = parentContext.getResource();
+                    if (parentContextResource != null) {
+                        Page parentContextPage = pageManager.getContainingPage(parentContextResource);
+                        inCurrentPage = (parentContextPage != null && StringUtils.equals(parentContextPage.getPath(), currentPage.getPath()));
+                        inTemplate = (template != null && parentContextResource.getPath().startsWith(template.getPath()));
+                        if (inCurrentPage || inTemplate) {
+                            path = parentContextResource.getPath().concat(resource.getPath());
+                            break;
+                        }
                     }
+                    parentContext = parentContext.getParent();
                 }
-                parentContext = parentContext.getParent();
+            }
+
+        }
+
+        return prefix + "-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
+    }
+
+    @Override
+    public final String getDataLayerId() {
+        return getId();
+    }
+
+    @Override
+    public final String getDataLayerType() {
+        return resource.getResourceType();
+    }
+
+    @Override
+    public final String getDataLayerLastModifiedDate() {
+        ValueMap valueMap = resource.adaptTo(ValueMap.class);
+        Calendar lastModified = null;
+
+        if (valueMap != null) {
+            lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+
+            if (lastModified == null) {
+                lastModified = valueMap.get(JcrConstants.JCR_CREATED, Calendar.class);
             }
         }
-        return prefix + "-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
+
+        if (lastModified != null) {
+            return lastModified.toInstant().toString();
+        }
+
+        return null;
     }
 }

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Image extends ComponentExporter {
+public interface Image extends ComponentExporter, DataLayerProperties {
 
     /**
      * Name of the configuration policy property that will store the allowed rendition widths for an image.
@@ -299,9 +299,4 @@ public interface Image extends ComponentExporter {
     default boolean isDecorative() {
         throw new UnsupportedOperationException();
     };
-
-    default String getDataLayerJson() {
-        throw new UnsupportedOperationException();
-    }
-
 }

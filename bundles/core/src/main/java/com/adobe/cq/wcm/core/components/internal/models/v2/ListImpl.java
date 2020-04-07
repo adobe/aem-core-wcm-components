@@ -49,7 +49,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         Collection<Page> pages = getPages();
         for (Page page : pages) {
             if (page != null) {
-                listItems.add(new PageListItemImpl(request, page));
+                listItems.add(new PageListItemImpl(request, page, getId()));
             }
         }
         return listItems;
@@ -62,5 +62,4 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         }
         return listItems;
     }
-
 }

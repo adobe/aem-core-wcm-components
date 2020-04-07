@@ -1,4 +1,11 @@
 {
+    "id": "title-1f9c6e70b8",
     "linkDisabled": false,
+    "dataLayerJson": {
+        "title-1f9c6e70b8": {
+            "lastModifiedDate": "2016-01-13T15:14:51Z",
+            "type": "core/wcm/components/title/v1/title"
+        }
+    },
     ":type": "core/wcm/components/title/v1/title"
 }
