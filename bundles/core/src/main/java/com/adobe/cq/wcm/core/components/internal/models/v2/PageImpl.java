@@ -18,8 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import java.util.*;
 
 import javax.annotation.PostConstruct;
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
