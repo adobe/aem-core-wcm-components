@@ -35,7 +35,6 @@ import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,11 +50,11 @@ import static com.adobe.cq.wcm.core.components.internal.models.v2.ExperienceFrag
 
 @Model(adaptables = SlingHttpServletRequest.class,
         defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL,
-        adapters = {ExperienceFragment.class, ContainerExporter.class},
+        adapters = {ExperienceFragment.class, ContainerExporter.class, ComponentExporter.class},
         resourceType = {RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
         extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl implements ContainerExporter {
+public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ExperienceFragmentImpl implements ExperienceFragment,ContainerExporter {
     
     public static final String RESOURCE_TYPE_V2 = "core/wcm/components/experiencefragment/v2/experiencefragment";
     
@@ -64,8 +63,8 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
     @Self
     private SlingHttpServletRequest slingRequest;
     
-    @SlingObject
-    private volatile Resource resource;
+    @Inject
+    private Resource resource;
     
     private ValueMap properties;
     
