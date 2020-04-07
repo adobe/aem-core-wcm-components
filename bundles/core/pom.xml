@@ -145,8 +145,7 @@
                                     <excludes>
                                         <!-- private enum; cannot test valueOf / values -->
                                         <exclude>com/adobe/cq/wcm/core/components/internal/models/v1/SocialMediaHelperImpl$WebsiteMetadata$Type.class</exclude>
-                                        <exclude>com/adobe/cq/wcm/core/components/internal/servlets/AdaptiveImageServlet$Source.class
-                                        </exclude>
+                                        <exclude>com/adobe/cq/wcm/core/components/internal/servlets/AdaptiveImageServlet$Source.class</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
@@ -338,6 +337,10 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>

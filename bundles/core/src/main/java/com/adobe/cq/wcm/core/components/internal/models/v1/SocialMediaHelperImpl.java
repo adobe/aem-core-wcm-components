@@ -99,6 +99,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     private boolean facebookEnabled;
     private boolean pinterestEnabled;
     private boolean socialMediaEnabled;
+    private String facebookAppId;
     private String variantPath;
 
     /**
@@ -121,6 +122,11 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
     @Override
     public boolean isSocialMediaEnabled() {
         return socialMediaEnabled;
+    }
+
+    @Override
+    public String getFacebookAppId() {
+        return facebookAppId;
     }
 
     @Override
@@ -157,6 +163,7 @@ public class SocialMediaHelperImpl implements SocialMediaHelper {
         facebookEnabled = ArrayUtils.contains(socialMedia, PV_FACEBOOK);
         pinterestEnabled = ArrayUtils.contains(socialMedia, PV_PINTEREST);
         socialMediaEnabled = facebookEnabled || pinterestEnabled;
+        facebookAppId = pageProperties.get(PN_FACEBOOK_APP_ID, String.class);
         variantPath = pageProperties.get(PN_VARIANT_PATH, String.class);
     }
 

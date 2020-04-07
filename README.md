@@ -23,7 +23,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 
 ## Available Components
 
-### Template components
+### Templating
 
 1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
 2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
@@ -31,7 +31,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
-### Page authoring components
+### Page Authoring
 
 6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
@@ -47,7 +47,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
 18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
 
-### Container components
+### Container
 
 19. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
 20. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
@@ -63,6 +63,27 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 27. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
 Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for the main upcoming components and features.
+
+## Extensions
+
+### AMP
+
+Learn more about AMP [here](https://amp.dev/).
+
+The [Component Library](https://www.adobe.com/go/aem_cmp_library) and [its code](examples/src/content/jcr_root/apps/core-components-examples) in this repository show how it can be used. 
+
+#### AMP behavior control
+
+For AEM users to control if they want their pages to be / not be AMP, an author with sufficient permissions can go un the page template's Page Policy and select the **AMP Mode**. It has the following options:
+
+1. ***No AMP***: This is the default. Pages will still render as usual and if a page is requested with the `amp` selector, its HTML version will be rendered and the proper metadata in the `<head>` will inform there is no AMP version for this page.
+2. ***Paired AMP***: This mode will allow delivery of **both** HTML and AMP pages relying on the `amp` sling selector to render a `page.html` and `page.amp.html` (see [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md) for more details)
+3. ***AMP Only***: The opposite of "No AMP". Pages requested will attempt to render their AMP version regardless of the request containing the `.amp` selector or not.
+
+All pages using the template where this is specified will inherit the behavior. This can also be overwritten at the page level by going to the page properties, under the "Advanced" tab and changing the "AMP Mode" from "Inherit from Page template" to something else. This will let Authors control if they want certain pages to have a different behavior than the one specified by the template.
+
+**Read more about the [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md)**
+
 
 ## Component Versioning
 

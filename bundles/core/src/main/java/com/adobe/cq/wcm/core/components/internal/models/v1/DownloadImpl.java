@@ -198,10 +198,7 @@ public class DownloadImpl implements Download {
                     url = getDownloadUrl(downloadResource);
 
                     if (titleFromAsset) {
-                        String assetTitle = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
-                        if (StringUtils.isNotBlank(assetTitle)) {
-                            title = assetTitle;
-                        }
+                        title = downloadAsset.getMetadataValue(DamConstants.DC_TITLE);
                     }
                     if (descriptionFromAsset) {
                         String assetDescription = downloadAsset.getMetadataValue(DamConstants.DC_DESCRIPTION);

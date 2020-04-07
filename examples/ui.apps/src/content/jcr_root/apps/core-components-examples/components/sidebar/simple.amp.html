@@ -1,0 +1,35 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<template data-sly-template.simple="${ @ container}">
+    <sly data-sly-test="${wcmmode.edit}" data-sly-use.allowed="com.day.cq.wcm.foundation.AllowedComponentList"></sly>
+    <button on="tap:${container.id @ context = 'attribute'}.toggle" class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}">
+        <i class="cmp-examples-show-menu--mid-line"></i>
+    </button>
+    <amp-sidebar data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+        layout="nodisplay"
+        id="${container.id}"
+        class="cmp-container${wcmmode.edit ? ' {0}': '' @ format=[allowed.cssClass]}"
+        style="${container.backgroundStyle @ context='styleString'}">
+        <sly data-sly-test.isAllowedApplicable="${allowed.isApplicable}"
+             data-sly-test="${isAllowedApplicable}"
+             data-sly-use.allowedTemplate="allowedcomponents.html"
+             data-sly-call="${allowedTemplate.allowedcomponents @ title=allowed.title, components=allowed.components}"></sly>
+        <sly data-sly-test="${!isAllowedApplicable}"
+             data-sly-repeat="${container.items}" data-sly-resource="${item.path @ decoration=true}"></sly>
+        <sly data-sly-test="${!isAllowedApplicable && !wcmmode.disabled}"
+             data-sly-resource="${resource.path @ resourceType='core/wcm/components/container/v1/container/new', appendPath='/*', decorationTagName='div', cssClassName='new section'}" />
+    </amp-sidebar>
+</template>

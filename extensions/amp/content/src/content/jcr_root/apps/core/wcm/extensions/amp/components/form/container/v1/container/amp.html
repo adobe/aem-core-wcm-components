@@ -1,0 +1,32 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2019 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<form data-sly-use.container="com.adobe.cq.wcm.core.components.models.form.Container"
+      data-sly-use.grid="com.day.cq.wcm.foundation.model.responsivegrid.ResponsiveGrid"
+      custom-validation-reporting="show-all-on-submit"
+      method="${container.method}"
+      id="${container.id}"
+      name="${container.name}"
+      action-xhr="${container.action}"
+      enctype="${container.enctype}"
+      target="${container.redirect ? '_blank' : '_top'}"
+      class="cmp-form ${grid.cssClass}">
+    <input type="hidden" name=":formstart" value="${resource.path}"/>
+    <input type="hidden" name="_charset_" value="utf-8"/>
+    <sly data-sly-repeat.paragraph="${grid.paragraphs}"
+         data-sly-resource="${paragraph.path @ resourceType=paragraph.resourceType, decorationTagName='div', cssClassName=paragraph.cssClass}"></sly>
+    <sly data-sly-resource="${resource.path @ resourceType=container.resourceTypeForDropArea, appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
+         data-sly-test="${wcmmode.edit || wcmmode.preview}"></sly>
+</form>

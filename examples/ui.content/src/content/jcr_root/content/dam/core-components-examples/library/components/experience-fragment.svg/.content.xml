@@ -1,28 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:isCheckedOut="{Boolean}true"
     jcr:mixinTypes="[mix:referenceable,mix:versionable]"
+=======
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:mixinTypes="[mix:referenceable]"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
     jcr:primaryType="dam:Asset"
-    jcr:uuid="b5b400f2-1ce1-47a6-9f7a-102d20ce4d61">
+    jcr:uuid="3bd2cdb2-b061-41aa-b3c4-f4cfcbf03c80">
     <jcr:content
-        cq:name="experience-fragment.svg"
-        cq:parentPath="/content/dam/core-components-examples/library/components"
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-08-28T15:42:10.855+02:00"
+<<<<<<< HEAD
+        jcr:lastModified="{Date}2019-12-19T17:36:29.658+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-08-28T15:42:10.393+02:00"
+            dam:extracted="{Date}2019-12-19T17:36:29.507+01:00"
             dam:sha1="b36225bfe4715c77ad111b04e810c984d745e693"
             dam:size="{Long}1078"
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-08-20T11:24:57.258+02:00"
             dc:title="Experience Fragment"
-            jcr:lastModified="{Date}2019-08-28T15:29:40.017+02:00"
+            jcr:lastModified="{Date}2019-12-19T17:36:29.462+01:00"
             jcr:lastModifiedBy="admin"
+=======
+        jcr:lastModified="{Date}2020-01-14T15:21:04.196+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2020-01-14T15:21:03.858+01:00"
+            dam:sha1="57e9fbc0f1308595ecaaaef92211bcc7c3ee7596"
+            dam:size="{Long}764"
+            dc:format="image/svg+xml"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
             jcr:mixinTypes="[cq:Taggable]"
-            jcr:primaryType="nt:unstructured">
-            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
-        </metadata>
+            jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>

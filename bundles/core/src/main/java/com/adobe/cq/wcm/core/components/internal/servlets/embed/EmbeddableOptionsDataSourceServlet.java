@@ -33,6 +33,7 @@ import com.adobe.cq.wcm.core.components.models.Embed;
 import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
+import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
@@ -66,17 +67,23 @@ public class EmbeddableOptionsDataSourceServlet extends SlingSafeMethodsServlet 
         Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
         ContentPolicyManager policyManager = resolver.adaptTo(ContentPolicyManager.class);
         if (policyManager != null) {
+            ValueMap properties = null;
             ContentPolicy policy = policyManager.getPolicy(contentResource);
             if (policy != null) {
-                ValueMap properties = policy.getProperties();
-                if (properties != null) {
-                    String[] allowedEmbeddables = properties.get(Embed.PN_DESIGN_ALLOWED_EMBEDDABLES, String[].class);
-                    if (allowedEmbeddables != null && allowedEmbeddables.length > 0) {
-                        for (String allowedEmbeddable : allowedEmbeddables) {
-                            Resource dialogResource = resolver.getResource(allowedEmbeddable + "/" + NN_DIALOG);
-                            if (dialogResource != null) {
-                                embeddableOptionsResources.add(dialogResource);
-                            }
+                properties = policy.getProperties();
+            } else {
+                Designer designer = resolver.adaptTo(Designer.class);
+                if (designer != null) {
+                    properties = designer.getStyle(contentResource);
+                }
+            }
+            if (properties != null) {
+                String[] allowedEmbeddables = properties.get(Embed.PN_DESIGN_ALLOWED_EMBEDDABLES, String[].class);
+                if (allowedEmbeddables != null && allowedEmbeddables.length > 0) {
+                    for (String allowedEmbeddable : allowedEmbeddables) {
+                        Resource dialogResource = resolver.getResource(allowedEmbeddable + "/" + NN_DIALOG);
+                        if (dialogResource != null) {
+                            embeddableOptionsResources.add(dialogResource);
                         }
                     }
                 }

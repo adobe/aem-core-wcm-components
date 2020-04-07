@@ -14,8 +14,10 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.embed="com.adobe.cq.wcm.core.components.models.Embed"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-use.commonsTemplates="core/wcm/components/commons/v1/templates.html"
      data-sly-test.hasContent="${(embed.result && embed.result.processor) || embed.html || embed.embeddableResourceType}"
+     id="${component.id}"
      class="cmp-embed">
     <sly data-sly-test="${embed.result && embed.result.processor}"
          data-sly-use.processorTemplate="processors/${embed.result.processor}.html"

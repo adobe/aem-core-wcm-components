@@ -24,7 +24,7 @@
        data-title="${image.title || image.alt}" data-asset="${image.fileReference}">
         <noscript data-sly-unwrap="${!image.json}" data-cmp-image="${image.json}">
             <img src="${image.src}"
-                 alt="${image.alt || true}"
+                 alt="${image.alt}"
                  title="${image.displayPopupTitle && image.title}"/>
         </noscript>
     </a>

@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:Iptc4xmpCore="http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="1026797d-7b59-4ac3-bcdd-5e5d8dc8a01e">
+    jcr:uuid="b52b9012-b100-4691-bf63-e151841fa42f">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-06-11T19:01:31.419+02:00"
+<<<<<<< HEAD
+        jcr:lastModified="{Date}2019-12-19T17:36:29.362+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-06-11T19:01:06.086+02:00"
+            dam:extracted="{Date}2019-12-19T17:36:29.118+01:00"
             dam:sha1="0620035f759590e75e37f2ddc49bb3a4239828ac"
             dam:size="{Long}2438"
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-06-11T19:01:31.419+02:00"
             dc:title="Container"
-            jcr:lastModified="{Date}2019-06-11T19:01:31.418+02:00"
+            jcr:lastModified="{Date}2019-12-19T17:36:29.135+01:00"
             jcr:lastModifiedBy="admin"
+=======
+        jcr:lastModified="{Date}2020-01-14T15:22:06.526+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2020-01-14T15:22:06.269+01:00"
+            dam:sha1="58a10694a9eb6b5452e8a51938e8ad07308ac5f0"
+            dam:size="{Long}1845"
+            dc:format="image/svg+xml"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
             jcr:mixinTypes="[cq:Taggable]"
-            jcr:primaryType="nt:unstructured">
-            <Iptc4xmpCore:CreatorContactInfo jcr:primaryType="nt:unstructured"/>
-        </metadata>
+            jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>
     </jcr:content>
 </jcr:root>

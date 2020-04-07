@@ -15,5 +15,7 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
-    <filter root="/apps/core/wcm/components"/>
+    <filter root="/apps/core/wcm/components">
+        <exclude pattern="/apps/core/wcm/extensions"/>
+    </filter>
 </workspaceFilter>

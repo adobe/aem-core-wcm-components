@@ -1,0 +1,47 @@
+{
+    "clientlib-base-amp": {
+        "jcr:primaryType": "cq:ClientLibraryFolder",
+        "allowProxy": true,
+        "categories": [
+            "cmp-examples.base.amp"
+        ],
+        "css.txt": {
+            "jcr:primaryType": "nt:file",
+            "jcr:content": {
+                "jcr:primaryType": "nt:resource",
+                "jcr:mimeType": "text/plain",
+                "jcr:data": "#base=styles \n index.css"
+            }
+        },
+        "styles": {
+            "jcr: primaryType": "nt:folder",
+            "index.css": {
+                "jcr:primaryType": "nt:file",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:mimeType": "text/css",
+                    "jcr:data": "html { \n box-sizing: border-box;\n font-size: 14px; \n}"
+                }
+            }
+        },
+        "js.txt": {
+            "jcr:primaryType": "nt:file",
+            "jcr:content": {
+                "jcr:primaryType": "nt:resource",
+                "jcr:mimeType": "text/plain",
+                "jcr:data": "#base=scripts \n index.js"
+            }
+        },
+        "scripts": {
+            "jcr: primaryType": "nt:folder",
+            "index.js": {
+                "jcr:primaryType": "nt:file",
+                "jcr:content": {
+                    "jcr:primaryType": "nt:resource",
+                    "jcr:mimeType": "application/javascript",
+                    "jcr:data": "console.log{'cmp-examples.base.amp clientlib js'}"
+                }
+            }
+        }
+    }
+}

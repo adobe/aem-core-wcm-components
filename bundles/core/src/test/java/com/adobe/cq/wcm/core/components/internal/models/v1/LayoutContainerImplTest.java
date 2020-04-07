@@ -34,6 +34,7 @@ import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.testing.MockSlingModelFilter;
 import com.adobe.cq.wcm.core.components.testing.MockStyle;
+import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
@@ -76,7 +77,7 @@ public class LayoutContainerImplTest {
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.RESPONSIVE_GRID,
                 container.getLayout());
-        assertEquals("Id mismatch",
+        assertEquals("ID mismatch",
                 "test",
                 container.getId());
         Object[][] expectedItems = {
@@ -89,24 +90,24 @@ public class LayoutContainerImplTest {
                 container.getExportedType());
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container1"));
     }
-    
+
     @Test
     public void testContainerNoProperties() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_2, null);
-        assertNull("Id", container.getId());
+        assertEquals("ID mismatch", "container-2611f8dc62", container.getId());
         assertNull("Style", container.getBackgroundStyle());
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.SIMPLE,
                 container.getLayout());
     }
-    
+
     @Test
     public void testContainerWithPropertiesAndNoPolicy() {
         LayoutContainer container = getContainerUnderTest(CONTAINER_3, null);
-        assertNull("Id", container.getId());
+        assertEquals("ID mismatch", "container-d7eba9c61f", container.getId());
         assertNull("Style", container.getBackgroundStyle());
     }
-    
+
     private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
         assertEquals("Item number mismatch", expectedItems.length, items.size());
         int index = 0;
@@ -123,10 +124,12 @@ public class LayoutContainerImplTest {
         }
 
         SlingBindings bindings = new SlingBindings();
+        ComponentContext componentContext = mock(ComponentContext.class);
         bindings.put(SlingBindings.RESOURCE, resource);
         bindings.put(SlingBindings.REQUEST, AEM_CONTEXT.request());
         bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
         bindings.put(WCMBindings.CURRENT_PAGE, AEM_CONTEXT.pageManager().getPage(TEST_PAGE));
+        bindings.put(WCMBindings.COMPONENT_CONTEXT, componentContext);
         bindings.put(WCMBindings.PAGE_MANAGER, AEM_CONTEXT.pageManager());
         if (style == null) {
             Resource mockResource = mock(Resource.class);

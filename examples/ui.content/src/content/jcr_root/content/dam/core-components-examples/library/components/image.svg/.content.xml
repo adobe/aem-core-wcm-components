@@ -2,21 +2,32 @@
 <jcr:root xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dam="http://www.day.com/dam/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:mixinTypes="[mix:referenceable]"
     jcr:primaryType="dam:Asset"
-    jcr:uuid="bafdf5c0-31ee-45cb-a649-ca42d9ca4409">
+    jcr:uuid="bb677d17-b36e-43a5-a127-f5a6ce90afc3">
     <jcr:content
         dam:assetState="processed"
-        jcr:lastModified="{Date}2019-05-24T12:27:19.684+02:00"
+<<<<<<< HEAD
+        jcr:lastModified="{Date}2019-12-19T17:36:30.158+01:00"
         jcr:lastModifiedBy="admin"
         jcr:primaryType="dam:AssetContent">
         <metadata
-            dam:extracted="{Date}2019-05-24T12:27:18.581+02:00"
+            dam:extracted="{Date}2019-12-19T17:36:29.965+01:00"
             dam:sha1="59084da65c6e34d5d43237f234e2de6440f13a8e"
             dam:size="{Long}1770"
             dc:format="image/svg+xml"
             dc:modified="{Date}2019-02-26T20:26:34.008+01:00"
             dc:title="Image"
-            jcr:lastModified="{Date}2019-05-24T12:27:19.683+02:00"
+            jcr:lastModified="{Date}2019-12-19T17:36:30.157+01:00"
             jcr:lastModifiedBy="admin"
+=======
+        jcr:lastModified="{Date}2020-01-14T15:20:54.713+01:00"
+        jcr:lastModifiedBy="admin"
+        jcr:primaryType="dam:AssetContent">
+        <metadata
+            dam:extracted="{Date}2020-01-14T15:20:54.384+01:00"
+            dam:sha1="0c1de4ad98ad19d356ca4fbb8b27c48e7d38460a"
+            dam:size="{Long}1284"
+            dc:format="image/svg+xml"
+>>>>>>> 6889222405e7270fce458b2ef547cac0ffd0138d
             jcr:mixinTypes="[cq:Taggable]"
             jcr:primaryType="nt:unstructured"/>
         <related jcr:primaryType="nt:unstructured"/>

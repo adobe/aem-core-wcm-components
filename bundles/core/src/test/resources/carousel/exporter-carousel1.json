@@ -1,4 +1,5 @@
 {
+    "id": "carousel-c39ba25916",
     "autoplay": true,
     "delay": 7000,
     "autopauseDisabled": true,
@@ -7,7 +8,6 @@
         "item_2",
         "item_3"
     ],
-    ":type": "core/wcm/components/carousel/v1/carousel",
     ":items": {
         "item_1": {
             "title": "Teaser 1",
@@ -22,7 +22,7 @@
         "item_2": {
             "title": "Teaser 2",
             "description": "Teaser 2 description",
-            "actionsEnabled" : false,
+            "actionsEnabled": false,
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
@@ -32,12 +32,13 @@
         "item_3": {
             "title": "Teaser 3",
             "description": "Teaser 3 description",
-            "actionsEnabled" : false,
+            "actionsEnabled": false,
             "imageLinkHidden": false,
             "titleLinkHidden": false,
             "actions": [],
             ":type": "core/wcm/components/teaser/v1/teaser",
             "cq:panelTitle": "Carousel Panel 3"
         }
-    }
+    },
+    ":type": "core/wcm/components/carousel/v1/carousel"
 }

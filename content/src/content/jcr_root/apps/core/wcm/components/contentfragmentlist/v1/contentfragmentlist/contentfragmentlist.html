@@ -14,9 +14,10 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <sly data-sly-use.list="com.adobe.cq.wcm.core.components.models.contentfragment.ContentFragmentList"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component"
      data-sly-test="${list.listItems.size>0}" data-sly-use.fragmentTemplate="core/wcm/components/contentfragment/v1/contentfragment/templates.html">
-         
     <section data-sly-list.fragment="${list.listItems}"
+             id="${component.id}"
              class="cmp-contentfragmentlist">
         <sly data-sly-call="${fragmentTemplate.contentFragment @ fragment=fragment, wcmmode=wcmmode}"></sly>
     </section>
