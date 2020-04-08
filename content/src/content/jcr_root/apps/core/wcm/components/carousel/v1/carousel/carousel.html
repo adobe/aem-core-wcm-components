@@ -27,12 +27,15 @@
      data-cmp-autopause-disabled="${carousel.autopauseDisabled}"
      data-cmp-data-layer="${carousel.dataLayerString}">
     <div data-sly-test="${carousel.items && carousel.items.size > 0}"
-         class="cmp-carousel__content">
+         class="cmp-carousel__content"
+         aria-atomic="false"
+         aria-live="${carousel.autoplay ? 'off' : 'polite'}">
         <div data-sly-repeat.item="${carousel.items}"
              data-sly-resource="${item.name @ decorationTagName='div'}"
              id="${item.id}"
              class="cmp-carousel__item${itemList.first ? ' cmp-carousel__item--active' : ''}"
              role="tabpanel"
+             aria-roledescription="slide"
              aria-label="${'Slide {0} of {1}' @ format=[itemList.count, carousel.items.size], i18n}"
              data-cmp-data-layer="${item.dataLayerString}"
              data-cmp-hook-carousel="item"></div>
