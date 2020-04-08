@@ -347,4 +347,12 @@ public interface Page extends ContainerExporter {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @see ContainerExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @NotNull
+    default String getMainContentSelector() {
+        throw new UnsupportedOperationException();
+    }
 }
