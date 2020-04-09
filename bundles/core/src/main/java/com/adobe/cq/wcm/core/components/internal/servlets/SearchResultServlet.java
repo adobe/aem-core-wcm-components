@@ -26,7 +26,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.Servlet;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -44,6 +43,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -214,7 +214,10 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
     }
 
     private String getId(Resource resource) {
-        return "search-" + StringUtils.substring(DigestUtils.sha256Hex(resource.getPath()), 0, 10);
+        if (resource == null) {
+            return null;
+        }
+        return Utils.generateId("search", resource.getPath());
     }
 
     private String getSearchRootPagePath(String searchRoot, Page currentPage) {
