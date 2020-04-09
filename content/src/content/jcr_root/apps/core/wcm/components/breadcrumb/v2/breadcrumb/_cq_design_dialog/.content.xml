@@ -62,6 +62,15 @@
                                 text="Hide current page"
                                 uncheckedValue="false"
                                 value="true"/>
+                            <disableShadowing
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldDescription="For redirecting pages: show original page instead of target."
+                                text="Disable shadowing"
+                                name="./disableShadowing"
+                                value="{Boolean}true"
+                                checked="{Boolean}false}"
+                                uncheckedValue="{Boolean}false"/>
                         </items>
                     </properties>
                     <styletab
