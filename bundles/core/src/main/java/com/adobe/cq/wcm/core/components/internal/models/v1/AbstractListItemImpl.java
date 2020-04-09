@@ -15,37 +15,32 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.Nullable;
-
-import com.adobe.cq.wcm.core.components.internal.Utils;
-
-import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
 /**
  * Abstract helper class for ListItem implementations.
- * Generates an ID for the item, using the ID of its parent as a prefix
+ * Generates an ID for the item containing the Container ID
  *
  */
 public abstract class AbstractListItemImpl extends AbstractComponentImpl {
-
     protected String parentId;
     protected String path;
 
-    private static final String ITEM_ID_PREFIX = "item";
-
-    protected AbstractListItemImpl(String parentId, Resource resource) {
+    public AbstractListItemImpl(String parentId, Resource resource) {
         this.parentId = parentId;
         this.path = resource.getPath();
         this.resource = resource;
     }
 
-    @Nullable
-    @Override
+    /**
+     * Generates an ID for the item containing the Container ID
+     *
+     * @return a string ID
+     */
     public String getId() {
-        String prefix = StringUtils.join(parentId, ID_SEPARATOR, ITEM_ID_PREFIX);
-        return Utils.generateId(prefix, path);
+        return parentId + "-item-" + StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10);
     }
 
 }

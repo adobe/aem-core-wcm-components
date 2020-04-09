@@ -17,6 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,7 +103,7 @@ class CarouselImplTest {
             assertEquals("The carousel item's data layer type is not what was expected: " + item.getDataLayerType(),
                     expectedItems[index][2], item.getDataLayerType());
             assertEquals("The carousel item's data layer id is not what was expected: " + item.getDataLayerId(),
-                com.adobe.cq.wcm.core.components.internal.Utils.generateId(carouselId + "-item", (String) expectedItems[index][3]),
+                carouselId + "-item-" + StringUtils.substring(DigestUtils.sha256Hex((String) expectedItems[index][3]), 0, 10),
                     item.getDataLayerId());
 
             index++;

@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
@@ -24,11 +23,6 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
 public class Utils {
-
-    /**
-     * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
-     */
-    public static final String ID_SEPARATOR = "-";
 
     private Utils() {
     }
@@ -96,15 +90,5 @@ public class Utils {
         }
     }
 
-    /**
-     * Returns an ID based on the prefix, the ID_SEPARATOR and a hash of the path, e.g. image-5c7e0ef90d
-     *
-     * @param prefix the prefix for the ID
-     * @param path   the resource path
-     * @return the generated ID
-     */
-    public static String generateId(String prefix, String path) {
-        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
-    }
 
 }
