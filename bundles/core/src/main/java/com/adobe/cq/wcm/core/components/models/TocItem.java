@@ -22,12 +22,12 @@ import org.osgi.annotation.versioning.ConsumerType;
 import java.util.List;
 
 /**
- * Defines the {@code TableOfContent} Sling Model used for the {@code /apps/core/wcm/components/tableOfContent} component.
+ * Defines the {@code Toc} Sling Model used for the {@code /apps/core/wcm/components/toc} - Table of Content component.
  *
  * @since com.adobe.cq.wcm.core.components.models
  */
 @ConsumerType
-public interface TableOfContent extends ComponentExporter {
+public interface TocItem {
 
     /**
      * Returns the Table of Content title.
@@ -40,23 +40,13 @@ public interface TableOfContent extends ComponentExporter {
     }
 
     /**
-     * Returns the Table of Content content.
+     * Returns the Level of the Table of Content item.
      *
-     * @return the List of TableOfContentItem
+     * @return an INT of the level of TocItem
      */
-    default List<TableOfContentItem> getItems() {
+    default int getLevel() {
         throw new UnsupportedOperationException();
     }
 
-
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.8.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
 
 }

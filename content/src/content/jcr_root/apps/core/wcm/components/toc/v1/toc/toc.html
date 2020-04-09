@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,8 +13,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.group="${@ items='The table of content items for the current level'}" data-sly-use.itemTemplate="item.html">
-    <ul class="cmp-tableOfContent__group" data-sly-list="${items}">
-        <sly data-sly-call="${itemTemplate.item @ item=item}"></sly>
-    </ul>
-</template>
+<div class="cmp-toc"
+     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
+     data-sly-use.toc="com.adobe.cq.wcm.core.components.models.Toc"
+     data-sly-use.groupTemplate="group.html"
+     data-sly-test.hasContent="${toc.title}"
+>
+    <h1 data-sly-element="${toc.title}" class="cmp-toc__header">${toc.title}</h1>
+    <sly data-sly-call="${groupTemplate.group @ items=toc.items}"></sly>
+</div>
+<sly data-sly-call="${template.placeholder @ isEmpty=!hasContent, classAppend='cmp-toc'}"></sly>
+

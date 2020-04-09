@@ -21,7 +21,7 @@ Table of Content component written in HTL.
 * Creates Table of Content from Header IDs
 
 ### Use Object
-The Table of Content component uses the `com.adobe.cq.wcm.core.components.models.TableOfContent` Sling model as its Use-object.
+The Table of Content component uses the `com.adobe.cq.wcm.core.components.models.Toc` Sling model as its Use-object.
 
 ### Edit Dialog Properties
 The following properties are written to JCR for the Table of Content component and are expected to be available as `Resource` properties:
@@ -38,8 +38,8 @@ TODO
 * **Version**: v1
 * **Compatibility**: AEM 6.3
 * **Status**: production-ready
-* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_tableOfContent\_v1](https://www.adobe.com/go/aem_cmp_table_of_content_v1)
-* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_tableOfContent](https://www.adobe.com/go/aem_cmp_library_table_of_content)
-* **Author**: [Richard Hand](https://github.com/cleliameneghin)
+* **Documentation**: [https://www.adobe.com/go/aem\_cmp\_toc\_v1](https://www.adobe.com/go/aem_cmp_table_of_content_v1)
+* **Component Library**: [https://www.adobe.com/go/aem\_cmp\_library\_toc](https://www.adobe.com/go/aem_cmp_library_table_of_content)
+* **Author**: [Clelia Meneghin](https://github.com/cleliameneghin)
 
 _If you were involved in the authoring of this component and are not credited above, please reach out to us on [GitHub](https://github.com/adobe/aem-core-wcm-components)._

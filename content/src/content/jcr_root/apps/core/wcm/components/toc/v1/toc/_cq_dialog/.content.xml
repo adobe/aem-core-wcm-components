@@ -18,9 +18,9 @@
           jcr:primaryType="nt:unstructured"
           jcr:title="Table of Content"
           sling:resourceType="cq/gui/components/authoring/dialog"
-          extraClientlibs="[core.wcm.components.tableOfContent.v1.editor]"
+          extraClientlibs="[core.wcm.components.toc.v1.editor]"
           helpPath="https://www.adobe.com/go/aem_cmp_table-of-content"
-          trackingFeature="core-components:tableOfContent:v1">
+          trackingFeature="core-components:toc:v1">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
