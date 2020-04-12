@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v2;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.internal.ContentFragmentUtils;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -108,14 +109,7 @@ public class ExperienceFragmentImpl extends com.adobe.cq.wcm.core.components.int
         if (efvResource != null) {
             // Columns provided by the design
     
-            for(Resource childResource : efvResource.getChildren()){
-                final ComponentExporter modelFromWrappedRequest = modelFactory.getModelFromWrappedRequest(slingRequest, childResource, ComponentExporter.class);
-                if(modelFromWrappedRequest != null){
-                    children.put(childResource.getName(), modelFromWrappedRequest);
-                    isEmpty = false;
-                }
-            }
-    
+            children = ContentFragmentUtils.getComponentExporters(efvResource.listChildren(), modelFactory, slingRequest);
         }
         
         if(isEmpty){
