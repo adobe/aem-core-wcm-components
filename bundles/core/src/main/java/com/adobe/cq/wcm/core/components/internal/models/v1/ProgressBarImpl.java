@@ -41,9 +41,9 @@ public class ProgressBarImpl extends AbstractComponentImpl implements ProgressBa
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/progressbar/v1/progressbar";
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = ProgressBar.PN_COMPLETED)
     @Default(intValues = 0)
-    private int completed;
+    private float completed;
 
     @PostConstruct
     private void initModel() {
@@ -56,12 +56,12 @@ public class ProgressBarImpl extends AbstractComponentImpl implements ProgressBa
     }
 
     @Override
-    public int getCompleted() {
+    public float getCompleted() {
         return completed;
     }
 
     @Override
-    public int getRemaining() {
+    public float getRemaining() {
         return 100 - completed;
     }
 }

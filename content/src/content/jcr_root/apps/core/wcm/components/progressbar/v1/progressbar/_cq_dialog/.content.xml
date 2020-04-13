@@ -55,7 +55,7 @@
                                                 max="100"
                                                 min="0"
                                                 name="./completed"
-                                                step="5"
+                                                step="0.1"
                                                 value="0"/>
                                         </items>
                                     </column>

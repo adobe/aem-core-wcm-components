@@ -16,7 +16,9 @@
 <div data-sly-use.progressBar="com.adobe.cq.wcm.core.components.models.ProgressBar"
      id="${progressBar.id}"
      class="cmp-progress">
-    <span class="cmp-progress__label--completed">${progressBar.completed}</span>
-    <span class="cmp-progress__label--remaining">${progressBar.remaining}</span>
-    <div class="cmp-progress__bar" role="progressbar" aria-valuenow="${progressBar.completed}" aria-valuemin="0" aria-valuemax="100">${progressBar.completed}</div>
+    <span class="cmp-progress__label--completed">${'#.##' @ format=progressBar.completed}</span>
+    <span class="cmp-progress__label--remaining">${'#.##' @ format=progressBar.remaining}</span>
+    <div class="cmp-progress__bar" role="progressbar"
+         aria-valuenow="${'#.##' @ format=progressBar.completed}" aria-valuemin="0" aria-valuemax="100"
+         style="width: ${progressBar.completed @ context='number'}%">${'#.##' @ format=progressBar.completed}</div>
 </div>

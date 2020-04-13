@@ -52,32 +52,32 @@ public class ProgressBarImplTest {
     @Test
     public void testCompleted() {
         ProgressBar progressBar = getComponentUnderTest(PROGRESSBAR_1);
-        assertEquals(75, progressBar.getCompleted());
-        assertEquals(25, progressBar.getRemaining());
+        assertEquals(75, progressBar.getCompleted(), 0);
+        assertEquals(25, progressBar.getRemaining(), 0);
         Utils.testJSONExport(progressBar, Utils.getTestExporterJSONPath(TEST_BASE, PROGRESSBAR_1));
     }
 
     @Test
     public void testDefault() {
         ProgressBar progressBar = getComponentUnderTest(PROGRESSBAR_2);
-        assertEquals(0, progressBar.getCompleted());
-        assertEquals(100, progressBar.getRemaining());
+        assertEquals(0, progressBar.getCompleted(), 0);
+        assertEquals(100, progressBar.getRemaining(), 0);
     }
 
     @Test
     public void testTooSmall() {
         // completed < 0
         ProgressBar progressBar = getComponentUnderTest(PROGRESSBAR_3);
-        assertEquals(0, progressBar.getCompleted());
-        assertEquals(100, progressBar.getRemaining());
+        assertEquals(0, progressBar.getCompleted(), 0);
+        assertEquals(100, progressBar.getRemaining(), 0);
     }
 
     @Test
     public void testTooLarge() {
         // completed > 100
         ProgressBar progressBar = getComponentUnderTest(PROGRESSBAR_4);
-        assertEquals(100, progressBar.getCompleted());
-        assertEquals(0, progressBar.getRemaining());
+        assertEquals(100, progressBar.getCompleted(), 0);
+        assertEquals(0, progressBar.getRemaining(), 0);
     }
 
     protected ProgressBar getComponentUnderTest(String resourcePath) {

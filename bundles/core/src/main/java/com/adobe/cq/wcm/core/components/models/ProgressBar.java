@@ -38,7 +38,7 @@ public interface ProgressBar extends Component {
      * @return Completed percentage as a number between 0 and 100
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    default int getCompleted() {
+    default float getCompleted() {
         throw new UnsupportedOperationException();
     }
 
@@ -48,7 +48,7 @@ public interface ProgressBar extends Component {
      * @return Remaining percentage as a number between 0 and 100
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    default int getRemaining() {
+    default float getRemaining() {
         throw new UnsupportedOperationException();
     }
 
