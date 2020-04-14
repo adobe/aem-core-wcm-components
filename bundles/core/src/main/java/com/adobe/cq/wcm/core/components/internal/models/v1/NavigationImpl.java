@@ -87,6 +87,7 @@ public class NavigationImpl implements Navigation {
     private String navigationRootPage;
     private List<NavigationItem> items;
     private boolean skipNavigationRoot;
+    private boolean isShadowingDisabled;
     private int structureStart;
 
     @PostConstruct
@@ -108,6 +109,8 @@ public class NavigationImpl implements Navigation {
                 structureStart = 0;
             }
         }
+        isShadowingDisabled = properties.get(PageListItemImpl.PN_DISABLE_SHADOWING,
+            currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
     @Override
@@ -185,7 +188,7 @@ public class NavigationImpl implements Navigation {
                 if (structureStart == 0) {
                     level = level + 1;
                 }
-                pages.add(new NavigationItemImpl(page, isSelected, request, level, children));
+                pages.add(new NavigationItemImpl(page, isSelected, request, level, children, isShadowingDisabled));
             }
         }
         return pages;
@@ -200,7 +203,8 @@ public class NavigationImpl implements Navigation {
         }
         if (structureStart == 0) {
             boolean isSelected = checkSelected(navigationRoot.page);
-            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree);
+            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree,
+                isShadowingDisabled);
             itemTree = new ArrayList<>();
             itemTree.add(root);
         }
