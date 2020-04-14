@@ -35,11 +35,6 @@ class TocImplTest {
     private static final String TEST_BASE = "/toc";
     private static final String TEST_PAGE = "/content/toc";
     private static final String TITLE_RESOURCE_JCR_TITLE = TEST_PAGE + "/jcr:content/par/title-jcr-title";
-    private static final String TITLE_RESOURCE_JCR_TITLE_TYPE = TEST_PAGE + "/jcr:content/par/title-jcr-title-type";
-    private static final String TITLE_NOPROPS = TEST_PAGE + "/jcr:content/par/title-noprops";
-    private static final String TITLE_WRONGTYPE = TEST_PAGE + "/jcr:content/par/title-wrongtype";
-    private static final String TITLE_RESOURCE_JCR_TITLE_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-v2";
-    private static final String TITLE_RESOURCE_JCR_TITLE_LINK_V2 = TEST_PAGE + "/jcr:content/par/title-jcr-title-link-v2";
     private static final String TABLE_OF_CONTENT_DEFAULT_TITLE = "Table of Content";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
@@ -55,7 +50,7 @@ class TocImplTest {
         assertEquals(TitleImpl.RESOURCE_TYPE_V1, toc.getExportedType());
     }
 
-    @Test
+   @Test
     void testGetTitle() {
         Toc toc = new TocImpl();
         assertEquals(TABLE_OF_CONTENT_DEFAULT_TITLE, toc.getTitle());
