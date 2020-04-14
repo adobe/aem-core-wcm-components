@@ -24,7 +24,7 @@
  * - hides all the sizes if only one size has been defined in the policy
  * - displays all the sizes defined in the policy if there are at least two
  */
-/*(function ($, Granite, ns, $document) {
+/* (function ($, Granite, ns, $document) {
     //var SIZE_SELECTOR   = "coral-select.core-title-";
 
-})*/
+}) */
