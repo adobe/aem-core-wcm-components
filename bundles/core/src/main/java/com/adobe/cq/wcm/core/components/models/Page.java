@@ -348,7 +348,7 @@ public interface Page extends ContainerExporter {
     }
 
     /**
-     * @see ContainerExporter#getExportedType()
+     * @see ContainerExporter#getMainContentSelector()
      * @since com.adobe.cq.wcm.core.components.models 12.2.0
      */
     @NotNull
