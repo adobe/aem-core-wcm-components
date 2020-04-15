@@ -63,21 +63,22 @@ Please help us making the Core Components better by responding to our **[short u
 16. [Embed](content/src/content/jcr_root/apps/core/wcm/components/embed/v1/embed)
 17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
 18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
+19. [Progress Bar](content/src/content/jcr_root/apps/core/wcm/components/progressbar/v1/progressbar)
 
 ### Container Components
 
-19. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
-20. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
-21. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
-22. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
+20. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
+21. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
+22. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
+23. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
 
 ### Form Components
 
-23. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
-24. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
-25. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
-26. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
-27. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
+24. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
+25. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
+26. [Form options field](content/src/content/jcr_root/apps/core/wcm/components/form/options/v2/options)
+27. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
+28. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
 ### Roadmap
 
