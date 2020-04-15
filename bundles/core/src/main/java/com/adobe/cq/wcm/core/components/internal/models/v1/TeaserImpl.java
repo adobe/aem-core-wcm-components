@@ -54,8 +54,9 @@ import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class,
+    ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TeaserImpl.class);
@@ -118,7 +119,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
             linkURL = null;
             populateActions();
-            if (actions.size() > 0) {
+            if (!actions.isEmpty()) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
                     targetPage = pageManager.getPage(firstAction.getPath());
@@ -140,6 +141,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             if (titleFromPage) {
                 if (targetPage != null) {
                     title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+                } else if (actionsEnabled) {
+                    title = actions.get(0).getTitle();
+                    linkURL = actions.get(0).getURL();
                 } else {
                     title = null;
                 }
@@ -160,18 +164,18 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
         if (StringUtils.isEmpty(linkURL)) {
-            LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
+            LOGGER.debug("Teaser component from {} does not define a link.", request.getResource().getPath());
         }
         if (StringUtils.isEmpty(fileReference)) {
             if (request.getResource().getChild(DownloadResource.NN_FILE) == null) {
-                LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not have an asset or an image file " +
-                        "configured.");
+                LOGGER.debug("Teaser component from {} does not have an asset or an image file " +
+                    "configured.", request.getResource().getPath());
                 hasImage = false;
             }
         } else {
             if (request.getResourceResolver().getResource(fileReference) == null) {
-                LOGGER.error("Asset " + fileReference + " configured for the teaser component from " + request.getResource().getPath() +
-                        " doesn't exist.");
+                LOGGER.error("Asset {} configured for the teaser component from {} doesn 't exist.", fileReference,
+                    request.getResource().getPath());
                 hasImage = false;
             }
         }
@@ -287,6 +291,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action implements ListItem {
+
         ValueMap properties;
         String title;
         String url;
