@@ -18,10 +18,8 @@ package com.adobe.cq.wcm.core.components.models;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
-
 @ConsumerType
-public interface CloudViewer extends ComponentExporter {
+public interface CloudViewer extends Component {
 
     default String getType() {
         throw new UnsupportedOperationException();

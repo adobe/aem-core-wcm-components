@@ -1,5 +1,5 @@
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ~ Copyright 2017 Adobe
+ ~ Copyright 2020 Adobe
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -40,6 +41,9 @@ import com.adobe.cq.wcm.core.components.internal.services.cloudviewer.CloudViewe
 public class CloudViewerImpl implements CloudViewer {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/cloudviewer/v1/cloudviewer";
+    protected static final String FULL_WINDOW = "FULL_WINDOW";
+    protected static final String SIZED_CONTAINER = "SIZED_CONTAINER";
+    protected static final String IN_LINE = "IN_LINE";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String documentPath;
@@ -165,19 +169,21 @@ public class CloudViewerImpl implements CloudViewer {
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
         jsonObjectBuilder.add("embedMode", type);
 
-        if (type.equals("FULL_WINDOW")) {
-            jsonObjectBuilder.add("defaultViewMode", defaultViewMode);
-            jsonObjectBuilder.add("showAnnotationTools", showAnnotationTools);
-            jsonObjectBuilder.add("showLeftHandPanel", showLeftHandPanel);
-        }
+        if(!StringUtils.isEmpty(type)) {
+            if (type.equals(FULL_WINDOW)) {
+                jsonObjectBuilder.add("defaultViewMode", defaultViewMode);
+                jsonObjectBuilder.add("showAnnotationTools", showAnnotationTools);
+                jsonObjectBuilder.add("showLeftHandPanel", showLeftHandPanel);
+            }
 
-        if (type.equals("SIZED_CONTAINER")) {
-            jsonObjectBuilder.add("showFullScreen", showFullScreen);
-        }
+            if (type.equals(SIZED_CONTAINER)) {
+                jsonObjectBuilder.add("showFullScreen", showFullScreen);
+            }
 
-        if (type.equals("FULL_WINDOW") || type.equals("SIZED_CONTAINER")) {
-            jsonObjectBuilder.add("showPageControls", showPageControls);
-            jsonObjectBuilder.add("dockPageControls", dockPageControls);
+            if (type.equals(FULL_WINDOW) || type.equals("SIZED_CONTAINER")) {
+                jsonObjectBuilder.add("showPageControls", showPageControls);
+                jsonObjectBuilder.add("dockPageControls", dockPageControls);
+            }
         }
 
         jsonObjectBuilder.add("showDownloadPDF", showDownloadPdf);
@@ -189,13 +195,15 @@ public class CloudViewerImpl implements CloudViewer {
     @Override
     public String getContainerClass() {
         String str = "adobe-dc-view-full-window";
-
-        if (type.equals("FULL_WINDOW") && borderless) {
-            str = "adobe-dc-view-full-window-borderless";
-        } else if (type.equals("SIZED_CONTAINER")) {
-           str = "adobe-dc-view-sized-container";
-        } else if (type.equals("IN_LINE")) {
-           str = "";
+        
+        if(!StringUtils.isEmpty(type)) {
+            if (type.equals(FULL_WINDOW) && borderless) {
+                str = "adobe-dc-view-full-window-borderless";
+            } else if (type.equals(SIZED_CONTAINER)) {
+            str = "adobe-dc-view-sized-container";
+            } else if (type.equals(IN_LINE)) {
+            str = "";
+            }
         }
 
         return str;
