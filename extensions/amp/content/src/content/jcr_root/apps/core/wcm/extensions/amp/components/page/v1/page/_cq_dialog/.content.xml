@@ -82,19 +82,6 @@
                                             </ampmode>
                                         </items>
                                     </amp>
-                                    <accessibility
-                                        jcr:primaryType="nt:unstructured"
-                                        jcr:title="Accessibility"
-                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
-                                        <items jcr:primaryType="nt:unstructured">
-                                            <mainContentSelector
-                                                jcr:primaryType="nt:unstructured"
-                                                valueType="string"
-                                                fieldLabel="Skip to main content ID selector"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                name="./mainContentSelector"/>
-                                        </items>
-                                    </accessibility>
                                 </items>
                             </column>
                         </items>
