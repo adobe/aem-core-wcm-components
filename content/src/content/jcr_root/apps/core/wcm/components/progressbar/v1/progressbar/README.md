@@ -32,10 +32,10 @@ The following properties are written to JCR for this Progress Bar component and 
 
 ## BEM Description
 ```
-BLOCK cmp-progress
-    ELEMENT cmp-progress__label--completed
-    ELEMENT cmp-progress__label--remaining
-    ELEMENT cmp-progress__bar
+BLOCK cmp-progressbar
+    ELEMENT cmp-progressbar__label--completed
+    ELEMENT cmp-progressbar__label--remaining
+    ELEMENT cmp-progressbar__bar
 ```
 
 ## Information
