@@ -291,7 +291,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
     public class Action implements ListItem {
-
         ValueMap properties;
         String title;
         String url;
