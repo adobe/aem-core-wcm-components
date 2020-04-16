@@ -74,6 +74,7 @@ class TeaserImplTest {
     private static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
     private static final String TEASER_10 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-10";
     private static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
+    private static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
     private TestLogger testLogger;
@@ -220,14 +221,14 @@ class TeaserImplTest {
     }
 
     @Test
-    void testTeaserWithTitleNotFromPageAndNoActions() {
+    void testTeaserWithTitleNotFromLinkedPageAndNoActions() {
         Teaser teaser = getTeaserUnderTest(TEASER_10);
         assertEquals("Teaser", teaser.getTitle());
         assertTrue(teaser.getActions().isEmpty());
     }
 
     @Test
-    void testTeaserWithTitleNotFromPageAndActions() {
+    void testTeaserWithTitleNotFromLinkedPageAndActions() {
         Teaser teaser = getTeaserUnderTest(TEASER_11);
         assertEquals("Teaser", teaser.getTitle());
         List<ListItem> actions = teaser.getActions();
@@ -235,6 +236,15 @@ class TeaserImplTest {
         assertEquals("Adobe", actions.get(0).getTitle());
         assertEquals("/content/teasers", actions.get(1).getPath());
         assertEquals("Teasers", actions.get(1).getTitle());
+    }
+
+    @Test
+    void testTeaserWithTitleFromLinkedPageAndActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_12);
+        assertEquals("Adobe", teaser.getTitle());
+        List<ListItem> actions = teaser.getActions();
+        assertEquals("http://www.adobe.com", actions.get(0).getPath());
+        assertEquals("Adobe", actions.get(0).getTitle());
     }
 
     private Teaser getTeaserUnderTest(String resourcePath, Object... properties) {
