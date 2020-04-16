@@ -14,12 +14,12 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 
-<div class="core-skip-to-main-content"
+<div class="cmp-page__skiptomaincontent"
      data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page"
      data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
      data-sly-test="${page.mainContentSelector}">
-    <a class="core-skip-to-main-content__link"
-       alt="Skip to main content link"
+    <a class="cmp-page__skiptomaincontent-link"
+       alt="${'Skip to main content link' @ i18n}"
        href="#${page.mainContentSelector}">${'Skip to main content' @ i18n}</a>
 </div>
 <sly data-sly-call="${clientlib.css @ categories='core.wcm.components.page.v2.skiptomaincontent'}"

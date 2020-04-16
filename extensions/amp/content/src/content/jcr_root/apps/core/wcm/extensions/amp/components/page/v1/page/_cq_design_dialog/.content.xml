@@ -137,7 +137,7 @@
                             <mainContentSelector
                                 jcr:primaryType="nt:unstructured"
                                 valueType="string"
-                                fieldLabel="Skip to main content ID selector"
+                                fieldLabel="Skip to main content element selector"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                 name="./mainContentSelector"/>
                         </items>

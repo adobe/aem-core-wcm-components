@@ -41,6 +41,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.granite.license.ProductInfoProvider;
@@ -49,8 +50,6 @@ import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
@@ -206,7 +205,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     public String getMainContentSelector() {
         PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
         if (pageManager == null) {
-            return getPolicyProperty(MAIN_CONTENT_SELECTOR_PROP, "", request);
+            return Utils.getPolicyProperty(MAIN_CONTENT_SELECTOR_PROP, "", request);
         }
         com.day.cq.wcm.api.Page page = pageManager.getContainingPage(request.getResource());
         if (page != null) {
@@ -215,18 +214,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
                 return mainContentSelector;
             }
         }
-        return getPolicyProperty(MAIN_CONTENT_SELECTOR_PROP, "", request);
-    }
-
-    private <T> T getPolicyProperty(String property, T defaultValue, @NotNull SlingHttpServletRequest slingRequest) {
-        ContentPolicyManager policyManager = slingRequest.getResourceResolver().adaptTo(ContentPolicyManager.class);
-        if (policyManager == null) {
-            return defaultValue;
-        }
-        ContentPolicy contentPolicy = policyManager.getPolicy(slingRequest.getResource());
-        if (contentPolicy == null) {
-            return defaultValue;
-        }
-        return contentPolicy.getProperties().get(property, defaultValue);
+        return Utils.getPolicyProperty(MAIN_CONTENT_SELECTOR_PROP, "", request);
     }
 }

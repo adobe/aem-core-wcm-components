@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-.core-skip-to-main-content {
-    .core-skip-to-main-content__link {
+.cmp-page__skiptomaincontent {
+    .cmp-page__skiptomaincontent__link {
         position: absolute;
         left: -999px;
         top: 0;
@@ -23,19 +23,19 @@
         height: 1px;
         overflow: hidden;
         z-index: -999;
-    }
 
-    .core-skip-to-main-content__link:focus, .core-skip-to-main-content__link:active {
-        left: 20px;
-        top: 20px;
-        width: auto;
-        height: auto;
-        color: blue;
-        background: white;
-        border: 1px solid blue;
-        overflow: auto;
-        padding: 10px;
-        margin: 5px;
-        z-index: 999;
+        &:focus, &:active {
+            left: 20px;
+            top: 20px;
+            width: auto;
+            height: auto;
+            color: blue;
+            background: white;
+            border: 1px solid blue;
+            overflow: auto;
+            padding: 10px;
+            margin: 5px;
+            z-index: 999;
+        }
     }
 }
