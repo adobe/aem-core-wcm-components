@@ -144,8 +144,6 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 } else if (actionsEnabled && !actions.isEmpty()) {
                     title = actions.get(0).getTitle();
                     linkURL = actions.get(0).getURL();
-                } else {
-                    title = null;
                 }
             }
         }
