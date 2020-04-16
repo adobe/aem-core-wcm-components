@@ -141,7 +141,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             if (titleFromPage) {
                 if (targetPage != null) {
                     title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
-                } else if (actionsEnabled) {
+                } else if (actionsEnabled && !actions.isEmpty()) {
                     title = actions.get(0).getTitle();
                     linkURL = actions.get(0).getURL();
                 } else {
@@ -164,18 +164,18 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
         if (StringUtils.isEmpty(linkURL)) {
-            LOGGER.debug("Teaser component from {} does not define a link.", request.getResource().getPath());
+            LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
         }
         if (StringUtils.isEmpty(fileReference)) {
             if (request.getResource().getChild(DownloadResource.NN_FILE) == null) {
-                LOGGER.debug("Teaser component from {} does not have an asset or an image file " +
-                    "configured.", request.getResource().getPath());
+                LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not have an asset or an image file " +
+                        "configured.");
                 hasImage = false;
             }
         } else {
             if (request.getResourceResolver().getResource(fileReference) == null) {
-                LOGGER.error("Asset {} configured for the teaser component from {} doesn 't exist.", fileReference,
-                    request.getResource().getPath());
+                LOGGER.error("Asset " + fileReference + " configured for the teaser component from " + request.getResource().getPath() +
+                        " doesn't exist.");
                 hasImage = false;
             }
         }
