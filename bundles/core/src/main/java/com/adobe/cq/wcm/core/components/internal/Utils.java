@@ -21,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.policies.ContentPolicy;
-import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
 public class Utils {
 
@@ -91,26 +89,4 @@ public class Utils {
             return element;
         }
     }
-
-    /**
-     * Given a {@link Page}, this method returns the correct URL, taking into account that the provided {@code page} might provide a
-     * vanity URL.
-     *
-     * @param request the current request, used to determine the server's context path
-     * @param page    the page
-     * @return the URL of the page identified by the provided {@code path}, or the original {@code path} if this doesn't identify a
-     * {@link Page}
-     */
-    public static <T> T getPolicyProperty(String property, T defaultValue, @NotNull SlingHttpServletRequest slingRequest) {
-        ContentPolicyManager policyManager = slingRequest.getResourceResolver().adaptTo(ContentPolicyManager.class);
-        if (policyManager == null) {
-            return defaultValue;
-        }
-        ContentPolicy contentPolicy = policyManager.getPolicy(slingRequest.getResource());
-        if (contentPolicy == null) {
-            return defaultValue;
-        }
-        return contentPolicy.getProperties().get(property, defaultValue);
-    }
-
 }

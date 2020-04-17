@@ -41,7 +41,6 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.models.v1.RedirectItemImpl;
-import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.granite.license.ProductInfoProvider;
@@ -49,7 +48,6 @@ import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
-import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 
@@ -60,7 +58,7 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
     protected static final String PN_CLIENTLIBS_JS_HEAD = "clientlibsJsHead";
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
-    public static final String MAIN_CONTENT_SELECTOR_PROP = "mainContentSelector";
+    public static final String PN_MAIN_CONTENT_SELECTOR_PROP = "mainContentSelector";
 
     private Boolean hasCloudconfigSupport;
 
@@ -203,17 +201,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public String getMainContentSelector() {
-        PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
-        if (pageManager == null) {
-            return Utils.getPolicyProperty(MAIN_CONTENT_SELECTOR_PROP, "", request);
-        }
-        com.day.cq.wcm.api.Page page = pageManager.getContainingPage(request.getResource());
-        if (page != null) {
-            String mainContentSelector = page.getProperties().get(MAIN_CONTENT_SELECTOR_PROP, "");
-            if (!mainContentSelector.isEmpty()) {
-                return mainContentSelector;
-            }
-        }
-        return Utils.getPolicyProperty(MAIN_CONTENT_SELECTOR_PROP, "", request);
+        return currentStyle.get(PN_MAIN_CONTENT_SELECTOR_PROP, String.class);
     }
 }
