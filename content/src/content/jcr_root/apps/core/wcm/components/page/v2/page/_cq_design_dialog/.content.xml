@@ -115,7 +115,7 @@
                             <mainContentSelector
                                 jcr:primaryType="nt:unstructured"
                                 fieldLabel="Skip to main content element selector"
-                                fieldDescription="This property defines selector wchich links to main part of the page. It is used by accessibility feature which allows user to skip directly to the main content of the page."
+                                fieldDescription="Selector for the main section of the page. Used as accessibility feature to skip directly to the main content of the page."
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                 name="./mainContentSelector"/>
                         </items>

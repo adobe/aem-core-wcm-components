@@ -348,6 +348,9 @@ public interface Page extends ContainerExporter {
     }
 
     /**
+     * Returns the selector for the main content element of the page (used by the "skip to main content" accessibility feature)
+     *
+     * @return selector for the main content element
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
     @NotNull
