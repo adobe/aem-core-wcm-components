@@ -15,11 +15,16 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Collections;
 import java.util.Map;
 
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.caconfig.ConfigurationBuilder;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.DataLayerPropertiesFactory;
 import com.adobe.cq.wcm.core.components.models.DataLayerProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,40 +38,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractDataLayerProperties implements DataLayerProperties {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDataLayerProperties.class);
 
+    @SlingObject
+    protected Resource resource;
+
     @Override
     public boolean isDataLayerEnabled() {
-        return true;
+        if (resource != null) {
+            DataLayerConfig config = resource.adaptTo(ConfigurationBuilder.class).as(DataLayerConfig.class);
+            return config.dataLayerEnabled();
+        }
+        return false;
     }
 
-    /**
-     * Returns a Map with all dataLayer properties.
-     *
-     * @return a Map with dataLayer properties
-     */
     @Override
     public Map<String, Map<String, Object>> getDataLayerJson() {
         if (isDataLayerEnabled()) {
             return DataLayerPropertiesFactory.build(this);
         }
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
-    /**
-     * Returns a JSON string with all dataLayer properties to be used in HTL
-     *
-     * @return a JSON string with dataLayer properties
-     */
     @Override
     @JsonIgnore
     public String getDataLayerString() {
-        String json = null;
-
+        Map<String, Map<String, Object>> json = getDataLayerJson();
         try {
-            json = new ObjectMapper().writeValueAsString(getDataLayerJson());
+            if (!json.isEmpty()) {
+                return new ObjectMapper().writeValueAsString(json);
+            }
         } catch (JsonProcessingException e) {
             LOGGER.error("Unable to generate dataLayer JSON string", e);
         }
-
-        return json;
+        return null;
     }
 }

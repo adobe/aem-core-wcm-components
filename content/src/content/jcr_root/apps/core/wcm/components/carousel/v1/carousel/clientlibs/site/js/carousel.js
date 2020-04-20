@@ -16,7 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayer = window.dataLayer = window.dataLayer || [];
+    var dataLayerEnabled = document.querySelector("body").hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
 
     var NS = "cmp";
     var IS = "carousel";
@@ -211,12 +212,14 @@
                 that._elements["previous"].addEventListener("click", function() {
                     var index = getPreviousIndex();
                     navigate(index);
-                    dataLayer.push({
-                        event: "cmp:show",
-                        info: {
-                            path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
-                        }
-                    });
+                    if (dataLayerEnabled) {
+                        dataLayer.push({
+                            event: "cmp:show",
+                            info: {
+                                path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                            }
+                        });
+                    }
                 });
             }
 
@@ -224,12 +227,14 @@
                 that._elements["next"].addEventListener("click", function() {
                     var index = getNextIndex();
                     navigate(index);
-                    dataLayer.push({
-                        event: "cmp:show",
-                        info: {
-                            path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
-                        }
-                    });
+                    if (dataLayerEnabled) {
+                        dataLayer.push({
+                            event: "cmp:show",
+                            info: {
+                                path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                            }
+                        });
+                    }
                 });
             }
 
@@ -483,9 +488,9 @@
             that._active = index;
             refreshActive();
 
-            var carouselId = that._elements.self.id;
-            var activeItem = getDataLayerId(that._elements.item[index].dataset.cmpDataLayer);
-            if (dataLayer.hasOwnProperty("getState")) {
+            if (dataLayerEnabled) {
+                var carouselId = that._elements.self.id;
+                var activeItem = getDataLayerId(that._elements.item[index].dataset.cmpDataLayer);
                 var updatePayload = { data: { component: {} } };
                 updatePayload.data.component[carouselId] = { shownItems: [activeItem] };
 
@@ -514,12 +519,14 @@
             navigate(index);
             focusWithoutScroll(that._elements["indicator"][index]);
 
-            dataLayer.push({
-                event: "cmp:show",
-                info: {
-                    path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
-                }
-            });
+            if (dataLayerEnabled) {
+                dataLayer.push({
+                    event: "cmp:show",
+                    info: {
+                        path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                    }
+                });
+            }
         }
 
         /**

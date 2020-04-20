@@ -22,7 +22,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -44,9 +43,6 @@ import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 public abstract class AbstractComponentImpl extends AbstractDataLayerProperties implements Component {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractComponentImpl.class);
-
-    @SlingObject
-    protected Resource resource;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     protected ComponentContext componentContext;

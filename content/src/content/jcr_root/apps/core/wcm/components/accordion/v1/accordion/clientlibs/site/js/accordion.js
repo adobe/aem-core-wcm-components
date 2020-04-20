@@ -16,7 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayer = window.dataLayer = window.dataLayer || [];
+    var dataLayerEnabled = document.querySelector("body").hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
 
     var NS = "cmp";
     var IS = "accordion";
@@ -330,9 +331,8 @@
                     setItemExpanded(item, !getItemExpanded(item));
                 }
 
-                var accordionId = that._elements.self.id;
-
-                if (dataLayer.hasOwnProperty("getState")) {
+                if (dataLayerEnabled) {
+                    var accordionId = that._elements.self.id;
                     var expandedItems = getExpandedItems()
                         .map(function(item) {
                             return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
@@ -360,21 +360,25 @@
         function setItemExpanded(item, expanded) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
-                dataLayer.push({
-                    event: "cmp:show",
-                    info: {
-                        path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
-                    }
-                });
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:show",
+                        info: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
 
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
-                dataLayer.push({
-                    event: "cmp:hide",
-                    info: {
-                        path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
-                    }
-                });
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:hide",
+                        info: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
             }
             refreshItem(item);
         }

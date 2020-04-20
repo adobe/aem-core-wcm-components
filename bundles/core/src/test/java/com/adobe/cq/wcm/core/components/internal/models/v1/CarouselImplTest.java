@@ -79,6 +79,7 @@ class CarouselImplTest {
     }
 
     private Carousel getCarouselUnderTest() {
+        Utils.enableDataLayer(context, true);
         context.currentResource(CarouselImplTest.CAROUSEL_1);
         return context.request().adaptTo(Carousel.class);
     }

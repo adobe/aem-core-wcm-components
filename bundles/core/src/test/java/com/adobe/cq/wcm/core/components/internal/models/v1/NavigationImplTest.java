@@ -384,6 +384,7 @@ class NavigationImplTest {
     }
 
     private Navigation getNavigationUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");

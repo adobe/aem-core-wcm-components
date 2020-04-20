@@ -16,7 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayer = window.dataLayer = window.dataLayer || [];
+    var dataLayerEnabled = document.querySelector("body").hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
 
     var NS = "cmp";
     var IS = "tabs";
@@ -269,25 +270,26 @@
             navigate(index);
             focusWithoutScroll(that._elements["tab"][index]);
 
-            var activeItem = getDataLayerId(that._elements.tabpanel[index].dataset.cmpDataLayer);
-            var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive].dataset.cmpDataLayer);
+            if (dataLayerEnabled) {
 
-            dataLayer.push({
-                event: "cmp:show",
-                info: {
-                    path: "component." + activeItem
-                }
-            });
+                var activeItem = getDataLayerId(that._elements.tabpanel[index].dataset.cmpDataLayer);
+                var exActiveItem = getDataLayerId(that._elements.tabpanel[exActive].dataset.cmpDataLayer);
 
-            dataLayer.push({
-                event: "cmp:hide",
-                info: {
-                    path: "component." + exActiveItem
-                }
-            });
+                dataLayer.push({
+                    event: "cmp:show",
+                    info: {
+                        path: "component." + activeItem
+                    }
+                });
 
-            var tabsId = that._elements.self.id;
-            if (dataLayer.hasOwnProperty("getState")) {
+                dataLayer.push({
+                    event: "cmp:hide",
+                    info: {
+                        path: "component." + exActiveItem
+                    }
+                });
+
+                var tabsId = that._elements.self.id;
                 var uploadPayload = { data: { component: {} } };
                 uploadPayload.data.component[tabsId] = { shownItems: [activeItem] };
 

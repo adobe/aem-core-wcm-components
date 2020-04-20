@@ -145,6 +145,7 @@ class LanguageNavigationImplTest {
     }
 
     private LanguageNavigation getLanguageNavigationUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath(CONTEXT_PATH);
