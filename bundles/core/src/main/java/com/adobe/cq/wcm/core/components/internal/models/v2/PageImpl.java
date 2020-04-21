@@ -201,6 +201,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
 
     @Override
     public String getMainContentSelector() {
-        return currentStyle.get(PN_MAIN_CONTENT_SELECTOR_PROP, String.class);
+        if (currentStyle != null) {
+            return currentStyle.get(PN_MAIN_CONTENT_SELECTOR_PROP, String.class);
+        }
+        return null;
     }
 }
