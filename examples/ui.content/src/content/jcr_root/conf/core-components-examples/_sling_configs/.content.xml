@@ -3,5 +3,5 @@
     jcr:primaryType="nt:unstructured">
     <com.adobe.cq.wcm.core.components.internal.DataLayerConfig
         jcr:primaryType="nt:unstructured"
-        dataLayerEnabled="{Boolean}true"/>
+        enabled="{Boolean}true"/>
 </jcr:root>

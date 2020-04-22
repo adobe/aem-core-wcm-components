@@ -16,7 +16,7 @@
 (function() {
     "use strict";
 
-    var dataLayerEnabled = document.querySelector("body").hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
     var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
 
     function addComponentToDataLayer(component) {
