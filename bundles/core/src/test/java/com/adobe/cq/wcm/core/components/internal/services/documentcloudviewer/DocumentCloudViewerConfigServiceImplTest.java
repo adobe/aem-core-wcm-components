@@ -74,6 +74,45 @@ class DocumentCloudViewerConfigServiceImplTest {
     }
 
     @Test
+    void testOverrideActivate() {
+        DocumentCloudViewerConfigServiceImpl service = new DocumentCloudViewerConfigServiceImpl(){
+        
+            @Override
+            public String getReportSuiteId() {
+                return "origin";
+            }
+        
+            @Override
+            public String getClientId() {
+                return "origin";
+            }
+        };
+
+        DocumentCloudViewerConfig config = new DocumentCloudViewerConfig(){
+        
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return null;
+            }
+        
+            @Override
+            public String reportSuiteId() {
+                return "activate";
+            }
+        
+            @Override
+            public String clientId() {
+                return "activate";
+            }
+        };
+
+        service.activate(config);
+
+        assertEquals("origin", service.getClientId());
+        assertEquals("origin", service.getReportSuiteId());
+    }
+
+    @Test
     void testNull() {
         DocumentCloudViewerConfigServiceImpl service = new DocumentCloudViewerConfigServiceImpl(){
         

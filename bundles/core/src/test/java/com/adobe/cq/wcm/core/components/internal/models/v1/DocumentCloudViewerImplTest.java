@@ -64,6 +64,8 @@ class DocumentCloudViewerImplTest {
         assertEquals(false, dcv.getShowPageControls());
         assertEquals(false, dcv.getDockPageControls());
         assertEquals("adobe-dc-view-sized-container", dcv.getContainerClass());
+        String json = "{\"embedMode\":\"SIZED_CONTAINER\",\"showFullScreen\":false,\"showPageControls\":false,\"dockPageControls\":false,\"showDownloadPDF\":false,\"showPrintPDF\":false}";
+        assertEquals(json, dcv.getViewerConfigJson());
     }
 
     @Test
