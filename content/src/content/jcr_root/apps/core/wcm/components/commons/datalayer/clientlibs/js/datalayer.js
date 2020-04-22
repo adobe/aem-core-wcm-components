@@ -16,7 +16,8 @@
 (function() {
     "use strict";
 
-    var dataLayer = window.dataLayer = window.dataLayer || [];
+    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
 
     function addComponentToDataLayer(component) {
         dataLayer.push({
@@ -99,10 +100,12 @@
         });
     }
 
-    if (document.readyState !== "loading") {
-        onDocumentReady();
-    } else {
-        document.addEventListener("DOMContentLoaded", onDocumentReady);
+    if (dataLayerEnabled) {
+        if (document.readyState !== "loading") {
+            onDocumentReady();
+        } else {
+            document.addEventListener("DOMContentLoaded", onDocumentReady);
+        }
     }
 
 }());

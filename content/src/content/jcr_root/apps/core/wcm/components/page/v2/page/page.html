@@ -19,8 +19,9 @@
       data-sly-use.footer="footer.html"
       data-sly-use.redirect="redirect.html">
     <head data-sly-call="${head.head @ page = page}"></head>
-    <body class="${page.cssClassNames}">
-        <script>
+    <body class="${page.cssClassNames}"
+          data-cmp-data-layer-enabled="${page.dataLayerEnabled}">
+        <script data-sly-test.dataLayerEnabled="${page.dataLayerEnabled}">
           window.dataLayer = window.dataLayer || [];
           dataLayer.push({data: { page: JSON.parse("${page.dataLayerString @ context='scriptString'}") }});
         </script>

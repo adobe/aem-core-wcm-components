@@ -134,6 +134,7 @@ public class PageImplTest {
     }
 
     protected Page getPageUnderTest(String pagePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         Map<String, Object> propertyMap = MapUtil.toMap(properties);
         Resource resource = context.currentResource(pagePath + "/" + JcrConstants.JCR_CONTENT);
         MockSlingHttpServletRequest request = context.request();

@@ -96,6 +96,7 @@ public class SearchResultServletTest {
 
     @Test
     public void testSimpleSearch() throws Exception {
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayerForOldAemContext(context, true);
         Resource resource = context.currentResource(TEST_ROOT_EN);
         when(mockHit.getResource()).thenReturn(resource);
         MockSlingHttpServletRequest request = context.request();
@@ -111,6 +112,7 @@ public class SearchResultServletTest {
 
     @Test
     public void testTemplateBasedSearch() throws Exception {
+        com.adobe.cq.wcm.core.components.Utils.enableDataLayerForOldAemContext(context, true);
         Resource resource = context.currentResource(TEST_TEMPLATE_EN);
         when(mockHit.getResource()).thenReturn(resource);
         MockSlingHttpServletRequest request = context.request();
