@@ -29,6 +29,6 @@ public @interface DataLayerConfig {
      * @return {@code true} if the data layer is enabled, {@code false} otherwise. It defaults to {@code false}.
      */
     @Property(label="Data Layer enabled")
-    boolean dataLayerEnabled() default false;
+    boolean enabled() default false;
 
 }

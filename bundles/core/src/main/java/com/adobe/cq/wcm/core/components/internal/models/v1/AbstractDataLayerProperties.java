@@ -44,8 +44,8 @@ public abstract class AbstractDataLayerProperties implements DataLayerProperties
     @Override
     public boolean isDataLayerEnabled() {
         if (resource != null) {
-            DataLayerConfig config = resource.adaptTo(ConfigurationBuilder.class).as(DataLayerConfig.class);
-            return config.dataLayerEnabled();
+            DataLayerConfig dataLayerConfig = resource.adaptTo(ConfigurationBuilder.class).as(DataLayerConfig.class);
+            return dataLayerConfig.enabled();
         }
         return false;
     }

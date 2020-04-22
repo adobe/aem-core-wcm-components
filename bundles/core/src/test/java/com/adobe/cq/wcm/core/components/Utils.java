@@ -106,9 +106,9 @@ public class Utils {
      */
     public static void enableDataLayer(AemContext context, boolean enabled) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
-        DataLayerConfig config = Mockito.mock(DataLayerConfig.class);
-        when(config.dataLayerEnabled()).thenReturn(enabled);
-        when(builder.as(DataLayerConfig.class)).thenReturn(config);
+        DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
+        when(dataLayerConfig.enabled()).thenReturn(enabled);
+        when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }
 
@@ -121,9 +121,9 @@ public class Utils {
      */
     public static void enableDataLayerForOldAemContext(io.wcm.testing.mock.aem.junit.AemContext context, boolean enabled) {
         ConfigurationBuilder builder = Mockito.mock(ConfigurationBuilder.class);
-        DataLayerConfig config = Mockito.mock(DataLayerConfig.class);
-        when(config.dataLayerEnabled()).thenReturn(enabled);
-        when(builder.as(DataLayerConfig.class)).thenReturn(config);
+        DataLayerConfig dataLayerConfig = Mockito.mock(DataLayerConfig.class);
+        when(dataLayerConfig.enabled()).thenReturn(enabled);
+        when(builder.as(DataLayerConfig.class)).thenReturn(dataLayerConfig);
         context.registerAdapter(Resource.class, ConfigurationBuilder.class, builder);
     }
 
