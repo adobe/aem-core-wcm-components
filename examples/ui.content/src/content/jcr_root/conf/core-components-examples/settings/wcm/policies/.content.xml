@@ -36,7 +36,7 @@
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Structure"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        components="[/libs/wcm/foundation/components/responsivegrid,/apps/core/wcm/tests/components/content/cloudviewer,group:Core Components Examples]">
+                        components="[/libs/wcm/foundation/components/responsivegrid,/apps/core/wcm/tests/components/content/documentcloudviewer,group:Core Components Examples]">
                         <jcr:content jcr:primaryType="nt:unstructured"/>
                         <cq:authoring jcr:primaryType="nt:unstructured">
                             <assetToComponentMapping jcr:primaryType="nt:unstructured">

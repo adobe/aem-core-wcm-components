@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 @ConsumerType
-public interface CloudViewer extends Component {
+public interface DocumentCloudViewer extends Component {
 
     default String getType() {
         throw new UnsupportedOperationException();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2017 Adobe
+  ~ Copyright 2020 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,5 +20,5 @@
     jcr:description="Embed Document Cloud Viewer"
     jcr:primaryType="cq:Component"
     jcr:title="Document Cloud Viewer (v1)"
-    sling:resourceSuperType="core/wcm/components/cloudviewer/v1/cloudviewer"
+    sling:resourceSuperType="core/wcm/components/documentcloudviewer/v1/documentcloudviewer"
     componentGroup="Core Component"/>

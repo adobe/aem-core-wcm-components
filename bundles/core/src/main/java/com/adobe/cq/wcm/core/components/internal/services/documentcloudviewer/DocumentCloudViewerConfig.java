@@ -13,14 +13,14 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.cloudviewer;
+package com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer;
 
 import org.osgi.service.metatype.annotations.AttributeDefinition;
 import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @ObjectClassDefinition(name = "Document Cloud Viewer - Configuration", description = "Document Cloud Viewer Configuration")
-public @interface CloudViewerConfig {
+public @interface DocumentCloudViewerConfig {
 
     @AttributeDefinition(name = "Client ID",
             description = "Document Cloud Viewer API Client ID (Required)",

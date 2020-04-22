@@ -1,0 +1,41 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2020 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<sly data-sly-use.documentCloudViewerModel="com.adobe.cq.wcm.core.components.models.DocumentCloudViewer"/>
+
+<style>
+     .adobe-dc-view-full-window, .adobe-dc-view-sized-container {
+          height: ${documentCloudViewerModel.viewerHeight @ context='styleToken'} !important;
+     }
+</style>
+
+<h2 data-sly-test="${!documentCloudViewerModel.documentPath}">Please select a document to display.</h2>
+<h2 data-sly-test="${!documentCloudViewerModel.clientId}">Please configure client ID in /system/console/configMgr</h2>
+
+<div id="${currentNode.identifier @ context='unsafe'}" class="adobe-dc-view ${documentCloudViewerModel.containerClass @ context='html'}"></div>
+<script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+<script type="text/javascript">
+     document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
+		var adobeDCView = new AdobeDC.View({
+               clientId: "${documentCloudViewerModel.clientId @ context='scriptToken'}",
+               divId: "${currentNode.identifier @ context='unsafe'}",
+               reportSuiteId: "${documentCloudViewerModel.reportSuiteId @ context='scriptToken'}"
+          });
+          adobeDCView.previewFile({
+               content:{location: {url: "${documentCloudViewerModel.documentPath @ context='unsafe'}"}},
+               metaData:{fileName: "${documentCloudViewerModel.documentFileName @ context='unsafe'}"}
+          }, ${documentCloudViewerModel.viewerConfigJson @ context='unsafe'});
+     });
+</script>

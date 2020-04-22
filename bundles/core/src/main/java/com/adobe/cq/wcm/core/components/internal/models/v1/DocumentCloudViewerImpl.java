@@ -31,16 +31,16 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.CloudViewer;
+import com.adobe.cq.wcm.core.components.models.DocumentCloudViewer;
 
-import com.adobe.cq.wcm.core.components.internal.services.cloudviewer.CloudViewerConfigService;
+import com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer.DocumentCloudViewerConfigService;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = { CloudViewer.class,
-        ComponentExporter.class }, resourceType = { CloudViewerImpl.RESOURCE_TYPE })
+@Model(adaptables = SlingHttpServletRequest.class, adapters = { DocumentCloudViewer.class,
+        ComponentExporter.class }, resourceType = { DocumentCloudViewerImpl.RESOURCE_TYPE })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class CloudViewerImpl implements CloudViewer {
+public class DocumentCloudViewerImpl implements DocumentCloudViewer {
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/cloudviewer/v1/cloudviewer";
+    protected static final String RESOURCE_TYPE = "core/wcm/components/documentcloudviewer/v1/documentcloudviewer";
     protected static final String FULL_WINDOW = "FULL_WINDOW";
     protected static final String SIZED_CONTAINER = "SIZED_CONTAINER";
     protected static final String IN_LINE = "IN_LINE";
@@ -86,7 +86,7 @@ public class CloudViewerImpl implements CloudViewer {
 
     @Inject
     @Optional
-    private CloudViewerConfigService config;
+    private DocumentCloudViewerConfigService config;
 
     @Override
     public String getClientId() {
