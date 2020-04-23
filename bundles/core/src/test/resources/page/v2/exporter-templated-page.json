@@ -1,12 +1,12 @@
 {
-    "designPath"      : "/etc/designs/mysite",
-    "title"           : "Templated Page",
-    "lastModifiedDate": 1453282416000,
-    "templateName"    : "product-page",
-    "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
-    "cssClassNames"   : "class1 class2",
-    "language"        : "en-GB",
-    ":itemsOrder"     : [
+    "designPath"       : "/etc/designs/mysite",
+    "title"            : "Templated Page",
+    "lastModifiedDate" : 1453282416000,
+    "templateName"     : "product-page",
+    "appResourcesPath" : "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
+    "cssClassNames"    : "class1 class2",
+    "language"         : "en-GB",
+    ":itemsOrder"      : [
         "root"
     ],
     ":items"          : {
