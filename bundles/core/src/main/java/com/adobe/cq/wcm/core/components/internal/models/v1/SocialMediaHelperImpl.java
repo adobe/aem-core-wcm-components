@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -39,7 +38,11 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.commerce.api.*;
+import com.adobe.cq.commerce.api.CommerceException;
+import com.adobe.cq.commerce.api.CommerceService;
+import com.adobe.cq.commerce.api.CommerceSession;
+import com.adobe.cq.commerce.api.PriceInfo;
+import com.adobe.cq.commerce.api.Product;
 import com.adobe.cq.commerce.common.CommerceHelper;
 import com.adobe.cq.commerce.common.PriceFilter;
 import com.adobe.cq.export.json.ComponentExporter;
