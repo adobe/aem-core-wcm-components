@@ -1,0 +1,38 @@
+{
+    "progressbar": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Tabs Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description"   : "Tabs description",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "progressbar-1"     : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "completed"         : 75,
+                        "sling:resourceType": "core/wcm/components/progressbar/v1/progressbar"
+                    },
+                    "progressbar-2"     : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/progressbar/v1/progressbar"
+                    },
+                    "progressbar-3"     : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "completed"         : -10,
+                        "sling:resourceType": "core/wcm/components/progressbar/v1/progressbar"
+                    },
+                    "progressbar-4"     : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "completed"         : 1000,
+                        "sling:resourceType": "core/wcm/components/progressbar/v1/progressbar"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -36,16 +36,23 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
 
+    /**
+     * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
+     * Dafault is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
+     */
+    static final String PN_DISABLE_SHADOWING = "disableShadowing";
+    public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
+
     protected SlingHttpServletRequest request;
     protected Page page;
 
-    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId) {
+    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId, boolean isShadowingDisabled) {
         super(parentId, page.getContentResource());
         this.request = request;
         this.page = page;
         this.parentId = parentId;
         Page redirectTarget = getRedirectTarget(page);
-        if (redirectTarget != null && !redirectTarget.equals(page)) {
+        if (shouldSetRedirectTargetAsPage(page, redirectTarget, isShadowingDisabled)) {
             this.page = redirectTarget;
         }
     }
@@ -89,6 +96,11 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     @JsonIgnore
     public String getName() {
         return page.getName();
+    }
+
+    private boolean shouldSetRedirectTargetAsPage(@NotNull Page page, Page redirectTarget,
+                                                  boolean isShadowingDisabled) {
+        return !isShadowingDisabled && redirectTarget != null && !redirectTarget.equals(page);
     }
 
     private Page getRedirectTarget(@NotNull Page page) {

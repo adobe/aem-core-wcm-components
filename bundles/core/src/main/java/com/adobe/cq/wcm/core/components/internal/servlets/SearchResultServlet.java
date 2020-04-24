@@ -203,7 +203,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                     Resource hitRes = hit.getResource();
                     Page page = getPage(hitRes);
                     if (page != null) {
-                        results.add(new PageListItemImpl(request, page, getId(searchResource)));
+                        results.add(new PageListItemImpl(request, page, getId(searchResource), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
                     }
                 } catch (RepositoryException e) {
                     LOGGER.error("Unable to retrieve search results for query.", e);

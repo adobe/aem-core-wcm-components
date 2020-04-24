@@ -49,7 +49,7 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         Collection<Page> pages = getPages();
         for (Page page : pages) {
             if (page != null) {
-                listItems.add(new PageListItemImpl(request, page, getId()));
+                listItems.add(new PageListItemImpl(request, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
             }
         }
         return listItems;
