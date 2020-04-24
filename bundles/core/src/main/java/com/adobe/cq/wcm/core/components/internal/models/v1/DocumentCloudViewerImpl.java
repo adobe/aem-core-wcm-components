@@ -194,13 +194,13 @@ public class DocumentCloudViewerImpl implements DocumentCloudViewer {
 
     @Override
     public String getContainerClass() {
-        String str = "adobe-dc-view-full-window";
+        String str = "cmp-documentcloudviewer__full-window";
         
         if(!StringUtils.isEmpty(type)) {
             if (type.equals(FULL_WINDOW) && borderless) {
-                str = "adobe-dc-view-full-window-borderless";
+                str = "cmp-documentcloudviewer__full-window-borderless";
             } else if (type.equals(SIZED_CONTAINER)) {
-            str = "adobe-dc-view-sized-container";
+            str = "cmp-documentcloudviewer__sized-container";
             } else if (type.equals(IN_LINE)) {
             str = "";
             }

@@ -13,29 +13,32 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.documentCloudViewerModel="com.adobe.cq.wcm.core.components.models.DocumentCloudViewer"/>
+<div class="cmp-documentcloudviewer" 
+     data-sly-use.documentCloudViewerModel="com.adobe.cq.wcm.core.components.models.DocumentCloudViewer"
+     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component">
 
-<style>
-     .adobe-dc-view-full-window, .adobe-dc-view-sized-container {
-          height: ${documentCloudViewerModel.viewerHeight @ context='styleToken'} !important;
-     }
-</style>
+     <style>
+          .cmp-documentcloudviewer__full-window, .cmp-documentcloudviewer__sized-container {
+               height: ${documentCloudViewerModel.viewerHeight @ context='styleToken'} !important;
+          }
+     </style>
 
-<h2 data-sly-test="${!documentCloudViewerModel.documentPath}">Please select a document to display.</h2>
-<h2 data-sly-test="${!documentCloudViewerModel.clientId}">Please configure client ID in /system/console/configMgr</h2>
+     <h2 data-sly-test="${!documentCloudViewerModel.documentPath}">Please select a document to display.</h2>
+     <h2 data-sly-test="${!documentCloudViewerModel.clientId}">Please configure client ID in /system/console/configMgr</h2>
 
-<div id="${currentNode.identifier @ context='unsafe'}" class="adobe-dc-view ${documentCloudViewerModel.containerClass @ context='html'}"></div>
-<script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
-<script type="text/javascript">
-     document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
-		var adobeDCView = new AdobeDC.View({
-               clientId: "${documentCloudViewerModel.clientId @ context='scriptToken'}",
-               divId: "${currentNode.identifier @ context='unsafe'}",
-               reportSuiteId: "${documentCloudViewerModel.reportSuiteId @ context='scriptToken'}"
+     <div id="${component.id}" class="cmp-documentcloudviewer__content ${documentCloudViewerModel.containerClass @ context='html'}"></div>
+     <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+     <script type="text/javascript">
+          document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
+               var adobeDCView = new AdobeDC.View({
+                    clientId: "${documentCloudViewerModel.clientId @ context='scriptToken'}",
+                    divId: "${component.id @ context='unsafe'}",
+                    reportSuiteId: "${documentCloudViewerModel.reportSuiteId @ context='scriptToken'}"
+               });
+               adobeDCView.previewFile({
+                    content:{location: {url: "${documentCloudViewerModel.documentPath @ context='unsafe'}"}},
+                    metaData:{fileName: "${documentCloudViewerModel.documentFileName @ context='unsafe'}"}
+               }, ${documentCloudViewerModel.viewerConfigJson @ context='unsafe'});
           });
-          adobeDCView.previewFile({
-               content:{location: {url: "${documentCloudViewerModel.documentPath @ context='unsafe'}"}},
-               metaData:{fileName: "${documentCloudViewerModel.documentFileName @ context='unsafe'}"}
-          }, ${documentCloudViewerModel.viewerConfigJson @ context='unsafe'});
-     });
-</script>
+     </script>
+</div>
