@@ -4,10 +4,8 @@
     jcr:primaryType="cq:Tag"
     jcr:title="Component Type"
     sling:resourceType="cq/tagging/components/tag">
-    <basic/>
     <container/>
     <form/>
-    <reference/>
-    <social/>
-    <template/>
+    <page-authoring/>
+    <templating/>
 </jcr:root>

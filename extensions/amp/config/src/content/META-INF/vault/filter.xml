@@ -16,7 +16,4 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <workspaceFilter version="1.0">
     <filter root="/apps/core/wcm/config" mode="merge"/>
-    <filter root="/apps">
-        <include pattern="/apps/rep:policy(/.*)?"/>
-    </filter>
 </workspaceFilter>
