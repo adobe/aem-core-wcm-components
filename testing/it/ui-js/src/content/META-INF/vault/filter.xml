@@ -25,7 +25,6 @@
     <filter root="/etc/blueprints/corecomp_blueprint"/>
     <!-- Hobbes IT folder -->
     <filter root="/apps/core/wcm/tests"/>
-    <filter root="/apps/core-component/components"/>
     <filter root="/apps/msm">
         <include pattern="/apps/msm/corecomp_blueprint(/.*)?"/>
     </filter>
