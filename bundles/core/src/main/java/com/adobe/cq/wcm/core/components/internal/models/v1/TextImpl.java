@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Default;
@@ -70,7 +71,6 @@ public class TextImpl extends AbstractComponentImpl implements Text {
 
     @Override
     public String getDataLayerText() {
-        String text = getText();
-        return text != null ? text : "";
+        return StringUtils.defaultIfEmpty(this.text, StringUtils.EMPTY);
     }
 }
