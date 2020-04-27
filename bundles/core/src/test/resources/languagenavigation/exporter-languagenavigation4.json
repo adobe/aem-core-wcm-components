@@ -1,7 +1,7 @@
 {
   "id": "languagenavigation-d42e3fadb7",
   "items": [],
-  "dataLayerJson": {
+  "dataLayer": {
     "languagenavigation-d42e3fadb7": {
       "type": "core/wcm/components/languagenavigation/v1/languagenavigation"
     }

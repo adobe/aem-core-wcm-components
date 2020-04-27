@@ -6,7 +6,7 @@
     "areas": [],
     "widths": [],
     "lazyEnabled": false,
-    "dataLayerJson": {
+    "dataLayer": {
         "image-af6aa44639": {
             "lastModifiedDate": "2017-05-15T16:56:17.756Z",
             "type": "core/wcm/components/image/v2/image",

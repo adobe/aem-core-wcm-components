@@ -2,7 +2,7 @@
     "id": "tabs-673620f4d1",
     "activeItem": "item_2",
     "tabsId": "-root-responsivegrid-tabs-2",
-    "dataLayerJson": {
+    "dataLayer": {
         "tabs-673620f4d1": {
             "type": "core/wcm/components/tabs/v1/tabs",
             "shownItems": [
@@ -30,7 +30,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-03d502f197",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-03d502f197": {
                             "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -43,7 +43,7 @@
                     "id": "tabs-c2dc9e45de",
                     "activeItem": "item_1_2_2",
                     "tabsId": "-root-responsivegrid-tabs-2-item_1-item_1_2",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "tabs-c2dc9e45de": {
                             "type": "core/wcm/components/tabs/v1/tabs",
                             "shownItems": [
@@ -71,7 +71,7 @@
                                     "titleLinkHidden": false,
                                     "actions": [],
                                     "id": "teaser-57dd562f53",
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "teaser-57dd562f53": {
                                             "description": "Teaser 1 description",
                                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -88,7 +88,7 @@
                                     "titleLinkHidden": false,
                                     "actions": [],
                                     "id": "teaser-716dd6dc8a",
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "teaser-716dd6dc8a": {
                                             "description": "Teaser 2 description",
                                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -115,7 +115,7 @@
                                     "titleLinkHidden": false,
                                     "actions": [],
                                     "id": "teaser-74587f333a",
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "teaser-74587f333a": {
                                             "description": "Teaser 1 description",
                                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -129,7 +129,7 @@
                                     "autoplay": false,
                                     "delay": 5000,
                                     "autopauseDisabled": false,
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "carousel-21953a9100": {
                                             "type": "core/wcm/components/carousel/v1/carousel",
                                             "shownItems": [
@@ -151,7 +151,7 @@
                                             "titleLinkHidden": false,
                                             "actions": [],
                                             "id": "teaser-260a2da9e8",
-                                            "dataLayerJson": {
+                                            "dataLayer": {
                                                 "teaser-260a2da9e8": {
                                                     "description": "Teaser 1 description",
                                                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -169,7 +169,7 @@
                                             "titleLinkHidden": false,
                                             "actions": [],
                                             "id": "teaser-52bb4ad862",
-                                            "dataLayerJson": {
+                                            "dataLayer": {
                                                 "teaser-52bb4ad862": {
                                                     "description": "Teaser 2 description",
                                                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -187,7 +187,7 @@
                                             "titleLinkHidden": false,
                                             "actions": [],
                                             "id": "teaser-9e643c8adc",
-                                            "dataLayerJson": {
+                                            "dataLayer": {
                                                 "teaser-9e643c8adc": {
                                                     "description": "Teaser 3 description",
                                                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -224,7 +224,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-b26e2145ab",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-b26e2145ab": {
                             "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -241,7 +241,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-c900ee9cbc",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-c900ee9cbc": {
                             "description": "Teaser 2 description",
                             "type": "core/wcm/components/teaser/v1/teaser",

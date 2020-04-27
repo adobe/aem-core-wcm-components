@@ -1,7 +1,7 @@
 {
     "id": "text-aa6e485483",
     "richText": false,
-    "dataLayerJson": {
+    "dataLayer": {
         "text-aa6e485483": {
             "text": "",
             "type": "core/wcm/components/text/v1/text"

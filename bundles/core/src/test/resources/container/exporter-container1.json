@@ -2,7 +2,7 @@
     "id": "test",
     "layout": "RESPONSIVE_GRID",
     "backgroundStyle": "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
-    "dataLayerJson": {
+    "dataLayer": {
         "test": {
             "type": "core/wcm/components/container/v1/container"
         }
@@ -20,7 +20,7 @@
             "titleLinkHidden": false,
             "actions": [],
             "id": "teaser-d00b134df3",
-            "dataLayerJson": {
+            "dataLayer": {
                 "teaser-d00b134df3": {
                     "description": "Teaser 1 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -37,7 +37,7 @@
             "titleLinkHidden": false,
             "actions": [],
             "id": "teaser-fd6086a850",
-            "dataLayerJson": {
+            "dataLayer": {
                 "teaser-fd6086a850": {
                     "description": "Teaser 2 description",
                     "type": "core/wcm/components/teaser/v1/teaser",

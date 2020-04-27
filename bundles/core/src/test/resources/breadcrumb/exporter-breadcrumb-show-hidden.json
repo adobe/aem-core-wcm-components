@@ -6,7 +6,7 @@
             "active": false,
             "url": "/content/breadcrumb/women.html",
             "title": "Women",
-            "dataLayerJson": {
+            "dataLayer": {
                 "breadcrumb-b32eadfd98-item-11c305ace0": {
                     "linkUrl": "/content/breadcrumb/women.html",
                     "type": "cq:PageContent",
@@ -20,7 +20,7 @@
             "active": false,
             "url": "/content/breadcrumb/women/shirts.html",
             "title": "Shirts",
-            "dataLayerJson": {
+            "dataLayer": {
                 "breadcrumb-b32eadfd98-item-0b751aeddc": {
                     "linkUrl": "/content/breadcrumb/women/shirts.html",
                     "type": "coretest/components/structure/page",
@@ -34,7 +34,7 @@
             "active": true,
             "url": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
             "title": "Devi Sleeveless Shirt",
-            "dataLayerJson": {
+            "dataLayer": {
                 "breadcrumb-b32eadfd98-item-a66a50bca8": {
                     "linkUrl": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
                     "type": "coretest/components/structure/page",
@@ -44,7 +44,7 @@
             ":type": "coretest/components/structure/page"
         }
     ],
-    "dataLayerJson": {
+    "dataLayer": {
         "breadcrumb-b32eadfd98": {
             "lastModifiedDate": "2016-01-11T15:21:45Z",
             "type": "core/wcm/components/breadcrumb"

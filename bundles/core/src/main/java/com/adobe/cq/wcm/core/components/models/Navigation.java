@@ -26,7 +26,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  *
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
-public interface Navigation extends ComponentExporter, DataLayerProperties {
+public interface Navigation extends Component {
 
     /**
      * Name of the resource / configuration policy property that defines the site's navigation root for which to build the navigation tree.

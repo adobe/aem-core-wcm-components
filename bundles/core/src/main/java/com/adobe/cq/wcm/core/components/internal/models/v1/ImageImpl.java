@@ -372,7 +372,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
 
     @Override
-    public Resource getAssetResource() {
+    public Resource getDataLayerAssetResource() {
         return resource.getResourceResolver().getResource(fileReference);
     }
 

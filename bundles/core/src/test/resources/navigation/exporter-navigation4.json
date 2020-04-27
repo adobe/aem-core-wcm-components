@@ -1,7 +1,7 @@
 {
   "id": "navigation-64077eb607",
   "items": [],
-  "dataLayerJson": {
+  "dataLayer": {
     "navigation-64077eb607": {
       "type": "core/wcm/components/navigation/v1/navigation"
     }

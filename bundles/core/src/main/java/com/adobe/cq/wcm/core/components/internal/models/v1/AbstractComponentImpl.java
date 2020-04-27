@@ -15,34 +15,39 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Calendar;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Component;
-import com.day.cq.commons.jcr.JcrConstants;
+import com.adobe.cq.wcm.core.components.models.DataLayer;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.api.components.ComponentContext;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
 /**
  * Abstract class that can be used as a base class for {@link Component} implementations.
  */
-public abstract class AbstractComponentImpl extends AbstractDataLayerProperties implements Component {
+public abstract class AbstractComponentImpl implements Component {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractComponentImpl.class);
+
+    @SlingObject
+    protected Resource resource;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     protected ComponentContext componentContext;
@@ -130,33 +135,63 @@ public abstract class AbstractComponentImpl extends AbstractDataLayerProperties 
         return Utils.generateId(prefix, path);
     }
 
+
     @Override
-    public final String getDataLayerId() {
-        return getId();
+    public DataLayer getDataLayer() {
+        return new DataLayerImpl(this, resource);
     }
 
-    @Override
-    public final String getDataLayerType() {
-        return resource.getResourceType();
+    /**
+     * Data layer specific methods. Each component can choose to implement some of these.
+     */
+
+    @JsonIgnore
+    public Resource getDataLayerAssetResource() {
+        return null;
     }
 
-    @Override
-    public final String getDataLayerLastModifiedDate() {
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
-        Calendar lastModified = null;
+    @JsonIgnore
+    public String getDataLayerTitle() {
+        return null;
+    }
 
-        if (valueMap != null) {
-            lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
+    @JsonIgnore
+    public String getDataLayerDescription() {
+        return null;
+    }
 
-            if (lastModified == null) {
-                lastModified = valueMap.get(JcrConstants.JCR_CREATED, Calendar.class);
-            }
-        }
+    @JsonIgnore
+    public String getDataLayerText() {
+        return null;
+    }
 
-        if (lastModified != null) {
-            return lastModified.toInstant().toString();
-        }
+    @JsonIgnore
+    public String[] getDataLayerTags() {
+        return null;
+    }
 
+    @JsonIgnore
+    public String getDataLayerUrl() {
+        return null;
+    }
+
+    @JsonIgnore
+    public String getDataLayerLinkUrl() {
+        return null;
+    }
+
+    @JsonIgnore
+    public String getDataLayerTemplatePath() {
+        return null;
+    }
+
+    @JsonIgnore
+    public String getDataLayerLanguage() {
+        return null;
+    }
+
+    @JsonIgnore
+    public String[] getDataLayerShownItems() {
         return null;
     }
 }

@@ -4,7 +4,7 @@
     "expandedItems": [
         "item_2"
     ],
-    "dataLayerJson": {
+    "dataLayer": {
         "accordion-4ddce2b53c": {
             "type": "core/wcm/components/accordion/v1/accordion",
             "shownItems": [
@@ -32,7 +32,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-96a4ff9445",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-96a4ff9445": {
                             "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -47,7 +47,7 @@
                     "expandedItems": [
                         "item_1_2_2"
                     ],
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "accordion-d15a8c2317": {
                             "type": "core/wcm/components/accordion/v1/accordion",
                             "shownItems": [
@@ -75,7 +75,7 @@
                                     "titleLinkHidden": false,
                                     "actions": [],
                                     "id": "teaser-b803954853",
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "teaser-b803954853": {
                                             "description": "Teaser 1 description",
                                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -92,7 +92,7 @@
                                     "titleLinkHidden": false,
                                     "actions": [],
                                     "id": "teaser-687a1eb719",
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "teaser-687a1eb719": {
                                             "description": "Teaser 2 description",
                                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -119,7 +119,7 @@
                                     "titleLinkHidden": false,
                                     "actions": [],
                                     "id": "teaser-b1b8255ea3",
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "teaser-b1b8255ea3": {
                                             "description": "Teaser 1 description",
                                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -133,7 +133,7 @@
                                     "autoplay": false,
                                     "delay": 5000,
                                     "autopauseDisabled": false,
-                                    "dataLayerJson": {
+                                    "dataLayer": {
                                         "carousel-8c88179066": {
                                             "type": "core/wcm/components/carousel/v1/carousel",
                                             "shownItems": [
@@ -155,7 +155,7 @@
                                             "titleLinkHidden": false,
                                             "actions": [],
                                             "id": "teaser-1630d349e3",
-                                            "dataLayerJson": {
+                                            "dataLayer": {
                                                 "teaser-1630d349e3": {
                                                     "description": "Teaser 1 description",
                                                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -173,7 +173,7 @@
                                             "titleLinkHidden": false,
                                             "actions": [],
                                             "id": "teaser-1f48b6d6c0",
-                                            "dataLayerJson": {
+                                            "dataLayer": {
                                                 "teaser-1f48b6d6c0": {
                                                     "description": "Teaser 2 description",
                                                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -191,7 +191,7 @@
                                             "titleLinkHidden": false,
                                             "actions": [],
                                             "id": "teaser-2eef5e8ad9",
-                                            "dataLayerJson": {
+                                            "dataLayer": {
                                                 "teaser-2eef5e8ad9": {
                                                     "description": "Teaser 3 description",
                                                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -228,7 +228,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-91b0afd683",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-91b0afd683": {
                             "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -245,7 +245,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-d7012a3f5c",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-d7012a3f5c": {
                             "description": "Teaser 2 description",
                             "type": "core/wcm/components/teaser/v1/teaser",

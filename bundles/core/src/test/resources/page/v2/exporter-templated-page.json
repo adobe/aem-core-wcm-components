@@ -7,7 +7,7 @@
     "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
     "cssClassNames": "class1 class2",
     "language": "en-GB",
-    "dataLayerJson": {
+    "dataLayer": {
         "page-bb590de134": {
             "description": "Description",
             "language": "en-GB",
@@ -36,7 +36,7 @@
                     "id": "text-41bcd02e64",
                     "text": "<p>This is a test</p>",
                     "richText": true,
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "text-41bcd02e64": {
                             "lastModifiedDate": "2016-01-18T15:59:43Z",
                             "text": "<p>This is a test</p>",

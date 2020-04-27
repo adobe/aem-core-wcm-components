@@ -3,7 +3,7 @@
     "text": "Adobe",
     "link": "https://www.adobe.com",
     "icon": "adobe",
-    "dataLayerJson": {
+    "dataLayer": {
         "button-0b8ad69ce8": {
             "linkUrl": "https://www.adobe.com",
             "type": "core/wcm/components/button/v1/button",

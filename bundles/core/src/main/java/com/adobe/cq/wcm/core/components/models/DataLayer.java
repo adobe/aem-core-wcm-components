@@ -20,13 +20,19 @@ import java.util.Map;
 import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
 
+import com.adobe.cq.wcm.core.components.internal.jackson.DataLayerSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * A base interface to be extended by components that need to enable dataLayer population.
  */
 @ConsumerType
-public interface DataLayerProperties {
+@JsonSerialize(using = DataLayerSerializer.class)
+public interface DataLayer {
 
     /**
      * Checks if the data layer is enabled
@@ -34,7 +40,7 @@ public interface DataLayerProperties {
      * @return {@code true} if the model will populate the dataLayer
      */
     @JsonIgnore
-    default boolean isDataLayerEnabled() {
+    default boolean isEnabled() {
         throw new UnsupportedOperationException();
     }
 
@@ -43,7 +49,6 @@ public interface DataLayerProperties {
      *
      * @return {@code Resource} of the asset
      */
-    @JsonIgnore
     default Resource getAssetResource() {
         throw new UnsupportedOperationException();
     }
@@ -53,8 +58,7 @@ public interface DataLayerProperties {
      *
      * @return string ID
      */
-    @JsonIgnore
-    default String getDataLayerId() {
+    default String getId() {
         throw new UnsupportedOperationException();
     }
 
@@ -63,8 +67,7 @@ public interface DataLayerProperties {
      *
      * @return type
      */
-    @JsonIgnore
-    default String getDataLayerType() {
+    default String getType() {
         throw new UnsupportedOperationException();
     }
 
@@ -73,8 +76,7 @@ public interface DataLayerProperties {
      *
      * @return src
      */
-    @JsonIgnore
-    default String getDataLayerTitle() {
+    default String getTitle() {
         throw new UnsupportedOperationException();
     }
 
@@ -83,8 +85,7 @@ public interface DataLayerProperties {
      *
      * @return description
      */
-    @JsonIgnore
-    default String getDataLayerDescription() {
+    default String getDescription() {
         throw new UnsupportedOperationException();
     }
 
@@ -93,8 +94,7 @@ public interface DataLayerProperties {
      *
      * @return lastModifiedDate
      */
-    @JsonIgnore
-    default String getDataLayerLastModifiedDate() {
+    default String getLastModifiedDate() {
         throw new UnsupportedOperationException();
     }
 
@@ -103,9 +103,7 @@ public interface DataLayerProperties {
      *
      * @return text
      */
-
-    @JsonIgnore
-    default String getDataLayerText() {
+    default String getText() {
         throw new UnsupportedOperationException();
     }
 
@@ -114,9 +112,7 @@ public interface DataLayerProperties {
      *
      * @return tags array
      */
-
-    @JsonIgnore
-    default String[] getDataLayerTags() {
+    default String[] getTags() {
         throw new UnsupportedOperationException();
     }
 
@@ -125,8 +121,7 @@ public interface DataLayerProperties {
      *
      * @return link URL
      */
-    @JsonIgnore
-    default String getDataLayerUrl() {
+    default String getUrl() {
         throw new UnsupportedOperationException();
     }
 
@@ -135,8 +130,7 @@ public interface DataLayerProperties {
      *
      * @return link URL
      */
-    @JsonIgnore
-    default String getDataLayerLinkUrl() {
+    default String getLinkUrl() {
         throw new UnsupportedOperationException();
     }
 
@@ -145,8 +139,7 @@ public interface DataLayerProperties {
      *
      * @return JCR template path
      */
-    @JsonIgnore
-    default String getDataLayerTemplatePath() {
+    default String getTemplatePath() {
         throw new UnsupportedOperationException();
     }
 
@@ -155,8 +148,7 @@ public interface DataLayerProperties {
      *
      * @return language
      */
-    @JsonIgnore
-    default String getDataLayerLanguage() {
+    default String getLanguage() {
         throw new UnsupportedOperationException();
     }
 
@@ -165,8 +157,7 @@ public interface DataLayerProperties {
      *
      * @return item ID
      */
-    @JsonIgnore
-    default String[] getDataLayerShownItems() {
+    default String[] getShownItems() {
         throw new UnsupportedOperationException();
     }
 
@@ -176,16 +167,8 @@ public interface DataLayerProperties {
      * @return JSON string
      */
     @JsonIgnore
-    default String getDataLayerString() {
+    default String getString() {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Returns the Map of the resource's properties used in the data layer
-     *
-     * @return dataLayer Map
-     */
-    default Map<String, ?> getDataLayerJson() {
-        throw new UnsupportedOperationException();
-    }
 }

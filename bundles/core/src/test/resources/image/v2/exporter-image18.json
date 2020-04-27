@@ -14,7 +14,7 @@
         2048
     ],
     "lazyEnabled": true,
-    "dataLayerJson": {
+    "dataLayer": {
         "image-dd0253e3cc": {
             "type": "core/wcm/components/image/v2/image",
             "asset": {

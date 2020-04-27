@@ -26,7 +26,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 12.7.0
  */
 @ConsumerType
-public interface Separator extends ComponentExporter {
+public interface Separator extends Component {
     /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.7.0

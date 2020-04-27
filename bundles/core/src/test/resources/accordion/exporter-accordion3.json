@@ -4,7 +4,7 @@
     "expandedItems": [
         "item_2"
     ],
-    "dataLayerJson": {
+    "dataLayer": {
         "accordion-96bc1a6527": {
             "type": "core/wcm/components/accordion/v1/accordion",
             "shownItems": [
@@ -32,7 +32,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-3c4ffb212c",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-3c4ffb212c": {
                             "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -49,7 +49,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-14cf5ac7d2",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-14cf5ac7d2": {
                             "description": "Teaser 2 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -76,7 +76,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-e1de7e067f",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-e1de7e067f": {
                             "description": "Teaser 1 description",
                             "type": "core/wcm/components/teaser/v1/teaser",
@@ -93,7 +93,7 @@
                     "titleLinkHidden": false,
                     "actions": [],
                     "id": "teaser-debff7e409",
-                    "dataLayerJson": {
+                    "dataLayer": {
                         "teaser-debff7e409": {
                             "description": "Teaser 2 description",
                             "type": "core/wcm/components/teaser/v1/teaser",

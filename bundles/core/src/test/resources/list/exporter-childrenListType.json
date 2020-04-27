@@ -24,7 +24,7 @@
             "title": "Page 1.3"
         }
     ],
-    "dataLayerJson": {
+    "dataLayer": {
         "list-3a0d6ddd86": {
             "type": "core/wcm/components/list"
         }

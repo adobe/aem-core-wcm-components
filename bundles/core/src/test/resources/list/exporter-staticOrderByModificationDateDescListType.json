@@ -17,7 +17,7 @@
             "title": "Page 2"
         }
     ],
-    "dataLayerJson": {
+    "dataLayer": {
         "list-39c9e886e9": {
             "type": "core/wcm/components/list"
         }

@@ -4,7 +4,7 @@
     "title": "Adobe Logo",
     "src": "/core/conf/coretest/settings/wcm/templates/testtemplate/structure.img.png/structure/jcr%3acontent/root/image_template/1490005239000/adobe-systems-logo-and-wordmark.png",
     "link": "/core/content/test-image.html",
-    "dataLayerJson": {
+    "dataLayer": {
         "image-1aae8f0716": {
             "linkUrl": "/core/content/test-image.html",
             "type": "core/wcm/components/image",

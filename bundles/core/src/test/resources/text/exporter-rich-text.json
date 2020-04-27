@@ -2,7 +2,7 @@
     "id": "text-5bafbc4f83",
     "text": "<p>rich</p>",
     "richText": true,
-    "dataLayerJson": {
+    "dataLayer": {
         "text-5bafbc4f83": {
             "text": "<p>rich</p>",
             "type": "core/wcm/components/text/v1/text"

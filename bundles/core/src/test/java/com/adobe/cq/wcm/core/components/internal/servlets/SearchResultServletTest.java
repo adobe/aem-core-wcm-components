@@ -151,11 +151,6 @@ public class SearchResultServletTest {
         private String id;
         private String url;
         private String title;
-        private String path;
-        private String description;
-        private String lastModified;
-        private String name;
-        private Map<String, Object> dataLayerJson;
 
         public Item() {
         }
@@ -176,10 +171,6 @@ public class SearchResultServletTest {
         @Override
         public String getTitle() {
             return title;
-        }
-
-        public Map<String, Object> getDataLayerJson() {
-            return dataLayerJson;
         }
     }
 }

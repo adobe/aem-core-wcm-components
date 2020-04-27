@@ -34,7 +34,7 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
  * supporting the data layer feature.
  */
 @ExtendWith(AemContextExtension.class)
-class AbstractDataLayerPropertiesTest {
+class DataLayerImplTest {
 
     private static final String TEST_BASE = "/title";
     private static final String TEST_PAGE = "/content/title";

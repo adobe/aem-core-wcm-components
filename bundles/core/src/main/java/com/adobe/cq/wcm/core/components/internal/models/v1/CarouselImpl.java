@@ -80,6 +80,6 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
 
     @Override
     public String[] getDataLayerShownItems() {
-        return  getItems() != null ? new String[]{getItems().get(0).getDataLayerId()} : new String[0];
+        return  getItems() != null ? new String[]{getItems().get(0).getId()} : new String[0];
     }
 }

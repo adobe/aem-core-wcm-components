@@ -3,7 +3,7 @@
     "autoplay": true,
     "delay": 7000,
     "autopauseDisabled": true,
-    "dataLayerJson": {
+    "dataLayer": {
         "carousel-c39ba25916": {
             "type": "core/wcm/components/carousel/v1/carousel",
             "shownItems": [
@@ -25,7 +25,7 @@
             "titleLinkHidden": false,
             "actions": [],
             "id": "teaser-6204f971ea",
-            "dataLayerJson": {
+            "dataLayer": {
                 "teaser-6204f971ea": {
                     "description": "Teaser 1 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -43,7 +43,7 @@
             "titleLinkHidden": false,
             "actions": [],
             "id": "teaser-7d7da28085",
-            "dataLayerJson": {
+            "dataLayer": {
                 "teaser-7d7da28085": {
                     "description": "Teaser 2 description",
                     "type": "core/wcm/components/teaser/v1/teaser",
@@ -61,7 +61,7 @@
             "titleLinkHidden": false,
             "actions": [],
             "id": "teaser-aeaad4f462",
-            "dataLayerJson": {
+            "dataLayer": {
                 "teaser-aeaad4f462": {
                     "description": "Teaser 3 description",
                     "type": "core/wcm/components/teaser/v1/teaser",

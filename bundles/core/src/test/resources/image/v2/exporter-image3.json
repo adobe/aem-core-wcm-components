@@ -10,7 +10,7 @@
     ],
     "lazyEnabled": false,
     "link": "https://www.adobe.com",
-    "dataLayerJson": {
+    "dataLayer": {
         "image-4fdb43cd81": {
             "linkUrl": "https://www.adobe.com",
             "type": "core/wcm/components/image/v2/image",

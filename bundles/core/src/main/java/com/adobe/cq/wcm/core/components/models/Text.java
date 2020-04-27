@@ -26,7 +26,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Text extends ComponentExporter, DataLayerProperties {
+public interface Text extends Component {
 
     /**
      * Retrieves the text value to be displayed.

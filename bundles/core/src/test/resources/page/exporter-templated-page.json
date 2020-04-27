@@ -6,7 +6,7 @@
     "lastModifiedDate": 1453282416000,
     "templateName": "product-page",
     "language": "en-GB",
-    "dataLayerJson": {
+    "dataLayer": {
         "page-bb590de134": {
             "description": "Description",
             "language": "en-GB",
@@ -30,7 +30,7 @@
             "id": "text-fb32b028de",
             "text": "<p>This is a test</p>",
             "richText": true,
-            "dataLayerJson": {
+            "dataLayer": {
                 "text-fb32b028de": {
                     "lastModifiedDate": "2016-01-18T15:59:43Z",
                     "text": "<p>This is a test</p>",

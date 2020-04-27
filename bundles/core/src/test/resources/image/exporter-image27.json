@@ -4,7 +4,7 @@
     "title": "Adobe Logo",
     "src": "/core/content/test/_jcr_content/root/image27.img.82.600.png/1490005239000.png",
     "link": "https://www.adobe.com",
-    "dataLayerJson": {
+    "dataLayer": {
         "image-8fe05d400b": {
             "lastModifiedDate": "2017-03-20T10:20:39Z",
             "linkUrl": "https://www.adobe.com",

@@ -1,7 +1,7 @@
 {
     "id": "image-c35f55512d",
     "src": "/core/content/test/_jcr_content/root/image15.img.png/1494867377756/adobe-systems-logo-and-wordmark.png",
-    "dataLayerJson": {
+    "dataLayer": {
         "image-c35f55512d": {
             "type": "core/wcm/components/image/v1/image",
             "asset": {

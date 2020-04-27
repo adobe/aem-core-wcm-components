@@ -26,7 +26,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
 @ConsumerType
-public interface ListItem extends DataLayerProperties {
+public interface ListItem extends Component {
 
     /**
      * Returns the ID of this {@code ListItem}.

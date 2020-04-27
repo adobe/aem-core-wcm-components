@@ -25,7 +25,7 @@
      data-asset-id="${image.uuid}"
      data-title="${image.title || image.alt}"
      id="${component.id}"
-     data-cmp-data-layer="${image.dataLayerString}"
+     data-cmp-data-layer="${image.dataLayer.string}"
      class="cmp-image${!wcmmode.disabled ? ' cq-dd-image' : ''}"
      itemscope itemtype="http://schema.org/ImageObject">
     <a data-sly-unwrap="${!image.link}"

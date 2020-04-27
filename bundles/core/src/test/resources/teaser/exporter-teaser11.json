@@ -10,7 +10,7 @@
       "id": "teaser-84f85e5d32-cta-4a426bc86e",
       "title": "Teasers",
       "url": "/core/content/teasers.html",
-      "dataLayerJson": {
+      "dataLayer": {
         "teaser-84f85e5d32-cta-4a426bc86e": {
           "linkUrl": "/core/content/teasers.html",
           "type": "nt:unstructured",
@@ -23,7 +23,7 @@
       "id": "teaser-84f85e5d32-cta-ed27c8e4b7",
       "title": "Adobe",
       "url": "http://www.adobe.com",
-      "dataLayerJson": {
+      "dataLayer": {
         "teaser-84f85e5d32-cta-ed27c8e4b7": {
           "linkUrl": "http://www.adobe.com",
           "type": "nt:unstructured",
@@ -35,7 +35,7 @@
   ],
   "id": "teaser-84f85e5d32",
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-8.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
-  "dataLayerJson": {
+  "dataLayer": {
     "teaser-84f85e5d32": {
       "linkUrl": "/core/content/teasers.html",
       "description": "Teasers description",

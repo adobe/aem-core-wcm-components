@@ -15,7 +15,7 @@
     ],
     "lazyEnabled": false,
     "link": "/core/content/test-image.html",
-    "dataLayerJson": {
+    "dataLayer": {
         "image-1aae8f0716": {
             "linkUrl": "/core/content/test-image.html",
             "type": "core/wcm/components/image/v2/image",

@@ -2,7 +2,7 @@
     "id": "text-28636c5fc9",
     "text": "plain",
     "richText": false,
-    "dataLayerJson": {
+    "dataLayer": {
         "text-28636c5fc9": {
             "text": "plain",
             "type": "core/wcm/components/text/v1/text"

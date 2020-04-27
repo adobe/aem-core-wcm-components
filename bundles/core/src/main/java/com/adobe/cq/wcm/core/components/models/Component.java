@@ -48,6 +48,17 @@ public interface Component extends ComponentExporter {
     }
 
     /**
+     * Returns the data layer information associated with the component
+     *
+     * @return {@link DataLayer} object associated with the component
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    default DataLayer getDataLayer() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * @see ComponentExporter#getExportedType()
      * @since com.adobe.cq.wcm.core.components.models 12.8.0
      */
