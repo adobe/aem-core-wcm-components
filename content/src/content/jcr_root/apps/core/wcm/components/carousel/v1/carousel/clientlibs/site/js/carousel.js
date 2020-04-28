@@ -17,7 +17,7 @@
     "use strict";
 
     var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
     var NS = "cmp";
     var IS = "carousel";
@@ -215,7 +215,7 @@
                     if (dataLayerEnabled) {
                         dataLayer.push({
                             event: "cmp:show",
-                            info: {
+                            eventInfo: {
                                 path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
                             }
                         });
@@ -230,7 +230,7 @@
                     if (dataLayerEnabled) {
                         dataLayer.push({
                             event: "cmp:show",
-                            info: {
+                            eventInfo: {
                                 path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
                             }
                         });
@@ -491,11 +491,11 @@
             if (dataLayerEnabled) {
                 var carouselId = that._elements.self.id;
                 var activeItem = getDataLayerId(that._elements.item[index].dataset.cmpDataLayer);
-                var updatePayload = { data: { component: {} } };
-                updatePayload.data.component[carouselId] = { shownItems: [activeItem] };
+                var updatePayload = { component: {} };
+                updatePayload.component[carouselId] = { shownItems: [activeItem] };
 
-                var removePayload = { data: { component: {} } };
-                removePayload.data.component[carouselId] = { shownItems: undefined };
+                var removePayload = { component: {} };
+                removePayload.component[carouselId] = { shownItems: undefined };
 
                 dataLayer.push(removePayload);
                 dataLayer.push(updatePayload);
@@ -522,7 +522,7 @@
             if (dataLayerEnabled) {
                 dataLayer.push({
                     event: "cmp:show",
-                    info: {
+                    eventInfo: {
                         path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
                     }
                 });
