@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
@@ -107,7 +108,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             if (smartSizes.length > 0) {
                 // only include the quality selector in the URL, if there are sizes configured
                 staticSelectors += DOT + jpegQuality;
-            } 
+            }
             srcUriTemplate = baseResourcePath + DOT + staticSelectors +
                 SRC_URI_TEMPLATE_WIDTH_VAR + DOT + extension +
                 (inTemplate ? templateRelativePath : "") + (lastModifiedDate > 0 ?("/" + lastModifiedDate +
@@ -186,5 +187,4 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     public String getUuid() {
         return uuid;
     }
-
 }

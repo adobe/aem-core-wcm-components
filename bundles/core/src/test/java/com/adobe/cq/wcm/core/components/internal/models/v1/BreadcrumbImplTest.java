@@ -105,6 +105,7 @@ class BreadcrumbImplTest {
     }
 
     private Breadcrumb getBreadcrumbUnderTest(String resourcePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);

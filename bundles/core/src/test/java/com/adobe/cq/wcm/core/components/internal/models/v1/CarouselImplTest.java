@@ -28,8 +28,8 @@ import com.adobe.cq.wcm.core.components.models.ListItem;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
 
 @ExtendWith(AemContextExtension.class)
 class CarouselImplTest {
@@ -60,11 +60,13 @@ class CarouselImplTest {
     void testCarouselWithItems() {
         Carousel carousel = getCarouselUnderTest();
         Object[][] expectedItems = {
-                {"item_1", "Teaser 1"},
-                {"item_2", "Teaser 2"},
-                {"item_3", "Carousel Panel 3"},
-        };
-        verifyCarouselItems(expectedItems, carousel.getItems());
+                { "item_1", "Teaser 1", "core/wcm/components/teaser/v1/teaser",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1" },
+                { "item_2", "Teaser 2", "core/wcm/components/teaser/v1/teaser",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_2" },
+                { "item_3", "Carousel Panel 3", "core/wcm/components/teaser/v1/teaser",
+                        "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_3" }, };
+        verifyCarouselItems(expectedItems, carousel.getItems(), carousel.getId());
         Utils.testJSONExport(carousel, Utils.getTestExporterJSONPath(TEST_BASE, "carousel1"));
     }
 
@@ -77,18 +79,32 @@ class CarouselImplTest {
     }
 
     private Carousel getCarouselUnderTest() {
+        Utils.enableDataLayer(context, true);
         context.currentResource(CarouselImplTest.CAROUSEL_1);
         return context.request().adaptTo(Carousel.class);
     }
 
-    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals("The carousel contains a different number of items than expected.", expectedItems.length, items.size());
+    private void verifyCarouselItems(Object[][] expectedItems, List<ListItem> items, String carouselId) {
+        assertEquals("The carousel contains a different number of items than expected.", expectedItems.length,
+                items.size());
         int index = 0;
         for (ListItem item : items) {
-            assertEquals("The carousel item's name is not what was expected.",
-                    expectedItems[index][0], item.getName());
+            assertEquals("The carousel item's name is not what was expected.", expectedItems[index][0], item.getName());
             assertEquals("The carousel item's title is not what was expected: " + item.getTitle(),
                     expectedItems[index][1], item.getTitle());
+            assertEquals("The carousel item's path is not what was expected: " + item.getPath(),
+                    expectedItems[index][3], item.getPath());
+
+            assertNotEquals("The carousel item's data layer string is empty", item.getDataLayer().getString(), "{}");
+
+            assertEquals("The carousel item's data layer title is not what was expected: " + item.getDataLayer().getTitle(),
+                    expectedItems[index][1], item.getDataLayer().getTitle());
+            assertEquals("The carousel item's data layer type is not what was expected: " + item.getDataLayer().getType(),
+                    expectedItems[index][2], item.getDataLayer().getType());
+            assertEquals("The carousel item's data layer id is not what was expected: " + item.getDataLayer().getId(),
+                com.adobe.cq.wcm.core.components.internal.Utils.generateId(carouselId + "-item", (String) expectedItems[index][3]),
+                    item.getDataLayer().getId());
+
             index++;
         }
     }

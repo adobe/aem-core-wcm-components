@@ -27,7 +27,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 12.9.0
  */
 @ConsumerType
-public interface ExperienceFragment extends ComponentExporter {
+public interface ExperienceFragment extends Component {
 
     /**
      * Name of the configuration policy property that specifies the experience fragment variation path. The property

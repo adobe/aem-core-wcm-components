@@ -28,7 +28,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface SocialMediaHelper extends ComponentExporter {
+public interface SocialMediaHelper extends Component {
 
     /**
      * Name of the resource property that will indicate which social networks are supported for social sharing.
