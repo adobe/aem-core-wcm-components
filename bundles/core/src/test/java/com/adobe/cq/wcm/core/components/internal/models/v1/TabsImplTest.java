@@ -77,6 +77,7 @@ class TabsImplTest {
     }
 
     private Tabs getTabsUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         context.request().setContextPath(CONTEXT_PATH);
         return context.request().adaptTo(Tabs.class);

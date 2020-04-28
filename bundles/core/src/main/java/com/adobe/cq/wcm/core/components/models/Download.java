@@ -25,7 +25,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  *
  * @since com.adobe.cq.wcm.core.components.models 12.8.0
  */
-public interface Download extends ComponentExporter {
+public interface Download extends Component {
 
     /**
      * Name of the resource property that defines whether or not the title value is taken from the configured asset.

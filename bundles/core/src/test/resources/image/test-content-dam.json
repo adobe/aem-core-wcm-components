@@ -321,6 +321,7 @@
                 "jcr:mixinTypes": [
                     "cq:Taggable"
                 ],
+                "cq:tags": "test1",
                 "exif:ExifOffset": 254160,
                 "dam:Physicalheightininches": "27.77777862548828",
                 "tiff:Compression": 7,

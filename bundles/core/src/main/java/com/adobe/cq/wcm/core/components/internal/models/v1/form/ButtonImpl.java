@@ -37,7 +37,7 @@ import com.day.cq.i18n.I18n;
        adapters = {Button.class, ComponentExporter.class},
        resourceType = {FormConstants.RT_CORE_FORM_BUTTON_V1, FormConstants.RT_CORE_FORM_BUTTON_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ButtonImpl extends AbstractFieldImpl implements Button, ComponentExporter {
+public class ButtonImpl extends AbstractFieldImpl implements Button {
 
     private static final String PROP_TYPE_DEFAULT = "submit";
     private static final String PN_TYPE = "type";

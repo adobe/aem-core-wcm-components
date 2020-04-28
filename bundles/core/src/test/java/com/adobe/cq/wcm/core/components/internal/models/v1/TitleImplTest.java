@@ -54,6 +54,7 @@ class TitleImplTest {
     void testExportedType() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE);
         assertEquals(TitleImpl.RESOURCE_TYPE_V1, title.getExportedType());
+        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
     }
 
     @Test
@@ -108,6 +109,7 @@ class TitleImplTest {
     }
 
     private Title getTitleUnderTest(String resourcePath, Object ... properties) {
+        Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);

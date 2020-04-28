@@ -248,6 +248,7 @@ class TeaserImplTest {
     }
 
     private Teaser getTeaserUnderTest(String resourcePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         MockSlingHttpServletRequest request = context.request();
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {

@@ -19,7 +19,9 @@
     data-sly-use.itemTemplate="item.html"
     data-sly-list.item="${list.listItems}"
     id="${component.id}"
+    data-cmp-data-layer="${list.dataLayer.string}"
     class="cmp-list">
-    <li class="cmp-list__item" data-sly-call="${itemTemplate.item @ list = list, item = item}"></li>
+    <li class="cmp-list__item" data-sly-call="${itemTemplate.item @ list = list, item = item}"
+        data-cmp-data-layer="${item.dataLayer.string}"></li>
 </ul>
 <sly data-sly-call="${template.placeholder @ isEmpty=list.listItems.size == 0, classAppend='cmp-list'}"></sly>

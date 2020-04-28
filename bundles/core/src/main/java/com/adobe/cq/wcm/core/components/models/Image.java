@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Image extends ComponentExporter {
+public interface Image extends Component {
 
     /**
      * Name of the configuration policy property that will store the allowed rendition widths for an image.
