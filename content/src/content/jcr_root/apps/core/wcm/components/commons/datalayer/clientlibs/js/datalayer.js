@@ -17,13 +17,11 @@
     "use strict";
 
     var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
     function addComponentToDataLayer(component) {
         dataLayer.push({
-            data: {
-                component: getComponentObject(component)
-            }
+            component: getComponentObject(component)
         });
     }
 
@@ -62,7 +60,7 @@
 
         dataLayer.push({
             event: "cmp:click",
-            info: {
+            eventInfo: {
                 path: "component." + componentId
             }
         });

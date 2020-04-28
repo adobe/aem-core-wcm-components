@@ -22,8 +22,8 @@
     <body class="${page.cssClassNames}"
           data-cmp-data-layer-enabled="${page.dataLayer.enabled}">
         <script data-sly-test.dataLayerEnabled="${page.dataLayer.enabled}">
-          window.dataLayer = window.dataLayer || [];
-          dataLayer.push({data: { page: JSON.parse("${page.dataLayer.string @ context='scriptString'}") }});
+          window.adobeDataLayer = window.adobeDataLayer || [];
+          adobeDataLayer.push({page: JSON.parse("${page.dataLayer.string @ context='scriptString'}")});
         </script>
         <sly data-sly-test.isRedirectPage="${page.redirectTarget && (wcmmode.edit || wcmmode.preview)}"
              data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>

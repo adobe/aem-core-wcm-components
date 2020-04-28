@@ -17,7 +17,7 @@
     "use strict";
 
     var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
     var NS = "cmp";
     var IS = "tabs";
@@ -277,24 +277,24 @@
 
                 dataLayer.push({
                     event: "cmp:show",
-                    info: {
+                    eventInfo: {
                         path: "component." + activeItem
                     }
                 });
 
                 dataLayer.push({
                     event: "cmp:hide",
-                    info: {
+                    eventInfo: {
                         path: "component." + exActiveItem
                     }
                 });
 
                 var tabsId = that._elements.self.id;
-                var uploadPayload = { data: { component: {} } };
-                uploadPayload.data.component[tabsId] = { shownItems: [activeItem] };
+                var uploadPayload = { component: {} };
+                uploadPayload.component[tabsId] = { shownItems: [activeItem] };
 
-                var removePayload = { data: { component: {} } };
-                removePayload.data.component[tabsId] = { shownItems: undefined };
+                var removePayload = { component: {} };
+                removePayload.component[tabsId] = { shownItems: undefined };
 
                 dataLayer.push(removePayload);
                 dataLayer.push(uploadPayload);
