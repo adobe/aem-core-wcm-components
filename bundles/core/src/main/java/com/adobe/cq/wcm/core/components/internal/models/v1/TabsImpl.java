@@ -97,13 +97,13 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
 
         if (items != null) {
             if (activeItemName == null) {
-                return new String[] { getItems().get(0).getId() };
+                return new String[] { getItems().get(0).getDataLayer().getId() };
             }
 
             activeItemId = items.stream()
                 .filter(e -> e.getName().equals(activeItemName))
                 .findFirst()
-                .get().getId();
+                .get().getDataLayer().getId();
         }
 
         return new String[] { activeItemId };
