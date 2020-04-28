@@ -17,7 +17,7 @@
     "use strict";
 
     var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
-    var dataLayer = (dataLayerEnabled)? window.dataLayer = window.dataLayer || [] : undefined;
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
 
     var NS = "cmp";
     var IS = "accordion";
@@ -338,11 +338,11 @@
                             return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
                         });
 
-                    var uploadPayload = { data: { component: {} } };
-                    uploadPayload.data.component[accordionId] = { shownItems: expandedItems };
+                    var uploadPayload = {component: {}};
+                    uploadPayload.component[accordionId] = { shownItems: expandedItems };
 
-                    var removePayload = { data: { component: {} } };
-                    removePayload.data.component[accordionId] = { shownItems: undefined };
+                    var removePayload = {component: {}};
+                    removePayload.component[accordionId] = { shownItems: undefined };
 
                     dataLayer.push(removePayload);
                     dataLayer.push(uploadPayload);
@@ -363,7 +363,7 @@
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:show",
-                        info: {
+                        eventInfo: {
                             path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
                         }
                     });
@@ -374,7 +374,7 @@
                 if (dataLayerEnabled) {
                     dataLayer.push({
                         event: "cmp:hide",
-                        info: {
+                        eventInfo: {
                             path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
                         }
                     });
