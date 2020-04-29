@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.caconfig.ConfigurationBuilder;
@@ -144,12 +145,15 @@ public class DataLayerImpl implements DataLayer {
     }
 
     @Override
+    @NotNull
     public String getString() {
-        try {
-            return new ObjectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            LOGGER.error("Unable to generate dataLayer JSON string", e);
+        if (isEnabled()) {
+            try {
+                return new ObjectMapper().writeValueAsString(this);
+            } catch (JsonProcessingException e) {
+                LOGGER.error("Unable to generate dataLayer JSON string", e);
+            }
         }
-        return null;
+        return StringUtils.EMPTY;
     }
 }

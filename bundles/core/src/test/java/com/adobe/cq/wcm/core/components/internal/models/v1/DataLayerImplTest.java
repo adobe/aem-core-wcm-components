@@ -28,6 +28,8 @@ import com.adobe.cq.wcm.core.components.models.Title;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * Test class to verify the data layer JSON of a component, when the data layer is enabled or disabled.
  * The tests are based on the Title component but it could be written with any other component
@@ -51,12 +53,16 @@ class DataLayerImplTest {
     @Test
     void getDataLayerJsonWhenDataLayerEnabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, true);
+        assertTrue(title.getDataLayer().isEnabled());
+        assertEquals("{\"title-7968bee19c\":{\"type\":\"core/wcm/components/title/v1/title\",\"title\":\"Hello World\",\"lastModifiedDate\":\"2016-01-13T15:14:51Z\"}}", title.getDataLayer().getString());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
     }
 
     @Test
     void getDataLayerJsonWhenDataLayerDisabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, false);
+        assertFalse(title.getDataLayer().isEnabled());
+        assertEquals("", title.getDataLayer().getString());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE + SUFFIX_NO_DATA_LAYER));
     }
 
