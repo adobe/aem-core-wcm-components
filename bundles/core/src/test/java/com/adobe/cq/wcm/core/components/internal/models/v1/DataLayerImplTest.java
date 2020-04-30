@@ -61,9 +61,7 @@ class DataLayerImplTest {
     @Test
     void getDataLayerJsonWhenDataLayerDisabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, false);
-        assertFalse(title.getDataLayer().isEnabled());
-        assertEquals("", title.getDataLayer().getString());
-        Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE + SUFFIX_NO_DATA_LAYER));
+        assertNull(title.getDataLayer());
     }
 
     private Title getTitleUnderTest(String resourcePath, boolean dataLayerEnabled, Object ... properties) {

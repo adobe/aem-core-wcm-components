@@ -54,6 +54,7 @@ public interface Component extends ComponentExporter {
      *
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
+    @Nullable
     default DataLayer getDataLayer() {
         throw new UnsupportedOperationException();
     }

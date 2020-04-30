@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -29,6 +30,8 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
+import com.adobe.cq.wcm.core.components.models.DataLayer;
+import com.adobe.cq.wcm.core.components.models.ListItem;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -80,6 +83,14 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
 
     @Override
     public String[] getDataLayerShownItems() {
-        return  getItems() != null ? new String[]{getItems().get(0).getDataLayer().getId()} : new String[0];
+        String[] shownItems = new String[0];
+        List<ListItem> items = getItems();
+        if (!items.isEmpty()) {
+            DataLayer dataLayer = items.get(0).getDataLayer();
+            if (dataLayer != null) {
+                shownItems = new String[] {dataLayer.getId()};
+            }
+        }
+        return shownItems;
     }
 }

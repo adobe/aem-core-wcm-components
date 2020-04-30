@@ -54,6 +54,7 @@ public abstract class AbstractComponentImpl implements Component {
     private Page currentPage;
 
     private String id;
+    private DataLayer dataLayer;
 
     @Nullable
     @Override
@@ -135,8 +136,12 @@ public abstract class AbstractComponentImpl implements Component {
 
 
     @Override
+    @Nullable
     public DataLayer getDataLayer() {
-        return new DataLayerImpl(this, resource);
+        if (dataLayer == null) {
+            dataLayer = new DataLayerImpl(this, resource);
+        }
+        return (dataLayer.isEnabled() ? dataLayer: null);
     }
 
     /**

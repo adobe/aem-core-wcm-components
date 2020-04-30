@@ -16,7 +16,11 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
@@ -29,6 +33,7 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
+import com.adobe.cq.wcm.core.components.models.DataLayer;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
 import com.day.cq.wcm.api.components.Component;
@@ -36,8 +41,11 @@ import com.day.cq.wcm.api.components.ComponentManager;
 
 import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class}, resourceType = TabsImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Model(adaptables = SlingHttpServletRequest.class,
+       adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class},
+       resourceType = TabsImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     public final static String RESOURCE_TYPE = "core/wcm/components/tabs/v1/tabs";
@@ -91,22 +99,20 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     @Override
     public String[] getDataLayerShownItems() {
+        String[] shownItems = new String[0];
+        ListItem activeItem = null;
         String activeItemName = getActiveItem();
         List<ListItem> items = getItems();
-        String activeItemId = null;
-
-        if (items != null) {
-            if (activeItemName == null) {
-                return new String[] { getItems().get(0).getDataLayer().getId() };
+        if (!items.isEmpty()) {
+            activeItem = items.stream()
+                    .filter(e -> StringUtils.equals(e.getName(), activeItemName))
+                    .findFirst().orElse(items.get(0));
+            DataLayer dataLayer = activeItem.getDataLayer();
+            if (dataLayer != null) {
+                shownItems = new String[]{dataLayer.getId()};
             }
-
-            activeItemId = items.stream()
-                .filter(e -> e.getName().equals(activeItemName))
-                .findFirst()
-                .get().getDataLayer().getId();
         }
-
-        return new String[] { activeItemId };
+        return shownItems;
     }
 
     @Override
