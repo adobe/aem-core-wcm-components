@@ -14,11 +14,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
-    xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="adobeDocumentCloud"
-    jcr:description="Embed Document Cloud Viewer"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:description="Document Cloud Viewer Component for the Core Components Library"
     jcr:primaryType="cq:Component"
-    jcr:title="Document Cloud Viewer (v1)"
+    jcr:title="Document Cloud Viewer"
     sling:resourceSuperType="core/wcm/components/documentcloudviewer/v1/documentcloudviewer"
-    componentGroup="Core Component"/>
+    componentGroup="Core Components Examples"/>

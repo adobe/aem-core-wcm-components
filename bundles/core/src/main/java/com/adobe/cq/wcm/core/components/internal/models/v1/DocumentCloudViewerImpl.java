@@ -44,6 +44,19 @@ public class DocumentCloudViewerImpl implements DocumentCloudViewer {
     protected static final String FULL_WINDOW = "FULL_WINDOW";
     protected static final String SIZED_CONTAINER = "SIZED_CONTAINER";
     protected static final String IN_LINE = "IN_LINE";
+    protected static final String EMBED_MODE = "embedMode";
+    protected static final String DEFAULT_VIEW_MODE= "defaultViewMode";
+    protected static final String SHOW_ANNOTATION_TOOLS = "showAnnotationTools";
+    protected static final String SHOW_LEFT_HAND_PANEL = "showLeftHandPanel";
+    protected static final String SHOW_FULL_SCREEN = "showFullScreen";
+    protected static final String SHOW_PAGE_CONTROLS = "showPageControls";
+    protected static final String DOCK_PAGE_CONTROLS = "dockPageControls";
+    protected static final String SHOW_DOWNLOAD_PDF = "showDownloadPDF";
+    protected static final String SHOW_PRINT_PDF = "showPrintPDF";
+    protected static final String CSS_FULL_WINDOW = "cmp-documentcloudviewer__full-window";
+    protected static final String CSS_BORDERLESS = "cmp-documentcloudviewer__full-window-borderless";
+    protected static final String CSS_SIZED_CONTAINER = "cmp-documentcloudviewer__sized-container";
+    protected static final String CSS_IN_LINE = "cmp-documentcloudviewer__in-line";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String documentPath;
@@ -167,46 +180,43 @@ public class DocumentCloudViewerImpl implements DocumentCloudViewer {
     @Override
     public String getViewerConfigJson() {
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-        jsonObjectBuilder.add("embedMode", type);
+        jsonObjectBuilder.add(EMBED_MODE, type);
 
         if(!StringUtils.isEmpty(type)) {
             if (type.equals(FULL_WINDOW)) {
-                jsonObjectBuilder.add("defaultViewMode", defaultViewMode);
-                jsonObjectBuilder.add("showAnnotationTools", showAnnotationTools);
-                jsonObjectBuilder.add("showLeftHandPanel", showLeftHandPanel);
+                jsonObjectBuilder.add(DEFAULT_VIEW_MODE, defaultViewMode);
+                jsonObjectBuilder.add(SHOW_ANNOTATION_TOOLS, showAnnotationTools);
+                jsonObjectBuilder.add(SHOW_LEFT_HAND_PANEL, showLeftHandPanel);
             }
 
             if (type.equals(SIZED_CONTAINER)) {
-                jsonObjectBuilder.add("showFullScreen", showFullScreen);
+                jsonObjectBuilder.add(SHOW_FULL_SCREEN, showFullScreen);
             }
 
-            if (type.equals(FULL_WINDOW) || type.equals("SIZED_CONTAINER")) {
-                jsonObjectBuilder.add("showPageControls", showPageControls);
-                jsonObjectBuilder.add("dockPageControls", dockPageControls);
+            if (type.equals(FULL_WINDOW) || type.equals(SIZED_CONTAINER)) {
+                jsonObjectBuilder.add(SHOW_PAGE_CONTROLS, showPageControls);
+                jsonObjectBuilder.add(DOCK_PAGE_CONTROLS, dockPageControls);
             }
         }
 
-        jsonObjectBuilder.add("showDownloadPDF", showDownloadPdf);
-        jsonObjectBuilder.add("showPrintPDF", showPrintPdf);
+        jsonObjectBuilder.add(SHOW_DOWNLOAD_PDF, showDownloadPdf);
+        jsonObjectBuilder.add(SHOW_PRINT_PDF, showPrintPdf);
 
         return jsonObjectBuilder.build().toString();
     }
 
     @Override
     public String getContainerClass() {
-        String str = "cmp-documentcloudviewer__full-window";
-        
         if(!StringUtils.isEmpty(type)) {
             if (type.equals(FULL_WINDOW) && borderless) {
-                str = "cmp-documentcloudviewer__full-window-borderless";
+                return CSS_BORDERLESS;
             } else if (type.equals(SIZED_CONTAINER)) {
-            str = "cmp-documentcloudviewer__sized-container";
+                return CSS_SIZED_CONTAINER;
             } else if (type.equals(IN_LINE)) {
-            str = "";
+                return CSS_IN_LINE;
             }
         }
-
-        return str;
+        return CSS_FULL_WINDOW;
     }
 
     @NotNull
