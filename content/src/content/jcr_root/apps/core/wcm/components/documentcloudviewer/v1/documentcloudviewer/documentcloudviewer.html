@@ -24,10 +24,12 @@
      </style>
 
      <h2 data-sly-test="${!documentCloudViewerModel.documentPath}">Please select a document to display.</h2>
-     <h2 data-sly-test="${!documentCloudViewerModel.clientId}">Please configure client ID in /system/console/configMgr</h2>
+     <h2 data-sly-test="${!documentCloudViewerModel.clientId}">
+          Please setup Context Aware Configuration 
+          (com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer.DocumentCloudViewerCaConfig) in /conf 
+          and link it using sling:configRef on any current/parent node.</h2>
 
      <div id="${component.id}" class="cmp-documentcloudviewer__content ${documentCloudViewerModel.containerClass @ context='html'}"></div>
-     <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
      <script type="text/javascript">
           document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
                var adobeDCView = new AdobeDC.View({

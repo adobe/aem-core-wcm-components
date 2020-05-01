@@ -15,10 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
+import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -34,6 +36,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.DocumentCloudViewer;
 
 import com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer.DocumentCloudViewerConfigService;
+import com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer.DocumentCloudViewerCaConfig;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { DocumentCloudViewer.class,
         ComponentExporter.class }, resourceType = { DocumentCloudViewerImpl.RESOURCE_TYPE })
@@ -101,14 +104,24 @@ public class DocumentCloudViewerImpl implements DocumentCloudViewer {
     @Optional
     private DocumentCloudViewerConfigService config;
 
+    private DocumentCloudViewerCaConfig caConfig;
+
+    @PostConstruct
+    protected void initModel() {
+        ConfigurationBuilder cb = resource.adaptTo(ConfigurationBuilder.class);
+        if (cb != null) {
+            caConfig = cb.as(DocumentCloudViewerCaConfig.class);
+        }
+    }
+
     @Override
     public String getClientId() {
-        return config.getClientId();
+        return caConfig.clientId();
     }
 
     @Override
     public String getReportSuiteId() {
-        return config.getReportSuiteId();
+        return caConfig.reportSuiteId();
     }
 
     @Override
