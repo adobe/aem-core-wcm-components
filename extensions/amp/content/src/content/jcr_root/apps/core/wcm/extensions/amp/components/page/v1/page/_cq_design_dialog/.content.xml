@@ -134,6 +134,13 @@
                                         value="ampOnly"/>
                                 </items>
                             </ampmode>
+                            <mainContentSelector
+                                jcr:primaryType="nt:unstructured"
+                                valueType="string"
+                                fieldLabel="Skip to main content element selector"
+                                fieldDescription="Selector for the main section of the page. Used as accessibility feature to skip directly to the main content of the page."
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                name="./mainContentSelector"/>
                         </items>
                     </properties>
                 </items>

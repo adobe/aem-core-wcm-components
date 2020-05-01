@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.jcr.RangeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -42,6 +43,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.SearchImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -52,12 +54,7 @@ import com.day.cq.search.Query;
 import com.day.cq.search.QueryBuilder;
 import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
-import com.day.cq.wcm.api.LanguageManager;
-import com.day.cq.wcm.api.NameConstants;
-import com.day.cq.wcm.api.Page;
-import com.day.cq.wcm.api.PageManager;
-import com.day.cq.wcm.api.Template;
-import com.day.cq.wcm.api.WCMException;
+import com.day.cq.wcm.api.*;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 import com.day.cq.wcm.msm.api.LiveRelationship;
@@ -206,7 +203,7 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
                     Resource hitRes = hit.getResource();
                     Page page = getPage(hitRes);
                     if (page != null) {
-                        results.add(new PageListItemImpl(request, page));
+                        results.add(new PageListItemImpl(request, page, getId(searchResource), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
                     }
                 } catch (RepositoryException e) {
                     LOGGER.error("Unable to retrieve search results for query.", e);
@@ -214,6 +211,13 @@ public class SearchResultServlet extends SlingSafeMethodsServlet {
             }
         }
         return results;
+    }
+
+    private String getId(Resource resource) {
+        if (resource == null) {
+            return null;
+        }
+        return Utils.generateId("search", resource.getPath());
     }
 
     private String getSearchRootPagePath(String searchRoot, Page currentPage) {

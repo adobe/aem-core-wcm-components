@@ -4,6 +4,5 @@
     <jcr:content
         jcr:primaryType="nt:unstructured"
         jcr:title="Sample Assets">
-        <folderThumbnail/>
     </jcr:content>
 </jcr:root>

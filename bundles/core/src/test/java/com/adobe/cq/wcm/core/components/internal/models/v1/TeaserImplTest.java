@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import org.apache.sling.api.resource.Resource;
@@ -71,6 +72,9 @@ class TeaserImplTest {
     private static final String TEASER_7 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-7";
     private static final String TEASER_8 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-8";
     private static final String TEASER_9 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-9";
+    private static final String TEASER_10 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-10";
+    private static final String TEASER_11 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-11";
+    private static final String TEASER_12 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/teaser-12";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
     private TestLogger testLogger;
@@ -207,7 +211,6 @@ class TeaserImplTest {
             Teaser.PN_TITLE_TYPE, "h5");
         assertEquals("Expected title type is not correct", "h5", teaser.getTitleType());
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser2"));
-
     }
 
     @Test
@@ -217,7 +220,35 @@ class TeaserImplTest {
         Utils.testJSONExport(teaser, Utils.getTestExporterJSONPath(TEST_BASE, "teaser1"));
     }
 
+    @Test
+    void testTeaserWithTitleNotFromLinkedPageAndNoActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_10);
+        assertEquals("Teaser", teaser.getTitle());
+        assertTrue(teaser.getActions().isEmpty());
+    }
+
+    @Test
+    void testTeaserWithTitleNotFromLinkedPageAndActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_11);
+        assertEquals("Teaser", teaser.getTitle());
+        List<ListItem> actions = teaser.getActions();
+        assertEquals("http://www.adobe.com", actions.get(0).getPath());
+        assertEquals("Adobe", actions.get(0).getTitle());
+        assertEquals("/content/teasers", actions.get(1).getPath());
+        assertEquals("Teasers", actions.get(1).getTitle());
+    }
+
+    @Test
+    void testTeaserWithTitleFromLinkedPageAndActions() {
+        Teaser teaser = getTeaserUnderTest(TEASER_12);
+        assertEquals("Adobe", teaser.getTitle());
+        List<ListItem> actions = teaser.getActions();
+        assertEquals("http://www.adobe.com", actions.get(0).getPath());
+        assertEquals("Adobe", actions.get(0).getTitle());
+    }
+
     private Teaser getTeaserUnderTest(String resourcePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         MockSlingHttpServletRequest request = context.request();
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {

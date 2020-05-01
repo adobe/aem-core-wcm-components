@@ -118,6 +118,7 @@ public class LayoutContainerImplTest {
     }
 
     private LayoutContainer getContainerUnderTest(String resourcePath, Style style) {
+        Utils.enableDataLayerForOldAemContext(AEM_CONTEXT, true);
         Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");

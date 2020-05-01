@@ -13,9 +13,22 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer;
+package com.adobe.cq.wcm.core.components.internal;
 
-public interface DocumentCloudViewerConfigService {
-    String getClientId();
-    String getReportSuiteId();
+import org.apache.sling.caconfig.annotation.Configuration;
+import org.apache.sling.caconfig.annotation.Property;
+
+/**
+ * Context Aware Configuration Class of the Data Layer
+ */
+@Configuration(label="Data Layer Context Aware Configuration")
+public @interface DataLayerConfig {
+
+    /**
+     *
+     * @return {@code true} if the data layer is enabled, {@code false} otherwise. It defaults to {@code false}.
+     */
+    @Property(label="Data Layer enabled")
+    boolean enabled() default false;
+
 }

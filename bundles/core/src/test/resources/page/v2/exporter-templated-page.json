@@ -1,28 +1,52 @@
 {
-    "designPath"      : "/etc/designs/mysite",
-    "title"           : "Templated Page",
+    "id": "page-bb590de134",
+    "designPath": "/etc/designs/mysite",
+    "title": "Templated Page",
     "lastModifiedDate": 1453282416000,
-    "templateName"    : "product-page",
+    "templateName": "product-page",
     "appResourcesPath": "/core/etc.clientlibs/wcm/core/page/clientlibs/favicon/resources",
-    "cssClassNames"   : "class1 class2",
-    "language"        : "en-GB",
-    ":itemsOrder"     : [
+    "cssClassNames": "class1 class2",
+    "language": "en-GB",
+    "dataLayer": {
+        "page-bb590de134": {
+            "description": "Description",
+            "language": "en-GB",
+            "type": "core/wcm/components/page/v2/page",
+            "title": "Templated Page",
+            "templatePath": "/conf/coretest/settings/wcm/templates/product-page",
+            "url": "/core/content/page/templated-page.html",
+            "tags": [
+                "two",
+                "three",
+                "one"
+            ]
+        }
+    },
+    ":itemsOrder": [
         "root"
     ],
-    ":items"          : {
+    ":items": {
         "root": {
+            ":type": "wcm/foundation/components/responsivegrid",
             ":itemsOrder": [
                 "text"
             ],
-            ":items"     : {
+            ":items": {
                 "text": {
-                    "text"    : "<p>This is a test</p>",
+                    "id": "text-41bcd02e64",
+                    "text": "<p>This is a test</p>",
                     "richText": true,
-                    ":type"   : "core/wcm/components/text/v2/text"
+                    "dataLayer": {
+                        "text-41bcd02e64": {
+                            "lastModifiedDate": "2016-01-18T15:59:43Z",
+                            "text": "<p>This is a test</p>",
+                            "type": "core/wcm/components/text/v2/text"
+                        }
+                    },
+                    ":type": "core/wcm/components/text/v2/text"
                 }
-            },
-            ":type"      : "wcm/foundation/components/responsivegrid"
+            }
         }
     },
-    ":type"           : "core/wcm/components/page/v2/page"
+    ":type": "core/wcm/components/page/v2/page"
 }

@@ -16,6 +16,9 @@
 (function() {
     "use strict";
 
+    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
     var NS = "cmp";
     var IS = "accordion";
 
@@ -327,6 +330,23 @@
                 } else {
                     setItemExpanded(item, !getItemExpanded(item));
                 }
+
+                if (dataLayerEnabled) {
+                    var accordionId = that._elements.self.id;
+                    var expandedItems = getExpandedItems()
+                        .map(function(item) {
+                            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+                        });
+
+                    var uploadPayload = {component: {}};
+                    uploadPayload.component[accordionId] = { shownItems: expandedItems };
+
+                    var removePayload = {component: {}};
+                    removePayload.component[accordionId] = { shownItems: undefined };
+
+                    dataLayer.push(removePayload);
+                    dataLayer.push(uploadPayload);
+                }
             }
         }
 
@@ -340,8 +360,25 @@
         function setItemExpanded(item, expanded) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:show",
+                        eventInfo: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
+
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:hide",
+                        eventInfo: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
             }
             refreshItem(item);
         }
@@ -505,6 +542,17 @@
             var uriParts = document.URL.split("#");
             return uriParts[uriParts.length - 1];
         }
+    }
+
+    /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
     }
 
     /**

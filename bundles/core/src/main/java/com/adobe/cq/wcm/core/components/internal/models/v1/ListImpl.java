@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+
 import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
 
@@ -33,11 +34,7 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +56,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ListImpl implements List {
+public class ListImpl extends AbstractComponentImpl implements List {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/list/v1/list";
 
@@ -84,9 +81,6 @@ public class ListImpl implements List {
 
     @SlingObject
     private ResourceResolver resourceResolver;
-
-    @SlingObject
-    private Resource resource;
 
     @Self
     private SlingHttpServletRequest request;
@@ -314,7 +308,6 @@ public class ListImpl implements List {
         }
         return pageManager.getContainingPage(resourceResolver.getResource(parentPath));
     }
-
 
     protected enum Source {
         CHILDREN("children"),

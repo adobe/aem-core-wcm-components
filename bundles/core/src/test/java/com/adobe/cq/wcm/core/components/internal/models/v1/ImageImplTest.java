@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.StringReader;
+
 import javax.json.Json;
 import javax.json.JsonReader;
 
@@ -196,6 +197,7 @@ public class ImageImplTest extends AbstractImageTest {
     }
 
     protected Image getImageUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath(CONTEXT_PATH);

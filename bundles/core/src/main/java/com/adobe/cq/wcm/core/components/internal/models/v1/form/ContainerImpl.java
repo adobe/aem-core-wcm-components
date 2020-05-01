@@ -53,7 +53,7 @@ import com.day.cq.wcm.foundation.forms.FormsHelper;
 import static com.day.cq.wcm.foundation.forms.FormsConstants.SCRIPT_FORM_SERVER_VALIDATION;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Container.class, ContainerExporter.class},
+       adapters = {Container.class, ContainerExporter.class, ComponentExporter.class},
        resourceType = {FormConstants.RT_CORE_FORM_CONTAINER_V1, FormConstants.RT_CORE_FORM_CONTAINER_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ContainerImpl implements Container {

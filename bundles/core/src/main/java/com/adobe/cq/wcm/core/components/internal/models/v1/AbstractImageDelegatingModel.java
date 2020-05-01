@@ -28,7 +28,7 @@ import com.adobe.cq.wcm.core.components.internal.resource.ImageResourceWrapper;
 import com.day.cq.wcm.api.components.Component;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public abstract class AbstractImageDelegatingModel {
+public abstract class AbstractImageDelegatingModel extends AbstractComponentImpl {
 
     /**
      * Component property name that indicates which Image Component will perform the image rendering for composed components. When

@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -91,6 +90,7 @@ class TabsImplTest {
     }
 
     private Tabs getTabsUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         context.request().setContextPath(CONTEXT_PATH);
         return context.request().adaptTo(Tabs.class);

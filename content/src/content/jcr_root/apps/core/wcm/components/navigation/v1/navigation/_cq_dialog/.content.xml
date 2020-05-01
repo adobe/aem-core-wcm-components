@@ -86,6 +86,15 @@
                                                 name="./structureDepth"
                                                 step="1"
                                                 value="${not empty cqDesign.structureDepth ? cqDesign.structureDepth : 1}"/>
+                                            <disableShadowing
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="For redirecting pages: show original page instead of target."
+                                                text="Disable shadowing"
+                                                name="./disableShadowing"
+                                                value="{Boolean}true"
+                                                checked="${not empty cqDesign.disableShadowing ? cqDesign.disableShadowing : false}"
+                                                uncheckedValue="{Boolean}false"/>
                                         </items>
                                     </column>
                                 </items>

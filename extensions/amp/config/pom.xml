@@ -56,17 +56,11 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <packageType>container</packageType>
                     <properties>
                         <acHandling>merge_preserve</acHandling>
                         <cloudManagerTarget>none</cloudManagerTarget>
                     </properties>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.adobe.cq</groupId>
-                            <artifactId>core.wcm.components.config</artifactId>
-                            <version>[${project.version},)</version>
-                        </dependency>
-                    </dependencies>
                 </configuration>
             </plugin>
             <plugin>

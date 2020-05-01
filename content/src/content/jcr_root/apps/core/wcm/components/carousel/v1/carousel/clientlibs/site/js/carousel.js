@@ -16,6 +16,9 @@
 (function() {
     "use strict";
 
+    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
     var NS = "cmp";
     var IS = "carousel";
 
@@ -30,7 +33,7 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]'
     };
 
     var properties = {
@@ -207,13 +210,31 @@
         function bindEvents() {
             if (that._elements["previous"]) {
                 that._elements["previous"].addEventListener("click", function() {
-                    navigate(getPreviousIndex());
+                    var index = getPreviousIndex();
+                    navigate(index);
+                    if (dataLayerEnabled) {
+                        dataLayer.push({
+                            event: "cmp:show",
+                            eventInfo: {
+                                path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                            }
+                        });
+                    }
                 });
             }
 
             if (that._elements["next"]) {
                 that._elements["next"].addEventListener("click", function() {
-                    navigate(getNextIndex());
+                    var index = getNextIndex();
+                    navigate(index);
+                    if (dataLayerEnabled) {
+                        dataLayer.push({
+                            event: "cmp:show",
+                            eventInfo: {
+                                path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                            }
+                        });
+                    }
                 });
             }
 
@@ -467,6 +488,19 @@
             that._active = index;
             refreshActive();
 
+            if (dataLayerEnabled) {
+                var carouselId = that._elements.self.id;
+                var activeItem = getDataLayerId(that._elements.item[index].dataset.cmpDataLayer);
+                var updatePayload = { component: {} };
+                updatePayload.component[carouselId] = { shownItems: [activeItem] };
+
+                var removePayload = { component: {} };
+                removePayload.component[carouselId] = { shownItems: undefined };
+
+                dataLayer.push(removePayload);
+                dataLayer.push(updatePayload);
+            }
+
             // reset the autoplay transition interval following navigation, if not already hovering the carousel
             if (that._elements.self.parentElement) {
                 if (that._elements.self.parentElement.querySelector(":hover") !== that._elements.self) {
@@ -484,6 +518,15 @@
         function navigateAndFocusIndicator(index) {
             navigate(index);
             focusWithoutScroll(that._elements["indicator"][index]);
+
+            if (dataLayerEnabled) {
+                dataLayer.push({
+                    event: "cmp:show",
+                    eventInfo: {
+                        path: "component." + getDataLayerId(that._elements.item[index].dataset.cmpDataLayer)
+                    }
+                });
+            }
         }
 
         /**
@@ -574,6 +617,17 @@
     }
 
     /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
+    }
+
+    /**
      * Document ready handler and DOM mutation observers. Initializes Carousel components as necessary.
      *
      * @private
@@ -585,8 +639,8 @@
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-        var body             = document.querySelector("body");
-        var observer         = new MutationObserver(function(mutations) {
+        var body = document.querySelector("body");
+        var observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 // needed for IE
                 var nodesArray = [].slice.call(mutation.addedNodes);

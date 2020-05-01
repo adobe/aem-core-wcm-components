@@ -15,15 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -45,6 +38,7 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
@@ -54,12 +48,10 @@ import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Page.class, ContainerExporter.class},
-       resourceType = PageImpl.RESOURCE_TYPE)
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-          extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class PageImpl implements Page {
+@Model(adaptables = SlingHttpServletRequest.class, adapters = { Page.class,
+        ContainerExporter.class }, resourceType = PageImpl.RESOURCE_TYPE)
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class PageImpl extends AbstractComponentImpl implements Page {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v1/page";
 
@@ -144,10 +136,10 @@ public class PageImpl implements Page {
         return templateName;
     }
 
-
     @Override
     public String getLanguage() {
-        return currentPage == null ? Locale.getDefault().toLanguageTag() : currentPage.getLanguage(false).toLanguageTag();
+        return currentPage == null ? Locale.getDefault().toLanguageTag()
+                : currentPage.getLanguage(false).toLanguageTag();
     }
 
     @Override
@@ -233,15 +225,17 @@ public class PageImpl implements Page {
     }
 
     /**
-     * Returns a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}.
+     * Returns a map (resource name => Sling Model class) of the given resource
+     * children's Sling Models that can be adapted to {@link T}.
      *
      * @param slingRequest the current request
-     * @param modelClass the Sling Model class to be adapted to
-     * @return a map (resource name => Sling Model class) of the given resource children's Sling Models that can be adapted to {@link T}
+     * @param modelClass   the Sling Model class to be adapted to
+     * @return a map (resource name => Sling Model class) of the given resource
+     *         children's Sling Models that can be adapted to {@link T}
      */
     @NotNull
     private <T> Map<String, T> getChildModels(@NotNull SlingHttpServletRequest slingRequest,
-                                              @NotNull Class<T> modelClass) {
+            @NotNull Class<T> modelClass) {
         Map<String, T> itemWrappers = new LinkedHashMap<>();
 
         for (final Resource child : slingModelFilter.filterChildResources(request.getResource().getChildren())) {
@@ -291,5 +285,39 @@ public class PageImpl implements Page {
         if (currentStyle != null) {
             Collections.addAll(categories, currentStyle.get(PN_CLIENTLIBS, ArrayUtils.EMPTY_STRING_ARRAY));
         }
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String[] getDataLayerTags() {
+        return Arrays.copyOf(keywords, keywords.length);
+    }
+
+    @Override
+    public String getDataLayerDescription() {
+        return pageProperties.get(NameConstants.PN_DESCRIPTION, String.class);
+    }
+
+    @Override
+    public String getDataLayerTemplatePath() {
+        return currentPage.getTemplate().getPath();
+    }
+
+    @Override
+    public String getDataLayerUrl() {
+        return Utils.getURL(request, currentPage);
+    }
+
+    @Override
+    public String getDataLayerLanguage() {
+        return getLanguage();
     }
 }

@@ -62,6 +62,7 @@ public class ListImplTest {
     }
 
     private List getListUnderTest(String resourcePath) {
+        Utils.enableDataLayerForOldAemContext(CONTEXT, true);
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
