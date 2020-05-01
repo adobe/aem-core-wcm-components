@@ -2,9 +2,10 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2020-04-29T17:15:12.937-07:00"
+        cq:lastModified="{Date}2020-05-01T14:45:51.053-07:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+        jcr:description="Embed a Document Cloud Viewer widget to display PDF's"
         jcr:primaryType="cq:PageContent"
         jcr:title="Document Cloud Viewer"
         sling:resourceType="core-components-examples/components/page">
@@ -52,7 +53,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_separator_v1"
+                    linkURL="https://www.adobe.com/"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -68,7 +69,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_separator_v1"
+                    linkURL="https://www.adobe.com/"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <title_865328580

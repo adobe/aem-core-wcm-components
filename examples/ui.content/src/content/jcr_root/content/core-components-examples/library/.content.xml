@@ -2,12 +2,13 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-05-29T18:25:56.781+03:00"
+        cq:lastModified="{Date}2020-05-01T14:48:55.771-07:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="AEM Core Components - Component Library"
         jcr:primaryType="cq:PageContent"
         jcr:title="Component Library"
+        sling:configRef="/conf/core-components-examples/content"
         sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
@@ -509,6 +510,32 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_803940090>
+                    <teaser_1138854628_co
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-05-01T14:44:49.190-07:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/embed.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/document-cloud-viewer"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1138854628_co>
                 </container_40754488>
                 <container_1589240805
                     cq:styleIds="[1579016386576]"
