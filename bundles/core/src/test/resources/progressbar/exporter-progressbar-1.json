@@ -2,6 +2,5 @@
     "id"            : "progressbar-980543f904",
     "completed"     : 75,
     "remaining"     : 25,
-    "dataLayer" : {},
     ":type"         : "core/wcm/components/progressbar/v1/progressbar"
 }
