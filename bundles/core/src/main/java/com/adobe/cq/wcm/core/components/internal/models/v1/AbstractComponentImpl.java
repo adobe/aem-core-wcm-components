@@ -18,7 +18,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -27,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.DataLayer;
@@ -56,6 +54,7 @@ public abstract class AbstractComponentImpl implements Component {
     private Page currentPage;
 
     private String id;
+    private DataLayer dataLayer;
 
     @Nullable
     @Override
@@ -137,8 +136,12 @@ public abstract class AbstractComponentImpl implements Component {
 
 
     @Override
+    @Nullable
     public DataLayer getDataLayer() {
-        return new DataLayerImpl(this, resource);
+        if (dataLayer == null) {
+            dataLayer = new DataLayerImpl(this, resource);
+        }
+        return (dataLayer.isEnabled() ? dataLayer: null);
     }
 
     /**

@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
@@ -27,12 +28,14 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 
 import com.adobe.cq.wcm.core.components.models.DataLayer;
+import com.adobe.cq.wcm.core.components.models.Image;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.tagging.TagConstants;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.google.common.collect.Iterables;
 
 public class DataLayerSerializer extends StdSerializer<DataLayer> {
 
@@ -66,14 +69,12 @@ public class DataLayerSerializer extends StdSerializer<DataLayer> {
     @Override
     public void serialize(DataLayer dataLayer, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException {
         jsonGenerator.writeStartObject();
-        if (dataLayer.isEnabled()) {
-            jsonGenerator.setCodec(new ObjectMapper());
-            jsonGenerator.writeObjectField(dataLayer.getId(), getDataLayerProperties(dataLayer));
-        }
+        jsonGenerator.setCodec(new ObjectMapper());
+        jsonGenerator.writeObjectField(dataLayer.getId(), getDataLayerProperties(dataLayer));
         jsonGenerator.writeEndObject();
     }
 
-    private Map<String, Object> getDataLayerProperties(DataLayer dataLayer) {
+    Map<String, Object> getDataLayerProperties(DataLayer dataLayer) {
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put(JSON_KEY_TYPE, dataLayer.getType());
         properties.put(JSON_KEY_TITLE, dataLayer.getTitle());
@@ -89,14 +90,14 @@ public class DataLayerSerializer extends StdSerializer<DataLayer> {
         properties.put(JSON_KEY_SHOWN_ITEMS, dataLayer.getShownItems());
 
         // Remove nulls
-        while(properties.values().remove(null));
+        properties.values().removeIf(Objects::isNull);
 
         return properties;
     }
 
     /**
      * Helper method for getting asset metadata where it applies (ex
-     * {@link com.adobe.cq.wcm.core.components.models.Image}
+     * {@link Image}
      *
      * @return the metadata Map
      */
@@ -113,7 +114,7 @@ public class DataLayerSerializer extends StdSerializer<DataLayer> {
                 assetMetadata.put(JSON_KEY_ASSET_LAST_MODIFIED_DATE, getAssetLastModifiedDate(asset, assetResource));
 
                 // Remove nulls
-                while(assetMetadata.values().remove(null));
+                assetMetadata.values().removeIf(Objects::isNull);
             }
         }
         return assetMetadata;
@@ -121,7 +122,7 @@ public class DataLayerSerializer extends StdSerializer<DataLayer> {
 
     /**
      * Helper method for getting asset tags where it applies (ex
-     * {@link com.adobe.cq.wcm.core.components.models.Image}
+     * {@link Image}
      *
      * @return the asset tags Map
      */
@@ -136,14 +137,16 @@ public class DataLayerSerializer extends StdSerializer<DataLayer> {
         }
 
         // Remove nulls
-        while(assetTags.values().remove(null));
+        while (assetTags.values().remove(null)) {
+            ;
+        }
 
         return assetTags;
     }
 
     /**
      * Helper method for getting asset modified date where it applies (ex
-     * {@link com.adobe.cq.wcm.core.components.models.Image}
+     * {@link Image}
      *
      * @return the asset modified date
      */
