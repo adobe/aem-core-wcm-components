@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
@@ -26,9 +27,11 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataModelImpl;
 import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.models.DataLayer;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
@@ -54,7 +57,8 @@ public abstract class AbstractComponentImpl implements Component {
     private Page currentPage;
 
     private String id;
-    private DataLayer dataLayer;
+    private Boolean dataLayerEnabled;
+    private ComponentDataModel componentDataModel;
 
     @Nullable
     @Override
@@ -134,19 +138,41 @@ public abstract class AbstractComponentImpl implements Component {
         return Utils.generateId(prefix, path);
     }
 
+    private boolean isDataLayerEnabled() {
+        if (dataLayerEnabled == null) {
+            dataLayerEnabled = false;
+            if (resource != null) {
+                ConfigurationBuilder builder = resource.adaptTo(ConfigurationBuilder.class);
+                if (builder != null) {
+                    DataLayerConfig dataLayerConfig = builder.as(DataLayerConfig.class);
+                    dataLayerEnabled = dataLayerConfig.enabled();
+                }
+            }
+        }
+        return dataLayerEnabled;
+    }
+
 
     @Override
     @Nullable
-    public DataLayer getDataLayer() {
-        if (dataLayer == null) {
-            dataLayer = new DataLayerImpl(this, resource);
+    public ComponentDataModel getComponentDataModel() {
+        if (!isDataLayerEnabled()) {
+            return null;
         }
-        return (dataLayer.isEnabled() ? dataLayer: null);
+        if (componentDataModel == null) {
+            componentDataModel = getComponentDataModelInternal();
+        }
+        return componentDataModel;
     }
 
     /**
-     * Data layer specific methods. Each component can choose to implement some of these.
+     * Data layer specific methods. Each component can choose to implement some of these, to override or feed the data model.
      */
+
+    @NotNull
+    protected ComponentDataModel getComponentDataModelInternal() {
+        return new ComponentDataModelImpl(this, resource);
+    }
 
     @JsonIgnore
     public Resource getDataLayerAssetResource() {

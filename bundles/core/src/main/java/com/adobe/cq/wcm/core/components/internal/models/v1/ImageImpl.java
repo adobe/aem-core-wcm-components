@@ -51,8 +51,10 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ImageDataModelImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -368,8 +370,13 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     }
 
     /*
-     * DataLayerProvider implementation of field getters
+     * DataLayer specific methods
      */
+
+    @Override
+    protected @NotNull ComponentDataModel getComponentDataModelInternal() {
+        return new ImageDataModelImpl(this, resource);
+    }
 
     @Override
     public Resource getDataLayerAssetResource() {

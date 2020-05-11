@@ -15,7 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -33,13 +41,16 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataModelImpl;
 import com.adobe.cq.wcm.core.components.models.Page;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -288,8 +299,13 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     }
 
     /*
-     * DataLayerProvider implementation of field getters
+     * DataLayer specific methods
      */
+
+    @Override
+    public @Nullable ComponentDataModel getComponentDataModel() {
+        return new PageDataModelImpl(this, resource);
+    }
 
     @Override
     public String getDataLayerTitle() {

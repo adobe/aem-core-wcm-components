@@ -20,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * A base interface to be extended by components that need to provide access to common properties.
@@ -50,12 +56,14 @@ public interface Component extends ComponentExporter {
     /**
      * Returns the data layer information associated with the component
      *
-     * @return {@link DataLayer} object associated with the component
+     * @return {@link ComponentDataModel} object associated with the component
      *
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     @Nullable
-    default DataLayer getDataLayer() {
+    @JsonProperty("dataLayer")
+    @JsonSerialize(using = ComponentDataModelSerializer.class)
+    default ComponentDataModel getComponentDataModel() {
         throw new UnsupportedOperationException();
     }
 
