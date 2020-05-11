@@ -221,7 +221,7 @@
                         <validatorsSettings>
                             <jackrabbit-filter>
                                 <options>
-                                    <validRoots>/,/libs,/apps,/apps/core/wcm,/etc,/var,/tmp,/content</validRoots>
+                                    <validRoots>/,/libs,/libs/core/wcm,/apps,/apps/core/wcm,/etc,/var,/tmp,/content</validRoots>
                                 </options>
                             </jackrabbit-filter>
                             <netcentric-aem-classification>

@@ -57,6 +57,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <filterSource>${basedir}/src/content/META-INF/vault/filter-apps.xml</filterSource>
                     <packageType>application</packageType>
                     <dependencies>
                         <dependency>
@@ -199,6 +200,23 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>cloud</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.jackrabbit</groupId>
+                        <artifactId>filevault-package-maven-plugin</artifactId>
+                        <configuration>
+                            <finalName>${project.build.finalName}-cloud</finalName>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
