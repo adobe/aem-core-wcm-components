@@ -205,7 +205,9 @@
                         <groupId>org.apache.jackrabbit</groupId>
                         <artifactId>filevault-package-maven-plugin</artifactId>
                         <configuration>
-                            <finalName>${project.build.finalName}-cloud</finalName>
+                            <filterSource>${basedir}/src/content/META-INF/vault/filter-libs.xml</filterSource>
+                            <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
+                            <classifier>cloud</classifier>
                         </configuration>
                     </plugin>
                 </plugins>
