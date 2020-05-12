@@ -17,6 +17,6 @@
     <h2 class="cmp-teaser__title" data-sly-test.title="${teaser.title}" data-sly-element="${teaser.titleType}">
         <a class="cmp-teaser__title-link" href="${teaser.linkURL}"
            data-sly-unwrap="${!teaser.linkURL || teaser.titleLinkHidden}"
-           data-cmp-clickable="${teaser.componentDataModel.enabled}">${title}</a>
+           data-cmp-clickable="${teaser.page.componentDataModel}">${title}</a>
     </h2>
 </sly>
