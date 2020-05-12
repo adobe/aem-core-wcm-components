@@ -20,8 +20,8 @@
       data-sly-use.redirect="redirect.html">
     <head data-sly-call="${head.head @ page = page}"></head>
     <body class="${page.cssClassNames}"
-          data-cmp-data-layer-enabled="${page.componentDataModel}">
-        <script data-sly-test.dataLayerEnabled="${page.page.componentDataModel}">
+          data-cmp-data-layer-enabled="${page.componentDataModel ? true : false}">
+        <script data-sly-test.dataLayerEnabled="${page.componentDataModel}">
           window.adobeDataLayer = window.adobeDataLayer || [];
           adobeDataLayer.push({page: JSON.parse("${page.componentDataModel.string @ context='scriptString'}")});
         </script>
