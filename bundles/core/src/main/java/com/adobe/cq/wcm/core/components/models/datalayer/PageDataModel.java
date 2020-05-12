@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Interface defining data for page components.
  *
@@ -40,6 +42,7 @@ public interface PageDataModel extends ContainerDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo:path")
     default String getUrl() {
         throw new UnsupportedOperationException();
     }
@@ -51,6 +54,7 @@ public interface PageDataModel extends ContainerDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:template")
     default String getTemplatePath() {
         throw new UnsupportedOperationException();
     }
@@ -62,6 +66,7 @@ public interface PageDataModel extends ContainerDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:language")
     default String getLanguage() {
         throw new UnsupportedOperationException();
     }

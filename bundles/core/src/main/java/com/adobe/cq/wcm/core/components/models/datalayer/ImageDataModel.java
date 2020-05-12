@@ -31,7 +31,7 @@ public interface ImageDataModel extends ComponentDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    @JsonProperty("asset")
+    @JsonProperty("image")
     default AssetDataModel getImage() {
         throw new UnsupportedOperationException();
     }

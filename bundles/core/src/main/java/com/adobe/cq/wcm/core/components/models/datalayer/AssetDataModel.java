@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Interface defining data for assets.
@@ -36,6 +37,7 @@ public interface AssetDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("@id")
     default String getId() {
         throw new UnsupportedOperationException();
     }
@@ -47,6 +49,7 @@ public interface AssetDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo")
     default String getUrl() {
         throw new UnsupportedOperationException();
     }
@@ -58,6 +61,7 @@ public interface AssetDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("@type")
     default String getFormat() {
         throw new UnsupportedOperationException();
     }
