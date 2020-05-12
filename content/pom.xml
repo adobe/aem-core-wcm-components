@@ -239,48 +239,15 @@
                     <plugin>
                         <groupId>org.apache.jackrabbit</groupId>
                         <artifactId>filevault-package-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>cloud-package</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>generate-metadata</goal>
-                                    <goal>package</goal>
-                                </goals>
-                                <configuration>
-                                    <filters>
-                                        <filter>
-                                            <root>/libs/core/wcm/components</root>
-                                        </filter>
-                                    </filters>
-                                    <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
-                                    <finalName>${project.build.finalName}-cloud</finalName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>1.7</version>
-                        <executions>
-                            <execution>
-                                <id>attach-artifacts</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>attach-artifact</goal>
-                                </goals>
-                                <configuration>
-                                    <artifacts>
-                                        <artifact>
-                                            <file>target/${project.build.finalName}-cloud.zip</file>
-                                            <classifier>cloud</classifier>
-                                            <type>zip</type>
-                                        </artifact>
-                                    </artifacts>
-                                </configuration>
-                            </execution>
-                        </executions>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <root>/libs/core/wcm/components</root>
+                                </filter>
+                            </filters>
+                            <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
+                            <classifier>cloud</classifier>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
