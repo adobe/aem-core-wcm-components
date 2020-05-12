@@ -84,6 +84,7 @@ public interface AssetDataModel {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo:modifyDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     default Date getLastModifiedDate() {
         throw new UnsupportedOperationException();
