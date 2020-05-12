@@ -57,6 +57,11 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <filters>
+                        <filter>
+                            <root>/apps/core/wcm/components</root>
+                        </filter>
+                    </filters>
                     <packageType>application</packageType>
                     <dependencies>
                         <dependency>
