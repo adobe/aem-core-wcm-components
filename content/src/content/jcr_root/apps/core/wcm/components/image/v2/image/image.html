@@ -30,7 +30,7 @@
      itemscope itemtype="http://schema.org/ImageObject">
     <a data-sly-unwrap="${!image.link}"
        class="cmp-image__link" href="${image.link}"
-       data-cmp-clickable="${image.componentDataModel.enabled}"
+       data-cmp-clickable="${image.page.componentDataModel}"
        data-cmp-hook-image="link">
         <noscript data-sly-unwrap="${!image.lazyEnabled && image.widths.length <= 1 && !image.areas}" data-cmp-hook-image="noscript">
             <sly data-sly-test.usemap="${'{0}{1}' @ format=['#', resource.path]}"></sly>
