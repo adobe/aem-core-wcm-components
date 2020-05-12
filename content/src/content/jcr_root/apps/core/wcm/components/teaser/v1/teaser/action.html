@@ -17,5 +17,5 @@
     <a class="cmp-teaser__action-link" href="${action.URL}"
        id="${action.id}"
        data-cmp-data-layer="${action.componentDataModel.string}"
-       data-cmp-clickable="${action.componentDataModel}">${action.title}</a>
+       data-cmp-clickable="${action.componentDataModel ? true : false}">${action.title}</a>
 </sly>
