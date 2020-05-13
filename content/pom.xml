@@ -239,15 +239,32 @@
                     <plugin>
                         <groupId>org.apache.jackrabbit</groupId>
                         <artifactId>filevault-package-maven-plugin</artifactId>
-                        <configuration>
-                            <filters>
-                                <filter>
-                                    <root>/libs/core/wcm/components</root>
-                                </filter>
-                            </filters>
-                            <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
-                            <classifier>cloud</classifier>
-                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-metadata-cloud</id>
+                                <goals>
+                                    <goal>generate-metadata</goal>
+                                </goals>
+                                <configuration>
+                                    <filters>
+                                        <filter>
+                                            <root>/libs/wcm/core</root>
+                                        </filter>
+                                    </filters>
+                                    <classifier>cloud</classifier>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>package-cloud</id>
+                                <goals>
+                                    <goal>package</goal>
+                                </goals>
+                                <configuration>
+                                    <jcrRootSourceDirectory>${project.build.directory}/jcr_root</jcrRootSourceDirectory>
+                                    <classifier>cloud</classifier>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
