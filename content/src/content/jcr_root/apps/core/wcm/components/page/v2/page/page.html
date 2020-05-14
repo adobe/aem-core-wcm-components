@@ -20,10 +20,10 @@
       data-sly-use.redirect="redirect.html">
     <head data-sly-call="${head.head @ page = page}"></head>
     <body class="${page.cssClassNames}"
-          data-cmp-data-layer-enabled="${page.dataLayer.enabled}">
-        <script data-sly-test.dataLayerEnabled="${page.dataLayer.enabled}">
+          data-cmp-data-layer-enabled="${page.data ? true : false}">
+        <script data-sly-test.dataLayerEnabled="${page.data}">
           window.adobeDataLayer = window.adobeDataLayer || [];
-          adobeDataLayer.push({page: JSON.parse("${page.dataLayer.string @ context='scriptString'}")});
+          adobeDataLayer.push({page: JSON.parse("${page.data.json @ context='scriptString'}")});
         </script>
         <sly data-sly-test.isRedirectPage="${page.redirectTarget && (wcmmode.edit || wcmmode.preview)}"
              data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>
