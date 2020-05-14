@@ -62,7 +62,7 @@ public interface Component extends ComponentExporter {
     @JsonProperty("dataLayer")
     @JsonSerialize(using = ComponentDataModelSerializer.class)
     default ComponentData getData() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
