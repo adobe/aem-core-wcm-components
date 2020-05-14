@@ -262,7 +262,7 @@
                         <failOnError>true</failOnError>
                         <verbose>true</verbose>
                         <userId>${vault.user}</userId>
-                        <userId>${vault.password}</userId>
+                        <password>${vault.password}</password>
                         <maxUploadAttemps>3</maxUploadAttemps>
                     </configuration>
                 </plugin>
