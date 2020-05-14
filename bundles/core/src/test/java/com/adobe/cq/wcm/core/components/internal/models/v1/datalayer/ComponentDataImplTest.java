@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * supporting the data layer feature.
  */
 @ExtendWith(AemContextExtension.class)
-class ComponentDataModelImplTest {
+class ComponentDataImplTest {
 
     private static final String TEST_BASE = "/title";
     private static final String TEST_PAGE = "/content/title";
@@ -59,17 +59,17 @@ class ComponentDataModelImplTest {
     @Test
     void getDataLayerJsonWhenDataLayerEnabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, true);
-        assertNotNull(title.getComponentDataModel());
+        assertNotNull(title.getData());
         String expected = "{\"title-7968bee19c\":{\"type\":\"core/wcm/components/title/v1/title\",\"title\":\"Hello World\",\"lastModifiedDate\":\"2016-01-13T15:14:51Z\"}}";
         assertEquals(Json.createReader(new StringReader(expected)).read(),
-                Json.createReader(new StringReader(title.getComponentDataModel().getString())).read());
+                Json.createReader(new StringReader(title.getData().getJson())).read());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
     }
 
     @Test
     void getDataLayerJsonWhenDataLayerDisabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, false);
-        assertNull(title.getComponentDataModel());
+        assertNull(title.getData());
     }
 
     private Title getTitleUnderTest(String resourcePath, boolean dataLayerEnabled, Object ... properties) {

@@ -13,22 +13,23 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
+package com.adobe.cq.wcm.core.components.models.datalayer;
 
-import org.apache.sling.api.resource.Resource;
-import org.jetbrains.annotations.NotNull;
+/**
+ * Interface defining data for container components.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
+ */
+public interface ContainerData extends ComponentData {
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.ContainerDataModel;
-
-public class ContainerDataModelImpl extends ComponentDataModelImpl implements ContainerDataModel {
-
-    public ContainerDataModelImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
-        super(component, resource);
-    }
-
-    @Override
-    public String[] getShownItems() {
-        return component.getDataLayerShownItems();
+    /**
+     * Returns the shown items for container components
+     *
+     * @return Array of shown items
+     *
+     * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
+     */
+    default String[] getShownItems() {
+        throw new UnsupportedOperationException();
     }
 }

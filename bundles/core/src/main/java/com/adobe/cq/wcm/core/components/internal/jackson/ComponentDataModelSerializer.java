@@ -17,27 +17,27 @@ package com.adobe.cq.wcm.core.components.internal.jackson;
 
 import java.io.IOException;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-public class ComponentDataModelSerializer extends StdSerializer<ComponentDataModel> {
+public class ComponentDataModelSerializer extends StdSerializer<ComponentData> {
 
     public ComponentDataModelSerializer() {
         this(null);
     }
 
-    public ComponentDataModelSerializer(Class<ComponentDataModel> t) {
+    public ComponentDataModelSerializer(Class<ComponentData> t) {
         super(t);
     }
 
     @Override
-    public void serialize(ComponentDataModel componentDataModel, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException {
+    public void serialize(ComponentData componentData, JsonGenerator jsonGenerator, SerializerProvider provider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.setCodec(new ObjectMapper());
-        jsonGenerator.writeObjectField(componentDataModel.getId(), componentDataModel);
+        jsonGenerator.writeObjectField(componentData.getId(), componentData);
         jsonGenerator.writeEndObject();
     }
 }

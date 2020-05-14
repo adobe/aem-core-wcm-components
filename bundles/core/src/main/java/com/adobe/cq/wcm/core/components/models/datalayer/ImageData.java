@@ -15,21 +15,24 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
- * Interface defining data for container components.
+ * Interface defining data for image components.
  *
  * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
  */
-public interface ContainerDataModel extends ComponentDataModel {
+public interface ImageData extends ComponentData {
 
     /**
-     * Returns the shown items for container components
+     * Returns the asset associated with the image.
      *
-     * @return Array of shown items
+     * @return Asset data model
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    default String[] getShownItems() {
+    @JsonProperty("asset")
+    default AssetData getAssetData() {
         throw new UnsupportedOperationException();
     }
 }

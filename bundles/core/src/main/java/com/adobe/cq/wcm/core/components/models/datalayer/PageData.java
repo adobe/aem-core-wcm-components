@@ -15,35 +15,28 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
-import java.util.Date;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 /**
- * Interface defining data for assets.
+ * Interface defining data for page components.
  *
  * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public interface AssetDataModel {
+public interface PageData extends ContainerData {
 
     /**
-     * Returns the JCR id of the asset
+     * Returns the page tags used in the data layer
      *
-     * @return Asset JCR id
+     * @return tags array
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    default String getId() {
+    default String[] getTags() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns the asset URL
+     * Returns the page URL used in the data layer
      *
-     * @return Asset URL
+     * @return link URL
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
@@ -52,36 +45,25 @@ public interface AssetDataModel {
     }
 
     /**
-     * Returns the asset format
+     * Returns the page template used in the data layer
      *
-     * @return Asset format
+     * @return JCR template path
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    default String getFormat() {
+    default String getTemplatePath() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns the asset tags
+     * Returns the page language used in the data layer
      *
-     * @return Asset tags
+     * @return language
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    default Map<String, Object> getTags() {
+    default String getLanguage() {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Returns the asset last modified date
-     *
-     * @return Asset last modified date
-     *
-     * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
-     */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    default Date getLastModifiedDate() {
-        throw new UnsupportedOperationException();
-    }
 }

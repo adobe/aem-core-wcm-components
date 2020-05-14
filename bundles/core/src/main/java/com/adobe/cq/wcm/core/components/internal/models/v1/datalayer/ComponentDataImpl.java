@@ -17,9 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-
-import javax.json.JsonObject;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
@@ -28,9 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.commons.jcr.JcrConstants;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,14 +34,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Implements the DataLayer functionality.
  *
  */
-public class ComponentDataModelImpl implements ComponentDataModel {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentDataModelImpl.class);
+public class ComponentDataImpl implements ComponentData {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentDataImpl.class);
 
     protected final AbstractComponentImpl component;
 
     protected final Resource resource;
 
-    public ComponentDataModelImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
+    public ComponentDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
         this.component = component;
         this.resource = resource;
     }
@@ -106,7 +102,7 @@ public class ComponentDataModelImpl implements ComponentDataModel {
     }
 
     @Override
-    public String getString() {
+    public String getJson() {
         try {
             return String.format("{\"%s\":%s}",
                     getId(),

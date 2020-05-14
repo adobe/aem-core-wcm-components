@@ -19,31 +19,25 @@ import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.PageDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.day.cq.dam.api.Asset;
 
-public class PageDataModelImpl extends ContainerDataModelImpl implements PageDataModel {
+public class ImageDataImpl extends ComponentDataImpl implements ImageData {
 
-    public PageDataModelImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
+    public ImageDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
         super(component, resource);
     }
 
     @Override
-    public String getTemplatePath() {
-        return component.getDataLayerTemplatePath();
-    }
-
-    @Override
-    public String getLanguage() {
-        return component.getDataLayerLanguage();
-    }
-
-    @Override
-    public String[] getTags() {
-        return component.getDataLayerTags();
-    }
-
-    @Override
-    public String getUrl() {
-        return component.getDataLayerUrl();
+    public AssetData getAssetData() {
+        Resource assetResource = component.getDataLayerAssetResource();
+        if (assetResource != null) {
+            Asset asset = assetResource.adaptTo(Asset.class);
+            if (asset != null) {
+                return new AssetDataImpl(asset);
+            }
+        }
+        return null;
     }
 }

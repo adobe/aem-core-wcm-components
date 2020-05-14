@@ -95,16 +95,16 @@ class CarouselImplTest {
             assertEquals("The carousel item's path is not what was expected: " + item.getPath(),
                     expectedItems[index][3], item.getPath());
 
-            if (item.getComponentDataModel() != null) {
-                assertNotEquals("The carousel item's data layer string is empty", item.getComponentDataModel().getString(), "{}");
+            if (item.getData() != null) {
+                assertNotEquals("The carousel item's data layer string is empty", item.getData().getJson(), "{}");
 
-                assertEquals("The carousel item's data layer title is not what was expected: " + item.getComponentDataModel().getTitle(),
-                        expectedItems[index][1], item.getComponentDataModel().getTitle());
-                assertEquals("The carousel item's data layer type is not what was expected: " + item.getComponentDataModel().getType(),
-                        expectedItems[index][2], item.getComponentDataModel().getType());
-                assertEquals("The carousel item's data layer id is not what was expected: " + item.getComponentDataModel().getId(),
+                assertEquals("The carousel item's data layer title is not what was expected: " + item.getData().getTitle(),
+                        expectedItems[index][1], item.getData().getTitle());
+                assertEquals("The carousel item's data layer type is not what was expected: " + item.getData().getType(),
+                        expectedItems[index][2], item.getData().getType());
+                assertEquals("The carousel item's data layer id is not what was expected: " + item.getData().getId(),
                         com.adobe.cq.wcm.core.components.internal.Utils.generateId(carouselId + "-item", (String) expectedItems[index][3]),
-                        item.getComponentDataModel().getId());
+                        item.getData().getId());
             }
             index++;
         }

@@ -48,9 +48,9 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataModelImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -303,8 +303,8 @@ public class PageImpl extends AbstractComponentImpl implements Page {
      */
 
     @Override
-    public @Nullable ComponentDataModel getComponentDataModel() {
-        return new PageDataModelImpl(this, resource);
+    public @Nullable ComponentData getData() {
+        return new PageDataImpl(this, resource);
     }
 
     @Override

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 @ConsumerType
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface ComponentDataModel {
+public interface ComponentData {
 
     /**
      * Returns the component's ID
@@ -133,7 +133,7 @@ public interface ComponentDataModel {
      */
     @JsonIgnore
     @Nullable
-    default String getString() {
+    default String getJson() {
         throw new UnsupportedOperationException();
     }
 

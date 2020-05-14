@@ -18,7 +18,7 @@
      id="${tabs.id}"
      class="cmp-tabs"
      data-cmp-is="tabs"
-     data-cmp-data-layer="${tabs.componentDataModel.string}">
+     data-cmp-data-layer="${tabs.data.json}">
     <ol data-sly-test="${tabs.items && tabs.items.size > 0}"
         data-sly-list.tab="${tabs.items}"
         role="tablist"
@@ -41,7 +41,7 @@
          tabindex="0"
          class="cmp-tabs__tabpanel${item.name == tabs.activeItem ? ' cmp-tabs__tabpanel--active' : ''}"
          data-cmp-hook-tabs="tabpanel"
-         data-cmp-data-layer="${item.componentDataModel.string}"></div>
+         data-cmp-data-layer="${item.data.json}"></div>
     <sly data-sly-resource="${resource.path @ resourceType='wcm/foundation/components/parsys/newpar', appendPath='/*', decorationTagName='div', cssClassName='new section aem-Grid-newComponent'}"
          data-sly-test="${(wcmmode.edit || wcmmode.preview) && tabs.items.size < 1}"></sly>
 </div>
