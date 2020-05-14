@@ -26,8 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -125,6 +127,11 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
     /*
      * DataLayerProvider implementation of field getters
      */
+
+    @Override
+    protected @NotNull ComponentData getComponentDataModelInternal() {
+        return new PageDataImpl(this, resource);
+    }
 
     @Override
     public String getDataLayerTitle() {

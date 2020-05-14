@@ -13,19 +13,19 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1;
+package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
-import com.adobe.cq.wcm.core.components.models.DataLayer;
+import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.commons.jcr.JcrConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,43 +34,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Implements the DataLayer functionality.
  *
  */
-public class DataLayerImpl implements DataLayer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataLayerImpl.class);
+public class ComponentDataImpl implements ComponentData {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentDataImpl.class);
 
-    private final AbstractComponentImpl component;
+    protected final AbstractComponentImpl component;
 
-    private final Resource resource;
+    protected final Resource resource;
 
-    private Boolean dataLayerEnabled;
-
-    public DataLayerImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
+    public ComponentDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
         this.component = component;
         this.resource = resource;
     }
 
     @Override
-    public boolean isEnabled() {
-        if (dataLayerEnabled == null) {
-            dataLayerEnabled = false;
-            if (resource != null) {
-                ConfigurationBuilder builder = resource.adaptTo(ConfigurationBuilder.class);
-                if (builder != null) {
-                    DataLayerConfig dataLayerConfig = builder.as(DataLayerConfig.class);
-                    dataLayerEnabled = dataLayerConfig.enabled();
-                }
-            }
-        }
-        return dataLayerEnabled;
-    }
-
-    @Override
-    public Resource getAssetResource() {
-        return component.getDataLayerAssetResource();
-    }
-
-    @Override
     public String getId() {
         return component.getId();
+    }
+
+    @Override
+    public String getParentId() {
+        return null;
     }
 
     @Override
@@ -89,7 +72,7 @@ public class DataLayerImpl implements DataLayer {
     }
 
     @Override
-    public String getLastModifiedDate() {
+    public Date getLastModifiedDate() {
         ValueMap valueMap = resource.adaptTo(ValueMap.class);
         Calendar lastModified = null;
 
@@ -102,7 +85,7 @@ public class DataLayerImpl implements DataLayer {
         }
 
         if (lastModified != null) {
-            return lastModified.toInstant().toString();
+            return lastModified.getTime();
         }
 
         return null;
@@ -114,39 +97,16 @@ public class DataLayerImpl implements DataLayer {
     }
 
     @Override
-    public String[] getTags() {
-        return component.getDataLayerTags();
-    }
-
-    @Override
-    public String getUrl() {
-        return component.getDataLayerUrl();
-    }
-
-    @Override
     public String getLinkUrl() {
         return component.getDataLayerLinkUrl();
     }
 
     @Override
-    public String getTemplatePath() {
-        return component.getDataLayerTemplatePath();
-    }
-
-    @Override
-    public String getLanguage() {
-        return component.getDataLayerLanguage();
-    }
-
-    @Override
-    public String[] getShownItems() {
-        return component.getDataLayerShownItems();
-    }
-
-    @Override
-    public String getString() {
+    public String getJson() {
         try {
-            return new ObjectMapper().writeValueAsString(this);
+            return String.format("{\"%s\":%s}",
+                    getId(),
+                    new ObjectMapper().writeValueAsString(this));
         } catch (JsonProcessingException e) {
             LOGGER.error("Unable to generate dataLayer JSON string", e);
         }

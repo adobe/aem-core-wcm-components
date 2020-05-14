@@ -16,9 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -31,7 +28,7 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.DataLayer;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
 import com.day.cq.wcm.api.components.Component;
@@ -86,9 +83,9 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
             activeItem = items.stream()
                     .filter(e -> StringUtils.equals(e.getName(), activeItemName))
                     .findFirst().orElse(items.get(0));
-            DataLayer dataLayer = activeItem.getDataLayer();
-            if (dataLayer != null) {
-                shownItems = new String[]{dataLayer.getId()};
+            ComponentData componentData = activeItem.getData();
+            if (componentData != null) {
+                shownItems = new String[]{componentData.getId()};
             }
         }
         return shownItems;

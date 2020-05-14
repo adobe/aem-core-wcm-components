@@ -14,7 +14,11 @@
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-package com.adobe.cq.wcm.core.components.internal.models.v1;
+package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
+
+import java.io.StringReader;
+
+import javax.json.Json;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
@@ -28,7 +32,9 @@ import com.adobe.cq.wcm.core.components.models.Title;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Test class to verify the data layer JSON of a component, when the data layer is enabled or disabled.
@@ -36,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * supporting the data layer feature.
  */
 @ExtendWith(AemContextExtension.class)
-class DataLayerImplTest {
+class ComponentDataImplTest {
 
     private static final String TEST_BASE = "/title";
     private static final String TEST_PAGE = "/content/title";
@@ -53,15 +59,17 @@ class DataLayerImplTest {
     @Test
     void getDataLayerJsonWhenDataLayerEnabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, true);
-        assertTrue(title.getDataLayer().isEnabled());
-        assertEquals("{\"title-7968bee19c\":{\"type\":\"core/wcm/components/title/v1/title\",\"title\":\"Hello World\",\"lastModifiedDate\":\"2016-01-13T15:14:51Z\"}}", title.getDataLayer().getString());
+        assertNotNull(title.getData());
+        String expected = "{\"title-7968bee19c\":{\"type\":\"core/wcm/components/title/v1/title\",\"title\":\"Hello World\",\"lastModifiedDate\":\"2016-01-13T15:14:51Z\"}}";
+        assertEquals(Json.createReader(new StringReader(expected)).read(),
+                Json.createReader(new StringReader(title.getData().getJson())).read());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));
     }
 
     @Test
     void getDataLayerJsonWhenDataLayerDisabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, false);
-        assertNull(title.getDataLayer());
+        assertNull(title.getData());
     }
 
     private Title getTitleUnderTest(String resourcePath, boolean dataLayerEnabled, Object ... properties) {
