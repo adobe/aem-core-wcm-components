@@ -32,7 +32,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -87,9 +87,9 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
         String[] shownItems = new String[0];
         List<ListItem> items = getItems();
         if (!items.isEmpty()) {
-            ComponentDataModel componentDataModel = items.get(0).getComponentDataModel();
-            if (componentDataModel != null) {
-                shownItems = new String[] {componentDataModel.getId()};
+            ComponentData componentData = items.get(0).getData();
+            if (componentData != null) {
+                shownItems = new String[] {componentData.getId()};
             }
         }
         return shownItems;

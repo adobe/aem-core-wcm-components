@@ -19,11 +19,11 @@ import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.PageDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 
-public class PageDataModelImpl extends ContainerDataModelImpl implements PageDataModel {
+public class PageDataImpl extends ContainerDataImpl implements PageData {
 
-    public PageDataModelImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
+    public PageDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
         super(component, resource);
     }
 

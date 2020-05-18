@@ -39,10 +39,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContainerDataModelImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContainerDataImpl;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
@@ -246,7 +246,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
      */
 
     @Override
-    public @Nullable ComponentDataModel getComponentDataModel() {
-        return new ContainerDataModelImpl(this, resource);
+    public @Nullable ComponentData getData() {
+        return new ContainerDataImpl(this, resource);
     }
 }

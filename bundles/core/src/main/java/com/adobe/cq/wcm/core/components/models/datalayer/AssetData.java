@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface AssetDataModel {
+public interface AssetData {
 
     /**
      * Returns the JCR id of the asset

@@ -19,23 +19,23 @@ import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl;
-import com.adobe.cq.wcm.core.components.models.datalayer.AssetDataModel;
-import com.adobe.cq.wcm.core.components.models.datalayer.ImageDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.day.cq.dam.api.Asset;
 
-public class ImageDataModelImpl extends ComponentDataModelImpl implements ImageDataModel {
+public class ImageDataImpl extends ComponentDataImpl implements ImageData {
 
-    public ImageDataModelImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
+    public ImageDataImpl(@NotNull AbstractComponentImpl component, @NotNull Resource resource) {
         super(component, resource);
     }
 
     @Override
-    public AssetDataModel getImage() {
+    public AssetData getAssetData() {
         Resource assetResource = component.getDataLayerAssetResource();
         if (assetResource != null) {
             Asset asset = assetResource.adaptTo(Asset.class);
             if (asset != null) {
-                return new AssetDataModelImpl(asset);
+                return new AssetDataImpl(asset);
             }
         }
         return null;

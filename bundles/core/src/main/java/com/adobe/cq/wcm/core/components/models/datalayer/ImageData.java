@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
  */
-public interface ImageDataModel extends ComponentDataModel {
+public interface ImageData extends ComponentData {
 
     /**
      * Returns the asset associated with the image.
@@ -32,7 +32,7 @@ public interface ImageDataModel extends ComponentDataModel {
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
     @JsonProperty("image")
-    default AssetDataModel getImage() {
+    default AssetData getAssetData() {
         throw new UnsupportedOperationException();
     }
 }

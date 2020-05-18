@@ -21,10 +21,8 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.internal.jackson.ComponentDataModelSerializer;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -56,15 +54,15 @@ public interface Component extends ComponentExporter {
     /**
      * Returns the data layer information associated with the component
      *
-     * @return {@link ComponentDataModel} object associated with the component
+     * @return {@link ComponentData} object associated with the component
      *
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     @Nullable
     @JsonProperty("dataLayer")
     @JsonSerialize(using = ComponentDataModelSerializer.class)
-    default ComponentDataModel getComponentDataModel() {
-        throw new UnsupportedOperationException();
+    default ComponentData getData() {
+        return null;
     }
 
     /**

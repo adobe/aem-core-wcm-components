@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AssetDataModelImplTest {
+public class AssetDataImplTest {
 
     @Test
     void testGetLastModifiedDate() {
@@ -37,7 +37,7 @@ public class AssetDataModelImplTest {
         when(asset.adaptTo(ValueMap.class)).thenReturn(valueMap);
         Calendar now = Calendar.getInstance();
         when(valueMap.get(JcrConstants.JCR_CREATED, Calendar.class)).thenReturn(now);
-        assertEquals(now.getTime(), new AssetDataModelImpl(asset).getLastModifiedDate());
+        assertEquals(now.getTime(), new AssetDataImpl(asset).getLastModifiedDate());
 
     }
 }

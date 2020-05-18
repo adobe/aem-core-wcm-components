@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
  */
-public interface PageDataModel extends ContainerDataModel {
+public interface PageData extends ContainerData {
 
     /**
      * Returns the page tags used in the data layer

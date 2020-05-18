@@ -25,15 +25,15 @@ import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.AssetDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.tagging.TagConstants;
 
-public class AssetDataModelImpl implements AssetDataModel {
+public class AssetDataImpl implements AssetData {
 
     private final Asset asset;
 
-    public AssetDataModelImpl(@NotNull Asset asset) {
+    public AssetDataImpl(@NotNull Asset asset) {
         this.asset= asset;
     }
 

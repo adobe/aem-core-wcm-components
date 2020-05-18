@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataModelImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataImpl;
 import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentDataModel;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
@@ -58,7 +58,7 @@ public abstract class AbstractComponentImpl implements Component {
 
     private String id;
     private Boolean dataLayerEnabled;
-    private ComponentDataModel componentDataModel;
+    private ComponentData componentData;
 
     @Nullable
     @Override
@@ -155,14 +155,14 @@ public abstract class AbstractComponentImpl implements Component {
 
     @Override
     @Nullable
-    public ComponentDataModel getComponentDataModel() {
+    public ComponentData getData() {
         if (!isDataLayerEnabled()) {
             return null;
         }
-        if (componentDataModel == null) {
-            componentDataModel = getComponentDataModelInternal();
+        if (componentData == null) {
+            componentData = getComponentDataModelInternal();
         }
-        return componentDataModel;
+        return componentData;
     }
 
     /**
@@ -170,8 +170,8 @@ public abstract class AbstractComponentImpl implements Component {
      */
 
     @NotNull
-    protected ComponentDataModel getComponentDataModelInternal() {
-        return new ComponentDataModelImpl(this, resource);
+    protected ComponentData getComponentDataModelInternal() {
+        return new ComponentDataImpl(this, resource);
     }
 
     @JsonIgnore

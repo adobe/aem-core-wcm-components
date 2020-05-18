@@ -89,23 +89,24 @@ public class AbstractModelTest {
                         errors.append("Method ").append(m.toString()).append(" was not marked as default.\n");
                     }
                     Throwable t = null;
+                    Object ret = null;
                     try {
                         if (m.getParameterCount() > 0) {
-                            m.invoke(instance, new Object[m.getParameterCount()]);
+                            ret = m.invoke(instance, new Object[m.getParameterCount()]);
                         } else {
-                            m.invoke(instance);
+                            ret = m.invoke(instance);
                         }
                     } catch (InvocationTargetException e) {
                         t = e.getCause();
                     }
-                    if (t == null || !(t instanceof UnsupportedOperationException)) {
+                    if ((t == null || !(t instanceof UnsupportedOperationException)) && ret != null) {
                         errors.append("Expected method ")
                                 .append(m.toString())
                                 .append("in class ")
                                 .append(clazz.getName())
                                 .append(" to throw an ")
                                 .append(UnsupportedOperationException.class.getName())
-                                .append(".\n");
+                                .append(" or return null.\n");
                     }
                 }
             }
