@@ -36,7 +36,7 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    @JsonProperty("@id")
+    @JsonProperty("repo:id")
     default String getId() {
         throw new UnsupportedOperationException();
     }
