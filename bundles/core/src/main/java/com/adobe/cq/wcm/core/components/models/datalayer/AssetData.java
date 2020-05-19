@@ -49,7 +49,7 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    @JsonProperty("repo")
+    @JsonProperty("repo:path")
     default String getUrl() {
         throw new UnsupportedOperationException();
     }

@@ -15,8 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Interface defining data for container components.
  *
@@ -31,7 +29,6 @@ public interface ContainerData extends ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    @JsonProperty("xdm:items")
     default String[] getShownItems() {
         throw new UnsupportedOperationException();
     }
