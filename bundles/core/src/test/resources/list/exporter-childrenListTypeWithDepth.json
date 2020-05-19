@@ -33,7 +33,7 @@
     ],
     "dataLayer": {
         "list-84128a1e08": {
-            "type": "core/wcm/components/list"
+            "@type": "core/wcm/components/list"
         }
     },
     "showDescription": false,

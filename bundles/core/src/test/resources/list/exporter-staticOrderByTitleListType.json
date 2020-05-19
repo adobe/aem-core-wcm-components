@@ -19,7 +19,7 @@
     ],
     "dataLayer": {
         "list-3684f2d161": {
-            "type": "core/wcm/components/list"
+            "@type": "core/wcm/components/list"
         }
     },
     "showDescription": true,

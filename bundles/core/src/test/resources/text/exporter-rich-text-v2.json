@@ -4,8 +4,8 @@
     "richText": true,
     "dataLayer": {
         "text-5e2ef0550b": {
-            "text": "<p>rich</p>",
-            "type": "core/wcm/components/text/v2/text"
+            "xdm:text": "<p>rich</p>",
+            "@type": "core/wcm/components/text/v2/text"
         }
     },
     ":type": "core/wcm/components/text/v2/text"
