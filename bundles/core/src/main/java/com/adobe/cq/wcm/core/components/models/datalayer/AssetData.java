@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
 import java.util.Date;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -73,7 +72,8 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    default Map<String, Object> getTags() {
+    @JsonProperty("xdm:tags")
+    default String[] getTags() {
         throw new UnsupportedOperationException();
     }
 

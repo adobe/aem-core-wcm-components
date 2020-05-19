@@ -31,6 +31,7 @@ public interface PageData extends ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:tags")
     default String[] getTags() {
         throw new UnsupportedOperationException();
     }

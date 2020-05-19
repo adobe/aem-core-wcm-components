@@ -115,6 +115,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:text")
     default String getText() {
         throw new UnsupportedOperationException();
     }
@@ -126,6 +127,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:linkURL")
     default String getLinkUrl() {
         throw new UnsupportedOperationException();
     }
