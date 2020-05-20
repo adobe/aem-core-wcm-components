@@ -82,7 +82,7 @@
             }
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
-            var deepLinkItemIdx = getDeepLinkItemIdx();
+            var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tabpanel");
             var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
             if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
                 navigateAndFocusTab(deepLinkItemIdx);
@@ -308,28 +308,6 @@
                 dataLayer.push(removePayload);
                 dataLayer.push(uploadPayload);
             }
-        }
-
-        /**
-         * Returns the tab item index that corresponds to the deep link in the URL fragment
-         *
-         * @private
-         * @returns {Number} the tab item index if it exists, -1 otherwise
-         */
-        function getDeepLinkItemIdx() {
-            if (window.location.hash) {
-                var deepLinkId = window.location.hash.substring(1);
-                if (document.getElementById(deepLinkId) &&
-                    deepLinkId && deepLinkId.indexOf(that._config.element.id + "-item-") === 0) {
-                    for (var i = 0; i < that._elements["tab"].length; i++) {
-                        var item = that._elements["tab"][i];
-                        if (item.id === deepLinkId) {
-                            return i;
-                        }
-                    }
-                }
-            }
-            return -1;
         }
     }
 

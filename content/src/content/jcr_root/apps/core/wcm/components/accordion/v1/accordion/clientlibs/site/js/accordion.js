@@ -115,7 +115,7 @@
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
                 // Expand the item based on deep-link-id if it matches with any existing accordion item id
-                var deepLinkItem = getDeepLinkItem();
+                var deepLinkItem = CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
                 if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
                     setItemExpanded(deepLinkItem, true);
                 }
@@ -489,27 +489,6 @@
         function focusButton(index) {
             var button = that._elements["button"][index];
             button.focus();
-        }
-
-        /**
-         * Returns the accordion item that corresponds to the deep link in the URL fragment
-         *
-         * @private
-         * @returns {Object} the accordion item if it exists, undefined otherwise
-         */
-        function getDeepLinkItem() {
-            if (window.location.hash) {
-                var deepLinkId = window.location.hash.substring(1);
-                if (document.getElementById(deepLinkId) &&
-                    deepLinkId && deepLinkId.indexOf(that._config.element.id + "-item-") === 0) {
-                    for (var i = 0; i < that._elements["item"].length; i++) {
-                        var item = that._elements["item"][i];
-                        if (item.id === deepLinkId) {
-                            return item;
-                        }
-                    }
-                }
-            }
         }
     }
 
