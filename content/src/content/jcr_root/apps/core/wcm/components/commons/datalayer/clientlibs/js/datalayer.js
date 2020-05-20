@@ -38,13 +38,7 @@
         if (parentElement) {
 
             if (parentElement.tagName === "BODY") {
-                parentData = dataLayer.find(function(element) {
-                    return element.data !== undefined && element.data.page !== undefined;
-                });
-
-                if (parentData !== undefined) {
-                    component[componentID].parentId = Object.keys(parentData.data.page)[0];
-                }
+                component[componentID].parentId = Object.keys(dataLayer.getState("page"))[0];
             } else {
                 parentData = getComponentData(parentElement);
                 component[componentID].parentId = Object.keys(parentData)[0];
