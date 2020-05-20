@@ -15,12 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Interface defining data for page components.
  *
  * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
  */
-public interface PageData extends ContainerData {
+public interface PageData extends ComponentData {
 
     /**
      * Returns the page tags used in the data layer
@@ -29,6 +31,7 @@ public interface PageData extends ContainerData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:tags")
     default String[] getTags() {
         throw new UnsupportedOperationException();
     }
@@ -40,6 +43,7 @@ public interface PageData extends ContainerData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo:path")
     default String getUrl() {
         throw new UnsupportedOperationException();
     }
@@ -51,6 +55,7 @@ public interface PageData extends ContainerData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:template")
     default String getTemplatePath() {
         throw new UnsupportedOperationException();
     }
@@ -62,6 +67,7 @@ public interface PageData extends ContainerData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:language")
     default String getLanguage() {
         throw new UnsupportedOperationException();
     }

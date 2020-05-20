@@ -6,10 +6,10 @@
     "link": "https://www.adobe.com",
     "dataLayer": {
         "image-4fdb43cd81": {
-            "lastModifiedDate": "2017-03-20T10:20:39Z",
-            "linkUrl": "https://www.adobe.com",
-            "type": "core/wcm/components/image/v1/image",
-            "title": "Adobe Logo"
+            "repo:modifyDate": "2017-03-20T10:20:39Z",
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/image/v1/image",
+            "dc:title": "Adobe Logo"
         }
     },
     ":type": "core/wcm/components/image/v1/image"

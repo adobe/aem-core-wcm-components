@@ -5,9 +5,9 @@
     "icon": "adobe",
     "dataLayer": {
         "button-0b8ad69ce8": {
-            "linkUrl": "https://www.adobe.com",
-            "type": "core/wcm/components/button/v1/button",
-            "title": "Adobe"
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/button/v1/button",
+            "dc:title": "Adobe"
         }
     },
     ":type": "core/wcm/components/button/v1/button"

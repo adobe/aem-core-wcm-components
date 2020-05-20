@@ -16,10 +16,10 @@
 package com.adobe.cq.wcm.core.components.models.datalayer;
 
 import java.util.Date;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Interface defining data for assets.
@@ -36,6 +36,7 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo:id")
     default String getId() {
         throw new UnsupportedOperationException();
     }
@@ -47,6 +48,7 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo:path")
     default String getUrl() {
         throw new UnsupportedOperationException();
     }
@@ -58,6 +60,7 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("@type")
     default String getFormat() {
         throw new UnsupportedOperationException();
     }
@@ -69,7 +72,8 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
-    default Map<String, Object> getTags() {
+    @JsonProperty("xdm:tags")
+    default String[] getTags() {
         throw new UnsupportedOperationException();
     }
 
@@ -80,6 +84,7 @@ public interface AssetData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo:modifyDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     default Date getLastModifiedDate() {
         throw new UnsupportedOperationException();

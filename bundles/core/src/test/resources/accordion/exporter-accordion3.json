@@ -6,7 +6,7 @@
     ],
     "dataLayer": {
         "accordion-96bc1a6527": {
-            "type": "core/wcm/components/accordion/v1/accordion",
+            "@type": "core/wcm/components/accordion/v1/accordion",
             "shownItems": [
                 "accordion-96bc1a6527-item-831c5ecd0f"
             ]
@@ -34,9 +34,9 @@
                     "id": "teaser-3c4ffb212c",
                     "dataLayer": {
                         "teaser-3c4ffb212c": {
-                            "description": "Teaser 1 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 1"
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -51,9 +51,9 @@
                     "id": "teaser-14cf5ac7d2",
                     "dataLayer": {
                         "teaser-14cf5ac7d2": {
-                            "description": "Teaser 2 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 2"
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -78,9 +78,9 @@
                     "id": "teaser-e1de7e067f",
                     "dataLayer": {
                         "teaser-e1de7e067f": {
-                            "description": "Teaser 1 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 1"
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -95,9 +95,9 @@
                     "id": "teaser-debff7e409",
                     "dataLayer": {
                         "teaser-debff7e409": {
-                            "description": "Teaser 2 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 2"
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"

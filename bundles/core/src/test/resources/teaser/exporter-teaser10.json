@@ -10,10 +10,10 @@
   "imagePath": "/core/content/teasers/_jcr_content/root/responsivegrid/teaser-7.coreimg.png/1490005239000/adobe-systems-logo-and-wordmark.png",
   "dataLayer": {
     "teaser-6a61ad8d2f": {
-      "linkUrl": "/core/content/teasers.html",
-      "description": "Description",
-      "type": "core/wcm/components/teaser/v1/teaser",
-      "title": "Teaser"
+      "xdm:linkURL": "/core/content/teasers.html",
+      "dc:description": "Description",
+      "@type": "core/wcm/components/teaser/v1/teaser",
+      "dc:title": "Teaser"
     }
   },
   ":type": "core/wcm/components/teaser/v1/teaser"

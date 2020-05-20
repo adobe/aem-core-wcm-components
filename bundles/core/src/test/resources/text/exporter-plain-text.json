@@ -4,8 +4,8 @@
     "richText": false,
     "dataLayer": {
         "text-28636c5fc9": {
-            "text": "plain",
-            "type": "core/wcm/components/text/v1/text"
+            "xdm:text": "plain",
+            "@type": "core/wcm/components/text/v1/text"
         }
     },
     ":type": "core/wcm/components/text/v1/text"
