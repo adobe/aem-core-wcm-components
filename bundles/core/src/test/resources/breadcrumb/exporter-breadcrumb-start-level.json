@@ -8,9 +8,9 @@
             "title": "Shirts",
             "dataLayer": {
                 "breadcrumb-be02fd85b6-item-0b751aeddc": {
-                    "linkUrl": "/content/breadcrumb/women/shirts.html",
-                    "type": "coretest/components/structure/page",
-                    "title": "Shirts"
+                    "xdm:linkURL": "/content/breadcrumb/women/shirts.html",
+                    "@type": "coretest/components/structure/page",
+                    "dc:title": "Shirts"
                 }
             },
             ":type": "coretest/components/structure/page"
@@ -22,9 +22,9 @@
             "title": "Devi Sleeveless Shirt",
             "dataLayer": {
                 "breadcrumb-be02fd85b6-item-a66a50bca8": {
-                    "linkUrl": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
-                    "type": "coretest/components/structure/page",
-                    "title": "Devi Sleeveless Shirt"
+                    "xdm:linkURL": "/content/breadcrumb/women/shirts/devi-sleeveless-shirt.html",
+                    "@type": "coretest/components/structure/page",
+                    "dc:title": "Devi Sleeveless Shirt"
                 }
             },
             ":type": "coretest/components/structure/page"
@@ -32,8 +32,8 @@
     ],
     "dataLayer": {
         "breadcrumb-be02fd85b6": {
-            "lastModifiedDate": "2016-01-11T15:21:45Z",
-            "type": "core/wcm/components/breadcrumb"
+            "repo:modifyDate": "2016-01-11T15:21:45Z",
+            "@type": "core/wcm/components/breadcrumb"
         }
     },
     ":type": "core/wcm/components/breadcrumb"

@@ -17,8 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.JcrConstants;
@@ -67,17 +67,17 @@ public class AssetDataImpl implements AssetData {
     }
 
     @Override
-    public Map<String, Object> getTags() {
-        Map<String, Object> assetTags = new LinkedHashMap<>();
+    public String[] getTags() {
+        List<String> assetTags = new LinkedList<>();
         String tagsValue = asset.getMetadataValueFromJcr(TagConstants.PN_TAGS);
         if (StringUtils.isNotEmpty(tagsValue)) {
             String[] tags = tagsValue.split(",");
             for (String tag : tags) {
                 if (StringUtils.isNotEmpty(tag)) {
-                    assetTags.put(tag, 1);
+                    assetTags.add(tag);
                 }
             }
         }
-        return assetTags;
+        return assetTags.toArray(new String[assetTags.size()]);
     }
 }

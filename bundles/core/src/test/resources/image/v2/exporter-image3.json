@@ -12,9 +12,9 @@
     "link": "https://www.adobe.com",
     "dataLayer": {
         "image-4fdb43cd81": {
-            "linkUrl": "https://www.adobe.com",
-            "type": "core/wcm/components/image/v2/image",
-            "title": "Adobe Logo"
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/image/v2/image",
+            "dc:title": "Adobe Logo"
         }
     },
     ":type": "core/wcm/components/image/v2/image"

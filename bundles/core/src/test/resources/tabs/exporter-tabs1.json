@@ -4,7 +4,7 @@
     "tabsId": "-root-responsivegrid-tabs-1",
     "dataLayer": {
         "tabs-3dc934841b": {
-            "type": "core/wcm/components/tabs/v1/tabs",
+            "@type": "core/wcm/components/tabs/v1/tabs",
             "shownItems": [
                 "tabs-3dc934841b-item-7fea3384a5"
             ]
@@ -32,9 +32,9 @@
                     "id": "teaser-5e80f2b18f",
                     "dataLayer": {
                         "teaser-5e80f2b18f": {
-                            "description": "Teaser 1 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 1"
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -49,9 +49,9 @@
                     "id": "teaser-c4c744ca71",
                     "dataLayer": {
                         "teaser-c4c744ca71": {
-                            "description": "Teaser 2 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 2"
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -76,9 +76,9 @@
                     "id": "teaser-af667597f0",
                     "dataLayer": {
                         "teaser-af667597f0": {
-                            "description": "Teaser 1 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 1"
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -93,9 +93,9 @@
                     "id": "teaser-71ba02337b",
                     "dataLayer": {
                         "teaser-71ba02337b": {
-                            "description": "Teaser 2 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 2"
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"

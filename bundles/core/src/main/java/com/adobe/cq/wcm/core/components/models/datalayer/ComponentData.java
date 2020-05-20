@@ -23,6 +23,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A base interface to be extended by components that need to enable data layer integration.
@@ -41,6 +42,7 @@ public interface ComponentData {
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
     @JsonIgnore
+    @JsonProperty("@id")
     default String getId() {
         throw new UnsupportedOperationException();
     }
@@ -52,6 +54,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("@type")
     default String getType() {
         throw new UnsupportedOperationException();
     }
@@ -63,6 +66,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("repo:modifyDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     default Date getLastModifiedDate() {
         throw new UnsupportedOperationException();
@@ -87,6 +91,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("dc:title")
     default String getTitle() {
         throw new UnsupportedOperationException();
     }
@@ -98,6 +103,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("dc:description")
     default String getDescription() {
         throw new UnsupportedOperationException();
     }
@@ -109,6 +115,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:text")
     default String getText() {
         throw new UnsupportedOperationException();
     }
@@ -120,6 +127,7 @@ public interface ComponentData {
      *
      * @since com.adobe.cq.wcm.core.components.models.datalayer 1.0.0
      */
+    @JsonProperty("xdm:linkURL")
     default String getLinkUrl() {
         throw new UnsupportedOperationException();
     }

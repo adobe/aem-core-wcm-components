@@ -12,7 +12,7 @@
     ],
     "dataLayer": {
         "list-513f2340c1": {
-            "type": "core/wcm/components/list"
+            "@type": "core/wcm/components/list"
         }
     },
     "showDescription": true,
