@@ -111,14 +111,4 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
         }
         return shownItems;
     }
-
-    @Override
-    public String getTabsId() {
-        String resourcePath = resource.getPath();
-        String identifier = resourcePath.substring(resourcePath.indexOf(JCR_CONTENT) + JCR_CONTENT.length());
-        if (resourcePath.startsWith("/conf")) {
-            identifier += "-template";
-        }
-        return identifier.replace("/", "-");
-    }
 }

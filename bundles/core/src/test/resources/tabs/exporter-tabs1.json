@@ -1,7 +1,6 @@
 {
     "id": "tabs-3dc934841b",
     "activeItem": "item_2",
-    "tabsId": "-root-responsivegrid-tabs-1",
     "dataLayer": {
         "tabs-3dc934841b": {
             "@type": "core/wcm/components/tabs/v1/tabs",

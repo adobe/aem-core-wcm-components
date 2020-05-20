@@ -44,14 +44,4 @@ public interface Tabs extends Container {
     default String getAccessibilityLabel() {
         throw new UnsupportedOperationException();
     }
-
-    /**
-     * Returns an unique ID for the tab based on resource path.
-     *
-     * @return an UID for tabs
-     * @since com.adobe.cq.wcm.core.components.models 12.13.0
-     */
-    default String getTabsId() {
-        throw new UnsupportedOperationException();
-    }
 }
