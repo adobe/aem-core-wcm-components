@@ -4,5 +4,5 @@
     jcr:description="Form Text Component for the Component Library"
     jcr:primaryType="cq:Component"
     jcr:title="Form Text"
-    sling:resourceSuperType="core/wcm/extensions/amp/components/form/text/v1/text"
+    sling:resourceSuperType="core/wcm/components/form/text/v2/text"
     componentGroup="Core Components Examples - Form"/>

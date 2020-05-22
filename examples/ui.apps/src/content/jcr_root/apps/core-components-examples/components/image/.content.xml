@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2020 Adobe
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,10 +15,8 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="form"
-    cq:isContainer="{Boolean}true"
-    jcr:description="Form Container component for the Core Components Library"
+    jcr:description="Image Component for the Core Components Library"
     jcr:primaryType="cq:Component"
-    jcr:title="Form Container"
-    sling:resourceSuperType="core/wcm/components/form/container/v2/container"
-    componentGroup="Core Components Examples - Form"/>
+    jcr:title="Image"
+    sling:resourceSuperType="core/wcm/components/image/v2/image"
+    componentGroup="Core Components Examples"/>

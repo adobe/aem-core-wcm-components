@@ -1,485 +1,485 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:primaryType="cq:Page">
+          jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2019-12-08T11:08:38.587+01:00"
-        cq:lastModifiedBy="admin"
-        cq:tags="[core-components-examples:component-type/page-authoring]"
-        cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
-        jcr:description="Link an image and text"
-        jcr:primaryType="cq:PageContent"
-        jcr:title="Teaser"
-        sling:resourceType="core-components-examples/components/page">
+            cq:lastModified="{Date}2019-12-08T11:08:38.587+01:00"
+            cq:lastModifiedBy="admin"
+            cq:tags="[core-components-examples:component-type/page-authoring]"
+            cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
+            jcr:description="Link an image and text"
+            jcr:primaryType="cq:PageContent"
+            jcr:title="Teaser"
+            sling:resourceType="core-components-examples/components/page">
         <root
-            jcr:primaryType="nt:unstructured"
-            sling:resourceType="wcm/foundation/components/responsivegrid">
-            <responsivegrid
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="wcm/foundation/components/responsivegrid">
+            <responsivegrid
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="wcm/foundation/components/responsivegrid">
                 <text_1740702241
-                    cq:styleIds="[1644862132301]"
-                    jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Teaser&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
-                    textIsRich="true"/>
-                <text
-                    cq:styleIds="[1544762734201]"
-                    jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:32:37.460+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined.&lt;/p>&#xa;"
-                    textIsRich="true"/>
-                <teaser
-                    cq:styleIds="[1550165685463]"
-                    jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
-                    jcr:createdBy="admin"
-                    jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
-                    jcr:lastModified="{Date}2019-02-14T16:49:57.290+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Technical Documentation"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                    actionsEnabled="false"
-                    descriptionFromPage="false"
-                    fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_tech_teaser_v1"
-                    textIsRich="true"
-                    titleFromPage="false"/>
-                <teaser_556024830
-                    cq:styleIds="[1550165685463]"
-                    jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
-                    jcr:createdBy="admin"
-                    jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
-                    jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Using Core Components"
-                    sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                    actionsEnabled="false"
-                    descriptionFromPage="false"
-                    fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/go/aem_cmp_teaser_v1"
-                    textIsRich="true"
-                    titleFromPage="false"/>
-                <title_865328580
-                    cq:styleIds="[1544759664489]"
-                    jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Examples"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h2"/>
-                <title_290384408
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-08T11:06:27.493+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Pretitle, Title and Description"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h3"/>
-                <text_1337506761
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-08T11:06:35.399+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Teaser with a pretitle, title and description.&lt;/p>"
-                    textIsRich="true"/>
-                <demo
-                    jcr:created="{Date}2018-12-07T13:36:02.946+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:02.946+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo"
-                    fullWidth="{Boolean}true">
-                    <component
+                        cq:styleIds="[1644862132301]"
+                        jcr:created="{Date}2019-02-15T19:05:53.032+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-02-15T19:09:39.787+01:00"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <teaser
-                            jcr:created="{Date}2018-12-07T13:36:34.343+01:00"
-                            jcr:createdBy="admin"
-                            jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
-                            jcr:lastModified="{Date}2019-12-08T11:05:56.255+01:00"
-                            jcr:lastModifiedBy="admin"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;h1>Teaser&lt;sub>v1&lt;/sub>&lt;/h1>&#xa;"
+                        textIsRich="true"/>
+                <text
+                        cq:styleIds="[1544762734201]"
+                        jcr:created="{Date}2018-12-06T19:11:23.947+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:32:37.460+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Teaser allows the grouping of an image, title and description for promoting and linking to site content sections. One or more actions can also be defined.&lt;/p>&#xa;"
+                        textIsRich="true"/>
+                <teaser
+                        cq:styleIds="[1550165685463]"
+                        jcr:created="{Date}2019-02-14T16:41:54.952+01:00"
+                        jcr:createdBy="admin"
+                        jcr:description="&lt;p>GitHub&lt;/p>&#xd;&#xa;"
+                        jcr:lastModified="{Date}2019-02-14T16:49:57.290+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Technical Documentation"
+                        sling:resourceType="core-components-examples/components/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="false"
+                        fileReference="/content/dam/core-components-examples/library/github-logo.svg"
+                        linkURL="https://www.adobe.com/go/aem_cmp_tech_teaser_v1"
+                        textIsRich="true"
+                        titleFromPage="false"/>
+                <teaser_556024830
+                        cq:styleIds="[1550165685463]"
+                        jcr:created="{Date}2019-02-14T16:41:59.595+01:00"
+                        jcr:createdBy="admin"
+                        jcr:description="&lt;p>Adobe Help Center&lt;/p>&#xd;&#xa;"
+                        jcr:lastModified="{Date}2019-02-14T17:47:53.311+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Using Core Components"
+                        sling:resourceType="core-components-examples/components/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="false"
+                        fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
+                        linkURL="https://www.adobe.com/go/aem_cmp_teaser_v1"
+                        textIsRich="true"
+                        titleFromPage="false"/>
+                <title_865328580
+                        cq:styleIds="[1544759664489]"
+                        jcr:created="{Date}2018-12-06T19:22:23.729+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-06T19:23:25.116+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Examples"
+                        sling:resourceType="core/wcm/components/title/v2/title"
+                        type="h2"/>
+                <title_290384408
+                        cq:styleIds="[1544759676459]"
+                        jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-12-08T11:06:27.493+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Pretitle, Title and Description"
+                        sling:resourceType="core/wcm/components/title/v2/title"
+                        type="h3"/>
+                <text_1337506761
+                        jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-12-08T11:06:35.399+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Teaser with a pretitle, title and description.&lt;/p>"
+                        textIsRich="true"/>
+                <demo
+                        jcr:created="{Date}2018-12-07T13:36:02.946+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:36:02.946+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo"
+                        fullWidth="{Boolean}true">
+                    <component
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Teaser Title"
-                            sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                            actionsEnabled="false"
-                            descriptionFromPage="false"
-                            pretitle="Pretitle"
-                            textIsRich="true"
-                            titleFromPage="false"/>
+                            sling:resourceType="core-components-examples/components/demo/component">
+                        <teaser
+                                jcr:created="{Date}2018-12-07T13:36:34.343+01:00"
+                                jcr:createdBy="admin"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:lastModified="{Date}2019-12-08T11:05:56.255+01:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Teaser Title"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="false"
+                                descriptionFromPage="false"
+                                pretitle="Pretitle"
+                                textIsRich="true"
+                                titleFromPage="false"/>
                     </component>
                     <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
                         <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
+                                cq:panelTitle="Properties"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/properties"
+                                reference="../../component"/>
                         <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
+                                cq:panelTitle="Markup"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/markup"
+                                reference="../../component"/>
                         <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
+                                cq:panelTitle="JSON"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/json"
+                                reference="../../component"/>
                     </info>
                 </demo>
                 <title_290385000
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-08T11:08:24.441+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Image, Pretitle, Title and Description"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h3"/>
-                <text_1337505001
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2019-12-08T11:08:31.143+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Teaser with an image, pretitle, title and description.&lt;/p>"
-                    textIsRich="true"/>
-                <demo_1160408466
-                    jcr:created="{Date}2018-12-07T13:36:07.808+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:07.808+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
+                        cq:styleIds="[1544759676459]"
+                        jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-12-08T11:08:24.441+01:00"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <teaser
-                            jcr:created="{Date}2018-12-07T13:36:37.955+01:00"
-                            jcr:createdBy="admin"
-                            jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
-                            jcr:lastModified="{Date}2019-12-08T11:08:38.580+01:00"
-                            jcr:lastModifiedBy="admin"
+                        jcr:title="Image, Pretitle, Title and Description"
+                        sling:resourceType="core/wcm/components/title/v2/title"
+                        type="h3"/>
+                <text_1337505001
+                        jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2019-12-08T11:08:31.143+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Teaser with an image, pretitle, title and description.&lt;/p>"
+                        textIsRich="true"/>
+                <demo_1160408466
+                        jcr:created="{Date}2018-12-07T13:36:07.808+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:36:07.808+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo">
+                    <component
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Teaser Title"
-                            sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                            actionsEnabled="false"
-                            descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
-                            pretitle="Pretitle"
-                            textIsRich="true"
-                            titleFromPage="false"/>
+                            sling:resourceType="core-components-examples/components/demo/component">
+                        <teaser
+                                jcr:created="{Date}2018-12-07T13:36:37.955+01:00"
+                                jcr:createdBy="admin"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:lastModified="{Date}2019-12-08T11:08:38.580+01:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Teaser Title"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="false"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
+                                pretitle="Pretitle"
+                                textIsRich="true"
+                                titleFromPage="false"/>
                     </component>
                     <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
                         <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
+                                cq:panelTitle="Properties"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/properties"
+                                reference="../../component"/>
                         <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
+                                cq:panelTitle="Markup"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/markup"
+                                reference="../../component"/>
                         <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
+                                cq:panelTitle="JSON"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/json"
+                                reference="../../component"/>
                     </info>
                 </demo_1160408466>
                 <title_290386000
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:33:24.237+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Linked"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h3"/>
-                <text_1337506001
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:33:26.650+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Teasers can be linked to internal relative AEM resources or external absolute URLs.&lt;/p>&#xa;"
-                    textIsRich="true"/>
-                <demo_1789748122
-                    jcr:created="{Date}2018-12-07T13:36:13.375+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:13.375+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
+                        cq:styleIds="[1544759676459]"
+                        jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:33:24.237+01:00"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <teaser
-                            jcr:created="{Date}2018-12-07T13:36:40.747+01:00"
-                            jcr:createdBy="admin"
-                            jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
-                            jcr:lastModified="{Date}2018-12-07T13:39:46.887+01:00"
-                            jcr:lastModifiedBy="admin"
+                        jcr:title="Linked"
+                        sling:resourceType="core/wcm/components/title/v2/title"
+                        type="h3"/>
+                <text_1337506001
+                        jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:33:26.650+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Teasers can be linked to internal relative AEM resources or external absolute URLs.&lt;/p>&#xa;"
+                        textIsRich="true"/>
+                <demo_1789748122
+                        jcr:created="{Date}2018-12-07T13:36:13.375+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:36:13.375+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo">
+                    <component
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Linked Teaser"
-                            sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                            actionsEnabled="false"
-                            descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
-                            linkURL="/content/core-components-examples/library/page-authoring/teaser"
-                            textIsRich="true"
-                            titleFromPage="false"/>
+                            sling:resourceType="core-components-examples/components/demo/component">
+                        <teaser
+                                jcr:created="{Date}2018-12-07T13:36:40.747+01:00"
+                                jcr:createdBy="admin"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:lastModified="{Date}2018-12-07T13:39:46.887+01:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Linked Teaser"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="false"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
+                                linkURL="/content/core-components-examples/library/page-authoring/teaser"
+                                textIsRich="true"
+                                titleFromPage="false"/>
                     </component>
                     <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
                         <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
+                                cq:panelTitle="Properties"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/properties"
+                                reference="../../component"/>
                         <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
+                                cq:panelTitle="Markup"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/markup"
+                                reference="../../component"/>
                         <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
+                                cq:panelTitle="JSON"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/json"
+                                reference="../../component"/>
                     </info>
                 </demo_1789748122>
                 <title_290387000
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:33:42.882+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Call To Action Button"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h3"/>
-                <text_1337507001
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:40:56.099+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Teaser with an image, title, description and call-to-action button.&lt;/p>&#xd;&#xa;"
-                    textIsRich="true"/>
-                <demo_1878698139
-                    jcr:created="{Date}2018-12-07T13:36:17.908+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:17.908+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
+                        cq:styleIds="[1544759676459]"
+                        jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:33:42.882+01:00"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <teaser
-                            jcr:created="{Date}2018-12-07T13:36:44.171+01:00"
-                            jcr:createdBy="admin"
-                            jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
-                            jcr:lastModified="{Date}2018-12-07T13:42:40.613+01:00"
-                            jcr:lastModifiedBy="admin"
+                        jcr:title="Call To Action Button"
+                        sling:resourceType="core/wcm/components/title/v2/title"
+                        type="h3"/>
+                <text_1337507001
+                        jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:40:56.099+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Teaser with an image, title, description and call-to-action button.&lt;/p>&#xd;&#xa;"
+                        textIsRich="true"/>
+                <demo_1878698139
+                        jcr:created="{Date}2018-12-07T13:36:17.908+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:36:17.908+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo">
+                    <component
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Teaser Title"
-                            sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                            actionsEnabled="true"
-                            descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"
-                            textIsRich="true"
-                            titleFromPage="false">
+                            sling:resourceType="core-components-examples/components/demo/component">
+                        <teaser
+                                jcr:created="{Date}2018-12-07T13:36:44.171+01:00"
+                                jcr:createdBy="admin"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:lastModified="{Date}2018-12-07T13:42:40.613+01:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Teaser Title"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="true"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg"
+                                textIsRich="true"
+                                titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
                                 <item0
-                                    jcr:primaryType="nt:unstructured"
-                                    link="/content/core-components-examples/library/page-authoring/teaser"
-                                    text="Call To Action"/>
+                                        jcr:primaryType="nt:unstructured"
+                                        link="/content/core-components-examples/library/page-authoring/teaser"
+                                        text="Call To Action"/>
                             </actions>
                         </teaser>
                     </component>
                     <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
                         <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
+                                cq:panelTitle="Properties"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/properties"
+                                reference="../../component"/>
                         <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
+                                cq:panelTitle="Markup"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/markup"
+                                reference="../../component"/>
                         <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
+                                cq:panelTitle="JSON"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/json"
+                                reference="../../component"/>
                     </info>
                 </demo_1878698139>
                 <title_290388000
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:34:56.398+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Multiple Call To Action Buttons"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h3"/>
-                <text_1337508001
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:41:04.958+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Teaser with an image, title, description and multiple call-to-action buttons, each with a different link.&lt;/p>&#xa;"
-                    textIsRich="true"/>
-                <demo_1581767054
-                    jcr:created="{Date}2018-12-07T13:36:22.414+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:22.414+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo">
-                    <component
+                        cq:styleIds="[1544759676459]"
+                        jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:34:56.398+01:00"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <teaser_2781767054
-                            jcr:created="{Date}2018-12-07T13:36:44.171+01:00"
-                            jcr:createdBy="admin"
-                            jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
-                            jcr:lastModified="{Date}2018-12-07T13:42:09.489+01:00"
-                            jcr:lastModifiedBy="admin"
+                        jcr:title="Multiple Call To Action Buttons"
+                        sling:resourceType="core/wcm/components/title/v2/title"
+                        type="h3"/>
+                <text_1337508001
+                        jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:41:04.958+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Teaser with an image, title, description and multiple call-to-action buttons, each with a different link.&lt;/p>&#xa;"
+                        textIsRich="true"/>
+                <demo_1581767054
+                        jcr:created="{Date}2018-12-07T13:36:22.414+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:36:22.414+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo">
+                    <component
                             jcr:primaryType="nt:unstructured"
-                            jcr:title="Teaser Title"
-                            sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                            actionsEnabled="true"
-                            descriptionFromPage="false"
-                            fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
-                            textIsRich="true"
-                            titleFromPage="false">
+                            sling:resourceType="core-components-examples/components/demo/component">
+                        <teaser_2781767054
+                                jcr:created="{Date}2018-12-07T13:36:44.171+01:00"
+                                jcr:createdBy="admin"
+                                jcr:description="&lt;p>Teaser Description&lt;/p>&#xd;&#xa;"
+                                jcr:lastModified="{Date}2018-12-07T13:42:09.489+01:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                jcr:title="Teaser Title"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="true"
+                                descriptionFromPage="false"
+                                fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
+                                textIsRich="true"
+                                titleFromPage="false">
                             <actions jcr:primaryType="nt:unstructured">
                                 <item0
-                                    jcr:primaryType="nt:unstructured"
-                                    link="/content/core-components-examples/library/page-authoring/teaser"
-                                    text="Call To Action"/>
+                                        jcr:primaryType="nt:unstructured"
+                                        link="/content/core-components-examples/library/page-authoring/teaser"
+                                        text="Call To Action"/>
                                 <item1
-                                    jcr:primaryType="nt:unstructured"
-                                    link="/content/core-components-examples/library"
-                                    text="Call To Action"/>
+                                        jcr:primaryType="nt:unstructured"
+                                        link="/content/core-components-examples/library"
+                                        text="Call To Action"/>
                             </actions>
                         </teaser_2781767054>
                     </component>
                     <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
                         <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
+                                cq:panelTitle="Properties"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/properties"
+                                reference="../../component"/>
                         <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
+                                cq:panelTitle="Markup"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/markup"
+                                reference="../../component"/>
                         <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
+                                cq:panelTitle="JSON"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/json"
+                                reference="../../component"/>
                     </info>
                 </demo_1581767054>
                 <title_290389000
-                    cq:styleIds="[1544759676459]"
-                    jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:35:26.346+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    jcr:title="Title and Description from Linked Page"
-                    sling:resourceType="core/wcm/components/title/v2/title"
-                    type="h3"/>
-                <text_1337509001
-                    jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:35:37.221+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;p>Teaser with a title, description and link - with the title and description taken from the linked page.&lt;/p>&#xa;"
-                    textIsRich="true"/>
-                <demo_1257101605
-                    jcr:created="{Date}2018-12-07T13:36:25.562+01:00"
-                    jcr:createdBy="admin"
-                    jcr:lastModified="{Date}2018-12-07T13:36:25.562+01:00"
-                    jcr:lastModifiedBy="admin"
-                    jcr:primaryType="nt:unstructured"
-                    sling:resourceType="core-components-examples/components/demo"
-                    fullWidth="{Boolean}true">
-                    <component
+                        cq:styleIds="[1544759676459]"
+                        jcr:created="{Date}2018-12-06T19:22:48.620+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:35:26.346+01:00"
+                        jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core-components-examples/components/demo/component">
-                        <teaser
-                            jcr:created="{Date}2018-12-07T13:36:51.442+01:00"
-                            jcr:createdBy="admin"
-                            jcr:lastModified="{Date}2018-12-07T13:43:16.319+01:00"
-                            jcr:lastModifiedBy="admin"
+                        jcr:title="Title and Description from Linked Page"
+                        sling:resourceType="core/wcm/components/title/v2/title"
+                        type="h3"/>
+                <text_1337509001
+                        jcr:created="{Date}2018-12-06T19:23:41.968+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:35:37.221+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core/wcm/components/text/v2/text"
+                        text="&lt;p>Teaser with a title, description and link - with the title and description taken from the linked page.&lt;/p>&#xa;"
+                        textIsRich="true"/>
+                <demo_1257101605
+                        jcr:created="{Date}2018-12-07T13:36:25.562+01:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2018-12-07T13:36:25.562+01:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/demo"
+                        fullWidth="{Boolean}true">
+                    <component
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/teaser/v1/teaser"
-                            actionsEnabled="false"
-                            descriptionFromPage="true"
-                            linkURL="/content/core-components-examples/library/page-authoring/teaser"
-                            textIsRich="true"
-                            titleFromPage="true"/>
+                            sling:resourceType="core-components-examples/components/demo/component">
+                        <teaser
+                                jcr:created="{Date}2018-12-07T13:36:51.442+01:00"
+                                jcr:createdBy="admin"
+                                jcr:lastModified="{Date}2018-12-07T13:43:16.319+01:00"
+                                jcr:lastModifiedBy="admin"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/teaser"
+                                actionsEnabled="false"
+                                descriptionFromPage="true"
+                                linkURL="/content/core-components-examples/library/page-authoring/teaser"
+                                textIsRich="true"
+                                titleFromPage="true"/>
                     </component>
                     <info
-                        jcr:primaryType="nt:unstructured"
-                        sling:resourceType="core/wcm/components/tabs/v1/tabs">
+                            jcr:primaryType="nt:unstructured"
+                            sling:resourceType="core/wcm/components/tabs/v1/tabs">
                         <properties
-                            cq:panelTitle="Properties"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/properties"
-                            reference="../../component"/>
+                                cq:panelTitle="Properties"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/properties"
+                                reference="../../component"/>
                         <markup
-                            cq:panelTitle="Markup"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/markup"
-                            reference="../../component"/>
+                                cq:panelTitle="Markup"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/markup"
+                                reference="../../component"/>
                         <json
-                            cq:panelTitle="JSON"
-                            jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core-components-examples/components/demo/json"
-                            reference="../../component"/>
+                                cq:panelTitle="JSON"
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="core-components-examples/components/demo/json"
+                                reference="../../component"/>
                     </info>
                 </demo_1257101605>
             </responsivegrid>

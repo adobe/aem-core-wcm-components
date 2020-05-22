@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2018 Adobe
+  ~ Copyright 2019 Adobe
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,4 +13,12 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<button class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}"><i class="cmp-examples-button__icon fas fa-bars"></i></button>
+<sly data-sly-use.container="com.adobe.cq.wcm.core.components.models.LayoutContainer">
+    <button class="cmp-examples-show-menu cmp-examples-button" data-cmp-examples-is="showMenu" aria-label="${'Show Menu' @ i18n}"><i class="cmp-examples-button__icon fas fa-bars"></i></button>
+    <sly data-sly-test.responsive="${container.layout == 'RESPONSIVE_GRID'}"
+         data-sly-use.responsiveGridTemplate="responsiveGrid.html"
+         data-sly-call="${responsiveGridTemplate.responsiveGrid @ container=container}"></sly>
+    <sly data-sly-test.simple="${!responsive}"
+         data-sly-use.simpleTemplate="simple.html"
+         data-sly-call="${simpleTemplate.simple @ container=container}"></sly>
+</sly>
