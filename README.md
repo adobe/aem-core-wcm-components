@@ -1,29 +1,46 @@
-# AEM Sites Core Components Sandbox
+# AEM WCM Core Components
+
 [![CircleCI](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development.svg?style=svg)](https://circleci.com/gh/adobe/aem-core-wcm-components/tree/development)
 [![Code Coverage](https://codecov.io/gh/adobe/aem-core-wcm-components/branch/development/graph/badge.svg)](https://codecov.io/gh/adobe/aem-core-wcm-components)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.adobe.cq/core.wcm.components.all)
 
-**The Sandbox represents a space where work-in-progress versions of the Core Components are developed. They provide _beta features_ and *should not be used in production*. When the components become stable, they will be promoted to new production-ready releases and moved out of the sandbox.**
+Set of standardized Web Content Management (WCM) components for [Adobe Experience Manager (AEM)](https://www.adobe.com/marketing/experience-manager.html) to speed up development time and reduce maintenance cost of your websites.
+
+## Welcome
+
+* **Contributions** are welcome, read our [contributing guide](CONTRIBUTING.md) for more information.
+* **Ideas and questions** are discussed on our [public mailing list](https://groups.google.com/forum/#!forum/aem-core-components-dev); you can also [subscribe via email](mailto:aem-core-components-dev+subscribe@googlegroups.com).
+
+### Usability Study 2020
+
+We're conducting a usability study by using the [System Usability Scale](https://measuringu.com/sus/), a reliable tool to measure the perceived usability.  
+Please help us making the Core Components better by responding to our **[short usability questionnaire](https://s2.userzoom.com/m/MSBDNTc1MlMxMDk1)**. Thank you!
 
 ## Documentation
 
-* [Component Library](https://www.adobe.com/go/aem_cmp_library)
-* [Using Core Components](https://docs.adobe.com/docs/en/aem/6-3/author/page-authoring/default-components/core-components.html)
-* [Tutorial for building a new site using the Core Components (takes about 2 days)](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/overview.html)
-* [Tutorial for building a new site, used at Adobe Summit 2019 (takes about 2 hours)](https://expleague.azureedge.net/labs/L767/index.html)
-* [Recording of the AEM GEMS Webinar, Dec 2018](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html)
+* **[Component Library](https://www.adobe.com/go/aem_cmp_library):** A collection of examples to view the components in their various configurations.
+* **[Component Documentation](https://docs.adobe.com/content/help/en/experience-manager-core-components/using/introduction.html):** For developers and authors, with details about each component.
+* Get Started:
+  - **[WKND Tutorial](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/overview.html):** A two-day tutorial for building a new site.
+  - **[Summit Tutorial](https://expleague.azureedge.net/labs/L767/index.html):** A two-hour tutorial for building a new site (from a Lab at US Summit 2019).
+  - **[Gems Webinar](https://helpx.adobe.com/experience-manager/kt/eseminars/gems/AEM-Core-Components.html):** A guided tour of the Core Components (recorded on Dec 2018).
 
-## Contributing
+## Features
 
-Contributions are welcome! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
+* **Production-Ready:** 27 robust components that are well tested, widely used, and that perform well.
+* **Cloud-Ready:** Whether on [AEM as a Cloud Service](https://docs.adobe.com/content/help/en/experience-manager-cloud-service/landing/home.html), on [Adobe Managed Services](https://github.com/adobe/aem-project-archetype/tree/master/src/main/archetype/dispatcher.ams), or on-premise, they just work.
+* **Versatile:** The components represent generic concepts with which the authors can assemble nearly any layout.
+* **Configurable:** Template-level [content policies](https://docs.adobe.com/content/help/en/experience-manager-65/developing/platform/templates/page-templates-editable.html#content-policies) define which features the page authors are allowed to use or not.
+* **Accessible:** They comply [WCAG 2.1 standard](https://www.w3.org/TR/WCAG21/), provide ARIA labels, and support keyboard navigation ([known issues](https://github.com/adobe/aem-core-wcm-components/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+accessibility+in%3Atitle)).
+* **SEO-Friendly:** The HTML output is semantic and provides schema.org microdata annotations.
+* **WebApp-Ready:** The [streamlined JSON output](https://docs.adobe.com/content/help/en/experience-manager-learn/foundation/development/develop-sling-model-exporter.html) allows client-side rendering, still with a possibility of [in-context editing](https://docs.adobe.com/content/help/en/experience-manager-learn/sites/spa-editor/spa-editor-framework-feature-video-use.html).
+* **Design Kit:** A [UI kit for Adobe XD](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/assets/overview/AEM_UI-kit_Wireframe.xd) allows designers to create wireframes that they can then [style as needed](https://docs.adobe.com/content/help/en/experience-manager-learn/getting-started-wknd-tutorial-develop/assets/overview/AEM_UI-kit_WKND.xd).
+* **Themeable:** The components implement the [Style System](https://docs.adobe.com/content/help/en/experience-manager-65/developing/components/style-system.html), and the markup follows [BEM CSS conventions](http://getbem.com/).
+* **Customizable:** Several patterns allow [easy customization](https://docs.adobe.com/content/help/en/experience-manager-core-components/using/developing/customizing.html), from adjusting the HTML to advanced functionality reuse.
+* **Versioning:** The [versioning policy](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) ensures we won't break your site when improving things that might impact you.
+* **Open Sourced:** If something is not as it should, [contribute](CONTRIBUTING.md) your improvements!
 
-## Mailing List
-
-For discussions and Q&A, you can use our public mailing list hosted on [googlegroups.com](https://groups.google.com/forum/#!forum/aem-core-components-dev). 
-You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups.com](mailto:aem-core-components-dev+subscribe@googlegroups.com).
-
-## Available Components
-
-### Templating
+### Template Components
 
 1. [Page](content/src/content/jcr_root/apps/core/wcm/components/page/v2/page)
 2. [Navigation](content/src/content/jcr_root/apps/core/wcm/components/navigation/v1/navigation)
@@ -31,7 +48,7 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 4. [Breadcrumb](content/src/content/jcr_root/apps/core/wcm/components/breadcrumb/v2/breadcrumb)
 5. [Quick Search](content/src/content/jcr_root/apps/core/wcm/components/search/v1/search)
 
-### Page Authoring
+### Page Authoring Components
 
 6. [Title](content/src/content/jcr_root/apps/core/wcm/components/title/v2/title)
 7. [Text](content/src/content/jcr_root/apps/core/wcm/components/text/v2/text)
@@ -48,14 +65,14 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
 19. [Progress Bar](content/src/content/jcr_root/apps/core/wcm/components/progressbar/v1/progressbar)
 
-### Container
+### Container Components
 
 20. [Container](content/src/content/jcr_root/apps/core/wcm/components/container/v1/container)
 21. [Carousel](content/src/content/jcr_root/apps/core/wcm/components/carousel/v1/carousel)
 22. [Tabs](content/src/content/jcr_root/apps/core/wcm/components/tabs/v1/tabs)
 23. [Accordion](content/src/content/jcr_root/apps/core/wcm/components/accordion/v1/accordion)
 
-### Form components
+### Form Components
 
 24. [Form container](content/src/content/jcr_root/apps/core/wcm/components/form/container/v2/container)
 25. [Form text field](content/src/content/jcr_root/apps/core/wcm/components/form/text/v2/text)
@@ -63,150 +80,48 @@ You can also subscribe via Email [aem-core-components-dev+subscribe@googlegroups
 27. [Form hidden field](content/src/content/jcr_root/apps/core/wcm/components/form/hidden/v2/hidden)
 28. [Form button](content/src/content/jcr_root/apps/core/wcm/components/form/button/v2/button)
 
-Visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki) for the main upcoming components and features.
+### Roadmap
 
-## Extensions
+To learn about the main upcoming components and features, visit the [roadmap wiki page](https://github.com/adobe/aem-core-wcm-components/wiki).
 
-### AMP
+## Usage
 
-Learn more about AMP [here](https://amp.dev/).
+To include the Core Components in a new project, we strongly advise to use the [AEM Project Archetype](https://github.com/adobe/aem-project-archetype); this guarantees a starting point that complies to all recommended practices from Adobe.
 
-The [Component Library](https://www.adobe.com/go/aem_cmp_library) and [its code](examples/src/content/jcr_root/apps/core-components-examples) in this repository show how it can be used. 
+For existing projects, take example from the [AEM Project Archetype](https://github.com/adobe/aem-project-archetype) by looking at the `core.wcm.components` references in the main [`pom.xml`](https://github.com/adobe/aem-project-archetype/blob/master/src/main/archetype/pom.xml), in [`all/pom.xml`](https://github.com/adobe/aem-project-archetype/blob/master/src/main/archetype/all/pom.xml), and in [`ui.apps/pom.xml`](https://github.com/adobe/aem-project-archetype/blob/master/src/main/archetype/ui.apps/pom.xml). For the rest, make sure to create Proxy Components, to load the client libraries and to allow the components on the template, as instructed in [Using Core Components](https://docs.adobe.com/content/help/en/experience-manager-core-components/using/get-started/using.html).
 
-#### AMP behavior control
+### System Requirements
 
-For AEM users to control if they want their pages to be / not be AMP, an author with sufficient permissions can go un the page template's Page Policy and select the **AMP Mode**. It has the following options:
+Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java SE | Maven
+---------|---------|---------|---------|---------|---------|---------
+[2.8.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0) | Continual | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11 | 3.3.9+
 
-1. ***No AMP***: This is the default. Pages will still render as usual and if a page is requested with the `amp` selector, its HTML version will be rendered and the proper metadata in the `<head>` will inform there is no AMP version for this page.
-2. ***Paired AMP***: This mode will allow delivery of **both** HTML and AMP pages relying on the `amp` sling selector to render a `page.html` and `page.amp.html` (see [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md) for more details)
-3. ***AMP Only***: The opposite of "No AMP". Pages requested will attempt to render their AMP version regardless of the request containing the `.amp` selector or not.
+For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 
-All pages using the template where this is specified will inherit the behavior. This can also be overwritten at the page level by going to the page properties, under the "Advanced" tab and changing the "AMP Mode" from "Inherit from Page template" to something else. This will let Authors control if they want certain pages to have a different behavior than the one specified by the template.
+The Core Components require the use of [editable templates](https://docs.adobe.com/content/help/en/experience-manager-learn/sites/page-authoring/template-editor-feature-video-use.html) and do not support Classic UI nor static templates. If needed, check out the [AEM Modernization Tools](https://opensource.adobe.com/aem-modernize-tools/pages/tools.html).
 
-**Read more about the [Technical aspects of AMP for AEM Core Components](extensions/amp/README.md)**
+Setup your local development environment for [AEM as a Cloud Service SDK](https://docs.adobe.com/content/help/en/experience-manager-learn/cloud-service/local-development-environment-set-up/overview.html) or for [older versions of AEM](https://docs.adobe.com/content/help/en/experience-manager-learn/foundation/development/set-up-a-local-aem-development-environment.html).
 
+### Building
 
-## Component Versioning
-
-The components' versioning scheme is documented on the [AEM Core WCM Components' versioning policies](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) wiki page.
-
-## System Requirements
-
-The latest version of the Core Components, require the below system requirements:
-
-Core Components | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
-----------------|---------|---------|---------|------
-[2.8.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0) | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
-
-For a list of requirements for previous versions, see [Historical System Requirements](VERSIONS.md).
-
-## Installation
-
-To install everything, excluding examples, the [released aggregate package `core.wcm.components.all`](https://github.com/adobe/aem-core-wcm-components/releases) can be installed via the AEM Package Manager.
-
-For more information about the Package Manager please have a look at [How to Work With Packages](https://helpx.adobe.com/experience-manager/6-4/sites/administering/using/package-manager.html) documentation page.
-
-## Build
-
-The project has the following requirements:
-* Java SE Development Kit 8 or Java SE Development Kit 11
-* Apache Maven 3.3.1 or newer
-
-For ease of build and installation the following profiles are provided:
-
- * ``autoInstallSinglePackage`` - install everything to an existing AEM author instance, as specified by ``http://${aem.host}:${aem.port}``
- * ``autoInstallSinglePackagePublish`` - install everything to an existing AEM publish instance, as specified by ``http://${aem.publish.host}:${aem.publish.port}``
- * ``autoInstallPackage`` - installs the package/bundle to an existing AEM author instance, as specified by ``http://${aem.host}:${aem.port}``
- * ``autoInstallPackagePublish`` - installs the package/bundle to an existing AEM publish instance, as specified by ``http://${aem.publish.host}:${aem.publish.port}``
-
-### UberJar
-
-This project relies on the unobfuscated AEM 6.3 cq-quickstart. This is publicly available on https://repo.adobe.com
-
-For more details about the UberJar please head over to the
-[How to Build AEM Projects using Apache Maven](https://helpx.adobe.com/experience-manager/6-4/sites/developing/using/ht-projects-maven.html) documentation page.
-
-### Install everything
-
-You can install everything needed to use the components on your running AEM instance by issuing the following command in the top level folder of the project:
+To compile your own version of the Core Components, you can build and install everything on your running AEM instance by issuing the following command in the top level folder of the project:
 
     mvn clean install -PautoInstallSinglePackage
 
-### Individual packages/bundles
-
-You can install individual packages/bundles by issuing the following command in the top level folder of the project:
+You can also install individual packages/bundles by issuing the following command in the top-level folder of the project:
 
     mvn clean install -PautoInstallPackage -pl <project_name(s)> -am
 
-Please note that
+Note that:
+* `-pl/-projects` option specifies the list of projects that you want to install
+* `-am/-also-make` options specifies that dependencies should also be built
 
- * ``-pl/-projects`` option specifies the list of projects that you want to install
- * ``-am/-also-make`` options specifies that dependencies should also be built
+For convenience, the following deployment profiles are provided when running the Maven install goal with `mvn install`:
+* `autoInstallSinglePackage`: Install everything to the AEM author instance.
+* `autoInstallSinglePackagePublish`: Install everything to the AEM publish instance.
+* `autoInstallPackage`: Install the `ui.content` and `ui.apps` content packages to the AEM author instance.
+* `autoInstallPackagePublish`: Install the `ui.content` and `ui.apps` content packages to the  AEM publish instance.
 
-## Include core components into your own project maven build
-
-To add core components to your project, you will need to add it to your maven build.
-The released version of the core components are available on the public maven repository at https://repo1.maven.org/maven2/com/adobe/cq/core.wcm.components.all/ 
-
-### For Projects using Maven Archetype 17 and below
-
-To include the core components package into your own project's maven build using AEM's maven archetype 17 and below, you can add the dependency to your pom.xml like this
- ```
- <dependency>
-     <groupId>com.adobe.cq</groupId>
-     <artifactId>core.wcm.components.all</artifactId>
-     <type>zip</type>
-     <version>2.8.0</version>
- </dependency>
- ```
-
- and then add this subpackage to your sub package section
-```
- <subPackage>
-     <groupId>com.adobe.cq</groupId>
-     <artifactId>core.wcm.components.all</artifactId>
-     <filter>true</filter>
- </subPackage>
-```
-
- inside the configuration of the `content-package-maven-plugin`.
-
- Also, make sure that if you have a submodule like ui.apps to add the core components as a dependency to ui.apps/pom.xml as well.
-
- ### For Projects Using Maven Archetype 18 and Above
-
-To include the core components package into your own project using AEM Archetype 18+, add it as a dependency to your build like so:
- ```
- <dependency>
-     <groupId>com.adobe.cq</groupId>
-     <artifactId>core.wcm.components.all</artifactId>
-     <type>zip</type>
-     <version>2.8.0</version>
- </dependency>
- ```
-
-Then add it as a subpackage
-```
- <subPackage>
-     <groupId>com.adobe.cq</groupId>
-     <artifactId>core.wcm.components.all</artifactId>
-     <filter>true</filter>
- </subPackage>
-```
-
-inside the configuration of the `filevault-package-maven-plugin`.
-
- For more information on how to setup the Adobe Maven Repository (`repo.adobe.com`) for your maven build, please have a look at the
- related [Knowledge Base article](https://helpx.adobe.com/experience-manager/kb/SetUpTheAdobeMavenRepository.html)
-
- ### Running the UI tests
-
- The Sandbox components might use features not yet available on AEM 6.4. In order to correctly test the functionality that's still
- supported for AEM 6.4, the Hobbes UI tests
- should be executed using the following request parameters:
-
-```
-http://localhost:4502/libs/granite/testing/hobbes.html?runId=1&autoRun=true&optin=disabled&filter=aem.core-components.testsuite.sandbox&run.options={"withMetadata":{"ignoreOn63":{"value":true,"type":"exclude"}}}
-```
-
-This will make sure that tests that would normally fail on AEM 6.3 due to platform changes are not executed.
+The hostname and port of the instance can be changed with the following user defined properties:
+* `aem.host` and `aem.port` for the author instance.
+* `aem.publish.host` and `aem.publish.port` for the publish instance.
