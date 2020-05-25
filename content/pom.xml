@@ -111,10 +111,18 @@
                     </execution>
                     <execution>
                         <id>npm install</id>
-                        <phase>validate</phase>
                         <goals>
                             <goal>npm</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -131,6 +139,8 @@
                         <!-- Ignore Node and npm -->
                         <exclude>**/node/**</exclude>
                         <exclude>**/node_modules/**</exclude>
+                        <!-- Ignore generated datalayer clientlib -->
+                        <exclude>**/core.wcm.components.commons.datalayer.v1/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

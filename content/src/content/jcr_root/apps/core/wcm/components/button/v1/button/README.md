@@ -41,6 +41,10 @@ BLOCK cmp-button
         MOD cmp-button__icon--<icon>
 ```
 
+### Icon styling
+
+Icon styling must be done by users of the Core Components. Here's an [example from the Core Components Library](https://github.com/adobe/aem-core-wcm-components/blob/72e2be7b9599aec7526be1adf3e4b3eaf3cf6f02/examples/ui.apps/src/content/jcr_root/apps/core-components-examples/clientlibs/clientlib-themes/core-components-clean/styles/components/carousel/base.less#L145).
+
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
