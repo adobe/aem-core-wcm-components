@@ -20,6 +20,7 @@
       data-sly-use.redirect="redirect.html">
     <head data-sly-call="${head.head @ page = page}"></head>
     <body class="${page.cssClassNames}"
+          id="${page.id}"
           data-cmp-data-layer-enabled="${page.data ? true : false}">
         <script data-sly-test.dataLayerEnabled="${page.data}">
           window.adobeDataLayer = window.adobeDataLayer || [];

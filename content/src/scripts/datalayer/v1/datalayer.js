@@ -30,25 +30,12 @@
     }
 
     function getComponentObject(element) {
-        var parentData;
         var component = getComponentData(element);
         var componentID = Object.keys(component)[0];
         var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
 
         if (parentElement) {
-
-            if (parentElement.tagName === "BODY") {
-                parentData = dataLayer.find(function(element) {
-                    return element.data !== undefined && element.data.page !== undefined;
-                });
-
-                if (parentData !== undefined) {
-                    component[componentID].parentId = Object.keys(parentData.data.page)[0];
-                }
-            } else {
-                parentData = getComponentData(parentElement);
-                component[componentID].parentId = Object.keys(parentData)[0];
-            }
+            component[componentID].parentId = parentElement.id;
         }
 
         return component;
