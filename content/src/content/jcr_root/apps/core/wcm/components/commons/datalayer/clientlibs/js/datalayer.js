@@ -30,19 +30,12 @@
     }
 
     function getComponentObject(element) {
-        var parentData;
         var component = getComponentData(element);
         var componentID = Object.keys(component)[0];
         var parentElement = element.parentNode.closest("[data-cmp-data-layer], body");
 
         if (parentElement) {
-
-            if (parentElement.tagName === "BODY") {
-                component[componentID].parentId = Object.keys(dataLayer.getState("page"))[0];
-            } else {
-                parentData = getComponentData(parentElement);
-                component[componentID].parentId = Object.keys(parentData)[0];
-            }
+            component[componentID].parentId = parentElement.id;
         }
 
         return component;
