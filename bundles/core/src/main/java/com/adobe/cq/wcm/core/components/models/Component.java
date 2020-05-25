@@ -48,7 +48,7 @@ public interface Component extends ComponentExporter {
      */
     @Nullable
     default String getId() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -56,7 +56,7 @@ public interface Component extends ComponentExporter {
      *
      * @return {@link ComponentData} object associated with the component
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     @Nullable
     @JsonProperty("dataLayer")
