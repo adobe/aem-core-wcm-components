@@ -100,6 +100,8 @@
          * @param {AccordionConfig} config The Accordion configuration
          */
         function init(config) {
+            that._config = config;
+
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
@@ -113,23 +115,14 @@
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
                 // Expand the item based on deep-link-id if it matches with any existing accordion item id
-                var deepLinkIdIndex = -1;
-                if (config.deepLinkId && config.deepLinkId.substring("-item-item") !== -1) {
-                    for (var i = 0; i < that._elements["item"].length; i++) {
-                        var item = that._elements["item"][i];
-                        if (item.id === config.deepLinkId) {
-                            deepLinkIdIndex = i;
-                            if (!item.hasAttribute(dataAttributes.item.expanded)) {
-                                setItemExpanded(item, true);
-                            }
-                            break;
-                        }
-                    }
+                var deepLinkItem = CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
+                if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
+                    setItemExpanded(deepLinkItem, true);
                 }
 
                 if (that._properties.singleExpansion) {
-                    // No deep linking as the index is -1
-                    if (deepLinkIdIndex === -1) {
+                    // No deep linking
+                    if (!deepLinkItem) {
                         var expandedItems = getExpandedItems();
                         // no expanded item annotated, force the first item to display.
                         if (expandedItems.length === 0) {
@@ -143,7 +136,7 @@
                         // Deep link case
                         // Collapse the items other than which is deep linked
                         for (var j = 0; j < that._elements["item"].length; j++) {
-                            if (j !== deepLinkIdIndex &&
+                            if (that._elements["item"][j].id !== deepLinkItem.id &&
                                 that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
                                 setItemExpanded(that._elements["item"][j], false);
                             }
@@ -532,19 +525,6 @@
     }
 
     /**
-     * Parses the url to extract the deep-link-id and returns deep-link-id
-     *
-     * @private
-     * @returns {String} deep-link-id if found otherwise undefined
-     */
-    function getDeepLinkId() {
-        if (window.location.hash) {
-            var uriParts = document.URL.split("#");
-            return uriParts[uriParts.length - 1];
-        }
-    }
-
-    /**
      * Parses the dataLayer string and returns the ID
      *
      * @private
@@ -561,10 +541,9 @@
      * @private
      */
     function onDocumentReady() {
-        var deepLinkId = getDeepLinkId();
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
-            new Accordion({ element: elements[i], options: readData(elements[i]), deepLinkId: deepLinkId });
+            new Accordion({ element: elements[i], options: readData(elements[i]) });
         }
 
         var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -578,7 +557,7 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Accordion({ element: element, options: readData(element), deepLinkId: deepLinkId });
+                                new Accordion({ element: element, options: readData(element) });
                             });
                         }
                     });
