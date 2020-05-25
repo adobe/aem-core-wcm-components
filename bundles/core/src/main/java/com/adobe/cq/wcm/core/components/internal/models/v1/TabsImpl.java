@@ -36,8 +36,6 @@ import com.adobe.cq.wcm.core.components.models.Tabs;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
-import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
-
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class},
        resourceType = TabsImpl.RESOURCE_TYPE)
