@@ -557,7 +557,7 @@
                         if (addedNode.querySelectorAll) {
                             var elementsArray = [].slice.call(addedNode.querySelectorAll(selectors.self));
                             elementsArray.forEach(function(element) {
-                                new Accordion({ element: element, options: readData(element), });
+                                new Accordion({ element: element, options: readData(element) });
                             });
                         }
                     });
