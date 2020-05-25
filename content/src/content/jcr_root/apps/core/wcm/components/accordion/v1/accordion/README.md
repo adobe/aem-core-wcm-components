@@ -26,6 +26,7 @@ Accordion component written in HTL.
 * Items expanded by default are configurable.
 * Item header HTML element is configurable (`h2` - `h6`, `h1` is omitted for SEO reasons).
 * Editing features for accordion items (adding, removing, editing, re-ordering).
+* Allows deep linking into a specific panel by passing the panel id as the URL fragment
 
 ### Use Object
 The Accordion component uses the `com.adobe.cq.wcm.core.components.models.Accordion` Sling model as its Use-object.
