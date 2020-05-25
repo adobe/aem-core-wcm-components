@@ -30,9 +30,9 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
