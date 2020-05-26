@@ -20,11 +20,13 @@ import java.util.Set;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.factory.ModelFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
+import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.wcm.core.extensions.amp.AmpTestContext;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.Template;
@@ -33,6 +35,8 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -51,6 +55,12 @@ class AmpUtilTest {
 
     @Mock
     private ResourceResolver resourceResolverMock;
+
+    @Mock
+    private ModelFactory modelFactory;
+
+    @Mock
+    private ExperienceFragment experienceFragment;
 
     private static final String TEST_BASE = "/amp-util";
     private static final String TEST_ROOT_PAGE = "/content";
@@ -146,6 +156,25 @@ class AmpUtilTest {
                 .thenReturn(null);
 
         assertEquals(this.resourceTypesSample, AmpUtil.getTemplateResourceTypes(this.pageMock, this.resourceTypeRegexSample, this.resourceResolverMock, this.resourceTypesSample));
+    }
+
+    @Test
+    void getTemplateResourceType_modelFactory() {
+        this.pathSample = "/content/fake/path/for/testing";
+        this.resourceTypesSample = new HashSet<>();
+        this.resourceTypesSample.add("dummyType");
+        this.resourceTypesSample.add("fakeType");
+
+        when(this.pageMock.getTemplate())
+                .thenReturn(this.templateMock);
+        when(this.templateMock.getPath())
+                .thenReturn(this.pathSample);
+        when(this.resourceResolverMock.getResource(this.pathSample + AllowedComponentList.STRUCTURE_JCR_CONTENT))
+                .thenReturn(null);
+        when(modelFactory.getModelFromWrappedRequest(any(), any(), eq(ExperienceFragment.class))).thenReturn(experienceFragment);
+        when(experienceFragment.getLocalizedFragmentVariationPath()).thenReturn("/foo/bar");
+
+        assertEquals(this.resourceTypesSample, AmpUtil.getTemplateResourceTypes(this.pageMock, this.resourceTypeRegexSample, context.request(), modelFactory, this.resourceTypesSample));
     }
 
     @Test
