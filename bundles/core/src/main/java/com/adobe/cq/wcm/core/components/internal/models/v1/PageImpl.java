@@ -302,7 +302,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
      */
 
     @NotNull
-    protected ComponentData getComponentDataModelInternal() {
+    protected ComponentData getComponentData() {
         return new PageDataImpl(this, resource);
     }
 

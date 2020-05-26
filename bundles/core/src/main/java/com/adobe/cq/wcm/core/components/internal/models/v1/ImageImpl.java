@@ -374,7 +374,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
 
     @Override
-    protected @NotNull ComponentData getComponentDataModelInternal() {
+    protected @NotNull ComponentData getComponentData() {
         return new ImageDataImpl(this, resource);
     }
 
