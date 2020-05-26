@@ -176,7 +176,7 @@ public abstract class AbstractComponentImpl implements Component {
 
     /**
      * Override this method to provide a different data model for your component. This will be called by
-     * @{link {@link AbstractComponentImpl#getData()} in case the datalayer is activated
+     * {@link AbstractComponentImpl#getData()} in case the datalayer is activated
      *
      * @return The component data
      */
