@@ -35,6 +35,48 @@
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 size="L">
                 <items jcr:primaryType="nt:unstructured">
+                    <basic
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Basic"
+                        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+                        <items jcr:primaryType="nt:unstructured">
+                            <column
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <title
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/basic/items/column/items/title"/>
+                                    <htmlid
+                                        jcr:primaryType="nt:unstructured"
+                                        jcr:title="HTML ID"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/fieldset">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
+                                        </items>
+                                    </htmlid>
+                                    <moretitles
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/basic/items/column/items/moretitles"/>
+                                    <onofftime
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/basic/items/column/items/onofftime"/>
+                                    <vanityurl
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/include"
+                                        path="/mnt/overlay/wcm/foundation/components/basicpage/v1/basicpage/tabs/basic/items/column/items/vanityurl"/>
+                                </items>
+                            </column>
+                        </items>
+                    </basic>
                     <socialmedia
                         cq:showOnCreate="{Boolean}true"
                         jcr:primaryType="nt:unstructured"

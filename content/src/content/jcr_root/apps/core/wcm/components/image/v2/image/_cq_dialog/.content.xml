@@ -153,6 +153,12 @@
                                                 name="./linkURL"
                                                 rootPath="/content"
                                                 wrapperClass="cmp-image__editor-link"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>
