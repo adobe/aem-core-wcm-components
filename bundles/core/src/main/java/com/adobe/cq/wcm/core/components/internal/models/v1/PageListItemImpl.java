@@ -129,7 +129,7 @@ public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
      */
 
     @Override
-    protected @NotNull ComponentData getComponentDataModelInternal() {
+    protected @NotNull ComponentData getComponentData() {
         return new PageDataImpl(this, resource);
     }
 

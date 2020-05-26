@@ -153,6 +153,11 @@ public abstract class AbstractComponentImpl implements Component {
     }
 
 
+    /**
+     * See {@link Component#getData()}
+     *
+     * @return The component data
+     */
     @Override
     @Nullable
     public ComponentData getData() {
@@ -160,7 +165,7 @@ public abstract class AbstractComponentImpl implements Component {
             return null;
         }
         if (componentData == null) {
-            componentData = getComponentDataModelInternal();
+            componentData = getComponentData();
         }
         return componentData;
     }
@@ -169,8 +174,14 @@ public abstract class AbstractComponentImpl implements Component {
      * Data layer specific methods. Each component can choose to implement some of these, to override or feed the data model.
      */
 
+    /**
+     * Override this method to provide a different data model for your component. This will be called by
+     * @{link {@link AbstractComponentImpl#getData()} in case the datalayer is activated
+     *
+     * @return The component data
+     */
     @NotNull
-    protected ComponentData getComponentDataModelInternal() {
+    protected ComponentData getComponentData() {
         return new ComponentDataImpl(this, resource);
     }
 
