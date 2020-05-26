@@ -121,6 +121,12 @@
                                                 fieldDescription="Default value of the field"
                                                 fieldLabel="Value"
                                                 name="./value"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

@@ -48,6 +48,12 @@
                                                 fieldDescription="Icon identifier for displaying an icon in the button."
                                                 fieldLabel="Icon"
                                                 name="./icon"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

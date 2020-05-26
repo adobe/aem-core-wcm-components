@@ -218,6 +218,12 @@
                                                 fieldDescription="A hint for the user of what can be entered in the field."
                                                 fieldLabel="Help Message"
                                                 name="./helpMessage"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>
