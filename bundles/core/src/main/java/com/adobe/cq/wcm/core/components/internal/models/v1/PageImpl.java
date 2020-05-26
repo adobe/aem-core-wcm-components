@@ -41,7 +41,6 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -302,8 +301,8 @@ public class PageImpl extends AbstractComponentImpl implements Page {
      * DataLayer specific methods
      */
 
-    @Override
-    public @Nullable ComponentData getData() {
+    @NotNull
+    protected ComponentData getComponentDataModelInternal() {
         return new PageDataImpl(this, resource);
     }
 
