@@ -35,6 +35,7 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -143,7 +144,7 @@ class AmpUtilTest {
     @Test
     public void getTemplateResourceTypes_resourceNull() {
         this.pathSample = "/fake/path/for/testing";
-        this.resourceTypesSample = new HashSet<String>();
+        this.resourceTypesSample = new HashSet<>();
 
         this.resourceTypesSample.add("dummyType");
         this.resourceTypesSample.add("fakeType");
@@ -164,6 +165,7 @@ class AmpUtilTest {
         this.resourceTypesSample = new HashSet<>();
         this.resourceTypesSample.add("dummyType");
         this.resourceTypesSample.add("fakeType");
+        this.resourceTypeRegexSample = "cq:PageContent";
 
         when(this.pageMock.getTemplate())
                 .thenReturn(this.templateMock);
@@ -178,8 +180,27 @@ class AmpUtilTest {
     }
 
     @Test
-    public void getResourceTypes_resourceNull() {
-        assertEquals(null, AmpUtil.getResourceTypes(null, this.resourceTypeRegexSample, this.resourceTypesSample));
+    void getTemplateResourceType_modelFactory_pageNull() {
+        this.resourceTypesSample = new HashSet<String>();
+
+        this.resourceTypesSample.add("dummyType");
+        this.resourceTypesSample.add("fakeType");
+
+        when(this.pageMock.getTemplate())
+                .thenReturn(null);
+
+        assertEquals(this.resourceTypesSample, AmpUtil.getTemplateResourceTypes(this.pageMock, this.resourceTypeRegexSample,
+                context.request(), modelFactory, this.resourceTypesSample));
+    }
+
+    @Test
+    void getResourceTypes_resourceNull() {
+        assertNull(AmpUtil.getResourceTypes(null, this.resourceTypeRegexSample, this.resourceTypesSample));
+    }
+
+    @Test
+    void getResourceTypes_modelFactory_resourceNull() {
+        assertNull(AmpUtil.getResourceTypes(null, this.resourceTypeRegexSample, this.resourceTypesSample, context.request(), modelFactory));
     }
 
     @Test
