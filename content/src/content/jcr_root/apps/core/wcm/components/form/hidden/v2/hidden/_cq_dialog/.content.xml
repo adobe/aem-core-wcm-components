@@ -59,7 +59,7 @@
                                                 fieldDescription="The value of the field, which is submitted with the form data"
                                                 fieldLabel="Value"
                                                 name="./value"/>
-                                            <identifier
+                                            <id
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                 fieldDescription="HTML ID attribute to apply to the component."
