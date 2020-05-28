@@ -37,6 +37,7 @@ The following properties are written to JCR for this Form Options component and 
 6. `./datasourceRT` - defines the resource type of the datasource, if the `source` property is set to `datasource`
 7. `./items` - defines the option items, if the `source` property is set to `local`
 8. `./helpMessage` - defines a help message that can be rendered in the field as a hint for the user
+9. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.form.options.v1.editor` editor client library category that includes

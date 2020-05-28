@@ -39,6 +39,7 @@ The following properties are written to JCR for this Form Container component an
 3. `./workflowTitle` - defines the workflow's title
 4. `./redirect` - if left empty the form will be rendered after submission, otherwise the user will be redirected to the page stored by this
 property
+5. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.form.container.v1` client library category that contains a recommended base
