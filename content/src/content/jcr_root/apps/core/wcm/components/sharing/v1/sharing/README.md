@@ -20,6 +20,11 @@ Social media sharing component, written in HTL.
 ## Features
 * Social media sharing for pages, currently via Facebook and Pinterest
 
+## Edit Dialog Properties
+The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:
+
+1. `./id` - defines the component HTML ID attribute.
+
 ### Use Object
 The Social Media Sharing component uses the `com.adobe.cq.wcm.core.components.models.SocialMediaHelper` Sling Model for its
 Use-object.

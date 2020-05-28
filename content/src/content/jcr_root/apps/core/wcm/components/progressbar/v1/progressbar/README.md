@@ -29,6 +29,7 @@ The Progress Bar component uses the `com.adobe.cq.wcm.core.components.models.Pro
 The following properties are written to JCR for this Progress Bar component and are expected to be available as `Resource` properties:
 
 1. `./completed` - will store the completion percentage
+2. `./id` - defines the component HTML ID attribute.
 
 ## BEM Description
 ```

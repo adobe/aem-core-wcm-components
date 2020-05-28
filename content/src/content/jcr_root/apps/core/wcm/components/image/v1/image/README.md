@@ -47,6 +47,7 @@ The following properties are written to JCR for this Image component and are exp
 `./displayPopupTitle`
 6. `./displayPopupTitle` - if set to `true` it will render the value of the `./jcr:title` property through the HTML `title` attribute,
 otherwise a caption will be rendered
+7. `./id` - defines the component HTML ID attribute.
 
 ## Rendering Logic
 

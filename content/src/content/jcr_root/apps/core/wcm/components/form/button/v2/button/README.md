@@ -29,6 +29,7 @@ The following properties are written to JCR for this Form Button component and a
 1. `./jcr:title` - defines the text displayed on the button; if none is provided, the text will default to the button type
 2. `./name` - defines the name of the button, which will be submitted with the form data
 3. `./value` - defines the value of the button, which will be submitted with the form data
+4. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.form.button.v2.editor` editor client library category that includes
