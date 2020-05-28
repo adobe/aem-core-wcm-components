@@ -16,5 +16,6 @@
 <h1 data-sly-use.title="com.adobe.cq.wcm.core.components.models.Title"
     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
     data-sly-element="${title.type}"
-    data-sly-test.text="${title.text}">${text}</h1>
+    data-sly-test.text="${title.text}"
+    id="${title.id}">${text}</h1>
 <sly data-sly-call="${template.placeholder @ isEmpty=!text}"></sly>

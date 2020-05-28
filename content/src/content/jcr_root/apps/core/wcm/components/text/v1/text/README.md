@@ -29,6 +29,7 @@ the following resource properties:
 
 1. `./text` - the actual text to be rendered
 2. `./textIsRich` - flag determining if the rendered text is rich or not, useful for applying the correct HTL display context
+3. `./id` - defines the component HTML ID attribute.
 
 ## Information
 * **Vendor**: Adobe

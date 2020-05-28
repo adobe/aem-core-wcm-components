@@ -76,6 +76,7 @@ The following properties are written to JCR for this Page component and are expe
 media
 20. `./cq:contextHubPath` - defines the Context Path configuration used by this page.
 21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path.
+22. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.page.v1.sharing` client library category that contains the JavaScript

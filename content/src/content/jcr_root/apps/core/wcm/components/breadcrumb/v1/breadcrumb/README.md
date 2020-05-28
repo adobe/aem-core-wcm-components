@@ -38,6 +38,7 @@ The following properties are written to JCR for this Breadcrumb component and ar
 1. `./startLevel` - defines from which level relative to the current page this breadcrumb will render its items
 2. `./showHidden` - if set to `true`, this breadcrumb component will also render hidden navigation items
 3. `./hideCurrent` - if set to `true`, the current page will be skipped by this breadcrumb component
+4. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.breadcrumb.v1` client library category that contains a recommended base
