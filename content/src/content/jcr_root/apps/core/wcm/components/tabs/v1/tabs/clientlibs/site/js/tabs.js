@@ -83,9 +83,11 @@
 
             // Show the tab based on deep-link-id if it matches with any existing tab item id
             var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tabpanel");
-            var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
-            if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
-                navigateAndFocusTab(deepLinkItemIdx);
+            if (deepLinkItemIdx) {
+                var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
+                if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
+                    navigateAndFocusTab(deepLinkItemIdx);
+                }
             }
 
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {
