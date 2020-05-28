@@ -25,9 +25,9 @@ The data layer is disabled by default.
 To enable the data layer for your site:
 1. Create the following structure below the `/conf` node:
     `/conf/<my-site>/sling:configs/com.adobe.cq.wcm.core.components.internal.DataLayerConfig`
-1. Add the `enabled` property and set it to `true`.
+1. Add the `enabled` boolean property and set it to `true`.
 
-## Data Layer State Structure
+## Data Layer State Structure 
 
 When the data layer is enabled, the javascript `adobeDataLayer` object is available on the page and is populated with the components and their properties that are used on the page.
 
