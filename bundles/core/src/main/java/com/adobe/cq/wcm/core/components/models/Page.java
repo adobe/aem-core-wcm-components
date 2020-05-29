@@ -353,8 +353,8 @@ public interface Page extends ContainerExporter, Component {
      * @return selector for the main content element
      * @since com.adobe.cq.wcm.core.components.models 12.4.0
      */
-    @NotNull
+    @Nullable
     default String getMainContentSelector() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 }
