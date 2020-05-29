@@ -39,6 +39,7 @@ Please help us making the Core Components better by responding to our **[short u
 * **Customizable:** Several patterns allow [easy customization](https://docs.adobe.com/content/help/en/experience-manager-core-components/using/developing/customizing.html), from adjusting the HTML to advanced functionality reuse.
 * **Versioning:** The [versioning policy](https://github.com/adobe/aem-core-wcm-components/wiki/Versioning-policies) ensures we won't break your site when improving things that might impact you.
 * **Open Sourced:** If something is not as it should, [contribute](CONTRIBUTING.md) your improvements!
+* **Trackable:** Main components are [integrated](DATA_LAYER_INTEGRATION.md) with the Adobe Client Data Layer.
 
 ### Template Components
 
