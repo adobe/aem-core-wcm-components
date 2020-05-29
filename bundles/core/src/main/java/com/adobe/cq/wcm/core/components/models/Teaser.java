@@ -178,7 +178,7 @@ public interface Teaser extends Component {
      * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     default String getPretitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
