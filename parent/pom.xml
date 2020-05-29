@@ -281,9 +281,6 @@
                             <goals>
                                 <goal>baseline</goal>
                             </goals>
-                            <configuration>
-                                <comparisonVersion>(,2.8.0)</comparisonVersion>
-                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
