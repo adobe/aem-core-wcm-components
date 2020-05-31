@@ -15,9 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -33,12 +33,11 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 public class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
     @Override
+    @NotNull
     protected List<ListItem> readItems() {
-        List<ListItem> items = new LinkedList<>();
-        getChildren().forEach(res -> {
-            items.add(new PanelContainerItemImpl(request, res, getId()));
-        });
-        return items;
+        return getChildren().stream()
+            .map(res -> new PanelContainerItemImpl(request, res, getId()))
+            .collect(Collectors.toList());
     }
 
     @Override
