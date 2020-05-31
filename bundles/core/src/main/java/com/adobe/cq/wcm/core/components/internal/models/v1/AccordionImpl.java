@@ -17,8 +17,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -34,7 +34,8 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Accordion;
-import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.Component;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.designer.Style;
 
 @Model(
@@ -130,13 +131,13 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
 
         if (expandedItemIds == null) {
             List<String> expandedItemsName = Arrays.asList(expandedItems);
-            List<ListItem> items = this.getItems();
 
-            expandedItemIds = items.stream()
+            expandedItemIds = this.getItems().stream()
                 .filter(item -> expandedItemsName.contains(item.getName()))
-                .map(item -> item.getData().getId())
+                .map(Component::getData)
+                .filter(Objects::nonNull)
+                .map(ComponentData::getId)
                 .toArray(String[]::new);
-
         }
 
         return Arrays.copyOf(expandedItemIds, expandedItemIds.length);
