@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,14 +45,13 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
     protected Map<String, ComponentExporter> getItemModels(@NotNull SlingHttpServletRequest request,
                                                            @NotNull Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = super.getItemModels(request, modelClass);
-        models.entrySet().forEach(entry -> {
-            ListItem match = getItems().stream()
-                .filter(item -> item != null && StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey()))
-                .findFirst().get();
-            if (match != null) {
-                entry.setValue(new JsonWrapper(entry.getValue(), match));
-            }
-        });
+        models.entrySet().forEach(entry ->
+            getItems().stream()
+                .filter(Objects::nonNull)
+                .filter(item -> StringUtils.isNotEmpty(item.getName()) && StringUtils.equals(item.getName(), entry.getKey()))
+                .findFirst()
+                .ifPresent(match -> entry.setValue(new JsonWrapper(entry.getValue(), match)))
+        );
         return models;
     }
 
