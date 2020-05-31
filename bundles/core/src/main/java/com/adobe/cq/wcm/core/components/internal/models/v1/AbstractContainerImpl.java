@@ -168,6 +168,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     @Override
     @JsonIgnore
+    @NotNull
     public List<ListItem> getItems() {
         if (items == null) {
             items = readItems();
