@@ -132,12 +132,10 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
             List<String> expandedItemsName = Arrays.asList(expandedItems);
             List<ListItem> items = this.getItems();
 
-            List<String> expandedItemIdsList = items.stream()
+            expandedItemIds = items.stream()
                 .filter(item -> expandedItemsName.contains(item.getName()))
                 .map(item -> item.getData().getId())
-                .collect(Collectors.toList());
-
-            expandedItemIds = expandedItemIdsList.toArray(new String[expandedItemIdsList.size()]);
+                .toArray(String[]::new);
 
         }
 
