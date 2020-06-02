@@ -65,6 +65,7 @@ Please help us making the Core Components better by responding to our **[short u
 17. [Sharing](content/src/content/jcr_root/apps/core/wcm/components/sharing/v1/sharing)
 18. [Separator](content/src/content/jcr_root/apps/core/wcm/components/separator/v1/separator)
 19. [Progress Bar](content/src/content/jcr_root/apps/core/wcm/components/progressbar/v1/progressbar)
+20. [Document Cloud Viewer](content/src/content/jcr_root/apps/core/wcm/components/documentcloudviewer/v1/documentcloudviewer)
 
 ### Container Components
 
