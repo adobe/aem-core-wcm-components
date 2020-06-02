@@ -29,8 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.DataLayerConfig;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataImpl;
 import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.models.DataLayer;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
@@ -56,6 +57,8 @@ public abstract class AbstractComponentImpl implements Component {
     private Page currentPage;
 
     private String id;
+    private Boolean dataLayerEnabled;
+    private ComponentData componentData;
 
     @Nullable
     @Override
@@ -135,15 +138,52 @@ public abstract class AbstractComponentImpl implements Component {
         return Utils.generateId(prefix, path);
     }
 
+    private boolean isDataLayerEnabled() {
+        if (dataLayerEnabled == null) {
+            dataLayerEnabled = false;
+            if (resource != null) {
+                ConfigurationBuilder builder = resource.adaptTo(ConfigurationBuilder.class);
+                if (builder != null) {
+                    DataLayerConfig dataLayerConfig = builder.as(DataLayerConfig.class);
+                    dataLayerEnabled = dataLayerConfig.enabled();
+                }
+            }
+        }
+        return dataLayerEnabled;
+    }
 
+
+    /**
+     * See {@link Component#getData()}
+     *
+     * @return The component data
+     */
     @Override
-    public DataLayer getDataLayer() {
-        return new DataLayerImpl(this, resource);
+    @Nullable
+    public ComponentData getData() {
+        if (!isDataLayerEnabled()) {
+            return null;
+        }
+        if (componentData == null) {
+            componentData = getComponentData();
+        }
+        return componentData;
     }
 
     /**
-     * Data layer specific methods. Each component can choose to implement some of these.
+     * Data layer specific methods. Each component can choose to implement some of these, to override or feed the data model.
      */
+
+    /**
+     * Override this method to provide a different data model for your component. This will be called by
+     * {@link AbstractComponentImpl#getData()} in case the datalayer is activated
+     *
+     * @return The component data
+     */
+    @NotNull
+    protected ComponentData getComponentData() {
+        return new ComponentDataImpl(this, resource);
+    }
 
     @JsonIgnore
     public Resource getDataLayerAssetResource() {

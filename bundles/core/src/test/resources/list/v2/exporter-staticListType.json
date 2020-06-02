@@ -10,9 +10,9 @@
             "title": "Page 1",
             "dataLayer": {
                 "list-e07bd4e270-item-c1a450dfb3": {
-                    "linkUrl": "/context/content/list/pages/page_1.html",
-                    "type": "cq:PageContent",
-                    "title": "Page 1"
+                    "xdm:linkURL": "/context/content/list/pages/page_1.html",
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 1"
                 }
             },
             ":type": "cq:PageContent"
@@ -25,9 +25,9 @@
             "title": "Page 2",
             "dataLayer": {
                 "list-e07bd4e270-item-a11dd78c1e": {
-                    "linkUrl": "/context/content/list/pages/page_2.html",
-                    "type": "cq:PageContent",
-                    "title": "Page 2"
+                    "xdm:linkURL": "/context/content/list/pages/page_2.html",
+                    "@type": "cq:PageContent",
+                    "dc:title": "Page 2"
                 }
             },
             ":type": "cq:PageContent"
@@ -35,7 +35,7 @@
     ],
     "dataLayer": {
         "list-e07bd4e270": {
-            "type": "core/wcm/components/list/v2/list"
+            "@type": "core/wcm/components/list/v2/list"
         }
     },
     "showDescription": true,

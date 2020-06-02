@@ -57,9 +57,16 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <packageType>application</packageType>
                     <properties>
                         <acHandling>merge_preserve</acHandling>
                     </properties>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.adobe.cq</groupId>
+                            <artifactId>core.wcm.components.content</artifactId>
+                        </dependency>
+                    </dependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -247,6 +254,13 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.content</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- AEM Core Components AMP Extension Bundle -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -254,6 +268,5 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

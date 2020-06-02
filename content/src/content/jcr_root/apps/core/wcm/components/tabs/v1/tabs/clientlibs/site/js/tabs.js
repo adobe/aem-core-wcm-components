@@ -68,6 +68,8 @@
          * @param {TabsConfig} config The Tabs configuration
          */
         function init(config) {
+            that._config = config;
+
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
@@ -77,6 +79,15 @@
             if (that._elements.tabpanel) {
                 refreshActive();
                 bindEvents();
+            }
+
+            // Show the tab based on deep-link-id if it matches with any existing tab item id
+            var deepLinkItemIdx = CQ.CoreComponents.container.utils.getDeepLinkItemIdx(that, "tabpanel");
+            if (deepLinkItemIdx) {
+                var deepLinkItem = that._elements["tab"][deepLinkItemIdx];
+                if (deepLinkItem && that._elements["tab"][that._active].id !== deepLinkItem.id) {
+                    navigateAndFocusTab(deepLinkItemIdx);
+                }
             }
 
             if (window.Granite && window.Granite.author && window.Granite.author.MessageChannel) {

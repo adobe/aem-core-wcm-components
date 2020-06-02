@@ -15,7 +15,12 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.CheckForNull;
 
@@ -34,8 +39,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.SlingModelFilter;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ContainerDataImpl;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.TemplatedResource;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
@@ -232,5 +239,14 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
             return Optional.ofNullable((Resource)this.request.adaptTo(TemplatedResource.class)).orElse(this.resource);
         }
         return null;
+    }
+
+    /*
+     * DataLayer specific methods
+     */
+
+    @Override
+    protected @NotNull ComponentData getComponentData() {
+        return new ContainerDataImpl(this, resource);
     }
 }

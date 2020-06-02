@@ -23,6 +23,7 @@ Tabs component written in HTL.
 * Allowed components can be configured through policy configuration.
 * Navigation to tab panels via tabs.
 * Editing features for tab panels (adding, removing, editing, re-ordering).
+* Allows deep linking into a specific tab by passing the tab id as the URL fragment
 
 ### Use Object
 The Tabs component uses the `com.adobe.cq.wcm.core.components.models.Tabs` Sling model as its Use-object.

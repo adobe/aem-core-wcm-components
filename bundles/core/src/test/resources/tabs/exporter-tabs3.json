@@ -1,10 +1,9 @@
 {
     "id": "tabs-73c57b3627",
     "activeItem": "item_1",
-    "tabsId": "-root-responsivegrid-tabs-3",
     "dataLayer": {
         "tabs-73c57b3627": {
-            "type": "core/wcm/components/tabs/v1/tabs",
+            "@type": "core/wcm/components/tabs/v1/tabs",
             "shownItems": [
                 "tabs-73c57b3627-item-25f537bb7f"
             ]
@@ -32,9 +31,9 @@
                     "id": "teaser-4bf56a19b1",
                     "dataLayer": {
                         "teaser-4bf56a19b1": {
-                            "description": "Teaser 1 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 1"
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -49,9 +48,9 @@
                     "id": "teaser-432f0bf9f0",
                     "dataLayer": {
                         "teaser-432f0bf9f0": {
-                            "description": "Teaser 2 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 2"
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -76,9 +75,9 @@
                     "id": "teaser-348840fc63",
                     "dataLayer": {
                         "teaser-348840fc63": {
-                            "description": "Teaser 1 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 1"
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"
@@ -93,9 +92,9 @@
                     "id": "teaser-4b653f1c72",
                     "dataLayer": {
                         "teaser-4b653f1c72": {
-                            "description": "Teaser 2 description",
-                            "type": "core/wcm/components/teaser/v1/teaser",
-                            "title": "Teaser 2"
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
                         }
                     },
                     ":type": "core/wcm/components/teaser/v1/teaser"

@@ -118,7 +118,9 @@
                 $altGroup.show();
                 $linkURLGroup.show();
             }
-            $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
+            if ($linkURLField.length) {
+                $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
+            }
             altTuple.hideTextfield(checkbox.checked);
             if (fileReference) {
                 altTuple.hideCheckbox(checkbox.checked);

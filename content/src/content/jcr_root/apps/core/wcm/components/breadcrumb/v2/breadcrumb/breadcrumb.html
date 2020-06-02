@@ -20,17 +20,17 @@
      class="cmp-breadcrumb"
      aria-label="${'Breadcrumb' @ i18n}"
      data-sly-test="${breadcrumb.items.size > 0}"
-     data-cmp-data-layer="${breadcrumb.dataLayer.string}">
+     data-cmp-data-layer="${breadcrumb.data.json}">
     <ol class="cmp-breadcrumb__list"
         itemscope itemtype="http://schema.org/BreadcrumbList"
         data-sly-list.navItem="${breadcrumb.items}">
         <li class="cmp-breadcrumb__item${navItem.active ? ' cmp-breadcrumb__item--active' : ''}"
-            data-cmp-data-layer="${navItem.dataLayer.string}"
+            data-cmp-data-layer="${navItem.data.json}"
             itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
             <a href="${navItem.URL}"
                class="cmp-breadcrumb__item-link"
                itemprop="item"
-               data-cmp-clickable
+               data-cmp-clickable="${breadcrumb.data ? true : false}"
                data-sly-unwrap="${navItem.active}">
                 <span itemprop="name">${navItem.title}</span>
             </a>

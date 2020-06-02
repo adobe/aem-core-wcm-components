@@ -21,8 +21,8 @@
         class="cmp-button"
         href="${button.link}"
         aria-label="${button.accessibilityLabel}"
-        data-cmp-clickable
-        data-cmp-data-layer="${button.dataLayer.string}">
+        data-cmp-clickable="${button.data ? true : false}"
+        data-cmp-data-layer="${button.data.json}">
     <sly data-sly-call="${iconTemplate.icon @ icon=button.icon}"></sly>
     <span data-sly-test="${button.text}" class="cmp-button__text">${button.text}</span>
 </button>
