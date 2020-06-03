@@ -68,6 +68,7 @@ public class ImageResourceWrapper extends ResourceWrapper {
     }
 
     @Override
+    @NotNull
     public String getResourceType() {
         return resourceType;
     }
