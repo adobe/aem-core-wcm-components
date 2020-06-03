@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.extensions.amp.internal.models.v1;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -78,7 +79,9 @@ public class ClientLibraryImpl implements ClientLibrary {
      */
     @Override
     public String getInline() {
-        return aggregatorService.getClientLibOutput(categories, type);
+        return Optional.ofNullable(this.aggregatorService)
+            .map(aggregator -> aggregator.getClientLibOutput(categories, type))
+            .orElse(null);
     }
 
     /**
@@ -88,16 +91,19 @@ public class ClientLibraryImpl implements ClientLibrary {
      */
     @Override
     public String getInlineLimited() {
-        Set<String> resourceTypes = AmpUtil.getResourceTypes(currentPage.getContentResource(),
-            aggregatorService.getResourceTypeRegex(), new HashSet<>());
+        if (this.currentPage != null && this.aggregatorService != null) {
+            Set<String> resourceTypes = AmpUtil.getResourceTypes(currentPage.getContentResource(),
+                aggregatorService.getResourceTypeRegex(), new HashSet<>());
 
-        try (ResourceResolver resolver = aggregatorService.getClientlibResourceResolver()) {
-            AmpUtil.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
-                resourceTypes);
-        } catch (LoginException e) {
-            LOG.error("Unable to get the service resource resolver.", e);
+            try (ResourceResolver resolver = aggregatorService.getClientlibResourceResolver()) {
+                AmpUtil.getTemplateResourceTypes(currentPage, aggregatorService.getResourceTypeRegex(), resolver,
+                    resourceTypes);
+            } catch (LoginException e) {
+                LOG.error("Unable to get the service resource resolver.", e);
+            }
+
+            return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
         }
-
-        return aggregatorService.getClientLibOutput(categories, type, resourceTypes, primaryPath, fallbackPath);
+        return null;
     }
 }
