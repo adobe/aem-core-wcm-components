@@ -8,7 +8,6 @@
         jcr:description="AEM Core Components - Component Library"
         jcr:primaryType="cq:PageContent"
         jcr:title="Component Library"
-        sling:configRef="/conf/core-components-examples/content"
         sling:resourceType="core-components-examples/components/page">
         <root
             jcr:primaryType="nt:unstructured"
