@@ -95,6 +95,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     protected Style currentStyle;
 
     @Self

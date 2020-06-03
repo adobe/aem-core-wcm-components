@@ -50,6 +50,7 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +79,7 @@ public class DownloadImpl implements Download {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     protected Style currentStyle;
 
     @SlingObject
@@ -97,15 +99,16 @@ public class DownloadImpl implements Download {
 
     private boolean displayFilename;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
-                   name = JcrConstants.JCR_TITLE)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
+    @Nullable
     private String title;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
-                   name = JcrConstants.JCR_DESCRIPTION)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_DESCRIPTION)
+    @Nullable
     private String description;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String actionText;
 
     private String titleType;

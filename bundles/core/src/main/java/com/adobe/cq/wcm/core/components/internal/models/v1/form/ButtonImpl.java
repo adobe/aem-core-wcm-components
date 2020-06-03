@@ -32,6 +32,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.models.form.Button;
 import com.day.cq.i18n.I18n;
+import org.jetbrains.annotations.Nullable;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class},
        adapters = {Button.class, ComponentExporter.class},
@@ -50,9 +51,11 @@ public class ButtonImpl extends AbstractFieldImpl implements Button {
     private Type type;
 
     @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private SlingHttpServletRequest request;
 
     @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private Resource resource;
 
     private I18n i18n;

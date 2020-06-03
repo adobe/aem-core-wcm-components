@@ -51,9 +51,11 @@ public abstract class AbstractComponentImpl implements Component {
     protected Resource resource;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected ComponentContext componentContext;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private Page currentPage;
 
     private String id;

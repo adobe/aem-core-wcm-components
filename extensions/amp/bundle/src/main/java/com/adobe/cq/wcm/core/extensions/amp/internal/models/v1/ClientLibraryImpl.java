@@ -33,6 +33,7 @@ import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,21 +48,27 @@ public class ClientLibraryImpl implements ClientLibrary {
     private static final Logger LOG = LoggerFactory.getLogger(ClientLibraryImpl.class);
 
     @OSGiService
+    @Nullable
     private ClientLibraryAggregatorService aggregatorService;
 
     @Inject
+    @Nullable
     private String categories;
 
     @ScriptVariable
+    @Nullable
     private Page currentPage;
 
     @Inject
+    @Nullable
     private String fallbackPath;
 
     @Inject
+    @Nullable
     private String primaryPath;
 
     @Inject
+    @Nullable
     private String type;
 
 

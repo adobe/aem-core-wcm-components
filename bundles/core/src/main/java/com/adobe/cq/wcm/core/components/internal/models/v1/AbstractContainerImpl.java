@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.CheckForNull;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -59,6 +57,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     protected Style currentStyle;
 
     @OSGiService
@@ -231,7 +230,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         return models;
     }
 
-    @CheckForNull
+    @Nullable
     protected Resource getEffectiveResource() {
         if (this.resource != null) {
             if (this.resource instanceof TemplatedResource) {

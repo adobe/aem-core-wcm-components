@@ -33,6 +33,7 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Carousel;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import org.jetbrains.annotations.Nullable;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Carousel.class, ComponentExporter.class, ContainerExporter.class}, resourceType = CarouselImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -45,6 +46,7 @@ public class CarouselImpl extends PanelContainerImpl implements Carousel {
     protected ValueMap properties;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected String accessibilityLabel;
 
     protected boolean autoplay;

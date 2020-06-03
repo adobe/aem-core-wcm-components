@@ -74,8 +74,8 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @ScriptVariable
     private ComponentContext componentContext;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
-                   name = PN_REDIRECT_TARGET)
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = PN_REDIRECT_TARGET)
+    @Nullable
     private String redirectTargetValue;
 
     private String appResourcesPath;
