@@ -54,10 +54,6 @@ public class ButtonImpl extends AbstractFieldImpl implements Button {
     @Nullable
     private SlingHttpServletRequest request;
 
-    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
-    private Resource resource;
-
     private I18n i18n;
 
     @PostConstruct
