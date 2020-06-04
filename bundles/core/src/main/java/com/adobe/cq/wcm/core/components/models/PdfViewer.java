@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
 @ConsumerType
-public interface DocumentCloudViewer extends Component {
+public interface PdfViewer extends Component {
 
     default String getType() {
         throw new UnsupportedOperationException();

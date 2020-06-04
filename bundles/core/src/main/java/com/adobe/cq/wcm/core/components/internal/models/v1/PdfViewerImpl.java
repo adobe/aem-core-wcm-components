@@ -32,16 +32,16 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.DocumentCloudViewer;
+import com.adobe.cq.wcm.core.components.models.PdfViewer;
 
-import com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer.DocumentCloudViewerCaConfig;
+import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = { DocumentCloudViewer.class,
-        ComponentExporter.class }, resourceType = { DocumentCloudViewerImpl.RESOURCE_TYPE })
+@Model(adaptables = SlingHttpServletRequest.class, adapters = { PdfViewer.class,
+        ComponentExporter.class }, resourceType = { PdfViewerImpl.RESOURCE_TYPE })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class DocumentCloudViewerImpl implements DocumentCloudViewer {
+public class PdfViewerImpl implements PdfViewer {
 
-    protected static final String RESOURCE_TYPE = "core/wcm/components/documentcloudviewer/v1/documentcloudviewer";
+    protected static final String RESOURCE_TYPE = "core/wcm/components/pdfviewer/v1/pdfviewer";
     protected static final String FULL_WINDOW = "FULL_WINDOW";
     protected static final String SIZED_CONTAINER = "SIZED_CONTAINER";
     protected static final String IN_LINE = "IN_LINE";
@@ -54,10 +54,10 @@ public class DocumentCloudViewerImpl implements DocumentCloudViewer {
     protected static final String DOCK_PAGE_CONTROLS = "dockPageControls";
     protected static final String SHOW_DOWNLOAD_PDF = "showDownloadPDF";
     protected static final String SHOW_PRINT_PDF = "showPrintPDF";
-    protected static final String CSS_FULL_WINDOW = "cmp-documentcloudviewer__full-window";
-    protected static final String CSS_BORDERLESS = "cmp-documentcloudviewer__full-window-borderless";
-    protected static final String CSS_SIZED_CONTAINER = "cmp-documentcloudviewer__sized-container";
-    protected static final String CSS_IN_LINE = "cmp-documentcloudviewer__in-line";
+    protected static final String CSS_FULL_WINDOW = "cmp-pdfviewer__full-window";
+    protected static final String CSS_BORDERLESS = "cmp-pdfviewer__full-window-borderless";
+    protected static final String CSS_SIZED_CONTAINER = "cmp-pdfviewer__sized-container";
+    protected static final String CSS_IN_LINE = "cmp-pdfviewer__in-line";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String documentPath;
@@ -98,13 +98,13 @@ public class DocumentCloudViewerImpl implements DocumentCloudViewer {
     @Inject
     private Resource resource;
 
-    private DocumentCloudViewerCaConfig caConfig;
+    private PdfViewerCaConfig caConfig;
 
     @PostConstruct
     protected void initModel() {
         ConfigurationBuilder cb = resource.adaptTo(ConfigurationBuilder.class);
         if (cb != null) {
-            caConfig = cb.as(DocumentCloudViewerCaConfig.class);
+            caConfig = cb.as(PdfViewerCaConfig.class);
         }
     }
 

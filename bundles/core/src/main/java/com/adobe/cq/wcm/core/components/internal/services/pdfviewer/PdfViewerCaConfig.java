@@ -13,13 +13,13 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer;
+package com.adobe.cq.wcm.core.components.internal.services.pdfviewer;
 
 import org.apache.sling.caconfig.annotation.Configuration;
 import org.apache.sling.caconfig.annotation.Property;
 
 @Configuration(label = "Document Cloud Viewer - Configuration", description = "Document Cloud Viewer Configuration")
-public @interface DocumentCloudViewerCaConfig {
+public @interface PdfViewerCaConfig {
   @Property(label = "Client ID", description = "Document Cloud Viewer API Client ID (Required)")
   String clientId() default "";
 

@@ -16,4 +16,4 @@
 
 #base=js
 
-documentcloudviewer.js
+pdfviewer.js

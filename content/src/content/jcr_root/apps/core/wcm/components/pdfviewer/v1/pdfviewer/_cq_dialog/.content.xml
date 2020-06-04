@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:granite="http://www.adobe.com/jcr/granite/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2020 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
     jcr:primaryType="nt:unstructured"
-    jcr:title="Document Cloud Viewer"
-    sling:resourceType="cq/gui/components/authoring/dialog">
+    jcr:title="PDF Viewer"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    helpPath="https://www.adobe.com/go/aem_cmp_pdfviewer_v1"
+    trackingFeature="core-components:pdfviewer:v1">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
             <tabs
-                granite:class="cloudviewer-tabs"
+                granite:class="pdfviewer-tabs"
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="granite/ui/components/coral/foundation/tabs"
                 maximized="{Boolean}true">
@@ -57,7 +76,7 @@
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
                                             <type
-                                                granite:class="cloudviewer-type-selector"
+                                                granite:class="pdfviewer-type-selector"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 fieldLabel="Type"
@@ -78,7 +97,7 @@
                                                 </items>
                                             </type>
                                             <defaultViewMode
-                                                granite:class="cloudviewer-controls cloudviewer-defaultViewMode"
+                                                granite:class="pdfviewer-controls pdfviewer-defaultViewMode"
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                                 fieldLabel="Default View Mode"
@@ -99,7 +118,7 @@
                                                 sling:resourceType="granite/ui/components/coral/foundation/well">
                                                 <items jcr:primaryType="nt:unstructured">
                                                     <viewerHeight
-                                                        granite:class="cloudviewer-controls cloudviewer-viewerHeight"
+                                                        granite:class="pdfviewer-controls pdfviewer-viewerHeight"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                                         fieldDescription="Set height of viewer."
@@ -107,7 +126,7 @@
                                                         name="./viewerHeight"
                                                         value="500px"/>
                                                     <borderless
-                                                        granite:class="cloudviewer-controls cloudviewer-borderless"
+                                                        granite:class="pdfviewer-controls pdfviewer-borderless"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         fieldDescription="Toggle for viewer to take up full height/width of viewport."
@@ -116,7 +135,7 @@
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showAnnotationTools
-                                                        granite:class="cloudviewer-controls cloudviewer-showAnnotationTools"
+                                                        granite:class="pdfviewer-controls pdfviewer-showAnnotationTools"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         fieldDescription="Toggle to display annotation tools."
@@ -125,7 +144,7 @@
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showLeftHandPanel
-                                                        granite:class="cloudviewer-controls cloudviewer-showLeftHandPanel"
+                                                        granite:class="pdfviewer-controls pdfviewer-showLeftHandPanel"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="{Boolean}true"
@@ -135,7 +154,7 @@
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showFullScreen
-                                                        granite:class="cloudviewer-controls cloudviewer-showFullScreen"
+                                                        granite:class="pdfviewer-controls pdfviewer-showFullScreen"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="{Boolean}true"
@@ -145,7 +164,7 @@
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showDownloadPdf
-                                                        granite:class="cloudviewer-controls cloudviewer-showDownloadPdf"
+                                                        granite:class="pdfviewer-controls pdfviewer-showDownloadPdf"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="{Boolean}true"
@@ -155,7 +174,7 @@
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showPrintPdf
-                                                        granite:class="cloudviewer-controls cloudviewer-showPrintPdf"
+                                                        granite:class="pdfviewer-controls pdfviewer-showPrintPdf"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="{Boolean}true"
@@ -165,7 +184,7 @@
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <showPageControls
-                                                        granite:class="cloudviewer-controls cloudviewer-showPageControls"
+                                                        granite:class="pdfviewer-controls pdfviewer-showPageControls"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
                                                         checked="{Boolean}true"
@@ -175,7 +194,7 @@
                                                         uncheckedValue="false"
                                                         value="{Boolean}true"/>
                                                     <dockPageControls
-                                                        granite:class="cloudviewer-controls cloudviewer-dockPageControls"
+                                                        granite:class="pdfviewer-controls pdfviewer-dockPageControls"
                                                         jcr:primaryType="nt:unstructured"
                                                         sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
                                                         deleteHint="{Boolean}true"
