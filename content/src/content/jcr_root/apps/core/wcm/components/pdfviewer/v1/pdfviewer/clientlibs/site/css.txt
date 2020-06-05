@@ -16,4 +16,4 @@
 
 #base=css
 
-documentcloudviewer.less
+pdfviewer.less

@@ -22,9 +22,9 @@
     var controls;
 
     $document.on("dialog-loaded", function(event) {
-        type = $(".cloudviewer-type-selector");
-        tabs = $(".cloudviewer-tabs");
-        controls = $(".cloudviewer-showPageControls");
+        type = $(".pdfviewer-type-selector");
+        tabs = $(".pdfviewer-tabs");
+        controls = $(".pdfviewer-showPageControls");
 
         type.on("change", function() {
             onTypeChange();
@@ -39,16 +39,16 @@
         });
 
         selectors = {
-            defaultViewMode: $(".cloudviewer-defaultViewMode").parent(),
-            viewerHeight: $(".cloudviewer-viewerHeight").parent(),
-            borderless: $(".cloudviewer-borderless").parent(),
-            annotationTools: $(".cloudviewer-showAnnotationTools").parent(),
-            showFullScreen: $(".cloudviewer-showFullScreen").parent(),
-            leftHandPanel: $(".cloudviewer-showLeftHandPanel").parent(),
-            downloadPdf: $(".cloudviewer-showDownloadPdf").parent(),
-            printPdf: $(".cloudviewer-showPrintPdf").parent(),
-            pageControls: $(".cloudviewer-showPageControls").parent(),
-            dockPageControls: $(".cloudviewer-dockPageControls")
+            defaultViewMode: $(".pdfviewer-defaultViewMode").parent(),
+            viewerHeight: $(".pdfviewer-viewerHeight").parent(),
+            borderless: $(".pdfviewer-borderless").parent(),
+            annotationTools: $(".pdfviewer-showAnnotationTools").parent(),
+            showFullScreen: $(".pdfviewer-showFullScreen").parent(),
+            leftHandPanel: $(".pdfviewer-showLeftHandPanel").parent(),
+            downloadPdf: $(".pdfviewer-showDownloadPdf").parent(),
+            printPdf: $(".pdfviewer-showPrintPdf").parent(),
+            pageControls: $(".pdfviewer-showPageControls").parent(),
+            dockPageControls: $(".pdfviewer-dockPageControls")
         };
     });
 

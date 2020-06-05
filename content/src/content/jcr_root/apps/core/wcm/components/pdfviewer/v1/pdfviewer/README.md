@@ -13,9 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-Document Cloud Viewer (v1)
+PDF Viewer (v1)
 ====
-Document Cloud Viewer component written in HTL.
+PDF Viewer for Adobe Document Cloud component written in HTL.
 
 ## Features
 
@@ -23,10 +23,10 @@ Document Cloud Viewer component written in HTL.
 * Configurable features for controlling appearance and functionality. 
 
 ### Use Object
-The Document Cloud Viewer component uses the `com.adobe.cq.wcm.core.components.models.DocumentCloudViewer` Sling model as its Use-object.
+The PDF Viewer component uses the `com.adobe.cq.wcm.core.components.models.PdfViewer` Sling model as its Use-object.
 
 ### Context Aware Config
-The Document Cloud Viewer component uses the context aware config `com.adobe.cq.wcm.core.components.internal.services.documentcloudviewer.DocumentCloudViewerCaConfig` with the following properties:
+The PDF Viewer component uses the context aware config `com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig` with the following properties:
 
 1. `clientId` - **Required** - the client key obtained by registering for the view sdk api - [https://www.adobe.com/go/dcsdks_credentials](https://www.adobe.com/go/dcsdks_credentials)
 2. `reportSuiteId` - Adobe Analytics ID
@@ -48,13 +48,13 @@ The following properties are written to JCR for this Document Cloud Viewer compo
 12. `./dockPageControls` - `true` to dock controls to bottom
 
 ## Client Libraries
-The component provides a `core.wcm.components.documentcloudviewer.v1` client library category that contains base
+The component provides a `core.wcm.components.pdfviewer.v1` client library category that contains base
 CSS styling and JavaScript component. It should be added to a relevant site client library using the `embed` property.
 
 ## BEM Description
 ```
-BLOCK cmp-documentcloudviewer
-    ELEMENT cmp-documentcloudviewer__content
+BLOCK cmp-pdfviewer
+    ELEMENT cmp-pdfviewer__content
 ```
 
 ## Information

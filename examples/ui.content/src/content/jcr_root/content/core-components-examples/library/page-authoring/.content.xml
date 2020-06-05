@@ -24,8 +24,8 @@
     <content-fragment/>
     <content-fragment-list/>
     <embed/>
+    <pdf-viewer/>
     <progressbar/>
     <social-sharing/>
     <separator/>
-    <document-cloud-viewer/>
 </jcr:root>

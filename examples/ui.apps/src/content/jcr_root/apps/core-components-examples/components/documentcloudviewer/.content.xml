@@ -18,5 +18,5 @@
     jcr:description="Document Cloud Viewer Component for the Core Components Library"
     jcr:primaryType="cq:Component"
     jcr:title="Document Cloud Viewer"
-    sling:resourceSuperType="core/wcm/components/documentcloudviewer/v1/documentcloudviewer"
+    sling:resourceSuperType="core/wcm/components/pdfviewer/v1/pdfviewer"
     componentGroup="Core Components Examples"/>
