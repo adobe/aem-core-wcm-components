@@ -3,9 +3,9 @@
         "jcr:primaryType": "cq:Page",
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Document Cloud Viewer Test",
+            "jcr:title"         : "PDF Viewer Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
-            "jcr:description"   : "Document Cloud Viewer description",
+            "jcr:description"   : "PDF Viewer description",
             "sling:configRef"   : "/conf/core-components-examples/content",
             "root"              : {
                 "jcr:primaryType"   : "nt:unstructured",

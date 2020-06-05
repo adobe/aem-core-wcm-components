@@ -15,8 +15,8 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    jcr:description="Document Cloud Viewer Component for the Core Components Library"
+    jcr:description="PDF Viewer Component for the Core Components Library"
     jcr:primaryType="cq:Component"
-    jcr:title="Document Cloud Viewer"
+    jcr:title="PDF Viewer"
     sling:resourceSuperType="core/wcm/components/pdfviewer/v1/pdfviewer"
     componentGroup="Core Components Examples"/>
