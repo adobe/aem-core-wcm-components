@@ -39,7 +39,7 @@ import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaC
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { PdfViewer.class,
         ComponentExporter.class }, resourceType = { PdfViewerImpl.RESOURCE_TYPE })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class PdfViewerImpl implements PdfViewer {
+public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/pdfviewer/v1/pdfviewer";
     protected static final String FULL_WINDOW = "FULL_WINDOW";
