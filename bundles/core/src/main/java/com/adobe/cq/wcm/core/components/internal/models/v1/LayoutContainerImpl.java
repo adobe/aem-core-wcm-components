@@ -26,6 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Model(adaptables = SlingHttpServletRequest.class, adapters = LayoutContainer.class, resourceType = LayoutContainerImpl.RESOURCE_TYPE_V1)
 public class LayoutContainerImpl extends AbstractContainerImpl implements LayoutContainer {
 
@@ -48,6 +51,14 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
                 }
             }
         }
+    }
+
+    @Override
+    @NotNull
+    protected List<ResourceListItemImpl> readItems() {
+        return getChildren().stream()
+            .map(res -> new ResourceListItemImpl(request, res, getId()))
+            .collect(Collectors.toList());
     }
 
     @Override

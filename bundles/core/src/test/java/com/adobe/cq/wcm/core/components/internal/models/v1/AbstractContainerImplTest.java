@@ -15,9 +15,10 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -25,20 +26,18 @@ import org.junit.Test;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.adobe.cq.wcm.core.components.testing.Utils;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class AbstractContainerImplTest {
 
     private static final String TEST_BASE = "/container";
     private static final String CONTENT_ROOT = "/content";
-    private static final String CONTEXT_PATH = "/core";
-    private static final String TEST_ROOT_PAGE = "/content/container";
-    private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
-    private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
+    // private static final String CONTEXT_PATH = "/core";
+    // private static final String TEST_ROOT_PAGE = "/content/container";
+    // private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
+    // private static final String CONTAINER_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/container-1";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     @ClassRule
@@ -53,48 +52,15 @@ public class AbstractContainerImplTest {
     public void testEmptyContainer() {
         Container container = new ContainerImpl();
         List<ListItem> items = container.getItems();
-        assertTrue("", items == null || items.size() == 0);
+        assertEquals(0, items.size());
     }
 
-    @Test
-    public void testContainerWithItems() {
-        Container container = getContainerUnderTest(CONTAINER_1);
-        Object[][] expectedItems = {
-            {"Teaser 1 description", "item_1", "/content/container/jcr:content/root/responsivegrid/container-1/item_1", "Teaser 1"},
-            {"Teaser 2 description", "item_2", "/content/container/jcr:content/root/responsivegrid/container-1/item_2", "Teaser 2"},
-        };
-        verifyContainerItems(expectedItems, container.getItems());
-    }
 
-    private Container getContainerUnderTest(String resourcePath) {
-        Resource resource = AEM_CONTEXT.resourceResolver().getResource(resourcePath);
-        if (resource == null) {
-            throw new IllegalStateException("Does the test resource " + resourcePath + " exist?");
+    private static class ContainerImpl extends AbstractContainerImpl {
+        @Override
+        @NotNull
+        protected List<ListItem> readItems() {
+            return new ArrayList<>();
         }
-        AEM_CONTEXT.currentResource(resource);
-        AEM_CONTEXT.request().setContextPath(CONTEXT_PATH);
-        Container container = new ContainerImpl();
-        Utils.setInternalState(container, "resource", resource);
-        Utils.setInternalState(container, "request", AEM_CONTEXT.request());
-        return container;
-    }
-
-    private void verifyContainerItems(Object[][] expectedItems, List<ListItem> items) {
-        assertEquals("The container has a different number of items than expected.", expectedItems.length, items.size());
-        int index = 0;
-        for (ListItem item : items) {
-            assertEquals("The container item's description is not what was expected: " + item.getDescription(),
-                expectedItems[index][0], item.getDescription());
-            assertEquals("The container item's name is not what was expected: " + item.getName(),
-                expectedItems[index][1], item.getName());
-            assertEquals("The container item's path is not what was expected: " + item.getPath(),
-                expectedItems[index][2], item.getPath());
-            assertEquals("The container item's title is not what was expected: " + item.getTitle(),
-                expectedItems[index][3], item.getTitle());
-            index++;
-        }
-    }
-
-    private class ContainerImpl extends AbstractContainerImpl {
     }
 }

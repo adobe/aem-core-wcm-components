@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -132,18 +133,12 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     }
 
     /**
-     * Read the list of items in the container
+     * Get the list of items in the container.
      *
-     * @return
+     * @return The list of items in the container.
      */
     @NotNull
-    protected List<ListItem> readItems() {
-        List<ListItem> items = new LinkedList<>();
-        getChildren().forEach(res -> {
-            items.add(new ResourceListItemImpl(request, res, getId()));
-        });
-        return items;
-    }
+    protected abstract List<? extends ListItem> readItems();
 
     private void populateStyleProperties() {
         backgroundColorEnabled = currentStyle.get(PN_BACKGROUND_COLOR_ENABLED, false);
@@ -170,7 +165,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     @NotNull
     public List<ListItem> getItems() {
         if (items == null) {
-            items = readItems();
+            items = readItems().stream().map(i -> (ListItem) i).collect(Collectors.toList());
         }
         return items;
     }
