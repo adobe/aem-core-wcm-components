@@ -3,5 +3,5 @@
           xmlns:jcr="http://www.jcp.org/jcr/1.0"
           cq:icon="table"
           jcr:primaryType="cq:Component"
-          jcr:title="Dynamic Table"
-          componentGroup="My Site - Content"/>
+          jcr:title="Table"
+          componentGroup="WCM Core"/>
