@@ -43,12 +43,12 @@ import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 
 @Component(
-        service = { Servlet.class },
-        property = {
-                "sling.servlet.resourceTypes="+ ClientLibraryCategoriesDataSourceServlet.RESOURCE_TYPE,
-                "sling.servlet.methods=GET",
-                "sling.servlet.extensions=html"
-        }
+    service = {Servlet.class},
+    property = {
+        "sling.servlet.resourceTypes=" + ClientLibraryCategoriesDataSourceServlet.RESOURCE_TYPE,
+        "sling.servlet.methods=GET",
+        "sling.servlet.extensions=html"
+    }
 )
 public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsServlet {
 
@@ -60,18 +60,17 @@ public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsSe
 
     @Override
     protected void doGet(@NotNull SlingHttpServletRequest request, @NotNull SlingHttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         LibraryType libraryType = null;
         Resource dataSourceResource = request.getResource().getChild(Config.DATASOURCE);
         if (dataSourceResource != null) {
             ValueMap dataSourceValueMap = ResourceUtil.getValueMap(dataSourceResource);
-            if (dataSourceValueMap != null) {
-                String type = dataSourceValueMap.get(PN_LIBRARY_TYPE, String.class);
-                if (type != null) {
-                    type = type.toUpperCase();
-                    libraryType = LibraryType.valueOf(type);
-                }
+            String type = dataSourceValueMap.get(PN_LIBRARY_TYPE, String.class);
+            if (type != null) {
+                type = type.toUpperCase();
+                libraryType = LibraryType.valueOf(type);
             }
+
         }
         SimpleDataSource clientLibraryCategoriesDataSource = new SimpleDataSource(getCategoryResourceList(request, libraryType).iterator());
         request.setAttribute(DataSource.class.getName(), clientLibraryCategoriesDataSource);
@@ -80,23 +79,23 @@ public class ClientLibraryCategoriesDataSourceServlet extends SlingSafeMethodsSe
     private List<Resource> getCategoryResourceList(@NotNull SlingHttpServletRequest request, LibraryType libraryType) {
         List<Resource> categoryResourceList = new ArrayList<>();
         HashSet<String> clientLibraryCategories = new HashSet<String>();
-        for (ClientLibrary library: htmlLibraryManager.getLibraries().values()) {
-            for (String category: library.getCategories()) {
+        for (ClientLibrary library : htmlLibraryManager.getLibraries().values()) {
+            for (String category : library.getCategories()) {
                 clientLibraryCategories.add(category);
             }
         }
         if (libraryType != null) {
             Collection<ClientLibrary> clientLibraries = htmlLibraryManager
                 .getLibraries(clientLibraryCategories.toArray(new String[clientLibraryCategories.size()]),
-                libraryType, true, true);
+                    libraryType, true, true);
             clientLibraryCategories.clear();
-            for (ClientLibrary library: clientLibraries) {
-                for (String category: library.getCategories()) {
+            for (ClientLibrary library : clientLibraries) {
+                for (String category : library.getCategories()) {
                     clientLibraryCategories.add(category);
                 }
             }
         }
-        for (String category: clientLibraryCategories) {
+        for (String category : clientLibraryCategories) {
             categoryResourceList.add(new CategoryResource(category, request.getResourceResolver()));
         }
         return categoryResourceList;
