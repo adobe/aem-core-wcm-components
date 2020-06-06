@@ -1,0 +1,21 @@
+<!-- TO DO class names as per core components BEM-->
+<div data-sly-use.table="com.adobe.cq.wcm.core.components.models.Table"
+     class="cmp-table" role="table" aria-label="" aria-describedby="">
+    <div id="">Table Description goes here. Optional</div>
+    <div role="rowgroup">
+        <div class="cmp-table-header" role="row" data-sly-list.propertyName="${table.formattedPropertyNames}">
+            <span class="cmp-table-header-column" role="columnheader">
+                ${propertyName}
+            </span>
+        </div>
+    </div>
+    <div role="rowgroup" data-sly-list.row="${table.rows}">
+        <div role="row" data-sly-list.item="${row}">
+            <span role="cell">
+                ${item}
+            </span>
+        </div>
+    </div>
+
+</div>
+

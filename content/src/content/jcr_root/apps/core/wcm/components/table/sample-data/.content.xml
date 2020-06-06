@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured">
+    <_x0031_0-year
+        jcr:primaryType="nt:unstructured"
+        jcr:title="10 Years"
+        apr="13%"
+        rate="12%"/>
+    <_x0032_0-year
+        jcr:primaryType="nt:unstructured"
+        jcr:title="20 Years"
+        apr="11%"
+        rate="10%"/>
+    <_x0033_0-year
+        jcr:primaryType="nt:unstructured"
+        jcr:title="30 Years"
+        apr="10%"
+        rate="9%"/>
+</jcr:root>
