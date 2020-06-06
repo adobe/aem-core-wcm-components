@@ -42,6 +42,7 @@ class TabsImplTest {
     private static final String TABS_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-1";
     private static final String TABS_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-2";
     private static final String TABS_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-3";
+    private static final String TABS_EMPTY = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-empty";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
@@ -54,9 +55,8 @@ class TabsImplTest {
 
     @Test
     void testEmptyTabs() {
-        Tabs tabs = new TabsImpl();
-        List<ListItem> items = tabs.getItems();
-        Assert.assertTrue("", items == null || items.size() == 0);
+        Tabs tabs = getTabsUnderTest(TABS_EMPTY);
+        Assert.assertEquals(0, tabs.getItems().size());
     }
 
     @Test
