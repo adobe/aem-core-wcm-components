@@ -53,8 +53,8 @@ public class TableImpl implements Table {
     public void init() throws IOException {
         formatPropertyNames();
         rows = new ArrayList<>();
-        Resource resource = resourceResolver.getResource(source);
-        rows = resourceReader.readData(resource,propertyNames);
+        //Resource resource = resourceResolver.getResource(source);
+        rows = resourceReader.readData(source,propertyNames);
     }
 
     /**

@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component(service = ResourceReader.class, immediate = true)
@@ -47,8 +48,12 @@ public class ResourceReaderImpl implements ResourceReader {
     private List<List<String>> rows;
 
     @Override
-    public List<List<String>> readData(Resource resource, String[] propertyNames) throws IOException {
+    public List<List<String>> readData(String source, String[] propertyNames) throws IOException {
+        Resource resource = resourceResolver.getResource(source);
         rows = new ArrayList<>();
+        if (isNull(resource)) {
+            return rows;
+        }
         if (DamUtil.isAsset(resource)) {
             processCSVData(resource, propertyNames);
         } else processResourceData(resource, propertyNames);
@@ -131,6 +136,4 @@ public class ResourceReaderImpl implements ResourceReader {
             .boxed()
             .collect(Collectors.toMap(index -> columns[index], index -> index, (a, b) -> b));
     }
-
-
 }
