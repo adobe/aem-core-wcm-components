@@ -20,7 +20,6 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceReader;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -32,12 +31,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Model(adaptables = {Resource.class, SlingHttpServletRequest.class},
-       adapters = {Table.class, ComponentExporter.class})
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = {Table.class, ComponentExporter.class},
+    resourceType = TableImpl.RESOURCE_TYPE)
+
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
     extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TableImpl extends AbstractComponentImpl implements Table {
 
+    public static final String RESOURCE_TYPE = "core/wcm/components/table/v1/table";
     @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String source;
 
