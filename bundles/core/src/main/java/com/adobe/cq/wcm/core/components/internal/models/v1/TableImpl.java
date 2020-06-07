@@ -54,7 +54,7 @@ public class TableImpl implements Table {
         formatPropertyNames();
         rows = new ArrayList<>();
         Resource resource = resourceResolver.getResource(source);
-        resourceReader.readData(resource,propertyNames);
+        rows = resourceReader.readData(resource,propertyNames);
     }
 
     /**
