@@ -17,13 +17,11 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Table;
-import com.adobe.cq.wcm.core.components.models.Tabs;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Assert;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,34 +34,30 @@ import static org.junit.Assert.assertEquals;
 class TableImplTest {
 
     private static final String TEST_BASE = "/table";
-    private static final String TEST_PAGE = "/content/table";
-    private static final String TEST_ROOT_PAGE = "/content/table";
+    private static final String CONTENT_ROOT = "/content";
+    private static final String TEST_ROOT_PAGE = CONTENT_ROOT + "/table";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CONTEXT_PATH = "/core";
     private static final String TABLE_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/table-1";
-
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
     @BeforeEach
     void setUp() {
-        context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
-    }
-
-    @AfterEach
-    void tearDown() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
     }
 
     @Test
     void testEmptyTable() {
         Table table = new TableImpl();
         List<List<String>> items = table.getItems();
-        Assert.assertTrue("", items == null || items.size() == 0);
+        Assert.assertTrue("", CollectionUtils.isEmpty(items));
+
     }
 
     @Test
     void testTableWithItems() {
-        Table table = getTableUnderTest(TABLE_1);
+        Table table = getTableUnderTest();
         Object[][] expectedItems = {
             {"item-1", "Active-1"},
             {"item-2", "Active-2"},
@@ -87,9 +81,9 @@ class TableImplTest {
             index++;
         }
     }
-    private Table getTableUnderTest(String resourcePath) {
+    private Table getTableUnderTest() {
         Utils.enableDataLayer(context, true);
-        context.currentResource(resourcePath);
+        context.currentResource(TABLE_1);
         context.request().setContextPath(CONTEXT_PATH);
         return context.request().adaptTo(Table.class);
     }

@@ -68,9 +68,10 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     private void formatPropertyNames() {
         formattedTableHeaderNames = new ArrayList<>();
         for (String propertyName : headerNames)
-            if (propertyName.contains("jcr:")) {
+            if (propertyName.contains("jcr:"))
                 formattedTableHeaderNames.add(propertyName.substring(propertyName.indexOf("jcr:") + 4));
-            } else formattedTableHeaderNames.add(propertyName);
+            else
+                formattedTableHeaderNames.add(propertyName);
     }
 
     @Override
