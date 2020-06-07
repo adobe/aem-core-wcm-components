@@ -51,12 +51,12 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     private ResourceReader resourceReader;
 
     private List<String> formattedTableHeaderNames;
-    private List<List<String>> rows;
+    private List<List<String>> items;
 
     @PostConstruct
     public void init() throws IOException {
         formatPropertyNames();
-        rows = resourceReader.readData(source, headerNames);
+        items = resourceReader.readData(source, headerNames);
     }
 
     /**
@@ -77,8 +77,8 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     }
 
     @Override
-    public List<List<String>> getRows() {
-        return rows;
+    public List<List<String>> getItems() {
+        return items;
     }
 
     @Override

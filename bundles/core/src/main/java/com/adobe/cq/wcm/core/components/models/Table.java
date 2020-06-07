@@ -23,7 +23,7 @@ public interface Table extends Component {
         throw new UnsupportedOperationException();
     }
 
-    default List<List<String>> getRows() {
+    default List<List<String>> getItems() {
         throw new UnsupportedOperationException();
     }
 

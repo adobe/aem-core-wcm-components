@@ -5,7 +5,7 @@
           xmlns:jcr="http://www.jcp.org/jcr/1.0"
           xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
           jcr:primaryType="nt:unstructured"
-          jcr:title="Table (V1)"
+          jcr:title="Table (v1)"
           sling:resourceType="cq/gui/components/authoring/dialog">
     <content jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/container">
         <layout jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/layouts/tabs" type="nav"/>
