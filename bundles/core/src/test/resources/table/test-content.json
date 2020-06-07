@@ -1,0 +1,23 @@
+{
+    "table": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Table Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description"   : "Table description",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "table-1"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/separator/v1/table"
+                    }
+                }
+            }
+        }
+    }
+}

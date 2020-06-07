@@ -43,6 +43,6 @@ BLOCK cmp-table
     ELEMENT cmp-table__rowgroup
     ELEMENT cmp-table__rowgroup-row
     ELEMENT cmp-table__rowgroup-row-columnheader
-    ELEMENT  cmp-table__rowgroup-row-cell
+    ELEMENT cmp-table__rowgroup-row-cell
 ```
 

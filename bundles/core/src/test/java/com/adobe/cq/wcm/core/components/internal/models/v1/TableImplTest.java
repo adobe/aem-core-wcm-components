@@ -15,7 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.services.table.ResourceReader;
+import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
@@ -35,31 +37,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(AemContextExtension.class)
 class TableImplTest {
 
-    @InjectMocks
-    private TableImpl table;
+    private static final String TEST_BASE = "/title";
+    private static final String TEST_PAGE = "/content/title";
 
-    @Mock
-    private String source;
-
-    @Mock
-    private String[] propertyNames;
-
-    @Mock
-    private String title;
-
-    @Mock
-    private ResourceReader resourceReader;
-
-    @Mock
-    private List<String> formattedPropertyNames;
-
-    @Mock
-    private List<List<String>> rows;
-
+    private final AemContext context = CoreComponentTestContext.newAemContext();
 
     @BeforeEach
     void setUp() {
-
+        context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
     }
 
     @AfterEach
