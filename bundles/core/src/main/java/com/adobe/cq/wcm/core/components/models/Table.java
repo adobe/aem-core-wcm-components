@@ -17,11 +17,17 @@ package com.adobe.cq.wcm.core.components.models;
 
 import java.util.List;
 
-public interface Table {
-    default List<String> getFormattedPropertyNames()  {
+public interface Table extends Component {
+
+    default List<String> getFormattedPropertyNames() {
         throw new UnsupportedOperationException();
     }
-    default List<List<String>> getRows()  {
+
+    default List<List<String>> getRows() {
+        throw new UnsupportedOperationException();
+    }
+
+    default String getTitle() {
         throw new UnsupportedOperationException();
     }
 }

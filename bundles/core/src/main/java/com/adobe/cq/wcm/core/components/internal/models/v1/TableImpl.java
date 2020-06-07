@@ -15,15 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.wcm.core.components.models.Table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceReader;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import javax.annotation.PostConstruct;
@@ -31,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Model(adaptables = {Resource.class, SlingHttpServletRequest.class}, adapters = Table.class)
+@Model(adaptables = {Resource.class, SlingHttpServletRequest.class}, adapters = {Table.class, ComponentExporter.class})
 public class TableImpl implements Table {
 
     @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -40,8 +39,8 @@ public class TableImpl implements Table {
     @ValueMapValue(name = "propertyNames", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String[] propertyNames;
 
-    @SlingObject
-    private ResourceResolver resourceResolver;
+    @ValueMapValue(name = "title", injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String title;
 
     @OSGiService
     private ResourceReader resourceReader;
@@ -52,9 +51,7 @@ public class TableImpl implements Table {
     @PostConstruct
     public void init() throws IOException {
         formatPropertyNames();
-        rows = new ArrayList<>();
-        //Resource resource = resourceResolver.getResource(source);
-        rows = resourceReader.readData(source,propertyNames);
+        rows = resourceReader.readData(source, propertyNames);
     }
 
     /**
@@ -77,5 +74,10 @@ public class TableImpl implements Table {
     @Override
     public List<List<String>> getRows() {
         return rows;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 }

@@ -15,6 +15,13 @@
                 <items jcr:primaryType="nt:unstructured">
                     <column jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
+
+                            <title
+                                jcr:primaryType="nt:unstructured"
+                                fieldLabel="Table Title"
+                                name="./title"
+                                sling:resourceType="granite/ui/components/foundation/form/textfield"/>
+
                             <tableFrom jcr:primaryType="nt:unstructured" fieldLabel="Build Table using" granite:class="cq-dialog-dropdown-showhide" name="./tableFrom" sling:resourceType="granite/ui/components/coral/foundation/form/select">
                                 <granite:data jcr:primaryType="nt:unstructured" cq-dialog-dropdown-showhide-target=".source-option-tablefrom-showhide-target"/>
                                 <items jcr:primaryType="nt:unstructured">
@@ -22,6 +29,7 @@
                                     <resource jcr:primaryType="nt:unstructured" granite:hide="${cqDesign.disableResource}" text="Resource" value="resource"/>
                                 </items>
                             </tableFrom>
+
                             <linkTo jcr:primaryType="nt:unstructured" fieldLabel="Source path" name="./source" predicate="nosystem" rootPath="/" showTitles="false" sling:resourceType="granite/ui/components/foundation/form/pathbrowser"/>
                             <setProperties jcr:primaryType="nt:unstructured" granite:class="hide source-option-tablefrom-showhide-target foundation-layout-util-vmargin" sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <granite:data jcr:primaryType="nt:unstructured" showhidetargetvalue="resource"/>
