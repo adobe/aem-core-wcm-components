@@ -19,7 +19,7 @@ import java.util.List;
 
 public interface Table extends Component {
 
-    default List<String> getFormattedPropertyNames() {
+    default List<String> getFormattedTableHeaderNames() {
         throw new UnsupportedOperationException();
     }
 

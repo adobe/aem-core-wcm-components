@@ -16,10 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceReader;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
@@ -30,14 +32,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Model(adaptables = {Resource.class, SlingHttpServletRequest.class}, adapters = {Table.class, ComponentExporter.class})
-public class TableImpl implements Table {
+@Model(adaptables = {Resource.class, SlingHttpServletRequest.class},
+       adapters = {Table.class, ComponentExporter.class})
+@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+    extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+public class TableImpl extends AbstractComponentImpl implements Table {
 
     @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String source;
 
-    @ValueMapValue(name = "propertyNames", injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String[] propertyNames;
+    @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String[] headerNames;
 
     @ValueMapValue(name = "title", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String title;
@@ -45,13 +50,13 @@ public class TableImpl implements Table {
     @OSGiService
     private ResourceReader resourceReader;
 
-    private List<String> formattedPropertyNames;
+    private List<String> formattedTableHeaderNames;
     private List<List<String>> rows;
 
     @PostConstruct
     public void init() throws IOException {
         formatPropertyNames();
-        rows = resourceReader.readData(source, propertyNames);
+        rows = resourceReader.readData(source, headerNames);
     }
 
     /**
@@ -59,16 +64,16 @@ public class TableImpl implements Table {
      * property names are used to display the headers in table.
      */
     private void formatPropertyNames() {
-        formattedPropertyNames = new ArrayList<>();
-        for (String propertyName : propertyNames)
+        formattedTableHeaderNames = new ArrayList<>();
+        for (String propertyName : headerNames)
             if (propertyName.contains("jcr:")) {
-                formattedPropertyNames.add(propertyName.substring(propertyName.indexOf("jcr:") + 4));
-            } else formattedPropertyNames.add(propertyName);
+                formattedTableHeaderNames.add(propertyName.substring(propertyName.indexOf("jcr:") + 4));
+            } else formattedTableHeaderNames.add(propertyName);
     }
 
     @Override
-    public List<String> getFormattedPropertyNames() {
-        return formattedPropertyNames;
+    public List<String> getFormattedTableHeaderNames() {
+        return formattedTableHeaderNames;
     }
 
     @Override
