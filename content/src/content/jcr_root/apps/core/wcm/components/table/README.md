@@ -1,10 +1,3 @@
-Table component creates a table from CVS file or resource node available in repository.
-
-Properties
-title : Table Title
-source : Root Resource or CSV File DAM path
-propertyNames: Names of the field that will be displayed in columns
-
 <!--
 Copyright 2019 Adobe
 
@@ -50,6 +43,6 @@ BLOCK cmp-table
     ELEMENT cmp-table__rowgroup
     ELEMENT cmp-table__rowgroup-row
     ELEMENT cmp-table__rowgroup-row-columnheader
-    ELEMEN  cmp-table__rowgroup-row-cell
+    ELEMENT  cmp-table__rowgroup-row-cell
 ```
 
