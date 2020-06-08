@@ -46,12 +46,12 @@ public class ListImplTest {
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
 
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUp() {
         CONTEXT.load().json("/list/test-etc.json", "/etc/tags/list");
     }
 
     @Test
-    public void testProperties() throws Exception {
+    public void testProperties() {
         List list = getListUnderTest(LIST_1);
         assertTrue(list.showDescription());
         assertTrue(list.showModificationDate());
