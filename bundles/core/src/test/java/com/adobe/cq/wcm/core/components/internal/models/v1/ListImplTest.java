@@ -38,6 +38,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -131,48 +132,48 @@ public class ListImplTest {
     @Test
     public void testOrderBy() {
         List list = getListUnderTest(LIST_7);
-        checkListConsistency(list, new String[]{"Page 1", "Page 2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1", "Page 2"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_7));
     }
 
     @Test
     public void testOrderDescBy() {
         List list = getListUnderTest(LIST_8);
-        checkListConsistency(list, new String[]{"Page 2", "Page 1"});
+        checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_8));
     }
 
     @Test
     public void testOrderByModificationDate() {
         List list = getListUnderTest(LIST_9);
-        checkListConsistency(list, new String[]{"Page 2", "Page 1"});
+        checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_9));
     }
 
     @Test
     public void testOrderByModificationDateDesc() {
         List list = getListUnderTest(LIST_10);
-        checkListConsistency(list, new String[]{"Page 1", "Page 2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1", "Page 2"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_10));
     }
 
     @Test
     public void testMaxItems() {
         List list = getListUnderTest(LIST_11);
-        checkListConsistency(list, new String[]{"Page 1"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_11));
     }
 
     @Test
     public void testOrderByModificationDateWithNoModificationDate() {
         List list = getListUnderTest(LIST_12);
-        checkListConsistency(list, new String[]{"Page 1.1", "Page 1.2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1.1", "Page 1.2"});
     }
 
     @Test
     public void testOrderByModificationDateWithNoModificationDateForOneItem() {
         List list = getListUnderTest(LIST_13);
-        checkListConsistency(list, new String[]{"Page 2", "Page 1", "Page 1.2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1", "Page 1.2"});
     }
 
     @Test
@@ -209,21 +210,11 @@ public class ListImplTest {
         return request.adaptTo(List.class);
     }
 
-    private void checkListConsistency(List list, String[] expectedPages) {
-        assertTrue("Expected that the returned list will contain " + expectedPages.length + " items",
-                list.getItems().size() == expectedPages.length);
-        int index = 0;
-        for (Page item : list.getItems()) {
-            assertEquals(expectedPages[index++], item.getTitle());
-        }
+    private void checkListConsistencyByTitle(List list, String[] expectedPageTitles) {
+        assertArrayEquals(expectedPageTitles, list.getItems().stream().map(Page::getTitle).toArray());
     }
 
     private void checkListConsistencyByPaths(List list, String[] expectedPagePaths) {
-        assertTrue("Expected that the returned list will contain " + expectedPagePaths.length + " items",
-                list.getItems().size() == expectedPagePaths.length);
-        int index = 0;
-        for (Page item : list.getItems()) {
-            assertEquals(expectedPagePaths[index++], item.getPath());
-        }
+        assertArrayEquals(expectedPagePaths, list.getItems().stream().map(Page::getPath).toArray());
     }
 }
