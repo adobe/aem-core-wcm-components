@@ -68,7 +68,37 @@
         return Object.keys(JSON.parse(componentElement.dataset.cmpDataLayer))[0];
     }
 
+    function isElementInViewport(el) {
+        var rect = el.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document. documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document. documentElement.clientWidth)
+        );
+    }
+
+    function triggerShowEvents() {
+        var components = document.querySelectorAll("[data-cmp-data-layer]");
+        components.forEach(function(component) {
+            if (isElementInViewport(component) && !component.viewed) {
+                var componentId = Object.keys(JSON.parse(component.dataset.cmpDataLayer))[0];
+                console.log('cmp:show triggered for:', componentId);
+                component.viewed = true;
+                dataLayer.push({
+                    event: "cmp:show",
+                    eventInfo: {
+                        path: "component." + componentId
+                    }
+                });
+            }
+        });
+    }
+
     function onDocumentReady() {
+        triggerShowEvents();
+        window.addEventListener('scroll', triggerShowEvents);
+
         var components = document.querySelectorAll("[data-cmp-data-layer]");
         var clickableElements = document.querySelectorAll("[data-cmp-clickable]");
 
