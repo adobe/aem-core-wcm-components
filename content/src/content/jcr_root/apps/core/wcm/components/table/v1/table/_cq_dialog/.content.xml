@@ -8,35 +8,53 @@
           jcr:title="Table (v1)"
           sling:resourceType="cq/gui/components/authoring/dialog">
     <content jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/container">
-        <layout jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/layouts/tabs" type="nav"/>
+        <layout jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/layouts/tabs"
+                type="nav"/>
         <items jcr:primaryType="nt:unstructured">
-            <settings jcr:primaryType="nt:unstructured" jcr:title="Settings" sling:resourceType="granite/ui/components/foundation/section">
-                <layout jcr:primaryType="nt:unstructured" margin="false" sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"/>
+            <settings jcr:primaryType="nt:unstructured" jcr:title="Settings"
+                      sling:resourceType="granite/ui/components/foundation/section">
+                <layout jcr:primaryType="nt:unstructured" margin="false"
+                        sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"/>
                 <items jcr:primaryType="nt:unstructured">
-                    <column jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/container">
+                    <column jcr:primaryType="nt:unstructured"
+                            sling:resourceType="granite/ui/components/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
 
-                            <title
+                            <description
                                 jcr:primaryType="nt:unstructured"
-                                fieldLabel="Table Title"
-                                name="./title"
+                                fieldLabel="Description"
+                                name="./description"
                                 sling:resourceType="granite/ui/components/foundation/form/textfield"/>
 
-                            <tableFrom jcr:primaryType="nt:unstructured" fieldLabel="Build Table using" granite:class="cq-dialog-dropdown-showhide" name="./tableFrom" sling:resourceType="granite/ui/components/coral/foundation/form/select">
-                                <granite:data jcr:primaryType="nt:unstructured" cq-dialog-dropdown-showhide-target=".source-option-tablefrom-showhide-target"/>
+                            <tableFrom jcr:primaryType="nt:unstructured" fieldLabel="Build Table using"
+                                       granite:class="cq-dialog-dropdown-showhide" name="./tableFrom"
+                                       sling:resourceType="granite/ui/components/coral/foundation/form/select">
+                                <granite:data jcr:primaryType="nt:unstructured"
+                                              cq-dialog-dropdown-showhide-target=".source-option-tablefrom-showhide-target"/>
                                 <items jcr:primaryType="nt:unstructured">
-                                    <csv jcr:primaryType="nt:unstructured" granite:hide="${cqDesign.disableCsv}" text="CSV" value="csv"/>
-                                    <resource jcr:primaryType="nt:unstructured" granite:hide="${cqDesign.disableResource}" text="Resource" value="resource"/>
+                                    <csv jcr:primaryType="nt:unstructured" granite:hide="${cqDesign.disableCsv}"
+                                         text="CSV" value="csv"/>
+                                    <resource jcr:primaryType="nt:unstructured"
+                                              granite:hide="${cqDesign.disableResource}" text="Resource"
+                                              value="resource"/>
                                 </items>
                             </tableFrom>
 
-                            <linkTo jcr:primaryType="nt:unstructured" fieldLabel="Source path" name="./source" predicate="nosystem" rootPath="/" showTitles="false" sling:resourceType="granite/ui/components/foundation/form/pathbrowser"/>
-                            <setProperties jcr:primaryType="nt:unstructured" granite:class="hide source-option-tablefrom-showhide-target foundation-layout-util-vmargin" sling:resourceType="granite/ui/components/coral/foundation/container">
+                            <linkTo jcr:primaryType="nt:unstructured" fieldLabel="Source path" name="./source"
+                                    predicate="nosystem" rootPath="/" showTitles="false"
+                                    sling:resourceType="granite/ui/components/foundation/form/pathbrowser"/>
+                            <setProperties jcr:primaryType="nt:unstructured"
+                                           granite:class="hide source-option-tablefrom-showhide-target foundation-layout-util-vmargin"
+                                           sling:resourceType="granite/ui/components/coral/foundation/container">
                                 <granite:data jcr:primaryType="nt:unstructured" showhidetargetvalue="resource"/>
                                 <items jcr:primaryType="nt:unstructured">
-                                    <symbols jcr:primaryType="nt:unstructured" fieldLabel="Property Names" granite:class="source-option-properties-showhide-target" label="Property Names" sling:resourceType="granite/ui/components/foundation/form/multifield">
+                                    <symbols jcr:primaryType="nt:unstructured" fieldLabel="Property Names"
+                                             granite:class="source-option-properties-showhide-target"
+                                             label="Property Names"
+                                             sling:resourceType="granite/ui/components/foundation/form/multifield">
                                         <granite:data jcr:primaryType="nt:unstructured" showhidetargetvalue="resource"/>
-                                        <field jcr:primaryType="nt:unstructured" name="./headerNames" sling:resourceType="granite/ui/components/foundation/form/textfield"/>
+                                        <field jcr:primaryType="nt:unstructured" name="./headerNames"
+                                               sling:resourceType="granite/ui/components/foundation/form/textfield"/>
                                     </symbols>
                                 </items>
                             </setProperties>

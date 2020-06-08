@@ -19,15 +19,29 @@ import java.util.List;
 
 public interface Table extends Component {
 
-    default List<String> getFormattedTableHeaderNames() {
+    /**
+     * Returns formatted property names by removing jcr: from the property name.
+     * @return
+     */
+    default List<String> getFormattedHeaderNames() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Returns the table items(Rows) associated to the selected source path.
+     *
+      * @return
+     */
     default List<List<String>> getItems() {
         throw new UnsupportedOperationException();
     }
 
-    default String getTitle() {
+    /**
+     * Returns Table Description
+     *
+     * @return
+     */
+    default String getDescription() {
         throw new UnsupportedOperationException();
     }
 }

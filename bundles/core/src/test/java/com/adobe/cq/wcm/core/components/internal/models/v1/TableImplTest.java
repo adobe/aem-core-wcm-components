@@ -15,13 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
-import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Table;
-import com.adobe.cq.wcm.core.components.models.Tabs;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +38,7 @@ import static org.junit.Assert.assertEquals;
 class TableImplTest {
 
     private static final String TEST_BASE = "/table";
-    private static final String TEST_PAGE = "/content/table";
+    private static final String TEST_PAGE = "/content";
     private static final String TEST_ROOT_PAGE = "/content/table";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CONTEXT_PATH = "/core";
@@ -62,6 +64,19 @@ class TableImplTest {
     }
 
     @Test
+    void testGetFormattedHeaders() {
+        Table table = getTableUnderTest(TABLE_1);
+        table.getFormattedHeaderNames();
+
+    }
+
+    @Test
+    void testGetDescription() {
+
+
+    }
+
+    @Test
     void testTableWithItems() {
         Table table = getTableUnderTest(TABLE_1);
         Object[][] expectedItems = {
@@ -69,6 +84,7 @@ class TableImplTest {
             {"item-2", "Active-2"},
             {"item-3", "Active-3"}
         };
+
         verifyTableItems(expectedItems, table.getItems());
         Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
     }
@@ -87,11 +103,24 @@ class TableImplTest {
             index++;
         }
     }
+
     private Table getTableUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
-        context.currentResource(resourcePath);
-        context.request().setContextPath(CONTEXT_PATH);
-        return context.request().adaptTo(Table.class);
+        Resource resource = context.currentResource(resourcePath);
+
+        if (resource == null) {
+            throw new IllegalStateException("Did you forget to define test resource " + resourcePath + "?");
+        }
+
+        MockSlingHttpServletRequest request = new MockSlingHttpServletRequest(context.resourceResolver(),
+            context.bundleContext());
+        SlingBindings bindings = new SlingBindings();
+        bindings.put(SlingBindings.RESOURCE, resource);
+        bindings.put(SlingBindings.REQUEST, request);
+        bindings.put(WCMBindings.PROPERTIES, resource.getValueMap());
+        request.setResource(resource);
+        request.setAttribute(SlingBindings.class.getName(), bindings);
+        return request.adaptTo(Table.class);
     }
 
 }

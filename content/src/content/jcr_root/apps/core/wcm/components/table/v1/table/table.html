@@ -20,10 +20,10 @@
      role="table"
      aria-label=""
      aria-describedby="">
-    <div data-sly-test="${table.title}" class="cmp-table__title"> ${table.title}</div>
-    <div class="cmp-table__rowgroup" role="rowgroup" >
+    <div data-sly-test="${table.description}" class="cmp-table__description"> ${table.description}</div>
+    <div class="cmp-table__rowgroup" role="rowgroup">
         <div class="cmp-table__rowgroup-row" role="row"
-             data-sly-list.headerName="${table.formattedTableHeaderNames}">
+             data-sly-list.headerName="${table.formattedHeaderNames}">
             <span class="cmp-table__rowgroup-row-columnheader"
                   role="columnheader">
                 ${headerName}

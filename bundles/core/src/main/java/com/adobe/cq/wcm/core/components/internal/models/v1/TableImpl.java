@@ -18,18 +18,28 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Table;
-import com.adobe.cq.wcm.core.components.services.table.ResourceReader;
+import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.commons.util.DamUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Model(adaptables = SlingHttpServletRequest.class,
     adapters = {Table.class, ComponentExporter.class},
@@ -49,16 +59,39 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     @ValueMapValue(name = "title", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String title;
 
-    @OSGiService
-    private ResourceReader resourceReader;
+    @Inject
+    @Optional
+    private List<ResourceProcessor> resourceProcessors;
+
+    @SlingObject
+    private ResourceResolver resourceResolver;
 
     private List<String> formattedTableHeaderNames;
     private List<List<String>> items;
 
+
     @PostConstruct
-    public void init() throws IOException {
-        formatPropertyNames();
-        items = resourceReader.readData(source, headerNames);
+    public void initModel() throws IOException {
+        Resource resource = resourceResolver.getResource(source);
+        if (!isNull(resource)) {
+            if (nonNull(resourceProcessors)) {
+                for (ResourceProcessor resourceProcessor : resourceProcessors) {
+                    if (resourceProcessor.canProcess(getResourceMimeType())) {
+                        items = resourceProcessor.processData(resource, headerNames);
+                        break;
+                    }
+                }
+            }
+            formatPropertyNames();
+        }
+    }
+
+    private String getResourceMimeType() {
+        if (nonNull(resource) && DamUtil.isAsset(resource)) {
+            Asset asset = DamUtil.resolveToAsset(resource);
+            return asset.getMimeType();
+        }
+        return StringUtils.EMPTY;
     }
 
     /**
@@ -67,14 +100,17 @@ public class TableImpl extends AbstractComponentImpl implements Table {
      */
     private void formatPropertyNames() {
         formattedTableHeaderNames = new ArrayList<>();
-        for (String propertyName : headerNames)
+        for (String propertyName : headerNames) {
             if (propertyName.contains("jcr:")) {
-                formattedTableHeaderNames.add(propertyName.substring(propertyName.indexOf("jcr:") + 4));
-            } else formattedTableHeaderNames.add(propertyName);
+                formattedTableHeaderNames.add(propertyName.substring(propertyName.indexOf("jcr:")));
+            } else {
+                formattedTableHeaderNames.add(propertyName);
+            }
+        }
     }
 
     @Override
-    public List<String> getFormattedTableHeaderNames() {
+    public List<String> getFormattedHeaderNames() {
         return formattedTableHeaderNames;
     }
 
@@ -84,7 +120,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     }
 
     @Override
-    public String getTitle() {
+    public String getDescription() {
         return title;
     }
 }

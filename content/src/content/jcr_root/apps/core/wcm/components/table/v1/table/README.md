@@ -34,12 +34,12 @@ The following configuration properties are used:
 1. `./id` - defines the component HTML ID attribute.
 2. `./source` - defines source resource for table content
 3. `./headerNames` - defines the table headers
-4. `./title` - defines title for table
+4. `./description` - defines title for table
 
 ## BEM Description
 ```
 BLOCK cmp-table
-    ELEMENT cmp-table__title
+    ELEMENT cmp-table__description
     ELEMENT cmp-table__rowgroup
     ELEMENT cmp-table__rowgroup-row
     ELEMENT cmp-table__rowgroup-row-columnheader

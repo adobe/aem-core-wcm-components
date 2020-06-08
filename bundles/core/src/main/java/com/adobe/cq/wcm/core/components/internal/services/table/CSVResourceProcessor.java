@@ -17,14 +17,11 @@
 package com.adobe.cq.wcm.core.components.internal.services.table;
 
 
-import com.adobe.cq.wcm.core.components.services.table.ResourceReader;
+import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.commons.util.DamUtil;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.osgi.service.component.annotations.Component;
 
 import java.io.BufferedReader;
@@ -32,51 +29,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-@Component(service = ResourceReader.class, immediate = true)
-public class ResourceReaderImpl implements ResourceReader {
-
-    @OSGiService
-    private ResourceResolver resourceResolver;
-
-    private List<List<String>> rows;
+@Component(service = ResourceProcessor.class, immediate = true)
+public class CSVResourceProcessor implements ResourceProcessor {
 
     @Override
-    public List<List<String>> readData(String source, String[] propertyNames) throws IOException {
-        Resource resource = resourceResolver.getResource(source);
-        rows = new ArrayList<>();
-        if (isNull(resource)) {
-            return rows;
-        }
-        if (DamUtil.isAsset(resource)) {
-            processCSVData(resource, propertyNames);
-        } else processResourceData(resource, propertyNames);
-
-        return rows;
-    }
-
-    private void processResourceData(Resource resource, String[] propertyNames) {
-
-        Iterator<Resource> children = resourceResolver.listChildren(resource);
-        while (children.hasNext()) {
-            Resource child = children.next();
-            ValueMap props = child.adaptTo(ValueMap.class);
-            List<String> row = new ArrayList<>();
-            for (String propertyName : propertyNames) {
-                String propValue = props != null ? props.get(propertyName, "") : "";
-                row.add(propValue);
-            }
-            rows.add(row);
-        }
-    }
-
-    private void processCSVData(Resource resource, String[] propertyNames) throws IOException {
+    public List<List<String>> processData(Resource resource, String[] headerNames) throws IOException {
+        List<List<String>> rows = new ArrayList<>();
         Asset asset = DamUtil.resolveToAsset(resource);
         if (nonNull(asset)) {
             Rendition original = asset.getOriginal();
@@ -89,19 +56,27 @@ public class ResourceReaderImpl implements ResourceReader {
                 Map<String, Integer> columnIndexMap = getColumnIndexMap(columns);
                 //get the column indexes for matching property name
                 Map<String, Integer> tableColumnsMap = new HashMap<>();
-                for (String propertyName : propertyNames) {
+                for (String propertyName : headerNames) {
                     tableColumnsMap.put(propertyName, columnIndexMap.getOrDefault(propertyName, -1));
                 }
                 //remove header row from the list
                 lines = lines.subList(1, lines.size() - 1);
-                populateRowsForTable(lines, tableColumnsMap);
+                populateRowsForTable(lines, tableColumnsMap, rows);
                 br.close();
 
             }
         }
+
+        return rows;
     }
 
-    private void populateRowsForTable(List<String[]> lines, Map<String, Integer> finalMap) {
+    @Override
+    public Boolean canProcess(String mimeType) {
+        return mimeType != null && mimeType.equalsIgnoreCase("text/csv");
+    }
+
+
+    private void populateRowsForTable(List<String[]> lines, Map<String, Integer> finalMap, List<List<String>> rows) {
         List<String> row = new ArrayList<>();
         for (String[] line : lines) {
             finalMap.forEach((k, v) ->
