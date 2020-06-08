@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Collections;
+import java.util.Objects;
 
 import javax.jcr.Session;
 
@@ -32,7 +33,6 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.day.cq.search.SimpleSearch;
-import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
@@ -129,12 +129,12 @@ public class ListImplTest {
         CONTEXT.registerAdapter(ResourceResolver.class, Session.class, mockSession);
         CONTEXT.registerAdapter(Resource.class, SimpleSearch.class, mockSimpleSearch);
         SearchResult searchResult = mock(SearchResult.class);
-        Hit hit = mock(Hit.class);
 
         when(mockSimpleSearch.getResult()).thenReturn(searchResult);
-        when(searchResult.getHits()).thenReturn(Collections.singletonList(hit));
-        Resource contentResource = CONTEXT.resourceResolver().getResource("/content/list/pages/page_1/jcr:content");
-        when(hit.getResource()).thenReturn(contentResource);
+        when(searchResult.getResources()).thenReturn(
+            Collections.singletonList(Objects.requireNonNull(
+                CONTEXT.resourceResolver().getResource("/content/list/pages/page_1/jcr:content")))
+                .iterator());
 
         List list = getListUnderTest(LIST_6);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1"});
