@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Model(adaptables = SlingHttpServletRequest.class,
@@ -56,8 +55,8 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String[] headerNames;
 
-    @ValueMapValue(name = "title", injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String title;
+    @ValueMapValue(name = "description", injectionStrategy = InjectionStrategy.OPTIONAL)
+    private String description;
 
     @Inject
     @Optional
@@ -72,24 +71,27 @@ public class TableImpl extends AbstractComponentImpl implements Table {
 
     @PostConstruct
     public void initModel() throws IOException {
-        Resource resource = resourceResolver.getResource(source);
-        if (!isNull(resource)) {
-            if (nonNull(resourceProcessors)) {
-                for (ResourceProcessor resourceProcessor : resourceProcessors) {
-                    if (resourceProcessor.canProcess(getResourceMimeType())) {
-                        items = resourceProcessor.processData(resource, headerNames);
-                        break;
-                    }
+        if (nonNull(resourceProcessors)) {
+            for (ResourceProcessor resourceProcessor : resourceProcessors) {
+                Resource sourceResource = resourceResolver.getResource(source);
+                if (resourceProcessor.canProcess(getSourceResourceMimeType(sourceResource))) {
+                    items = resourceProcessor.processData(sourceResource, headerNames);
+                    break;
                 }
             }
             formatPropertyNames();
         }
+
     }
 
-    private String getResourceMimeType() {
-        if (nonNull(resource) && DamUtil.isAsset(resource)) {
-            Asset asset = DamUtil.resolveToAsset(resource);
-            return asset.getMimeType();
+    private String getSourceResourceMimeType(Resource sourceResource) throws IOException {
+        if (nonNull(sourceResource)) {
+            if (DamUtil.isAsset(sourceResource)) {
+                Asset asset = DamUtil.resolveToAsset(sourceResource);
+                return asset.getMimeType();
+            } else {
+                return StringUtils.EMPTY;
+            }
         }
         return StringUtils.EMPTY;
     }
@@ -121,6 +123,6 @@ public class TableImpl extends AbstractComponentImpl implements Table {
 
     @Override
     public String getDescription() {
-        return title;
+        return description;
     }
 }

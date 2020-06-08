@@ -67,22 +67,23 @@ class TableImplTest {
 
     @Test
     void testGetDescription() {
-
-
-    }
-
-    @Test
-    void testTableWithItems() {
         Table table = getTableUnderTest(TABLE_1);
-        Object[][] expectedItems = {
-            {"item-1", "Active-1"},
-            {"item-2", "Active-2"},
-            {"item-3", "Active-3"}
-        };
 
-        verifyTableItems(expectedItems, table.getItems());
-        Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
+
     }
+
+//    @Test
+//    void testTableWithItems() {
+//        Table table = getTableUnderTest(TABLE_1);
+//        Object[][] expectedItems = {
+//            {"item-1", "Active-1"},
+//            {"item-2", "Active-2"},
+//            {"item-3", "Active-3"}
+//        };
+//
+//        verifyTableItems(expectedItems, table.getItems());
+//        Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
+//    }
 
 
     private void verifyTableItems(Object[][] expectedItems, List<List<String>> items) {
