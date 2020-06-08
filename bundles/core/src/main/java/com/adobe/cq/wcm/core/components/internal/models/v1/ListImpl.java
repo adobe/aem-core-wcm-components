@@ -16,10 +16,12 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.Serializable;
+import java.text.Collator;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -280,7 +282,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
         OrderBy orderBy = OrderBy.fromString(properties.get(PN_ORDER_BY, StringUtils.EMPTY));
         if (orderBy != null) {
             SortOrder sortOrder = SortOrder.fromString(properties.get(PN_SORT_ORDER, SortOrder.ASC.value));
-            itemStream = itemStream.sorted(new ListSort(orderBy, sortOrder));
+            itemStream = itemStream.sorted(new ListSort(orderBy, sortOrder, this.currentPage.getLanguage()));
         }
 
         int maxItems = properties.get(PN_MAX_ITEMS, MAX_ITEMS_DEFAULT);
@@ -542,7 +544,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
      */
     private static class ListSort implements Comparator<Page>, Serializable {
 
-        private static final long serialVersionUID = 204096578105548876L;
+        private static final long serialVersionUID = 1171225002657014881L;
 
         /**
          * The sort order
@@ -556,20 +558,36 @@ public class ListImpl extends AbstractComponentImpl implements List {
         @Nullable
         private final OrderBy orderBy;
 
-        ListSort(@Nullable final OrderBy orderBy, @Nullable final SortOrder sortOrder) {
+        /**
+         * Comparator for comparing titles.
+         */
+        @NotNull
+        private final Comparator<String> titleComparator;
+
+        /**
+         * Construct a page sorting comparator.
+         *
+         * @param orderBy The field to order by.
+         * @param sortOrder The sort order.
+         * @param locale Current locale.
+         */
+        ListSort(@Nullable final OrderBy orderBy, @Nullable final SortOrder sortOrder, @NotNull Locale locale) {
             this.orderBy = orderBy;
             this.sortOrder = sortOrder;
+            Collator collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.PRIMARY);
+            this.titleComparator = Comparator.nullsLast(collator);
         }
 
         @Override
-        public int compare(final Page item1, final Page item2) {
+        public int compare(@NotNull final Page item1, @NotNull final Page item2) {
             int i = 0;
             if (orderBy == OrderBy.MODIFIED) {
                 // getLastModified may return null, define null to be after nonnull values
                 i = ObjectUtils.compare(item1.getLastModified(), item2.getLastModified(), true);
             } else if (orderBy == OrderBy.TITLE) {
                 // getTitle may return null, define null to be greater than nonnull values
-                i = ObjectUtils.compare(item1.getTitle(), item2.getTitle(), true);
+                i = this.titleComparator.compare(item1.getTitle(), item2.getTitle());
             }
 
             if (sortOrder == SortOrder.DESC) {

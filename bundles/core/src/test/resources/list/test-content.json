@@ -77,6 +77,21 @@
                 "/content/list/pages/page_2"
             ]
         },
+        "staticOrderByTitleListTypeWithAccent": {
+            "jcr:primaryType"     : "nt:unstructured",
+            "sling:resourceType"  : "core/wcm/components/list",
+            "listFrom"            : "static",
+            "showThumbnail"       : "true",
+            "linkItems"           : "true",
+            "showDescription"     : "true",
+            "showModificationDate": "true",
+            "orderBy"             : "title",
+            "pages"               : [
+                "/content/list/pages/page_1",
+                "/content/list/pages/page_5",
+                "/content/list/pages/page_2"
+            ]
+        },
         "staticOrderByModificationDateListType"    : {
             "jcr:primaryType"     : "nt:unstructured",
             "sling:resourceType"  : "core/wcm/components/list",
@@ -244,6 +259,14 @@
             "jcr:primaryType": "cq:Page",
             "jcr:content"    : {
                 "jcr:primaryType": "cq:PageContent"
+            }
+        },
+        "page_5": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content"    : {
+                "jcr:primaryType": "cq:PageContent",
+                "jcr:title"      : "Páge 1",
+                "cq:lastModified": "2016-09-21T16:12:45.000-07:00"
             }
         }
     },
