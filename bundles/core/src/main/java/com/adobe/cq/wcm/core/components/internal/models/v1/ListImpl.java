@@ -194,7 +194,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
     @Deprecated
     public Collection<Page> getItems() {
         if (listItems == null) {
-            this.listItems = getListItems(getListType());
+            this.listItems = getPages();
         }
         return listItems;
     }
@@ -236,7 +236,7 @@ public class ListImpl extends AbstractComponentImpl implements List {
      * @return The list type.
      */
     @NotNull
-    protected Source getListType() {
+    private Source getListType() {
         // Note: this can be done a lot cleaner in JDK 11.
         return Optional.ofNullable(
             // get the source from the properties
@@ -251,15 +251,14 @@ public class ListImpl extends AbstractComponentImpl implements List {
     }
 
     /**
-     * Get the list of pages for the given list type.
+     * Get the list of pages.
      *
-     * @param listType The list type.
      * @return The list of pages.
      */
-    protected java.util.List<Page> getListItems(Source listType) {
+    protected java.util.List<Page> getPages() {
         // get the list item stream
         Stream<Page> itemStream;
-        switch (listType) {
+        switch (getListType()) {
             case STATIC:
                 itemStream = getStaticListItems();
                 break;
