@@ -1,41 +1,44 @@
 {
     "table": {
         "jcr:primaryType": "cq:Page",
-        "jcr:content"    : {
-            "jcr:primaryType"   : "cq:PageContent",
-            "jcr:title"         : "Table Test",
+        "jcr:content": {
+            "jcr:primaryType": "cq:PageContent",
+            "jcr:title": "Table Test",
             "sling:resourceType": "core/wcm/components/page/v2/page",
-            "jcr:description"   : "Table description",
-            "root"              : {
-                "jcr:primaryType"   : "nt:unstructured",
+            "jcr:description": "Table description",
+            "root": {
+                "jcr:primaryType": "nt:unstructured",
                 "sling:resourceType": "wcm/foundation/components/responsivegrid",
-                "responsivegrid"    : {
-                    "jcr:primaryType"   : "nt:unstructured",
+                "responsivegrid": {
+                    "jcr:primaryType": "nt:unstructured",
                     "sling:resourceType": "wcm/foundation/components/responsivegrid",
-                    "table-1"          : {
-                        "jcr:primaryType"   : "nt:unstructured",
+                    "table-1": {
+                        "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/table/v1/table",
                         "headerNames": "[email,firstName,gender,jcr:title]",
                         "item-1": {
                             "jcr:primaryType": "nt:unstructured",
-                             "jcr:title": "Active-1",
+                            "jcr:title": "Active-1",
                             "email": "sample1@sample.com",
                             "firstName": "sample-1",
-                            "gender": "male"
+                            "gender": "male",
+                            "sling:resourceType": "core/wcm/components/text/v1/text"
                         },
                         "item-2": {
                             "jcr:primaryType": "nt:unstructured",
                             "jcr:title": "Active-2",
                             "email": "sample2@sample.com",
                             "firstName": "sample-2",
-                            "gender": "female"
+                            "gender": "female",
+                            "sling:resourceType": "core/wcm/components/text/v1/text"
                         },
                         "item-3": {
                             "jcr:primaryType": "nt:unstructured",
                             "jcr:title": "Active-3",
                             "email": "sample3@sample.com",
                             "firstName": "sample-3",
-                            "gender": "male"
+                            "gender": "male",
+                            "sling:resourceType": "core/wcm/components/text/v1/text"
                         }
                     }
                 }

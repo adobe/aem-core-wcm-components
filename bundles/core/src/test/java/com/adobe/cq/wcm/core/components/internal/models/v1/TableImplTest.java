@@ -21,11 +21,10 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.Table;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
-import org.junit.Assert;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,34 +32,30 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class TableImplTest {
 
     private static final String TEST_BASE = "/table";
-    private static final String TEST_PAGE = "/content";
-    private static final String TEST_ROOT_PAGE = "/content/table";
+    private static final String CONTENT_ROOT = "/content";
+    private static final String TEST_ROOT_PAGE = CONTENT_ROOT + TEST_BASE;
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
-    private static final String CONTEXT_PATH = "/core";
     private static final String TABLE_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/table-1";
-
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
     @BeforeEach
     void setUp() {
-        context.load().json(TEST_BASE + "/test-content.json", TEST_PAGE);
-    }
-
-    @AfterEach
-    void tearDown() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
     }
 
     @Test
     void testEmptyTable() {
         Table table = new TableImpl();
         List<List<String>> items = table.getItems();
-        Assert.assertTrue("", items == null || items.size() == 0);
+        assertTrue("", CollectionUtils.isEmpty(items));
+
     }
 
     @Test
@@ -103,7 +98,6 @@ class TableImplTest {
             index++;
         }
     }
-
     private Table getTableUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);
@@ -122,5 +116,4 @@ class TableImplTest {
         request.setAttribute(SlingBindings.class.getName(), bindings);
         return request.adaptTo(Table.class);
     }
-
 }
