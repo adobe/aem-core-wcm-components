@@ -39,7 +39,6 @@ import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -85,28 +84,41 @@ public class ListImplTest {
     @Test
     public void testStaticListType() {
         List list = getListUnderTest(LIST_2);
-        assertEquals(2, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_1",
+            "/content/list/pages/page_2",
+        });
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_2));
     }
 
     @Test
     public void testChildrenListType() {
         List list = getListUnderTest(LIST_3);
-        assertEquals(3, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_1/page_1_1",
+            "/content/list/pages/page_1/page_1_2",
+            "/content/list/pages/page_1/page_1_3",
+        });
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_3));
     }
 
     @Test
     public void testChildrenListTypeWithDepth() {
         List list = getListUnderTest(LIST_4);
-        assertEquals(4, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_1/page_1_1",
+            "/content/list/pages/page_1/page_1_2",
+            "/content/list/pages/page_1/page_1_2/page_1_2_1",
+            "/content/list/pages/page_1/page_1_3",
+
+        });
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_4));
     }
 
     @Test
     public void testTagsListType() {
         List list = getListUnderTest(LIST_5);
-        assertEquals(1, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1/page_1_3"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_5));
     }
 
@@ -125,7 +137,7 @@ public class ListImplTest {
         when(hit.getResource()).thenReturn(contentResource);
 
         List list = getListUnderTest(LIST_6);
-        assertEquals(1, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_6));
     }
 
