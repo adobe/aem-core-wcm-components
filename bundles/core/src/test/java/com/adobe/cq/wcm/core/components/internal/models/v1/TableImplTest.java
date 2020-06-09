@@ -18,7 +18,11 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceProcessor;
 import com.adobe.cq.wcm.core.components.models.Table;
+import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
+import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
+import com.day.cq.wcm.api.LanguageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.commons.collections4.CollectionUtils;
@@ -79,18 +83,21 @@ class TableImplTest {
 
     }
 
-//    @Test
-//    void testTableWithItems() {
-//        Table table = getTableUnderTest(TABLE_1);
-//        Object[][] expectedItems = {
-//            {"item-1", "Active-1"},
-//            {"item-2", "Active-2"},
-//            {"item-3", "Active-3"}
-//        };
-//
-//        verifyTableItems(expectedItems, table.getItems());
-//        Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
-//    }
+    @Test
+    void testTableWithItems() throws IOException{
+        context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
+
+        Table table = getTableUnderTest(TABLE_1);
+
+        Object[][] expectedItems = {
+            {"item-1", "Active-1"},
+            {"item-2", "Active-2"},
+            {"item-3", "Active-3"}
+        };
+
+        verifyTableItems(expectedItems, table.getItems());
+        Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
+    }
 
 
     private void verifyTableItems(Object[][] expectedItems, List<List<String>> items) {
