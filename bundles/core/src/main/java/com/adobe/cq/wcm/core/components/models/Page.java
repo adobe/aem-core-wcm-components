@@ -227,6 +227,16 @@ public interface Page extends ContainerExporter, Component {
     }
 
     /**
+     * Returns the brand slug of this page.
+     *
+     * @return the page's brandSlug
+     * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
+     */
+    default String getBrandSlug() {
+    	throw new UnsupportedOperationException();
+    }
+    
+    /**
      * If this page is associated with a Template, then this method will return the Template's client library categories
      * to be included in the page as defined by the user in the policy.
      *

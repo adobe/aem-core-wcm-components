@@ -50,6 +50,7 @@ import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.day.cq.commons.inherit.HierarchyNodeInheritanceValueMap;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -57,6 +58,7 @@ import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Strings;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { Page.class,
         ContainerExporter.class }, resourceType = PageImpl.RESOURCE_TYPE)
@@ -96,12 +98,17 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected String designPath;
     protected String staticDesignPath;
     protected String title;
+    protected String brandSlug;
+    
     protected String[] clientLibCategories = new String[0];
     protected Calendar lastModifiedDate;
     protected String templateName;
 
     protected static final String DEFAULT_TEMPLATE_EDITOR_CLIENTLIB = "wcm.foundation.components.parsys.allowedcomponents";
     protected static final String PN_CLIENTLIBS = "clientlibs";
+    
+    protected static final String PN_BRANDSLUG = "brandSlug";
+    
     private Map<String, ComponentExporter> childModels = null;
     private String resourceType;
 
@@ -132,6 +139,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
         populateClientlibCategories();
         templateName = extractTemplateName();
+        brandSlug = Utils.inheritWithOverrides(currentPage, PN_BRANDSLUG);
     }
 
     protected String extractTemplateName() {
@@ -145,7 +153,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
         return templateName;
     }
-
+    
     @Override
     public String getLanguage() {
         return currentPage == null ? Locale.getDefault().toLanguageTag()
@@ -189,6 +197,11 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     }
 
     @Override
+    public String getBrandSlug() {
+		return brandSlug;
+	}
+
+	@Override
     public String getTemplateName() {
         return templateName;
     }

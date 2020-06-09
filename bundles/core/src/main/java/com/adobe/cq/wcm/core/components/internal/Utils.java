@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
 import com.day.cq.wcm.api.Page;
@@ -104,7 +105,30 @@ public class Utils {
      * @return the generated ID
      */
     public static String generateId(String prefix, String path) {
-        return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
+        return generateId(prefix, ID_SEPARATOR, path);
+    }
+    public static String generateId(String prefix, String separator, String path) {
+        return StringUtils.join(prefix, separator, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 
+    public static String inheritWithOverrides(com.day.cq.wcm.api.Page startingPoint, String propertyName) {
+    	if( startingPoint == null ) {
+    		return StringUtils.EMPTY;
+    	}
+    	
+    	com.day.cq.wcm.api.Page tmp = startingPoint;
+    	
+		while( tmp != null && tmp.hasContent() && tmp.getDepth() > 1 ) {
+			ValueMap props = tmp.getProperties();
+			if( props != null ) {
+				boolean override = Boolean.parseBoolean(props.get(propertyName + "_override", String.class));
+				if(override) {
+					return props.get(propertyName, String.class);
+				}
+				tmp = tmp.getParent();
+			}
+		}
+    	return StringUtils.EMPTY;
+    }
+    
 }
