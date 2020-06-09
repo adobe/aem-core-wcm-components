@@ -60,7 +60,7 @@ BLOCK cmp-pdfviewer
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
-* **Compatibility**: AEM 6.3
+* **Compatibility**: AEM 6.4
 * **Status**: production-ready
 * **ViewSDK Documentation**: [https://www.adobe.io/apis/documentcloud/dcsdk/docs.html](https://www.adobe.io/apis/documentcloud/dcsdk/docs.html)
 * **Author**: [Ensemble Systems Inc. - Leslie Chan](https://ensemble.com)
