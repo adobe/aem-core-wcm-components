@@ -24,6 +24,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import static java.util.Objects.isNull;
 @Component(service = ResourceProcessor.class, immediate = true)
 public class DefaultResourceProcessor implements ResourceProcessor {
 
-    @OSGiService
+    @Reference
     private ResourceResolver resourceResolver;
 
     @Override
