@@ -23,7 +23,16 @@
         self: "[data-" + NS + '-is="' + IS + '"]'
     };
 
+    function initSDK() {
+        if (!window.adobe_dc_view_sdk) {
+            var dcv = document.createElement("script");
+            dcv.src = "https://documentcloud.adobe.com/view-sdk/main.js";
+            document.body.appendChild(dcv);
+        }
+    }
+
     function previewPdf(component) {
+        initSDK();
         // prevents multiple initialization
         component.removeAttribute("data-" + NS + "-is");
 
@@ -49,12 +58,6 @@
      * @private
      */
     function onDocumentReady() {
-        if (!window.adobe_dc_view_sdk) {
-            var dcv = document.createElement("script");
-            dcv.src = "https://documentcloud.adobe.com/view-sdk/main.js";
-            document.body.appendChild(dcv);
-        }
-
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             previewPdf(elements[i]);
