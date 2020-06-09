@@ -26,7 +26,16 @@
         sdkScript: 'script[src="' + SDK_URL + '"]'
     };
 
+    function initSDK() {
+        if (!window.adobe_dc_view_sdk) {
+            var dcv = document.createElement("script");
+            dcv.src = "https://documentcloud.adobe.com/view-sdk/main.js";
+            document.body.appendChild(dcv);
+        }
+    }
+
     function previewPdf(component) {
+        initSDK();
         // prevents multiple initialization
         component.removeAttribute("data-" + NS + "-is");
 
