@@ -27,25 +27,21 @@
     };
 
     function initSDK() {
-        if (!window.adobe_dc_view_sdk) {
-            var dcv = document.createElement("script");
-            dcv.src = "https://documentcloud.adobe.com/view-sdk/main.js";
-            document.body.appendChild(dcv);
-        }
-    }
-
-    function previewPdf(component) {
-        initSDK();
-        // prevents multiple initialization
-        component.removeAttribute("data-" + NS + "-is");
-
-        // add the view sdk to the page
         var scriptIncluded = document.querySelectorAll(selectors.sdkScript).length > 0;
         if (!window.adobe_dc_view_sdk && !scriptIncluded) {
             var dcv = document.createElement("script");
             dcv.src = SDK_URL;
             document.body.appendChild(dcv);
         }
+    }
+
+    function previewPdf(component) {
+        // prevents multiple initialization
+        component.removeAttribute("data-" + NS + "-is");
+
+        // add the view sdk to the page
+        initSDK();
+
         // manage the preview
         if (component.dataset && component.id) {
             document.addEventListener(SDK_READY_EVENT, function(){
@@ -57,7 +53,7 @@
                 adobeDCView.previewFile({
                     content:{location: {url: component.dataset.cmpDocumentPath}},
                     metaData:{fileName: component.dataset.cmpDocumentFileName}
-                }, component.dataset.cmpViewerConfigJson);
+                }, JSON.parse(component.dataset.cmpViewerConfigJson));
             });
         }
     }

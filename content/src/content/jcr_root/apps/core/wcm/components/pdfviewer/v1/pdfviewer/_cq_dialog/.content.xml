@@ -20,6 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="PDF Viewer"
     sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientLibs="core.wcm.components.pdfviewer.v1.editor"
     helpPath="https://www.adobe.com/go/aem_cmp_pdfviewer_v1"
     trackingFeature="core-components:pdfviewer:v1">
     <content
