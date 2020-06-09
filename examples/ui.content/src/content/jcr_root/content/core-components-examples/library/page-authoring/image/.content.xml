@@ -242,7 +242,7 @@
                             displayPopupTitle="true"
                             fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
                             isDecorative="false"
-                            linkURL="/content/core-components-examples/library/image"
+                            linkURL="/content/core-components-examples/library/page-authoring/image"
                             titleValueFromDAM="true"/>
                     </component>
                     <info

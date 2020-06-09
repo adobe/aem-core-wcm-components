@@ -220,7 +220,7 @@
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-into-ocean.jpg"
-                                linkURL="/content/core-components-examples/library/carousel"
+                                linkURL="/content/core-components-examples/library/container/carousel"
                                 textIsRich="true"
                                 titleFromPage="false"/>
                             <teaser_841933659
@@ -236,7 +236,7 @@
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/snowy-mountain-glacier.jpg"
-                                linkURL="/content/core-components-examples/library/carousel"
+                                linkURL="/content/core-components-examples/library/container/carousel"
                                 textIsRich="true"
                                 titleFromPage="false"/>
                             <teaser
@@ -252,7 +252,7 @@
                                 actionsEnabled="false"
                                 descriptionFromPage="false"
                                 fileReference="/content/dam/core-components-examples/library/sample-assets/lava-rock-formation.jpg"
-                                linkURL="/content/core-components-examples/library/carousel"
+                                linkURL="/content/core-components-examples/library/container/carousel"
                                 textIsRich="true"
                                 titleFromPage="false"/>
                         </carousel_8337507762>
