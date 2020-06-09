@@ -18,18 +18,28 @@
 
     var NS = "cmp";
     var IS = "pdfviewer";
+    var SDK_URL = "https://documentcloud.adobe.com/view-sdk/main.js";
+    var SDK_READY_EVENT = "adobe_dc_view_sdk.ready";
 
     var selectors = {
-        self: "[data-" + NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]',
+        sdkScript: 'script[src="' + SDK_URL + '"]'
     };
 
     function previewPdf(component) {
         // prevents multiple initialization
         component.removeAttribute("data-" + NS + "-is");
 
+        // add the view sdk to the page
+        var scriptIncluded = document.querySelectorAll(selectors.sdkScript).length > 0;
+        if (!window.adobe_dc_view_sdk && !scriptIncluded) {
+            var dcv = document.createElement("script");
+            dcv.src = SDK_URL;
+            document.body.appendChild(dcv);
+        }
         // manage the preview
         if (component.dataset && component.id) {
-            document.addEventListener("adobe_dc_view_sdk.ready", function(){
+            document.addEventListener(SDK_READY_EVENT, function(){
                 var adobeDCView = new AdobeDC.View({
                     clientId: component.dataset.cmpClientId,
                     divId: component.id + '-content',
@@ -49,12 +59,6 @@
      * @private
      */
     function onDocumentReady() {
-        if (!window.adobe_dc_view_sdk) {
-            var dcv = document.createElement("script");
-            dcv.src = "https://documentcloud.adobe.com/view-sdk/main.js";
-            document.body.appendChild(dcv);
-        }
-
         var elements = document.querySelectorAll(selectors.self);
         for (var i = 0; i < elements.length; i++) {
             previewPdf(elements[i]);
