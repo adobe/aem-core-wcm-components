@@ -27,9 +27,10 @@
     };
 
     function initSDK() {
-        var scriptIncluded = document.querySelectorAll(selectors.sdkScript).length > 0;
-        if (!window.adobe_dc_view_sdk && !scriptIncluded) {
+        var sdkIncluded = document.querySelectorAll(selectors.sdkScript).length > 0;
+        if (!window.adobe_dc_view_sdk && !sdkIncluded) {
             var dcv = document.createElement("script");
+            dcv.type = "text/javascript";
             dcv.src = SDK_URL;
             document.body.appendChild(dcv);
         }
