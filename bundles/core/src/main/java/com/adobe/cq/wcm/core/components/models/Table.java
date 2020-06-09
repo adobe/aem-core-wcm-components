@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface Table extends Component {
@@ -32,7 +33,7 @@ public interface Table extends Component {
      *
       * @return
      */
-    default List<List<String>> getItems() {
+    default List<List<String>> getItems() throws IOException {
         throw new UnsupportedOperationException();
     }
 

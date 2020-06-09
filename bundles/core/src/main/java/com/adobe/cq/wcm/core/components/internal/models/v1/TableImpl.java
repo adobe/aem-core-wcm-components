@@ -71,17 +71,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
 
     @PostConstruct
     public void initModel() throws IOException {
-        if (nonNull(resourceProcessors)) {
-            for (ResourceProcessor resourceProcessor : resourceProcessors) {
-                Resource sourceResource = resourceResolver.getResource(source);
-                if (resourceProcessor.canProcess(getSourceResourceMimeType(sourceResource))) {
-                    items = resourceProcessor.processData(sourceResource, headerNames);
-                    break;
-                }
-            }
-            formatPropertyNames();
-        }
-
+        formatHeaderNames();
     }
 
     private String getSourceResourceMimeType(Resource sourceResource) throws IOException {
@@ -100,7 +90,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
      * This method formats the property name to friendly names by removing jcr: prefix. Formatted
      * property names are used to display the headers in table.
      */
-    private void formatPropertyNames() {
+    private void formatHeaderNames() {
         formattedTableHeaderNames = new ArrayList<>();
         for (String propertyName : headerNames) {
             if (propertyName.contains("jcr:")) {
@@ -117,7 +107,17 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     }
 
     @Override
-    public List<List<String>> getItems() {
+    public List<List<String>> getItems() throws IOException {
+        if (nonNull(resourceProcessors)) {
+            for (ResourceProcessor resourceProcessor : resourceProcessors) {
+                Resource sourceResource = resourceResolver.getResource(source);
+                if (resourceProcessor.canProcess(getSourceResourceMimeType(sourceResource))) {
+                    items = resourceProcessor.processData(sourceResource, headerNames);
+                    break;
+                }
+            }
+
+        }
         return items;
     }
 
