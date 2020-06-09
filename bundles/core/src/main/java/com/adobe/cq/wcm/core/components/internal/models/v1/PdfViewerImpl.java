@@ -20,10 +20,10 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
-import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -32,9 +32,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.PdfViewer;
-
 import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
+import com.adobe.cq.wcm.core.components.models.PdfViewer;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { PdfViewer.class,
         ComponentExporter.class }, resourceType = { PdfViewerImpl.RESOURCE_TYPE })

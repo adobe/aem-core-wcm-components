@@ -27,7 +27,8 @@
      data-sly-set.clientIdError="${'Please setup Context Aware Configuration (com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig) in /conf and link it using sling:configRef on any current/parent node.' @ i18n}"
      data-sly-set.documentPathError="${'Please select a document to display.' @ i18n}"
      data-sly-set.error="${!pdfViewer.clientId ? clientIdError : (!pdfViewer.documentPath ? documentPathError : false)}"
-     data-sly-test="${!error}">
+     data-sly-test="${!error}"
+     data-cmp-data-layer="${pdfViewer.data.json}">
      <div id="${pdfViewer.id}-content"
           class="cmp-pdfviewer__content ${pdfViewer.containerClass @ context='html'}"
           data-sly-set.style="height: ${pdfViewer.viewerHeight @ context='html'} !important"
