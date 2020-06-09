@@ -54,6 +54,7 @@
                                                 fieldDescription="Path of Document."
                                                 fieldLabel="Document Path"
                                                 name="./documentPath"
+                                                required="{Boolean}true"
                                                 rootPath="/content/dam"/>
                                         </items>
                                     </column>
