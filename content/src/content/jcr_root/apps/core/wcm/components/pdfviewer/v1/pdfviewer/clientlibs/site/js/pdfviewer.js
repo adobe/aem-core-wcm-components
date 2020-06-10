@@ -45,18 +45,26 @@
 
         // manage the preview
         if (component.dataset && component.id) {
-            document.addEventListener(SDK_READY_EVENT, function(){
-                var adobeDCView = new AdobeDC.View({
-                    clientId: component.dataset.cmpClientId,
-                    divId: component.id + '-content',
-                    reportSuiteId: component.dataset.cmpReportSuiteId
+            if (window.AdobeDC && window.AdobeDC.View) {
+                dcView(component);
+            } else {
+                document.addEventListener(SDK_READY_EVENT, function () {
+                    dcView(component);
                 });
-                adobeDCView.previewFile({
-                    content:{location: {url: component.dataset.cmpDocumentPath}},
-                    metaData:{fileName: component.dataset.cmpDocumentFileName}
-                }, JSON.parse(component.dataset.cmpViewerConfigJson));
-            });
+            }
         }
+    }
+
+    function dcView(component) {
+        var adobeDCView = new AdobeDC.View({
+            clientId: component.dataset.cmpClientId,
+            divId: component.id + '-content',
+            reportSuiteId: component.dataset.cmpReportSuiteId
+        });
+        adobeDCView.previewFile({
+            content:{location: {url: component.dataset.cmpDocumentPath}},
+            metaData:{fileName: component.dataset.cmpDocumentFileName}
+        }, JSON.parse(component.dataset.cmpViewerConfigJson));
     }
 
     /**
