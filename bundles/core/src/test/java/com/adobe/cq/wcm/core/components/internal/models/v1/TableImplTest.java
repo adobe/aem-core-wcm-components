@@ -18,6 +18,8 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import com.adobe.cq.sightly.WCMBindings;
 import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.services.table.CSVResourceProcessor;
+import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceProcessor;
 import com.adobe.cq.wcm.core.components.models.Table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -27,6 +29,7 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,6 +77,12 @@ class TableImplTest {
     @Mock
     Resource resource;
 
+    @Mock
+    DefaultResourceProcessor defaultResourceProcessor;
+
+    @Mock
+    CSVResourceProcessor csvResourceProcessor;
+
     @BeforeEach
     void setUp() throws NoSuchFieldException {
         MockitoAnnotations.initMocks(this);
@@ -81,6 +90,13 @@ class TableImplTest {
         FieldSetter.setField(table, getField("resourceProcessors"), resourceProcessors);
         FieldSetter.setField(table, getField("headerNames"), HEADER_NAMES);
         FieldSetter.setField(table, getField("description"), DESCRIPTION);
+
+        List<ResourceProcessor> resourceProcessors = new ArrayList<>();
+        resourceProcessors.add(defaultResourceProcessor);
+        resourceProcessors.add(csvResourceProcessor);
+        FieldSetter.setField(table, getField("resourceProcessors"), resourceProcessors);
+
+
     }
 
     private Field getField(final String fieldName) throws NoSuchFieldException {
@@ -97,6 +113,8 @@ class TableImplTest {
     @Test
     void testGetFormattedHeaders() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
+
         Table table = getTableUnderTest();
         List<String> expectedFormattedHeadersList = Arrays.asList(HEADER_NAMES);
         List<String> formattedHeaders = table.getFormattedHeaderNames();
@@ -106,6 +124,7 @@ class TableImplTest {
     @Test
     void testGetDescription() {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
         Table table = getTableUnderTest();
         assertEquals("This is sample Table Description", table.getDescription());
 
@@ -114,37 +133,36 @@ class TableImplTest {
     @Test
     void testTableWithItems() throws IOException {
 
-        List<List<String>> rows = new ArrayList<>();
-        List<String> row = new ArrayList<>();
-        row.add("sample1@sample.com");
-        row.add("sample-1");
-        row.add("male");
-        row.add("Active-1");
-        rows.add(row);
-        row.clear();
-        row.add("sample-2");
-        row.add("female");
-        row.add("Active-2");
-        rows.add(row);
-        row.clear();
-        row.add("sample-3");
-        row.add("male");
-        row.add("Active-3");
-        rows.add(row);
-
-//        context.registerService(ResourceProcessor.class, resourceProcessors);
-//        Table table = getTableUnderTest();
-
+        List<List<String>> rows = setMockRows();
         when(resourceResolver.getResource("/test/path")).thenReturn(resource);
-        ResourceProcessor resourceProcessor = mock(ResourceProcessor.class);
-
-        Iterator<ResourceProcessor> itr = mock(Iterator.class);
-        Mockito.when(itr.hasNext()).thenReturn(true, false);
-        Mockito.when(itr.next()).thenReturn(Mockito.any(ResourceProcessor.class));
-        when(resourceProcessor.canProcess("")).thenReturn(true);
-        when(resourceProcessor.processData(resource, HEADER_NAMES)).thenReturn(rows);
+        when(defaultResourceProcessor.canProcess("")).thenReturn(true);
+        when(csvResourceProcessor.canProcess("")).thenReturn(false);
+        when(defaultResourceProcessor.processData(resource, HEADER_NAMES)).thenReturn(rows);
         assertEquals(rows, table.getItems());
         Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
+    }
+
+    @NotNull
+    private List<List<String>> setMockRows() {
+        List<List<String>> rows = new ArrayList<>();
+        List<String> row1 = new ArrayList<>();
+        row1.add("sample1@sample.com");
+        row1.add("sample-1");
+        row1.add("male");
+        row1.add("Active-1");
+        rows.add(row1);
+        List<String> row2 = new ArrayList<>();
+        row2.add("sample-2");
+        row2.add("female");
+        row2.add("Active-2");
+        rows.add(row2);
+        List<String> row3 = new ArrayList<>();
+
+        row3.add("sample-3");
+        row3.add("male");
+        row3.add("Active-3");
+        rows.add(row3);
+        return rows;
     }
 
 
