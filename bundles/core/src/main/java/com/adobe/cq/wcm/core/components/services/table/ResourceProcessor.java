@@ -23,5 +23,5 @@ import java.util.List;
 public interface ResourceProcessor {
     List<List<String>> processData(Resource resource, String[] propertyNames) throws IOException;
 
-    Boolean canProcess(String mimeType);
+    boolean canProcess(String mimeType);
 }

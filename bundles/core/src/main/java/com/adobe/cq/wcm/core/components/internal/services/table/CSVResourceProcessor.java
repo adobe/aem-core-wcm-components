@@ -71,7 +71,7 @@ public class CSVResourceProcessor implements ResourceProcessor {
     }
 
     @Override
-    public Boolean canProcess(String mimeType) {
+    public boolean canProcess(String mimeType) {
         return mimeType != null && mimeType.equalsIgnoreCase("text/csv");
     }
 

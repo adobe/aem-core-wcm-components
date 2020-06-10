@@ -27,7 +27,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
@@ -69,11 +68,11 @@ public class TableImpl extends AbstractComponentImpl implements Table {
 
 
     @PostConstruct
-    public void initModel() throws IOException {
+    public void initModel() {
         formatHeaderNames();
     }
 
-    private String getSourceResourceMimeType(Resource sourceResource) throws IOException {
+    private String getSourceResourceMimeType(Resource sourceResource) {
         if (nonNull(sourceResource)) {
             if (DamUtil.isAsset(sourceResource)) {
                 Asset asset = DamUtil.resolveToAsset(sourceResource);
