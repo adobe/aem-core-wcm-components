@@ -29,8 +29,6 @@
      data-sly-test="${!error}"
      data-cmp-data-layer="${pdfViewer.data.json}">
      <div id="${pdfViewer.id}-content"
-          class="cmp-pdfviewer__content ${pdfViewer.containerClass @ context='html'}"
-          data-sly-set.style="height: ${pdfViewer.viewerHeight @ context='html'} !important"
-          style="${(pdfViewer.containerClass == 'cmp-pdfviewer__full-window' || pdfViewer.containerClass == 'cmp-pdfviewer__sized-container') ? style : '' @ context='attribute' }"></div>
+          class="cmp-pdfviewer__content ${pdfViewer.containerClass @ context='html'}"></div>
 </div>
 <sly data-sly-call="${template.placeholder @ isEmpty=error, classAppend='cmp-pdfviewer', emptyTextAppend=error}"></sly>

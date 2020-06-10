@@ -40,7 +40,6 @@
 
         selectors = {
             defaultViewMode: $(".pdfviewer-defaultViewMode").parent(),
-            viewerHeight: $(".pdfviewer-viewerHeight").parent(),
             borderless: $(".pdfviewer-borderless").parent(),
             annotationTools: $(".pdfviewer-showAnnotationTools").parent(),
             showFullScreen: $(".pdfviewer-showFullScreen").parent(),
@@ -66,7 +65,7 @@
         controls.attr("disabled", false);
         switch (value) {
             case "SIZED_CONTAINER":
-                showControls(["viewerHeight", "showFullScreen", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
+                showControls(["showFullScreen", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
                 controls.attr("checked", true);
                 controls.attr("disabled", true);
                 break;
@@ -75,7 +74,7 @@
                 break;
             case "FULL_WINDOW":
             default:
-                showControls(["defaultViewMode", "viewerHeight", "borderless", "annotationTools", "leftHandPanel", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
+                showControls(["defaultViewMode", "borderless", "annotationTools", "leftHandPanel", "downloadPdf", "printPdf", "pageControls", "dockPageControls"]);
         }
         onPageControlChange();
     }

@@ -68,9 +68,6 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
     private String defaultViewMode;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String viewerHeight;
-
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private boolean borderless;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -136,11 +133,6 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
     @Override
     public String getDefaultViewMode() {
         return defaultViewMode;
-    }
-
-    @Override
-    public String getViewerHeight() {
-        return viewerHeight;
     }
 
     @Override

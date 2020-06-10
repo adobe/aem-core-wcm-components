@@ -20,7 +20,7 @@
     jcr:primaryType="nt:unstructured"
     jcr:title="PDF Viewer"
     sling:resourceType="cq/gui/components/authoring/dialog"
-    extraClientLibs="core.wcm.components.pdfviewer.v1.editor"
+    extraClientlibs="[core.wcm.components.pdfviewer.v1.editor]"
     helpPath="https://www.adobe.com/go/aem_cmp_pdfviewer_v1"
     trackingFeature="core-components:pdfviewer:v1">
     <content
@@ -119,14 +119,6 @@
                                                 jcr:primaryType="nt:unstructured"
                                                 sling:resourceType="granite/ui/components/coral/foundation/well">
                                                 <items jcr:primaryType="nt:unstructured">
-                                                    <viewerHeight
-                                                        granite:class="pdfviewer-controls pdfviewer-viewerHeight"
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                        fieldDescription="Set height of viewer."
-                                                        fieldLabel="Viewer Height"
-                                                        name="./viewerHeight"
-                                                        value="500px"/>
                                                     <borderless
                                                         granite:class="pdfviewer-controls pdfviewer-borderless"
                                                         jcr:primaryType="nt:unstructured"

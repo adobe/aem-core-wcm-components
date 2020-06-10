@@ -45,10 +45,6 @@ public interface PdfViewer extends Component {
         throw new UnsupportedOperationException();
     }
 
-    default String getViewerHeight() {
-        throw new UnsupportedOperationException();
-    }
-
     default boolean getBorderless() {
         throw new UnsupportedOperationException();
     }

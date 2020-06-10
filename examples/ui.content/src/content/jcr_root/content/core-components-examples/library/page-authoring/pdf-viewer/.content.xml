@@ -129,8 +129,7 @@
                             showLeftHandPanel="true"
                             showPageControls="true"
                             showPrintPdf="true"
-                            type="FULL_WINDOW"
-                            viewerHeight="500px"/>
+                            type="FULL_WINDOW"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -199,8 +198,7 @@
                             showLeftHandPanel="true"
                             showPageControls="false"
                             showPrintPdf="true"
-                            type="SIZED_CONTAINER"
-                            viewerHeight="500px"/>
+                            type="SIZED_CONTAINER"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -269,8 +267,7 @@
                             showLeftHandPanel="true"
                             showPageControls="true"
                             showPrintPdf="true"
-                            type="IN_LINE"
-                            viewerHeight="500px"/>
+                            type="IN_LINE"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

@@ -54,7 +54,6 @@ class PdfViewerImplTest {
         assertEquals("SIZED_CONTAINER", dcv.getType());
         assertEquals("https://pdfviewer.test/Test Document2.pdf", dcv.getDocumentPath());
         assertEquals("Test Document2.pdf", dcv.getDocumentFileName());
-        assertEquals("400px", dcv.getViewerHeight());
         assertEquals(false, dcv.getBorderless());
         assertEquals(false, dcv.getShowLeftHandPanel());
         assertEquals(false, dcv.getShowFullScreen());
@@ -95,12 +94,6 @@ class PdfViewerImplTest {
     void testGetDefaultViewMode() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
         assertEquals("FIT_PAGE", dcv.getDefaultViewMode());
-    }
-
-    @Test
-    void testGetViewerHeight() {
-        PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals("500px", dcv.getViewerHeight());
     }
 
     @Test
