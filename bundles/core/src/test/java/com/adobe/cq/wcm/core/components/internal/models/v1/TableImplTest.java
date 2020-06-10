@@ -21,28 +21,42 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceProcessor;
 import com.adobe.cq.wcm.core.components.models.Table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
-import com.adobe.cq.wcm.core.components.testing.MockLanguageManager;
-import com.day.cq.wcm.api.LanguageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.internal.util.reflection.FieldSetter;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+import javax.inject.Inject;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(AemContextExtension.class)
 class TableImplTest {
 
+    public static final String[] HEADER_PROPS = {"email", "firstName", "gender", "title"};
     private static final String TEST_BASE = "/table";
     private static final String CONTENT_ROOT = "/content";
     private static final String TEST_ROOT_PAGE = CONTENT_ROOT + TEST_BASE;
@@ -51,9 +65,35 @@ class TableImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
+
+    @InjectMocks
+    TableImpl table;
+
+    @Mock
+    private List<ResourceProcessor> resourceProcessors;
+
+    @Mock
+    private ResourceResolver resourceResolver;
+
+    @Mock
+    Resource resource;
+
+    @Mock
+    private String source;
+
+    @Mock
+    private String[] headerNames;
+
+    @Mock
+    private String description;
+
     @BeforeEach
-    void setUp() {
-        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+    void setUp() throws NoSuchFieldException {
+        MockitoAnnotations.initMocks(this);
+        FieldSetter.setField(table, table.getClass().getDeclaredField("resourceResolver"), resource);
+        FieldSetter.setField(table, table.getClass().getDeclaredField("resourceProcessors"), resourceProcessors);
+        FieldSetter.setField(table, table.getClass().getDeclaredField("headerNames"), headerNames);
+        FieldSetter.setField(table, table.getClass().getDeclaredField("description"), description);
     }
 
     @Test
@@ -66,53 +106,60 @@ class TableImplTest {
 
     @Test
     void testGetFormattedHeaders() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         Table table = getTableUnderTest(TABLE_1);
-        //TODO : Need to fix this test case
-        //String[] expectedFormattedHeadersArray = {"email","firstName","gender","title"};
-        String[] expectedFormattedHeadersArray = {"jcr:title]"};
+        String[] expectedFormattedHeadersArray = {"email", "firstName", "gender", "title"};
         List<String> expectedFormattedHeadersList = Arrays.asList(expectedFormattedHeadersArray);
         List<String> formattedHeaders = table.getFormattedHeaderNames();
-        assertEquals(expectedFormattedHeadersList,formattedHeaders);
-
+        assertEquals(expectedFormattedHeadersList, formattedHeaders);
     }
 
     @Test
     void testGetDescription() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         Table table = getTableUnderTest(TABLE_1);
-        assertEquals("This is sample Table",table.getDescription());
+        assertEquals("This is sample Table Description", table.getDescription());
 
     }
 
     @Test
-    void testTableWithItems() throws IOException{
-        context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
+    void testTableWithItems() throws IOException {
 
-        Table table = getTableUnderTest(TABLE_1);
+        List<List<String>> rows = new ArrayList<>();
+        List<String> row = new ArrayList<>();
+        row.add("sample1@sample.com");
+        row.add("sample-1");
+        row.add("male");
+        row.add("Active-1");
+        rows.add(row);
+        row.clear();
+        row.add("sample-2");
+        row.add("female");
+        row.add("Active-2");
+        rows.add(row);
+        row.clear();
+        row.add("sample-3");
+        row.add("male");
+        row.add("Active-3");
+        rows.add(row);
 
-        Object[][] expectedItems = {
-            {"item-1", "Active-1"},
-            {"item-2", "Active-2"},
-            {"item-3", "Active-3"}
-        };
+        //   context.registerService(ResourceProcessor.class, resourceProcessor);
+        //Table table = getTableUnderTest(TABLE_1);
 
-        verifyTableItems(expectedItems, table.getItems());
+        when(resourceResolver.getResource("/test/path")).thenReturn(resource);
+        ResourceProcessor resourceProcessor = Mockito.mock(ResourceProcessor.class);
+
+        Iterator<ResourceProcessor> itr = Mockito.mock(Iterator.class);
+        Mockito.when(itr.hasNext()).thenReturn(true, false);
+        Mockito.when(itr.next()).thenReturn(Mockito.any(ResourceProcessor.class));
+        when(resourceProcessor.canProcess("")).thenReturn(true);
+        when(resourceProcessor.processData(resource, HEADER_PROPS)).thenReturn(rows);
+        assertEquals(rows, table.getItems());
         Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
     }
 
 
-    private void verifyTableItems(Object[][] expectedItems, List<List<String>> items) {
-        assertEquals("The table contains a different number of items than expected.", expectedItems.length, items.size());
-        int index = 0;
-        for (List<String> item : items) {
-            assertEquals("The table item's is not what was expected.",
-                expectedItems[index][0], item.get(index));
-            assertEquals("The table item's  is not what was expected: " + item.get(index),
-                expectedItems[index][1], item.get(index));
-            assertEquals("The table item's  is not what was expected: " + item.get(index),
-                expectedItems[index][2], item.get(index));
-            index++;
-        }
-    }
+
     private Table getTableUnderTest(String resourcePath) {
         Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);

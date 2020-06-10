@@ -15,8 +15,8 @@
                     "table-1": {
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/table/v1/table",
-                        "headerNames": "[email,firstName,gender,jcr:title]",
-                        "description": "This is sample Table",
+                        "headerNames": ["email","firstName","gender","jcr:title"],
+                        "description": "This is sample Table Description",
                         "item-1": {
                             "jcr:primaryType": "nt:unstructured",
                             "jcr:title": "Active-1",

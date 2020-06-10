@@ -59,7 +59,6 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     private String description;
 
     @Inject
-    @Optional
     private List<ResourceProcessor> resourceProcessors;
 
     @SlingObject
@@ -94,7 +93,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
         formattedTableHeaderNames = new ArrayList<>();
         for (String propertyName : headerNames) {
             if (propertyName.contains("jcr:")) {
-                formattedTableHeaderNames.add(propertyName.substring(propertyName.indexOf("jcr:")));
+                formattedTableHeaderNames.add(propertyName.replace("jcr:",""));
             } else {
                 formattedTableHeaderNames.add(propertyName);
             }
