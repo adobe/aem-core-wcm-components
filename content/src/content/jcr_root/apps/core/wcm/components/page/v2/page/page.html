@@ -24,7 +24,13 @@
           data-cmp-data-layer-enabled="${page.data ? true : false}">
         <script data-sly-test.dataLayerEnabled="${page.data}">
           window.adobeDataLayer = window.adobeDataLayer || [];
-          adobeDataLayer.push({page: JSON.parse("${page.data.json @ context='scriptString'}"),event:'cmp:show',eventInfo:{path: 'page.${page.id @ context='scriptString'}'}});
+          adobeDataLayer.push({
+              page: JSON.parse("${page.data.json @ context='scriptString'}"),
+              event:'cmp:show',
+              eventInfo: {
+                  path: 'page.${page.id @ context="scriptString"}'
+              }
+          });
         </script>
         <sly data-sly-test.isRedirectPage="${page.redirectTarget && (wcmmode.edit || wcmmode.preview)}"
              data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>
