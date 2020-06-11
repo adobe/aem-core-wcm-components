@@ -23,10 +23,10 @@ import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceP
 import com.adobe.cq.wcm.core.components.models.Table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import com.day.cq.dam.api.Asset;
-import com.day.cq.dam.commons.util.DamUtil;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
@@ -48,7 +48,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
@@ -131,7 +130,6 @@ class TableImplTest {
         context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
         Table table = getTableUnderTest();
         assertEquals(TABLE_DESCRIPTION, table.getDescription());
-
     }
 
     @Test
@@ -139,9 +137,9 @@ class TableImplTest {
         List<List<String>> rows = setMockRows();
         when(resourceResolver.getResource(SOURCE)).thenReturn(sourceResource);
         when(sourceResource.getResourceType()).thenReturn(DAM_ASSET);
-        when(asset.getMimeType()).thenReturn("");
+        when(asset.getMimeType()).thenReturn(StringUtils.EMPTY);
         when(sourceResource.adaptTo(Asset.class)).thenReturn(asset);
-        when(defaultResourceProcessor.canProcess("")).thenReturn(true);
+        when(defaultResourceProcessor.canProcess(StringUtils.EMPTY)).thenReturn(true);
         when(defaultResourceProcessor.processData(sourceResource, HEADER_NAMES)).thenReturn(rows);
         assertEquals(rows, table.getItems());
     }
