@@ -22,6 +22,8 @@ import com.adobe.cq.wcm.core.components.internal.services.table.CSVResourceProce
 import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceProcessor;
 import com.adobe.cq.wcm.core.components.models.Table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
+import com.day.cq.dam.api.Asset;
+import com.day.cq.dam.commons.util.DamUtil;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,7 +37,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.util.reflection.FieldSetter;
 
@@ -43,7 +44,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -59,8 +59,9 @@ class TableImplTest {
     private static final String TEST_ROOT_PAGE = CONTENT_ROOT + TEST_BASE;
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String TABLE_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/table-1";
-    private static final String[] HEADER_NAMES = new String[] {"email", "firstName", "gender", "title"};
+    private static final String[] HEADER_NAMES = new String[]{"email", "firstName", "gender", "title"};
     private static final String DESCRIPTION = "Dummy description";
+    private static final String SOURCE = "/content/dam/test.csv";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -75,13 +76,16 @@ class TableImplTest {
     private ResourceResolver resourceResolver;
 
     @Mock
-    Resource resource;
+    Resource sourceResource;
 
     @Mock
     DefaultResourceProcessor defaultResourceProcessor;
 
     @Mock
     CSVResourceProcessor csvResourceProcessor;
+
+    @Mock
+    Asset asset;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException {
@@ -90,13 +94,11 @@ class TableImplTest {
         FieldSetter.setField(table, getField("resourceProcessors"), resourceProcessors);
         FieldSetter.setField(table, getField("headerNames"), HEADER_NAMES);
         FieldSetter.setField(table, getField("description"), DESCRIPTION);
-
+        FieldSetter.setField(table, getField("source"), SOURCE);
         List<ResourceProcessor> resourceProcessors = new ArrayList<>();
         resourceProcessors.add(defaultResourceProcessor);
         resourceProcessors.add(csvResourceProcessor);
         FieldSetter.setField(table, getField("resourceProcessors"), resourceProcessors);
-
-
     }
 
     private Field getField(final String fieldName) throws NoSuchFieldException {
@@ -132,14 +134,14 @@ class TableImplTest {
 
     @Test
     void testTableWithItems() throws IOException {
-
         List<List<String>> rows = setMockRows();
-        when(resourceResolver.getResource("/test/path")).thenReturn(resource);
+        when(resourceResolver.getResource(SOURCE)).thenReturn(sourceResource);
+        when(sourceResource.getResourceType()).thenReturn("dam:Asset");
+        when(asset.getMimeType()).thenReturn("");
+        when(sourceResource.adaptTo(Asset.class)).thenReturn(asset);
         when(defaultResourceProcessor.canProcess("")).thenReturn(true);
-        when(csvResourceProcessor.canProcess("")).thenReturn(false);
-        when(defaultResourceProcessor.processData(resource, HEADER_NAMES)).thenReturn(rows);
+        when(defaultResourceProcessor.processData(sourceResource, HEADER_NAMES)).thenReturn(rows);
         assertEquals(rows, table.getItems());
-        Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table-1"));
     }
 
     @NotNull
