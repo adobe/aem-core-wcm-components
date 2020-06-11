@@ -74,8 +74,8 @@ public class CSVResourceProcessor implements ResourceProcessor {
     private void populateRowsForTable(List<List<String>> lines, Map<String, Integer> finalMap, List<List<String>> rows) {
         for (List<String> line : lines) {
             List<String> row = new ArrayList<>();
-            for(String column : finalMap.keySet()) {
-                row.add(line.get(finalMap.get(column)));
+            for(Map.Entry<String, Integer> columnIndex : finalMap.entrySet()) {
+                row.add(line.get(columnIndex.getValue()));
             }
             rows.add(row);
         }
