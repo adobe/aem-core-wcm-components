@@ -56,7 +56,7 @@ public class CSVResourceProcessor implements ResourceProcessor {
                 }
                 //remove header row from the list
                 lines = lines.subList(1, lines.size());
-                populateRowsForTable(lines, tableColumnsMap, columns, rows);
+                populateRowsForTable(lines, tableColumnsMap, rows);
                 br.close();
 
             }
@@ -71,11 +71,10 @@ public class CSVResourceProcessor implements ResourceProcessor {
     }
 
 
-    private void populateRowsForTable(List<List<String>> lines, Map<String, Integer> finalMap, List<String> columns, List<List<String>> rows) {
-
+    private void populateRowsForTable(List<List<String>> lines, Map<String, Integer> finalMap, List<List<String>> rows) {
         for (List<String> line : lines) {
             List<String> row = new ArrayList<>();
-            for (String column : columns) {
+            for(String column : finalMap.keySet()) {
                 row.add(line.get(finalMap.get(column)));
             }
             rows.add(row);

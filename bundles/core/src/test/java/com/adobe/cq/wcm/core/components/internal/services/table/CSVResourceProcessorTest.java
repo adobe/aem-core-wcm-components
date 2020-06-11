@@ -4,6 +4,7 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.Rendition;
 import org.apache.sling.api.resource.Resource;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,6 +25,8 @@ class CSVResourceProcessorTest {
 
     private static final String[] HEADER_NAMES = {"email", "name", "gender", "status"};
 
+    private static final String[] RANDOM_HEADER_NAMES = {"name", "email", "gender"};
+
     @InjectMocks
     private CSVResourceProcessor csvResourceProcessor;
 
@@ -42,7 +45,13 @@ class CSVResourceProcessorTest {
     }
 
     @Test
+    @DisplayName("When all the headers are passed in the order fields are placed in csv file")
     void processData() throws IOException {
+        setUpMocks();
+        assertEquals(expectedOutput(), csvResourceProcessor.processData(resource, HEADER_NAMES));
+    }
+
+    private void setUpMocks() throws FileNotFoundException {
         when(resource.getResourceType()).thenReturn("dam:Asset");
         when(resource.adaptTo(Asset.class)).thenReturn(asset);
         when(asset.getOriginal()).thenReturn(original);
@@ -50,7 +59,13 @@ class CSVResourceProcessorTest {
         // Create inputstream from resources csv and add it as return type for below
         InputStream inputStream = loadCSVStream();
         when(original.getStream()).thenReturn(inputStream);
-        assertEquals(expectedOutput(), csvResourceProcessor.processData(resource, HEADER_NAMES));
+    }
+
+    @Test
+    @DisplayName("When all the headers are passed in the order fields are placed in csv file")
+    void processDataWithScrambledHeaders() throws IOException {
+        setUpMocks();
+        assertEquals(randomHeaderOutput(), csvResourceProcessor.processData(resource, RANDOM_HEADER_NAMES));
     }
 
     private InputStream loadCSVStream() throws FileNotFoundException {
@@ -70,6 +85,15 @@ class CSVResourceProcessorTest {
         tableData.add(Arrays.asList("test2@sample.com", "test2", "female", "active"));
         tableData.add(Arrays.asList("test3@sample.com", "test3", "male", "inactive"));
         tableData.add(Arrays.asList("test4@sample.com", "test4", "female", "inactive"));
+        return tableData;
+    }
+
+    private List<List<String>> randomHeaderOutput() {
+        List<List<String>> tableData = new ArrayList<>();
+        tableData.add(Arrays.asList("test1", "test1@sample.com", "male"));
+        tableData.add(Arrays.asList("test2", "test2@sample.com", "female"));
+        tableData.add(Arrays.asList("test3", "test3@sample.com", "male"));
+        tableData.add(Arrays.asList("test4", "test4@sample.com", "female"));
         return tableData;
     }
 
