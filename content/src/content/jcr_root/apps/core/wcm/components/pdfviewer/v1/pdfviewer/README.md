@@ -32,7 +32,7 @@ The PDF Viewer component uses the context aware config `com.adobe.cq.wcm.core.co
 2. `reportSuiteId` - Adobe Analytics ID
 
 ### Edit Dialog Properties
-The following properties are written to JCR for this Document Cloud Viewer component and are expected to be available as `Resource` properties:
+The following properties are written to JCR for this PDF Viewer component and are expected to be available as `Resource` properties:
 
 1. `./documentPath` - defines the path of the pdf to display
 2. `./type` - defines the display type

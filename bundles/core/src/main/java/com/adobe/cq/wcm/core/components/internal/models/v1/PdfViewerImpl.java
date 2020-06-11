@@ -165,21 +165,19 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
         jsonObjectBuilder.add(FIELD_EMBED_MODE, type);
 
-        if(!StringUtils.isEmpty(type)) {
-            if (type.equals(FULL_WINDOW)) {
-                jsonObjectBuilder.add(PN_DEFAULT_VIEW_MODE, defaultViewMode);
-                jsonObjectBuilder.add(PN_SHOW_ANNOTATION_TOOLS, showAnnotationTools);
-                jsonObjectBuilder.add(PN_SHOW_LEFT_HAND_PANEL, showLeftHandPanel);
-            }
+        if (StringUtils.equals(type, FULL_WINDOW)) {
+            jsonObjectBuilder.add(PN_DEFAULT_VIEW_MODE, defaultViewMode);
+            jsonObjectBuilder.add(PN_SHOW_ANNOTATION_TOOLS, showAnnotationTools);
+            jsonObjectBuilder.add(PN_SHOW_LEFT_HAND_PANEL, showLeftHandPanel);
+        }
 
-            if (type.equals(SIZED_CONTAINER)) {
-                jsonObjectBuilder.add(PN_SHOW_FULL_SCREEN, showFullScreen);
-            }
+        if (StringUtils.equals(type, SIZED_CONTAINER)) {
+            jsonObjectBuilder.add(PN_SHOW_FULL_SCREEN, showFullScreen);
+        }
 
-            if (type.equals(FULL_WINDOW) || type.equals(SIZED_CONTAINER)) {
-                jsonObjectBuilder.add(PN_SHOW_PAGE_CONTROLS, showPageControls);
-                jsonObjectBuilder.add(PN_DOCK_PAGE_CONTROLS, dockPageControls);
-            }
+        if (StringUtils.equals(type, FULL_WINDOW) || StringUtils.equals(type, SIZED_CONTAINER)) {
+            jsonObjectBuilder.add(PN_SHOW_PAGE_CONTROLS, showPageControls);
+            jsonObjectBuilder.add(PN_DOCK_PAGE_CONTROLS, dockPageControls);
         }
 
         jsonObjectBuilder.add(PN_SHOW_DOWNLOAD_PDF, showDownloadPdf);
