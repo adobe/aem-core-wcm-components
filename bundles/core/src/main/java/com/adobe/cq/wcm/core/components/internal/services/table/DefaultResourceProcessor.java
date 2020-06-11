@@ -50,8 +50,8 @@ public class DefaultResourceProcessor implements ResourceProcessor {
             Resource child = children.next();
             ValueMap props = child.adaptTo(ValueMap.class);
             List<String> row = new ArrayList<>();
-            for (String propertyName : headerNames) {
-                String propValue = props != null ? props.get(propertyName, StringUtils.EMPTY) : StringUtils.EMPTY;
+            for (String headerName : headerNames) {
+                String propValue = props != null ? props.get(headerName, StringUtils.EMPTY) : StringUtils.EMPTY;
                 row.add(propValue);
             }
             rows.add(row);
