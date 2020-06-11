@@ -15,7 +15,8 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div data-sly-use.progressBar="com.adobe.cq.wcm.core.components.models.ProgressBar"
      id="${progressBar.id}"
-     class="cmp-progressbar">
+     class="cmp-progressbar"
+     data-cmp-data-layer="${progressBar.data.json}">
     <span class="cmp-progressbar__label--completed">${'#.##' @ format=progressBar.completed}</span>
     <span class="cmp-progressbar__label--remaining">${'#.##' @ format=progressBar.remaining}</span>
     <div class="cmp-progressbar__bar" role="progressbar"

@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -94,19 +95,16 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     @Override
     public String[] getDataLayerShownItems() {
-        String[] shownItems = new String[0];
-        ListItem activeItem = null;
         String activeItemName = getActiveItem();
         List<ListItem> items = getItems();
-        if (!items.isEmpty()) {
-            activeItem = items.stream()
-                    .filter(e -> StringUtils.equals(e.getName(), activeItemName))
-                    .findFirst().orElse(items.get(0));
-            ComponentData componentData = activeItem.getData();
-            if (componentData != null) {
-                shownItems = new String[]{componentData.getId()};
-            }
-        }
-        return shownItems;
+        return Optional.ofNullable(
+            items.stream()
+                .filter(e -> StringUtils.equals(e.getName(), activeItemName))
+                .findFirst()
+                .orElse(items.get(0))
+                .getData())
+            .map(ComponentData::getId)
+            .map(item -> new String[]{item})
+            .orElseGet(() -> new String[0]);
     }
 }

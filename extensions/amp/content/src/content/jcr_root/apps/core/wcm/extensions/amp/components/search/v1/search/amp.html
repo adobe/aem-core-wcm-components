@@ -17,7 +17,7 @@
          class="cmp-search"
          role="search">
     <form class="cmp-search__form"
-          method="get"
+          method="post"
           action-xhr="${currentPage.path @ addSelectors=['searchresults'], extension='json', suffix = search.relativePath}"
           target="_top">
         <amp-autocomplete class="cmp-search__field"
