@@ -45,7 +45,7 @@ class CSVResourceProcessorTest {
     }
 
     @Test
-    @DisplayName("When all the headers are passed in the order fields are placed in csv file")
+    @DisplayName("When all the headers are passed in the same order fields are placed in csv file")
     void processData() throws IOException {
         setUpMocks();
         assertEquals(expectedOutput(), csvResourceProcessor.processData(resource, HEADER_NAMES));
@@ -62,7 +62,7 @@ class CSVResourceProcessorTest {
     }
 
     @Test
-    @DisplayName("When all the headers are passed in the order fields are placed in csv file")
+    @DisplayName("When some of the headers are passed in different order than the headers are placed in csv file")
     void processDataWithScrambledHeaders() throws IOException {
         setUpMocks();
         assertEquals(randomHeaderOutput(), csvResourceProcessor.processData(resource, RANDOM_HEADER_NAMES));
