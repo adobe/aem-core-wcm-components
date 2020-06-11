@@ -62,6 +62,8 @@ class TableImplTest {
     private static final String[] HEADER_NAMES = new String[]{"email", "firstName", "gender", "title"};
     private static final String DESCRIPTION = "Dummy description";
     private static final String SOURCE = "/content/dam/test.csv";
+    public static final String TABLE_DESCRIPTION = "This is sample Table Description";
+    public static final String DAM_ASSET = "dam:Asset";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -128,7 +130,7 @@ class TableImplTest {
         context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
         Table table = getTableUnderTest();
-        assertEquals("This is sample Table Description", table.getDescription());
+        assertEquals(TABLE_DESCRIPTION, table.getDescription());
 
     }
 
@@ -136,7 +138,7 @@ class TableImplTest {
     void testTableWithItems() throws IOException {
         List<List<String>> rows = setMockRows();
         when(resourceResolver.getResource(SOURCE)).thenReturn(sourceResource);
-        when(sourceResource.getResourceType()).thenReturn("dam:Asset");
+        when(sourceResource.getResourceType()).thenReturn(DAM_ASSET);
         when(asset.getMimeType()).thenReturn("");
         when(sourceResource.adaptTo(Asset.class)).thenReturn(asset);
         when(defaultResourceProcessor.canProcess("")).thenReturn(true);
