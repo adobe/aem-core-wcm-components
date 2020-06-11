@@ -37,15 +37,14 @@ The following properties are written to JCR for this Document Cloud Viewer compo
 1. `./documentPath` - defines the path of the pdf to display
 2. `./type` - defines the display type
 3. `./defaultViewMode` - defines the display view
-4. `./viewerHeight` - defines the height of the viewer when not inline or in full screen mode
-5. `./borderless` - `true` to enable full screen borderless
-6. `./showAnnotationTools` - `true` to enable annotation tools
-7. `./showFullScreen` - `true` to show full screen button
-8. `./showLeftHandPanel` - `true` to display left side panel
-9. `./showDownloadPdf` - `true` to show download button
-10. `./showPrintPdf` - `true` to show print button
-11. `./showPageControls` - `true` to show page controls
-12. `./dockPageControls` - `true` to dock controls to bottom
+4. `./borderless` - `true` to enable full screen borderless
+5. `./showAnnotationTools` - `true` to enable annotation tools
+6. `./showFullScreen` - `true` to show full screen button
+7. `./showLeftHandPanel` - `true` to display left side panel
+8. `./showDownloadPdf` - `true` to show download button
+9. `./showPrintPdf` - `true` to show print button
+10. `./showPageControls` - `true` to show page controls
+11. `./dockPageControls` - `true` to dock controls to bottom
 
 ## Client Libraries
 The component provides a `core.wcm.components.pdfviewer.v1` client library category that contains base
@@ -60,7 +59,7 @@ BLOCK cmp-pdfviewer
 ## Information
 * **Vendor**: Adobe
 * **Version**: v1
-* **Compatibility**: AEM 6.3
+* **Compatibility**: AEM 6.4
 * **Status**: production-ready
 * **ViewSDK Documentation**: [https://www.adobe.io/apis/documentcloud/dcsdk/docs.html](https://www.adobe.io/apis/documentcloud/dcsdk/docs.html)
 * **Author**: [Ensemble Systems Inc. - Leslie Chan](https://ensemble.com)

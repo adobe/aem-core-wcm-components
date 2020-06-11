@@ -118,7 +118,7 @@
                             jcr:lastModified="{Date}2020-04-29T17:10:55.898-07:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/pdfviewer/v1/pdfviewer"
+                            sling:resourceType="core-components-examples/components/pdfviewer"
                             borderless="false"
                             defaultViewMode="FIT_PAGE"
                             dockPageControls="true"
@@ -129,8 +129,7 @@
                             showLeftHandPanel="true"
                             showPageControls="true"
                             showPrintPdf="true"
-                            type="FULL_WINDOW"
-                            viewerHeight="500px"/>
+                            type="FULL_WINDOW"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -188,7 +187,7 @@
                             jcr:lastModified="{Date}2020-04-29T17:11:46.375-07:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/pdfviewer/v1/pdfviewer"
+                            sling:resourceType="core-components-examples/components/pdfviewer"
                             borderless="false"
                             defaultViewMode="FIT_PAGE"
                             dockPageControls="false"
@@ -199,8 +198,7 @@
                             showLeftHandPanel="true"
                             showPageControls="false"
                             showPrintPdf="true"
-                            type="SIZED_CONTAINER"
-                            viewerHeight="500px"/>
+                            type="SIZED_CONTAINER"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"
@@ -258,7 +256,7 @@
                             jcr:lastModified="{Date}2020-04-29T17:12:31.006-07:00"
                             jcr:lastModifiedBy="admin"
                             jcr:primaryType="nt:unstructured"
-                            sling:resourceType="core/wcm/components/pdfviewer/v1/pdfviewer"
+                            sling:resourceType="core-components-examples/components/pdfviewer"
                             borderless="false"
                             defaultViewMode="FIT_PAGE"
                             dockPageControls="true"
@@ -269,8 +267,7 @@
                             showLeftHandPanel="true"
                             showPageControls="true"
                             showPrintPdf="true"
-                            type="IN_LINE"
-                            viewerHeight="500px"/>
+                            type="IN_LINE"/>
                     </component>
                     <info
                         jcr:primaryType="nt:unstructured"

@@ -14,33 +14,21 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <div class="cmp-pdfviewer" 
-     data-sly-use.pdfViewerModel="com.adobe.cq.wcm.core.components.models.PdfViewer"
-     data-sly-use.component="com.adobe.cq.wcm.core.components.models.Component">
-
-     <style>
-          .cmp-pdfviewer__full-window, .cmp-pdfviewer__sized-container {
-               height: ${pdfViewerModel.viewerHeight @ context='styleToken'} !important;
-          }
-     </style>
-
-     <h2 data-sly-test="${!pdfViewerModel.documentPath}">Please select a document to display.</h2>
-     <h2 data-sly-test="${!pdfViewerModel.clientId}">
-          Please setup Context Aware Configuration 
-          (com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig) in /conf 
-          and link it using sling:configRef on any current/parent node.</h2>
-
-     <div id="${component.id}" class="cmp-pdfviewer__content ${pdfViewerModel.containerClass @ context='html'}"></div>
-     <script type="text/javascript">
-          document.addEventListener("adobe_dc_view_sdk.ready", function(){ 
-               var adobeDCView = new AdobeDC.View({
-                    clientId: "${pdfViewerModel.clientId @ context='scriptToken'}",
-                    divId: "${component.id @ context='unsafe'}",
-                    reportSuiteId: "${pdfViewerModel.reportSuiteId @ context='scriptToken'}"
-               });
-               adobeDCView.previewFile({
-                    content:{location: {url: "${pdfViewerModel.documentPath @ context='unsafe'}"}},
-                    metaData:{fileName: "${pdfViewerModel.documentFileName @ context='unsafe'}"}
-               }, ${pdfViewerModel.viewerConfigJson @ context='unsafe'});
-          });
-     </script>
+     data-sly-use.pdfViewer="com.adobe.cq.wcm.core.components.models.PdfViewer"
+     data-sly-use.template="core/wcm/components/commons/v1/templates.html"
+     id="${pdfViewer.id}"
+     data-cmp-is="pdfviewer"
+     data-cmp-client-id="${pdfViewer.clientId}"
+     data-cmp-report-suite-id="${pdfViewer.reportSuiteId}"
+     data-cmp-document-path="${pdfViewer.documentPath}"
+     data-cmp-document-file-name="${pdfViewer.documentFileName}"
+     data-cmp-viewer-config-json="${pdfViewer.viewerConfigJson}"
+     data-sly-set.clientIdError="${'Please setup Context Aware Configuration (com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig) in /conf and link it using sling:configRef on any current/parent node.' @ i18n}"
+     data-sly-set.documentPathError="${'Please select a document to display.' @ i18n}"
+     data-sly-set.error="${!pdfViewer.clientId ? clientIdError : (!pdfViewer.documentPath ? documentPathError : false)}"
+     data-sly-test="${!error}"
+     data-cmp-data-layer="${pdfViewer.data.json}">
+     <div id="${pdfViewer.id}-content"
+          class="cmp-pdfviewer__content ${pdfViewer.containerClass @ context='html'}"></div>
 </div>
+<sly data-sly-call="${template.placeholder @ isEmpty=error, classAppend='cmp-pdfviewer', emptyTextAppend=error}"></sly>

@@ -20,10 +20,10 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 
-import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.caconfig.ConfigurationBuilder;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -32,32 +32,16 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.PdfViewer;
-
 import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
+import com.adobe.cq.wcm.core.components.models.PdfViewer;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { PdfViewer.class,
         ComponentExporter.class }, resourceType = { PdfViewerImpl.RESOURCE_TYPE })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class PdfViewerImpl implements PdfViewer {
+public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
 
     protected static final String RESOURCE_TYPE = "core/wcm/components/pdfviewer/v1/pdfviewer";
-    protected static final String FULL_WINDOW = "FULL_WINDOW";
-    protected static final String SIZED_CONTAINER = "SIZED_CONTAINER";
-    protected static final String IN_LINE = "IN_LINE";
-    protected static final String EMBED_MODE = "embedMode";
-    protected static final String DEFAULT_VIEW_MODE= "defaultViewMode";
-    protected static final String SHOW_ANNOTATION_TOOLS = "showAnnotationTools";
-    protected static final String SHOW_LEFT_HAND_PANEL = "showLeftHandPanel";
-    protected static final String SHOW_FULL_SCREEN = "showFullScreen";
-    protected static final String SHOW_PAGE_CONTROLS = "showPageControls";
-    protected static final String DOCK_PAGE_CONTROLS = "dockPageControls";
-    protected static final String SHOW_DOWNLOAD_PDF = "showDownloadPDF";
-    protected static final String SHOW_PRINT_PDF = "showPrintPDF";
-    protected static final String CSS_FULL_WINDOW = "cmp-pdfviewer__full-window";
-    protected static final String CSS_BORDERLESS = "cmp-pdfviewer__full-window-borderless";
-    protected static final String CSS_SIZED_CONTAINER = "cmp-pdfviewer__sized-container";
-    protected static final String CSS_IN_LINE = "cmp-pdfviewer__in-line";
+    protected static final String FIELD_EMBED_MODE = "embedMode";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String documentPath;
@@ -67,9 +51,6 @@ public class PdfViewerImpl implements PdfViewer {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private String defaultViewMode;
-
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String viewerHeight;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private boolean borderless;
@@ -140,74 +121,69 @@ public class PdfViewerImpl implements PdfViewer {
     }
 
     @Override
-    public String getViewerHeight() {
-        return viewerHeight;
-    }
-
-    @Override
-    public boolean getBorderless() {
+    public boolean isBorderless() {
         return borderless;
     }
 
     @Override
-    public boolean getShowAnnotationTools() {
+    public boolean isShowAnnotationTools() {
         return showAnnotationTools;
     }
 
     @Override
-    public boolean getShowFullScreen() {
+    public boolean isShowFullScreen() {
         return showFullScreen;
     }
 
     @Override
-    public boolean getShowLeftHandPanel() {
+    public boolean isShowLeftHandPanel() {
         return showLeftHandPanel;
     }
 
     @Override
-    public boolean getShowDownloadPdf() {
+    public boolean isShowDownloadPdf() {
         return showDownloadPdf;
     }
 
     @Override
-    public boolean getShowPrintPdf() {
+    public boolean isShowPrintPdf() {
         return showPrintPdf;
     }
 
     @Override
-    public boolean getShowPageControls() {
+    public boolean isShowPageControls() {
         return showPageControls;
     }
 
     @Override
-    public boolean getDockPageControls() {
+    public boolean isDockPageControls() {
         return dockPageControls;
     }
 
     @Override
     public String getViewerConfigJson() {
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-        jsonObjectBuilder.add(EMBED_MODE, type);
+        jsonObjectBuilder.add(FIELD_EMBED_MODE, type);
 
         if(!StringUtils.isEmpty(type)) {
             if (type.equals(FULL_WINDOW)) {
-                jsonObjectBuilder.add(DEFAULT_VIEW_MODE, defaultViewMode);
-                jsonObjectBuilder.add(SHOW_ANNOTATION_TOOLS, showAnnotationTools);
-                jsonObjectBuilder.add(SHOW_LEFT_HAND_PANEL, showLeftHandPanel);
+                jsonObjectBuilder.add(PN_DEFAULT_VIEW_MODE, defaultViewMode);
+                jsonObjectBuilder.add(PN_SHOW_ANNOTATION_TOOLS, showAnnotationTools);
+                jsonObjectBuilder.add(PN_SHOW_LEFT_HAND_PANEL, showLeftHandPanel);
             }
 
             if (type.equals(SIZED_CONTAINER)) {
-                jsonObjectBuilder.add(SHOW_FULL_SCREEN, showFullScreen);
+                jsonObjectBuilder.add(PN_SHOW_FULL_SCREEN, showFullScreen);
             }
 
             if (type.equals(FULL_WINDOW) || type.equals(SIZED_CONTAINER)) {
-                jsonObjectBuilder.add(SHOW_PAGE_CONTROLS, showPageControls);
-                jsonObjectBuilder.add(DOCK_PAGE_CONTROLS, dockPageControls);
+                jsonObjectBuilder.add(PN_SHOW_PAGE_CONTROLS, showPageControls);
+                jsonObjectBuilder.add(PN_DOCK_PAGE_CONTROLS, dockPageControls);
             }
         }
 
-        jsonObjectBuilder.add(SHOW_DOWNLOAD_PDF, showDownloadPdf);
-        jsonObjectBuilder.add(SHOW_PRINT_PDF, showPrintPdf);
+        jsonObjectBuilder.add(PN_SHOW_DOWNLOAD_PDF, showDownloadPdf);
+        jsonObjectBuilder.add(PN_SHOW_PRINT_PDF, showPrintPdf);
 
         return jsonObjectBuilder.build().toString();
     }
