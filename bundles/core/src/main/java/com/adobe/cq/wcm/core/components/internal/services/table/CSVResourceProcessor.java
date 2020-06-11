@@ -23,17 +23,13 @@ import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.commons.util.DamUtil;
 import org.apache.sling.api.resource.Resource;
 import org.osgi.service.component.annotations.Component;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
 
 import static java.util.Objects.nonNull;
 
@@ -49,18 +45,18 @@ public class CSVResourceProcessor implements ResourceProcessor {
             if (nonNull(original)) {
                 InputStream inputStream = original.getStream();
                 BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-                List<String[]> lines = getRawCSVDataInList(br);
+                List<List<String>> lines = getRawCSVDataInList(br);
 
-                final String[] columns = lines.get(0);
+                final List<String> columns = lines.get(0);
                 Map<String, Integer> columnIndexMap = getColumnIndexMap(columns);
                 //get the column indexes for matching property name
-                Map<String, Integer> tableColumnsMap = new HashMap<>();
+                Map<String, Integer> tableColumnsMap = new LinkedHashMap<>();
                 for (String headerName : headerNames) {
                     tableColumnsMap.put(headerName, columnIndexMap.getOrDefault(headerName, -1));
                 }
                 //remove header row from the list
-                lines = lines.subList(1, lines.size() - 1);
-                populateRowsForTable(lines, tableColumnsMap, rows);
+                lines = lines.subList(1, lines.size());
+                populateRowsForTable(lines, tableColumnsMap, columns, rows);
                 br.close();
 
             }
@@ -71,33 +67,27 @@ public class CSVResourceProcessor implements ResourceProcessor {
 
     @Override
     public boolean canProcess(String mimeType) {
-        return mimeType != null && mimeType.equalsIgnoreCase("text/csv");
+        return nonNull(mimeType) && mimeType.equalsIgnoreCase("text/csv");
     }
 
 
-    private void populateRowsForTable(List<String[]> lines, Map<String, Integer> finalMap, List<List<String>> rows) {
-        List<String> row = new ArrayList<>();
-        for (String[] line : lines) {
-            finalMap.forEach((k, v) ->
-                {
-                    if (v >= 0) {
-                        row.add(line[v]);
-                    } else row.add("");
-                }
-            );
+    private void populateRowsForTable(List<List<String>> lines, Map<String, Integer> finalMap, List<String> columns, List<List<String>> rows) {
+
+        for (List<String> line : lines) {
+            List<String> row = new ArrayList<>();
+            for (String column : columns) {
+                row.add(line.get(finalMap.get(column)));
+            }
             rows.add(row);
         }
     }
 
-    private List<String[]> getRawCSVDataInList(BufferedReader br) throws IOException {
-        String[][] csvData;
-        List<String[]> lines = new ArrayList<>();
+    private List<List<String>> getRawCSVDataInList(BufferedReader br) throws IOException {
+        List<List<String>> lines = new ArrayList<>();
         String currentLine;
         while ((currentLine = br.readLine()) != null) {
-            lines.add(currentLine.split(","));
+            lines.add(Arrays.asList(currentLine.split(",")));
         }
-        csvData = new String[lines.size()][0];
-        lines.toArray(csvData);
         return lines;
     }
 
@@ -105,9 +95,11 @@ public class CSVResourceProcessor implements ResourceProcessor {
      * @param columns : Array of Column names. This is first row in the CSV file
      * @return : Returns the column name and it's index
      */
-    private Map<String, Integer> getColumnIndexMap(String[] columns) {
-        return IntStream.range(0, columns.length)
-            .boxed()
-            .collect(Collectors.toMap(index -> columns[index], index -> index, (a, b) -> b));
+    private Map<String, Integer> getColumnIndexMap(List<String> columns) {
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        for (int i = 0; i < columns.size(); i++) {
+            columnIndexMap.put(columns.get(i), i);
+        }
+        return columnIndexMap;
     }
 }
