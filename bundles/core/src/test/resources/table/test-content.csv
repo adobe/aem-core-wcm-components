@@ -1,0 +1,5 @@
+email,name,gender,status
+test1@sample.com,test1,male,active
+test2@sample.com,test2,female,active
+test3@sample.com,test3,male,inactive
+test4@sample.com,test4,female,inactive

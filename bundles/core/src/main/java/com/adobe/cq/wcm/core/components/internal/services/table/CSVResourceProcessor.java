@@ -23,7 +23,6 @@ import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.commons.util.DamUtil;
 import org.apache.sling.api.resource.Resource;
 import org.osgi.service.component.annotations.Component;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,8 +55,8 @@ public class CSVResourceProcessor implements ResourceProcessor {
                 Map<String, Integer> columnIndexMap = getColumnIndexMap(columns);
                 //get the column indexes for matching property name
                 Map<String, Integer> tableColumnsMap = new HashMap<>();
-                for (String propertyName : headerNames) {
-                    tableColumnsMap.put(propertyName, columnIndexMap.getOrDefault(propertyName, -1));
+                for (String headerName : headerNames) {
+                    tableColumnsMap.put(headerName, columnIndexMap.getOrDefault(headerName, -1));
                 }
                 //remove header row from the list
                 lines = lines.subList(1, lines.size() - 1);
