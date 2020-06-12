@@ -4,4 +4,4 @@
           jcr:primaryType="nt:unstructured"
           description="Add Table description Here"
           headerNames="[email,firstName,gender,jcr:title]"
-          source="/apps/core/wcm/components/table/sample-data"/>
+          source="/apps/core/wcm/components/table/v1/table/sample-data"/>
