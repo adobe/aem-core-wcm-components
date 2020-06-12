@@ -392,6 +392,7 @@
                             <exclude>**/.github/**</exclude>
                             <!-- Ignore mockito extensions config -->
                             <exclude>**/test/resources/mockito-extensions/*</exclude>
+                            <exclude>**/test/resources/table/*</exclude>
                         </excludes>
                     </configuration>
                     <executions>
