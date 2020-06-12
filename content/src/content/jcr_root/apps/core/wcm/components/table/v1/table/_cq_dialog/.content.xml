@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
-          xmlns:cq="http://www.day.com/jcr/cq/1.0"
-          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
-          xmlns:jcr="http://www.jcp.org/jcr/1.0"
-          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
           jcr:primaryType="nt:unstructured"
-          jcr:title="Table (v1)"
+          jcr:title="Dynamic Table"
           sling:resourceType="cq/gui/components/authoring/dialog">
-    <content jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/container">
-        <layout jcr:primaryType="nt:unstructured" sling:resourceType="granite/ui/components/foundation/layouts/tabs"
-                type="nav"/>
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/foundation/container">
+        <layout
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/foundation/layouts/tabs"
+            type="nav"/>
         <items jcr:primaryType="nt:unstructured">
-            <settings jcr:primaryType="nt:unstructured" jcr:title="Settings"
-                      sling:resourceType="granite/ui/components/foundation/section">
-                <layout jcr:primaryType="nt:unstructured" margin="false"
-                        sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"/>
+            <settings
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Settings"
+                sling:resourceType="granite/ui/components/foundation/section">
+                <layout
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/foundation/layouts/fixedcolumns"
+                    margin="{Boolean}false"/>
                 <items jcr:primaryType="nt:unstructured">
-                    <column jcr:primaryType="nt:unstructured"
-                            sling:resourceType="granite/ui/components/foundation/container">
+                    <column
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
                             <description
                                 jcr:primaryType="nt:unstructured"
@@ -26,29 +31,24 @@
                                 sling:resourceType="granite/ui/components/foundation/form/textfield"/>
                             <linkTo
                                 jcr:primaryType="nt:unstructured"
-                                fieldLabel="Source path"
+                                sling:resourceType="granite/ui/components/foundation/form/pathbrowser"
+                                fieldLabel="Source"
+                                description="Select File from DAM or else Resource who children need to be displayed in table rows"
                                 name="./source"
                                 predicate="nosystem"
-                                rootPath="/content"
-                                showTitles="false"
-                                sling:resourceType="granite/ui/components/foundation/form/pathbrowser"/>
-                            <headersContainer
+                                rootPath="/"
+                                showTitles="false"/>
+                            <symbols
                                 jcr:primaryType="nt:unstructured"
-                                granite:class="foundation-layout-util-vmargin"
-                                sling:resourceType="granite/ui/components/coral/foundation/container">
-                                <items jcr:primaryType="nt:unstructured">
-                                    <setHeaderNames
-                                        jcr:primaryType="nt:unstructured"
-                                        fieldLabel="Header Names"
-                                        label="Header Names"
-                                        sling:resourceType="granite/ui/components/foundation/form/multifield">
-                                        <headerName
-                                            jcr:primaryType="nt:unstructured"
-                                            name="./headerNames"
-                                            sling:resourceType="granite/ui/components/foundation/form/textfield"/>
-                                    </setHeaderNames>
-                                </items>
-                            </headersContainer>
+                                sling:resourceType="granite/ui/components/foundation/form/multifield"
+                                class="foundation-layout-util-maximized-alt"
+                                fieldLabel="Header Names"
+                                label="Header Names">
+                                <field
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/foundation/form/textfield"
+                                    name="./headerNames"/>
+                            </symbols>
                         </items>
                     </column>
                 </items>

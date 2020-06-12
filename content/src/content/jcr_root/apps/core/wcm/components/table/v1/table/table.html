@@ -16,13 +16,13 @@
 
 <div data-sly-use.table="com.adobe.cq.wcm.core.components.models.Table"
      id="${table.id}"
-     class="cmp-table"
+     class="table"
      role="table"
      aria-label=""
      aria-describedby="">
     <div data-sly-test="${table.description}" class="cmp-table__description"> ${table.description}</div>
     <div class="cmp-table__rowgroup" role="rowgroup">
-        <div class="cmp-table__rowgroup-row" role="row"
+        <div class="cmp-table__rowgroup-row-headers" role="row"
              data-sly-list.headerName="${table.formattedHeaderNames}">
             <span class="cmp-table__rowgroup-row-columnheader"
                   role="columnheader">
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="cmp-table__rowgroup" role="rowgroup" data-sly-list.row="${table.items}">
-        <div class="cmp-table__rowgroup-row" role="row" data-sly-list.item="${row}">
+        <div class="cmp-table__rowgroup-row-data" role="row" data-sly-list.item="${row}">
             <span class="cmp-table__rowgroup-row-cell" role="cell">
                 ${item}
             </span>

@@ -41,8 +41,9 @@ The following configuration properties are used:
 BLOCK cmp-table
     ELEMENT cmp-table__description
     ELEMENT cmp-table__rowgroup
-    ELEMENT cmp-table__rowgroup-row
+    ELEMENT cmp-table__rowgroup-row-headers
     ELEMENT cmp-table__rowgroup-row-columnheader
+    ELEMENT cmp-table__rowgroup-row-data
     ELEMENT cmp-table__rowgroup-row-cell
 ```
 
