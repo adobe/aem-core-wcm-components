@@ -44,13 +44,13 @@ class DefaultResourceProcessorTest {
     private DefaultResourceProcessor defaultResourceProcessor;
 
     @Mock
-    private ResourceResolver resourceResolver;
-
-    @Mock
     Resource resource;
 
     @Mock
     ValueMap props;
+
+    @Mock
+    Iterable<Resource> iterable;
 
     @BeforeEach
     void setUp() {
@@ -61,7 +61,9 @@ class DefaultResourceProcessorTest {
     void processData() throws IOException {
 
         Iterator<Resource> children = getChildrenIterator();
-        when(resourceResolver.listChildren(resource)).thenReturn(children);
+       // when(resourceResolver.listChildren(resource)).thenReturn(children);
+        when(resource.getChildren()).thenReturn(iterable);
+        when(iterable.iterator()).thenReturn(children);
         when(props.get("email", StringUtils.EMPTY)).thenReturn("test@test.com");
         when(props.get("name", StringUtils.EMPTY)).thenReturn("test");
         when(props.get("gender", StringUtils.EMPTY)).thenReturn("male");

@@ -20,11 +20,8 @@ package com.adobe.cq.wcm.core.components.internal.services.table;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,16 +33,14 @@ import static java.util.Objects.isNull;
 @Component(service = ResourceProcessor.class, immediate = true)
 public class DefaultResourceProcessor implements ResourceProcessor {
 
-    @Reference
-    private ResourceResolver resourceResolver;
-
     @Override
     public List<List<String>> processData(Resource resource, String[] headerNames) throws IOException {
         List<List<String>> rows = new ArrayList<>();
-        Iterator<Resource> children = resourceResolver.listChildren(resource);
+        Iterator<Resource> children =  resource.getChildren().iterator();
         if(isNull(children)){
             return rows;
         }
+
         while (children.hasNext()) {
             Resource child = children.next();
             ValueMap props = child.adaptTo(ValueMap.class);
