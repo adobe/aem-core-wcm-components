@@ -3,7 +3,7 @@
           xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
           jcr:primaryType="nt:unstructured"
           description="Add Table description Here"
-          propertyNames="[email,firstName,gender,jcr:title]"
+          headerNames="[email,firstName,gender,jcr:title]"
           source="/apps/mysite/components/table/sample-data"
 
 />
