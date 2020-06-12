@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
           jcr:primaryType="nt:unstructured"
-          jcr:title="Dynamic Table"
-          sling:resourceType="cq/gui/components/authoring/dialog">
+          jcr:title="Table (v1)"
+          sling:resourceType="cq/gui/components/authoring/dialog"
+          helpPath="https://www.adobe.com/go/aem_cmp_table_v1"
+          trackingFeature="core-components:table:v1">
     <content
         jcr:primaryType="nt:unstructured"
         sling:resourceType="granite/ui/components/foundation/container">
@@ -24,6 +26,12 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
+                            <id
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="HTML ID attribute to apply to the component."
+                                fieldLabel="ID"
+                                name="./id"/>
                             <description
                                 jcr:primaryType="nt:unstructured"
                                 fieldLabel="Description"
@@ -33,22 +41,21 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/foundation/form/pathbrowser"
                                 fieldLabel="Source"
-                                description="Select File from DAM or else Resource who children need to be displayed in table rows"
+                                fieldDescription="Select File from DAM or else Resource who children need to be displayed in table rows"
                                 name="./source"
                                 predicate="nosystem"
                                 rootPath="/"
                                 showTitles="false"/>
-                            <symbols
+                            <multifieldParent
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/foundation/form/multifield"
-                                class="foundation-layout-util-maximized-alt"
-                                fieldLabel="Header Names"
-                                label="Header Names">
+                                sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                fieldDescription="Add List of Headers that need to displayed in Table"
+                                fieldLabel="Table Headers">
                                 <field
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/foundation/form/textfield"
                                     name="./headerNames"/>
-                            </symbols>
+                            </multifieldParent>
                         </items>
                     </column>
                 </items>
