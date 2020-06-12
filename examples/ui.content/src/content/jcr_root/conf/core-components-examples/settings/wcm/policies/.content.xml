@@ -31,12 +31,12 @@
                     </policy_76194888503838>
                     <policy_1545309074617
                         cq:styleDefaultClasses="cmp-examples-structure__main"
-                        jcr:lastModified="{Date}2019-01-08T16:59:45.043+01:00"
+                        jcr:lastModified="{Date}2020-03-31T12:22:22.749-07:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         jcr:title="Core Components Examples - Structure"
                         sling:resourceType="wcm/core/components/policy/policy"
-                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples,group:.core-wcm,group:.core-wcm-form]">
+                        components="[/libs/wcm/foundation/components/responsivegrid,group:Core Components Examples]">
                         <jcr:content jcr:primaryType="nt:unstructured"/>
                         <cq:authoring jcr:primaryType="nt:unstructured">
                             <assetToComponentMapping jcr:primaryType="nt:unstructured">
