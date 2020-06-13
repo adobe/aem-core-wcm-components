@@ -17,15 +17,14 @@ package com.adobe.cq.wcm.core.components.internal.services.table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -58,8 +57,10 @@ class DefaultResourceProcessorTest {
     }
 
     @Test
-    void processData() throws IOException {
+    @DisplayName("Happy path when the data is available under child nodes.")
+    void processData() {
         Iterator<Resource> children = getChildrenIterator();
+        when(resource.hasChildren()).thenReturn(true);
         when(resource.getChildren()).thenReturn(iterable);
         when(iterable.iterator()).thenReturn(children);
         when(props.get("email", StringUtils.EMPTY)).thenReturn("test@test.com");
@@ -71,8 +72,24 @@ class DefaultResourceProcessorTest {
     }
 
     @Test
+    @DisplayName("When data is not available under child nodes")
+    void processDataWithNoChildNodes() {
+        Iterator<Resource> children = getEmptyIterator();
+        when(resource.hasChildren()).thenReturn(false);
+        when(resource.getChildren()).thenReturn(iterable);
+        when(iterable.iterator()).thenReturn(children);
+        List<List<String>> rows = new ArrayList<>();
+        assertEquals(rows, defaultResourceProcessor.processData(resource, HEADER_NAMES));
+    }
+
+    @Test
     void canProcess() {
         assertTrue(defaultResourceProcessor.canProcess(StringUtils.EMPTY));
+    }
+
+    private Iterator<Resource> getEmptyIterator() {
+        final List<Resource> children = new ArrayList<>();
+        return children.iterator();
     }
 
     private Iterator<Resource> getChildrenIterator() {

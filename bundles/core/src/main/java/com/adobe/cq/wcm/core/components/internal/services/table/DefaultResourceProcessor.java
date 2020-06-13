@@ -23,7 +23,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.osgi.service.component.annotations.Component;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,15 +33,13 @@ import static java.util.Objects.isNull;
 public class DefaultResourceProcessor implements ResourceProcessor {
 
     @Override
-    public List<List<String>> processData(Resource resource, String[] headerNames) throws IOException {
+    public List<List<String>> processData(Resource resource, String[] headerNames) {
         List<List<String>> rows = new ArrayList<>();
-        Iterator<Resource> children =  resource.getChildren().iterator();
-        if(isNull(children)){
+        if(!resource.hasChildren()) {
             return rows;
         }
 
-        while (children.hasNext()) {
-            Resource child = children.next();
+        for (Resource child : resource.getChildren()) {
             ValueMap props = child.adaptTo(ValueMap.class);
             List<String> row = new ArrayList<>();
             for (String headerName : headerNames) {
