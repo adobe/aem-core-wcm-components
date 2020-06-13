@@ -44,24 +44,23 @@ public class CSVResourceProcessor implements ResourceProcessor {
             Rendition original = asset.getOriginal();
             if (nonNull(original)) {
                 InputStream inputStream = original.getStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-                List<List<String>> lines = getRawCSVDataInList(br);
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+                    List<List<String>> lines = getRawCSVDataInList(br);
+                    // First line of csv is the name of headers
+                    final List<String> columns = lines.get(0);
+                    Map<String, Integer> columnIndexMap = getColumnIndexMap(columns);
+                    // Set the column header names and their indexes in the same order as header are received as input
+                    Map<String, Integer> tableColumnsMap = new LinkedHashMap<>();
+                    for (String headerName : headerNames) {
+                        tableColumnsMap.put(headerName, columnIndexMap.getOrDefault(headerName, -1));
+                    }
 
-                final List<String> columns = lines.get(0);
-                Map<String, Integer> columnIndexMap = getColumnIndexMap(columns);
-                //get the column indexes for matching property name
-                Map<String, Integer> tableColumnsMap = new LinkedHashMap<>();
-                for (String headerName : headerNames) {
-                    tableColumnsMap.put(headerName, columnIndexMap.getOrDefault(headerName, -1));
+                    // Remove header names row from the list.
+                    lines = lines.subList(1, lines.size());
+                    populateRowsForTable(lines, tableColumnsMap, rows);
                 }
-                //remove header row from the list
-                lines = lines.subList(1, lines.size());
-                populateRowsForTable(lines, tableColumnsMap, rows);
-                br.close();
-
             }
         }
-
         return rows;
     }
 

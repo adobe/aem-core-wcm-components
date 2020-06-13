@@ -59,9 +59,7 @@ class DefaultResourceProcessorTest {
 
     @Test
     void processData() throws IOException {
-
         Iterator<Resource> children = getChildrenIterator();
-       // when(resourceResolver.listChildren(resource)).thenReturn(children);
         when(resource.getChildren()).thenReturn(iterable);
         when(iterable.iterator()).thenReturn(children);
         when(props.get("email", StringUtils.EMPTY)).thenReturn("test@test.com");

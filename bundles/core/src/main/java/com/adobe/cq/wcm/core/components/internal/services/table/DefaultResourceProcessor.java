@@ -56,6 +56,6 @@ public class DefaultResourceProcessor implements ResourceProcessor {
 
     @Override
     public boolean canProcess(String mimeType) {
-        return mimeType == null || StringUtils.EMPTY.equals(mimeType);
+        return StringUtils.isBlank(mimeType);
     }
 }

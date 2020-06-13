@@ -60,7 +60,7 @@ class CSVResourceProcessorTest {
     }
 
     @Test
-    @DisplayName("When all the headers are passed in the same order fields are placed in csv file")
+    @DisplayName("When all the headers are passed in the same order, than fields are placed in csv file")
     void processData() throws IOException {
         setUpMocks();
         assertEquals(expectedOutput(), csvResourceProcessor.processData(resource, HEADER_NAMES));
@@ -71,13 +71,13 @@ class CSVResourceProcessorTest {
         when(resource.adaptTo(Asset.class)).thenReturn(asset);
         when(asset.getOriginal()).thenReturn(original);
 
-        // Create inputstream from resources csv and add it as return type for below
+        // Create input stream from csv file in resources dir
         InputStream inputStream = loadCSVStream();
         when(original.getStream()).thenReturn(inputStream);
     }
 
     @Test
-    @DisplayName("When some of the headers are passed in different order than the headers are placed in csv file")
+    @DisplayName("When some of the headers are passed in different order, than the headers are placed in csv file")
     void processDataWithScrambledHeaders() throws IOException {
         setUpMocks();
         assertEquals(randomHeaderOutput(), csvResourceProcessor.processData(resource, RANDOM_HEADER_NAMES));
@@ -85,8 +85,7 @@ class CSVResourceProcessorTest {
 
     private InputStream loadCSVStream() throws FileNotFoundException {
         Path resourceDirectory = Paths.get("src", "test", "resources", "table", "test-content.csv");
-        String absolutePath = resourceDirectory.toFile().getAbsolutePath();
-        return new FileInputStream(new File(absolutePath));
+        return new FileInputStream(resourceDirectory.toFile());
     }
 
     @Test
