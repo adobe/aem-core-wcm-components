@@ -48,6 +48,7 @@ The following properties are written to JCR for this Form Text component and are
 9. `./required` - if set to `true`, this field will be marked as required, not allowing the form to be submitted until the field has a value
 10. `./requiredMessage` - defines the message displayed as tooltip when submitting the form if the value is left empty
 11. `./readOnly` - if set to `true`, the filed will be read only
+12. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.form.text.v2` client library category that contains a JavaScript component.

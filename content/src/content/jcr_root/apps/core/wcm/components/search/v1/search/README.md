@@ -37,6 +37,7 @@ The following configuration properties are used:
 The following properties are written to JCR for the Search component and are expected to be available as `Resource` properties:
 
 1. `./searchRoot` - the root page from which to search. It can be a blueprint master, language master or regular page.
+2. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.search.v1` client library category that contains a recommended base

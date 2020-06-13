@@ -21,6 +21,11 @@ Separator component written in HTL.
 
 * Allows addition of a horizontal rule element for separating content sections.
 
+## Edit Dialog Properties
+The following properties are written to JCR for this Page component and are expected to be available as `Resource` properties:
+
+1. `./id` - defines the component HTML ID attribute.
+
 ## BEM Description
 ```
 BLOCK cmp-separator

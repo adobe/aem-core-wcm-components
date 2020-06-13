@@ -19,3 +19,4 @@ atlassian-ide-plugin.xml
 .vlt-sync-config.properties
 node
 node_modules
+core.wcm.components.commons.datalayer.*

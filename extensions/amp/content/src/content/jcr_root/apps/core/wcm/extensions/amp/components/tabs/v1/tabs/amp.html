@@ -19,14 +19,14 @@
               data-sly-list.item="${tabs.items}"
               class="cmp-tabs tabs-with-flex"
               role="tablist">
-    <div id="tab-item${tabs.tabsId}-${itemList.index}"
+    <div id="${item.id}-tab"
          class="cmp-tabs__tab"
          option
          selected="${item.name == tabs.activeItem}"
          role="tab"
-         aria-controls="tab-panel${tabs.tabsId}-${itemList.index}">${item.title}</div>
-    <div id="tab-panel${tabs.tabsId}-${itemList.index}"
-         aria-labelledby="tab-item${tabs.tabsId}-${itemList.index}"
+         aria-controls="${item.id}">${item.title}</div>
+    <div id="${item.id}"
+         aria-labelledby="${item.id}-tab"
          data-sly-resource="${item.name @ decorationTagName='div'}"
          role="tabpanel"
          class="cmp-tabs__tabpanel"></div>

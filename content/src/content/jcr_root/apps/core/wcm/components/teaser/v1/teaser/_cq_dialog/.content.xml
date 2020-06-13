@@ -67,12 +67,12 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/container">
                                         <items jcr:primaryType="nt:unstructured">
-                                                    <pretitle
-                                                        jcr:primaryType="nt:unstructured"
-                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                        fieldDescription="A pretitle that will be displayed above the Teaser's title."
-                                                        fieldLabel="Pretitle"
-                                                        name="./pretitle"/>
+                                            <pretitle
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="A pretitle that will be displayed above the Teaser's title."
+                                                fieldLabel="Pretitle"
+                                                name="./pretitle"/>
                                             <titleGroup
                                                 granite:hide="${cqDesign.titleHidden}"
                                                 jcr:primaryType="nt:unstructured"
@@ -244,6 +244,12 @@
                                                         value="{Boolean}true"/>
                                                 </items>
                                             </descriptionGroup>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

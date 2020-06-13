@@ -2,7 +2,7 @@
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="cq:Page">
     <jcr:content
-        cq:lastModified="{Date}2020-04-13T13:12:47.831+03:00"
+        cq:lastModified="{Date}2020-05-22T18:27:05.662+03:00"
         cq:lastModifiedBy="admin"
         cq:template="/conf/core-components-examples/settings/wcm/templates/content-page"
         jcr:description="AEM Core Components - Component Library"
@@ -26,7 +26,7 @@
                     jcr:lastModifiedBy="admin"
                     jcr:primaryType="nt:unstructured"
                     sling:resourceType="core/wcm/components/text/v2/text"
-                    text="&lt;h1>Component Library &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0&quot;>2.8.0&lt;/a>&lt;/h1>&#xa;"
+                    text="&lt;h1>Component Library &lt;a href=&quot;https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.9.0&quot;>2.9.0&lt;/a>&lt;/h1>&#xa;"
                     textIsRich="true"/>
                 <text
                     cq:styleIds="[1544762734201]"
@@ -457,16 +457,43 @@
                                 width="12"/>
                         </cq:responsive>
                     </teaser_1138854628>
-                    <teaser
+                    <teaser_1138854628_co
                         cq:styleIds="[1547060090076]"
-                        jcr:created="{Date}2020-04-13T13:09:51.049+03:00"
+                        jcr:created="{Date}2019-05-21T11:21:34.635+02:00"
                         jcr:createdBy="admin"
-                        jcr:lastModified="{Date}2020-04-13T13:12:47.816+03:00"
+                        jcr:lastModified="{Date}2020-05-01T14:44:49.190-07:00"
                         jcr:lastModifiedBy="admin"
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                        linkURL="/content/core-components-examples/library/page-authoring/pdf-viewer"
+                        textIsRich="true"
+                        titleFromPage="true">
+                        <cq:responsive jcr:primaryType="nt:unstructured">
+                            <default
+                                jcr:primaryType="nt:unstructured"
+                                width="3"/>
+                            <small
+                                jcr:primaryType="nt:unstructured"
+                                width="4"/>
+                            <extrasmall
+                                jcr:primaryType="nt:unstructured"
+                                width="12"/>
+                        </cq:responsive>
+                    </teaser_1138854628_co>
+                    <teaser
+                        cq:styleIds="[1547060090076]"
+                        jcr:created="{Date}2020-04-13T13:09:51.049+03:00"
+                        jcr:createdBy="admin"
+                        jcr:lastModified="{Date}2020-05-22T18:27:05.458+03:00"
+                        jcr:lastModifiedBy="admin"
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="core-components-examples/components/teaser"
+                        actionsEnabled="false"
+                        descriptionFromPage="true"
+                        fileReference="/content/dam/core-components-examples/library/components/progressbar.svg"
                         linkURL="/content/core-components-examples/library/page-authoring/progressbar"
                         textIsRich="true"
                         titleFromPage="true">

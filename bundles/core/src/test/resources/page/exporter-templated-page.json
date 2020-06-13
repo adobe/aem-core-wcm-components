@@ -8,13 +8,13 @@
     "language": "en-GB",
     "dataLayer": {
         "page-bb590de134": {
-            "description": "Description",
-            "language": "en-GB",
-            "type": "core/wcm/components/page/v1/page",
-            "title": "Templated Page",
-            "templatePath": "/conf/coretest/settings/wcm/templates/product-page",
-            "url": "/core/content/page/templated-page.html",
-            "tags": [
+            "dc:description": "Description",
+            "xdm:language": "en-GB",
+            "@type": "core/wcm/components/page/v1/page",
+            "dc:title": "Templated Page",
+            "xdm:template": "/conf/coretest/settings/wcm/templates/product-page",
+            "repo:path": "/core/content/page/templated-page.html",
+            "xdm:tags": [
                 "two",
                 "three",
                 "one"
@@ -32,9 +32,9 @@
             "richText": true,
             "dataLayer": {
                 "text-fb32b028de": {
-                    "lastModifiedDate": "2016-01-18T15:59:43Z",
-                    "text": "<p>This is a test</p>",
-                    "type": "core/wcm/components/text/v1/text"
+                    "repo:modifyDate": "2016-01-18T15:59:43Z",
+                    "xdm:text": "<p>This is a test</p>",
+                    "@type": "core/wcm/components/text/v1/text"
                 }
             },
             ":type": "core/wcm/components/text/v1/text"

@@ -60,7 +60,7 @@ class ComponentDataImplTest {
     void getDataLayerJsonWhenDataLayerEnabled() {
         Title title = getTitleUnderTest(TITLE_RESOURCE_JCR_TITLE, true);
         assertNotNull(title.getData());
-        String expected = "{\"title-7968bee19c\":{\"type\":\"core/wcm/components/title/v1/title\",\"title\":\"Hello World\",\"lastModifiedDate\":\"2016-01-13T15:14:51Z\"}}";
+        String expected = "{\"title-7968bee19c\":{\"@type\":\"core/wcm/components/title/v1/title\",\"dc:title\":\"Hello World\",\"repo:modifyDate\":\"2016-01-13T15:14:51Z\"}}";
         assertEquals(Json.createReader(new StringReader(expected)).read(),
                 Json.createReader(new StringReader(title.getData().getJson())).read());
         Utils.testJSONExport(title, Utils.getTestExporterJSONPath(TEST_BASE, TITLE_RESOURCE_JCR_TITLE));

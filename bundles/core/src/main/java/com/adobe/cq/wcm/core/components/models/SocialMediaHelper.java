@@ -54,7 +54,7 @@ public interface SocialMediaHelper extends Component {
     String PV_FACEBOOK = "facebook";
 
     /**
-     * Name of teh property that will return the Facebook APp ID.
+     * Name of the property that will return the Facebook App ID.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
@@ -98,9 +98,9 @@ public interface SocialMediaHelper extends Component {
     }
 
     /**
-     * Returns the value of teh Facebook App ID if specified, null otherwise.
+     * Returns the value of the Facebook App ID if specified, null otherwise.
      *
-     * @return the value of teh Facebook App ID if specified, null otherwise.
+     * @return the value of the Facebook App ID if specified, null otherwise.
      * @since com.adobe.cq.wcm.core.components.models 12.14.0; marked <code>default</code> in 12.14.0
      */
     default String getFacebookAppId() {

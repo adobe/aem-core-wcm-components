@@ -28,7 +28,7 @@ public interface ProgressBar extends Component {
      * Name of property that defines the completion percentage.
      * The property should provide a numeric value between 0 and 100.
      *
-     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     String PN_COMPLETED = "completed";
 
@@ -36,7 +36,7 @@ public interface ProgressBar extends Component {
      * Get the completed percentage
      *
      * @return Completed percentage as a number between 0 and 100
-     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     default float getCompleted() {
         throw new UnsupportedOperationException();
@@ -46,25 +46,15 @@ public interface ProgressBar extends Component {
      * Get the remaining percentage
      *
      * @return Remaining percentage as a number between 0 and 100
-     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     default float getRemaining() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * @see Component#getId()
-     * @since com.adobe.cq.wcm.core.components.models 12.14.0
-     */
-    @Override
-    @Nullable
-    default String getId() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     @NotNull
     @Override

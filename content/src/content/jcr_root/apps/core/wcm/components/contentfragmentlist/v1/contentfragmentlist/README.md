@@ -37,6 +37,7 @@ The following properties are written to JCR for the Content Fragment List compon
 5. `./sortOrder` - sort order ascending or descending.
 6. `./maxItems` - defines the maximum number of items rendered by the list. If not defined, all fragments matching the query criteria are returned.
 7. `./elementNames` - element names for limiting the model data displayed in the result.
+8. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.contentfragmentlist.v1.editor` editor client library category that includes JavaScript

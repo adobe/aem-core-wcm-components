@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -30,13 +31,11 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
-
-import static com.day.cq.commons.jcr.JcrConstants.JCR_CONTENT;
 
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class},
@@ -96,29 +95,16 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
 
     @Override
     public String[] getDataLayerShownItems() {
-        String[] shownItems = new String[0];
-        ListItem activeItem = null;
         String activeItemName = getActiveItem();
         List<ListItem> items = getItems();
-        if (!items.isEmpty()) {
-            activeItem = items.stream()
-                    .filter(e -> StringUtils.equals(e.getName(), activeItemName))
-                    .findFirst().orElse(items.get(0));
-            ComponentData componentData = activeItem.getData();
-            if (componentData != null) {
-                shownItems = new String[]{componentData.getId()};
-            }
-        }
-        return shownItems;
-    }
-
-    @Override
-    public String getTabsId() {
-        String resourcePath = resource.getPath();
-        String identifier = resourcePath.substring(resourcePath.indexOf(JCR_CONTENT) + JCR_CONTENT.length());
-        if (resourcePath.startsWith("/conf")) {
-            identifier += "-template";
-        }
-        return identifier.replace("/", "-");
+        return Optional.ofNullable(
+            items.stream()
+                .filter(e -> StringUtils.equals(e.getName(), activeItemName))
+                .findFirst()
+                .orElse(items.get(0))
+                .getData())
+            .map(ComponentData::getId)
+            .map(item -> new String[]{item})
+            .orElseGet(() -> new String[0]);
     }
 }

@@ -65,6 +65,12 @@
                                                 name="./structureDepth"
                                                 step="1"
                                                 value="${not empty cqDesign.structureDepth ? cqDesign.structureDepth : 1}"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

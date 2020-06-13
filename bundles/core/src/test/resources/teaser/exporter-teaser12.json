@@ -9,10 +9,10 @@
   "id": "teaser-c8b7c5c73f",
   "dataLayer": {
     "teaser-c8b7c5c73f": {
-      "linkUrl": "/core/content/teasers.html",
-      "description": "Description",
-      "type": "core/wcm/components/teaser/v1/teaser",
-      "title": "Teaser"
+      "xdm:linkURL": "/core/content/teasers.html",
+      "dc:description": "Description",
+      "@type": "core/wcm/components/teaser/v1/teaser",
+      "dc:title": "Teaser"
     }
   },
   ":type": "core/wcm/components/teaser/v1/teaser"

@@ -21,7 +21,7 @@ import org.apache.sling.caconfig.annotation.Property;
 /**
  * Context Aware Configuration Class of the Data Layer
  */
-@Configuration(label="Data Layer Context Aware Configuration")
+@Configuration(label="Data Layer", description="Configure support for Adobe Client Data Layer")
 public @interface DataLayerConfig {
 
     /**
