@@ -31,6 +31,8 @@ import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -40,32 +42,37 @@ import java.util.List;
 
 import static java.util.Objects.nonNull;
 
-@Model(adaptables = SlingHttpServletRequest.class,
+@Model(
+    adaptables = SlingHttpServletRequest.class,
     adapters = {Table.class, ComponentExporter.class},
-    resourceType = TableImpl.RESOURCE_TYPE)
+    resourceType = TableImpl.RESOURCE_TYPE
+)
 
-@Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-    extensions = ExporterConstants.SLING_MODEL_EXTENSION)
+@Exporter(
+    name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
+    extensions = ExporterConstants.SLING_MODEL_EXTENSION
+)
 public class TableImpl extends AbstractComponentImpl implements Table {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/table/v1/table";
-    @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.REQUIRED)
     private String source;
 
-    @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.REQUIRED)
     private String[] headerNames;
 
     @ValueMapValue(name = "description", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String description;
 
-    @Inject @Optional
+    @Inject
+    @Optional
     private List<ResourceProcessor> resourceProcessors;
 
     @SlingObject
     private ResourceResolver resourceResolver;
 
     private List<String> formattedTableHeaderNames;
-    private List<List<String>> items;
 
 
     @PostConstruct
@@ -93,7 +100,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
         formattedTableHeaderNames = new ArrayList<>();
         for (String propertyName : headerNames) {
             if (propertyName.contains("jcr:")) {
-                formattedTableHeaderNames.add(propertyName.replace("jcr:",""));
+                formattedTableHeaderNames.add(propertyName.replace("jcr:", ""));
             } else {
                 formattedTableHeaderNames.add(propertyName);
             }
@@ -101,27 +108,27 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     }
 
     @Override
-    public List<String> getFormattedHeaderNames() {
+    public @NotNull List<String> getFormattedHeaderNames() {
         return formattedTableHeaderNames;
     }
 
     @Override
     public List<List<String>> getItems() throws IOException {
         if (nonNull(resourceProcessors)) {
-            for (ResourceProcessor resourceProcessor : resourceProcessors) {
-                Resource sourceResource = resourceResolver.getResource(source);
-                if (resourceProcessor.canProcess(getSourceResourceMimeType(sourceResource))) {
-                    items = resourceProcessor.processData(sourceResource, headerNames);
-                    break;
+            Resource sourceResource = resourceResolver.getResource(source);
+            if (nonNull(sourceResource)) {
+                for (ResourceProcessor resourceProcessor : resourceProcessors) {
+                    if (resourceProcessor.canProcess(getSourceResourceMimeType(sourceResource))) {
+                        return resourceProcessor.processData(sourceResource, headerNames);
+                    }
                 }
             }
-
         }
-        return items;
+        return new ArrayList<>();
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return StringUtils.isEmpty(description) ? StringUtils.EMPTY : description;
     }
 }

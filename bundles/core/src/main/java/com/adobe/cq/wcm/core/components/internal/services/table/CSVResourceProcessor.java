@@ -22,6 +22,7 @@ import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.Rendition;
 import com.day.cq.dam.commons.util.DamUtil;
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
 import java.io.BufferedReader;
@@ -37,7 +38,7 @@ import static java.util.Objects.nonNull;
 public class CSVResourceProcessor implements ResourceProcessor {
 
     @Override
-    public List<List<String>> processData(Resource resource, String[] headerNames) throws IOException {
+    public List<List<String>> processData(@NotNull Resource resource, String[] headerNames) throws IOException {
         List<List<String>> rows = new ArrayList<>();
         Asset asset = DamUtil.resolveToAsset(resource);
         if (nonNull(asset)) {

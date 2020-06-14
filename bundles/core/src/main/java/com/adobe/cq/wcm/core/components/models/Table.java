@@ -15,15 +15,22 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Defines the {@code Table} Sling Model used for the {@code /apps/core/wcm/components/table} component.
+ */
 public interface Table extends Component {
 
     /**
      * Returns formatted property names by removing jcr: from the property name.
-     * @return
+     * @return table header names
      */
+    @NotNull
     default List<String> getFormattedHeaderNames() {
         throw new UnsupportedOperationException();
     }
@@ -31,7 +38,7 @@ public interface Table extends Component {
     /**
      * Returns the table items(Rows) associated to the selected source path.
      *
-      * @return
+      * @return All the table data (row-columns)
      */
     default List<List<String>> getItems() throws IOException {
         throw new UnsupportedOperationException();
@@ -40,7 +47,7 @@ public interface Table extends Component {
     /**
      * Returns Table Description
      *
-     * @return
+     * @return business description about the table
      */
     default String getDescription() {
         throw new UnsupportedOperationException();

@@ -20,7 +20,7 @@
      role="table"
      aria-label=""
      aria-describedby="">
-    <div data-sly-test="${table.description}" class="cmp-table__description"> ${table.description}</div>
+    <div data-sly-test="${table.description != ''}" class="cmp-table__description"> ${table.description}</div>
     <div class="cmp-table__rowgroup" role="rowgroup">
         <div class="cmp-table__rowgroup-row-headers" role="row"
              data-sly-list.headerName="${table.formattedHeaderNames}">

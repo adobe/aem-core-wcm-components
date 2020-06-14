@@ -21,19 +21,17 @@ import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @Component(service = ResourceProcessor.class, immediate = true)
 public class DefaultResourceProcessor implements ResourceProcessor {
 
     @Override
-    public List<List<String>> processData(Resource resource, String[] headerNames) {
+    public List<List<String>> processData(@NotNull Resource resource, String[] headerNames) {
         List<List<String>> rows = new ArrayList<>();
         if(!resource.hasChildren()) {
             return rows;

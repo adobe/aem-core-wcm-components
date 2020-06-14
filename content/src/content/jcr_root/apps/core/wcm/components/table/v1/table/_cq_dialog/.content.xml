@@ -37,12 +37,13 @@
                                 fieldLabel="Description"
                                 name="./description"
                                 sling:resourceType="granite/ui/components/foundation/form/textfield"/>
-                            <linkTo
+                            <source
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/foundation/form/pathbrowser"
                                 fieldLabel="Source"
                                 fieldDescription="Select File from DAM or else Resource who children need to be displayed in table rows"
                                 name="./source"
+                                required="{Boolean}true"
                                 predicate="nosystem"
                                 rootPath="/"
                                 showTitles="false"/>
@@ -50,6 +51,7 @@
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                 fieldDescription="Add List of Headers that need to displayed in Table"
+                                required="{Boolean}true"
                                 fieldLabel="Table Headers">
                                 <field
                                     jcr:primaryType="nt:unstructured"
