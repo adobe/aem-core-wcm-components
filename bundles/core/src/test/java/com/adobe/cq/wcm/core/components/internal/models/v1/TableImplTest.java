@@ -21,7 +21,6 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.table.CSVResourceProcessor;
 import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceProcessor;
 import com.adobe.cq.wcm.core.components.models.Table;
-import com.adobe.cq.wcm.core.components.models.Title;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import com.day.cq.dam.api.Asset;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -33,7 +32,6 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.testing.mock.sling.servlet.MockSlingHttpServletRequest;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,6 +64,7 @@ class TableImplTest {
     private static final String TABLE_DESCRIPTION = "This is sample Table Description";
     private static final String TABLE_ARIA_LABEL="Sample Table";
     private static final String DAM_ASSET = "dam:Asset";
+    private static final String TABLE_EXPORTED_TYPE = "core/wcm/components/table/v1/table";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -142,6 +141,15 @@ class TableImplTest {
         Table table = getTableUnderTest();
         assertEquals(TABLE_ARIA_LABEL, table.getAriaLabel());
     }
+
+    @Test
+    void testExportedType() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
+        Table table = getTableUnderTest();
+        assertEquals(TABLE_EXPORTED_TYPE, table.getExportedType());
+    }
+
     @Test
     void testTableWithItems() throws IOException {
         List<List<String>> rows = setMockRows();

@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.Optional;
@@ -56,10 +57,10 @@ public class TableImpl extends AbstractComponentImpl implements Table {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/table/v1/table";
 
-    @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.REQUIRED)
     private String source;
 
-    @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.REQUIRED)
     private String[] headerNames;
 
     @ValueMapValue(name = "description", injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -135,13 +136,13 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     @NotNull
     @Override
     public String getDescription() {
-        return StringUtils.isEmpty(description) ? StringUtils.EMPTY : description;
+        return StringUtils.defaultIfEmpty(description, StringUtils.EMPTY);
     }
 
     @NotNull
     @Override
     public String getAriaLabel() {
-        return StringUtils.isEmpty(ariaLabel) ? StringUtils.EMPTY : ariaLabel;
+        return StringUtils.defaultIfEmpty(ariaLabel, StringUtils.EMPTY);
     }
 
     @NotNull
@@ -157,6 +158,6 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     @Nullable
     @Override
     public String getDataLayerText() {
-        return StringUtils.defaultIfEmpty(this.description, StringUtils.EMPTY);
+        return StringUtils.defaultIfEmpty(description, StringUtils.EMPTY);
     }
 }

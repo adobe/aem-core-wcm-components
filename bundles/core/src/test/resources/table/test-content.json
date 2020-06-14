@@ -17,6 +17,7 @@
                         "sling:resourceType": "core/wcm/components/table/v1/table",
                         "headerNames": ["email","firstName","gender","jcr:title"],
                         "description": "This is sample Table Description",
+                        "source": "/content/dam/test.csv",
                         "ariaLabel": "Sample Table",
                         "item-1": {
                             "jcr:primaryType": "nt:unstructured",
