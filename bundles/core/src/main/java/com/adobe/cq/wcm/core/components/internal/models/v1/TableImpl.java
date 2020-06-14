@@ -137,8 +137,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     }
 
     @Override
-    @Nullable
     public String getAriaLabel() {
-        return ariaLabel;
+        return StringUtils.isEmpty(ariaLabel) ? StringUtils.EMPTY : ariaLabel;
     }
 }
