@@ -17,6 +17,7 @@ package com.adobe.cq.wcm.core.components.models;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +43,7 @@ public interface Table extends Component {
      *
       * @return All the table data (row-columns)
      */
+    @NotNull
     default List<List<String>> getItems() throws IOException {
         throw new UnsupportedOperationException();
     }
@@ -51,6 +53,7 @@ public interface Table extends Component {
      *
      * @return business description about the table
      */
+    @NotNull
     default String getDescription() {
         throw new UnsupportedOperationException();
     }
@@ -60,6 +63,7 @@ public interface Table extends Component {
      *
      * @return accessible name for the table
      */
+    @NotNull
     default String getAriaLabel() {
         throw new UnsupportedOperationException();
     }

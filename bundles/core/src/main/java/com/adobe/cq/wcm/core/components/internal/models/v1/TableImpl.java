@@ -110,15 +110,15 @@ public class TableImpl extends AbstractComponentImpl implements Table {
         }
     }
 
-    @Nullable
+
     @Override
     public @NotNull List<String> getFormattedHeaderNames() {
         return formattedTableHeaderNames;
     }
 
-    @Nullable
+
     @Override
-    public List<List<String>> getItems() throws IOException {
+    public @NotNull List<List<String>> getItems() throws IOException {
         if (nonNull(resourceProcessors)) {
             Resource sourceResource = resourceResolver.getResource(source);
             if (nonNull(sourceResource)) {
@@ -132,13 +132,13 @@ public class TableImpl extends AbstractComponentImpl implements Table {
         return new ArrayList<>();
     }
 
-    @Nullable
+    @NotNull
     @Override
     public String getDescription() {
         return StringUtils.isEmpty(description) ? StringUtils.EMPTY : description;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public String getAriaLabel() {
         return StringUtils.isEmpty(ariaLabel) ? StringUtils.EMPTY : ariaLabel;
