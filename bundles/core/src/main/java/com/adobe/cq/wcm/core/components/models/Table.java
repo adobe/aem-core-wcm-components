@@ -17,12 +17,13 @@ package com.adobe.cq.wcm.core.components.models;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
 /**
  * Defines the {@code Table} Sling Model used for the {@code /apps/core/wcm/components/table} component.
+ *
+ * @since com.adobe.cq.wcm.core.components.models.Table 12.10.0
  */
 public interface Table extends Component {
 
