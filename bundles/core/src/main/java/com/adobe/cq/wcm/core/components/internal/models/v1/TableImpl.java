@@ -140,4 +140,19 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     public String getAriaLabel(){
         return ariaLabel;
     }
+
+    @NotNull
+    @Override
+    public String getExportedType() {
+        return resource.getResourceType();
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerText() {
+        return StringUtils.defaultIfEmpty(this.description, StringUtils.EMPTY);
+    }
 }

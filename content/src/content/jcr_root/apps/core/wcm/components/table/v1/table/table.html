@@ -21,7 +21,8 @@
      itemtype="http://schema.org/Table"
      role="table"
      aria-label="${table.ariaLabel}"
-     aria-describedby="${table.id}">
+     aria-describedby="${table.id}"
+     data-cmp-data-layer="${table.data.json}">
     <div data-sly-test="${table.description != ''}"
          class="cmp-table__description"
          itemprop="about"> ${table.description}</div>
@@ -42,4 +43,3 @@
         </div>
     </div>
 </div>
-

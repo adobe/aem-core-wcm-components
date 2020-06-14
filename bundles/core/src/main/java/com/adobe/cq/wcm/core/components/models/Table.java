@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import com.adobe.cq.export.json.ComponentExporter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -60,6 +61,16 @@ public interface Table extends Component {
      * @return accessible name for the table
      */
     default String getAriaLabel() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @see ComponentExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.2.0
+     */
+    @NotNull
+    @Override
+    default String getExportedType() {
         throw new UnsupportedOperationException();
     }
 
