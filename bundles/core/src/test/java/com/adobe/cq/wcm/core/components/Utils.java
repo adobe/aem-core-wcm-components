@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import javax.json.Json;
 import javax.json.JsonReader;
 
@@ -62,7 +63,7 @@ public class Utils {
         } catch (IOException e) {
             fail(String.format("Unable to generate JSON export for model %s: %s", model.getClass().getName(), e.getMessage()));
         }
-        JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString()));
+        JsonReader outputReader = Json.createReader(IOUtils.toInputStream(writer.toString(), StandardCharsets.UTF_8));
         InputStream is = Utils.class.getResourceAsStream
                 (expectedJsonResource);
         if (is != null) {
