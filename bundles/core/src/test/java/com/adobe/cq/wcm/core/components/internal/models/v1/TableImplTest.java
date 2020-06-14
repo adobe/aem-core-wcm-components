@@ -61,8 +61,9 @@ class TableImplTest {
     private static final String[] HEADER_NAMES = new String[]{"email", "firstName", "gender", "title"};
     private static final String DESCRIPTION = "Dummy description";
     private static final String SOURCE = "/content/dam/test.csv";
-    public static final String TABLE_DESCRIPTION = "This is sample Table Description";
-    public static final String DAM_ASSET = "dam:Asset";
+    private static final String TABLE_DESCRIPTION = "This is sample Table Description";
+    private static final String TABLE_ARIA_LABEL="Sample Table";
+    private static final String DAM_ASSET = "dam:Asset";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -132,6 +133,13 @@ class TableImplTest {
         assertEquals(TABLE_DESCRIPTION, table.getDescription());
     }
 
+    @Test
+    void testGetAriaLabel() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
+        Table table = getTableUnderTest();
+        assertEquals(TABLE_ARIA_LABEL, table.getAriaLabel());
+    }
     @Test
     void testTableWithItems() throws IOException {
         List<List<String>> rows = setMockRows();

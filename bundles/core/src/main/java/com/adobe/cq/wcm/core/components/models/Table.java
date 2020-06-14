@@ -53,4 +53,14 @@ public interface Table extends Component {
     default String getDescription() {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * Returns accessible name for the table
+     *
+     * @return accessible name for the table
+     */
+    default String getAriaLabel() {
+        throw new UnsupportedOperationException();
+    }
+
 }

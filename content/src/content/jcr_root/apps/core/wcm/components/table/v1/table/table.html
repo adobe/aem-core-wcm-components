@@ -17,10 +17,14 @@
 <div data-sly-use.table="com.adobe.cq.wcm.core.components.models.Table"
      id="${table.id}"
      class="table"
+     itemscope
+     itemtype="http://schema.org/Table"
      role="table"
-     aria-label=""
-     aria-describedby="">
-    <div data-sly-test="${table.description != ''}" class="cmp-table__description"> ${table.description}</div>
+     aria-label="${table.ariaLabel}"
+     aria-describedby="${table.id}">
+    <div data-sly-test="${table.description != ''}"
+         class="cmp-table__description"
+         itemprop="about"> ${table.description}</div>
     <div class="cmp-table__rowgroup" role="rowgroup">
         <div class="cmp-table__rowgroup-row-headers" role="row"
              data-sly-list.headerName="${table.formattedHeaderNames}">

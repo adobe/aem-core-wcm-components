@@ -47,7 +47,7 @@
                                 predicate="nosystem"
                                 rootPath="/"
                                 showTitles="false"/>
-                            <multifieldParent
+                            <headerNames
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
                                 fieldDescription="Add List of Headers that need to displayed in Table"
@@ -57,7 +57,13 @@
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/foundation/form/textfield"
                                     name="./headerNames"/>
-                            </multifieldParent>
+                            </headerNames>
+                            <arialabel
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="Provide an accessible name for the table"
+                                fieldLabel="Aria Label"
+                                name="./ariaLabel"/>
                         </items>
                     </column>
                 </items>
