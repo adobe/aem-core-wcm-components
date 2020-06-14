@@ -55,18 +55,17 @@ import static java.util.Objects.nonNull;
 public class TableImpl extends AbstractComponentImpl implements Table {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/table/v1/table";
-    @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.REQUIRED)
+
+    @ValueMapValue(name = "source", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String source;
 
-    @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.REQUIRED)
+    @ValueMapValue(name = "headerNames", injectionStrategy = InjectionStrategy.OPTIONAL)
     private String[] headerNames;
 
     @ValueMapValue(name = "description", injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
     private String description;
 
     @ValueMapValue(name = "ariaLabel", injectionStrategy = InjectionStrategy.OPTIONAL)
-    @Nullable
     private String ariaLabel;
 
     @Inject
@@ -111,11 +110,13 @@ public class TableImpl extends AbstractComponentImpl implements Table {
         }
     }
 
+    @Nullable
     @Override
     public @NotNull List<String> getFormattedHeaderNames() {
         return formattedTableHeaderNames;
     }
 
+    @Nullable
     @Override
     public List<List<String>> getItems() throws IOException {
         if (nonNull(resourceProcessors)) {
@@ -131,11 +132,13 @@ public class TableImpl extends AbstractComponentImpl implements Table {
         return new ArrayList<>();
     }
 
+    @Nullable
     @Override
     public String getDescription() {
         return StringUtils.isEmpty(description) ? StringUtils.EMPTY : description;
     }
 
+    @Nullable
     @Override
     public String getAriaLabel() {
         return StringUtils.isEmpty(ariaLabel) ? StringUtils.EMPTY : ariaLabel;
@@ -151,6 +154,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
      * DataLayerProvider implementation of field getters
      */
 
+    @Nullable
     @Override
     public String getDataLayerText() {
         return StringUtils.defaultIfEmpty(this.description, StringUtils.EMPTY);
