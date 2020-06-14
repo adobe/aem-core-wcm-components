@@ -65,9 +65,9 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     @Nullable
     private String description;
 
-    @ValueMapValue(name="ariaLabel", injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = "ariaLabel", injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
-    private  String ariaLabel;
+    private String ariaLabel;
 
     @Inject
     @Optional
@@ -137,7 +137,8 @@ public class TableImpl extends AbstractComponentImpl implements Table {
     }
 
     @Override
-    public String getAriaLabel(){
+    @Nullable
+    public String getAriaLabel() {
         return ariaLabel;
     }
 }

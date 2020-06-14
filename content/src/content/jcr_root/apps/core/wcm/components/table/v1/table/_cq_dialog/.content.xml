@@ -58,12 +58,12 @@
                                     sling:resourceType="granite/ui/components/foundation/form/textfield"
                                     name="./headerNames"/>
                             </headerNames>
-                            <arialabel
+                            <ariaLabel
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
                                 fieldDescription="Provide an accessible name for the table"
                                 fieldLabel="Aria Label"
-                                name="./ariaLabel"/>
+                                name="./ariaLabel" />
                         </items>
                     </column>
                 </items>
