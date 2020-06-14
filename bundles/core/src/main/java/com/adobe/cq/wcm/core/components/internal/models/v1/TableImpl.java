@@ -84,7 +84,7 @@ public class TableImpl extends AbstractComponentImpl implements Table {
         if (nonNull(sourceResource)) {
             if (DamUtil.isAsset(sourceResource)) {
                 Asset asset = DamUtil.resolveToAsset(sourceResource);
-                return asset.getMimeType();
+                return nonNull(asset) ? asset.getMimeType() : StringUtils.EMPTY;
             } else {
                 return StringUtils.EMPTY;
             }
