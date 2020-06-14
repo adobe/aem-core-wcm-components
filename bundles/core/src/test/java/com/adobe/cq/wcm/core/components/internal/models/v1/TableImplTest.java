@@ -21,6 +21,7 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.table.CSVResourceProcessor;
 import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceProcessor;
 import com.adobe.cq.wcm.core.components.models.Table;
+import com.adobe.cq.wcm.core.components.models.Tabs;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import com.day.cq.dam.api.Asset;
 import io.wcm.testing.mock.aem.junit5.AemContext;
@@ -148,6 +149,14 @@ class TableImplTest {
         context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
         Table table = getTableUnderTest();
         assertEquals(TABLE_EXPORTED_TYPE, table.getExportedType());
+    }
+
+    @Test
+    void testTableJson() {
+        context.load().json(TEST_BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.registerService(ResourceProcessor.class, new DefaultResourceProcessor());
+        Table table = getTableUnderTest();
+        Utils.testJSONExport(table, Utils.getTestExporterJSONPath(TEST_BASE, "table"));
     }
 
     @Test
