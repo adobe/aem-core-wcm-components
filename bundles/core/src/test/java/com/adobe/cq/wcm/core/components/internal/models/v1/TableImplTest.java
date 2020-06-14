@@ -21,7 +21,6 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.services.table.CSVResourceProcessor;
 import com.adobe.cq.wcm.core.components.internal.services.table.DefaultResourceProcessor;
 import com.adobe.cq.wcm.core.components.models.Table;
-import com.adobe.cq.wcm.core.components.models.Tabs;
 import com.adobe.cq.wcm.core.components.services.table.ResourceProcessor;
 import com.day.cq.dam.api.Asset;
 import io.wcm.testing.mock.aem.junit5.AemContext;
