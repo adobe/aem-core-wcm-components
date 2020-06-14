@@ -25,28 +25,31 @@ import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toList;
 
 @Component(service = ResourceProcessor.class, immediate = true)
 public class DefaultResourceProcessor implements ResourceProcessor {
 
     @Override
     public List<List<String>> processData(@NotNull Resource resource, String[] headerNames) {
-        List<List<String>> rows = new ArrayList<>();
-        if(!resource.hasChildren()) {
-            return rows;
+        if (!resource.hasChildren()) {
+            return new ArrayList<>();
         }
 
-        for (Resource child : resource.getChildren()) {
-            ValueMap props = child.adaptTo(ValueMap.class);
-            List<String> row = new ArrayList<>();
-            for (String headerName : headerNames) {
-                String propValue = props != null ? props.get(headerName, StringUtils.EMPTY) : StringUtils.EMPTY;
-                row.add(propValue);
-            }
-            rows.add(row);
-        }
-        return rows;
+        return StreamSupport.stream(resource.getChildren().spliterator(), false)
+                            .map(Resource::getValueMap)
+                            .map(props -> getTableRowData(headerNames, props))
+                            .collect(toList());
+    }
+
+    private List<String> getTableRowData(String[] headerNames, ValueMap props) {
+        return Arrays.stream(headerNames)
+                     .map(headerName -> props.get(headerName, StringUtils.EMPTY))
+                     .collect(toList());
     }
 
     @Override

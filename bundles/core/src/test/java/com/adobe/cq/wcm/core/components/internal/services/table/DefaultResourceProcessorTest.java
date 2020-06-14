@@ -25,10 +25,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,10 +56,10 @@ class DefaultResourceProcessorTest {
     @Test
     @DisplayName("Happy path when the data is available under child nodes.")
     void processData() {
-        Iterator<Resource> children = getChildrenIterator();
+        Spliterator<Resource> children = getChildrenSpliterator();
         when(resource.hasChildren()).thenReturn(true);
         when(resource.getChildren()).thenReturn(iterable);
-        when(iterable.iterator()).thenReturn(children);
+        when(iterable.spliterator()).thenReturn(children);
         when(props.get("email", StringUtils.EMPTY)).thenReturn("test@test.com");
         when(props.get("name", StringUtils.EMPTY)).thenReturn("test");
         when(props.get("gender", StringUtils.EMPTY)).thenReturn("male");
@@ -92,12 +89,12 @@ class DefaultResourceProcessorTest {
         return children.iterator();
     }
 
-    private Iterator<Resource> getChildrenIterator() {
+    private Spliterator<Resource> getChildrenSpliterator() {
         Resource child = mock(Resource.class);
-        when(child.adaptTo(ValueMap.class)).thenReturn(props);
+        when(child.getValueMap()).thenReturn(props);
         final List<Resource> children = new ArrayList<>();
         children.add(child);
-        return children.iterator();
+        return children.spliterator();
     }
 
     private List<List<String>> expectedOutput() {
