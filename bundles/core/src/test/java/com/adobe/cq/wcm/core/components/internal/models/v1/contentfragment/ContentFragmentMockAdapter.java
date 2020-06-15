@@ -48,7 +48,7 @@ import static com.day.cq.commons.jcr.JcrConstants.JCR_TITLE;
 import static com.day.cq.dam.api.DamConstants.NT_DAM_ASSET;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
