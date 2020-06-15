@@ -84,14 +84,16 @@ public class ClientLibrariesImpl implements ClientLibraries {
         if (categoriesArray == null) {
             Set<String> categories = new HashSet<>();
 
+            // retrieve all the clientlibs defined for the resource, its descendants and its super types
             populateClientLibraries();
 
+            // add categories defined by the clientlibs
             for (ClientLibrary library : libraries) {
                 String[] libraryCategories = library.getCategories();
                 categories.addAll(Arrays.asList(libraryCategories));
             }
 
-            // add clientlib categories defined in the page policy and page design
+            // add categories defined in the page policy and page design
             addPageClientLibCategories(categories);
 
             // add categories injected by the HTL template
@@ -118,6 +120,22 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return Arrays.copyOf(categoriesArray, categoriesArray.length);
     }
 
+    private void populateClientLibraries() {
+        allLibraries = htmlLibraryManager.getLibraries();
+        libraries = new ArrayList<>();
+        Set<String> resourceTypes = new HashSet<>();
+        // get the resource types of this resource, its descendants and its super types
+        addResourceTypesFromResource(resourceTypes);
+        // if the resource is a page: get the resource types of the resources used in the template
+        addResourceTypesFromTemplate(resourceTypes);
+
+        // get the clientlibs defined by the resource types
+        for (String resourceType : resourceTypes) {
+            Resource componentRes = resolveResource(resolver, resourceType);
+            addClientLibraries(componentRes, libraries);
+        }
+    }
+
     private void addPageClientLibCategories(Set<String> categories) {
         // if the resource is based on a page model
         com.adobe.cq.wcm.core.components.models.Page  pageModel = request.adaptTo(com.adobe.cq.wcm.core.components.models.Page.class);
@@ -126,22 +144,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
             if (pageClientLibCategories != null) {
                 categories.addAll(new HashSet<>(Arrays.asList(pageClientLibCategories)));
             }
-        }
-    }
-
-    private void populateClientLibraries() {
-        allLibraries = htmlLibraryManager.getLibraries();
-        libraries = new ArrayList<>();
-        Set<String> resourceTypes = new HashSet<>();
-        // get the resource types of this resource, its descendants and its super types
-        addResourceTypesFromResource(resourceTypes);
-        // if the resource is a page: get the resource types used on the template
-        addResourceTypesFromTemplate(resourceTypes);
-
-        // get the clientlib categories defined by the resource types
-        for (String resourceType : resourceTypes) {
-            Resource componentRes = resolveResource(resolver, resourceType);
-            addClientLibraries(componentRes, libraries);
         }
     }
 
