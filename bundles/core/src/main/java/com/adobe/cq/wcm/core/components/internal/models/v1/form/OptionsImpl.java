@@ -33,7 +33,12 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.*;
+import org.apache.sling.models.annotations.injectorspecific.ChildResource;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,21 +63,27 @@ public class OptionsImpl extends AbstractFieldImpl implements Options {
     private static final String ID_PREFIX = "form-options";
 
     @ChildResource(injectionStrategy = InjectionStrategy.OPTIONAL) @Named(OPTION_ITEMS_PATH)
+    @Nullable
     private List<Resource> itemResources;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String helpMessage;
 
     @ValueMapValue(name = OptionsImpl.PN_TYPE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String typeString;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String listPath;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String datasourceRT;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = "source")
+    @Nullable
     private String sourceString;
 
     @ScriptVariable

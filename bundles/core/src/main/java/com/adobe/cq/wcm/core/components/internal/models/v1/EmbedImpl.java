@@ -52,18 +52,23 @@ public class EmbedImpl implements Embed {
     protected static final String RESOURCE_TYPE = "core/wcm/components/embed/v1/embed";
 
     @ValueMapValue(name = PN_TYPE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String type;
 
     @ValueMapValue(name = PN_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String url;
 
     @ValueMapValue(name = PN_HTML, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String html;
 
     @ValueMapValue(name = PN_EMBEDDABLE_RESOURCE_TYPE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String embeddableResourceType;
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private Style currentStyle;
 
     @Inject @Optional

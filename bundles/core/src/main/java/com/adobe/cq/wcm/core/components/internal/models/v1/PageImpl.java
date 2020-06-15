@@ -57,6 +57,7 @@ import com.day.cq.wcm.api.designer.Design;
 import com.day.cq.wcm.api.designer.Designer;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { Page.class,
         ContainerExporter.class }, resourceType = PageImpl.RESOURCE_TYPE)
@@ -77,6 +78,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     protected Style currentStyle;
 
     @ScriptVariable

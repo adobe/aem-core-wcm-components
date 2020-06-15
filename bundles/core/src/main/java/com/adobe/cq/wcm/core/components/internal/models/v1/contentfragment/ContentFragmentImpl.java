@@ -82,20 +82,20 @@ public class ContentFragmentImpl implements ContentFragment {
     @ScriptVariable
     private Resource resource;
 
-    @ValueMapValue(name = ContentFragment.PN_PATH,
-                   injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String fragmentPath;
 
-    @ValueMapValue(name = ContentFragment.PN_ELEMENT_NAMES,
-                   injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_ELEMENT_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String[] elementNames;
 
-    @ValueMapValue(name = ContentFragment.PN_VARIATION_NAME,
-                   injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_VARIATION_NAME, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String variationName;
 
-    @ValueMapValue(name = ContentFragment.PN_DISPLAY_MODE,
-                   injectionStrategy = InjectionStrategy.OPTIONAL)
+    @ValueMapValue(name = ContentFragment.PN_DISPLAY_MODE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String displayMode;
 
     private DAMContentFragment damContentFragment = new EmptyContentFragment();

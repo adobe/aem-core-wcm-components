@@ -35,6 +35,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.*;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +86,7 @@ public class ContainerImpl implements Container {
     private String id;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String actionType;
 
     @ValueMapValue(name = ResourceResolver.PROPERTY_RESOURCE_TYPE)
@@ -92,6 +94,7 @@ public class ContainerImpl implements Container {
     private String dropAreaResourceType;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String redirect;
 
     private String name;

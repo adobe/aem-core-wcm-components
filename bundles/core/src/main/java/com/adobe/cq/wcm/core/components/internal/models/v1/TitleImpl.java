@@ -28,6 +28,7 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -64,15 +65,19 @@ public class TitleImpl extends AbstractComponentImpl implements Title {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     private Style currentStyle;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
+    @Nullable
     private String title;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String type;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String linkURL;
 
     /**

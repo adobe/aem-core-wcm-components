@@ -26,8 +26,14 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.*;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +82,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
     private Page currentPage;
 
     @ValueMapValue(name = ExperienceFragment.PN_FRAGMENT_VARIATION_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String fragmentVariationPath;
 
     @OSGiService
@@ -190,8 +197,7 @@ public class ExperienceFragmentImpl implements ExperienceFragment {
         try {
             if (relationshipManager.isSource(resource)) {
                 // the resource is a blueprint
-                RangeIterator liveCopiesIterator = null;
-                liveCopiesIterator = relationshipManager.getLiveRelationships(resource, null, null);
+                RangeIterator liveCopiesIterator = relationshipManager.getLiveRelationships(resource, null, null);
                 if (liveCopiesIterator != null) {
                     LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
                     LiveCopy liveCopy = relationship.getLiveCopy();

@@ -16,7 +16,9 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -27,6 +29,7 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -34,9 +37,11 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.Tabs;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 
+/**
+ * Tabs model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Tabs.class, ComponentExporter.class, ContainerExporter.class},
        resourceType = TabsImpl.RESOURCE_TYPE)
@@ -44,47 +49,62 @@ import com.day.cq.wcm.api.components.ComponentManager;
           extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TabsImpl extends PanelContainerImpl implements Tabs {
 
+    /**
+     * The resource type.
+     */
     public final static String RESOURCE_TYPE = "core/wcm/components/tabs/v1/tabs";
 
+    /**
+     * The current active tab.
+     */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String activeItem;
 
+    /**
+     * The accessibility label.
+     */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String accessibilityLabel;
 
+    /**
+     * The current resource.
+     */
     @SlingObject
     private Resource resource;
 
+    /**
+     * The current request.
+     */
     @Self
     SlingHttpServletRequest request;
 
+    /**
+     * The name of the active item.
+     */
     private String activeItemName;
 
     @Override
     public String getActiveItem() {
         if (activeItemName == null) {
-            Resource active = resource.getChild(activeItem);
-            if (active != null) {
-                activeItemName = activeItem;
-            } else {
-                ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
-                if (componentManager != null) {
-                    for (Resource res : resource.getChildren()) {
-                        if (res != null) {
-                            Component component = componentManager.getComponentOfResource(res);
-                            if (component != null) {
-                                activeItemName = res.getName();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
+            this.activeItemName = Optional.ofNullable(this.activeItem)
+                .map(resource::getChild)
+                .map(Resource::getName)
+                .orElseGet(() ->
+                    Optional.ofNullable(request.getResourceResolver().adaptTo(ComponentManager.class))
+                        .flatMap(componentManager -> StreamSupport.stream(resource.getChildren().spliterator(), false)
+                            .filter(Objects::nonNull)
+                            .filter(res -> Objects.nonNull(componentManager.getComponentOfResource(res)))
+                            .findFirst()
+                            .map(Resource::getName))
+                        .orElse(null));
         }
         return activeItemName;
     }
 
     @Override
+    @Nullable
     public String getAccessibilityLabel() {
         return accessibilityLabel;
     }
