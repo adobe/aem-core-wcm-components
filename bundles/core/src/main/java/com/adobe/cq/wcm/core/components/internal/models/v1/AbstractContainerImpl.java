@@ -20,15 +20,16 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-
-import javax.annotation.CheckForNull;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -44,7 +45,6 @@ import com.adobe.cq.wcm.core.components.models.Container;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.TemplatedResource;
-import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.components.ComponentManager;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -54,64 +54,77 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public abstract class AbstractContainerImpl extends AbstractComponentImpl implements Container {
 
+    /**
+     * The current request.
+     */
     @Self
     protected SlingHttpServletRequest request;
 
+    /**
+     * The current style for this component.
+     */
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     protected Style currentStyle;
 
+    /**
+     * The sling model factory service.
+     */
     @OSGiService
     protected SlingModelFilter slingModelFilter;
 
+    /**
+     * The model factory.
+     */
     @OSGiService
     protected ModelFactory modelFactory;
 
+    /**
+     * The list of child items.
+     */
     protected List<ListItem> items;
-    protected List<Resource> childComponents;
-    protected List<Resource> filteredChildComponents;
-
-    protected Map<String, ? extends ComponentExporter> itemModels;
-    private String[] exportedItemsOrder;
-
-    private boolean backgroundColorEnabled;
-    private boolean backgroundImageEnabled;
-    private String backgroundImageReference;
-    private String backgroundColor;
-    private StringBuilder styleBuilder;
 
     /**
-     * Read the list of children resources that are components
-     *
-     * @return
+     * The list of child resources that are components.
      */
-    @NotNull
-    private List<Resource> readChildren() {
-        List<Resource> children = new LinkedList<>();
-        Resource effectiveResource = this.getEffectiveResource();
-        if (effectiveResource != null) {
-            ComponentManager componentManager = request.getResourceResolver().adaptTo(ComponentManager.class);
-            if (componentManager != null) {
-                effectiveResource.getChildren().forEach(res -> {
-                    Component component = componentManager.getComponentOfResource(res);
-                    if (component != null) {
-                        children.add(res);
-                    }
-                });
-            }
-        }
-        return children;
-    }
+    protected List<Resource> childComponents;
+
+    /**
+     * The child resources to be exported.
+     */
+    protected List<Resource> filteredChildComponents;
+
+    /**
+     * Map of the child items to be exported wherein the key is the child name, and the value is the child model.
+     */
+    protected Map<String, ? extends ComponentExporter> itemModels;
+
+    /**
+     * The name of the child resources in the order they are to be exported.
+     */
+    private String[] exportedItemsOrder;
+
+    /**
+     * The background style string for this container component.
+     */
+    private String backgroundStyle;
 
     /**
      * Return (and cache) the list of children resources that are components
      *
-     * @return
+     * @return List of all children resources that are components.
      */
     @NotNull
     protected List<Resource> getChildren() {
         if (childComponents == null) {
-            childComponents = readChildren();
+            Resource effectiveResource = this.getEffectiveResource();
+            childComponents = Optional.ofNullable(request.getResourceResolver().adaptTo(ComponentManager.class))
+                .map(componentManager ->
+                    StreamSupport.stream(effectiveResource.getChildren().spliterator(), false)
+                        .filter(res -> Objects.nonNull(componentManager.getComponentOfResource(res))))
+                .orElseGet(Stream::empty)
+                .collect(Collectors.toList());
         }
         return childComponents;
     }
@@ -120,7 +133,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
      * Return (and cache) the list of children resources that are components, filtered by the Sling Model Filter. This
      * should only be used for JSON export, for other usages refer to {@link AbstractContainerImpl#getChildren}.
      *
-     * @return
+     * @return The list of children resources available for JSON export.
      */
     @NotNull
     protected List<Resource> getFilteredChildren() {
@@ -133,37 +146,35 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     }
 
     /**
-     * Read the list of items in the container
+     * Get the list of items in the container.
      *
-     * @return
+     * @return The list of items in the container.
      */
     @NotNull
-    protected List<ListItem> readItems() {
-        List<ListItem> items = new LinkedList<>();
-        getChildren().forEach(res -> {
-            items.add(new ResourceListItemImpl(request, res, getId()));
-        });
-        return items;
+    protected abstract List<? extends ListItem> readItems();
+
+    /**
+     * Get the background colour.
+     *
+     * @return The background colour if set, empty if background colour is not enabled or not defined.
+     */
+    private Optional<String> getBackgroundColor() {
+        return Optional.ofNullable(this.currentStyle)
+            .filter(style -> style.get(PN_BACKGROUND_COLOR_ENABLED, Boolean.FALSE))
+            .flatMap(style -> Optional.ofNullable(this.resource.getValueMap().get(PN_BACKGROUND_COLOR, String.class)))
+            .filter(StringUtils::isNotEmpty);
     }
 
-    private void populateStyleProperties() {
-        backgroundColorEnabled = currentStyle.get(PN_BACKGROUND_COLOR_ENABLED, false);
-        backgroundImageEnabled = currentStyle.get(PN_BACKGROUND_IMAGE_ENABLED, false);
-        if (resource != null) {
-            ValueMap properties = resource.getValueMap();
-            backgroundColor = properties.get(PN_BACKGROUND_COLOR, String.class);
-            backgroundImageReference = properties.get(PN_BACKGROUND_IMAGE_REFERENCE, String.class);
-        }
-    }
-
-    private void setBackgroundStyleString() {
-        styleBuilder = new StringBuilder();
-        if (backgroundImageEnabled && !StringUtils.isEmpty(backgroundImageReference)) {
-            styleBuilder.append("background-image:url(" + backgroundImageReference + ");background-size:cover;background-repeat:no-repeat;");
-        }
-        if (backgroundColorEnabled && !StringUtils.isEmpty(backgroundColor)) {
-            styleBuilder.append("background-color:" + backgroundColor + ";");
-        }
+    /**
+     * Get the background image.
+     *
+     * @return The background image if set, empty if background image is not enabled or not defined.
+     */
+    private Optional<String> getBackgroundImage() {
+        return Optional.ofNullable(this.currentStyle)
+            .filter(style -> style.get(PN_BACKGROUND_IMAGE_ENABLED, Boolean.FALSE))
+            .flatMap(style -> Optional.ofNullable(this.resource.getValueMap().get(PN_BACKGROUND_IMAGE_REFERENCE, String.class)))
+            .filter(StringUtils::isNotEmpty);
     }
 
     @Override
@@ -171,7 +182,7 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     @NotNull
     public List<ListItem> getItems() {
         if (items == null) {
-            items = readItems();
+            items = readItems().stream().map(i -> (ListItem) i).collect(Collectors.toList());
         }
         return items;
     }
@@ -179,15 +190,21 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
     @Nullable
     @Override
     public String getBackgroundStyle() {
-        if (styleBuilder == null) {
-            populateStyleProperties();
-            setBackgroundStyleString();
+        if (this.backgroundStyle == null) {
+            StringBuilder styleBuilder = new StringBuilder();
+            getBackgroundImage().ifPresent(image -> {
+                styleBuilder.append("background-image:url(").append(image).append(");background-size:cover;background-repeat:no-repeat;");
+            });
+            getBackgroundColor().ifPresent(color -> {
+                styleBuilder.append("background-color:").append(color).append(";");
+            });
+            this.backgroundStyle = styleBuilder.toString();
         }
-        String style = styleBuilder.toString();
-        if (StringUtils.isEmpty(style)) {
+
+        if (StringUtils.isEmpty(this.backgroundStyle)) {
             return null;
         }
-        return style;
+        return this.backgroundStyle;
     }
 
     @NotNull
@@ -219,8 +236,15 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         return Arrays.copyOf(exportedItemsOrder, exportedItemsOrder.length);
     }
 
-    protected Map<String, ComponentExporter> getItemModels(@NotNull SlingHttpServletRequest request,
-                                                           @NotNull Class<ComponentExporter> modelClass) {
+    /**
+     * Get the models for the child resources as provided by {@link AbstractContainerImpl#getFilteredChildren()}.
+     *
+     * @param request The current request.
+     * @param modelClass The child model class.
+     * @return Map of models wherein the key is the child name, and the value is it's model.
+     */
+    protected Map<String, ComponentExporter> getItemModels(@NotNull final SlingHttpServletRequest request,
+                                                           @NotNull final Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = new LinkedHashMap<>();
         getFilteredChildren().forEach(child -> {
             ComponentExporter model = modelFactory.getModelFromWrappedRequest(request, child, modelClass);
@@ -231,15 +255,17 @@ public abstract class AbstractContainerImpl extends AbstractComponentImpl implem
         return models;
     }
 
-    @CheckForNull
+    /**
+     * Get the effective {@link TemplatedResource} for the current resource.
+     *
+     * @return The TemplatedResource, or the current resource if it cannot be adapted to a TemplatedResource.
+     */
+    @NotNull
     protected Resource getEffectiveResource() {
-        if (this.resource != null) {
-            if (this.resource instanceof TemplatedResource) {
-                return this.resource;
-            }
-            return Optional.ofNullable((Resource)this.request.adaptTo(TemplatedResource.class)).orElse(this.resource);
+        if (this.resource instanceof TemplatedResource) {
+            return this.resource;
         }
-        return null;
+        return Optional.ofNullable((Resource)this.request.adaptTo(TemplatedResource.class)).orElse(this.resource);
     }
 
     /*

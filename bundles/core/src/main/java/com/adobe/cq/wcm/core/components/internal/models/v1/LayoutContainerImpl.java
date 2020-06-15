@@ -19,12 +19,15 @@ import javax.annotation.PostConstruct;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = LayoutContainer.class, resourceType = LayoutContainerImpl.RESOURCE_TYPE_V1)
 public class LayoutContainerImpl extends AbstractContainerImpl implements LayoutContainer {
@@ -38,16 +41,17 @@ public class LayoutContainerImpl extends AbstractContainerImpl implements Layout
 
     @PostConstruct
     protected void initModel() {
-        if (resource != null) {
-            ValueMap properties = resource.getValueMap();
-            if (properties != null) {
-                String layoutProperty = properties.get(LayoutContainer.PN_LAYOUT, String.class);
-                layout = LayoutType.getLayoutType(layoutProperty);
-                if (layout == null) {
-                    layout = LayoutType.SIMPLE;
-                }
-            }
-        }
+        this.layout = Optional.ofNullable(resource.getValueMap().get(LayoutContainer.PN_LAYOUT, String.class))
+            .map(LayoutType::getLayoutType)
+            .orElse(LayoutType.SIMPLE);
+    }
+
+    @Override
+    @NotNull
+    protected List<ResourceListItemImpl> readItems() {
+        return getChildren().stream()
+            .map(res -> new ResourceListItemImpl(request, res, getId()))
+            .collect(Collectors.toList());
     }
 
     @Override

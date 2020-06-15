@@ -26,6 +26,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -40,6 +41,7 @@ public class TextImpl extends AbstractComponentImpl implements Text {
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/text/v2/text";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String text;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)

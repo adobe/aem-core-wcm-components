@@ -16,7 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.List;
+import java.util.Objects;
 
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +42,7 @@ class CarouselImplTest {
     private static final String TEST_ROOT_PAGE = "/content/carousel";
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String CAROUSEL_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-1";
+    private static final String CAROUSEL_EMPTY = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/carousel-empty";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
@@ -51,14 +55,12 @@ class CarouselImplTest {
 
     @Test
     void testEmptyCarousel() {
-        Carousel carousel = new CarouselImpl();
-        List<ListItem> items = carousel.getItems();
-        assertEquals("", 0, items.size());
+        Assertions.assertEquals(0, getCarouselUnderTest(CAROUSEL_EMPTY).getItems().size());
     }
 
     @Test
     void testCarouselWithItems() {
-        Carousel carousel = getCarouselUnderTest();
+        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
         Object[][] expectedItems = {
                 { "item_1", "Teaser 1", "core/wcm/components/teaser/v1/teaser",
                         "/content/carousel/jcr:content/root/responsivegrid/carousel-1/item_1" },
@@ -72,15 +74,15 @@ class CarouselImplTest {
 
     @Test
     void testCarouselProperties() {
-        Carousel carousel = getCarouselUnderTest();
+        Carousel carousel = getCarouselUnderTest(CAROUSEL_1);
         assertTrue(carousel.getAutoplay());
         assertEquals(Long.valueOf(7000), carousel.getDelay());
         assertTrue(carousel.getAutopauseDisabled());
     }
 
-    private Carousel getCarouselUnderTest() {
+    private Carousel getCarouselUnderTest(@NotNull final String resourcePath) {
         Utils.enableDataLayer(context, true);
-        context.currentResource(CarouselImplTest.CAROUSEL_1);
+        context.currentResource(Objects.requireNonNull(context.resourceResolver().getResource(resourcePath)));
         return context.request().adaptTo(Carousel.class);
     }
 

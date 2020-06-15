@@ -158,15 +158,12 @@ public class EmbeddablesDataSourceServlet extends SlingSafeMethodsServlet {
         /**
          * @see java.lang.Comparable#compareTo(java.lang.Object)
          */
-        public int compareTo(EmbeddableDescription o) {
-            if (o == null) {
-                return 0;
-            }
-            final EmbeddableDescription obj = (EmbeddableDescription) o;
-            if (this.order < obj.order) {
+        @Override
+        public int compareTo(@NotNull final EmbeddableDescription o) {
+            if (this.order < o.order) {
                 return -1;
-            } else if (this.order == obj.order) {
-                return this.title.compareTo(obj.title);
+            } else if (this.order == o.order) {
+                return this.title.compareTo(o.title);
             }
             return 1;
         }

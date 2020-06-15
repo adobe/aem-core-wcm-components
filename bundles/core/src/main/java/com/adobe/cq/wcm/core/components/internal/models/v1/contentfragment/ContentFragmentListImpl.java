@@ -33,6 +33,7 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +68,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     public static final String RESOURCE_TYPE = "core/wcm/components/contentfragmentlist/v1/contentfragmentlist";
 
     public static final String DEFAULT_DAM_PARENT_PATH = "/content/dam";
-    
+
     public static final int DEFAULT_MAX_ITEMS = -1;
 
     @Self(injectionStrategy = InjectionStrategy.REQUIRED)
@@ -80,15 +81,19 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     private ResourceResolver resourceResolver;
 
     @ValueMapValue(name = ContentFragmentList.PN_MODEL_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String modelPath;
 
     @ValueMapValue(name = ContentFragmentList.PN_ELEMENT_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String[] elementNames;
 
     @ValueMapValue(name = ContentFragmentList.PN_TAG_NAMES, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String[] tagNames;
 
     @ValueMapValue(name = ContentFragmentList.PN_PARENT_PATH, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String parentPath;
 
     @ValueMapValue(name = ContentFragmentList.PN_MAX_ITEMS, injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -96,12 +101,14 @@ public class ContentFragmentListImpl implements ContentFragmentList {
     private int maxItems;
 
     @ValueMapValue(name = ContentFragmentList.PN_ORDER_BY, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String orderBy = JcrConstants.JCR_CREATED;
+    @Default(values = JcrConstants.JCR_CREATED)
+    private String orderBy;
 
     @ValueMapValue(name = ContentFragmentList.PN_SORT_ORDER, injectionStrategy = InjectionStrategy.OPTIONAL)
-    private String sortOrder = Predicate.SORT_ASCENDING;
+    @Default(values = Predicate.SORT_ASCENDING)
+    private String sortOrder;
 
-    private List<DAMContentFragment> items = new ArrayList<>();
+    private final List<DAMContentFragment> items = new ArrayList<>();
 
     @PostConstruct
     private void initModel() {
@@ -159,7 +166,7 @@ public class ContentFragmentListImpl implements ContentFragmentList {
 
         PredicateGroup predicateGroup = PredicateGroup.create(queryParameterMap);
         Query query = queryBuilder.createQuery(predicateGroup, session);
-        
+
         SearchResult searchResult = query.getResult();
 
         LOG.debug("Query statement: '{}'", searchResult.getQueryStatement());
