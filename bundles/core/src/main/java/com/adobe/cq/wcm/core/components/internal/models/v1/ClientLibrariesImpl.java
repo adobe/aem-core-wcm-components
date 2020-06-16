@@ -84,11 +84,11 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private String[] categoriesArray;
 
     public String getInlineJS() {
-        Collection<ClientLibrary> resourceLibs = htmlLibraryManager.getLibraries(getCategories(), LibraryType.CSS, true, false);
+        Collection<ClientLibrary> resourceLibs = htmlLibraryManager.getLibraries(getCategories(), LibraryType.JS, true, false);
         // Iterate through the clientlibs and aggregate their content.
         StringBuilder output = new StringBuilder();
         for (ClientLibrary resourceLib : resourceLibs) {
-            HtmlLibrary library = htmlLibraryManager.getLibrary(LibraryType.CSS, resourceLib.getPath());
+            HtmlLibrary library = htmlLibraryManager.getLibrary(LibraryType.JS, resourceLib.getPath());
             if (library != null) {
                 try {
                     output.append(IOUtils.toString(library.getInputStream(htmlLibraryManager.isMinifyEnabled()),
