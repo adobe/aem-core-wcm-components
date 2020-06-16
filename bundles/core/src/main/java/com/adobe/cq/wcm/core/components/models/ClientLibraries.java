@@ -15,8 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
+import java.util.Set;
+
 import org.osgi.annotation.versioning.ConsumerType;
-import java.util.List;
 
 @ConsumerType
 public interface ClientLibraries {
@@ -33,11 +34,11 @@ public interface ClientLibraries {
         throw new UnsupportedOperationException();
     }
 
-    default List<String> getJsPaths() {
+    default Set<String> getJsPaths() {
         throw new UnsupportedOperationException();
     }
 
-    default List<String> getCssPaths() {
+    default Set<String> getCssPaths() {
         throw new UnsupportedOperationException();
     }
 

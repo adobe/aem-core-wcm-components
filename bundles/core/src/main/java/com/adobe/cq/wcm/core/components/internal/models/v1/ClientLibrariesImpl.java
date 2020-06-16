@@ -127,13 +127,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     @NotNull
     @Override
-    public List<String> getJsPaths() {
+    public Set<String> getJsPaths() {
         return getLibsPaths(LibraryType.JS);
     }
 
     @NotNull
     @Override
-    public List<String> getCssPaths() {
+    public Set<String> getCssPaths() {
         return getLibsPaths(LibraryType.CSS);
     }
 
@@ -149,14 +149,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return getInline(LibraryType.CSS);
     }
 
-    private List<String> getLibsPaths(LibraryType libraryType) {
-        List<String> paths = new ArrayList<>();
+    private Set<String> getLibsPaths(LibraryType libraryType) {
+        Set<String> paths = new HashSet<>();
         Collection<ClientLibrary> clientlibs = htmlLibraryManager.getLibraries(categoriesArray, libraryType, true, false);
         // Iterate through the clientlibs and aggregate their content.
         for (ClientLibrary clientlib : clientlibs) {
             HtmlLibrary htmlLibrary = htmlLibraryManager.getLibrary(libraryType, clientlib.getPath());
             if (htmlLibrary != null) {
-                paths.add(htmlLibrary.getPath());
+                paths.add(htmlLibrary.getPath(htmlLibraryManager.isMinifyEnabled()));
             }
         }
         return paths;
