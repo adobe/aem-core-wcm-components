@@ -127,6 +127,18 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     @NotNull
     @Override
+    public List<String> getJsPaths() {
+        return getLibsPaths(LibraryType.JS);
+    }
+
+    @NotNull
+    @Override
+    public List<String> getCssPaths() {
+        return getLibsPaths(LibraryType.CSS);
+    }
+
+    @NotNull
+    @Override
     public String getInlineJS() {
         return getInline(LibraryType.JS);
     }
@@ -135,6 +147,19 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Override
     public String getInlineCSS() {
         return getInline(LibraryType.CSS);
+    }
+
+    private List<String> getLibsPaths(LibraryType libraryType) {
+        List<String> paths = new ArrayList<>();
+        Collection<ClientLibrary> clientlibs = htmlLibraryManager.getLibraries(categoriesArray, libraryType, true, false);
+        // Iterate through the clientlibs and aggregate their content.
+        for (ClientLibrary clientlib : clientlibs) {
+            HtmlLibrary htmlLibrary = htmlLibraryManager.getLibrary(libraryType, clientlib.getPath());
+            if (htmlLibrary != null) {
+                paths.add(htmlLibrary.getPath());
+            }
+        }
+        return paths;
     }
 
     private String getInline(LibraryType libraryType) {

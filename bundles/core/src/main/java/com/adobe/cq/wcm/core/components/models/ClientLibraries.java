@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.ConsumerType;
+import java.util.List;
 
 @ConsumerType
 public interface ClientLibraries {
@@ -29,6 +30,14 @@ public interface ClientLibraries {
     }
 
     default String getInlineCSS() {
+        throw new UnsupportedOperationException();
+    }
+
+    default List<String> getJsPaths() {
+        throw new UnsupportedOperationException();
+    }
+
+    default List<String> getCssPaths() {
         throw new UnsupportedOperationException();
     }
 
