@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2019 Adobe Systems Incorporated
+  ~ Copyright 2020 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,7 +13,5 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.clientlib="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ additionnalCategories='cmp-examples.base.amp', categoryFilter='cmp-examples.base.amp'}"/>
-<style amp-custom>
-    ${clientlib.inlineCSS @ context="unsafe"}
-</style>
+<link data-sly-use.ampPage="com.adobe.cq.wcm.core.extensions.amp.models.AmpPage"
+      data-sly-test="${ampPage.ampEnabled}" data-sly-attribute="${ampPage.pageLinkAttrs}">
