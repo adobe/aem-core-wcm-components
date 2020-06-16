@@ -15,12 +15,15 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -36,7 +39,9 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
+import com.adobe.granite.ui.clientlibs.HtmlLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
+import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.Template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -77,6 +82,24 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private Map<String, ClientLibrary> allLibraries;
     private Collection<ClientLibrary> libraries;
     private String[] categoriesArray;
+
+    public String getInlineJS() {
+        Collection<ClientLibrary> resourceLibs = htmlLibraryManager.getLibraries(getCategories(), LibraryType.CSS, true, false);
+        // Iterate through the clientlibs and aggregate their content.
+        StringBuilder output = new StringBuilder();
+        for (ClientLibrary resourceLib : resourceLibs) {
+            HtmlLibrary library = htmlLibraryManager.getLibrary(LibraryType.CSS, resourceLib.getPath());
+            if (library != null) {
+                try {
+                    output.append(IOUtils.toString(library.getInputStream(htmlLibraryManager.isMinifyEnabled()),
+                        StandardCharsets.UTF_8));
+                } catch (IOException e) {
+                    // LOG.error("Error getting input stream from clientlib with path '{}'.", clientlib.getPath());
+                }
+            }
+        }
+        return output.toString();
+    }
 
     @NotNull
     @Override
