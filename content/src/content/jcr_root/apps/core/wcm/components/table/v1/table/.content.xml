@@ -4,4 +4,4 @@
           cq:icon="table"
           jcr:primaryType="cq:Component"
           jcr:title="Table (v1)"
-          componentGroup=".wcm-core"/>
+          componentGroup=".core-wcm"/>

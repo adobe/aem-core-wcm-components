@@ -26,12 +26,6 @@
                         jcr:primaryType="nt:unstructured"
                         sling:resourceType="granite/ui/components/foundation/container">
                         <items jcr:primaryType="nt:unstructured">
-                            <id
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                fieldDescription="HTML ID attribute to apply to the component."
-                                fieldLabel="ID"
-                                name="./id"/>
                             <description
                                 jcr:primaryType="nt:unstructured"
                                 fieldLabel="Description"
@@ -64,6 +58,12 @@
                                 fieldDescription="Provide an accessible name for the table"
                                 fieldLabel="Aria Label"
                                 name="./ariaLabel" />
+                            <id
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="HTML ID attribute to apply to the component."
+                                fieldLabel="ID"
+                                name="./id"/>
                         </items>
                     </column>
                 </items>
