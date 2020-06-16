@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
@@ -35,6 +36,8 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
@@ -50,6 +53,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
     adapters = {ClientLibraries.class}
 )
 public class ClientLibrariesImpl implements ClientLibraries {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ClientLibrariesImpl.class);
 
     private static final String NN_CQ_CLIENT_LIBRARY_FOLDER = "cq:ClientLibraryFolder";
     private static final String TEMPLATE_STRUCTURE_CONTENT_PATH = "/structure/jcr:content";
@@ -83,18 +88,67 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private Collection<ClientLibrary> libraries;
     private String[] categoriesArray;
 
+    @PostConstruct
+    protected void initModel() {
+        Set<String> categories = new HashSet<>();
+
+        // retrieve all the clientlibs defined for the resource, its descendants and its super types
+        populateClientLibraries();
+
+        // add categories defined by the clientlibs
+        for (ClientLibrary library : libraries) {
+            String[] libraryCategories = library.getCategories();
+            categories.addAll(Arrays.asList(libraryCategories));
+        }
+
+        // add categories defined in the page policy and page design
+        addPageClientLibCategories(categories);
+
+        // add categories injected by the HTL template
+        if (StringUtils.isNotBlank(additionnalCategories)) {
+            if (additionnalCategories.contains(",")) {
+                Collections.addAll(categories, additionnalCategories.split(","));
+            } else {
+                categories.add(additionnalCategories);
+            }
+        }
+
+        // filter the categories based on category name regex
+        if (StringUtils.isNotBlank(categoryFilter)) {
+            Pattern p = Pattern.compile(categoryFilter);
+            categories.removeIf(category -> {
+                Matcher m = p.matcher(category);
+                return !m.find();
+            });
+        }
+
+        categoriesArray = categories.toArray(new String[0]);
+    }
+
+    @NotNull
+    @Override
     public String getInlineJS() {
-        Collection<ClientLibrary> resourceLibs = htmlLibraryManager.getLibraries(getCategories(), LibraryType.JS, true, false);
+        return getInline(LibraryType.JS);
+    }
+
+    @NotNull
+    @Override
+    public String getInlineCSS() {
+        return getInline(LibraryType.CSS);
+    }
+
+    private String getInline(LibraryType libraryType) {
+        Collection<ClientLibrary> clientlibs = htmlLibraryManager.getLibraries(categoriesArray, libraryType, true, false);
         // Iterate through the clientlibs and aggregate their content.
         StringBuilder output = new StringBuilder();
-        for (ClientLibrary resourceLib : resourceLibs) {
-            HtmlLibrary library = htmlLibraryManager.getLibrary(LibraryType.JS, resourceLib.getPath());
-            if (library != null) {
+        for (ClientLibrary clientlib : clientlibs) {
+            HtmlLibrary htmlLibrary = htmlLibraryManager.getLibrary(libraryType, clientlib.getPath());
+            if (htmlLibrary != null) {
                 try {
-                    output.append(IOUtils.toString(library.getInputStream(htmlLibraryManager.isMinifyEnabled()),
+                    output.append(IOUtils.toString(htmlLibrary.getInputStream(htmlLibraryManager.isMinifyEnabled()),
                         StandardCharsets.UTF_8));
                 } catch (IOException e) {
-                    // LOG.error("Error getting input stream from clientlib with path '{}'.", clientlib.getPath());
+                    LOG.error("Error getting input stream from clientlib with path '{}'.", clientlib.getPath());
                 }
             }
         }
@@ -104,42 +158,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @NotNull
     @Override
     public String[] getCategories() {
-        if (categoriesArray == null) {
-            Set<String> categories = new HashSet<>();
-
-            // retrieve all the clientlibs defined for the resource, its descendants and its super types
-            populateClientLibraries();
-
-            // add categories defined by the clientlibs
-            for (ClientLibrary library : libraries) {
-                String[] libraryCategories = library.getCategories();
-                categories.addAll(Arrays.asList(libraryCategories));
-            }
-
-            // add categories defined in the page policy and page design
-            addPageClientLibCategories(categories);
-
-            // add categories injected by the HTL template
-            if (StringUtils.isNotBlank(additionnalCategories)) {
-                if (additionnalCategories.contains(",")) {
-                    Collections.addAll(categories, additionnalCategories.split(","));
-                } else {
-                    categories.add(additionnalCategories);
-                }
-            }
-
-            // filter the categories based on category name regex
-            if (StringUtils.isNotBlank(categoryFilter)) {
-                Pattern p = Pattern.compile(categoryFilter);
-                categories.removeIf(category -> {
-                    Matcher m = p.matcher(category);
-                    return !m.find();
-                });
-            }
-
-            categoriesArray = categories.toArray(new String[0]);
-        }
-
         return Arrays.copyOf(categoriesArray, categoriesArray.length);
     }
 

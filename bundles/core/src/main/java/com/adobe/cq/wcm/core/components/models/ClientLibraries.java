@@ -24,4 +24,12 @@ public interface ClientLibraries {
         throw new UnsupportedOperationException();
     }
 
+    default String getInlineJS() {
+        throw new UnsupportedOperationException();
+    }
+
+    default String getInlineCSS() {
+        throw new UnsupportedOperationException();
+    }
+
 }
