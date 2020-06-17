@@ -138,19 +138,19 @@ public class ClientLibrariesImpl implements ClientLibraries {
         categoriesArray = categoriesSet.toArray(new String[0]);
     }
 
-    public String jsTags() {
-        return libTags("js");
+    public String getJsTags() {
+        return getLibTags("js");
     }
 
-    public String cssTags() {
-        return libTags("css");
+    public String getCssTags() {
+        return getLibTags("css");
     }
 
-    public String libTags() {
-        return libTags("");
+    public String getLibTags() {
+        return getLibTags("");
     }
 
-    private String libTags(String type) {
+    private String getLibTags(String type) {
         StringWriter sw = new StringWriter();
         try {
             if (categoriesArray == null || categoriesArray.length == 0)  {
