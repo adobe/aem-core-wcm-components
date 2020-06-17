@@ -119,11 +119,6 @@ public abstract class AbstractComponentImpl implements Component {
     }
 
     @JsonIgnore
-    public String[] getDataLayerTags() {
-        return null;
-    }
-
-    @JsonIgnore
     public String getDataLayerUrl() {
         return null;
     }

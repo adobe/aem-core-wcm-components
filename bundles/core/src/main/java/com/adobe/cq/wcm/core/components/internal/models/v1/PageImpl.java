@@ -29,6 +29,8 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -49,9 +51,7 @@ import com.adobe.cq.export.json.ContainerExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.export.json.SlingModelFilter;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.models.Page;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.tagging.Tag;
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Template;
@@ -314,19 +314,22 @@ public class PageImpl extends AbstractComponentImpl implements Page {
      * DataLayer specific methods
      */
 
+    @Override
     @NotNull
-    protected ComponentData getComponentData() {
-        return new PageDataImpl(this, resource);
+    protected final PageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asPage()
+            .withTitle(this::getTitle)
+            .withTags(() -> Arrays.copyOf(this.keywords, this.keywords.length))
+            .withDescription(() -> this.pageProperties.get(NameConstants.PN_DESCRIPTION, String.class))
+            .withTemplatePath(() -> this.currentPage.getTemplate().getPath())
+            .withUrl(() -> Utils.getURL(request, currentPage))
+            .withLanguage(this::getLanguage)
+            .build();
     }
 
     @Override
     public String getDataLayerTitle() {
         return getTitle();
-    }
-
-    @Override
-    public String[] getDataLayerTags() {
-        return Arrays.copyOf(keywords, keywords.length);
     }
 
     @Override
