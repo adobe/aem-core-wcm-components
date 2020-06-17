@@ -42,15 +42,15 @@ public interface ClientLibraries {
         throw new UnsupportedOperationException();
     }
 
-    default String jsTags() {
+    default String getJsTags() {
         throw new UnsupportedOperationException();
     }
 
-    default String cssTags() {
+    default String getCssTags() {
         throw new UnsupportedOperationException();
     }
 
-    default String libTags() {
+    default String getLibTags() {
         throw new UnsupportedOperationException();
     }
 }
