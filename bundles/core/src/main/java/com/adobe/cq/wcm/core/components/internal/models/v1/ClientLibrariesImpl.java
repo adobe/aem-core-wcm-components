@@ -16,6 +16,8 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -134,6 +136,40 @@ public class ClientLibrariesImpl implements ClientLibraries {
         }
 
         categoriesArray = categoriesSet.toArray(new String[0]);
+    }
+
+    public String jsTags() {
+        return libTags("js");
+    }
+
+    public String cssTags() {
+        return libTags("css");
+    }
+
+    public String libTags() {
+        return libTags("");
+    }
+
+    private String libTags(String type) {
+        StringWriter sw = new StringWriter();
+        try {
+            if (categoriesArray == null || categoriesArray.length == 0)  {
+                LOG.error("'categories' option might be missing from the invocation of the /libs/granite/sightly/templates/clientlib.html" +
+                    "client libraries template library. Please provide a CSV list or an array of categories to include.");
+            } else {
+                PrintWriter out = new PrintWriter(sw);
+                if ("js".equalsIgnoreCase(type)) {
+                    htmlLibraryManager.writeJsInclude(request, out, categoriesArray);
+                } else if ("css".equalsIgnoreCase(type)) {
+                    htmlLibraryManager.writeCssInclude(request, out, categoriesArray);
+                } else {
+                    htmlLibraryManager.writeIncludes(request, out, categoriesArray);
+                }
+            }
+        } catch (IOException e) {
+            LOG.error("Failed to include client libraries {}", categoriesArray);
+        }
+        return sw.toString();
     }
 
     @NotNull
