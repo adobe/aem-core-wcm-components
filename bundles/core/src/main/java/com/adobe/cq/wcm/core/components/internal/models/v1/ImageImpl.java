@@ -28,6 +28,9 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +56,6 @@ import org.slf4j.LoggerFactory;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ImageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
@@ -381,15 +383,20 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
      */
 
     @Override
-    protected @NotNull ComponentData getComponentData() {
-        return new ImageDataImpl(this, resource);
-    }
-
-    @Override
-    public Resource getDataLayerAssetResource() {
-        return Optional.ofNullable(this.fileReference)
-            .map(reference -> request.getResourceResolver().getResource(reference))
-            .orElse(null);
+    @NotNull
+    protected ImageData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData())
+            .asImageComponent()
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getLink)
+            .withAssetData(() ->
+                Optional.ofNullable(this.fileReference)
+                    .map(reference -> this.request.getResourceResolver().getResource(reference))
+                    .map(assetResource -> assetResource.adaptTo(Asset.class))
+                    .map(DataLayerBuilder::forAsset)
+                    .map(AssetDataBuilder::build)
+                    .orElse(null))
+            .build();
     }
 
     @Override

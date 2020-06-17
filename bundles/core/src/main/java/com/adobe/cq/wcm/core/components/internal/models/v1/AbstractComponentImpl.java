@@ -104,11 +104,6 @@ public abstract class AbstractComponentImpl implements Component {
     }
 
     @JsonIgnore
-    public Resource getDataLayerAssetResource() {
-        return null;
-    }
-
-    @JsonIgnore
     public String getDataLayerTitle() {
         return null;
     }
