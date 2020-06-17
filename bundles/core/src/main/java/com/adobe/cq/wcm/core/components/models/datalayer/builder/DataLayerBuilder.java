@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.supplier.DataLayerSupplierImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplierImpl;
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.supplier.DataLayerSupplier.EMPTY_SUPPLIER;
+import static com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplier.EMPTY_SUPPLIER;
 
 /**
  * Data layer builder utility.

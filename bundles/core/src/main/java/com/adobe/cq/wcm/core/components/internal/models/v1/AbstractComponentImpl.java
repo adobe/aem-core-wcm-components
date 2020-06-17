@@ -22,13 +22,16 @@ import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataImpl;
 import com.adobe.cq.wcm.core.components.models.Component;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.day.cq.commons.jcr.JcrConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.components.ComponentContext;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.Calendar;
+import java.util.Optional;
 
 /**
  * Abstract class that can be used as a base class for {@link Component} implementations.
@@ -88,63 +91,26 @@ public abstract class AbstractComponentImpl implements Component {
         return componentData;
     }
 
-    /*
-     * Data layer specific methods. Each component can choose to implement some of these, to override or feed the data model.
-     */
-
     /**
      * Override this method to provide a different data model for your component. This will be called by
-     * {@link AbstractComponentImpl#getData()} in case the datalayer is activated
+     * {@link AbstractComponentImpl#getData()} in case the datalayer is activated.
      *
-     * @return The component data
+     * @return The component data.
      */
     @NotNull
     protected ComponentData getComponentData() {
-        return new ComponentDataImpl(this, resource);
+        return DataLayerBuilder.forComponent()
+            .withId(this::getId)
+            .withLastModifiedDate(() ->
+                // Note: this can be simplified in JDK 11
+                Optional.ofNullable(resource.getValueMap().get(JcrConstants.JCR_LASTMODIFIED, Calendar.class))
+                    .map(Calendar::getTime)
+                    .orElseGet(() ->
+                        Optional.ofNullable(resource.getValueMap().get(JcrConstants.JCR_CREATED, Calendar.class))
+                            .map(Calendar::getTime)
+                            .orElse(null)))
+            .withType(() -> this.resource.getResourceType())
+            .build();
     }
 
-    @JsonIgnore
-    public String getDataLayerTitle() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String getDataLayerDescription() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String getDataLayerText() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String getDataLayerUrl() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String getDataLayerLinkUrl() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String getDataLayerTemplatePath() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String getDataLayerLanguage() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String[] getDataLayerShownItems() {
-        return null;
-    }
-
-    @JsonIgnore
-    public String getDataLayerType() {
-        return resource.getResourceType();
-    }
 }

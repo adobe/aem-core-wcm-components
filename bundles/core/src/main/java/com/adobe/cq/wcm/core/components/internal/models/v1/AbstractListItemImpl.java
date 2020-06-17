@@ -15,28 +15,54 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.day.cq.wcm.api.components.Component;
+
+import java.util.Optional;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
 /**
  * Abstract helper class for ListItem implementations.
  * Generates an ID for the item, using the ID of its parent as a prefix
- *
  */
-public abstract class AbstractListItemImpl extends AbstractComponentImpl {
+public abstract class AbstractListItemImpl extends AbstractComponentImpl implements ListItem {
 
-    protected String parentId;
-    protected String path;
-    protected String dataLayerType;
-
+    /**
+     * Prefix prepended to the item ID.
+     */
     private static final String ITEM_ID_PREFIX = "item";
 
+    /**
+     * The ID of the component that contains this list item.
+     */
+    protected String parentId;
+
+    /**
+     * The path of this list item.
+     */
+    protected String path;
+
+    /**
+     * Data layer type.
+     */
+    protected String dataLayerType;
+
+    /**
+     * Construct a list item.
+     *
+     * @param parentId The ID of the containing component.
+     * @param resource The resource of the list item.
+     * @param component The component that contains this list item.
+     */
     protected AbstractListItemImpl(String parentId, Resource resource, Component component) {
         this.parentId = parentId;
         if (resource != null) {
@@ -55,9 +81,15 @@ public abstract class AbstractListItemImpl extends AbstractComponentImpl {
         return Utils.generateId(prefix, path);
     }
 
+    @NotNull
     @Override
-    public String getDataLayerType() {
-        return StringUtils.defaultString(dataLayerType, super.getDataLayerType());
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData())
+            .asComponent()
+            .withType(() -> Optional.ofNullable(this.dataLayerType).orElseGet(() -> super.getComponentData().getType()))
+            .withTitle(this::getTitle)
+            .withLinkUrl(this::getURL)
+            .build();
     }
 
 }

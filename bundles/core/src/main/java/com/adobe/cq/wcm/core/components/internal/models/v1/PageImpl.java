@@ -295,7 +295,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
                 addPolicyClientLibs(categories);
             }
         }
-        clientLibCategories = categories.toArray(new String[categories.size()]);
+        clientLibCategories = categories.toArray(new String[0]);
     }
 
     protected void addDefaultTemplateEditorClientLib(Resource templateResource, List<String> categories) {
@@ -310,10 +310,6 @@ public class PageImpl extends AbstractComponentImpl implements Page {
         }
     }
 
-    /*
-     * DataLayer specific methods
-     */
-
     @Override
     @NotNull
     protected final PageData getComponentData() {
@@ -327,28 +323,4 @@ public class PageImpl extends AbstractComponentImpl implements Page {
             .build();
     }
 
-    @Override
-    public String getDataLayerTitle() {
-        return getTitle();
-    }
-
-    @Override
-    public String getDataLayerDescription() {
-        return pageProperties.get(NameConstants.PN_DESCRIPTION, String.class);
-    }
-
-    @Override
-    public String getDataLayerTemplatePath() {
-        return currentPage.getTemplate().getPath();
-    }
-
-    @Override
-    public String getDataLayerUrl() {
-        return Utils.getURL(request, currentPage);
-    }
-
-    @Override
-    public String getDataLayerLanguage() {
-        return getLanguage();
-    }
 }

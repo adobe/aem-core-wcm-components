@@ -28,9 +28,6 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
-import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +55,9 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -385,8 +384,7 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
     @Override
     @NotNull
     protected ImageData getComponentData() {
-        return DataLayerBuilder.extending(super.getComponentData())
-            .asImageComponent()
+        return DataLayerBuilder.extending(super.getComponentData()).asImageComponent()
             .withTitle(this::getTitle)
             .withLinkUrl(this::getLink)
             .withAssetData(() ->
@@ -398,15 +396,4 @@ public class ImageImpl extends AbstractComponentImpl implements Image {
                     .orElse(null))
             .build();
     }
-
-    @Override
-    public String getDataLayerTitle() {
-        return title;
-    }
-
-    @Override
-    public String getDataLayerLinkUrl() {
-        return getLink();
-    }
-
 }

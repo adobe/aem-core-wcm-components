@@ -31,6 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.models.Text;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = { Text.class, ComponentExporter.class }, resourceType = {
         TextImpl.RESOURCE_TYPE_V1, TextImpl.RESOURCE_TYPE_V2 })
@@ -67,12 +69,11 @@ public class TextImpl extends AbstractComponentImpl implements Text {
         return resource.getResourceType();
     }
 
-    /*
-     * DataLayerProvider implementation of field getters
-     */
-
     @Override
-    public String getDataLayerText() {
-        return StringUtils.defaultIfEmpty(this.text, StringUtils.EMPTY);
+    @NotNull
+    protected ComponentData getComponentData() {
+        return DataLayerBuilder.extending(super.getComponentData()).asComponent()
+            .withText(() -> StringUtils.defaultIfEmpty(this.getText(), StringUtils.EMPTY))
+            .build();
     }
 }
