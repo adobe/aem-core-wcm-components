@@ -79,6 +79,9 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private String additionnalCategories;
 
     @Inject
+    private String categories;
+
+    @Inject
     private String categoryFilter;
 
     @OSGiService
@@ -90,39 +93,47 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     @PostConstruct
     protected void initModel() {
-        Set<String> categories = new HashSet<>();
+        Set<String> categoriesSet = new HashSet<>();
 
-        // retrieve all the clientlibs defined for the resource, its descendants and its super types
-        populateClientLibraries();
-
-        // add categories defined by the clientlibs
-        for (ClientLibrary library : libraries) {
-            String[] libraryCategories = library.getCategories();
-            categories.addAll(Arrays.asList(libraryCategories));
-        }
-
-        // add categories defined in the page policy and page design
-        addPageClientLibCategories(categories);
-
-        // add categories injected by the HTL template
-        if (StringUtils.isNotBlank(additionnalCategories)) {
-            if (additionnalCategories.contains(",")) {
-                Collections.addAll(categories, additionnalCategories.split(","));
+        if (StringUtils.isNotBlank(categories)) {
+            if (categories.contains(",")) {
+                Collections.addAll(categoriesSet, categories.split(","));
             } else {
-                categories.add(additionnalCategories);
+                categoriesSet.add(categories);
+            }
+        } else {
+            // retrieve all the clientlibs defined for the resource, its descendants and its super types
+            populateClientLibraries();
+
+            // add categories defined by the clientlibs
+            for (ClientLibrary library : libraries) {
+                String[] libraryCategories = library.getCategories();
+                categoriesSet.addAll(Arrays.asList(libraryCategories));
+            }
+
+            // add categories defined in the page policy and page design
+            addPageClientLibCategories(categoriesSet);
+
+            // add categories injected by the HTL template
+            if (StringUtils.isNotBlank(additionnalCategories)) {
+                if (additionnalCategories.contains(",")) {
+                    Collections.addAll(categoriesSet, additionnalCategories.split(","));
+                } else {
+                    categoriesSet.add(additionnalCategories);
+                }
+            }
+
+            // filter the categories based on category name regex
+            if (StringUtils.isNotBlank(categoryFilter)) {
+                Pattern p = Pattern.compile(categoryFilter);
+                categoriesSet.removeIf(category -> {
+                    Matcher m = p.matcher(category);
+                    return !m.find();
+                });
             }
         }
 
-        // filter the categories based on category name regex
-        if (StringUtils.isNotBlank(categoryFilter)) {
-            Pattern p = Pattern.compile(categoryFilter);
-            categories.removeIf(category -> {
-                Matcher m = p.matcher(category);
-                return !m.find();
-            });
-        }
-
-        categoriesArray = categories.toArray(new String[0]);
+        categoriesArray = categoriesSet.toArray(new String[0]);
     }
 
     @NotNull
