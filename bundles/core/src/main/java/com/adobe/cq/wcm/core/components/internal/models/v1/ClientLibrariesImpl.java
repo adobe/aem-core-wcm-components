@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -25,12 +26,19 @@ import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.commons.html.HtmlParser;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -40,6 +48,7 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.*;
 
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
@@ -86,8 +95,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     private String categoryFilter;
 
+    @Inject
+    private String crossorigin;
+
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
+
+    @OSGiService
+    private HtmlParser htmlParser;
 
     private Map<String, ClientLibrary> allLibraries;
     private Collection<ClientLibrary> libraries;
@@ -169,7 +184,61 @@ public class ClientLibrariesImpl implements ClientLibraries {
         } catch (IOException e) {
             LOG.error("Failed to include client libraries {}", categoriesArray);
         }
-        return sw.toString();
+
+        String html = sw.toString();
+        StringBuilder updatedHtml = new StringBuilder();
+        InputStream htmlStream = IOUtils.toInputStream(html);
+        try {
+            Document document = htmlParser.parse(null, htmlStream, "UTF-8");
+            addAttributeToDocument(document, "script", "crossorigin", crossorigin);
+            updatedHtml.append(getUpdatedHtml(document, "script"));
+            updatedHtml.append(getUpdatedHtml(document, "link"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*
+        String tagsString = sw.toString();
+        if (StringUtils.isNotEmpty(crossorigin)) {
+            tagsString = StringUtils.replace(tagsString, "></script>", " crossorigin='" + crossorigin + "'></script>");
+        }
+        */
+
+        return updatedHtml.toString();
+    }
+
+    private String getUpdatedHtml(Document document, String tagName) {
+        StringBuilder updatedHtml = new StringBuilder();
+        NodeList tags = document.getElementsByTagName(tagName);
+        for (int i=0;i < tags.getLength(); i++) {
+            Element element = (Element) tags.item(i);
+            updatedHtml.append(domNodeToString(element));
+        }
+        return updatedHtml.toString();
+    }
+
+    private void addAttributeToDocument(Document document, String tagName, String attributeName, String attributeValue) {
+        NodeList tags = document.getElementsByTagName(tagName);
+        for (int i=0;i < tags.getLength(); i++) {
+            Element element = (Element) tags.item(i);
+            if (element.hasAttribute("src") && !element.hasAttribute(attributeName)) {
+                element.setAttribute(attributeName, attributeValue);
+            }
+        }
+    }
+
+    private String domNodeToString(Node node) {
+        try {
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer trans = tf.newTransformer();
+            StringWriter sw = new StringWriter();
+            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            trans.transform(new DOMSource(node), new StreamResult(sw));
+            return sw.toString();
+        } catch (TransformerException tEx) {
+            tEx.printStackTrace();
+        }
+        return null;
     }
 
     @NotNull
