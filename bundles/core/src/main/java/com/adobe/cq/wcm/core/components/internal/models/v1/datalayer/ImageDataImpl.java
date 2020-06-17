@@ -15,6 +15,8 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.AssetDataBuilder;
+import com.adobe.cq.wcm.core.components.models.datalayer.builder.DataLayerBuilder;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +24,8 @@ import com.adobe.cq.wcm.core.components.internal.models.v1.AbstractComponentImpl
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
 import com.day.cq.dam.api.Asset;
+
+import java.util.Optional;
 
 public class ImageDataImpl extends ComponentDataImpl implements ImageData {
 
@@ -31,13 +35,10 @@ public class ImageDataImpl extends ComponentDataImpl implements ImageData {
 
     @Override
     public AssetData getAssetData() {
-        Resource assetResource = component.getDataLayerAssetResource();
-        if (assetResource != null) {
-            Asset asset = assetResource.adaptTo(Asset.class);
-            if (asset != null) {
-                return new AssetDataImpl(asset);
-            }
-        }
-        return null;
+        return Optional.ofNullable(component.getDataLayerAssetResource())
+            .map(assetResource -> assetResource.adaptTo(Asset.class))
+            .map(DataLayerBuilder::forAsset)
+            .map(AssetDataBuilder::build)
+            .orElse(null);
     }
 }
