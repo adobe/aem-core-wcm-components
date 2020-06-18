@@ -98,6 +98,12 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     private String crossorigin;
 
+    @Inject
+    private String media;
+
+    @Inject
+    private String onload;
+
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
 
@@ -184,61 +190,79 @@ public class ClientLibrariesImpl implements ClientLibraries {
         } catch (IOException e) {
             LOG.error("Failed to include client libraries {}", categoriesArray);
         }
-
         String html = sw.toString();
-        StringBuilder updatedHtml = new StringBuilder();
-        InputStream htmlStream = IOUtils.toInputStream(html);
+        Map<String, String> jsAttributes = new HashMap<>();
+        Map<String, String> cssAttributes = new HashMap<>();
+        if (StringUtils.isNotEmpty(crossorigin)) {
+            jsAttributes.put("crossorigin", crossorigin);
+        }
+        if (StringUtils.isNotEmpty(onload)) {
+            jsAttributes.put("onload", onload);
+        }
+        if (StringUtils.isNotEmpty(media)) {
+            cssAttributes.put("media", media);
+        }
+        // TODO support more CSS and JS attributes: async, defer
+        return getUpdatedHtml(html, jsAttributes, cssAttributes);
+    }
+
+    private String getUpdatedHtml(String html, Map<String, String> jsAttributes, Map<String, String> cssAttributes) {
+        if ((jsAttributes == null || jsAttributes.isEmpty()) && (cssAttributes == null || cssAttributes.isEmpty())) {
+            return html;
+        }
+        String updatedHtml = null;
         try {
+            InputStream htmlStream = IOUtils.toInputStream(html, "UTF-8");
             Document document = htmlParser.parse(null, htmlStream, "UTF-8");
-            addAttributeToDocument(document, "script", "crossorigin", crossorigin);
-            updatedHtml.append(getUpdatedHtml(document, "script"));
-            updatedHtml.append(getUpdatedHtml(document, "link"));
+            if (jsAttributes != null && !jsAttributes.isEmpty()) {
+                addAttributesToDocument(document, "script", jsAttributes);
+            }
+            if (cssAttributes != null && !cssAttributes.isEmpty()) {
+                addAttributesToDocument(document, "link", cssAttributes);
+            }
+            updatedHtml = getUpdatedHtml(document);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        /*
-        String tagsString = sw.toString();
-        if (StringUtils.isNotEmpty(crossorigin)) {
-            tagsString = StringUtils.replace(tagsString, "></script>", " crossorigin='" + crossorigin + "'></script>");
-        }
-        */
-
-        return updatedHtml.toString();
+        return updatedHtml;
     }
 
-    private String getUpdatedHtml(Document document, String tagName) {
-        StringBuilder updatedHtml = new StringBuilder();
-        NodeList tags = document.getElementsByTagName(tagName);
-        for (int i=0;i < tags.getLength(); i++) {
-            Element element = (Element) tags.item(i);
-            updatedHtml.append(domNodeToString(element));
-        }
-        return updatedHtml.toString();
-    }
-
-    private void addAttributeToDocument(Document document, String tagName, String attributeName, String attributeValue) {
-        NodeList tags = document.getElementsByTagName(tagName);
-        for (int i=0;i < tags.getLength(); i++) {
-            Element element = (Element) tags.item(i);
-            if (element.hasAttribute("src") && !element.hasAttribute(attributeName)) {
-                element.setAttribute(attributeName, attributeValue);
-            }
-        }
-    }
-
-    private String domNodeToString(Node node) {
+    private String getUpdatedHtml(Document document) {
         try {
             TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer trans = tf.newTransformer();
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            // TODO remove the xmlns attribute that is added to the script tag by the transformer
             StringWriter sw = new StringWriter();
-            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            trans.transform(new DOMSource(node), new StreamResult(sw));
+            StreamResult sr = new StreamResult(sw);
+            List<String> tagNames = Arrays.asList("script", "link");
+            for (String tagName : tagNames) {
+                NodeList tags = document.getElementsByTagName(tagName);
+                for (int i = 0; i < tags.getLength(); i++) {
+                    Element element = (Element) tags.item(i);
+                    transformer.transform(new DOMSource(element), sr);
+                }
+            }
             return sw.toString();
         } catch (TransformerException tEx) {
             tEx.printStackTrace();
         }
         return null;
+    }
+
+    private void addAttributesToDocument(Document document, String tagName, Map<String, String> attributes) {
+        NodeList tags = document.getElementsByTagName(tagName);
+        for (int i = 0; i < tags.getLength(); i++) {
+            Element element = (Element) tags.item(i);
+            for (Map.Entry<String, String> entry : attributes.entrySet()) {
+                String attributeName = entry.getKey();
+                String attributeValue = entry.getValue();
+                if (!element.hasAttribute(attributeName)) {
+                    element.setAttribute(attributeName, attributeValue);
+                }
+            }
+        }
     }
 
     @NotNull
