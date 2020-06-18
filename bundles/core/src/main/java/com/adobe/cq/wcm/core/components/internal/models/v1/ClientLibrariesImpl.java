@@ -16,7 +16,6 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
@@ -26,19 +25,12 @@ import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.commons.html.HtmlParser;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
@@ -48,7 +40,6 @@ import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
 
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
@@ -104,11 +95,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     private String onload;
 
-    @OSGiService
-    private HtmlLibraryManager htmlLibraryManager;
+    @Inject
+    private boolean async;
+
+    @Inject
+    private boolean defer;
 
     @OSGiService
-    private HtmlParser htmlParser;
+    private HtmlLibraryManager htmlLibraryManager;
 
     private Map<String, ClientLibrary> allLibraries;
     private Collection<ClientLibrary> libraries;
@@ -190,79 +184,38 @@ public class ClientLibrariesImpl implements ClientLibraries {
         } catch (IOException e) {
             LOG.error("Failed to include client libraries {}", categoriesArray);
         }
+
         String html = sw.toString();
-        Map<String, String> jsAttributes = new HashMap<>();
-        Map<String, String> cssAttributes = new HashMap<>();
+        // inject attributes from HTL into the JS and CSS HTML tags
+        return getHtmlWithInjectedAttributes(html);
+    }
+
+    private String getHtmlWithInjectedAttributes(String html) {
+        StringBuilder jsAttributes = new StringBuilder();
+        if (async) {
+            jsAttributes.append("async ");
+        }
+        if (defer) {
+            jsAttributes.append("defer ");
+        }
         if (StringUtils.isNotEmpty(crossorigin)) {
-            jsAttributes.put("crossorigin", crossorigin);
+            jsAttributes.append("crossorigin=\"");
+            jsAttributes.append(crossorigin);
+            jsAttributes.append("\" ");
         }
         if (StringUtils.isNotEmpty(onload)) {
-            jsAttributes.put("onload", onload);
+            jsAttributes.append("onload=\"");
+            jsAttributes.append(onload);
+            jsAttributes.append("\" ");
         }
+        StringBuilder cssAttributes = new StringBuilder();
         if (StringUtils.isNotEmpty(media)) {
-            cssAttributes.put("media", media);
+            cssAttributes.append("media=\"");
+            cssAttributes.append(media);
+            cssAttributes.append("\" ");
         }
-        // TODO support more CSS and JS attributes: async, defer
-        return getUpdatedHtml(html, jsAttributes, cssAttributes);
-    }
-
-    private String getUpdatedHtml(String html, Map<String, String> jsAttributes, Map<String, String> cssAttributes) {
-        if ((jsAttributes == null || jsAttributes.isEmpty()) && (cssAttributes == null || cssAttributes.isEmpty())) {
-            return html;
-        }
-        String updatedHtml = null;
-        try {
-            InputStream htmlStream = IOUtils.toInputStream(html, "UTF-8");
-            Document document = htmlParser.parse(null, htmlStream, "UTF-8");
-            if (jsAttributes != null && !jsAttributes.isEmpty()) {
-                addAttributesToDocument(document, "script", jsAttributes);
-            }
-            if (cssAttributes != null && !cssAttributes.isEmpty()) {
-                addAttributesToDocument(document, "link", cssAttributes);
-            }
-            updatedHtml = getUpdatedHtml(document);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return updatedHtml;
-    }
-
-    private String getUpdatedHtml(Document document) {
-        try {
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer transformer = tf.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            // TODO remove the xmlns attribute that is added to the script tag by the transformer
-            StringWriter sw = new StringWriter();
-            StreamResult sr = new StreamResult(sw);
-            List<String> tagNames = Arrays.asList("script", "link");
-            for (String tagName : tagNames) {
-                NodeList tags = document.getElementsByTagName(tagName);
-                for (int i = 0; i < tags.getLength(); i++) {
-                    Element element = (Element) tags.item(i);
-                    transformer.transform(new DOMSource(element), sr);
-                }
-            }
-            return sw.toString();
-        } catch (TransformerException tEx) {
-            tEx.printStackTrace();
-        }
-        return null;
-    }
-
-    private void addAttributesToDocument(Document document, String tagName, Map<String, String> attributes) {
-        NodeList tags = document.getElementsByTagName(tagName);
-        for (int i = 0; i < tags.getLength(); i++) {
-            Element element = (Element) tags.item(i);
-            for (Map.Entry<String, String> entry : attributes.entrySet()) {
-                String attributeName = entry.getKey();
-                String attributeValue = entry.getValue();
-                if (!element.hasAttribute(attributeName)) {
-                    element.setAttribute(attributeName, attributeValue);
-                }
-            }
-        }
+        String updatedHtml = StringUtils.replace(html,"<script ", "<script " + jsAttributes.toString());
+        return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }
 
     @NotNull
