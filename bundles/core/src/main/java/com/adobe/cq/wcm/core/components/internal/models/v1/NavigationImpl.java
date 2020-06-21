@@ -44,7 +44,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.Navigation;
 import com.adobe.cq.wcm.core.components.models.NavigationItem;
 import com.day.cq.wcm.api.*;
@@ -304,10 +303,10 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @param page The page to check.
      * @return True if the page is selected, false if not.
      */
-    private boolean checkSelected(final Page page) {
-        return this.currentPage.equals(page) ||
-                this.currentPage.getPath().startsWith(page.getPath() + "/") ||
-                currentPageIsRedirectTarget(page);
+    private boolean checkSelected(@NotNull final Page page) {
+        return this.currentPage.equals(page)
+            || this.currentPage.getPath().startsWith(page.getPath() + "/")
+            || currentPageIsRedirectTarget(page);
     }
 
     /**
@@ -316,23 +315,10 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @param page The page to check.
      * @return True if the specified page redirects to the current page.
      */
-    private boolean currentPageIsRedirectTarget(final Page page) {
-        boolean currentPageIsRedirectTarget = false;
-        Resource contentResource = page.getContentResource();
-        if (contentResource != null) {
-            ValueMap valueMap = contentResource.getValueMap();
-            String redirectTarget = valueMap.get(PageImpl.PN_REDIRECT_TARGET, String.class);
-            if(StringUtils.isNotBlank(redirectTarget)) {
-                PageManager pageManager = resourceResolver.adaptTo(PageManager.class);
-                if (pageManager != null) {
-                    Page redirectPage = pageManager.getPage(redirectTarget);
-                    if (currentPage.equals(redirectPage)) {
-                        currentPageIsRedirectTarget = true;
-                    }
-                }
-            }
-        }
-        return currentPageIsRedirectTarget;
+    private boolean currentPageIsRedirectTarget(@NotNull final Page page) {
+        return NavigationItemImpl.getRedirectTarget(page)
+            .filter(target -> target.equals(currentPage))
+            .isPresent();
     }
 
     private int getLevel(Page page) {
