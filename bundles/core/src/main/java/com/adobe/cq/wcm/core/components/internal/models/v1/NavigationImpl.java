@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
-import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -51,8 +50,8 @@ import com.day.cq.wcm.msm.api.LiveRelationshipManager;
  * Navigation model implementation.
  */
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Navigation.class, ComponentExporter.class},
-       resourceType = {NavigationImpl.RESOURCE_TYPE})
+    adapters = {Navigation.class, ComponentExporter.class},
+    resourceType = {NavigationImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class NavigationImpl extends AbstractComponentImpl implements Navigation {
 
@@ -170,12 +169,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
             if (rootPage != null) {
                 Page navigationRootLanguageRoot = getPageResource(rootPage).map(languageManager::getLanguageRoot).orElse(null);
                 Page currentPageLanguageRoot = languageManager.getLanguageRoot(currentPage.getContentResource());
-                RangeIterator liveCopiesIterator = null;
-                try {
-                    liveCopiesIterator = relationshipManager.getLiveRelationships(rootPage.adaptTo(Resource.class), null, null);
-                } catch (WCMException e) {
-                    // ignore it
-                }
                 if (navigationRootLanguageRoot != null && currentPageLanguageRoot != null && !navigationRootLanguageRoot.equals
                     (currentPageLanguageRoot)) {
                     // check if there's a language copy of the navigation root
@@ -184,17 +177,19 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
                     if (languageCopyNavigationRoot != null) {
                         rootPage = languageCopyNavigationRoot;
                     }
-                } else if (liveCopiesIterator != null) {
-                    while (liveCopiesIterator.hasNext()) {
-                        LiveRelationship relationship = (LiveRelationship) liveCopiesIterator.next();
+                } else {
+                    try {
                         String currentPagePath = currentPage.getPath() + "/";
-                        if (currentPagePath.startsWith(relationship.getTargetPath() + "/")) {
-                            Page liveCopyNavigationRoot = pageManager.getPage(relationship.getTargetPath());
-                            if (liveCopyNavigationRoot != null) {
-                                rootPage = liveCopyNavigationRoot;
-                                break;
-                            }
-                        }
+                        rootPage = Optional.ofNullable((Iterator<LiveRelationship>) relationshipManager.getLiveRelationships(rootPage.adaptTo(Resource.class), null, null))
+                            .map(liveRelationshipIterator -> StreamSupport.stream(((Iterable<LiveRelationship>) () -> liveRelationshipIterator).spliterator(), false))
+                            .orElseGet(Stream::empty)
+                            .map(LiveRelationship::getTargetPath)
+                            .filter(target -> currentPagePath.startsWith(target + "/"))
+                            .map(pageManager::getPage)
+                            .findFirst()
+                            .orElse(rootPage);
+                    } catch (WCMException e) {
+                        // ignore it
                     }
                 }
             }
