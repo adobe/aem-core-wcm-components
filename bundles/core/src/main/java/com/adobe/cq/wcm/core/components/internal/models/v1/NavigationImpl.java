@@ -18,9 +18,11 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
@@ -243,12 +245,9 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     }
 
     private List<NavigationItem> getNavigationTree(NavigationRoot navigationRoot) {
-        List<NavigationItem> itemTree = new ArrayList<>();
-        Iterator<NavigationRoot> it = getRootItems(navigationRoot, structureStart).iterator();
-        while (it.hasNext()) {
-            NavigationRoot item = it.next();
-            itemTree.addAll(getItems(item, item.page));
-        }
+        List<NavigationItem> itemTree = getRootItems(navigationRoot, structureStart)
+            .flatMap(item -> getItems(item, item.page).stream())
+            .collect(Collectors.toList());
         if (structureStart == 0) {
             boolean isSelected = checkSelected(navigationRoot.page);
             NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree, getId(), isShadowingDisabled);
@@ -258,25 +257,21 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         return  itemTree;
     }
 
-    private List<NavigationRoot> getRootItems(NavigationRoot navigationRoot, int structureStart) {
-        LinkedList<NavigationRoot> pages = new LinkedList<>();
-        pages.addLast(navigationRoot);
-        if (structureStart != 0) {
-            int level = 1;
-            while (level != structureStart && !pages.isEmpty()) {
-                int size = pages.size();
-                while (size > 0) {
-                    NavigationRoot item = pages.removeFirst();
-                    Iterator<Page> it = item.page.listChildren(new PageFilter());
-                    while (it.hasNext()) {
-                        pages.addLast(new NavigationRoot(it.next(), structureDepth));
-                    }
-                    size = size - 1;
-                }
-                level = level + 1;
-            }
+    /**
+     * Gets a stream of the top level of pages in the navigation.
+     *
+     * @param navigationRoot The navigation root page.
+     * @param structureStart The number of levels under the root page to begin collecting pages.
+     * @return Stream of all descendant pages of navigationRoot that are exactly structureStart levels deeper.
+     */
+    private Stream<NavigationRoot> getRootItems(NavigationRoot navigationRoot, int structureStart) {
+        if (structureStart <= 1) {
+            return Stream.of(navigationRoot);
         }
-        return pages;
+        Iterator<Page> childIterator = navigationRoot.page.listChildren();
+        return StreamSupport.stream(((Iterable<Page>) () -> childIterator).spliterator(), false)
+            .map(child -> new NavigationRoot(child, structureDepth))
+            .flatMap(child -> getRootItems(child, structureStart - 1));
     }
 
     /**
@@ -309,7 +304,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
             .isPresent();
     }
 
-    private int getLevel(Page page) {
+    private int getLevel(@NotNull final Page page) {
         return StringUtils.countMatches(page.getPath(), "/") - 1;
     }
 
