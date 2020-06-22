@@ -26,19 +26,11 @@ public interface ClientLibraries {
         throw new UnsupportedOperationException();
     }
 
-    default String getInlineJS() {
+    default String getJsInline() {
         throw new UnsupportedOperationException();
     }
 
-    default String getInlineCSS() {
-        throw new UnsupportedOperationException();
-    }
-
-    default Set<String> getJsPaths() {
-        throw new UnsupportedOperationException();
-    }
-
-    default Set<String> getCssPaths() {
+    default String getCssInline() {
         throw new UnsupportedOperationException();
     }
 
@@ -53,4 +45,13 @@ public interface ClientLibraries {
     default String getLibTags() {
         throw new UnsupportedOperationException();
     }
+
+    default Set<String> getJsPaths() {
+        throw new UnsupportedOperationException();
+    }
+
+    default Set<String> getCssPaths() {
+        throw new UnsupportedOperationException();
+    }
+
 }

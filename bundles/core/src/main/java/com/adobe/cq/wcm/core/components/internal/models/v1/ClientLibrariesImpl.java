@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -32,6 +33,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -78,27 +80,41 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private Resource resource;
 
     @Inject
+    @Optional
+    @Nullable
     private String additionnalCategories;
 
     @Inject
+    @Optional
+    @Nullable
     private String categories;
 
     @Inject
+    @Optional
+    @Nullable
     private String categoryFilter;
 
     @Inject
+    @Optional
+    @Nullable
     private String crossorigin;
 
     @Inject
+    @Optional
+    @Nullable
     private String media;
 
     @Inject
+    @Optional
+    @Nullable
     private String onload;
 
     @Inject
+    @Optional
     private boolean async;
 
     @Inject
+    @Optional
     private boolean defer;
 
     @OSGiService
@@ -153,19 +169,52 @@ public class ClientLibrariesImpl implements ClientLibraries {
         categoriesArray = categoriesSet.toArray(new String[0]);
     }
 
+    @NotNull
+    @Override
+    public String[] getCategories() {
+        return Arrays.copyOf(categoriesArray, categoriesArray.length);
+    }
+
+    @NotNull
+    @Override
+    public String getJsInline() {
+        return getInline(LibraryType.JS);
+    }
+
+    @NotNull
+    @Override
+    public String getCssInline() {
+        return getInline(LibraryType.CSS);
+    }
+
+    @Override
     public String getJsTags() {
-        return getLibTags("js");
+        return getLibTags(LibraryType.JS);
     }
 
+    @Override
     public String getCssTags() {
-        return getLibTags("css");
+        return getLibTags(LibraryType.CSS);
     }
 
+    @Override
     public String getLibTags() {
-        return getLibTags("");
+        return getLibTags(null);
     }
 
-    private String getLibTags(String type) {
+    @NotNull
+    @Override
+    public Set<String> getJsPaths() {
+        return getLibsPaths(LibraryType.JS);
+    }
+
+    @NotNull
+    @Override
+    public Set<String> getCssPaths() {
+        return getLibsPaths(LibraryType.CSS);
+    }
+
+    private String getLibTags(LibraryType type) {
         StringWriter sw = new StringWriter();
         try {
             if (categoriesArray == null || categoriesArray.length == 0)  {
@@ -173,9 +222,9 @@ public class ClientLibrariesImpl implements ClientLibraries {
                     "client libraries template library. Please provide a CSV list or an array of categories to include.");
             } else {
                 PrintWriter out = new PrintWriter(sw);
-                if ("js".equalsIgnoreCase(type)) {
+                if (type == LibraryType.JS) {
                     htmlLibraryManager.writeJsInclude(request, out, categoriesArray);
-                } else if ("css".equalsIgnoreCase(type)) {
+                } else if (type == LibraryType.CSS) {
                     htmlLibraryManager.writeCssInclude(request, out, categoriesArray);
                 } else {
                     htmlLibraryManager.writeIncludes(request, out, categoriesArray);
@@ -192,54 +241,28 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     private String getHtmlWithInjectedAttributes(String html) {
         StringBuilder jsAttributes = new StringBuilder();
-        if (async) {
-            jsAttributes.append("async ");
-        }
-        if (defer) {
-            jsAttributes.append("defer ");
-        }
-        if (StringUtils.isNotEmpty(crossorigin)) {
-            jsAttributes.append("crossorigin=\"");
-            jsAttributes.append(crossorigin);
-            jsAttributes.append("\" ");
-        }
-        if (StringUtils.isNotEmpty(onload)) {
-            jsAttributes.append("onload=\"");
-            jsAttributes.append(onload);
-            jsAttributes.append("\" ");
-        }
+        jsAttributes.append(getHtmlAttr("async", async));
+        jsAttributes.append(getHtmlAttr("defer", defer));
+        jsAttributes.append(getHtmlAttr("crossorigin", crossorigin));
+        jsAttributes.append(getHtmlAttr("onload", onload));
         StringBuilder cssAttributes = new StringBuilder();
-        if (StringUtils.isNotEmpty(media)) {
-            cssAttributes.append("media=\"");
-            cssAttributes.append(media);
-            cssAttributes.append("\" ");
-        }
+        cssAttributes.append(getHtmlAttr("media", media));
         String updatedHtml = StringUtils.replace(html,"<script ", "<script " + jsAttributes.toString());
         return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }
 
-    @NotNull
-    @Override
-    public Set<String> getJsPaths() {
-        return getLibsPaths(LibraryType.JS);
+    private String getHtmlAttr(String name, boolean include) {
+        if (include) {
+            return name + " ";
+        }
+        return "";
     }
 
-    @NotNull
-    @Override
-    public Set<String> getCssPaths() {
-        return getLibsPaths(LibraryType.CSS);
-    }
-
-    @NotNull
-    @Override
-    public String getInlineJS() {
-        return getInline(LibraryType.JS);
-    }
-
-    @NotNull
-    @Override
-    public String getInlineCSS() {
-        return getInline(LibraryType.CSS);
+    private String getHtmlAttr(String name, String value) {
+        if (StringUtils.isNotEmpty(value)) {
+            return name + "=\"" + value + "\" ";
+        }
+        return "";
     }
 
     private Set<String> getLibsPaths(LibraryType libraryType) {
@@ -271,12 +294,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
             }
         }
         return output.toString();
-    }
-
-    @NotNull
-    @Override
-    public String[] getCategories() {
-        return Arrays.copyOf(categoriesArray, categoriesArray.length);
     }
 
     private void populateClientLibraries() {
