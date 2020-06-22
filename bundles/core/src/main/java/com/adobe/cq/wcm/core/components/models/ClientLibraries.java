@@ -25,8 +25,8 @@ public interface ClientLibraries {
      * - the requested resource and its descendants
      * - the resource types and super resource types
      * - the resource types used by the referenced experience fragments
-     * - if the resource is a page or page content, the template content resource below template/structure and all its descendants
-     * - if the resource is a page or page content, the page policy and page design
+     * - the template content resource below template/structure and all its descendants, if the resource is a page or page content
+     * - the page policy and page design, if the resource is a page or page content
      *
      * Note: following HTL options can be injected into the ClientLibraries model:
      * - categories: replaces the categories computed for the resource and its descendants
