@@ -53,7 +53,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/github-logo.svg"
-                    linkURL="https://www.adobe.com/"
+                    linkURL="https://www.adobe.com/go/aem_cmp_tech_pdfviewer_v1"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <teaser_556024830
@@ -69,7 +69,7 @@
                     actionsEnabled="false"
                     descriptionFromPage="false"
                     fileReference="/content/dam/core-components-examples/library/adobe-logo.svg"
-                    linkURL="https://www.adobe.com/"
+                    linkURL="https://www.adobe.com/go/aem_cmp_pdfviewer_v1"
                     textIsRich="true"
                     titleFromPage="false"/>
                 <title_865328580
