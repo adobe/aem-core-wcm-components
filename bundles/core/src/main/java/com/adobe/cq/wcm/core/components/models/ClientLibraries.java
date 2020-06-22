@@ -21,6 +21,31 @@ import org.osgi.annotation.versioning.ConsumerType;
 public interface ClientLibraries {
 
     /**
+     * Name of the HTL option to inject the async attribute into the javascript script tag.
+     */
+    public static final String OPTION_ASYNC = "async";
+
+    /**
+     * Name of the HTL option to inject the defer attribute into the javascript script tag.
+     */
+    public static final String OPTION_DEFER= "defer";
+
+    /**
+     * Name of the HTL option to inject the crossorigin attribute into the javascript script tag.
+     */
+    public static final String OPTION_CROSSORIGIN= "crossorigin";
+
+    /**
+     * Name of the HTL option to inject the onload attribute into the javascript script tag.
+     */
+    public static final String OPTION_ONLOAD = "onload";
+
+    /**
+     * Name of the HTL option to inject the media attribute into the stylesheet link tag.
+     */
+    public static final String OPTION_MEDIA = "media";
+
+    /**
      * Returns the clientlib categories of:
      * - the requested resource and its descendants
      * - the resource types and super resource types
@@ -30,7 +55,7 @@ public interface ClientLibraries {
      *
      * Note: following HTL options can be injected into the ClientLibraries model:
      * - categories: replaces the categories computed for the resource and its descendants
-     * - categoryFilter: regular expression to filter the categories based on their names
+     * - filter: regular expression to filter the categories based on their names
      * - async: injected into the JS script tags
      * - defer: injected into the JS script tags
      * - crossorigin: injected into the JS script tags

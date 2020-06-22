@@ -87,7 +87,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     @Optional
     @Nullable
-    private String categoryFilter;
+    private String filter;
 
     @Inject
     @Optional
@@ -143,8 +143,8 @@ public class ClientLibrariesImpl implements ClientLibraries {
             addPageClientLibCategories(categoriesSet);
 
             // filter the categories based on category name regex
-            if (StringUtils.isNotBlank(categoryFilter)) {
-                Pattern p = Pattern.compile(categoryFilter);
+            if (StringUtils.isNotBlank(filter)) {
+                Pattern p = Pattern.compile(filter);
                 categoriesSet.removeIf(category -> {
                     Matcher m = p.matcher(category);
                     return !m.find();
@@ -215,12 +215,12 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     private String getHtmlWithInjectedAttributes(String html) {
         StringBuilder jsAttributes = new StringBuilder();
-        jsAttributes.append(getHtmlAttr("async", async));
-        jsAttributes.append(getHtmlAttr("defer", defer));
-        jsAttributes.append(getHtmlAttr("crossorigin", crossorigin));
-        jsAttributes.append(getHtmlAttr("onload", onload));
+        jsAttributes.append(getHtmlAttr(OPTION_ASYNC, async));
+        jsAttributes.append(getHtmlAttr(OPTION_DEFER, defer));
+        jsAttributes.append(getHtmlAttr(OPTION_CROSSORIGIN, crossorigin));
+        jsAttributes.append(getHtmlAttr(OPTION_ONLOAD, onload));
         StringBuilder cssAttributes = new StringBuilder();
-        cssAttributes.append(getHtmlAttr("media", media));
+        cssAttributes.append(getHtmlAttr(OPTION_MEDIA, media));
         String updatedHtml = StringUtils.replace(html,"<script ", "<script " + jsAttributes.toString());
         return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }
