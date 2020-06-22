@@ -42,15 +42,7 @@ public interface ClientLibraries {
         throw new UnsupportedOperationException();
     }
 
-    default String getLibTags() {
-        throw new UnsupportedOperationException();
-    }
-
-    default Set<String> getJsPaths() {
-        throw new UnsupportedOperationException();
-    }
-
-    default Set<String> getCssPaths() {
+    default String getJsAndCssTags() {
         throw new UnsupportedOperationException();
     }
 
