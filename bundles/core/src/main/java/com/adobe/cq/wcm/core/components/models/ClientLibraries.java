@@ -17,33 +17,48 @@ package com.adobe.cq.wcm.core.components.models;
 
 import org.osgi.annotation.versioning.ConsumerType;
 
+/**
+ * Defines the {@code ClientLibraries} Sling Model used for all the components.
+ *
+ * @since com.adobe.cq.wcm.core.components.models 12.14.0
+ */
 @ConsumerType
 public interface ClientLibraries {
 
     /**
      * Name of the HTL option to inject the async attribute into the javascript script tag.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    public static final String OPTION_ASYNC = "async";
+    String OPTION_ASYNC = "async";
 
     /**
      * Name of the HTL option to inject the defer attribute into the javascript script tag.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    public static final String OPTION_DEFER= "defer";
+    String OPTION_DEFER= "defer";
 
     /**
      * Name of the HTL option to inject the crossorigin attribute into the javascript script tag.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    public static final String OPTION_CROSSORIGIN= "crossorigin";
+    String OPTION_CROSSORIGIN= "crossorigin";
 
     /**
      * Name of the HTL option to inject the onload attribute into the javascript script tag.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    public static final String OPTION_ONLOAD = "onload";
+    String OPTION_ONLOAD = "onload";
 
     /**
      * Name of the HTL option to inject the media attribute into the stylesheet link tag.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
-    public static final String OPTION_MEDIA = "media";
+    String OPTION_MEDIA = "media";
 
     /**
      * Returns the clientlib categories of:
@@ -63,6 +78,7 @@ public interface ClientLibraries {
      * - media: injected into the CSS link tags
      *
      * @return the clientlib categories
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String[] getCategories() {
         throw new UnsupportedOperationException();
@@ -72,6 +88,7 @@ public interface ClientLibraries {
      * Returns a concatenation of all the JS libraries defined for the requested resource.
      *
      * @return the inlined JS libraries
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getJsInline() {
         throw new UnsupportedOperationException();
@@ -81,6 +98,7 @@ public interface ClientLibraries {
      * Returns a concatenation of all the CSS libraries defined for the requested resource.
      *
      * @return the inlined CSS libraries
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getCssInline() {
         throw new UnsupportedOperationException();
@@ -90,6 +108,7 @@ public interface ClientLibraries {
      * Returns a concatenation of all the HTML JS script tags defined for the requested resource.
      *
      * @return the HTML JS script tags
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getJsIncludes() {
         throw new UnsupportedOperationException();
@@ -99,6 +118,7 @@ public interface ClientLibraries {
      * Returns a concatenation of all the HTML CSS link tags defined for the requested resource.
      *
      * @return the HTML CSS link tags
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getCssIncludes() {
         throw new UnsupportedOperationException();
@@ -108,6 +128,7 @@ public interface ClientLibraries {
      * Returns a concatenation of all the HTML JS script and CSS link tags defined for the requested resource.
      *
      * @return the HTML JS script and CSS link tags
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     default String getJsAndCssIncludes() {
         throw new UnsupportedOperationException();
