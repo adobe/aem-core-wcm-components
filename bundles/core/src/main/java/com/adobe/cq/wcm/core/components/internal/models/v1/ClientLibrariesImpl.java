@@ -82,17 +82,25 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     @Optional
     @Nullable
-    private String additionnalCategories;
-
-    @Inject
-    @Optional
-    @Nullable
     private String categories;
 
     @Inject
     @Optional
     @Nullable
+    private String additionnalCategories;
+
+    @Inject
+    @Optional
+    @Nullable
     private String categoryFilter;
+
+    @Inject
+    @Optional
+    private boolean async;
+
+    @Inject
+    @Optional
+    private boolean defer;
 
     @Inject
     @Optional
@@ -102,20 +110,12 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     @Optional
     @Nullable
-    private String media;
-
-    @Inject
-    @Optional
-    @Nullable
     private String onload;
 
     @Inject
     @Optional
-    private boolean async;
-
-    @Inject
-    @Optional
-    private boolean defer;
+    @Nullable
+    private String media;
 
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
