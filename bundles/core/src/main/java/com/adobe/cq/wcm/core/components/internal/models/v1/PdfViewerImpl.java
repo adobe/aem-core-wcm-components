@@ -34,9 +34,11 @@ import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.services.pdfviewer.PdfViewerCaConfig;
 import com.adobe.cq.wcm.core.components.models.PdfViewer;
+import org.jetbrains.annotations.Nullable;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = { PdfViewer.class,
-        ComponentExporter.class }, resourceType = { PdfViewerImpl.RESOURCE_TYPE })
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = { PdfViewer.class, ComponentExporter.class },
+    resourceType = { PdfViewerImpl.RESOURCE_TYPE })
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
 
@@ -44,12 +46,15 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
     protected static final String FIELD_EMBED_MODE = "embedMode";
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String documentPath;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String type;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String defaultViewMode;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
@@ -100,22 +105,27 @@ public class PdfViewerImpl extends AbstractComponentImpl implements PdfViewer {
     }
 
     @Override
+    @Nullable
     public String getDocumentPath() {
         return documentPath;
     }
 
-    @Override 
+    @Override
     public String getDocumentFileName() {
-        int index = documentPath.lastIndexOf("/");
-        return documentPath.substring(index + 1);
+        if (this.documentPath != null) {
+            return StringUtils.substringAfterLast(this.documentPath, "/");
+        }
+        return null;
     }
 
     @Override
+    @Nullable
     public String getType() {
         return type;
     }
 
     @Override
+    @Nullable
     public String getDefaultViewMode() {
         return defaultViewMode;
     }

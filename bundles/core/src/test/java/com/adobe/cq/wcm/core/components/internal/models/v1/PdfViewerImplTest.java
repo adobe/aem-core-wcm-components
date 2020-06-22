@@ -26,7 +26,9 @@ import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @ExtendWith(AemContextExtension.class)
 class PdfViewerImplTest {
@@ -37,8 +39,10 @@ class PdfViewerImplTest {
     private static final String GRID = ROOT_PAGE + "/jcr:content/root/responsivegrid";
     private static final String DCV_1 = "/pdfviewer-1";
     private static final String DCV_2 = "/pdfviewer-2";
+    private static final String DCV_3 = "/pdfviewer-3";
     private static final String PATH_DCV_1 = GRID + DCV_1;
     private static final String PATH_DCV_2 = GRID + DCV_2;
+    private static final String PATH_DCV_3 = GRID + DCV_3;
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
@@ -54,13 +58,13 @@ class PdfViewerImplTest {
         assertEquals("SIZED_CONTAINER", dcv.getType());
         assertEquals("https://pdfviewer.test/Test Document2.pdf", dcv.getDocumentPath());
         assertEquals("Test Document2.pdf", dcv.getDocumentFileName());
-        assertEquals(false, dcv.isBorderless());
-        assertEquals(false, dcv.isShowLeftHandPanel());
-        assertEquals(false, dcv.isShowFullScreen());
-        assertEquals(false, dcv.isShowFullScreen());
-        assertEquals(false, dcv.isShowPrintPdf());
-        assertEquals(false, dcv.isShowPageControls());
-        assertEquals(false, dcv.isDockPageControls());
+        assertFalse(dcv.isBorderless());
+        assertFalse(dcv.isShowLeftHandPanel());
+        assertFalse(dcv.isShowFullScreen());
+        assertFalse(dcv.isShowFullScreen());
+        assertFalse(dcv.isShowPrintPdf());
+        assertFalse(dcv.isShowPageControls());
+        assertFalse(dcv.isDockPageControls());
         assertEquals(PdfViewer.CSS_SIZED_CONTAINER, dcv.getContainerClass());
         String json = "{\"embedMode\":\"SIZED_CONTAINER\",\"showFullScreen\":false,\"showPageControls\":false,\"dockPageControls\":false,\"showDownloadPDF\":false,\"showPrintPDF\":false}";
         assertEquals(json, dcv.getViewerConfigJson());
@@ -85,9 +89,21 @@ class PdfViewerImplTest {
     }
 
     @Test
+    void testGetDocumentPathNotSet() {
+        PdfViewer dcv = getDcvUnderTest(PATH_DCV_3);
+        assertNull(dcv.getDocumentPath());
+    }
+
+    @Test
     void testGetDocumentFileName() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
         assertEquals("Test Document.pdf", dcv.getDocumentFileName());
+    }
+
+    @Test
+    void testGetDocumentFileNameNotSet() {
+        PdfViewer dcv = getDcvUnderTest(PATH_DCV_3);
+        assertNull(dcv.getDocumentFileName());
     }
 
     @Test
@@ -99,51 +115,51 @@ class PdfViewerImplTest {
     @Test
     void testGetBorderless() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(false, dcv.isBorderless());
+        assertFalse(dcv.isBorderless());
     }
 
     @Test
     void testGetShowAnnotationTools() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(true, dcv.isShowAnnotationTools());
+        assertTrue(dcv.isShowAnnotationTools());
     }
 
     @Test
     void testGetShowLeftHandPanel() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(true, dcv.isShowLeftHandPanel());
+        assertTrue(dcv.isShowLeftHandPanel());
     }
 
     @Test
     void testGetShowFullScreen() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(true, dcv.isShowFullScreen());
+        assertTrue(dcv.isShowFullScreen());
     }
 
     @Test
     void testGetShowDownloadPdf() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(true, dcv.isShowDownloadPdf());
+        assertTrue(dcv.isShowDownloadPdf());
     }
 
     @Test
     void testGetShowPrintPdf() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(true, dcv.isShowPrintPdf());
+        assertTrue(dcv.isShowPrintPdf());
     }
 
     @Test
     void testGetShowPageControls() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(true, dcv.isShowPageControls());
+        assertTrue(dcv.isShowPageControls());
     }
 
     @Test
     void testGetDockPageControls() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);
-        assertEquals(true, dcv.isDockPageControls());
+        assertTrue(dcv.isDockPageControls());
     }
-    
+
     @Test
     void testGetContainerClass() {
         PdfViewer dcv = getDcvUnderTest(PATH_DCV_1);

@@ -40,6 +40,10 @@
                         "showPrintPdf": false,
                         "showPageControls": false,
                         "dockPageControls": false
+                    },
+                    "pdfviewer-3" : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/pdfviewer/v1/pdfviewer"
                     }
                 }
             }
