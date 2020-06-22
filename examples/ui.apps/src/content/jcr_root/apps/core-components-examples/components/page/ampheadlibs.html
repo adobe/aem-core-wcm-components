@@ -13,7 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<sly data-sly-use.clientlib="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ additionnalCategories='cmp-examples.base.amp', categoryFilter='cmp-examples.base.amp'}"/>
+<sly data-sly-use.clientlibBase="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ categories='cmp-examples.base.amp'}"
+     data-sly-use.clientlib="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ filter='core\\.wcm\\.components\\..*\\.amp'}"></sly>
 <style amp-custom>
-    ${clientlib.inlineCSS @ context="unsafe"}
+    ${clientlibBase.cssInline @ context="unsafe"}
+    ${clientlib.cssInline @ context="unsafe"}
 </style>

@@ -19,7 +19,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,13 +49,13 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
-import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
-import com.day.cq.wcm.api.Template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(
@@ -61,7 +67,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private static final Logger LOG = LoggerFactory.getLogger(ClientLibrariesImpl.class);
 
     private static final String NN_CQ_CLIENT_LIBRARY_FOLDER = "cq:ClientLibraryFolder";
-    private static final String TEMPLATE_STRUCTURE_CONTENT_PATH = "/structure/jcr:content";
 
     @ScriptVariable
     protected com.day.cq.wcm.api.Page currentPage;
@@ -115,6 +120,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
 
+    private Set<String> resourceTypes;
     private Map<String, ClientLibrary> allLibraries;
     private Collection<ClientLibrary> libraries;
     private String[] categoriesArray;
@@ -257,25 +263,27 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return output.toString();
     }
 
+    private Set<String> getResourceTypes() {
+        if (resourceTypes == null) {
+            resourceTypes = Utils.getAllResourceTypes(resolver, modelFactory, currentPage.getPageManager(), request, resource);
+        }
+        return resourceTypes;
+    }
+
     private void populateClientLibraries() {
         allLibraries = htmlLibraryManager.getLibraries();
         libraries = new ArrayList<>();
-        Set<String> resourceTypes = new HashSet<>();
-        // get the resource types of this resource, its descendants and its super types
-        addResourceTypesFromResource(resourceTypes);
-        // if the resource is a page: get the resource types of the resources used in the template
-        addResourceTypesFromTemplate(resourceTypes);
 
         // get the clientlibs defined by the resource types
-        for (String resourceType : resourceTypes) {
-            Resource componentRes = resolveResource(resolver, resourceType);
+        for (String resourceType : getResourceTypes()) {
+            Resource componentRes = resolver.getResource(resourceType);
             addClientLibraries(componentRes, libraries);
         }
     }
 
     private void addPageClientLibCategories(Set<String> categories) {
         // if the resource is based on a page model
-        com.adobe.cq.wcm.core.components.models.Page  pageModel = request.adaptTo(com.adobe.cq.wcm.core.components.models.Page.class);
+        Page pageModel = request.adaptTo(Page.class);
         if (pageModel != null) {
             String[] pageClientLibCategories = pageModel.getClientLibCategories();
             if (pageClientLibCategories != null) {
@@ -299,87 +307,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
         for (Resource child : childComponents) {
             addClientLibraries(child, libraries);
         }
-    }
-
-    private void addResourceTypesFromResource(Set<String> resourceTypes) {
-        addResourceTypesFromTree(resource, resourceTypes);
-    }
-
-    private void addResourceTypesFromTemplate(Set<String> resourceTypes) {
-        // if the resource is a page
-        if (StringUtils.equals(resource.getPath(), currentPage.getContentResource().getPath())) {
-            Template template = currentPage.getTemplate();
-            if (template == null) {
-                return;
-            }
-            String templatePath = template.getPath() + TEMPLATE_STRUCTURE_CONTENT_PATH;
-            Resource templateResource = resolver.getResource(templatePath);
-            if (templateResource != null) {
-                addResourceTypesFromTree(templateResource, resourceTypes);
-            }
-        }
-    }
-
-    private void addResourceTypesFromTree(Resource resource, Set<String> resourceTypes) {
-        if (resource == null) {
-            return;
-        }
-        // add the resource type of the resource
-        String resourceType = resource.getResourceType();
-        resourceTypes.add(resourceType);
-        // add all the super types of the resource
-        addResourceSuperTypes(resourceType, resourceTypes);
-        // in case the resource is an experience fragment: add the resource types of the original fragment
-        addResourceTypesFromXF(resource, resourceTypes);
-        // add the resource types of the children and their descendents
-        Iterable<Resource> childComponents = resource.getChildren();
-        for (Resource child : childComponents) {
-            addResourceTypesFromTree(child, resourceTypes);
-        }
-    }
-
-    private void addResourceSuperTypes(String resourceType, Set<String> resourceTypes) {
-        Resource resource = resolveResource(resolver, resourceType);
-        if (resource == null) {
-            return;
-        }
-        // Get resource superType path from the resource type.
-        String superType = resource.getResourceSuperType();
-        if (!StringUtils.isEmpty(superType)) {
-            resourceTypes.add(superType);
-        }
-        addResourceSuperTypes(superType, resourceTypes);
-    }
-
-    private void addResourceTypesFromXF(Resource resource, Set<String> resourceTypes) {
-        ExperienceFragment experienceFragment = modelFactory.getModelFromWrappedRequest(request, resource, ExperienceFragment.class);
-        if (experienceFragment != null) {
-            String fragmentPath = experienceFragment.getLocalizedFragmentVariationPath();
-            if (StringUtils.isNotEmpty(fragmentPath)) {
-                Resource fragmentResource = resolver.getResource(fragmentPath);
-                if (fragmentResource != null) {
-                    addResourceTypesFromTree(fragmentResource, resourceTypes);
-                }
-            }
-        }
-    }
-
-    private static Resource resolveResource(ResourceResolver resolver, String path) {
-        if (StringUtils.isEmpty(path)) {
-            return null;
-        }
-        // Resolve absolute resource path.
-        if (StringUtils.startsWith(path, "/")) {
-            return resolver.getResource(path);
-        }
-        // Resolve relative resource path.
-        for (String searchPath : resolver.getSearchPath()) {
-            Resource resource = resolver.getResource(searchPath + path);
-            if (resource != null) {
-                return resource;
-            }
-        }
-        return null;
     }
 
 }
