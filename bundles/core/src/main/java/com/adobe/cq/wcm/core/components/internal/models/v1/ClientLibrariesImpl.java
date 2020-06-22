@@ -87,11 +87,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     @Optional
     @Nullable
-    private String additionnalCategories;
-
-    @Inject
-    @Optional
-    @Nullable
     private String categoryFilter;
 
     @Inject
@@ -147,15 +142,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
             // add categories defined in the page policy and page design
             addPageClientLibCategories(categoriesSet);
 
-            // add categories injected by the HTL template
-            if (StringUtils.isNotBlank(additionnalCategories)) {
-                if (additionnalCategories.contains(",")) {
-                    Collections.addAll(categoriesSet, additionnalCategories.split(","));
-                } else {
-                    categoriesSet.add(additionnalCategories);
-                }
-            }
-
             // filter the categories based on category name regex
             if (StringUtils.isNotBlank(categoryFilter)) {
                 Pattern p = Pattern.compile(categoryFilter);
@@ -188,21 +174,21 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     @Override
-    public String getJsTags() {
-        return getLibTags(LibraryType.JS);
+    public String getJsIncludes() {
+        return getLibIncludes(LibraryType.JS);
     }
 
     @Override
-    public String getCssTags() {
-        return getLibTags(LibraryType.CSS);
+    public String getCssIncludes() {
+        return getLibIncludes(LibraryType.CSS);
     }
 
     @Override
-    public String getJsAndCssTags() {
-        return getLibTags(null);
+    public String getJsAndCssIncludes() {
+        return getLibIncludes(null);
     }
 
-    private String getLibTags(LibraryType type) {
+    private String getLibIncludes(LibraryType type) {
         StringWriter sw = new StringWriter();
         try {
             if (categoriesArray == null || categoriesArray.length == 0)  {

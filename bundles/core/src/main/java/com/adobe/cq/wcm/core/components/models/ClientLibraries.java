@@ -30,7 +30,6 @@ public interface ClientLibraries {
      *
      * Note: following HTL options can be injected into the ClientLibraries model:
      * - categories: replaces the categories computed for the resource and its descendants
-     * - additionnalCategories: adds those categories to the ones computed for the resource and its descendants
      * - categoryFilter: regular expression to filter the categories based on their names
      * - async: injected into the JS script tags
      * - defer: injected into the JS script tags
@@ -67,7 +66,7 @@ public interface ClientLibraries {
      *
      * @return the HTML JS script tags
      */
-    default String getJsTags() {
+    default String getJsIncludes() {
         throw new UnsupportedOperationException();
     }
 
@@ -76,7 +75,7 @@ public interface ClientLibraries {
      *
      * @return the HTML CSS link tags
      */
-    default String getCssTags() {
+    default String getCssIncludes() {
         throw new UnsupportedOperationException();
     }
 
@@ -85,7 +84,7 @@ public interface ClientLibraries {
      *
      * @return the HTML JS script and CSS link tags
      */
-    default String getJsAndCssTags() {
+    default String getJsAndCssIncludes() {
         throw new UnsupportedOperationException();
     }
 
