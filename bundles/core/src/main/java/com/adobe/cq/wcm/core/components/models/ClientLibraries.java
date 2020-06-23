@@ -69,14 +69,14 @@ public interface ClientLibraries {
      * - the page policy and page design, if the resource is a page or page content
      *
      * Note: following HTL options can be injected into the ClientLibraries model:
-     * - resourceTypes: replaces the resource types computed for the resource and its descendants
-     * - categories: replaces the categories computed for the resource and its descendants
+     * - resourceTypes: csv string to override the computed resource types
+     * - categories: csv string to override the computed categories
      * - filter: regular expression to filter the categories based on their names
-     * - async: injected into the JS script tags
-     * - defer: injected into the JS script tags
-     * - crossorigin: injected into the JS script tags
-     * - onload: injected into the JS script tags
-     * - media: injected into the CSS link tags
+     * - async: to inject async into the JS script tags. E.g.: async=true
+     * - defer: to inject defer into the JS script tags. E.g.: defer=true
+     * - crossorigin: to inject crossorigin and its value into the JS script tags. E.g.: crossorigin='anonymous'
+     * - onload: to inject onload and its value into the JS script tags. E.g.: onload='myFunction()'
+     * - media: to inject media and its value into the CSS link tags. E.g.: media='print'
      *
      * @return the clientlib categories
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
