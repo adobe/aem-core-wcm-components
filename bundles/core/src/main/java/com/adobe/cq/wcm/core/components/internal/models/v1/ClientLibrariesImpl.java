@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -88,6 +89,12 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Optional
     @Nullable
     private String categories;
+
+    @Inject
+    @Optional
+    @Nullable
+    @Named("resourceTypes")
+    private String resourceTypesCsv;
 
     @Inject
     @Optional
@@ -265,7 +272,16 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     private Set<String> getResourceTypes() {
         if (resourceTypes == null) {
-            resourceTypes = Utils.getAllResourceTypes(resolver, modelFactory, currentPage.getPageManager(), request, resource);
+            resourceTypes = new HashSet<>();
+            if (StringUtils.isNotBlank(resourceTypesCsv)) {
+                if (resourceTypesCsv.contains(",")) {
+                    Collections.addAll(resourceTypes, resourceTypesCsv.split(","));
+                } else {
+                    resourceTypes.add(resourceTypesCsv);
+                }
+            } else {
+                resourceTypes = Utils.getAllResourceTypes(resolver, modelFactory, currentPage.getPageManager(), request, resource);
+            }
         }
         return resourceTypes;
     }

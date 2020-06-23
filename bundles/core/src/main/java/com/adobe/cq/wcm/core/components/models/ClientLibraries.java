@@ -69,6 +69,7 @@ public interface ClientLibraries {
      * - the page policy and page design, if the resource is a page or page content
      *
      * Note: following HTL options can be injected into the ClientLibraries model:
+     * - resourceTypes: replaces the resource types computed for the resource and its descendants
      * - categories: replaces the categories computed for the resource and its descendants
      * - filter: regular expression to filter the categories based on their names
      * - async: injected into the JS script tags
