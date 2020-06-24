@@ -1,3 +1,7 @@
 {
-    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment"
+    "configured": false,
+    ":type": "core/wcm/components/experiencefragment/v1/experiencefragment",
+    "classNames": "aem-xf empty",
+    ":itemsOrder": [],
+    ":items": {}
 }

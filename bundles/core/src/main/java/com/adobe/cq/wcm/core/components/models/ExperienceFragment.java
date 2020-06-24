@@ -15,13 +15,13 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.adobe.cq.export.json.ComponentExporter;
+import com.adobe.cq.export.json.ContainerExporter;
 import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
 
-import com.adobe.cq.export.json.ComponentExporter;
-
 import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Defines the {@code ExperienceFragment} Sling Model used for the
@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
  * @since com.adobe.cq.wcm.core.components.models 12.9.0
  */
 @ConsumerType
-public interface ExperienceFragment extends ComponentExporter {
+public interface ExperienceFragment extends ContainerExporter {
 
     /**
      * Name of the configuration policy property that specifies the experience fragment variation path. The property
@@ -66,15 +66,7 @@ public interface ExperienceFragment extends ComponentExporter {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * @see ComponentExporter#getExportedType()
-     * @since com.adobe.cq.wcm.core.components.models 12.9.0
-     */
-    @NotNull
-    @Override
-    default String getExportedType() {
-        throw new UnsupportedOperationException();
-    }
+  
     
     /**
      * Generates some container class names (needed for SPA framework)
@@ -87,10 +79,41 @@ public interface ExperienceFragment extends ComponentExporter {
     }
     
     /**
-     * Simple boolean flag to check if the path is configured
-     * @return
+     * Simple boolean flag to check if the experience fragment variation and its underlying experience fragment is configured.
+     * If the localizedFragmentVariationPath path is not configured or the children are empty, this wis will return false.
+     * @return localizedFragmentVariationPath is configured and has entries
      * @since com.adobe.cq.wcm.core.components.models 12.13.0
      */
-    default boolean isPathConfigured()  {throw new UnsupportedOperationException(); }
+    default boolean isConfigured()  {throw new UnsupportedOperationException(); }
+    
+    /**
+     * @see ComponentExporter#getExportedType()
+     * @since com.adobe.cq.wcm.core.components.models 12.9.0
+     */
+    @NotNull
+    @Override
+    default String getExportedType() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * @see ContainerExporter#getExportedItemsOrder()
+     * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
+     */
+    @NotNull
+    @Override
+    default String[] getExportedItemsOrder() {
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * @see ContainerExporter#getExportedItems()
+     * @since com.adobe.cq.wcm.core.components.models.form 14.2.0
+     */
+    @NotNull
+    @Override
+    default Map<String, ? extends ComponentExporter> getExportedItems() {
+        throw new UnsupportedOperationException();
+    }
 
 }

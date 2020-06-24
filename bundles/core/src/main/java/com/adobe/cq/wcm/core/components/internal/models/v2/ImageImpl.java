@@ -142,7 +142,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     }
 
     @Override
-    public List<ImageArea> getAreas() { return Collections.unmodifiableList(areas); }
+    public List<ImageArea> getAreas() { return (areas == null) ? Collections.emptyList() : Collections.unmodifiableList(areas); }
 
     @Override
     public String getUuid() {
