@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2020 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="PDF Viewer"
+    sling:resourceType="cq/gui/components/authoring/dialog"
+    extraClientlibs="[core.wcm.components.pdfviewer.v1.editor]"
+    helpPath="https://www.adobe.com/go/aem_cmp_pdfviewer_v1"
+    trackingFeature="core-components:pdfviewer:v1">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                granite:class="pdfviewer-tabs"
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+                    <configuration
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Configuration"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <documentPath
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                fieldDescription="Path of Document."
+                                                fieldLabel="Document Path"
+                                                name="./documentPath"
+                                                required="{Boolean}true"
+                                                rootPath="/content/dam"/>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </configuration>
+                    <customize
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Customize"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+                            <columns
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                                margin="{Boolean}true">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <column
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <type
+                                                granite:class="pdfviewer-type-selector"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldLabel="Type"
+                                                name="./type">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <fullWindow
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Full Window"
+                                                        value="FULL_WINDOW"/>
+                                                    <sizedContainer
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Sized Container"
+                                                        value="SIZED_CONTAINER"/>
+                                                    <inline
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="In-Line"
+                                                        value="IN_LINE"/>
+                                                </items>
+                                            </type>
+                                            <defaultViewMode
+                                                granite:class="pdfviewer-controls pdfviewer-defaultViewMode"
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                                fieldLabel="Default View Mode"
+                                                name="./defaultViewMode">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <fitPage
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Fit Page"
+                                                        value="FIT_PAGE"/>
+                                                    <fitWidth
+                                                        jcr:primaryType="nt:unstructured"
+                                                        text="Fit Width"
+                                                        value="FIT_WIDTH"/>
+                                                </items>
+                                            </defaultViewMode>
+                                            <well
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/well">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <borderless
+                                                        granite:class="pdfviewer-controls pdfviewer-borderless"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        fieldDescription="Toggle for viewer to take up full height/width of viewport."
+                                                        name="./borderless"
+                                                        text="Full Screen"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                    <showAnnotationTools
+                                                        granite:class="pdfviewer-controls pdfviewer-showAnnotationTools"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        fieldDescription="Toggle to display annotation tools."
+                                                        name="./showAnnotationTools"
+                                                        text="Annotation Tools"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                    <showLeftHandPanel
+                                                        granite:class="pdfviewer-controls pdfviewer-showLeftHandPanel"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
+                                                        fieldDescription="Toggle to display left hand panel."
+                                                        name="./showLeftHandPanel"
+                                                        text="Left Hand Panel"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                    <showFullScreen
+                                                        granite:class="pdfviewer-controls pdfviewer-showFullScreen"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
+                                                        fieldDescription="Toggle to display left hand panel."
+                                                        name="./showFullScreen"
+                                                        text="Fullscreen Mode"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                    <showDownloadPdf
+                                                        granite:class="pdfviewer-controls pdfviewer-showDownloadPdf"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
+                                                        fieldDescription="Toggle to display PDF download button."
+                                                        name="./showDownloadPdf"
+                                                        text="Download PDF"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                    <showPrintPdf
+                                                        granite:class="pdfviewer-controls pdfviewer-showPrintPdf"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
+                                                        fieldDescription="Toggle to display PDF print button."
+                                                        name="./showPrintPdf"
+                                                        text="Print PDF"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                    <showPageControls
+                                                        granite:class="pdfviewer-controls pdfviewer-showPageControls"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                        checked="{Boolean}true"
+                                                        fieldDescription="Toggle to display page controls."
+                                                        name="./showPageControls"
+                                                        text="Page Controls"
+                                                        uncheckedValue="false"
+                                                        value="{Boolean}true"/>
+                                                    <dockPageControls
+                                                        granite:class="pdfviewer-controls pdfviewer-dockPageControls"
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/radiogroup"
+                                                        deleteHint="{Boolean}true"
+                                                        name="./dockPageControls">
+                                                        <items jcr:primaryType="nt:unstructured">
+                                                            <dock
+                                                                jcr:primaryType="nt:unstructured"
+                                                                checked="{Boolean}true"
+                                                                text="Dock"
+                                                                value="{Boolean}true"/>
+                                                            <undock
+                                                                jcr:primaryType="nt:unstructured"
+                                                                text="Undock"
+                                                                value="{Boolean}false"/>
+                                                        </items>
+                                                    </dockPageControls>
+                                                </items>
+                                            </well>
+                                        </items>
+                                    </column>
+                                </items>
+                            </columns>
+                        </items>
+                    </customize>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

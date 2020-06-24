@@ -1,6 +1,14 @@
 {
+    "id": "button-0b8ad69ce8",
     "text": "Adobe",
     "link": "https://www.adobe.com",
     "icon": "adobe",
+    "dataLayer": {
+        "button-0b8ad69ce8": {
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/button/v1/button",
+            "dc:title": "Adobe"
+        }
+    },
     ":type": "core/wcm/components/button/v1/button"
 }

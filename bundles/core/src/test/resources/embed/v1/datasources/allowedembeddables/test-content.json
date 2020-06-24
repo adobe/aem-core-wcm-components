@@ -8,8 +8,8 @@
             "jcr:title": "Embed Policy",
             "sling:resourceType": "wcm/core/components/policy/policy",
             "allowedEmbeddables": [
-                "/apps/app/chatbot",
-                "/apps/app/social"
+                "/apps/my-app/chatbot",
+                "/apps/my-app/social"
             ],
             "embeddablesDisabled": "false",
             "htmlDisabled": "true",
@@ -103,6 +103,34 @@
                     "cmp-embed-dialog-edit-embeddableoptions": true,
                     "cmp-embed-dialog-edit-showhidetargetvalue": "core-components-examples/components/embeddables/social"
                 }
+            }
+        }
+    },
+    "content": {
+        "jcr:primaryType": "nt:unstructured",
+        "embed": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:createdBy": "admin",
+            "jcr:lastModifiedBy": "admin",
+            "embeddableResourceType": "core/wcm/components/embed/v1/embed/embeddable/youtube",
+            "jcr:created": "Sat Feb 22 2020 12:09:13 GMT+0100",
+            "type": "embeddable",
+            "jcr:lastModified": "Sat Feb 22 2020 12:19:11 GMT+0100",
+            "sling:resourceType": "my-app/components/embed"
+        }
+    },
+    "etc": {
+        "designs": {
+            "embed": {
+                "jcr:primaryType": "nt:unstructured",
+                "sling:resourceType": "my-app/components/embed",
+                "allowedEmbeddables": [
+                    "/apps/my-app/chatbot",
+                    "/apps/my-app/social"
+                ],
+                "embeddablesDisabled": "false",
+                "htmlDisabled": "true",
+                "urlDisabled": "true"
             }
         }
     }

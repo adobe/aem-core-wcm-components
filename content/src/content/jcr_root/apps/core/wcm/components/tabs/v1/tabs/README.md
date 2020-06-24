@@ -23,6 +23,7 @@ Tabs component written in HTL.
 * Allowed components can be configured through policy configuration.
 * Navigation to tab panels via tabs.
 * Editing features for tab panels (adding, removing, editing, re-ordering).
+* Allows deep linking into a specific tab by passing the tab id as the URL fragment
 
 ### Use Object
 The Tabs component uses the `com.adobe.cq.wcm.core.components.models.Tabs` Sling model as its Use-object.
@@ -34,7 +35,8 @@ The component policy dialog allows definition of allowed components for the Tabs
 The following properties are written to JCR for this Tabs component and are expected to be available as `Resource` properties:
 
 1. `./activeItem` - defines the name of the item that is active by default.
-2. `./accessibilityLabel` - defines an accessibility label for the tabs.
+2. `./id` - defines the component HTML ID attribute.
+3. `./accessibilityLabel` - defines an accessibility label for the tabs.
 
 The edit dialog also allows editing of Tabs items (adding, removing, naming, re-ordering).
 

@@ -1,5 +1,12 @@
 {
-    "type": "h2",
+    "id": "title-826fc94cbc",
     "linkDisabled": false,
+    "type": "h2",
+    "dataLayer": {
+        "title-826fc94cbc": {
+            "repo:modifyDate": "2016-01-13T15:14:51Z",
+            "@type": "core/wcm/components/title/v1/title"
+        }
+    },
     ":type": "core/wcm/components/title/v1/title"
 }

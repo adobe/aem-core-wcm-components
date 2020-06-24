@@ -1,0 +1,10 @@
+{
+  "id": "languagenavigation-d42e3fadb7",
+  "items": [],
+  "dataLayer": {
+    "languagenavigation-d42e3fadb7": {
+      "@type": "core/wcm/components/languagenavigation/v1/languagenavigation"
+    }
+  },
+  ":type": "core/wcm/components/languagenavigation/v1/languagenavigation"
+}

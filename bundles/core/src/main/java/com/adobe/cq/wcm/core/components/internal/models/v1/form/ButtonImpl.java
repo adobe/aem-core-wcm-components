@@ -32,12 +32,13 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.form.FormConstants;
 import com.adobe.cq.wcm.core.components.models.form.Button;
 import com.day.cq.i18n.I18n;
+import org.jetbrains.annotations.Nullable;
 
 @Model(adaptables = {SlingHttpServletRequest.class, Resource.class},
        adapters = {Button.class, ComponentExporter.class},
        resourceType = {FormConstants.RT_CORE_FORM_BUTTON_V1, FormConstants.RT_CORE_FORM_BUTTON_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ButtonImpl extends AbstractFieldImpl implements Button, ComponentExporter {
+public class ButtonImpl extends AbstractFieldImpl implements Button {
 
     private static final String PROP_TYPE_DEFAULT = "submit";
     private static final String PN_TYPE = "type";
@@ -50,10 +51,8 @@ public class ButtonImpl extends AbstractFieldImpl implements Button, ComponentEx
     private Type type;
 
     @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private SlingHttpServletRequest request;
-
-    @Self(injectionStrategy = InjectionStrategy.OPTIONAL)
-    private Resource resource;
 
     private I18n i18n;
 

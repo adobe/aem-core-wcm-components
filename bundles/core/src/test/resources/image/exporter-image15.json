@@ -1,4 +1,17 @@
 {
+    "id": "image-c35f55512d",
     "src": "/core/content/test/_jcr_content/root/image15.img.png/1494867377756/adobe-systems-logo-and-wordmark.png",
+    "dataLayer": {
+        "image-c35f55512d": {
+            "@type": "core/wcm/components/image/v1/image",
+            "image": {
+                "repo:modifyDate": "2017-03-20T10:20:39Z",
+                "@type": "image/png",
+                "repo:id": "60a1a56e-f3f4-4021-a7bf-ac7a51f0ffe5",
+                "repo:path": "/content/dam/core/images/Adobe_Systems_logo_and_wordmark.png",
+                "xdm:tags": []
+            }
+        }
+    },
     ":type": "core/wcm/components/image/v1/image"
 }

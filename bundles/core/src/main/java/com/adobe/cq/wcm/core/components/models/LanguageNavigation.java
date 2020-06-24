@@ -26,7 +26,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  *
  * @since com.adobe.cq.wcm.core.components.models 12.2.0
  */
-public interface LanguageNavigation extends ComponentExporter {
+public interface LanguageNavigation extends Component {
 
     /**
      * Name of the resource / configuration policy property that defines the navigation root from which to build the global

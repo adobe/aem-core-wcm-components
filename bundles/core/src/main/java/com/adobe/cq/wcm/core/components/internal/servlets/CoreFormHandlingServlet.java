@@ -28,6 +28,7 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.commons.osgi.PropertiesUtil;
+import org.jetbrains.annotations.NotNull;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -86,11 +87,7 @@ public class CoreFormHandlingServlet
     static final String EXTENSION = "html";
     private static final Boolean PROP_ALLOW_EXPRESSION_DEFAULT = true;
 
-    private String[] dataNameWhitelist;
-
     private transient FormsHandlingServletHelper formsHandlingServletHelper;
-
-    private boolean allowExpressions;
 
     @Reference
     private transient SaferSlingPostValidator validator;
@@ -101,18 +98,17 @@ public class CoreFormHandlingServlet
     @Activate
     protected void activate(Configuration configuration) {
 
-        dataNameWhitelist = PropertiesUtil.toStringArray(configuration.name_whitelist());
-        allowExpressions = PropertiesUtil.toBoolean(configuration.allow_expressions(), PROP_ALLOW_EXPRESSION_DEFAULT);
+        String[] dataNameWhitelist = PropertiesUtil.toStringArray(configuration.name_whitelist());
+        boolean allowExpressions = PropertiesUtil.toBoolean(configuration.allow_expressions(), PROP_ALLOW_EXPRESSION_DEFAULT);
         formsHandlingServletHelper = new FormsHandlingServletHelper(dataNameWhitelist, validator, FormConstants.RT_ALL_CORE_FORM_CONTAINER,
-                allowExpressions, formStructureHelperFactory);
+            allowExpressions, formStructureHelperFactory);
     }
 
     /**
      * @see org.apache.sling.api.servlets.SlingAllMethodsServlet#doPost(org.apache.sling.api.SlingHttpServletRequest, org.apache.sling.api.SlingHttpServletResponse)
      */
     @Override
-    protected void doPost(SlingHttpServletRequest request,
-                          final SlingHttpServletResponse response)
+    protected void doPost(@NotNull SlingHttpServletRequest request, @NotNull final SlingHttpServletResponse response)
             throws ServletException, IOException {
         formsHandlingServletHelper.doPost(request, response);
     }
@@ -130,7 +126,7 @@ public class CoreFormHandlingServlet
     /**
      * @see Filter#init(FilterConfig)
      */
-    public void init(final FilterConfig config) throws ServletException {
+    public void init(final FilterConfig config) {
         // nothing to do!
     }
 }

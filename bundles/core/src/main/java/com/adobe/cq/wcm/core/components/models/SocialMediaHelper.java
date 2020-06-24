@@ -28,7 +28,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface SocialMediaHelper extends ComponentExporter {
+public interface SocialMediaHelper extends Component {
 
     /**
      * Name of the resource property that will indicate which social networks are supported for social sharing.
@@ -52,6 +52,13 @@ public interface SocialMediaHelper extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.1.0
      */
     String PV_FACEBOOK = "facebook";
+
+    /**
+     * Name of the property that will return the Facebook App ID.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 11.1.0
+     */
+    String PN_FACEBOOK_APP_ID = "facebookAppId";
 
     /**
      * Possible value of the {@link #PN_SOCIAL_MEDIA} resource property.
@@ -87,6 +94,16 @@ public interface SocialMediaHelper extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 11.0.0; marked <code>default</code> in 12.1.0
      */
     default boolean isSocialMediaEnabled() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Returns the value of the Facebook App ID if specified, null otherwise.
+     *
+     * @return the value of the Facebook App ID if specified, null otherwise.
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0; marked <code>default</code> in 12.14.0
+     */
+    default String getFacebookAppId() {
         throw new UnsupportedOperationException();
     }
 

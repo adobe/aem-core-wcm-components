@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.8.1-SNAPSHOT</version>
+        <version>2.10.1-SNAPSHOT</version>
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <!-- P R O J E C T  D E S C R I P T I O N                                   -->
     <!-- ====================================================================== -->
     <artifactId>core.wcm.components.config</artifactId>
-    <version>2.8.1-SNAPSHOT</version>
+    <version>2.10.1-SNAPSHOT</version>
     <packaging>content-package</packaging>
 
     <name>Adobe Experience Manager Core WCM Components Configurations</name>
@@ -56,6 +56,7 @@
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <packageType>container</packageType>
                     <showImportPackageReport>false</showImportPackageReport>
                     <properties>
                         <cloudManagerTarget>none</cloudManagerTarget>

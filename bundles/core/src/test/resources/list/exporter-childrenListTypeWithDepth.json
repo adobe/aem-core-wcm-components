@@ -1,37 +1,43 @@
 {
-    "dateFormatString"    : "yyyy-MM-dd",
-    "items"               : [
+    "id": "list-84128a1e08",
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
         {
-            "path"       : "/content/list/pages/page_1/page_1_1",
-            "pageTitle"  : null,
-            "name"       : "page_1_1",
+            "path": "/content/list/pages/page_1/page_1_1",
+            "pageTitle": null,
+            "name": "page_1_1",
             "description": null,
-            "title"      : "Page 1.1"
+            "title": "Page 1.1"
         },
         {
-            "path"       : "/content/list/pages/page_1/page_1_2",
-            "pageTitle"  : null,
-            "name"       : "page_1_2",
+            "path": "/content/list/pages/page_1/page_1_2",
+            "pageTitle": null,
+            "name": "page_1_2",
             "description": null,
-            "title"      : "Page 1.2"
+            "title": "Page 1.2"
         },
         {
-            "path"       : "/content/list/pages/page_1/page_1_2/page_1_2_1",
-            "pageTitle"  : null,
-            "name"       : "page_1_2_1",
+            "path": "/content/list/pages/page_1/page_1_2/page_1_2_1",
+            "pageTitle": null,
+            "name": "page_1_2_1",
             "description": null,
-            "title"      : "Page 1.2.1"
+            "title": "Page 1.2.1"
         },
         {
-            "path"       : "/content/list/pages/page_1/page_1_3",
-            "pageTitle"  : null,
-            "name"       : "page_1_3",
+            "path": "/content/list/pages/page_1/page_1_3",
+            "pageTitle": null,
+            "name": "page_1_3",
             "description": null,
-            "title"      : "Page 1.3"
+            "title": "Page 1.3"
         }
     ],
-    "showDescription"     : false,
+    "dataLayer": {
+        "list-84128a1e08": {
+            "@type": "core/wcm/components/list"
+        }
+    },
+    "showDescription": false,
     "showModificationDate": false,
-    "linkItems"           : false,
-    ":type"               : "core/wcm/components/list"
+    "linkItems": false,
+    ":type": "core/wcm/components/list"
 }

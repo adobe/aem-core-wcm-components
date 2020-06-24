@@ -15,8 +15,9 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.Exporter;
@@ -29,7 +30,6 @@ import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.models.v1.PageListItemImpl;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.adobe.cq.wcm.core.components.models.ListItem;
-import com.day.cq.wcm.api.Page;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {List.class, ComponentExporter.class}, resourceType = ListImpl.RESOURCE_TYPE)
@@ -41,26 +41,21 @@ public class ListImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * Result list.
+     */
+    private Collection<ListItem> listItems;
+
     @Override
     @NotNull
     @JsonProperty("items")
     public Collection<ListItem> getListItems() {
-        Collection<ListItem> listItems = new ArrayList<>();
-        Collection<Page> pages = getPages();
-        for (Page page : pages) {
-            if (page != null) {
-                listItems.add(new PageListItemImpl(request, page));
-            }
+        if (this.listItems == null) {
+            this.listItems = super.getPages().stream()
+                .filter(Objects::nonNull)
+                .map(page -> new PageListItemImpl(request, page, getId(), PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT))
+                .collect(Collectors.toList());
         }
-        return listItems;
+        return this.listItems;
     }
-
-    private Collection<Page> getPages() {
-        if (listItems == null) {
-            Source listType = getListType();
-            populateListItems(listType);
-        }
-        return listItems;
-    }
-
 }

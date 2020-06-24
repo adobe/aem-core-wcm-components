@@ -15,12 +15,14 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -49,60 +51,102 @@ import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
 import com.day.cq.wcm.api.components.ComponentContext;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.Lists;
 
+/**
+ * V2 Page model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Page.class, ContainerExporter.class}, resourceType = PageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.PageImpl implements Page {
 
+    /**
+     * The resource type.
+     */
     protected static final String RESOURCE_TYPE = "core/wcm/components/page/v2/page";
+
+    /**
+     * Head JS client library style property name.
+     */
     protected static final String PN_CLIENTLIBS_JS_HEAD = "clientlibsJsHead";
+
+    /**
+     * Redirect target property name.
+     */
     public static final String PN_REDIRECT_TARGET = "cq:redirectTarget";
 
+    /**
+     * Main content selector style property name.
+     */
+    public static final String PN_MAIN_CONTENT_SELECTOR_PROP = "mainContentSelector";
+
+    /**
+     * Flag indicating if cloud configuration support is enabled.
+     */
     private Boolean hasCloudconfigSupport;
 
+    /**
+     * The HtmlLibraryManager (client library) service.
+     */
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
 
+    /**
+     * The ProductInfoProvider service.
+     */
     @OSGiService
     private ProductInfoProvider productInfoProvider;
 
+    /**
+     * The current request.
+     */
     @Self
     protected SlingHttpServletRequest request;
 
+    /**
+     * The current component context.
+     */
     @ScriptVariable
     private ComponentContext componentContext;
 
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL,
-                   name = PN_REDIRECT_TARGET)
+    /**
+     * The redirect target if set, null if not.
+     */
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = PN_REDIRECT_TARGET)
+    @Nullable
     private String redirectTargetValue;
 
+    /**
+     * The proxy path of the first client library listed in the style under the
+     * &quot;{@value Page#PN_APP_RESOURCES_CLIENTLIB}&quot; property.
+     */
     private String appResourcesPath;
+
+    /**
+     * The redirect target as a NavigationItem.
+     */
     private NavigationItem redirectTarget;
 
-    protected String[] clientLibCategoriesJsBody = new String[0];
-    protected String[] clientLibCategoriesJsHead = new String[0];
+    /**
+     * Body JS client library categories.
+     */
+    private String[] clientLibCategoriesJsBody;
+
+    /**
+     * Head JS client library categories.
+     */
+    private String[] clientLibCategoriesJsHead;
 
     @PostConstruct
     protected void initModel() {
         super.initModel();
-        String resourcesClientLibrary = currentStyle.get(PN_APP_RESOURCES_CLIENTLIB, String.class);
-        if (resourcesClientLibrary != null) {
-            Collection<ClientLibrary> clientLibraries =
-                    htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, true);
-            ArrayList<ClientLibrary> clientLibraryList = Lists.newArrayList(clientLibraries.iterator());
-            if (!clientLibraryList.isEmpty()) {
-                appResourcesPath = getProxyPath(clientLibraryList.get(0));
-            }
-        }
-        populateClientLibCategoriesJs();
-        setRedirect();
-    }
-
-    private void setRedirect() {
-        if (StringUtils.isNotEmpty(redirectTargetValue)) {
-            redirectTarget = new RedirectItemImpl(redirectTargetValue, request);
-        }
+        this.appResourcesPath = Optional.ofNullable(currentStyle)
+            .map(style -> style.get(PN_APP_RESOURCES_CLIENTLIB, String.class))
+            .map(resourcesClientLibrary -> htmlLibraryManager.getLibraries(new String[]{resourcesClientLibrary}, LibraryType.CSS, true, true))
+            .map(Collection::stream)
+            .orElse(Stream.empty())
+            .findFirst()
+            .map(this::getProxyPath)
+            .orElse(null);
     }
 
     private String getProxyPath(ClientLibrary lib) {
@@ -124,15 +168,6 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
         return path;
     }
 
-    protected void populateClientLibCategoriesJs() {
-        if (currentStyle != null) {
-            clientLibCategoriesJsHead = currentStyle.get(PN_CLIENTLIBS_JS_HEAD, ArrayUtils.EMPTY_STRING_ARRAY);
-            LinkedHashSet<String> categories = new LinkedHashSet<>(Arrays.asList(clientLibCategories));
-            categories.removeAll(Arrays.asList(clientLibCategoriesJsHead));
-            clientLibCategoriesJsBody = categories.toArray(new String[0]);
-        }
-    }
-
     @Override
     protected void loadFavicons(String designPath) {
     }
@@ -147,12 +182,27 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Override
     @JsonIgnore
     public String[] getClientLibCategoriesJsBody() {
+        if (clientLibCategoriesJsBody == null) {
+            List<String> headLibs = Arrays.asList(getClientLibCategoriesJsHead());
+            clientLibCategoriesJsBody = Arrays.stream(clientLibCategories)
+                .distinct()
+                .filter(item -> !headLibs.contains(item))
+                .toArray(String[]::new);
+        }
         return Arrays.copyOf(clientLibCategoriesJsBody, clientLibCategoriesJsBody.length);
     }
 
     @Override
     @JsonIgnore
     public String[] getClientLibCategoriesJsHead() {
+        if (clientLibCategoriesJsHead == null) {
+            clientLibCategoriesJsHead = Optional.ofNullable(currentStyle)
+                .map(style -> style.get(PN_CLIENTLIBS_JS_HEAD, String[].class))
+                .map(Arrays::stream)
+                .orElseGet(Stream::empty)
+                .distinct()
+                .toArray(String[]::new);
+        }
         return Arrays.copyOf(clientLibCategoriesJsHead, clientLibCategoriesJsHead.length);
     }
 
@@ -182,6 +232,9 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
     @Nullable
     @Override
     public NavigationItem getRedirectTarget() {
+        if (redirectTarget == null && StringUtils.isNotEmpty(redirectTargetValue)) {
+            redirectTarget = new RedirectItemImpl(redirectTargetValue, request);
+        }
         return redirectTarget;
     }
 
@@ -196,5 +249,13 @@ public class PageImpl extends com.adobe.cq.wcm.core.components.internal.models.v
             }
         }
         return hasCloudconfigSupport;
+    }
+
+    @Override
+    public String getMainContentSelector() {
+        if (currentStyle != null) {
+            return currentStyle.get(PN_MAIN_CONTENT_SELECTOR_PROP, String.class);
+        }
+        return null;
     }
 }

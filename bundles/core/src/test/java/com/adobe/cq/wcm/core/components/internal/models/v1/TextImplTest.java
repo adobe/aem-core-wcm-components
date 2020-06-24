@@ -82,6 +82,7 @@ class TextImplTest {
     }
 
     private Text getTextUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         return request.adaptTo(Text.class);

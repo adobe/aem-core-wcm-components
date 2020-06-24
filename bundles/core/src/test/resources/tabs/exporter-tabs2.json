@@ -1,17 +1,25 @@
 {
+    "id": "tabs-673620f4d1",
     "activeItem": "item_2",
+    "dataLayer": {
+        "tabs-673620f4d1": {
+            "@type": "core/wcm/components/tabs/v1/tabs",
+            "shownItems": [
+                "tabs-673620f4d1-item-0ae34790af"
+            ]
+        }
+    },
     ":itemsOrder": [
         "item_1",
         "item_2"
     ],
-    ":type": "core/wcm/components/tabs/v1/tabs",
     ":items": {
         "item_1": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_1_1",
                 "item_1_2"
             ],
-            ":type": "core/wcm/components/responsivegrid",
             ":items": {
                 "item_1_1": {
                     "title": "Teaser 1",
@@ -20,22 +28,38 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-03d502f197",
+                    "dataLayer": {
+                        "teaser-03d502f197": {
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
+                        }
+                    },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_1_2": {
+                    "id": "tabs-c2dc9e45de",
                     "activeItem": "item_1_2_2",
+                    "dataLayer": {
+                        "tabs-c2dc9e45de": {
+                            "@type": "core/wcm/components/tabs/v1/tabs",
+                            "shownItems": [
+                                "tabs-c2dc9e45de-item-913daa91d5"
+                            ]
+                        }
+                    },
                     ":itemsOrder": [
                         "item_1_2_1",
                         "item_1_2_2"
                     ],
-                    ":type": "core/wcm/components/tabs/v1/tabs",
                     ":items": {
                         "item_1_2_1": {
+                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_1_1",
                                 "item_1_2_1_2"
                             ],
-                            ":type": "core/wcm/components/responsivegrid",
                             ":items": {
                                 "item_1_2_1_1": {
                                     "title": "Teaser 1",
@@ -44,6 +68,14 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-57dd562f53",
+                                    "dataLayer": {
+                                        "teaser-57dd562f53": {
+                                            "dc:description": "Teaser 1 description",
+                                            "@type": "core/wcm/components/teaser/v1/teaser",
+                                            "dc:title": "Teaser 1"
+                                        }
+                                    },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_1_2": {
@@ -53,17 +85,25 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-716dd6dc8a",
+                                    "dataLayer": {
+                                        "teaser-716dd6dc8a": {
+                                            "dc:description": "Teaser 2 description",
+                                            "@type": "core/wcm/components/teaser/v1/teaser",
+                                            "dc:title": "Teaser 2"
+                                        }
+                                    },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 }
                             },
                             "cq:panelTitle": "Tab 1.1"
                         },
                         "item_1_2_2": {
+                            ":type": "core/wcm/components/responsivegrid",
                             ":itemsOrder": [
                                 "item_1_2_2_1",
                                 "item_1_2_2_2"
                             ],
-                            ":type": "core/wcm/components/responsivegrid",
                             ":items": {
                                 "item_1_2_2_1": {
                                     "title": "Teaser 1",
@@ -72,18 +112,34 @@
                                     "imageLinkHidden": false,
                                     "titleLinkHidden": false,
                                     "actions": [],
+                                    "id": "teaser-74587f333a",
+                                    "dataLayer": {
+                                        "teaser-74587f333a": {
+                                            "dc:description": "Teaser 1 description",
+                                            "@type": "core/wcm/components/teaser/v1/teaser",
+                                            "dc:title": "Teaser 1"
+                                        }
+                                    },
                                     ":type": "core/wcm/components/teaser/v1/teaser"
                                 },
                                 "item_1_2_2_2": {
-                                    "autopauseDisabled": false,
+                                    "id": "carousel-21953a9100",
                                     "autoplay": false,
                                     "delay": 5000,
+                                    "autopauseDisabled": false,
+                                    "dataLayer": {
+                                        "carousel-21953a9100": {
+                                            "@type": "core/wcm/components/carousel/v1/carousel",
+                                            "shownItems": [
+                                                "carousel-21953a9100-item-260a2da9e8"
+                                            ]
+                                        }
+                                    },
                                     ":itemsOrder": [
                                         "item_1_2_2_2_1",
                                         "item_1_2_2_2_2",
                                         "item_1_2_2_2_3"
                                     ],
-                                    ":type": "core/wcm/components/carousel/v1/carousel",
                                     ":items": {
                                         "item_1_2_2_2_1": {
                                             "title": "Teaser 1",
@@ -92,6 +148,14 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-260a2da9e8",
+                                            "dataLayer": {
+                                                "teaser-260a2da9e8": {
+                                                    "dc:description": "Teaser 1 description",
+                                                    "@type": "core/wcm/components/teaser/v1/teaser",
+                                                    "dc:title": "Teaser 1"
+                                                }
+                                            },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 1"
                                         },
@@ -102,6 +166,14 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-52bb4ad862",
+                                            "dataLayer": {
+                                                "teaser-52bb4ad862": {
+                                                    "dc:description": "Teaser 2 description",
+                                                    "@type": "core/wcm/components/teaser/v1/teaser",
+                                                    "dc:title": "Teaser 2"
+                                                }
+                                            },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 2"
                                         },
@@ -112,25 +184,35 @@
                                             "imageLinkHidden": false,
                                             "titleLinkHidden": false,
                                             "actions": [],
+                                            "id": "teaser-9e643c8adc",
+                                            "dataLayer": {
+                                                "teaser-9e643c8adc": {
+                                                    "dc:description": "Teaser 3 description",
+                                                    "@type": "core/wcm/components/teaser/v1/teaser",
+                                                    "dc:title": "Teaser 3"
+                                                }
+                                            },
                                             ":type": "core/wcm/components/teaser/v1/teaser",
                                             "cq:panelTitle": "Teaser 3"
                                         }
-                                    }
+                                    },
+                                    ":type": "core/wcm/components/carousel/v1/carousel"
                                 }
                             },
                             "cq:panelTitle": "Tab 1.2"
                         }
-                    }
+                    },
+                    ":type": "core/wcm/components/tabs/v1/tabs"
                 }
             },
             "cq:panelTitle": "Tab 1"
         },
         "item_2": {
+            ":type": "core/wcm/components/responsivegrid",
             ":itemsOrder": [
                 "item_2_1",
                 "item_2_2"
             ],
-            ":type": "core/wcm/components/responsivegrid",
             ":items": {
                 "item_2_1": {
                     "title": "Teaser 1",
@@ -139,6 +221,14 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-b26e2145ab",
+                    "dataLayer": {
+                        "teaser-b26e2145ab": {
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
+                        }
+                    },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 },
                 "item_2_2": {
@@ -148,10 +238,19 @@
                     "imageLinkHidden": false,
                     "titleLinkHidden": false,
                     "actions": [],
+                    "id": "teaser-c900ee9cbc",
+                    "dataLayer": {
+                        "teaser-c900ee9cbc": {
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
+                        }
+                    },
                     ":type": "core/wcm/components/teaser/v1/teaser"
                 }
             },
             "cq:panelTitle": "Tab 2"
         }
-    }
+    },
+    ":type": "core/wcm/components/tabs/v1/tabs"
 }

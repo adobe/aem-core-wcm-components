@@ -1,0 +1,25 @@
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2020 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<div data-sly-use.progressBar="com.adobe.cq.wcm.core.components.models.ProgressBar"
+     id="${progressBar.id}"
+     class="cmp-progressbar"
+     data-cmp-data-layer="${progressBar.data.json}">
+    <span class="cmp-progressbar__label--completed">${'#.##' @ format=progressBar.completed}</span>
+    <span class="cmp-progressbar__label--remaining">${'#.##' @ format=progressBar.remaining}</span>
+    <div class="cmp-progressbar__bar" role="progressbar"
+         aria-valuenow="${'#.##' @ format=progressBar.completed}" aria-valuemin="0" aria-valuemax="100"
+         style="width: ${progressBar.completed @ context='number'}%">${'#.##' @ format=progressBar.completed}</div>
+</div>

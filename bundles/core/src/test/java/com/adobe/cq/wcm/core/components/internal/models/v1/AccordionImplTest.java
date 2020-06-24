@@ -40,6 +40,8 @@ class AccordionImplTest {
     private static final String ACCORDION_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-1";
     private static final String ACCORDION_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-2";
     private static final String ACCORDION_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-3";
+    private static final String ACCORDION_EMPTY = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/accordion-empty";
+
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
@@ -52,9 +54,7 @@ class AccordionImplTest {
 
     @Test
     void testEmptyAccordion() {
-        Accordion accordion = new AccordionImpl();
-        List<ListItem> items = accordion.getItems();
-        assertEquals(0, items.size());
+        assertEquals(0, getAccordionUnderTest(ACCORDION_EMPTY).getItems().size());
     }
 
     @Test
@@ -90,6 +90,7 @@ class AccordionImplTest {
     }
 
     private Accordion getAccordionUnderTest(String resourcePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         Resource resource = context.currentResource(resourcePath);
         if (resource != null && properties != null) {
             context.contentPolicyMapping(resource.getResourceType(), properties);

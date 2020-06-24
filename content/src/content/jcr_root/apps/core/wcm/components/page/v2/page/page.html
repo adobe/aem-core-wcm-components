@@ -19,10 +19,23 @@
       data-sly-use.footer="footer.html"
       data-sly-use.redirect="redirect.html">
     <head data-sly-call="${head.head @ page = page}"></head>
-    <body class="${page.cssClassNames}">
+    <body class="${page.cssClassNames}"
+          id="${page.id}"
+          data-cmp-data-layer-enabled="${page.data ? true : false}">
+        <script data-sly-test.dataLayerEnabled="${page.data}">
+          window.adobeDataLayer = window.adobeDataLayer || [];
+          adobeDataLayer.push({
+              page: JSON.parse("${page.data.json @ context='scriptString'}"),
+              event:'cmp:show',
+              eventInfo: {
+                  path: 'page.${page.id @ context="scriptString"}'
+              }
+          });
+        </script>
         <sly data-sly-test.isRedirectPage="${page.redirectTarget && (wcmmode.edit || wcmmode.preview)}"
              data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>
         <sly data-sly-test="${!isRedirectPage}">
+            <sly data-sly-include="body.skiptomaincontent.html"></sly>
             <sly data-sly-include="body.socialmedia_begin.html"></sly>
             <sly data-sly-include="body.html"></sly>
             <sly data-sly-call="${footer.footer @ page = page}"></sly>

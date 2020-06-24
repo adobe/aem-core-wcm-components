@@ -35,6 +35,7 @@ The following configuration properties are used:
 3. ~~./skipNavigationRoot~~ - **deprecated**; if `true`, excludes the navigation root in the resulting tree, including its descendants only.
 4. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
 5. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
+6. `./disableShadowing` - for redirecting pages PageA -> PageB. If `true` - PageA(original page) is shown. If `false` or not configured - PageB(target page).
 
 ### Edit Dialog Properties
 The following properties are written to JCR for the Navigation component and are expected to be available as `Resource` properties:
@@ -45,6 +46,8 @@ The following properties are written to JCR for the Navigation component and are
 4. `./collectAllPages` - if `true`, collects all pages that are descendants of the `./navigationRoot`. Overrides `./structureDepth`.
 5. `./structureDepth` - the depth of the navigation structure, relative to the navigation root.
 6. `./accessibilityLabel` - defines an accessibility label for the navigation.
+7. `./disableShadowing` - for redirecting pages PageA -> PageB. If `true` - PageA(original page) is shown. If `false` or not configured - PageB(target page).
+8. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.navigation.v1.editor` editor client library category that includes

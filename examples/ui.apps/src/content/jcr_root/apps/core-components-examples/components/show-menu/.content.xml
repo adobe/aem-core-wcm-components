@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    cq:icon="button"
-    jcr:description="Simple button component for showing the Core Components Library aside menu."
-    jcr:primaryType="cq:Component"
-    jcr:title="Show Menu"
-    componentGroup="Core Components Examples"/>

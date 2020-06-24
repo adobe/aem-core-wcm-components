@@ -37,6 +37,8 @@ import com.adobe.granite.ui.components.Value;
 import com.adobe.granite.ui.components.ds.DataSource;
 import com.adobe.granite.ui.components.ds.SimpleDataSource;
 import com.day.cq.commons.jcr.JcrConstants;
+import com.day.cq.wcm.api.designer.Designer;
+import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
 
@@ -68,14 +70,20 @@ public class AllowedEmbeddablesDataSourceServlet extends SlingSafeMethodsServlet
         ResourceResolver resolver = request.getResourceResolver();
         Resource contentResource = resolver.getResource((String) request.getAttribute(Value.CONTENTPATH_ATTRIBUTE));
         ContentPolicyManager policyManager = resolver.adaptTo(ContentPolicyManager.class);
-        if (policyManager == null) {
+        if (policyManager == null || contentResource == null) {
             return allowedEmbeddableResources;
         }
+        ValueMap properties = null;
         ContentPolicy policy = policyManager.getPolicy(contentResource);
-        if (policy == null) {
-            return allowedEmbeddableResources;
+        if (policy != null) {
+            properties = policy.getProperties();
+        } else {
+            Designer designer = resolver.adaptTo(Designer.class);
+            if (designer != null) {
+                properties = designer.getStyle(contentResource);
+            }
         }
-        ValueMap properties = policy.getProperties();
+
         if (properties == null) {
             return allowedEmbeddableResources;
         }

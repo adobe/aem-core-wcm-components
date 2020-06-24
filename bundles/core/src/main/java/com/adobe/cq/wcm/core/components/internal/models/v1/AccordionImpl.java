@@ -15,18 +15,21 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-import org.apache.commons.lang3.ArrayUtils;
+import com.adobe.cq.wcm.core.components.models.Component;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ContainerExporter;
@@ -35,6 +38,9 @@ import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.Accordion;
 import com.day.cq.wcm.api.designer.Style;
 
+/**
+ * V1 Accordion model implementation.
+ */
 @Model(
     adaptables = SlingHttpServletRequest.class,
     adapters = { Accordion.class, ComponentExporter.class, ContainerExporter.class },
@@ -46,17 +52,34 @@ import com.day.cq.wcm.api.designer.Style;
 )
 public class AccordionImpl extends PanelContainerImpl implements Accordion {
 
+    /**
+     * Resource type.
+     */
     public final static String RESOURCE_TYPE = "core/wcm/components/accordion/v1/accordion";
 
+    /**
+     * Flag indicating if single expansion is enabled.
+     */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     private boolean singleExpansion;
 
+    /**
+     * Array of expanded items.
+     */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String[] expandedItems;
 
+    /**
+     * The heading element.
+     */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String headingElement;
 
+    /**
+     * The current style for this component.
+     */
     @ScriptVariable
     private Style currentStyle;
 
@@ -64,6 +87,11 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
      * The cached node names of the expanded items for which there is a valid matching child resource.
      */
     private String[] expandedItemNames;
+
+    /**
+     * The cached model IDs of the expanded items for which there is a valid matching child resource.
+     */
+    private String[] expandedItemIds;
 
     /**
      * The {@link com.adobe.cq.wcm.core.components.internal.Utils.Heading} object for the HTML element
@@ -79,20 +107,12 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
     @Override
     public String[] getExpandedItems() {
         if (expandedItemNames == null) {
-            List<String> expanded = new ArrayList<>();
-            if (expandedItems != null) {
-                for (String expandedItemName : expandedItems) {
-                    Resource child = resource.getChild(expandedItemName);
-                    if (child != null) {
-                        expanded.add(expandedItemName);
-                    }
-                }
-            }
-            if (!expanded.isEmpty()) {
-                expandedItemNames = expanded.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
-            } else {
-                expandedItemNames = ArrayUtils.EMPTY_STRING_ARRAY;
-            }
+            this.expandedItemNames = Optional.ofNullable(this.expandedItems)
+                .map(Arrays::stream)
+                .orElse(Stream.empty())
+                .filter(Objects::nonNull)
+                .filter(item -> Objects.nonNull(resource.getChild(item)))
+                .toArray(String[]::new);
         }
         return Arrays.copyOf(expandedItemNames, expandedItemNames.length);
     }
@@ -109,5 +129,29 @@ public class AccordionImpl extends PanelContainerImpl implements Accordion {
             return heading.getElement();
         }
         return null;
+    }
+
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String[] getDataLayerShownItems() {
+        if (expandedItems == null) {
+            return new String[0];
+        }
+
+        if (expandedItemIds == null) {
+            List<String> expandedItemsName = Arrays.asList(expandedItems);
+
+            expandedItemIds = this.getItems().stream()
+                .filter(item -> expandedItemsName.contains(item.getName()))
+                .map(Component::getData)
+                .filter(Objects::nonNull)
+                .map(ComponentData::getId)
+                .toArray(String[]::new);
+        }
+
+        return Arrays.copyOf(expandedItemIds, expandedItemIds.length);
     }
 }

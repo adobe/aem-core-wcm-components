@@ -28,7 +28,7 @@ import com.adobe.cq.wcm.core.components.services.embed.UrlProcessor;
  * @since com.adobe.cq.wcm.core.components.models 12.10.0
  */
 @ConsumerType
-public interface Embed extends ComponentExporter {
+public interface Embed extends Component {
 
     /**
      * Enumeration of the supported embed input types.

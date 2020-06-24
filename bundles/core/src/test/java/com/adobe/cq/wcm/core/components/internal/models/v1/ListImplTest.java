@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Collections;
+import java.util.Objects;
 
 import javax.jcr.Session;
 
@@ -32,15 +33,14 @@ import com.adobe.cq.wcm.core.components.Utils;
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.models.List;
 import com.day.cq.search.SimpleSearch;
-import com.day.cq.search.result.Hit;
 import com.day.cq.search.result.SearchResult;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.designer.Style;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -68,12 +68,12 @@ public class ListImplTest {
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
 
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUp() {
         CONTEXT.load().json("/list/test-etc.json", "/etc/tags/list");
     }
 
     @Test
-    public void testProperties() throws Exception {
+    public void testProperties() {
         List list = getListUnderTest(LIST_1);
         assertTrue(list.showDescription());
         assertTrue(list.showModificationDate());
@@ -84,28 +84,41 @@ public class ListImplTest {
     @Test
     public void testStaticListType() {
         List list = getListUnderTest(LIST_2);
-        assertEquals(2, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_1",
+            "/content/list/pages/page_2",
+        });
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_2));
     }
 
     @Test
-    public void testChildrenListType() throws Exception {
+    public void testChildrenListType() {
         List list = getListUnderTest(LIST_3);
-        assertEquals(3, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_1/page_1_1",
+            "/content/list/pages/page_1/page_1_2",
+            "/content/list/pages/page_1/page_1_3",
+        });
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_3));
     }
 
     @Test
-    public void testChildrenListTypeWithDepth() throws Exception {
+    public void testChildrenListTypeWithDepth() {
         List list = getListUnderTest(LIST_4);
-        assertEquals(4, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{
+            "/content/list/pages/page_1/page_1_1",
+            "/content/list/pages/page_1/page_1_2",
+            "/content/list/pages/page_1/page_1_2/page_1_2_1",
+            "/content/list/pages/page_1/page_1_3",
+
+        });
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_4));
     }
 
     @Test
-    public void testTagsListType() throws Exception {
+    public void testTagsListType() {
         List list = getListUnderTest(LIST_5);
-        assertEquals(1, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1/page_1_3"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_5));
     }
 
@@ -116,78 +129,79 @@ public class ListImplTest {
         CONTEXT.registerAdapter(ResourceResolver.class, Session.class, mockSession);
         CONTEXT.registerAdapter(Resource.class, SimpleSearch.class, mockSimpleSearch);
         SearchResult searchResult = mock(SearchResult.class);
-        Hit hit = mock(Hit.class);
 
         when(mockSimpleSearch.getResult()).thenReturn(searchResult);
-        when(searchResult.getHits()).thenReturn(Collections.singletonList(hit));
-        Resource contentResource = CONTEXT.resourceResolver().getResource("/content/list/pages/page_1/jcr:content");
-        when(hit.getResource()).thenReturn(contentResource);
+        when(searchResult.getResources()).thenReturn(
+            Collections.singletonList(Objects.requireNonNull(
+                CONTEXT.resourceResolver().getResource("/content/list/pages/page_1/jcr:content")))
+                .iterator());
 
         List list = getListUnderTest(LIST_6);
-        assertEquals(1, list.getItems().size());
+        checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_6));
     }
 
     @Test
-    public void testOrderBy() throws Exception {
+    public void testOrderBy() {
         List list = getListUnderTest(LIST_7);
-        checkListConsistency(list, new String[]{"Page 1", "Page 2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1", "Page 2"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_7));
     }
 
     @Test
-    public void testOrderDescBy() throws Exception {
+    public void testOrderDescBy() {
         List list = getListUnderTest(LIST_8);
-        checkListConsistency(list, new String[]{"Page 2", "Page 1"});
+        checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_8));
     }
 
     @Test
-    public void testOrderByModificationDate() throws Exception {
+    public void testOrderByModificationDate() {
         List list = getListUnderTest(LIST_9);
-        checkListConsistency(list, new String[]{"Page 2", "Page 1"});
+        checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_9));
     }
 
     @Test
-    public void testOrderByModificationDateDesc() throws Exception {
+    public void testOrderByModificationDateDesc() {
         List list = getListUnderTest(LIST_10);
-        checkListConsistency(list, new String[]{"Page 1", "Page 2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1", "Page 2"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_10));
     }
 
     @Test
-    public void testMaxItems() throws Exception {
+    public void testMaxItems() {
         List list = getListUnderTest(LIST_11);
-        checkListConsistency(list, new String[]{"Page 1"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1"});
         Utils.testJSONExport(list, Utils.getTestExporterJSONPath(TEST_BASE, LIST_11));
     }
 
     @Test
-    public void testOrderByModificationDateWithNoModificationDate() throws Exception {
+    public void testOrderByModificationDateWithNoModificationDate() {
         List list = getListUnderTest(LIST_12);
-        checkListConsistency(list, new String[]{"Page 1.1", "Page 1.2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 1.1", "Page 1.2"});
     }
 
     @Test
-    public void testOrderByModificationDateWithNoModificationDateForOneItem() throws Exception {
+    public void testOrderByModificationDateWithNoModificationDateForOneItem() {
         List list = getListUnderTest(LIST_13);
-        checkListConsistency(list, new String[]{"Page 2", "Page 1", "Page 1.2"});
+        checkListConsistencyByTitle(list, new String[]{"Page 2", "Page 1", "Page 1.2"});
     }
 
     @Test
-    public void testOrderByTitleWithNoTitle() throws Exception {
+    public void testOrderByTitleWithNoTitle() {
         List list = getListUnderTest(LIST_14);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_3", "/content/list/pages/page_4"});
     }
 
     @Test
-    public void testOrderByTitleWithNoTitleForOneItem() throws Exception {
+    public void testOrderByTitleWithNoTitleForOneItem() {
         List list = getListUnderTest(LIST_15);
         checkListConsistencyByPaths(list, new String[]{"/content/list/pages/page_1", "/content/list/pages/page_2", "/content/list/pages/page_4"});
     }
 
     private List getListUnderTest(String resourcePath) {
+        Utils.enableDataLayerForOldAemContext(CONTEXT, true);
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");
@@ -208,21 +222,11 @@ public class ListImplTest {
         return request.adaptTo(List.class);
     }
 
-    private void checkListConsistency(List list, String[] expectedPages) {
-        assertTrue("Expected that the returned list will contain " + expectedPages.length + " items",
-                list.getItems().size() == expectedPages.length);
-        int index = 0;
-        for (Page item : list.getItems()) {
-            assertEquals(expectedPages[index++], item.getTitle());
-        }
+    private void checkListConsistencyByTitle(List list, String[] expectedPageTitles) {
+        assertArrayEquals(expectedPageTitles, list.getItems().stream().map(Page::getTitle).toArray());
     }
 
     private void checkListConsistencyByPaths(List list, String[] expectedPagePaths) {
-        assertTrue("Expected that the returned list will contain " + expectedPagePaths.length + " items",
-                list.getItems().size() == expectedPagePaths.length);
-        int index = 0;
-        for (Page item : list.getItems()) {
-            assertEquals(expectedPagePaths[index++], item.getPath());
-        }
+        assertArrayEquals(expectedPagePaths, list.getItems().stream().map(Page::getPath).toArray());
     }
 }

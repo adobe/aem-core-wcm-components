@@ -35,6 +35,7 @@ import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.*;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +54,7 @@ import com.day.cq.wcm.foundation.forms.FormsHelper;
 import static com.day.cq.wcm.foundation.forms.FormsConstants.SCRIPT_FORM_SERVER_VALIDATION;
 
 @Model(adaptables = SlingHttpServletRequest.class,
-       adapters = {Container.class, ContainerExporter.class},
+       adapters = {Container.class, ContainerExporter.class, ComponentExporter.class},
        resourceType = {FormConstants.RT_CORE_FORM_CONTAINER_V1, FormConstants.RT_CORE_FORM_CONTAINER_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ContainerImpl implements Container {
@@ -85,6 +86,7 @@ public class ContainerImpl implements Container {
     private String id;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String actionType;
 
     @ValueMapValue(name = ResourceResolver.PROPERTY_RESOURCE_TYPE)
@@ -92,6 +94,7 @@ public class ContainerImpl implements Container {
     private String dropAreaResourceType;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String redirect;
 
     private String name;

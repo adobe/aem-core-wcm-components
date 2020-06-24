@@ -28,6 +28,7 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -43,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
        adapters = {Title.class, ComponentExporter.class},
        resourceType = {TitleImpl.RESOURCE_TYPE_V1, TitleImpl.RESOURCE_TYPE_V2})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class TitleImpl implements Title {
+public class TitleImpl extends AbstractComponentImpl implements Title {
 
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/title/v1/title";
     protected static final String RESOURCE_TYPE_V2 = "core/wcm/components/title/v2/title";
@@ -64,15 +65,19 @@ public class TitleImpl implements Title {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     private Style currentStyle;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
+    @Nullable
     private String title;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String type;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String linkURL;
 
     /**
@@ -133,4 +138,17 @@ public class TitleImpl implements Title {
         return resource.getResourceType();
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLinkURL();
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return getText();
+    }
 }

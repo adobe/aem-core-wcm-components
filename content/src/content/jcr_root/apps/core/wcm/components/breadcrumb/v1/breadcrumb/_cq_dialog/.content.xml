@@ -46,6 +46,12 @@
                                 text="Hide Current"
                                 uncheckedValue="false"
                                 value="true"/>
+                            <id
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldDescription="HTML ID attribute to apply to the component."
+                                fieldLabel="ID"
+                                name="./id"/>
                         </items>
                     </properties>
                 </items>

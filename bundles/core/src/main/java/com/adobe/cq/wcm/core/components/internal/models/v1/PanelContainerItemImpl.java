@@ -15,9 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
+import java.util.Optional;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.ListItem;
@@ -27,12 +28,9 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
 
     public static final String PN_PANEL_TITLE = "cq:panelTitle";
 
-    public PanelContainerItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
-        super(request, resource);
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
-        if (valueMap != null) {
-            String jcrTitle = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            title = valueMap.get(PN_PANEL_TITLE, jcrTitle);
-        }
+    public PanelContainerItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource, String parentId) {
+        super(request, resource, parentId);
+        title = Optional.ofNullable(resource.getValueMap().get(PN_PANEL_TITLE, String.class))
+            .orElseGet(() -> resource.getValueMap().get(JcrConstants.JCR_TITLE, String.class));
     }
 }

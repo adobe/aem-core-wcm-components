@@ -1,0 +1,107 @@
+{
+    "id": "tabs-73c57b3627",
+    "activeItem": "item_1",
+    "dataLayer": {
+        "tabs-73c57b3627": {
+            "@type": "core/wcm/components/tabs/v1/tabs",
+            "shownItems": [
+                "tabs-73c57b3627-item-25f537bb7f"
+            ]
+        }
+    },
+    ":itemsOrder": [
+        "item_1",
+        "item_2"
+    ],
+    ":items": {
+        "item_1": {
+            ":type": "core/wcm/components/responsivegrid",
+            ":itemsOrder": [
+                "item_1_1",
+                "item_1_2"
+            ],
+            ":items": {
+                "item_1_1": {
+                    "title": "Teaser 1",
+                    "description": "Teaser 1 description",
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    "id": "teaser-4bf56a19b1",
+                    "dataLayer": {
+                        "teaser-4bf56a19b1": {
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
+                        }
+                    },
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                },
+                "item_1_2": {
+                    "title": "Teaser 2",
+                    "description": "Teaser 2 description",
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    "id": "teaser-432f0bf9f0",
+                    "dataLayer": {
+                        "teaser-432f0bf9f0": {
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
+                        }
+                    },
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                }
+            },
+            "cq:panelTitle": "Tab 1"
+        },
+        "item_2": {
+            ":type": "core/wcm/components/responsivegrid",
+            ":itemsOrder": [
+                "item_2_1",
+                "item_2_2"
+            ],
+            ":items": {
+                "item_2_1": {
+                    "title": "Teaser 1",
+                    "description": "Teaser 1 description",
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    "id": "teaser-348840fc63",
+                    "dataLayer": {
+                        "teaser-348840fc63": {
+                            "dc:description": "Teaser 1 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 1"
+                        }
+                    },
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                },
+                "item_2_2": {
+                    "title": "Teaser 2",
+                    "description": "Teaser 2 description",
+                    "actionsEnabled": false,
+                    "imageLinkHidden": false,
+                    "titleLinkHidden": false,
+                    "actions": [],
+                    "id": "teaser-4b653f1c72",
+                    "dataLayer": {
+                        "teaser-4b653f1c72": {
+                            "dc:description": "Teaser 2 description",
+                            "@type": "core/wcm/components/teaser/v1/teaser",
+                            "dc:title": "Teaser 2"
+                        }
+                    },
+                    ":type": "core/wcm/components/teaser/v1/teaser"
+                }
+            },
+            "cq:panelTitle": "Tab Panel 2"
+        }
+    },
+    ":type": "core/wcm/components/tabs/v1/tabs"
+}

@@ -1,0 +1,97 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+ 
+@cmp-examples-text-page-title-tag-width: 42*@px;
+@cmp-examples-text-page-title-tag-height: 24*@px;
+@cmp-examples-text-page-title-tag-border-width: 1*@px;
+@cmp-examples-text-page-title-tag-line-height: @cmp-examples-text-page-title-tag-height - (2 * @cmp-examples-text-page-title-tag-border-width);
+
+.cmp-examples-text--page-title {
+    .cmp-text {
+        position: relative;
+
+        font-size: @cmp-examples-font-size-h1;
+        font-weight: @cmp-examples-font-weight-bold;
+        line-height: @cmp-examples-line-height-heading;
+        margin: 0 0 @cmp-examples-spacing-8 0;
+        padding-right: @cmp-examples-text-page-title-tag-width + @cmp-examples-spacing-3;
+
+        > * {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        /*
+         * component version tag
+         *
+         * Example content:
+         * Teaser<sub>v1</sub>
+         *
+         * missing space between title and version prevents the version line-breaking
+         *
+         */
+        sub {
+            bottom: 0;
+
+            margin-left: @cmp-examples-spacing-4;
+
+            font-size: @cmp-examples-font-size;
+            font-weight: @cmp-examples-font-weight-regular;
+            color: @cmp-examples-color-gray-700;
+            vertical-align: baseline;
+        }
+
+        /*
+         * Core Components version tag
+         *
+         * Example content:
+         * Component Library <a href="http://version-tag-url">2.3.0</a>
+         *
+         */
+        a {
+            position: absolute;
+            bottom: 13*@px;
+            right: 0;
+
+            width: @cmp-examples-text-page-title-tag-width;
+            height: @cmp-examples-text-page-title-tag-height;
+            border: @cmp-examples-text-page-title-tag-border-width solid @cmp-examples-color-gray-600;
+            border-radius: @cmp-examples-border-radius;
+            line-height: @cmp-examples-text-page-title-tag-line-height;
+
+            font-size: @cmp-examples-font-size-xs;
+            font-weight: @cmp-examples-font-weight-regular;
+            text-align: center;
+            color: @cmp-examples-color-gray-700;
+
+            &:hover,
+            &:active,
+            &:focus {
+                border-color: @cmp-examples-color-gray-700;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+// hero variant (content description, page top)
+.cmp-examples-text--hero {
+    .cmp-text {
+        font-size: 18*@px;
+        line-height: @cmp-examples-line-height;
+        margin-bottom: @cmp-examples-spacing-8;
+    }
+}

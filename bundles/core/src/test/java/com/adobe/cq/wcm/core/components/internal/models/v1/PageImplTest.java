@@ -17,12 +17,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.testing.mock.osgi.MapUtil;
@@ -139,6 +134,7 @@ public class PageImplTest {
     }
 
     protected Page getPageUnderTest(String pagePath, Object... properties) {
+        Utils.enableDataLayer(context, true);
         Map<String, Object> propertyMap = MapUtil.toMap(properties);
         Resource resource = context.currentResource(pagePath + "/" + JcrConstants.JCR_CONTENT);
         MockSlingHttpServletRequest request = context.request();

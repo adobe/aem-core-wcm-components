@@ -1,23 +1,29 @@
 {
-    "dateFormatString"    : "yyyy-MM-dd",
-    "items"               : [
+    "id": "list-3684f2d161",
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
         {
-            "path"       : "/content/list/pages/page_1",
-            "pageTitle"  : null,
-            "name"       : "page_1",
+            "path": "/content/list/pages/page_1",
+            "pageTitle": null,
+            "name": "page_1",
             "description": null,
-            "title"      : "Page 1"
+            "title": "Page 1"
         },
         {
-            "path"       : "/content/list/pages/page_2",
-            "pageTitle"  : null,
-            "name"       : "page_2",
+            "path": "/content/list/pages/page_2",
+            "pageTitle": null,
+            "name": "page_2",
             "description": null,
-            "title"      : "Page 2"
+            "title": "Page 2"
         }
     ],
-    "showDescription"     : true,
+    "dataLayer": {
+        "list-3684f2d161": {
+            "@type": "core/wcm/components/list"
+        }
+    },
+    "showDescription": true,
     "showModificationDate": true,
-    "linkItems"           : true,
-    ":type"               : "core/wcm/components/list"
+    "linkItems": true,
+    ":type": "core/wcm/components/list"
 }

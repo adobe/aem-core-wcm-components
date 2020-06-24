@@ -63,12 +63,6 @@
                                                         value="responsiveGrid"/>
                                                 </items>
                                             </layout>
-                                            <id
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldDescription="HTML ID attribute to apply to the component."
-                                                fieldLabel="ID"
-                                                name="./id"/>
                                             <backgroundColor
                                                 granite:hide="${!cqDesign.backgroundColorEnabled || cqDesign.backgroundColorSwatchesOnly}"
                                                 jcr:primaryType="nt:unstructured"
@@ -115,6 +109,12 @@
                                                 title="Upload Image Asset"
                                                 uploadUrl="${suffix.path}"
                                                 useHTML5="{Boolean}true"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

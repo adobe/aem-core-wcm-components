@@ -1,4 +1,11 @@
 {
+    "id": "text-aa6e485483",
     "richText": false,
-    ":type"   : "core/wcm/components/text/v1/text"
+    "dataLayer": {
+        "text-aa6e485483": {
+            "xdm:text": "",
+            "@type": "core/wcm/components/text/v1/text"
+        }
+    },
+    ":type": "core/wcm/components/text/v1/text"
 }

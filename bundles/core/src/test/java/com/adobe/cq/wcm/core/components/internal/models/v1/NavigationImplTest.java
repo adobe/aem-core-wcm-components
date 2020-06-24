@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.jcr.RangeIterator;
 
 import org.apache.sling.api.resource.Resource;
@@ -42,9 +43,6 @@ import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -78,6 +76,9 @@ class NavigationImplTest {
     private static final String NAV_COMPONENT_12 = TEST_ROOT + "/jcr:content/root/navigation-component-12";
     private static final String NAV_COMPONENT_13 = TEST_ROOT + "/jcr:content/root/navigation-component-13";
     private static final String NAV_COMPONENT_14 = TEST_ROOT + "/jcr:content/root/navigation-component-14";
+    private static final String NAV_COMPONENT_15 = "/content/navigation-livecopy/jcr:content/root/navigation-component-15";
+    private static final String NAV_COMPONENT_16 = TEST_ROOT + "/jcr:content/root/navigation-component-16";
+    private static final String NAV_COMPONENT_17 = TEST_ROOT + "/jcr:content/root/navigation-component-17";
 
     @BeforeEach
     void setUp() throws WCMException {
@@ -278,6 +279,21 @@ class NavigationImplTest {
     }
 
     @Test
+    void testNavigationWithLiveCopyTreeCurrentPageAtRoot() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_15);
+        Object[][] expectedPages = {
+            {"/content/navigation-livecopy", 0, true, "/content/navigation-livecopy.html"},
+            {"/content/navigation-livecopy/1", 1, false, "/content/navigation-livecopy/1.html"},
+            {"/content/navigation-livecopy/1/1-1", 2, false, "/content/navigation-livecopy/1/1-1.html"},
+            {"/content/navigation-livecopy/1/1-3", 2, false, "/content/navigation-livecopy/1/1-3.html"},
+            {"/content/navigation-livecopy/2", 1, false, "/content/navigation-livecopy/2.html"},
+            {"/content/navigation-livecopy/3", 1, false, "/content/navigation-livecopy/3.html"},
+
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+    }
+
+    @Test
     void activeRedirectTest() {
         Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_9);
         Object[][] expectedPages = {
@@ -297,6 +313,56 @@ class NavigationImplTest {
         };
         verifyNavigationItems(expectedPages, getNavigationItems(navigation));
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation9"));
+    }
+
+    /**
+     * Test to verify #945: if shadowing is disabled Redirecting pages should be displayed instead of redirect targets
+     */
+    @Test
+    void testRedirectWithDisabledShadowing() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_16);
+        Object[][] expectedPages = {
+            {"/content/navigation-redirect", 0, true, "/content/navigation-redirect.html"},
+            {"/content/navigation-redirect/navigation-1", 1, false, "/navigation-1-vanity"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1", 2, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1", 4, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation16"));
+    }
+
+    /**
+     * Test to verify #945: if shadowing is enabled Redirect target pages should be displayed instead of original pages
+     */
+    @Test
+    void testRedirectWithEnabledShadowing() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_17);
+        Object[][] expectedPages = {
+            {"/content/navigation", 0, true, "/content/navigation.html"},
+            {"/content/navigation-redirect/navigation-1", 1, false, "/navigation-1-vanity"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1", 2, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1", 3, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-1.html"},
+            {"/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1", 4, false,
+                "/content/navigation/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-2/navigation-1-1-2-2-1.html"},
+            {"/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3", 4, false,
+                "/content/navigation-redirect/navigation-1/navigation-1-1/navigation-1-1-2/navigation-1-1-2-3.html"},
+            {"/content/navigation-redirect/navigation-2", 1, false, "/content/navigation-redirect/navigation-2.html"}
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation17"));
     }
 
     /**
@@ -370,6 +436,7 @@ class NavigationImplTest {
     }
 
     private Navigation getNavigationUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         MockSlingHttpServletRequest request = context.request();
         request.setContextPath("/core");

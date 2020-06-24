@@ -79,6 +79,8 @@ The following properties are written to JCR for this Page component and are expe
 media
 20. `./cq:contextHubPath` - defines the Context Path configuration used by this page.
 21. `./cq:contextHubSegmentsPath` - defines the Context Path Segments Path.
+22. `./mainContentSelector` - defines the ID of the main content element of the page (used by the "skip to main content" accessibility feature).
+23. `./id` - defines the component HTML ID attribute.
 
 ## Web Resources Client Library
 A web resources client library can be defined at the template level (see `./appResourcesClientlib` component policy configuration).

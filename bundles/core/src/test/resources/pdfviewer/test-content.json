@@ -1,0 +1,52 @@
+{
+    "pdfviewer": {
+        "jcr:primaryType": "cq:Page",
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "PDF Viewer Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description"   : "PDF Viewer description",
+            "sling:configRef"   : "/conf/core-components-examples/content",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "pdfviewer-1" : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/pdfviewer/v1/pdfviewer",
+                        "documentPath": "https://pdfviewer.test/Test Document.pdf",
+                        "type": "FULL_WINDOW",
+                        "defaultViewMode": "FIT_PAGE",
+                        "borderless": false,
+                        "showAnnotationTools": true,
+                        "showFullScreen": true,
+                        "showLeftHandPanel": true,
+                        "showDownloadPdf": true,
+                        "showPrintPdf": true,
+                        "showPageControls": true,
+                        "dockPageControls": true
+                    },
+                    "pdfviewer-2" : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/pdfviewer/v1/pdfviewer",
+                        "documentPath": "https://pdfviewer.test/Test Document2.pdf",
+                        "type": "SIZED_CONTAINER",
+                        "showAnnotationTools": false,
+                        "showFullScreen": false,
+                        "showLeftHandPanel": false,
+                        "showDownloadPdf": false,
+                        "showPrintPdf": false,
+                        "showPageControls": false,
+                        "dockPageControls": false
+                    },
+                    "pdfviewer-3" : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/pdfviewer/v1/pdfviewer"
+                    }
+                }
+            }
+        }
+    }
+}

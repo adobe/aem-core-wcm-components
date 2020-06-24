@@ -1,5 +1,13 @@
 {
-    "linkURL": "https://www.adobe.com",
+    "id": "title-6032c7e80a",
     "linkDisabled": true,
+    "linkURL": "https://www.adobe.com",
+    "dataLayer": {
+        "title-6032c7e80a": {
+            "repo:modifyDate": "2016-01-13T15:14:51Z",
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/title/v2/title"
+        }
+    },
     ":type": "core/wcm/components/title/v2/title"
 }

@@ -250,7 +250,7 @@ window.CQ.CoreComponentsIT.Image.v1 = window.CQ.CoreComponentsIT.Image.v1 || {}
             // check if the image is rendered without alt text even if it is set in the edit dialog
 
             .asserts.isTrue(function() {
-                return h.find("div.cmp-image img").attr("alt") === "";
+                return h.find("div.cmp-image img[alt]").size() === 0;
             });
     };
 

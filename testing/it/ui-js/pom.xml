@@ -14,7 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,7 +25,7 @@
     <parent>
         <groupId>com.adobe.cq</groupId>
         <artifactId>core.wcm.components.parent</artifactId>
-        <version>2.8.1-SNAPSHOT</version>
+        <version>2.10.1-SNAPSHOT</version>
         <relativePath>../../../parent/pom.xml</relativePath>
     </parent>
 
@@ -34,7 +35,7 @@
     <artifactId>core.wcm.components.it.ui-js</artifactId>
     <packaging>content-package</packaging>
     <name>Adobe Experience Manager Core WCM Components JS Tests</name>
-    <version>2.8.1-SNAPSHOT</version>
+    <version>2.10.1-SNAPSHOT</version>
 
     <!-- ====================================================================== -->
     <!-- P R O P E R T I E S                                                    -->
@@ -88,6 +89,18 @@
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>filevault-package-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <packageType>mixed</packageType>
+                    <properties>
+                        <acHandling>merge_preserve</acHandling>
+                    </properties>
+                    <dependencies>
+                        <dependency>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>core.wcm.components.content</artifactId>
+                        </dependency>
+                    </dependencies>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.day.jcr.vault</groupId>
@@ -203,5 +216,13 @@
             </build>
         </profile>
     </profiles>
-
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>core.wcm.components.content</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

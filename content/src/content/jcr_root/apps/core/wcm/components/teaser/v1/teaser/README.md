@@ -58,6 +58,7 @@ The following properties are written to JCR for this Teaser component and are ex
 7. `./titleFromPage` - defines whether or not the title value is taken from the linked page
 8. `./jcr:description` - defines the value of the teaser description
 9. `./descriptionFromPage` - defines whether or not the description value is taken from the linked page
+10. `./id` - defines the component HTML ID attribute.
 
 ### Extending the Teaser Component
 When extending the Teaser component by using `sling:resourceSuperType`, developers need to define the `imageDelegate` property for

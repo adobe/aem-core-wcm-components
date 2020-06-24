@@ -31,6 +31,7 @@ The following configuration properties are used:
 1. `./startLevel` - the level at which to start the breadcrumb: 0 = /content, 1 = /content/site, etc.
 2. `./showHidden` - if `true`, show navigation items hidden via a ./hideInNav property in the breadcrumb.
 3. `./hideCurrent` - if `true`, don't display the current page in the breadcrumb.
+4. `./disableShadowing` - for redirecting pages PageA -> PageB. If `true` - PageA(original page) is shown. If `false` or not configured - PageB(target page).
 
 ### Edit Dialog Properties
 The following properties are written to JCR for this Breadcrumb component and are expected to be available as `Resource` properties:
@@ -38,6 +39,8 @@ The following properties are written to JCR for this Breadcrumb component and ar
 1. `./startLevel` - the level at which to start the breadcrumb: 0 = /content, 1 = /content/site, etc.
 2. `./showHidden` - if `true`, show navigation items hidden via a ./hideInNav property in the breadcrumb.
 3. `./hideCurrent` - if `true`, don't display the current page in the breadcrumb.
+4. `./disableShadowing` - for redirecting pages PageA -> PageB. If `true` - PageA(original page) is shown. If `false` or not configured - PageB(target page).
+5. `./id` - defines the component HTML ID attribute.
 
 ## Client Libraries
 The component provides a `core.wcm.components.breadcrumb.v2` client library category that contains a recommended base

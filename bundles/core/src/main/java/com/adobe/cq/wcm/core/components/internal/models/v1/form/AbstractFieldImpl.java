@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.form.Field;
 import com.day.cq.commons.jcr.JcrConstants;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract class which can be used as base class for {@link Field} implementations.
@@ -32,17 +33,23 @@ import com.day.cq.commons.jcr.JcrConstants;
 public abstract class AbstractFieldImpl implements Field {
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected String id;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL, name = JcrConstants.JCR_TITLE)
+    @Nullable
     protected String title;
 
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected String name;
 
     @ValueMapValue
     @Default(values = "")
     protected String value;
+
+    @SlingObject
+    private Resource resource;
 
     /**
      * @return a prefix String which will be used for generating {@link #id} through {@link #getId()}
@@ -54,9 +61,6 @@ public abstract class AbstractFieldImpl implements Field {
     protected abstract String getDefaultValue();
 
     protected abstract String getDefaultTitle();
-
-    @SlingObject
-    private Resource resource;
 
     @Override
     public String getId() {

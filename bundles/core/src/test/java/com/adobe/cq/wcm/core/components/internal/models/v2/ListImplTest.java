@@ -31,7 +31,7 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,12 +46,12 @@ public class ListImplTest {
     public static final AemContext CONTEXT = CoreComponentTestContext.createContext(TEST_BASE, "/content/list");
 
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUp() {
         CONTEXT.load().json("/list/test-etc.json", "/etc/tags/list");
     }
 
     @Test
-    public void testProperties() throws Exception {
+    public void testProperties() {
         List list = getListUnderTest(LIST_1);
         assertTrue(list.showDescription());
         assertTrue(list.showModificationDate());
@@ -62,6 +62,7 @@ public class ListImplTest {
     }
 
     private List getListUnderTest(String resourcePath) {
+        Utils.enableDataLayerForOldAemContext(CONTEXT, true);
         Resource resource = CONTEXT.resourceResolver().getResource(resourcePath);
         if (resource == null) {
             throw new IllegalStateException("Did you forget to defines test resource " + resourcePath + "?");

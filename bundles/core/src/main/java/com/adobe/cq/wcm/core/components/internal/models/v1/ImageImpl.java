@@ -18,8 +18,10 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -44,14 +46,17 @@ import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ImageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.servlets.AdaptiveImageServlet;
 import com.adobe.cq.wcm.core.components.models.Image;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.commons.DownloadResource;
 import com.day.cq.commons.ImageResource;
 import com.day.cq.commons.jcr.JcrConstants;
@@ -65,7 +70,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
-public class ImageImpl implements Image {
+public class ImageImpl extends AbstractComponentImpl implements Image {
 
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v1/image";
     private static final String DEFAULT_EXTENSION = "jpeg";
@@ -78,9 +83,6 @@ public class ImageImpl implements Image {
 
     @Self
     protected SlingHttpServletRequest request;
-
-    @Inject
-    protected Resource resource;
 
     @ScriptVariable
     protected PageManager pageManager;
@@ -99,15 +101,19 @@ public class ImageImpl implements Image {
     protected MimeTypeService mimeTypeService;
 
     @ValueMapValue(name = DownloadResource.PN_REFERENCE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected String fileReference;
 
     @ValueMapValue(name = ImageResource.PN_ALT, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected String alt;
 
     @ValueMapValue(name = JcrConstants.JCR_TITLE, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     protected String title;
 
     @ValueMapValue(name = ImageResource.PN_LINK_URL, injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Nullable
     private String linkURL;
 
     protected String src;
@@ -252,13 +258,14 @@ public class ImageImpl implements Image {
      * @return image name from DAM
      */
     protected String getImageNameFromDam() {
-        String imageName = "";
-        Resource damResource = request.getResourceResolver().getResource(fileReference);
-        if (damResource != null) {
-            Asset asset = damResource.adaptTo(Asset.class);
-            imageName = asset != null ? StringUtils.trimToNull(asset.getName()) : "";
-        }
-        return getSeoFriendlyName(FilenameUtils.getBaseName(imageName));
+        return Optional.ofNullable(this.fileReference)
+            .map(reference -> request.getResourceResolver().getResource(reference))
+            .map(damResource -> damResource.adaptTo(Asset.class))
+            .map(Asset::getName)
+            .map(StringUtils::trimToNull)
+            .map(FilenameUtils::getBaseName)
+            .map(this::getSeoFriendlyName)
+            .orElse(StringUtils.EMPTY);
     }
 
     /**
@@ -267,7 +274,7 @@ public class ImageImpl implements Image {
      * {@code application/x-www-form-urlencoded} format using {@code utf-8} encoding
      * scheme.
      *
-     * @param imageName
+     * @param imageName The image name
      * @return the SEO friendly image name
      */
     protected String getSeoFriendlyName(String imageName) {
@@ -278,7 +285,7 @@ public class ImageImpl implements Image {
         try {
             seoFriendlyName = URLEncoder.encode(seoFriendlyName, CharEncoding.UTF_8);
         } catch (UnsupportedEncodingException e) {
-            LOGGER.error(String.format("The Character Encoding is not supported."));
+            LOGGER.error("The Character Encoding is not supported.");
         }
         return seoFriendlyName;
     }
@@ -367,6 +374,32 @@ public class ImageImpl implements Image {
     private boolean smartSizesSupported() {
         // "smart sizes" is supported for all images except SVG
         return !StringUtils.equals(mimeType, MIME_TYPE_IMAGE_SVG);
+    }
+
+    /*
+     * DataLayer specific methods
+     */
+
+    @Override
+    protected @NotNull ComponentData getComponentData() {
+        return new ImageDataImpl(this, resource);
+    }
+
+    @Override
+    public Resource getDataLayerAssetResource() {
+        return Optional.ofNullable(this.fileReference)
+            .map(reference -> request.getResourceResolver().getResource(reference))
+            .orElse(null);
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return title;
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLink();
     }
 
 }

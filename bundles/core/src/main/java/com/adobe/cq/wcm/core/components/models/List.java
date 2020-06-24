@@ -30,7 +30,7 @@ import com.day.cq.wcm.api.Page;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface List extends ComponentExporter {
+public interface List extends Component {
 
     /**
      * Name of the resource property indicating how the list will be built. Possible values are:
@@ -213,5 +213,4 @@ public interface List extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
-
 }

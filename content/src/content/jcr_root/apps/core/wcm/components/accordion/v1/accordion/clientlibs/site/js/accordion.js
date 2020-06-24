@@ -16,6 +16,9 @@
 (function() {
     "use strict";
 
+    var dataLayerEnabled = document.body.hasAttribute("data-cmp-data-layer-enabled");
+    var dataLayer = (dataLayerEnabled)? window.adobeDataLayer = window.adobeDataLayer || [] : undefined;
+
     var NS = "cmp";
     var IS = "accordion";
 
@@ -31,7 +34,7 @@
     };
 
     var selectors = {
-        self: "[data-" +  NS + '-is="' + IS + '"]'
+        self: "[data-" + NS + '-is="' + IS + '"]'
     };
 
     var cssClasses = {
@@ -97,6 +100,8 @@
          * @param {AccordionConfig} config The Accordion configuration
          */
         function init(config) {
+            that._config = config;
+
             // prevents multiple initialization
             config.element.removeAttribute("data-" + NS + "-is");
 
@@ -109,15 +114,33 @@
                 that._elements["button"] = Array.isArray(that._elements["button"]) ? that._elements["button"] : [that._elements["button"]];
                 that._elements["panel"] = Array.isArray(that._elements["panel"]) ? that._elements["panel"] : [that._elements["panel"]];
 
+                // Expand the item based on deep-link-id if it matches with any existing accordion item id
+                var deepLinkItem = CQ.CoreComponents.container.utils.getDeepLinkItem(that, "item");
+                if (deepLinkItem && !deepLinkItem.hasAttribute(dataAttributes.item.expanded)) {
+                    setItemExpanded(deepLinkItem, true);
+                }
+
                 if (that._properties.singleExpansion) {
-                    var expandedItems = getExpandedItems();
-                    // no expanded item annotated, force the first item to display.
-                    if (expandedItems.length === 0) {
-                        toggle(0);
-                    }
-                    // multiple expanded items annotated, display the last item open.
-                    if (expandedItems.length > 1) {
-                        toggle(expandedItems.length - 1);
+                    // No deep linking
+                    if (!deepLinkItem) {
+                        var expandedItems = getExpandedItems();
+                        // no expanded item annotated, force the first item to display.
+                        if (expandedItems.length === 0) {
+                            toggle(0);
+                        }
+                        // multiple expanded items annotated, display the last item open.
+                        if (expandedItems.length > 1) {
+                            toggle(expandedItems.length - 1);
+                        }
+                    } else {
+                        // Deep link case
+                        // Collapse the items other than which is deep linked
+                        for (var j = 0; j < that._elements["item"].length; j++) {
+                            if (that._elements["item"][j].id !== deepLinkItem.id &&
+                                that._elements["item"][j].hasAttribute(dataAttributes.item.expanded)) {
+                                setItemExpanded(that._elements["item"][j], false);
+                            }
+                        }
                     }
                 }
 
@@ -300,6 +323,23 @@
                 } else {
                     setItemExpanded(item, !getItemExpanded(item));
                 }
+
+                if (dataLayerEnabled) {
+                    var accordionId = that._elements.self.id;
+                    var expandedItems = getExpandedItems()
+                        .map(function(item) {
+                            return Object.keys(JSON.parse(item.dataset.cmpDataLayer))[0];
+                        });
+
+                    var uploadPayload = {component: {}};
+                    uploadPayload.component[accordionId] = { shownItems: expandedItems };
+
+                    var removePayload = {component: {}};
+                    removePayload.component[accordionId] = { shownItems: undefined };
+
+                    dataLayer.push(removePayload);
+                    dataLayer.push(uploadPayload);
+                }
             }
         }
 
@@ -313,8 +353,25 @@
         function setItemExpanded(item, expanded) {
             if (expanded) {
                 item.setAttribute(dataAttributes.item.expanded, "");
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:show",
+                        eventInfo: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
+
             } else {
                 item.removeAttribute(dataAttributes.item.expanded);
+                if (dataLayerEnabled) {
+                    dataLayer.push({
+                        event: "cmp:hide",
+                        eventInfo: {
+                            path: "component." + getDataLayerId(item.dataset.cmpDataLayer)
+                        }
+                    });
+                }
             }
             refreshItem(item);
         }
@@ -465,6 +522,17 @@
         }
 
         return options;
+    }
+
+    /**
+     * Parses the dataLayer string and returns the ID
+     *
+     * @private
+     * @param {String} componentDataLayer the dataLayer string
+     * @returns {String} dataLayerId or undefined
+     */
+    function getDataLayerId(componentDataLayer) {
+        return Object.keys(JSON.parse(componentDataLayer))[0];
     }
 
     /**

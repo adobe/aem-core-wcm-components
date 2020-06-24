@@ -38,3 +38,21 @@
         display: none;
     }
 }
+
+.cmp-examples-structure__aside {
+    .cmp-examples-button {
+        padding: 0;
+        position: fixed;
+        top: 0;
+        transform: translateX(15rem);
+    }
+
+    &--open {
+        height: 100vh;
+        overflow: scroll;
+
+        .cmp-examples-button {
+            display: none;
+        }
+    }
+}

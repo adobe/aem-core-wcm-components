@@ -1,16 +1,22 @@
 {
-    "dateFormatString"    : "yyyy-MM-dd",
-    "items"               : [
+    "id": "list-513f2340c1",
+    "dateFormatString": "yyyy-MM-dd",
+    "items": [
         {
-            "path"       : "/content/list/pages/page_1",
-            "pageTitle"  : null,
-            "name"       : "page_1",
+            "path": "/content/list/pages/page_1",
+            "pageTitle": null,
+            "name": "page_1",
             "description": null,
-            "title"      : "Page 1"
+            "title": "Page 1"
         }
     ],
-    "showDescription"     : true,
+    "dataLayer": {
+        "list-513f2340c1": {
+            "@type": "core/wcm/components/list"
+        }
+    },
+    "showDescription": true,
     "showModificationDate": true,
-    "linkItems"           : true,
-    ":type"               : "core/wcm/components/list"
+    "linkItems": true,
+    ":type": "core/wcm/components/list"
 }

@@ -26,24 +26,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.PageDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v2.PageImpl;
 import com.adobe.cq.wcm.core.components.models.ListItem;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class PageListItemImpl implements ListItem {
+public class PageListItemImpl extends AbstractListItemImpl implements ListItem {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PageListItemImpl.class);
+
+    /**
+     * Name of the resource property that for redirecting pages will indicate if original page or redirect target page should be returned.
+     * Dafault is `false`. If `true` - original page is returned. If `false` or not configured - redirect target page.
+     */
+    static final String PN_DISABLE_SHADOWING = "disableShadowing";
+    public static final boolean PROP_DISABLE_SHADOWING_DEFAULT = false;
 
     protected SlingHttpServletRequest request;
     protected Page page;
 
-    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page) {
+    public PageListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Page page, String parentId, boolean isShadowingDisabled) {
+        super(parentId, page.getContentResource());
         this.request = request;
         this.page = page;
+        this.parentId = parentId;
         Page redirectTarget = getRedirectTarget(page);
-        if (redirectTarget != null && !redirectTarget.equals(page)) {
+        if (shouldSetRedirectTargetAsPage(page, redirectTarget, isShadowingDisabled)) {
             this.page = redirectTarget;
         }
     }
@@ -89,13 +100,19 @@ public class PageListItemImpl implements ListItem {
         return page.getName();
     }
 
+    private boolean shouldSetRedirectTargetAsPage(@NotNull Page page, Page redirectTarget,
+                                                  boolean isShadowingDisabled) {
+        return !isShadowingDisabled && redirectTarget != null && !redirectTarget.equals(page);
+    }
+
     private Page getRedirectTarget(@NotNull Page page) {
         Page result = page;
         String redirectTarget;
         PageManager pageManager = page.getPageManager();
         Set<String> redirectCandidates = new LinkedHashSet<>();
         redirectCandidates.add(page.getPath());
-        while (result != null && StringUtils.isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
+        while (result != null && StringUtils
+                .isNotEmpty((redirectTarget = result.getProperties().get(PageImpl.PN_REDIRECT_TARGET, String.class)))) {
             result = pageManager.getPage(redirectTarget);
             if (result != null) {
                 if (!redirectCandidates.add(result.getPath())) {
@@ -107,4 +124,22 @@ public class PageListItemImpl implements ListItem {
         return result;
     }
 
+    /*
+     * DataLayerProvider implementation of field getters
+     */
+
+    @Override
+    protected @NotNull ComponentData getComponentData() {
+        return new PageDataImpl(this, resource);
+    }
+
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getURL();
+    }
 }

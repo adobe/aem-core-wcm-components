@@ -28,7 +28,7 @@ The following properties are written to JCR for this Form Hidden component and a
 
 1. `./name` - defines the name of the field, which will be submitted with the form data
 2. `./value` - defines the value of the field, which will be submitted with the form data
-3. `./id` - defines the identifier of this field, which should be unique on the page
+3. `./id` - defines the component HTML ID attribute.
 
 ## Information
 * **Vendor**: Adobe

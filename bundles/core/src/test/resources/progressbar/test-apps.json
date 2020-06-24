@@ -1,0 +1,15 @@
+{
+    "progressbar": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "progressbar"         : {
+                "cq:icon"                : "progressbar",
+                "jcr:description"        : "Displays a progress bar.",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Progress Bar (v1)",
+                "componentGroup"         : ".core-wcm"
+            }
+        }
+    }
+}

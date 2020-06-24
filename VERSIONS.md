@@ -4,6 +4,8 @@ See below for a full list of system requirements for historical versions of the 
 
 Core Components | Extension | AEM 6.5 | AEM 6.4 | AEM 6.3 | Java
 ----------------|-----------|---------|---------|---------|------
+[2.10.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.10.0) | - | 6.5.5.0+ | 6.4.8.1+ |  - | 8, 11
+[2.9.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.9.0) | - | 6.5.4.0+ | 6.4.8.0+ |  - | 8, 11
 [2.8.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.8.0) | - | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
 [2.7.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.7.0) | - | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11
 [2.6.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.6.0) | - | 6.5.0.0+ | 6.4.4.0+ | 6.3.3.4+ | 8, 11

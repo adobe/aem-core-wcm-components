@@ -17,7 +17,8 @@
 <template data-sly-template.item="${@ item='The navigation item'}"
           data-sly-use.groupTemplate="group.html"
           data-sly-use.itemContentTemplate="itemContent.html">
-    <li class="cmp-navigation__item cmp-navigation__item--level-${item.level}${item.active ? ' cmp-navigation__item--active' : ''}">
+    <li class="cmp-navigation__item cmp-navigation__item--level-${item.level}${item.active ? ' cmp-navigation__item--active' : ''}"
+        data-cmp-data-layer="${item.data.json}">
         <sly data-sly-call="${itemContentTemplate.itemContent @ item = item}"></sly>
         <sly data-sly-test="${item.children.size > 0}" data-sly-call="${groupTemplate.group @ items = item.children}"></sly>
     </li>

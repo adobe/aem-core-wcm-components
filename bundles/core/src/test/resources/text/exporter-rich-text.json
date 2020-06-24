@@ -1,5 +1,12 @@
 {
+    "id": "text-5bafbc4f83",
     "text": "<p>rich</p>",
     "richText": true,
+    "dataLayer": {
+        "text-5bafbc4f83": {
+            "xdm:text": "<p>rich</p>",
+            "@type": "core/wcm/components/text/v1/text"
+        }
+    },
     ":type": "core/wcm/components/text/v1/text"
 }

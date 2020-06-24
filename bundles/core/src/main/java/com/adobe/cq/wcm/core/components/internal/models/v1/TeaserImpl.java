@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -53,6 +54,8 @@ import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
@@ -92,6 +95,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
     @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
     @JsonIgnore
+    @Nullable
     protected Style currentStyle;
 
     @Self
@@ -118,7 +122,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
             linkURL = null;
             populateActions();
-            if (actions.size() > 0) {
+            if (!actions.isEmpty()) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
                     targetPage = pageManager.getPage(firstAction.getPath());
@@ -140,6 +144,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             if (titleFromPage) {
                 if (targetPage != null) {
                     title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
+                } else if (actionsEnabled && !actions.isEmpty()) {
+                    title = actions.get(0).getTitle();
+                    linkURL = actions.get(0).getURL();
                 } else {
                     title = null;
                 }
@@ -204,7 +211,7 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         Resource actionsNode = resource.getChild(Teaser.NN_ACTIONS);
         if (actionsNode != null) {
             for (Resource actionRes : actionsNode.getChildren()) {
-                actions.add(new Action(actionRes));
+                actions.add(new Action(actionRes, this.getId()));
             }
         }
     }
@@ -285,43 +292,104 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return request.getResource().getResourceType();
     }
 
-    @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
-    public class Action implements ListItem {
-        ValueMap properties;
-        String title;
-        String url;
-        Page page;
+    /*
+     * DataLayerProvider implementation of field getters
+     */
 
-        public Action(Resource actionRes) {
-            properties = actionRes.getValueMap();
-            title = properties.get(PN_ACTION_TEXT, String.class);
-            url = properties.get(PN_ACTION_LINK, String.class);
-            if (url != null && url.startsWith("/")) {
-                page = pageManager.getPage(url);
+    @Override
+    public String getDataLayerTitle() {
+        return getTitle();
+    }
+
+    @Override
+    public String getDataLayerLinkUrl() {
+        return getLinkURL();
+    }
+
+    @Override
+    public String getDataLayerDescription() {
+        return getDescription();
+    }
+
+
+    @JsonIgnoreProperties({"path", "description", "lastModified", "name"})
+    public class Action extends AbstractListItemImpl implements ListItem {
+
+        private static final String CTA_ID_PREFIX = "cta";
+
+        private Resource ctaResource;
+        private String ctaTitle;
+        private String ctaUrl;
+        private String ctaPath;
+        private Page ctaPage;
+        private String ctaParentId;
+        private String ctaId;
+
+        private Action(Resource actionRes, String parentId) {
+            super(parentId, actionRes);
+            ctaParentId = parentId;
+            ctaResource = actionRes;
+            ValueMap ctaProperties = actionRes.getValueMap();
+            ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
+            ctaUrl = ctaProperties.get(PN_ACTION_LINK, String.class);
+            ctaPath = actionRes.getPath();
+            if (ctaUrl != null && ctaUrl.startsWith("/")) {
+                ctaPage = pageManager.getPage(ctaUrl);
             }
         }
 
         @Nullable
         @Override
         public String getTitle() {
-            return title;
+            return ctaTitle;
         }
 
         @Nullable
         @Override
         public String getPath() {
-            return url;
+            return ctaUrl;
         }
 
         @Nullable
         @Override
         public String getURL() {
-            if (page != null) {
-                return Utils.getURL(request, page);
+            if (ctaPage != null) {
+                return Utils.getURL(request, ctaPage);
             } else {
-                return url;
+                return ctaUrl;
             }
         }
 
+        @Nullable
+        @Override
+        public String getId() {
+            if (ctaId == null) {
+                if (ctaResource != null) {
+                    ValueMap properties = ctaResource.getValueMap();
+                    ctaId = properties.get(com.adobe.cq.wcm.core.components.models.Component.PN_ID, String.class);
+                }
+                if (StringUtils.isEmpty(ctaId)) {
+                    String prefix = StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX);
+                    ctaId = Utils.generateId(prefix, ctaPath);
+                } else {
+                    ctaId = StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(ctaId)), " ", ID_SEPARATOR);
+                }
+            }
+            return ctaId;
+        }
+
+        /*
+         * DataLayerProvider implementation of field getters
+         */
+
+        @Override
+        public String getDataLayerLinkUrl() {
+            return getURL();
+        }
+
+        @Override
+        public String getDataLayerTitle() {
+            return getTitle();
+        }
     }
 }

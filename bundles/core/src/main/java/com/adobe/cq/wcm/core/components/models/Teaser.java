@@ -27,7 +27,7 @@ import com.adobe.cq.export.json.ComponentExporter;
  *
  * @since com.adobe.cq.wcm.core.components.models 12.4.0
  */
-public interface Teaser extends ComponentExporter {
+public interface Teaser extends Component {
 
     /**
      * Name of the resource property that defines whether or not the teaser has Call-to-Action elements
@@ -178,7 +178,7 @@ public interface Teaser extends ComponentExporter {
      * @since com.adobe.cq.wcm.core.components.models 12.12.0
      */
     default String getPretitle() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     /**
@@ -229,5 +229,4 @@ public interface Teaser extends ComponentExporter {
     default String getExportedType() {
         throw new UnsupportedOperationException();
     }
-
 }

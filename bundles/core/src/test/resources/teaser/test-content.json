@@ -109,6 +109,47 @@
                         "jcr:description"   : "Description",
                         "linkURL"           : "/content/teasers",
                         "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                    },
+                    "teaser-10"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "jcr:title"         : "Teaser",
+                        "jcr:description"   : "Description",
+                        "linkURL"           : "/content/teasers",
+                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                    },
+                    "teaser-11"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "jcr:title"           : "Teaser",
+                        "actionsEnabled"      : true,
+                        "sling:resourceType"  : "core/wcm/components/teaser/v1/teaser",
+                        "actions" : {
+                            "jcr:primaryType" : "nt:unstructured",
+                            "item0" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "http://www.adobe.com",
+                                "text": "Adobe"
+                            },
+                            "item1" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "/content/teasers",
+                                "text": "Teasers"
+                            }
+                        }
+                    },
+                    "teaser-12"          : {
+                        "jcr:primaryType"     : "nt:unstructured",
+                        "jcr:title"           : "Teaser",
+                        "actionsEnabled"      : true,
+                        "titleFromPage"       : true,
+                        "sling:resourceType"  : "core/wcm/components/teaser/v1/teaser",
+                        "actions" : {
+                            "jcr:primaryType" : "nt:unstructured",
+                            "item0" : {
+                                "jcr:primaryType" : "nt:unstructured",
+                                "link": "http://www.adobe.com",
+                                "text": "Adobe"
+                            }
+                        }
                     }
                 }
             }

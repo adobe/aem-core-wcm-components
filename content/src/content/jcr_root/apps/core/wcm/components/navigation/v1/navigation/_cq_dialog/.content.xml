@@ -50,11 +50,10 @@
                                         <items jcr:primaryType="nt:unstructured">
                                             <navigationRoot
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                sling:resourceType="cq/gui/components/coral/common/form/pagefield"
                                                 fieldDescription="The root page from which to build the navigation. Can be a blueprint master, language master or regular page."
                                                 fieldLabel="Navigation Root"
                                                 rootPath="/content"
-                                                forceSelection="{Boolean}true"
                                                 name="./navigationRoot"
                                                 value="${not empty cqDesign.navigationRoot ? cqDesign.navigationRoot : ''}"
                                                 required="{Boolean}true"/>
@@ -87,6 +86,21 @@
                                                 name="./structureDepth"
                                                 step="1"
                                                 value="${not empty cqDesign.structureDepth ? cqDesign.structureDepth : 1}"/>
+                                            <disableShadowing
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                                fieldDescription="For redirecting pages: show original page instead of target."
+                                                text="Disable shadowing"
+                                                name="./disableShadowing"
+                                                value="{Boolean}true"
+                                                checked="${not empty cqDesign.disableShadowing ? cqDesign.disableShadowing : false}"
+                                                uncheckedValue="{Boolean}false"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

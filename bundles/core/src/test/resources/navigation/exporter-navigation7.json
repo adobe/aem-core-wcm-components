@@ -1,36 +1,63 @@
 {
+  "id": "navigation-8a906ec61d",
   "items": [
     {
+      "id": "navigation-8a906ec61d-item-4885a69181",
       "path": "/content/navigation/navigation-1",
-      "description": null,
-      "lastModified": null,
-      "title": "Navigation 1",
-      "active": true,
       "children": [
         {
+          "id": "navigation-8a906ec61d-item-6a9edbe69f",
           "path": "/content/navigation/navigation-1/navigation-1-1",
-          "description": null,
-          "lastModified": null,
-          "title": "Navigation 1.1",
-          "active": true,
           "children": [],
           "level": 1,
-          "url": "/core/content/navigation/navigation-1/navigation-1-1.html"
+          "active": true,
+          "url": "/core/content/navigation/navigation-1/navigation-1-1.html",
+          "title": "Navigation 1.1",
+          "dataLayer": {
+            "navigation-8a906ec61d-item-6a9edbe69f": {
+              "xdm:linkURL": "/core/content/navigation/navigation-1/navigation-1-1.html",
+              "@type": "cq:PageContent",
+              "dc:title": "Navigation 1.1"
+            }
+          },
+          ":type": "cq:PageContent"
         }
       ],
       "level": 0,
-      "url": "/core/navigation-1-vanity"
+      "active": true,
+      "url": "/core/navigation-1-vanity",
+      "title": "Navigation 1",
+      "dataLayer": {
+        "navigation-8a906ec61d-item-4885a69181": {
+          "xdm:linkURL": "/core/navigation-1-vanity",
+          "@type": "cq:PageContent",
+          "dc:title": "Navigation 1"
+        }
+      },
+      ":type": "cq:PageContent"
     },
     {
+      "id": "navigation-8a906ec61d-item-196ac37bae",
       "path": "/content/navigation/navigation-2",
-      "description": null,
-      "lastModified": null,
-      "title": "Navigation 2",
-      "active": false,
       "children": [],
       "level": 0,
-      "url": "/core/content/navigation/navigation-2.html"
+      "active": false,
+      "url": "/core/content/navigation/navigation-2.html",
+      "title": "Navigation 2",
+      "dataLayer": {
+        "navigation-8a906ec61d-item-196ac37bae": {
+          "xdm:linkURL": "/core/content/navigation/navigation-2.html",
+          "@type": "cq:PageContent",
+          "dc:title": "Navigation 2"
+        }
+      },
+      ":type": "cq:PageContent"
     }
   ],
+  "dataLayer": {
+    "navigation-8a906ec61d": {
+      "@type": "core/wcm/components/navigation/v1/navigation"
+    }
+  },
   ":type": "core/wcm/components/navigation/v1/navigation"
 }

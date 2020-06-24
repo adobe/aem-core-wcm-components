@@ -104,12 +104,18 @@
                                             </workflowcontainer>
                                             <redirect
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                                sling:resourceType="cq/gui/components/coral/common/form/pagefield"
                                                 fieldDescription="Leave empty to redisplay the form after submission"
                                                 fieldLabel="Thank You Page"
                                                 name="./redirect"
                                                 rootPath="/content"
                                                 wrapperClass="hide cmp-redirect-selection"/>
+                                            <id
+                                                jcr:primaryType="nt:unstructured"
+                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                fieldDescription="HTML ID attribute to apply to the component."
+                                                fieldLabel="ID"
+                                                name="./id"/>
                                         </items>
                                     </column>
                                 </items>

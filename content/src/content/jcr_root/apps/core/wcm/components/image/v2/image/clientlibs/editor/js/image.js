@@ -87,6 +87,12 @@
             }
             toggleAlternativeFieldsAndLink(isDecorative);
         }
+
+        $(window).adaptTo("foundation-registry").register("foundation.validation.selector", {
+            submittable: ".cmp-image__editor-alt-text",
+            candidate: ".cmp-image__editor-alt-text:not(:hidden)",
+            exclusion: ".cmp-image__editor-alt-text *"
+        });
     });
 
     $(window).on("focus", function() {
@@ -112,7 +118,9 @@
                 $altGroup.show();
                 $linkURLGroup.show();
             }
-            $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
+            if ($linkURLField.length) {
+                $linkURLField.adaptTo("foundation-field").setDisabled(checkbox.checked);
+            }
             altTuple.hideTextfield(checkbox.checked);
             if (fileReference) {
                 altTuple.hideCheckbox(checkbox.checked);

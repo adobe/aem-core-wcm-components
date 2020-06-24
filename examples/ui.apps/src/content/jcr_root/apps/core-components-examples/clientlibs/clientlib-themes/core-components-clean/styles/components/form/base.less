@@ -1,0 +1,98 @@
+/*
+ *  Copyright 2019 Adobe
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+.t-cmp-clean {
+    .cmp-form-button {
+        display: inline-block;
+        padding: 5*@px 7*@px;
+        border: 1*@px solid;
+        border-radius: 3*@px;
+
+        font-size: 10*@px;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+        background: none;
+    }
+
+    .cmp-form-text {
+        width: 50%;
+        float: left;
+        padding-bottom: 10*@px;
+
+        label {
+            line-height: 30*@px;
+        }
+
+        .cmp-form-text__text, .cmp-form-text__textarea {
+            padding: 5*@px;
+            float: right;
+            width: 100%;
+        }
+    }
+
+    .cmp-form-options {
+        margin: 10*@px 0;
+        padding: 5*@px 10*@px;
+        border: solid 1*@px;
+        border-radius: 3*@px;
+        min-width: 150*@px;
+
+        .cmp-form-options__legend {
+            padding: 0 5*@px;
+        }
+
+        .cmp-form-options__label {
+            padding: 0 10*@px 0 0;
+        }
+
+        .cmp-form-options__field-label {
+            display: flex;
+            align-items: center;
+
+            input {
+                margin-right: 10*@px;
+            }
+        }
+
+        .cmp-form-options__field--multi-drop-down {
+            border: solid 1*@px;
+            border-radius: 3*@px;
+            float: right;
+
+            option {
+                padding: 2*@px 5*@px;
+            }
+        }
+
+        .cmp-form-options__help-message {
+            margin: 0;
+            padding-top: 10*@px;
+        }
+    }
+
+    .options.aem-GridColumn.aem-GridColumn--default--12.cq-Editable-dom  {
+        padding-bottom: 10*@px;
+    }
+
+    @media @cmp-examples-screen-s-min {
+        .cmp-form-button {
+            padding: 8*@px 18*@px;
+            font-size: 12*@px;
+        }
+    }
+}

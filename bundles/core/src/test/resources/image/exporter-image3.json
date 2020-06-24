@@ -1,7 +1,16 @@
 {
+    "id": "image-4fdb43cd81",
     "alt": "Adobe Logo",
     "title": "Adobe Logo",
     "src": "/core/content/test/_jcr_content/root/image3.img.82.600.png/1490005239000/adobe-systems-logo-and-wordmark.png",
     "link": "https://www.adobe.com",
+    "dataLayer": {
+        "image-4fdb43cd81": {
+            "repo:modifyDate": "2017-03-20T10:20:39Z",
+            "xdm:linkURL": "https://www.adobe.com",
+            "@type": "core/wcm/components/image/v1/image",
+            "dc:title": "Adobe Logo"
+        }
+    },
     ":type": "core/wcm/components/image/v1/image"
 }

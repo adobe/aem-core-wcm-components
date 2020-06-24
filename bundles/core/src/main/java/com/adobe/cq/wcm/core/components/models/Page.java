@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since com.adobe.cq.wcm.core.components.models 11.0.0
  */
 @ConsumerType
-public interface Page extends ContainerExporter {
+public interface Page extends ContainerExporter, Component {
 
     /**
      * Key used for the regular favicon file.
@@ -347,4 +347,14 @@ public interface Page extends ContainerExporter {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Returns the selector for the main content element of the page (used by the "skip to main content" accessibility feature)
+     *
+     * @return selector for the main content element
+     * @since com.adobe.cq.wcm.core.components.models 12.4.0
+     */
+    @Nullable
+    default String getMainContentSelector() {
+        return null;
+    }
 }

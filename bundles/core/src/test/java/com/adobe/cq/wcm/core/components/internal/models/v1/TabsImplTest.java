@@ -41,6 +41,8 @@ class TabsImplTest {
     private static final String TEST_ROOT_PAGE_GRID = "/jcr:content/root/responsivegrid";
     private static final String TABS_1 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-1";
     private static final String TABS_2 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-2";
+    private static final String TABS_3 = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-3";
+    private static final String TABS_EMPTY = TEST_ROOT_PAGE + TEST_ROOT_PAGE_GRID + "/tabs-empty";
     private static final String TEST_APPS_ROOT = "/apps/core/wcm/components";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
@@ -53,9 +55,8 @@ class TabsImplTest {
 
     @Test
     void testEmptyTabs() {
-        Tabs tabs = new TabsImpl();
-        List<ListItem> items = tabs.getItems();
-        Assert.assertTrue("", items == null || items.size() == 0);
+        Tabs tabs = getTabsUnderTest(TABS_EMPTY);
+        Assert.assertEquals(0, tabs.getItems().size());
     }
 
     @Test
@@ -76,7 +77,20 @@ class TabsImplTest {
         Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs2"));
     }
 
+    @Test
+    void testTabsDefaultActiveItem() {
+        Tabs tabs = getTabsUnderTest(TABS_3);
+        Object[][] expectedItems = {
+            {"item_1", "Tab 1"},
+            {"item_2", "Tab Panel 2"},
+        };
+        verifyTabItems(expectedItems, tabs.getItems());
+        assertEquals("item_1", tabs.getActiveItem());
+        Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs3"));
+    }
+
     private Tabs getTabsUnderTest(String resourcePath) {
+        Utils.enableDataLayer(context, true);
         context.currentResource(resourcePath);
         context.request().setContextPath(CONTEXT_PATH);
         return context.request().adaptTo(Tabs.class);
