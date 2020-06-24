@@ -16,7 +16,6 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"   xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
           cq:icon="panel"
-          jcr:description="Displays content as an accordion"
           jcr:primaryType="cq:Component"
           jcr:title="New Paragraph - Accordion"
           sling:resourceSuperType="wcm/foundation/components/parsys/newpar"
