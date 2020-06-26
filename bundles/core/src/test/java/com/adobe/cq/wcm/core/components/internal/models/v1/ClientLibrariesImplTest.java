@@ -63,12 +63,22 @@ class ClientLibrariesImplTest {
     private static final String CSS_FILE_REL_PATH = "/styles/index.css";
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
+
+    private Map<String,ClientLibrary> allLibraries; // (path, library)
+    private Map<String,ClientLibrary> librariesMap; // (category, library)
     private Map<String,String> jsIncludes;
     private Map<String,String> cssIncludes;
     private Map<String,String> jsIncludesWithAttributes;
     private Map<String,String> cssIncludesWithAttributes;
     private Map<String,String> jsInlines;
     private Map<String,String> cssInlines;
+
+    // TODO: add test for page template
+    // TODO: add test for page policy and page design
+    // TODO: add test for XF
+    // TODO: add test for super resource types
+    // TODO: add test for Utils
+    // TODO: add test: the resource is not a page
 
     @BeforeEach
     void setUp() {
@@ -122,6 +132,11 @@ class ClientLibrariesImplTest {
         when(carouselClientLibrary.getCategories()).thenReturn(carouselCategories);
         when(carouselClientLibrary.getPath()).thenReturn(CAROUSEL__CLIENTLIB_PATH);
 
+        librariesMap = new HashMap<>();
+        librariesMap.put(TEASER_CATEGORY, teaserClientLibrary);
+        librariesMap.put(ACCORDION_CATEGORY, accordionClientLibrary);
+        librariesMap.put(CAROUSEL_CATEGORY, carouselClientLibrary);
+
         // Mock HtmlLibrary
         HtmlLibrary teaserJsHtmlLibrary = mock(HtmlLibrary.class);
         HtmlLibrary accordionJsHtmlLibrary = mock(HtmlLibrary.class);
@@ -149,7 +164,7 @@ class ClientLibrariesImplTest {
         }
 
         // Mock htmlLibraryManager.getLibraries()
-        Map<String, ClientLibrary> allLibraries = new HashMap<>();
+        allLibraries = new HashMap<>();
         allLibraries.put(TEASER_CLIENTLIB_PATH, teaserClientLibrary);
         allLibraries.put(ACCORDION_CLIENTLIB_PATH, accordionClientLibrary);
         allLibraries.put(CAROUSEL__CLIENTLIB_PATH, carouselClientLibrary);
@@ -157,11 +172,15 @@ class ClientLibrariesImplTest {
         when(htmlLibraryManager.getLibraries()).thenReturn(allLibraries);
 
         // Mock htmlLibraryManager.getLibraries(a, b, c, d)
-        Collection<ClientLibrary> libraries = new ArrayList<>();
-        libraries.add(teaserClientLibrary);
-        libraries.add(accordionClientLibrary);
-        libraries.add(carouselClientLibrary);
-        when(htmlLibraryManager.getLibraries(any(String[].class), any(LibraryType.class), anyBoolean(), anyBoolean())).thenReturn(libraries);
+        doAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            String[] categories = (String[]) args[0];
+            Collection<ClientLibrary> libraries = new ArrayList<>();
+            for (String category : categories) {
+                libraries.add(librariesMap.get(category));
+            }
+            return libraries;
+        }).when(htmlLibraryManager).getLibraries(any(String[].class), any(LibraryType.class), anyBoolean(), anyBoolean());
 
         // Mock htmlLibraryManager.getLibrary(libraryType, clientlib.getPath())
         when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(TEASER_CLIENTLIB_PATH))).thenReturn(teaserJsHtmlLibrary);
@@ -278,6 +297,17 @@ class ClientLibrariesImplTest {
         jsInline.append(jsInlines.get(TEASER_CATEGORY));
         jsInline.append(jsInlines.get(ACCORDION_CATEGORY));
         jsInline.append(jsInlines.get(CAROUSEL_CATEGORY));
+        assertEquals(jsInline.toString(), clientlibs.getJsInline());
+    }
+
+    @Test
+    void testGetJsInlineWithInjectedCategories() {
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", "core.wcm.components.teaser.v1,core.wcm.components.accordion.v1");
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        StringBuilder jsInline = new StringBuilder();
+        jsInline.append(jsInlines.get(TEASER_CATEGORY));
+        jsInline.append(jsInlines.get(ACCORDION_CATEGORY));
         assertEquals(jsInline.toString(), clientlibs.getJsInline());
     }
 
