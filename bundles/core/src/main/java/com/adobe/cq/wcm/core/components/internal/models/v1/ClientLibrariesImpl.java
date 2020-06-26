@@ -88,7 +88,8 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @Inject
     @Optional
     @Nullable
-    private String categories;
+    @Named("categories")
+    private String categoriesCsv;
 
     @Inject
     @Optional
@@ -136,13 +137,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
     protected void initModel() {
         Set<String> categoriesSet = new HashSet<>();
 
-        if (StringUtils.isNotBlank(categories)) {
-            if (categories.contains(",")) {
-                Collections.addAll(categoriesSet, categories.split(","));
+        if (StringUtils.isNotBlank(categoriesCsv)) {
+            if (categoriesCsv.contains(",")) {
+                Collections.addAll(categoriesSet, categoriesCsv.split(","));
             } else {
-                categoriesSet.add(categories);
+                categoriesSet.add(categoriesCsv);
             }
         } else {
+            populateResourceTypes();
             // retrieve all the clientlibs defined for the resource, its descendants and its super types
             populateClientLibraries();
 
@@ -270,20 +272,17 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return output.toString();
     }
 
-    private Set<String> getResourceTypes() {
-        if (resourceTypes == null) {
-            resourceTypes = new HashSet<>();
-            if (StringUtils.isNotBlank(resourceTypesCsv)) {
-                if (resourceTypesCsv.contains(",")) {
-                    Collections.addAll(resourceTypes, resourceTypesCsv.split(","));
-                } else {
-                    resourceTypes.add(resourceTypesCsv);
-                }
+    private void populateResourceTypes() {
+        resourceTypes = new HashSet<>();
+        if (StringUtils.isNotBlank(resourceTypesCsv)) {
+            if (resourceTypesCsv.contains(",")) {
+                Collections.addAll(resourceTypes, resourceTypesCsv.split(","));
             } else {
-                resourceTypes = Utils.getAllResourceTypes(resolver, modelFactory, currentPage.getPageManager(), request, resource);
+                resourceTypes.add(resourceTypesCsv);
             }
+        } else {
+            resourceTypes = Utils.getAllResourceTypes(resolver, modelFactory, currentPage.getPageManager(), request, resource);
         }
-        return resourceTypes;
     }
 
     private void populateClientLibraries() {
@@ -291,7 +290,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
         libraries = new ArrayList<>();
 
         // get the clientlibs defined by the resource types
-        for (String resourceType : getResourceTypes()) {
+        for (String resourceType : resourceTypes) {
             Resource componentRes = resolver.getResource(resourceType);
             addClientLibraries(componentRes, libraries);
         }

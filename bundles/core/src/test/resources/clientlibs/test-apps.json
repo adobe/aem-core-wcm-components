@@ -1,0 +1,190 @@
+{
+    "teaser": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "teaser"         : {
+                "cq:icon"                : "image",
+                "jcr:description"        : "Displays an image together with a link that can act as a teaser for a site section.",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Teaser (v1)",
+                "sling:resourceSuperType": "core/wcm/components/teaser",
+                "imageDelegate"          : "core/wcm/components/image/v2/image",
+                "componentGroup"         : ".core-wcm",
+                "clientlib"     : {
+                    "jcr:primaryType": "cq:ClientLibraryFolder",
+                    "allowProxy": true,
+                    "categories": [
+                        "core.wcm.components.teaser.v1"
+                    ],
+                    "css.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:content": {
+                            "jcr:primaryType": "nt:resource",
+                            "jcr:mimeType": "text/plain",
+                            "jcr:data": "#base=styles \n index.css"
+                        }
+                    },
+                    "styles": {
+                        "jcr: primaryType": "nt:folder",
+                        "index.css": {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:resource",
+                                "jcr:mimeType": "text/css",
+                                "jcr:data": "html, .teaser { \n box-sizing: border-box;\n font-size: 14px; \n}"
+                            }
+                        }
+                    },
+                    "js.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:content": {
+                            "jcr:primaryType": "nt:resource",
+                            "jcr:mimeType": "text/plain",
+                            "jcr:data": "#base=scripts \n index.js"
+                        }
+                    },
+                    "scripts": {
+                        "jcr: primaryType": "nt:folder",
+                        "index.js": {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:resource",
+                                "jcr:mimeType": "application/javascript",
+                                "jcr:data": "console.log('teaser clientlib js');"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "accordion": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "accordion"         : {
+                "cq:isContainer"         : "true",
+                "jcr:description"        : "Displays content as an accordion",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Accordion (v1)",
+                "sling:resourceSuperType": "core/wcm/components/accordion",
+                "componentGroup"         : ".core-wcm",
+                "clientlib"     : {
+                    "jcr:primaryType": "cq:ClientLibraryFolder",
+                    "allowProxy": true,
+                    "categories": [
+                        "core.wcm.components.accordion.v1"
+                    ],
+                    "css.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:content": {
+                            "jcr:primaryType": "nt:resource",
+                            "jcr:mimeType": "text/plain",
+                            "jcr:data": "#base=styles \n index.css"
+                        }
+                    },
+                    "styles": {
+                        "jcr: primaryType": "nt:folder",
+                        "index.css": {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:resource",
+                                "jcr:mimeType": "text/css",
+                                "jcr:data": "html, .accordion { \n box-sizing: border-box;\n font-size: 14px; \n}"
+                            }
+                        }
+                    },
+                    "js.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:content": {
+                            "jcr:primaryType": "nt:resource",
+                            "jcr:mimeType": "text/plain",
+                            "jcr:data": "#base=scripts \n index.js"
+                        }
+                    },
+                    "scripts": {
+                        "jcr: primaryType": "nt:folder",
+                        "index.js": {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:resource",
+                                "jcr:mimeType": "application/javascript",
+                                "jcr:data": "console.log('accordion clientlib js');"
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    },
+    "carousel": {
+        "jcr:primaryType": "sling:Folder",
+        "v1"             : {
+            "jcr:primaryType": "nt:unstructured",
+            "carousel"         : {
+                "cq:isContainer"         : "true",
+                "cq:icon"                : "imageCarousel",
+                "jcr:description"        : "Cycles through a list of generic content items",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Carousel (v1)",
+                "sling:resourceSuperType": "core/wcm/components/carousel",
+                "componentGroup"         : ".core-wcm",
+                "clientlib"     : {
+                    "jcr:primaryType": "cq:ClientLibraryFolder",
+                    "allowProxy": true,
+                    "categories": [
+                        "core.wcm.components.carousel.v1"
+                    ],
+                    "css.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:content": {
+                            "jcr:primaryType": "nt:resource",
+                            "jcr:mimeType": "text/plain",
+                            "jcr:data": "#base=styles \n index.css"
+                        }
+                    },
+                    "styles": {
+                        "jcr: primaryType": "nt:folder",
+                        "index.css": {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:resource",
+                                "jcr:mimeType": "text/css",
+                                "jcr:data": "html, .carousel { \n box-sizing: border-box;\n font-size: 14px; \n}"
+                            }
+                        }
+                    },
+                    "js.txt": {
+                        "jcr:primaryType": "nt:file",
+                        "jcr:content": {
+                            "jcr:primaryType": "nt:resource",
+                            "jcr:mimeType": "text/plain",
+                            "jcr:data": "#base=scripts \n index.js"
+                        }
+                    },
+                    "scripts": {
+                        "jcr: primaryType": "nt:folder",
+                        "index.js": {
+                            "jcr:primaryType": "nt:file",
+                            "jcr:content": {
+                                "jcr:primaryType": "nt:resource",
+                                "jcr:mimeType": "application/javascript",
+                                "jcr:data": "console.log('carousel clientlib js');"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "responsivegrid": {
+        "cq:isContainer"         : "true",
+        "jcr:description"        : "Proxy component for the AEM responsive grid component",
+        "jcr:primaryType"        : "cq:Component",
+        "jcr:title"              : "Proxy responsive grid component",
+        "sling:resourceSuperType": "wcm/foundation/components/responsivegrid",
+        "componentGroup"         : ".core-wcm"
+    }
+}
