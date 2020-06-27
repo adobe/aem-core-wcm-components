@@ -15,7 +15,6 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +26,6 @@ import java.util.stream.StreamSupport;
 import javax.annotation.PostConstruct;
 import javax.jcr.RangeIterator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceUtil;
@@ -118,7 +116,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     /**
      * The root page from which to build the navigation.
      */
-    private String navigationRootPage;
+    private Page navigationRootPage;
 
     /**
      * Flag indicating if showing is disabled.
@@ -143,7 +141,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         if (collectAllPages) {
             structureDepth = -1;
         }
-        navigationRootPage = properties.get(PN_NAVIGATION_ROOT, currentStyle.get(PN_NAVIGATION_ROOT, String.class));
         if (currentStyle.containsKey(PN_STRUCTURE_START) || properties.containsKey(PN_STRUCTURE_START)) {
             //workaround to maintain the content of Navigation component of users in case they update to the current i.e. the `structureStart` version.
             structureStart = properties.get(PN_STRUCTURE_START, currentStyle.get(PN_STRUCTURE_START, 1));
@@ -159,28 +156,33 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
             currentStyle.get(PageListItemImpl.PN_DISABLE_SHADOWING, PageListItemImpl.PROP_DISABLE_SHADOWING_DEFAULT));
     }
 
-    @Override
-    public List<NavigationItem> getItems() {
-        if (items == null) {
+    /**
+     * Get the effective navigation root page.
+     *
+     * @return The effective navigation root page.
+     */
+    private Page getNavigationRoot() {
+        if (this.navigationRootPage == null) {
+            String navigationRootPath = Optional.ofNullable(this.resource.getValueMap().get(PN_NAVIGATION_ROOT, String.class))
+                .orElseGet(() -> currentStyle.get(PN_NAVIGATION_ROOT, String.class));
             PageManager pageManager = currentPage.getPageManager();
-            Page rootPage = pageManager.getPage(navigationRootPage);
+            Page rootPage = pageManager.getPage(navigationRootPath);
             if (rootPage != null) {
-                NavigationRoot navigationRoot = new NavigationRoot(rootPage, structureDepth);
-                Page navigationRootLanguageRoot = navigationRoot.getPageResource().map(languageManager::getLanguageRoot).orElse(null);
+                Page navigationRootLanguageRoot = getPageResource(rootPage).map(languageManager::getLanguageRoot).orElse(null);
                 Page currentPageLanguageRoot = languageManager.getLanguageRoot(currentPage.getContentResource());
                 RangeIterator liveCopiesIterator = null;
                 try {
-                    liveCopiesIterator = relationshipManager.getLiveRelationships(navigationRoot.page.adaptTo(Resource.class), null, null);
+                    liveCopiesIterator = relationshipManager.getLiveRelationships(rootPage.adaptTo(Resource.class), null, null);
                 } catch (WCMException e) {
                     // ignore it
                 }
                 if (navigationRootLanguageRoot != null && currentPageLanguageRoot != null && !navigationRootLanguageRoot.equals
-                        (currentPageLanguageRoot)) {
+                    (currentPageLanguageRoot)) {
                     // check if there's a language copy of the navigation root
                     Page languageCopyNavigationRoot = pageManager.getPage(ResourceUtil.normalize(currentPageLanguageRoot.getPath() + "/" +
-                            getRelativePath(navigationRootLanguageRoot, navigationRoot.page)));
+                        getRelativePath(navigationRootLanguageRoot, rootPage)));
                     if (languageCopyNavigationRoot != null) {
-                        navigationRoot = new NavigationRoot(languageCopyNavigationRoot, structureDepth);
+                        rootPage = languageCopyNavigationRoot;
                     }
                 } else if (liveCopiesIterator != null) {
                     while (liveCopiesIterator.hasNext()) {
@@ -189,16 +191,26 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
                         if (currentPagePath.startsWith(relationship.getTargetPath() + "/")) {
                             Page liveCopyNavigationRoot = pageManager.getPage(relationship.getTargetPath());
                             if (liveCopyNavigationRoot != null) {
-                                navigationRoot = new NavigationRoot(liveCopyNavigationRoot, structureDepth);
+                                rootPage = liveCopyNavigationRoot;
                                 break;
                             }
                         }
                     }
                 }
-                items = getNavigationTree(navigationRoot);
-            } else {
-                items = Collections.emptyList();
             }
+            this.navigationRootPage = rootPage;
+        }
+        return this.navigationRootPage;
+    }
+
+    @Override
+    public List<NavigationItem> getItems() {
+        if (this.items == null) {
+            this.items = Optional.ofNullable(this.getNavigationRoot())
+                .map(navigationRoot -> getRootItems(navigationRoot, structureStart))
+                .orElseGet(Stream::empty)
+                .map(item -> this.createNavigationItem(item, getItems(item)))
+                .collect(Collectors.toList());
         }
         return Collections.unmodifiableList(items);
     }
@@ -221,40 +233,17 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     /**
      * Builds the navigation tree for a {@code navigationRoot} page.
      *
-     * @param navigationRoot the global navigation tree root (start page)
-     * @param subtreeRoot the current sub-tree root (changes depending on the level of recursion)
+     * @param subtreeRoot The page for which to generate the sub-tree.
      * @return the list of collected navigation trees
      */
-    private List<NavigationItem> getItems(NavigationRoot navigationRoot, Page subtreeRoot) {
-        List<NavigationItem> pages = new ArrayList<>();
-        if (navigationRoot.structureDepth == -1 || getLevel(subtreeRoot) < navigationRoot.structureDepth) {
-            Iterator<Page> it = subtreeRoot.listChildren(new PageFilter());
-            while (it.hasNext()) {
-                Page page = it.next();
-                int pageLevel = getLevel(page);
-                int level = pageLevel - navigationRoot.startLevel - 1;
-                List<NavigationItem> children = getItems(navigationRoot, page);
-                boolean isSelected = checkSelected(page);
-                if (structureStart == 0) {
-                    level = level + 1;
-                }
-                pages.add(new NavigationItemImpl(page, isSelected, request, level, children, getId(), isShadowingDisabled));
-            }
+    private List<NavigationItem> getItems(@NotNull final Page subtreeRoot) {
+        if (this.structureDepth < 0 || subtreeRoot.getDepth() - this.getNavigationRoot().getDepth() < this.structureDepth) {
+            Iterator<Page> childIterator = subtreeRoot.listChildren(new PageFilter());
+            return StreamSupport.stream(((Iterable<Page>) () -> childIterator).spliterator(), false)
+                .map(item -> this.createNavigationItem(item, getItems(item)))
+                .collect(Collectors.toList());
         }
-        return pages;
-    }
-
-    private List<NavigationItem> getNavigationTree(NavigationRoot navigationRoot) {
-        List<NavigationItem> itemTree = getRootItems(navigationRoot, structureStart)
-            .flatMap(item -> getItems(item, item.page).stream())
-            .collect(Collectors.toList());
-        if (structureStart == 0) {
-            boolean isSelected = checkSelected(navigationRoot.page);
-            NavigationItemImpl root = new NavigationItemImpl(navigationRoot.page, isSelected, request, 0, itemTree, getId(), isShadowingDisabled);
-            itemTree = new ArrayList<>();
-            itemTree.add(root);
-        }
-        return  itemTree;
+        return Collections.emptyList();
     }
 
     /**
@@ -264,14 +253,26 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      * @param structureStart The number of levels under the root page to begin collecting pages.
      * @return Stream of all descendant pages of navigationRoot that are exactly structureStart levels deeper.
      */
-    private Stream<NavigationRoot> getRootItems(NavigationRoot navigationRoot, int structureStart) {
-        if (structureStart <= 1) {
+    private Stream<Page> getRootItems(@NotNull final Page navigationRoot, final int structureStart) {
+        if (structureStart < 1) {
             return Stream.of(navigationRoot);
         }
-        Iterator<Page> childIterator = navigationRoot.page.listChildren();
+        Iterator<Page> childIterator = navigationRoot.listChildren(new PageFilter());
         return StreamSupport.stream(((Iterable<Page>) () -> childIterator).spliterator(), false)
-            .map(child -> new NavigationRoot(child, structureDepth))
             .flatMap(child -> getRootItems(child, structureStart - 1));
+    }
+
+    /**
+     * Create a navigation item for the given page/children.
+     *
+     * @param page The page for which to create a navigation item.
+     * @param children The child navigation items.
+     * @return The newly created navigation item.
+     */
+    private NavigationItemImpl createNavigationItem(@NotNull final Page page, @NotNull final List<NavigationItem> children) {
+        int level = page.getDepth() - (this.getNavigationRoot().getDepth() + structureStart);
+        boolean selected = checkSelected(page);
+        return new NavigationItemImpl(page, selected, request, level, children, getId(), isShadowingDisabled);
     }
 
     /**
@@ -304,10 +305,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
             .isPresent();
     }
 
-    private int getLevel(@NotNull final Page page) {
-        return StringUtils.countMatches(page.getPath(), "/") - 1;
-    }
-
     /**
      * Get the relative path between the two pages.
      *
@@ -325,34 +322,21 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         return null;
     }
 
-    private class NavigationRoot {
-        final Page page;
-        int startLevel;
-        int structureDepth = -1;
-
-        private NavigationRoot(@NotNull Page navigationRoot, int configuredStructureDepth) {
-            page = navigationRoot;
-            this.startLevel = getLevel(navigationRoot);
-            if (configuredStructureDepth > -1) {
-                structureDepth = configuredStructureDepth + startLevel;
-            }
-        }
-
-        /**
-         * Gets the resource representation of the navigation root page.
-         *
-         * @return the resource for the navigation root, empty if the resource could not be resolved
-         */
-        @NotNull
-        final Optional<Resource> getPageResource() {
-            return Optional.ofNullable(
-                Optional.of(this.page)
-                    // get the parent of the content resource
-                    .map(Page::getContentResource)
-                    .map(Resource::getParent)
-                    // if content resource is missing, resolve resource at page path
-                    .orElseGet(() -> resource.getResourceResolver().getResource(this.page.getPath())));
-        }
+    /**
+     * Gets the resource representation of the specified page.
+     *
+     * @param page The page to adapt to a resource.
+     * @return the resource for the specified page, empty if the resource could not be resolved.
+     */
+    @NotNull
+    final Optional<Resource> getPageResource(@NotNull final Page page) {
+        return Optional.ofNullable(
+            Optional.of(page)
+                // get the parent of the content resource
+                .map(Page::getContentResource)
+                .map(Resource::getParent)
+                // if content resource is missing, resolve resource at page path
+                .orElseGet(() -> this.resource.getResourceResolver().getResource(page.getPath())));
     }
 
 }
