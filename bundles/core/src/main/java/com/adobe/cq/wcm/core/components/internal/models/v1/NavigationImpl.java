@@ -28,7 +28,6 @@ import javax.jcr.RangeIterator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
@@ -37,7 +36,6 @@ import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,12 +68,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      */
     @Self
     private SlingHttpServletRequest request;
-
-    /**
-     * The resource resolver.
-     */
-    @SlingObject
-    private ResourceResolver resourceResolver;
 
     /**
      * The current page.
@@ -225,7 +217,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     @NotNull
     @Override
     public String getExportedType() {
-        return request.getResource().getResourceType();
+        return this.resource.getResourceType();
     }
 
     /**
@@ -368,7 +360,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
                     .map(Page::getContentResource)
                     .map(Resource::getParent)
                     // if content resource is missing, resolve resource at page path
-                    .orElseGet(() -> resourceResolver.getResource(this.page.getPath())));
+                    .orElseGet(() -> resource.getResourceResolver().getResource(this.page.getPath())));
         }
     }
 
