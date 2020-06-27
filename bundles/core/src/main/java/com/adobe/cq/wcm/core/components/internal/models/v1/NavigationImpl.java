@@ -32,11 +32,9 @@ import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,6 +62,11 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
 
     /**
+     * Name of the resource / configuration policy property that defines the accessibility label.
+     */
+    private static final String PN_ACCESSIBILITY_LABEL = "accessibilityLabel";
+
+    /**
      * The current request.
      */
     @Self
@@ -74,12 +77,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      */
     @ScriptVariable
     private Page currentPage;
-
-    /**
-     * The current resource properties.
-     */
-    @ScriptVariable
-    private ValueMap properties;
 
     /**
      * The current style.
@@ -102,7 +99,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     /**
      * The accessibility label.
      */
-    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String accessibilityLabel;
 
@@ -144,6 +140,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
      */
     @PostConstruct
     private void initModel() {
+        ValueMap properties = this.resource.getValueMap();
         structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, -1));
         boolean collectAllPages = properties.get(PN_COLLECT_ALL_PAGES, currentStyle.get(PN_COLLECT_ALL_PAGES, true));
         if (collectAllPages) {
@@ -210,8 +207,12 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     }
 
     @Override
+    @Nullable
     public String getAccessibilityLabel() {
-        return accessibilityLabel;
+        if (this.accessibilityLabel == null) {
+            this.accessibilityLabel = this.resource.getValueMap().get(PN_ACCESSIBILITY_LABEL, String.class);
+        }
+        return this.accessibilityLabel;
     }
 
     @NotNull
