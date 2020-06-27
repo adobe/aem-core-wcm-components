@@ -119,11 +119,6 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
     private String navigationRootPage;
 
     /**
-     * Flag indicating if the navigation root should be skipped.
-     */
-    private boolean skipNavigationRoot;
-
-    /**
      * Flag indicating if showing is disabled.
      * If shadowing is enabled, then the navigation will traverse redirects - where possible - to present information
      * relevant to the target page that the user would navigate to if selected.
@@ -151,7 +146,7 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
             //workaround to maintain the content of Navigation component of users in case they update to the current i.e. the `structureStart` version.
             structureStart = properties.get(PN_STRUCTURE_START, currentStyle.get(PN_STRUCTURE_START, 1));
         } else {
-            skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
+            boolean skipNavigationRoot = properties.get(PN_SKIP_NAVIGATION_ROOT, currentStyle.get(PN_SKIP_NAVIGATION_ROOT, true));
             if (skipNavigationRoot) {
                 structureStart = 1;
             } else {
