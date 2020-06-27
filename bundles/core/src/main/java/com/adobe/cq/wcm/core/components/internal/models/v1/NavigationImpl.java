@@ -47,46 +47,105 @@ import com.day.cq.wcm.api.designer.Style;
 import com.day.cq.wcm.msm.api.LiveRelationship;
 import com.day.cq.wcm.msm.api.LiveRelationshipManager;
 
+/**
+ * Navigation model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class,
        adapters = {Navigation.class, ComponentExporter.class},
        resourceType = {NavigationImpl.RESOURCE_TYPE})
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class NavigationImpl extends AbstractComponentImpl implements Navigation {
 
+    /**
+     * The resource navigation component resource type.
+     */
     public static final String RESOURCE_TYPE = "core/wcm/components/navigation/v1/navigation";
 
+    /**
+     * The current request.
+     */
     @Self
     private SlingHttpServletRequest request;
 
+    /**
+     * The resource resolver.
+     */
     @SlingObject
     private ResourceResolver resourceResolver;
 
+    /**
+     * The current page.
+     */
     @ScriptVariable
     private Page currentPage;
 
+    /**
+     * The current resource properties.
+     */
     @ScriptVariable
     private ValueMap properties;
 
+    /**
+     * The current style.
+     */
     @ScriptVariable
     private Style currentStyle;
 
+    /**
+     * The language manager service.
+     */
     @OSGiService
     private LanguageManager languageManager;
 
+    /**
+     * The relationship manager service.
+     */
     @OSGiService
     private LiveRelationshipManager relationshipManager;
 
+    /**
+     * The accessibility label.
+     */
     @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
     @Nullable
     private String accessibilityLabel;
 
-    private int structureDepth;
-    private String navigationRootPage;
-    private List<NavigationItem> items;
-    private boolean skipNavigationRoot;
-    private boolean isShadowingDisabled;
+    /**
+     * Number indicating how many levels below the navigation root the navigation should start.
+     */
     private int structureStart;
 
+    /**
+     * Number indicating how many levels below the navigation root should be included in the results.
+     * Use "-1" for no limit.
+     */
+    private int structureDepth;
+
+    /**
+     * The root page from which to build the navigation.
+     */
+    private String navigationRootPage;
+
+    /**
+     * Flag indicating if the navigation root should be skipped.
+     */
+    private boolean skipNavigationRoot;
+
+    /**
+     * Flag indicating if showing is disabled.
+     * If shadowing is enabled, then the navigation will traverse redirects - where possible - to present information
+     * relevant to the target page that the user would navigate to if selected.
+     */
+    private boolean isShadowingDisabled;
+
+    /**
+     * Placeholder for the list of results.
+     */
+    private List<NavigationItem> items;
+
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
     private void initModel() {
         structureDepth = properties.get(PN_STRUCTURE_DEPTH, currentStyle.get(PN_STRUCTURE_DEPTH, -1));
@@ -228,13 +287,31 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         return pages;
     }
 
-    private boolean checkSelected(Page page) {
+    /**
+     * Checks if the specified page is selected.
+     * A page is selected if it is either:
+     * <ul>
+     *     <li>The current page; or,</li>
+     *     <li>A page that redirects to the current page; or,</li>
+     *     <li>The current page is a child of the specified page</li>
+     * </ul>
+     *
+     * @param page The page to check.
+     * @return True if the page is selected, false if not.
+     */
+    private boolean checkSelected(final Page page) {
         return this.currentPage.equals(page) ||
                 this.currentPage.getPath().startsWith(page.getPath() + "/") ||
                 currentPageIsRedirectTarget(page);
     }
 
-    private boolean currentPageIsRedirectTarget(Page page) {
+    /**
+     * Checks if the specified page redirects to the current page.
+     *
+     * @param page The page to check.
+     * @return True if the specified page redirects to the current page.
+     */
+    private boolean currentPageIsRedirectTarget(final Page page) {
         boolean currentPageIsRedirectTarget = false;
         Resource contentResource = page.getContentResource();
         if (contentResource != null) {
@@ -257,8 +334,15 @@ public class NavigationImpl extends AbstractComponentImpl implements Navigation 
         return StringUtils.countMatches(page.getPath(), "/") - 1;
     }
 
+    /**
+     * Get the relative path between the two pages.
+     *
+     * @param root The root page.
+     * @param child The child page.
+     * @return The relative path between root and child page, null if child is not a child of root.
+     */
     @Nullable
-    private String getRelativePath(@NotNull Page root, @NotNull Page child) {
+    private String getRelativePath(@NotNull final Page root, @NotNull final Page child) {
         if (child.equals(root)) {
             return ".";
         } else if ((child.getPath() + "/").startsWith(root.getPath())) {
