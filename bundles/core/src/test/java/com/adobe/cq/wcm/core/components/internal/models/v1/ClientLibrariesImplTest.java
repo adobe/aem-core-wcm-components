@@ -19,7 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -38,10 +41,13 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyBoolean;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(AemContextExtension.class)
 class ClientLibrariesImplTest {
@@ -50,7 +56,6 @@ class ClientLibrariesImplTest {
     private static final String CONTENT_ROOT = "/content";
     private static final String APPS_ROOT = "/apps/core/wcm/components";
     private static final String ROOT_PAGE = "/content/clientlibs";
-    private static final String ACCORDION_1_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/accordion-1";
 
     private static final String TEASER_CATEGORY = "core.wcm.components.teaser.v1";
     private static final String ACCORDION_CATEGORY = "core.wcm.components.accordion.v1";
@@ -58,7 +63,7 @@ class ClientLibrariesImplTest {
 
     private static final String TEASER_CLIENTLIB_PATH = "/apps/core/wcm/components/teaser/v1/teaser/clientlib";
     private static final String ACCORDION_CLIENTLIB_PATH = "/apps/core/wcm/components/accordion/v1/accordion/clientlib";
-    private static final String CAROUSEL__CLIENTLIB_PATH = "/apps/core/wcm/components/carousel/v1/carousel/clientlib";
+    private static final String CAROUSEL_CLIENTLIB_PATH = "/apps/core/wcm/components/carousel/v1/carousel/clientlib";
 
     private static final String JS_FILE_REL_PATH = "/scripts/index.js";
     private static final String CSS_FILE_REL_PATH = "/styles/index.css";
@@ -74,34 +79,28 @@ class ClientLibrariesImplTest {
     private Map<String,String> jsInlines;
     private Map<String,String> cssInlines;
 
-    // TODO: add test for page template
-    // TODO: add test for page policy and page design
-    // TODO: add test for XF
-    // TODO: add test for super resource types
-    // TODO: add test for Utils
-    // TODO: add test: the resource is not a page
-
     @BeforeEach
     void setUp() {
         jsIncludes = new HashMap<>();
         jsIncludes.put(TEASER_CATEGORY, "<script src=\"" + TEASER_CLIENTLIB_PATH + ".js\"></script>");
         jsIncludes.put(ACCORDION_CATEGORY, "<script src=\"" + ACCORDION_CLIENTLIB_PATH + ".js\"></script>");
-        jsIncludes.put(CAROUSEL_CATEGORY, "<script src=\"" + CAROUSEL__CLIENTLIB_PATH + ".js\"></script>");
+        jsIncludes.put(CAROUSEL_CATEGORY, "<script src=\"" + CAROUSEL_CLIENTLIB_PATH + ".js\"></script>");
 
         jsIncludesWithAttributes = new HashMap<>();
         jsIncludesWithAttributes.put(TEASER_CATEGORY, "<script async defer crossorigin=\"anonymous\" onload=\"myFunction()\" src=\"" + TEASER_CLIENTLIB_PATH + ".js\"></script>");
         jsIncludesWithAttributes.put(ACCORDION_CATEGORY, "<script async defer crossorigin=\"anonymous\" onload=\"myFunction()\" src=\"" + ACCORDION_CLIENTLIB_PATH + ".js\"></script>");
-        jsIncludesWithAttributes.put(CAROUSEL_CATEGORY, "<script async defer crossorigin=\"anonymous\" onload=\"myFunction()\" src=\"" + CAROUSEL__CLIENTLIB_PATH + ".js\"></script>");
+        jsIncludesWithAttributes.put(CAROUSEL_CATEGORY, "<script async defer crossorigin=\"anonymous\" onload=\"myFunction()\" src=\"" +
+                CAROUSEL_CLIENTLIB_PATH + ".js\"></script>");
 
         cssIncludes = new HashMap<>();
         cssIncludes.put(TEASER_CATEGORY, "<link rel=\"stylesheet\" href=\"" + TEASER_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
         cssIncludes.put(ACCORDION_CATEGORY, "<link rel=\"stylesheet\" href=\"" + ACCORDION_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
-        cssIncludes.put(CAROUSEL_CATEGORY, "<link rel=\"stylesheet\" href=\"" + CAROUSEL__CLIENTLIB_PATH + ".css\" type=\"text/css\">");
+        cssIncludes.put(CAROUSEL_CATEGORY, "<link rel=\"stylesheet\" href=\"" + CAROUSEL_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
 
         cssIncludesWithAttributes = new HashMap<>();
         cssIncludesWithAttributes.put(TEASER_CATEGORY, "<link media=\"print\" rel=\"stylesheet\" href=\"" + TEASER_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
         cssIncludesWithAttributes.put(ACCORDION_CATEGORY, "<link media=\"print\" rel=\"stylesheet\" href=\"" + ACCORDION_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
-        cssIncludesWithAttributes.put(CAROUSEL_CATEGORY, "<link media=\"print\" rel=\"stylesheet\" href=\"" + CAROUSEL__CLIENTLIB_PATH + ".css\" type=\"text/css\">");
+        cssIncludesWithAttributes.put(CAROUSEL_CATEGORY, "<link media=\"print\" rel=\"stylesheet\" href=\"" + CAROUSEL_CLIENTLIB_PATH + ".css\" type=\"text/css\">");
 
         jsInlines = new HashMap<>();
         jsInlines.put(TEASER_CATEGORY, "console.log('teaser clientlib js');");
@@ -131,7 +130,7 @@ class ClientLibrariesImplTest {
 
         String[] carouselCategories = new String[]{CAROUSEL_CATEGORY};
         when(carouselClientLibrary.getCategories()).thenReturn(carouselCategories);
-        when(carouselClientLibrary.getPath()).thenReturn(CAROUSEL__CLIENTLIB_PATH);
+        when(carouselClientLibrary.getPath()).thenReturn(CAROUSEL_CLIENTLIB_PATH);
 
         librariesMap = new HashMap<>();
         librariesMap.put(TEASER_CATEGORY, teaserClientLibrary);
@@ -148,10 +147,10 @@ class ClientLibrariesImplTest {
 
         Resource teaserJsClientLibResource = context.currentResource(TEASER_CLIENTLIB_PATH + JS_FILE_REL_PATH);
         Resource accordionJsClientLibResource = context.currentResource(ACCORDION_CLIENTLIB_PATH + JS_FILE_REL_PATH);
-        Resource carouselJsClientLibResource = context.currentResource(CAROUSEL__CLIENTLIB_PATH + JS_FILE_REL_PATH);
+        Resource carouselJsClientLibResource = context.currentResource(CAROUSEL_CLIENTLIB_PATH + JS_FILE_REL_PATH);
         Resource teaserCssClientLibResource = context.currentResource(TEASER_CLIENTLIB_PATH + CSS_FILE_REL_PATH);
         Resource accordionCssClientLibResource = context.currentResource(ACCORDION_CLIENTLIB_PATH + CSS_FILE_REL_PATH);
-        Resource carouselCssClientLibResource = context.currentResource(CAROUSEL__CLIENTLIB_PATH + CSS_FILE_REL_PATH);
+        Resource carouselCssClientLibResource = context.currentResource(CAROUSEL_CLIENTLIB_PATH + CSS_FILE_REL_PATH);
 
         try {
             when(teaserJsHtmlLibrary.getInputStream(anyBoolean())).thenReturn(teaserJsClientLibResource.adaptTo(InputStream.class));
@@ -168,7 +167,7 @@ class ClientLibrariesImplTest {
         allLibraries = new HashMap<>();
         allLibraries.put(TEASER_CLIENTLIB_PATH, teaserClientLibrary);
         allLibraries.put(ACCORDION_CLIENTLIB_PATH, accordionClientLibrary);
-        allLibraries.put(CAROUSEL__CLIENTLIB_PATH, carouselClientLibrary);
+        allLibraries.put(CAROUSEL_CLIENTLIB_PATH, carouselClientLibrary);
         HtmlLibraryManager htmlLibraryManager = context.registerInjectActivateService(mock(MockHtmlLibraryManager.class));
         when(htmlLibraryManager.getLibraries()).thenReturn(allLibraries);
 
@@ -186,10 +185,10 @@ class ClientLibrariesImplTest {
         // Mock htmlLibraryManager.getLibrary(libraryType, clientlib.getPath())
         when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(TEASER_CLIENTLIB_PATH))).thenReturn(teaserJsHtmlLibrary);
         when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(ACCORDION_CLIENTLIB_PATH))).thenReturn(accordionJsHtmlLibrary);
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(CAROUSEL__CLIENTLIB_PATH))).thenReturn(carouselJsHtmlLibrary);
+        when(htmlLibraryManager.getLibrary(eq(LibraryType.JS), eq(CAROUSEL_CLIENTLIB_PATH))).thenReturn(carouselJsHtmlLibrary);
         when(htmlLibraryManager.getLibrary(eq(LibraryType.CSS), eq(TEASER_CLIENTLIB_PATH))).thenReturn(teaserCssHtmlLibrary);
         when(htmlLibraryManager.getLibrary(eq(LibraryType.CSS), eq(ACCORDION_CLIENTLIB_PATH))).thenReturn(accordionCssHtmlLibrary);
-        when(htmlLibraryManager.getLibrary(eq(LibraryType.CSS), eq(CAROUSEL__CLIENTLIB_PATH))).thenReturn(carouselCssHtmlLibrary);
+        when(htmlLibraryManager.getLibrary(eq(LibraryType.CSS), eq(CAROUSEL_CLIENTLIB_PATH))).thenReturn(carouselCssHtmlLibrary);
 
         // Mock htmlLibraryManager.writeJsInclude
         try {
@@ -250,59 +249,10 @@ class ClientLibrariesImplTest {
     }
 
     @Test
-    void testGetCategories() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE);
-        Set<String> categories = new HashSet<>();
-        categories.add(TEASER_CATEGORY);
-        categories.add(ACCORDION_CATEGORY);
-        categories.add(CAROUSEL_CATEGORY);
-        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
-    }
-
-    @Test
-    void testGetCategoriesForComponent() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ACCORDION_1_PATH);
-        Set<String> categories = new HashSet<>();
-        categories.add(TEASER_CATEGORY);
-        categories.add(ACCORDION_CATEGORY);
-        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
-    }
-
-    @Test
-    void testGetCategoriesWithInjectedFilter() {
-        Map<String,Object> attributes = new HashMap<>();
-        attributes.put("filter", ".*teaser.*");
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
-        Set<String> categories = new HashSet<>();
-        categories.add(TEASER_CATEGORY);
-        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
-    }
-
-    @Test
-    void testGetCategoriesWithInjectedCategories() {
-        Map<String,Object> attributes = new HashMap<>();
-        attributes.put("categories", "core.wcm.components.teaser.v1,core.wcm.components.accordion.v1");
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
-        Set<String> categories = new HashSet<>();
-        categories.add(TEASER_CATEGORY);
-        categories.add(ACCORDION_CATEGORY);
-        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
-    }
-
-    @Test
-    void testGetCategoriesWithInjectedResourceTypes() {
-        Map<String,Object> attributes = new HashMap<>();
-        attributes.put("resourceTypes", "core/wcm/components/accordion/v1/accordion,core/wcm/components/carousel/v1/carousel");
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
-        Set<String> categories = new HashSet<>();
-        categories.add(ACCORDION_CATEGORY);
-        categories.add(CAROUSEL_CATEGORY);
-        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
-    }
-
-    @Test
     void testGetJsInline() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE);
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY + "," + CAROUSEL_CATEGORY);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
         StringBuilder jsInline = new StringBuilder();
         jsInline.append(jsInlines.get(TEASER_CATEGORY));
         jsInline.append(jsInlines.get(ACCORDION_CATEGORY));
@@ -311,19 +261,10 @@ class ClientLibrariesImplTest {
     }
 
     @Test
-    void testGetJsInlineWithInjectedCategories() {
-        Map<String,Object> attributes = new HashMap<>();
-        attributes.put("categories", "core.wcm.components.teaser.v1,core.wcm.components.accordion.v1");
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
-        StringBuilder jsInline = new StringBuilder();
-        jsInline.append(jsInlines.get(TEASER_CATEGORY));
-        jsInline.append(jsInlines.get(ACCORDION_CATEGORY));
-        assertEquals(jsInline.toString(), clientlibs.getJsInline());
-    }
-
-    @Test
     void testGetCssInline() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE);
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY + "," + CAROUSEL_CATEGORY);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
         StringBuilder cssInline = new StringBuilder();
         cssInline.append(cssInlines.get(TEASER_CATEGORY));
         cssInline.append(cssInlines.get(ACCORDION_CATEGORY));
@@ -333,7 +274,9 @@ class ClientLibrariesImplTest {
 
     @Test
     void testGetJsIncludes() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE);
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY + "," + CAROUSEL_CATEGORY);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
         StringBuilder jsInclude = new StringBuilder();
         jsInclude.append(jsIncludes.get(TEASER_CATEGORY));
         jsInclude.append(jsIncludes.get(ACCORDION_CATEGORY));
@@ -343,7 +286,9 @@ class ClientLibrariesImplTest {
 
     @Test
     void testGetCssIncludes() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE);
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY + "," + CAROUSEL_CATEGORY);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
         StringBuilder cssInclude = new StringBuilder();
         cssInclude.append(cssIncludes.get(TEASER_CATEGORY));
         cssInclude.append(cssIncludes.get(ACCORDION_CATEGORY));
@@ -353,7 +298,9 @@ class ClientLibrariesImplTest {
 
     @Test
     void testGetJsAndCssIncludes() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE);
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY + "," + CAROUSEL_CATEGORY);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
         StringBuilder includes = new StringBuilder();
         includes.append(jsIncludes.get(TEASER_CATEGORY));
         includes.append(jsIncludes.get(ACCORDION_CATEGORY));
@@ -367,6 +314,7 @@ class ClientLibrariesImplTest {
     @Test
     void testGetJsAndCssIncludesWithInjectedAttributes() {
         Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY + "," + CAROUSEL_CATEGORY);
         attributes.put("async", true);
         attributes.put("defer", true);
         attributes.put("crossorigin", "anonymous");
@@ -381,10 +329,6 @@ class ClientLibrariesImplTest {
         includes.append(cssIncludesWithAttributes.get(ACCORDION_CATEGORY));
         includes.append(cssIncludesWithAttributes.get(CAROUSEL_CATEGORY));
         assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
-    }
-
-    private ClientLibraries getClientLibrariesUnderTest(String path) {
-        return getClientLibrariesUnderTest(path, null);
     }
 
     private ClientLibraries getClientLibrariesUnderTest(String path, Map<String,Object> attributes) {

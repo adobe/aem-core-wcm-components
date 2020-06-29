@@ -38,7 +38,6 @@ public class Utils {
      * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
      */
     public static final String ID_SEPARATOR = "-";
-    private static final String TEMPLATE_STRUCTURE_CONTENT_PATH = "/structure/jcr:content";
 
     private Utils() {
     }
@@ -115,66 +114,6 @@ public class Utils {
      */
     public static String generateId(String prefix, String path) {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
-    }
-
-    @NotNull
-    public static Set<String> getAllResourceTypes(@NotNull ResourceResolver resolver, @NotNull ModelFactory modelFactory, @NotNull PageManager pageManager,
-                                                  @NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
-        Set<String> resourceTypes = new HashSet<>();
-        resourceTypes.add(resource.getResourceType());
-        resourceTypes.addAll(getSuperTypes(resolver, resource.getResourceType()));
-        resourceTypes.addAll(getXFResourceTypes(resolver, modelFactory, pageManager, request, resource));
-        resourceTypes.addAll(getTemplateResourceTypes(resolver, modelFactory, pageManager, request, resource));
-        for (Resource child : resource.getChildren()) {
-            //TODO: check it's a cq:Component
-            resourceTypes.addAll(getAllResourceTypes(resolver, modelFactory, pageManager, request, child));
-        }
-        return resourceTypes;
-    }
-
-    public static Set<String> getXFResourceTypes(@NotNull ResourceResolver resolver, @NotNull ModelFactory modelFactory, @NotNull PageManager pageManager,
-                                                 @NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
-        ExperienceFragment experienceFragment = modelFactory.getModelFromWrappedRequest(request, resource, ExperienceFragment.class);
-        if (experienceFragment != null) {
-            String fragmentPath = experienceFragment.getLocalizedFragmentVariationPath();
-            if (StringUtils.isNotEmpty(fragmentPath)) {
-                Resource fragmentResource = resolver.getResource(fragmentPath);
-                if (fragmentResource != null) {
-                    return getAllResourceTypes(resolver, modelFactory, pageManager, request, fragmentResource);
-                }
-            }
-        }
-        return Collections.emptySet();
-    }
-
-    public static Set<String> getTemplateResourceTypes(@NotNull ResourceResolver resolver, @NotNull ModelFactory modelFactory, @NotNull PageManager pageManager,
-                                                       @NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
-        Page page = pageManager.getPage(resource.getPath());
-        if (page != null) {
-            Template template = page.getTemplate();
-            if (template != null) {
-                String templatePath = template.getPath() + TEMPLATE_STRUCTURE_CONTENT_PATH;
-                Resource templateResource = resolver.getResource(templatePath);
-                if (templateResource != null) {
-                    return getAllResourceTypes(resolver, modelFactory, pageManager, request, templateResource);
-                }
-            }
-        }
-        return Collections.emptySet();
-    }
-
-    @NotNull
-    public static Set<String> getSuperTypes(@NotNull ResourceResolver resolver, @NotNull String resourceType) {
-        Set<String> superTypes = new HashSet<>();
-        Resource resource;
-        while ((resource = resolver.getResource(resourceType)) != null) {
-            resourceType = resource.getResourceSuperType();
-            if (resourceType == null ||
-                    !superTypes.add(resourceType)) { // avoid infinite loops
-                break;
-            }
-        }
-        return superTypes;
     }
 
 }

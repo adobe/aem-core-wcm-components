@@ -18,19 +18,19 @@ package com.adobe.cq.wcm.core.extensions.amp.models.v1;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.cq.wcm.core.extensions.amp.AmpTestContext;
-import com.adobe.cq.wcm.core.extensions.amp.internal.ClientLibraryAggregatorServiceImpl;
 import com.adobe.cq.wcm.core.extensions.amp.models.AmpPage;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(AemContextExtension.class)
@@ -50,7 +50,6 @@ class AmpPageImplTest {
         context.load().json(TEST_BASE + AmpTestContext.TEST_CONTENT_JSON, TEST_ROOT_PAGE);
         context.load().json(TEST_BASE + AmpTestContext.TEST_APPS_JSON, TEST_APPS_ROOT);
         context.registerInjectActivateService(new MockHtmlLibraryManager(mock(com.adobe.granite.ui.clientlibs.ClientLibrary.class)));
-        context.registerInjectActivateService(new ClientLibraryAggregatorServiceImpl());
     }
 
     @Test
