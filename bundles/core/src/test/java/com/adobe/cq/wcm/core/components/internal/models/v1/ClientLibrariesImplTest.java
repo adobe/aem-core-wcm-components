@@ -50,12 +50,17 @@ import static org.mockito.Mockito.*;
 class ClientLibrariesImplTest {
 
     private static final String TEST_CONTENT_XF_JSON = "/test-content-xf.json";
-    private static final String BASE = "/clientlibs";
-    private static final String CONTENT_ROOT = "/content";
+    private static final String TEST_CONF_TEMPLATES_JSON = "/test-conf-templates.json";
+
     private static final String APPS_ROOT = "/apps/core/wcm/components";
     private static final String XF_ROOT = "/content/experience-fragments";
+    private static final String TEMPLATES_ROOT = "/conf/templates";
+
+    private static final String BASE = "/clientlibs";
+    private static final String CONTENT_ROOT = "/content";
     private static final String ROOT_PAGE = "/content/clientlibs";
-    private static final String ACCORDION_1_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/accordion-1";
+    private static final String PAGE_WITH_TEMPLATE = ROOT_PAGE + "/page-with-template";
+    private static final String ACCORDION_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/accordion-1";
     private static final String EXPERIENCE_FRAGMENT_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/experiencefragment-1";
 
     private static final String TEASER_CATEGORY = "core.wcm.components.teaser.v1";
@@ -80,18 +85,15 @@ class ClientLibrariesImplTest {
     private Map<String,String> jsInlines;
     private Map<String,String> cssInlines;
 
-    // TODO: add test for page template
     // TODO: add test for page policy and page design
-    // TODO: add test for XF
     // TODO: add test for super resource types
-    // TODO: add test for Utils
-    // TODO: add test: the resource is not a page
 
     @BeforeEach
     void setUp() {
         context.load().json(BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
         context.load().json(BASE + CoreComponentTestContext.TEST_APPS_JSON, APPS_ROOT);
         context.load().json(BASE + TEST_CONTENT_XF_JSON, XF_ROOT);
+        context.load().json(BASE + TEST_CONF_TEMPLATES_JSON, TEMPLATES_ROOT);
 
         jsIncludes = new HashMap<>();
         jsIncludes.put(TEASER_CATEGORY, "<script src=\"" + TEASER_CLIENTLIB_PATH + ".js\"></script>");
@@ -268,7 +270,7 @@ class ClientLibrariesImplTest {
 
     @Test
     void testGetCategoriesForComponent() {
-        ClientLibraries clientlibs = getClientLibrariesUnderTest(ACCORDION_1_PATH);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ACCORDION_PATH);
         Set<String> categories = new HashSet<>();
         categories.add(TEASER_CATEGORY);
         categories.add(ACCORDION_CATEGORY);
@@ -422,9 +424,17 @@ class ClientLibrariesImplTest {
             when(experienceFragment.getLocalizedFragmentVariationPath()).thenReturn(fragmentPath);
             return experienceFragment;
         }).when(modelFactory).getModelFromWrappedRequest(any(SlingHttpServletRequest.class), any(Resource.class), eq(ExperienceFragment.class));
-
         Set<String> resourceTypes = Utils.getXFResourceTypes(context.resourceResolver(), modelFactory, context.pageManager(), context.request(), xfResource);
         Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/page/v2/page", "cq:Page", "core/wcm/components/teaser/v1/teaser", "wcm/foundation/components/responsivegrid", "core/wcm/components/teaser"));
+        assertEquals(expectedResourceTypes, resourceTypes);
+    }
+
+    @Test
+    void testGetTemplateResourceTypes() {
+        Resource pageResource = context.currentResource(PAGE_WITH_TEMPLATE);
+        ModelFactory modelFactory = mock(ModelFactory.class);
+        Set<String> resourceTypes = Utils.getTemplateResourceTypes(context.resourceResolver(), modelFactory, context.pageManager(), context.request(), pageResource);
+        Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/page/v2/page", "wcm/foundation/components/responsivegrid", "core/wcm/components/text/v1/text"));
         assertEquals(expectedResourceTypes, resourceTypes);
     }
 
