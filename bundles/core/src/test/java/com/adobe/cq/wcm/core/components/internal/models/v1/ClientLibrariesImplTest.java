@@ -50,6 +50,7 @@ class ClientLibrariesImplTest {
     private static final String CONTENT_ROOT = "/content";
     private static final String APPS_ROOT = "/apps/core/wcm/components";
     private static final String ROOT_PAGE = "/content/clientlibs";
+    private static final String ACCORDION_1_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/accordion-1";
 
     private static final String TEASER_CATEGORY = "core.wcm.components.teaser.v1";
     private static final String ACCORDION_CATEGORY = "core.wcm.components.accordion.v1";
@@ -255,6 +256,15 @@ class ClientLibrariesImplTest {
         categories.add(TEASER_CATEGORY);
         categories.add(ACCORDION_CATEGORY);
         categories.add(CAROUSEL_CATEGORY);
+        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
+    }
+
+    @Test
+    void testGetCategoriesForComponent() {
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ACCORDION_1_PATH);
+        Set<String> categories = new HashSet<>();
+        categories.add(TEASER_CATEGORY);
+        categories.add(ACCORDION_CATEGORY);
         assertArrayEquals(categories.toArray(), clientlibs.getCategories());
     }
 

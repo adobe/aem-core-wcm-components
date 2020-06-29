@@ -121,14 +121,14 @@ public class Utils {
     public static Set<String> getAllResourceTypes(@NotNull ResourceResolver resolver, @NotNull ModelFactory modelFactory, @NotNull PageManager pageManager,
                                                   @NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
         Set<String> resourceTypes = new HashSet<>();
+        resourceTypes.add(resource.getResourceType());
+        resourceTypes.addAll(getSuperTypes(resolver, resource.getResourceType()));
+        resourceTypes.addAll(getXFResourceTypes(resolver, modelFactory, pageManager, request, resource));
+        resourceTypes.addAll(getTemplateResourceTypes(resolver, modelFactory, pageManager, request, resource));
         for (Resource child : resource.getChildren()) {
             //TODO: check it's a cq:Component
-            resourceTypes.add(child.getResourceType());
-            resourceTypes.addAll(getSuperTypes(resolver, child.getResourceType()));
-            resourceTypes.addAll(getXFResourceTypes(resolver, modelFactory, pageManager, request, child));
             resourceTypes.addAll(getAllResourceTypes(resolver, modelFactory, pageManager, request, child));
         }
-        resourceTypes.addAll(getTemplateResourceTypes(resolver, modelFactory, pageManager, request, resource));
         return resourceTypes;
     }
 
