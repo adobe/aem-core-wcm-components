@@ -24,12 +24,15 @@ import java.util.*;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.models.factory.ModelFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
+import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibrary;
@@ -46,11 +49,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(AemContextExtension.class)
 class ClientLibrariesImplTest {
 
+    private static final String TEST_CONTENT_XF_JSON = "/test-content-xf.json";
     private static final String BASE = "/clientlibs";
     private static final String CONTENT_ROOT = "/content";
     private static final String APPS_ROOT = "/apps/core/wcm/components";
+    private static final String XF_ROOT = "/content/experience-fragments";
     private static final String ROOT_PAGE = "/content/clientlibs";
     private static final String ACCORDION_1_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/accordion-1";
+    private static final String EXPERIENCE_FRAGMENT_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/experiencefragment-1";
 
     private static final String TEASER_CATEGORY = "core.wcm.components.teaser.v1";
     private static final String ACCORDION_CATEGORY = "core.wcm.components.accordion.v1";
@@ -83,6 +89,10 @@ class ClientLibrariesImplTest {
 
     @BeforeEach
     void setUp() {
+        context.load().json(BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(BASE + CoreComponentTestContext.TEST_APPS_JSON, APPS_ROOT);
+        context.load().json(BASE + TEST_CONTENT_XF_JSON, XF_ROOT);
+
         jsIncludes = new HashMap<>();
         jsIncludes.put(TEASER_CATEGORY, "<script src=\"" + TEASER_CLIENTLIB_PATH + ".js\"></script>");
         jsIncludes.put(ACCORDION_CATEGORY, "<script src=\"" + ACCORDION_CLIENTLIB_PATH + ".js\"></script>");
@@ -112,9 +122,6 @@ class ClientLibrariesImplTest {
         cssInlines.put(TEASER_CATEGORY, "html, .teaser { \n box-sizing: border-box;\n font-size: 14px; \n}");
         cssInlines.put(ACCORDION_CATEGORY, "html, .accordion { \n box-sizing: border-box;\n font-size: 14px; \n}");
         cssInlines.put(CAROUSEL_CATEGORY, "html, .carousel { \n box-sizing: border-box;\n font-size: 14px; \n}");
-
-        context.load().json(BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        context.load().json(BASE + CoreComponentTestContext.TEST_APPS_JSON, APPS_ROOT);
 
         // Mock ClientLibrary
         ClientLibrary teaserClientLibrary = mock(ClientLibrary.class);
@@ -279,12 +286,32 @@ class ClientLibrariesImplTest {
     }
 
     @Test
+    void testGetCategoriesWithInjectedCategory() {
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", "core.wcm.components.teaser.v1");
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        Set<String> categories = new HashSet<>();
+        categories.add(TEASER_CATEGORY);
+        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
+    }
+
+    @Test
     void testGetCategoriesWithInjectedCategories() {
         Map<String,Object> attributes = new HashMap<>();
         attributes.put("categories", "core.wcm.components.teaser.v1,core.wcm.components.accordion.v1");
         ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
         Set<String> categories = new HashSet<>();
         categories.add(TEASER_CATEGORY);
+        categories.add(ACCORDION_CATEGORY);
+        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
+    }
+
+    @Test
+    void testGetCategoriesWithInjectedResourceType() {
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("resourceTypes", "core/wcm/components/accordion/v1/accordion");
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        Set<String> categories = new HashSet<>();
         categories.add(ACCORDION_CATEGORY);
         assertArrayEquals(categories.toArray(), clientlibs.getCategories());
     }
@@ -381,6 +408,24 @@ class ClientLibrariesImplTest {
         includes.append(cssIncludesWithAttributes.get(ACCORDION_CATEGORY));
         includes.append(cssIncludesWithAttributes.get(CAROUSEL_CATEGORY));
         assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
+    }
+
+    @Test
+    void testUtilsGetXFResourceTypes() {
+        Resource xfResource = context.currentResource(EXPERIENCE_FRAGMENT_PATH);
+        ModelFactory modelFactory = mock(ModelFactory.class);
+        doAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            Resource resource = (Resource) args[1];
+            String fragmentPath = resource.getValueMap().get("fragmentVariationPath", String.class);
+            ExperienceFragment experienceFragment = mock(ExperienceFragment.class);
+            when(experienceFragment.getLocalizedFragmentVariationPath()).thenReturn(fragmentPath);
+            return experienceFragment;
+        }).when(modelFactory).getModelFromWrappedRequest(any(SlingHttpServletRequest.class), any(Resource.class), eq(ExperienceFragment.class));
+
+        Set<String> resourceTypes = Utils.getXFResourceTypes(context.resourceResolver(), modelFactory, context.pageManager(), context.request(), xfResource);
+        Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/page/v2/page", "cq:Page", "core/wcm/components/teaser/v1/teaser", "wcm/foundation/components/responsivegrid", "core/wcm/components/teaser"));
+        assertEquals(expectedResourceTypes, resourceTypes);
     }
 
     private ClientLibraries getClientLibrariesUnderTest(String path) {

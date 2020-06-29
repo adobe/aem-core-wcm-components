@@ -16,6 +16,11 @@
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/accordion/v1/accordion"
                     },
+                    "experiencefragment-1": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fragmentVariationPath" : "/content/experience-fragments/simple-experience-fragment/master",
+                        "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment"
+                    },
                     "accordion-1"          : {
                         "jcr:primaryType"   : "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/accordion/v1/accordion",
