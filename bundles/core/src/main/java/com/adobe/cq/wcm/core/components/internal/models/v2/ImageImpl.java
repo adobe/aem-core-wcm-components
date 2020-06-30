@@ -53,6 +53,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     private String srcUriTemplate;
     private List<ImageArea> areas;
     private boolean uuidDisabled;
+    private int lazyThreshold;
 
     public ImageImpl() {
         selector = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
@@ -122,6 +123,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
             }
             buildJson();
         }
+
+        this.lazyThreshold = currentStyle.get(PN_DESIGN_LAZY_THRESHOLD, 0);
     }
 
     @NotNull
@@ -138,6 +141,11 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
     @Override
     public boolean isLazyEnabled() {
         return !disableLazyLoading;
+    }
+
+    @Override
+    public int getLazyThreshold() {
+        return this.lazyThreshold;
     }
 
     @Override
