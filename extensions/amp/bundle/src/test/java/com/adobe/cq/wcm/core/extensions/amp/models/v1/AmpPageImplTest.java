@@ -65,10 +65,6 @@ class AmpPageImplTest {
         assertEquals(expectedAttrs, ampPage.getPageLinkAttrs());
 
         assertTrue(ampPage.isAmpEnabled());
-
-        assertNotNull(ampPage.getHeadlibIncludes());
-        assertEquals(1, ampPage.getHeadlibIncludes().size());
-        assertEquals("/apps/core/wcm/components/page/v2/page/customheadlibs.amp.html", ampPage.getHeadlibIncludes().get(0));
     }
 
     @Test
@@ -83,61 +79,6 @@ class AmpPageImplTest {
         assertEquals(expectedAttrs, ampPage.getPageLinkAttrs());
 
         assertTrue(ampPage.isAmpEnabled());
-
-        assertNotNull(ampPage.getHeadlibIncludes());
-        assertEquals(0, ampPage.getHeadlibIncludes().size());
-    }
-
-    @Test
-    void pairedAmpWithSuperTypes() {
-        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE_NO_COMPONENT);
-        context.requestPathInfo().setSelectorString("amp");
-        context.requestPathInfo().setExtension("html");
-        AmpPage ampPage = context.request().adaptTo(AmpPage.class);
-        assertNotNull(ampPage);
-        Map<String, String> expectedAttrs = new HashMap<>();
-        expectedAttrs.put("rel", "canonical");
-        expectedAttrs.put("href", "/content/amp-selector-with-amp-mode-no-component.html");
-        assertEquals(expectedAttrs, ampPage.getPageLinkAttrs());
-
-        assertNotNull(ampPage.getHeadlibIncludes());
-        assertEquals(2, ampPage.getHeadlibIncludes().size());
-        assertEquals("/apps/core/wcm/components/page/v2/page/customheadlibs.amp.html", ampPage.getHeadlibIncludes().get(0));
-        assertEquals("/apps/core/wcm/components/sample_super/v1/sample_super/customheadlibs.amp.html", ampPage.getHeadlibIncludes().get(1));
-    }
-
-    @Test
-    void pairedAmpWithInvalidSuperType() {
-        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE_NULL_SUPERTYPE);
-        context.requestPathInfo().setSelectorString("amp");
-        context.requestPathInfo().setExtension("html");
-        AmpPage ampPage = context.request().adaptTo(AmpPage.class);
-        assertNotNull(ampPage);
-        Map<String, String> expectedAttrs = new HashMap<>();
-        expectedAttrs.put("rel", "canonical");
-        expectedAttrs.put("href", "/content/amp-selector-with-amp-mode-null-supertype.html");
-        assertEquals(expectedAttrs, ampPage.getPageLinkAttrs());
-
-        assertNotNull(ampPage.getHeadlibIncludes());
-        assertEquals(1, ampPage.getHeadlibIncludes().size());
-        assertEquals("/apps/core/wcm/components/page/v2/page/customheadlibs.amp.html", ampPage.getHeadlibIncludes().get(0));
-    }
-
-    @Test
-    void pairedAmpWithNoSuperType() {
-        context.currentPage(AMP_SELECTOR_WITH_AMP_MODE_NO_SUPERTYPE);
-        context.requestPathInfo().setSelectorString("amp");
-        context.requestPathInfo().setExtension("html");
-        AmpPage ampPage = context.request().adaptTo(AmpPage.class);
-        assertNotNull(ampPage);
-        Map<String, String> expectedAttrs = new HashMap<>();
-        expectedAttrs.put("rel", "canonical");
-        expectedAttrs.put("href", "/content/amp-selector-with-amp-mode-no-supertype.html");
-        assertEquals(expectedAttrs, ampPage.getPageLinkAttrs());
-
-        assertNotNull(ampPage.getHeadlibIncludes());
-        assertEquals(1, ampPage.getHeadlibIncludes().size());
-        assertEquals("/apps/core/wcm/components/page/v2/page/customheadlibs.amp.html", ampPage.getHeadlibIncludes().get(0));
     }
 
 }

@@ -31,6 +31,7 @@ import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.foundation.AllowedComponentList;
 
 public class Utils {
 
@@ -116,4 +117,69 @@ public class Utils {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 
+    public static Set<String> getPageResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Set<String> resourceTypes = new HashSet<>();
+        resourceTypes.addAll(getResourceTypes(page.getContentResource(), request, modelFactory));
+        resourceTypes.addAll(getTemplateResourceTypes(page, request, modelFactory));
+        return resourceTypes;
+    }
+
+    @NotNull
+    public static Set<String> getResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Set<String> resourceTypes = new HashSet<>();
+        resourceTypes.add(resource.getResourceType());
+        //resourceTypes.addAll(getSuperTypes(resource.getResourceType(), resolver));
+        resourceTypes.addAll(getXFResourceTypes(resource, request, modelFactory));
+        for (Resource child : resource.getChildren()) {
+            //TODO: check it's a cq:Component, used to be allowed node (filtered out by regex)
+            resourceTypes.addAll(getResourceTypes(child, request, modelFactory));
+        }
+        return resourceTypes;
+    }
+
+    public static Set<String> getXFResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        ExperienceFragment experienceFragment = modelFactory.getModelFromWrappedRequest(request, resource, ExperienceFragment.class);
+        if (experienceFragment != null) {
+            String fragmentPath = experienceFragment.getLocalizedFragmentVariationPath();
+            if (StringUtils.isNotEmpty(fragmentPath)) {
+                ResourceResolver resolver = resource.getResourceResolver();
+                if (resolver != null) {
+                    Resource fragmentResource = resolver.getResource(fragmentPath);
+                    if (fragmentResource != null) {
+                        return getResourceTypes(fragmentResource, request, modelFactory);
+                    }
+                }
+            }
+        }
+        return Collections.emptySet();
+    }
+
+    public static Set<String> getTemplateResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Template template = page.getTemplate();
+        if (template != null) {
+            String templatePath = template.getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
+            ResourceResolver resolver = page.getContentResource().getResourceResolver();
+            if (resolver != null) {
+                Resource templateResource = resolver.getResource(templatePath);
+                if (templateResource != null) {
+                    return getResourceTypes(templateResource, request, modelFactory);
+                }
+            }
+        }
+        return Collections.emptySet();
+    }
+
+    @NotNull
+    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull ResourceResolver resolver) {
+        Set<String> superTypes = new HashSet<>();
+        Resource resource;
+        while ((resource = resolver.getResource(resourceType)) != null) {
+            resourceType = resource.getResourceSuperType();
+            if (resourceType == null ||
+                    !superTypes.add(resourceType)) { // avoid infinite loops
+                break;
+            }
+        }
+        return superTypes;
+    }
 }

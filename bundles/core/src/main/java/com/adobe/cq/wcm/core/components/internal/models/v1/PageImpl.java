@@ -24,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -106,6 +107,7 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     protected static final String PN_CLIENTLIBS = "clientlibs";
     private Map<String, ComponentExporter> childModels = null;
     private String resourceType;
+    private Set<String> resourceTypes;
 
     @JsonIgnore
     protected Map<String, String> favicons = new HashMap<>();
@@ -199,6 +201,15 @@ public class PageImpl extends AbstractComponentImpl implements Page {
     @JsonIgnore
     public String[] getClientLibCategories() {
         return Arrays.copyOf(clientLibCategories, clientLibCategories.length);
+    }
+
+    @Override
+    @JsonIgnore
+    public Set<String> getComponentsResourceTypes() {
+        if (resourceTypes == null) {
+            resourceTypes = Utils.getPageResourceTypes(currentPage, request, modelFactory);
+        }
+        return resourceTypes;
     }
 
     @NotNull

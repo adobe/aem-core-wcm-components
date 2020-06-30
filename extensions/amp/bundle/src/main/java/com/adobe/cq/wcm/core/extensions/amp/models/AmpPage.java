@@ -42,35 +42,6 @@ public interface AmpPage {
     }
 
     /**
-     * Returns a set of resource types for components included in the page.
-     *
-     * @return Resource types for components included in the page
-     */
-    @NotNull
-    default Set<String> getComponentsResourceTypes() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Returns a set of client library categories that need to be included in the page.
-     *
-     * @return Categories of client libraries that need to be included in the page
-     *
-     */
-    default Set<String> getClientlibCategories() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Getter for the list of customheadlibs.amp.html files in components on the page.
-     *
-     * @return list of files to include
-     */
-    default List<String> getHeadlibIncludes() {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * Getter for whether the current request has the AMP selector
      *
      * @return {@code true} if the current request has the AMP selector, {@code false} otherwise

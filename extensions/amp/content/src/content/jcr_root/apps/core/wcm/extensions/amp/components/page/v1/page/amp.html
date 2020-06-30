@@ -26,8 +26,7 @@
     <sly data-sly-include="ampboilerplate.html"></sly>
     <sly data-sly-include="head.socialmedia.html"></sly>
     <link data-sly-use.ampPage="com.adobe.cq.wcm.core.extensions.amp.models.AmpPage" data-sly-attribute="${ampPage.pageLinkAttrs}">
-    <sly data-sly-repeat.toInclude="${ampPage.headlibIncludes}" data-sly-include="${toInclude}"></sly>
-    <sly data-sly-include="ampheadlibs.html"></sly>
+    <sly data-sly-use.headlibs="ampheadlibs.html" data-sly-call="${headlibs.headlibs @ page = page}"></sly>
 </head>
 <body class="${page.cssClassNames}">
     <sly data-sly-test="${!isRedirectPage}">
