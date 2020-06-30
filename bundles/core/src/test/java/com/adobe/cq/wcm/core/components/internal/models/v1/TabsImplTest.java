@@ -57,6 +57,7 @@ class TabsImplTest {
     void testEmptyTabs() {
         Tabs tabs = getTabsUnderTest(TABS_EMPTY);
         Assert.assertEquals(0, tabs.getItems().size());
+        Utils.testJSONExport(tabs, Utils.getTestExporterJSONPath(TEST_BASE, "tabs0"));
     }
 
     @Test

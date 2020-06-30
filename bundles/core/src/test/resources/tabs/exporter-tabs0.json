@@ -1,0 +1,12 @@
+{
+    "id": "tabs-3bd052d24e",
+    "dataLayer": {
+        "tabs-3bd052d24e": {
+            "@type": "core/wcm/components/tabs/v1/tabs",
+            "shownItems": []
+        }
+    },
+    ":itemsOrder": [],
+    ":items": {},
+    ":type": "core/wcm/components/tabs/v1/tabs"
+}
