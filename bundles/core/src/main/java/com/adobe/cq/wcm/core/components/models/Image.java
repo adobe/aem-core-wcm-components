@@ -53,6 +53,12 @@ public interface Image extends Component {
     String PN_DESIGN_LAZY_LOADING_ENABLED = "disableLazyLoading";
 
     /**
+     * Name of the configuration policy property that indicate the number of pixels, in advance of becoming visible,
+     * that a lazy loading image should load.
+     */
+    String PN_DESIGN_LAZY_THRESHOLD = "lazyThreshold";
+
+    /**
      * Name of the resource property that will indicate if the image is decorative.
      *
      * @since com.adobe.cq.wcm.core.components.models 11.0.0
@@ -271,6 +277,16 @@ public interface Image extends Component {
     }
 
     /**
+     * Returns the number of pixels in advance of an image becoming visible that a lazy
+     * loading image should load.
+     *
+     * @return The number of pixels.
+     */
+    default int getLazyThreshold() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
      * Returns a list of image map areas.
      *
      * @return the image map areas
@@ -298,5 +314,5 @@ public interface Image extends Component {
      */
     default boolean isDecorative() {
         throw new UnsupportedOperationException();
-    };
+    }
 }
