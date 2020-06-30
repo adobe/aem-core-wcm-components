@@ -14,18 +14,18 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.headlibs="${ @ page}">
-    <sly data-sly-use.libFilter="${'com.adobe.cq.wcm.core.components.models.custom.ClientLibraryFilter' @ resourceTypes = page.componentsResourceTypes, filter='.*\\.amp'}"
-         data-sly-use.childFilter="${'com.adobe.cq.wcm.core.components.models.custom.ChildFilter' @ resourceTypes = page.componentsResourceTypes, filter='customheadlibs\\.amp\\.html'}"
-         data-sly-set.categories="cmp-examples.base.amp,${libFilter.categories}"
+    <sly data-sly-use.componentClientlibs="${'com.adobe.cq.wcm.core.components.models.ComponentClientLibraries' @ resourceTypes = page.componentsResourceTypes, filter='.*\\.amp'}"
+         data-sly-use.componentFiles="${'com.adobe.cq.wcm.core.components.models.ComponentFiles' @ resourceTypes = page.componentsResourceTypes, filter='customheadlibs\\.amp\\.html'}"
+         data-sly-set.categories="cmp-examples.base.amp,${componentClientlibs.categories}"
          data-sly-use.clientlibs="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ categories=categories}"></sly>
 <!--
 ${page.componentsResourceTypes}
 --
-${libFilter.categories}
-----
-${childFilter.paths}
+${componentClientlibs.categories}
+------
+${componentFiles.paths}
 -->
-    <sly data-sly-repeat.toInclude="${childFilter.paths}" data-sly-include="${toInclude}"></sly>
+    <sly data-sly-repeat.toInclude="${componentFiles.paths}" data-sly-include="${toInclude}"></sly>
     <style amp-custom>
         ${clientlibs.cssInline @ context="unsafe"}
     </style>

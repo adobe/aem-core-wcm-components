@@ -13,21 +13,17 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1.custom;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -35,13 +31,13 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 
-import com.adobe.cq.wcm.core.components.models.custom.ChildFilter;
+import com.adobe.cq.wcm.core.components.models.ComponentFiles;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
-        adapters = ChildFilter.class
+        adapters = ComponentFiles.class
 )
-public class ChildFilterImpl implements ChildFilter {
+public class ComponentFilesImpl implements ComponentFiles {
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)

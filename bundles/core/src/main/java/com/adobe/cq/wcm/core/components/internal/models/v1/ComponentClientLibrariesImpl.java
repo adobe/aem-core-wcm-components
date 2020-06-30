@@ -13,16 +13,14 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1.custom;
+package com.adobe.cq.wcm.core.components.internal.models.v1;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -39,15 +37,15 @@ import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 
 import com.adobe.aem.formsndocuments.util.FMConstants;
-import com.adobe.cq.wcm.core.components.models.custom.ClientLibraryFilter;
+import com.adobe.cq.wcm.core.components.models.ComponentClientLibraries;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
-        adapters = ClientLibraryFilter.class
+        adapters = ComponentClientLibraries.class
 )
-public class ClientLibraryFilterImpl implements ClientLibraryFilter {
+public class ComponentClientLibrariesImpl implements ComponentClientLibraries {
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)
