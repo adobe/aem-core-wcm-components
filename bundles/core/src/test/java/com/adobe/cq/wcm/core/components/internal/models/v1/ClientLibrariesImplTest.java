@@ -33,6 +33,7 @@ import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
+import com.adobe.cq.wcm.core.components.models.Page;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibrary;
@@ -41,6 +42,7 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,17 +78,14 @@ class ClientLibrariesImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private Map<String,ClientLibrary> allLibraries; // (path, library)
-    private Map<String,ClientLibrary> librariesMap; // (category, library)
-    private Map<String,String> jsIncludes;
-    private Map<String,String> cssIncludes;
-    private Map<String,String> jsIncludesWithAttributes;
-    private Map<String,String> cssIncludesWithAttributes;
-    private Map<String,String> jsInlines;
-    private Map<String,String> cssInlines;
-
-    // TODO: add test for page policy and page design
-    // TODO: add test for super resource types
+    private Map<String,ClientLibrary> allLibraries; // a map of (path, library) of all the libraries
+    private Map<String,ClientLibrary> librariesMap; // a map of (category, library) of all the libraries
+    private Map<String,String> jsIncludes; // expected js includes
+    private Map<String,String> cssIncludes; // expected css includes
+    private Map<String,String> jsIncludesWithAttributes; // expected js includes when injecting attributes
+    private Map<String,String> cssIncludesWithAttributes; // expected css includes when injecting attributes
+    private Map<String,String> jsInlines; // expected js inlines
+    private Map<String,String> cssInlines; // expected css inlines
 
     @BeforeEach
     void setUp() {
@@ -170,7 +169,7 @@ class ClientLibrariesImplTest {
             when(accordionCssHtmlLibrary.getInputStream(anyBoolean())).thenReturn(accordionCssClientLibResource.adaptTo(InputStream.class));
             when(carouselCssHtmlLibrary.getInputStream(anyBoolean())).thenReturn(carouselCssClientLibResource.adaptTo(InputStream.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to get input stream from the library: %s", e.getMessage()));
         }
 
         // Mock htmlLibraryManager.getLibraries()
@@ -214,7 +213,7 @@ class ClientLibrariesImplTest {
                 return null;
             }).when(htmlLibraryManager).writeJsInclude(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to write JS include: %s", e.getMessage()));
         }
 
         // Mock htmlLibraryManager.writeCssInclude
@@ -231,7 +230,7 @@ class ClientLibrariesImplTest {
                 return null;
             }).when(htmlLibraryManager).writeCssInclude(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to write CSS include: %s", e.getMessage()));
         }
 
         // Mock htmlLibraryManager.writeIncludes
@@ -253,7 +252,7 @@ class ClientLibrariesImplTest {
                 return null;
             }).when(htmlLibraryManager).writeIncludes(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to write include: %s", e.getMessage()));
         }
 
     }
@@ -265,6 +264,24 @@ class ClientLibrariesImplTest {
         categories.add(TEASER_CATEGORY);
         categories.add(ACCORDION_CATEGORY);
         categories.add(CAROUSEL_CATEGORY);
+        assertArrayEquals(categories.toArray(), clientlibs.getCategories());
+    }
+
+    @Test
+    void testGetCategoriesWithPageClientlibs() {
+        Page pageModel = mock(Page.class);
+        String pageClientlib1 = "pageClientlib1";
+        String pageClientlib2 = "pageClientlib2";
+        String[] pageClientLibCategories = new String[]{pageClientlib1, pageClientlib2};
+        when(pageModel.getClientLibCategories()).thenReturn(pageClientLibCategories);
+        context.registerAdapter(SlingHttpServletRequest.class, Page.class, pageModel);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE);
+        Set<String> categories = new HashSet<>();
+        categories.add(TEASER_CATEGORY);
+        categories.add(ACCORDION_CATEGORY);
+        categories.add(CAROUSEL_CATEGORY);
+        categories.add(pageClientlib1);
+        categories.add(pageClientlib2);
         assertArrayEquals(categories.toArray(), clientlibs.getCategories());
     }
 
@@ -412,6 +429,10 @@ class ClientLibrariesImplTest {
         assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
     }
 
+    //
+    // Below are tests for the specific methods in com.adobe.cq.wcm.core.components.internal.Utils
+    //
+
     @Test
     void testUtilsGetXFResourceTypes() {
         Resource xfResource = context.currentResource(EXPERIENCE_FRAGMENT_PATH);
@@ -430,11 +451,19 @@ class ClientLibrariesImplTest {
     }
 
     @Test
-    void testGetTemplateResourceTypes() {
+    void testUtilsGetTemplateResourceTypes() {
         Resource pageResource = context.currentResource(PAGE_WITH_TEMPLATE);
         ModelFactory modelFactory = mock(ModelFactory.class);
         Set<String> resourceTypes = Utils.getTemplateResourceTypes(context.resourceResolver(), modelFactory, context.pageManager(), context.request(), pageResource);
         Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/page/v2/page", "wcm/foundation/components/responsivegrid", "core/wcm/components/text/v1/text"));
+        assertEquals(expectedResourceTypes, resourceTypes);
+    }
+
+    @Test
+    void testUtilsGetSuperTypes() {
+        String resourceType = "core/wcm/components/teaser/v1/teaser";
+        Set<String> resourceTypes = Utils.getSuperTypes(context.resourceResolver(), resourceType);
+        Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/teaser"));
         assertEquals(expectedResourceTypes, resourceTypes);
     }
 
