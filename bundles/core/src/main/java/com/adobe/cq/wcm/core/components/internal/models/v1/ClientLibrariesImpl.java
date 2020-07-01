@@ -139,59 +139,6 @@ public class ClientLibrariesImpl implements ClientLibraries {
         categoriesArray = categoriesSet.toArray(new String[0]);
     }
 
-    public Set<String> getCategoriesFromComponents() {
-        Set<String> categories = new HashSet<>();
-
-        allLibraries = htmlLibraryManager.getLibraries();
-        Collection<ClientLibrary> libraries = new LinkedList<>();
-
-        for (String resourceType : resourceTypes) {
-            Resource componentRes = getResource(resourceType);
-            addClientLibraries(componentRes, libraries);
-
-            if (inherited && componentRes != null) {
-                addClientLibraries(getResource(componentRes.getResourceSuperType()), libraries);
-            }
-        }
-        for (ClientLibrary library : libraries) {
-            for (String category : library.getCategories()) {
-                if (pattern != null) {
-                    if (pattern.matcher(category).matches()) {
-                        categories.add(category);
-                    }
-                } else {
-                    categories.add(category);
-                }
-            }
-        }
-        return categories;
-    }
-
-    private void addClientLibraries(Resource componentRes, Collection<ClientLibrary> libraries) {
-        if (componentRes == null) {
-            return;
-        }
-        String componentType = componentRes.getResourceType();
-        if (StringUtils.equals(componentType, FMConstants.CQ_CLIENTLIBRARY_FOLDER)) {
-            ClientLibrary library = allLibraries.get(componentRes.getPath());
-            if (library != null) {
-                libraries.add(library);
-            }
-        }
-        Iterable<Resource> childComponents = componentRes.getChildren();
-        for (Resource child : childComponents) {
-            addClientLibraries(child, libraries);
-        }
-    }
-
-    private Resource getResource(String path) {
-        if (path == null) {
-            return null;
-        }
-        return resolver.getResource(path);
-
-    }
-
     @NotNull
     @Override
     public String getJsInline() {
@@ -287,5 +234,60 @@ public class ClientLibrariesImpl implements ClientLibraries {
         }
         return output.toString();
     }
+
+    public Set<String> getCategoriesFromComponents() {
+        Set<String> categories = new HashSet<>();
+
+        allLibraries = htmlLibraryManager.getLibraries();
+        Collection<ClientLibrary> libraries = new LinkedList<>();
+
+        for (String resourceType : resourceTypes) {
+            Resource componentRes = getResource(resourceType);
+            addClientLibraries(componentRes, libraries);
+
+            if (inherited && componentRes != null) {
+                addClientLibraries(getResource(componentRes.getResourceSuperType()), libraries);
+            }
+        }
+        for (ClientLibrary library : libraries) {
+            for (String category : library.getCategories()) {
+                if (pattern != null) {
+                    if (pattern.matcher(category).matches()) {
+                        categories.add(category);
+                    }
+                } else {
+                    categories.add(category);
+                }
+            }
+        }
+        return categories;
+    }
+
+    private void addClientLibraries(Resource componentRes, Collection<ClientLibrary> libraries) {
+        if (componentRes == null) {
+            return;
+        }
+        String componentType = componentRes.getResourceType();
+        if (StringUtils.equals(componentType, FMConstants.CQ_CLIENTLIBRARY_FOLDER)) {
+            ClientLibrary library = allLibraries.get(componentRes.getPath());
+            if (library != null) {
+                libraries.add(library);
+            }
+        }
+        Iterable<Resource> childComponents = componentRes.getChildren();
+        for (Resource child : childComponents) {
+            addClientLibraries(child, libraries);
+        }
+    }
+
+    private Resource getResource(String path) {
+        if (path == null) {
+            return null;
+        }
+        return resolver.getResource(path);
+
+    }
+
+
 
 }
