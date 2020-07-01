@@ -22,7 +22,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -32,14 +35,19 @@ import javax.inject.Named;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Default;
+import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.Optional;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.adobe.aem.formsndocuments.util.FMConstants;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibrary;
@@ -48,7 +56,8 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 
 @Model(
     adaptables = SlingHttpServletRequest.class,
-    adapters = {ClientLibraries.class}
+    adapters = ClientLibraries.class,
+    defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL
 )
 public class ClientLibrariesImpl implements ClientLibraries {
 
@@ -58,46 +67,63 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private SlingHttpServletRequest request;
 
     @Inject
+    @Named(OPTION_RESOURCE_TYPES)
+    Collection<String> resourceTypes;
+
+    @Inject
+    @Named(OPTION_FILTER_REGEX)
+    String filterRegex;
+
+    @Inject
+    @Named(OPTION_INHERITED)
+    @Default(booleanValues = OPTION_INHERITED_DEFAULT)
+    boolean inherited;
+
+    @Inject
     @Named(OPTION_CATEGORIES)
     private String categoriesCsv;
 
     @Inject
     @Named(OPTION_ASYNC)
-    @Optional
     @Nullable
     private boolean async;
 
     @Inject
     @Named(OPTION_DEFER)
-    @Optional
     @Nullable
     private boolean defer;
 
     @Inject
     @Named(OPTION_CROSSORIGIN)
-    @Optional
     @Nullable
     private String crossorigin;
 
     @Inject
     @Named(OPTION_ONLOAD)
-    @Optional
     @Nullable
     private String onload;
 
     @Inject
     @Named(OPTION_MEDIA)
-    @Optional
     @Nullable
     private String media;
 
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
 
+    @ScriptVariable
+    //TODO: will this resolver work on publish?
+    private ResourceResolver resolver;
+
+    Map<String, ClientLibrary> allLibraries;
+    private Pattern pattern;
     private String[] categoriesArray;
 
     @PostConstruct
     protected void initModel() {
+        if (StringUtils.isNotEmpty(filterRegex)) {
+            pattern = Pattern.compile(filterRegex);
+        }
         Set<String> categoriesSet = new HashSet<>();
 
         if (StringUtils.isNotBlank(categoriesCsv)) {
@@ -106,9 +132,64 @@ public class ClientLibrariesImpl implements ClientLibraries {
             } else {
                 categoriesSet.add(categoriesCsv);
             }
+        } else {
+            categoriesSet = getCategoriesFromComponents();
         }
 
         categoriesArray = categoriesSet.toArray(new String[0]);
+    }
+
+    public Set<String> getCategoriesFromComponents() {
+        Set<String> categories = new HashSet<>();
+
+        allLibraries = htmlLibraryManager.getLibraries();
+        Collection<ClientLibrary> libraries = new LinkedList<>();
+
+        for (String resourceType : resourceTypes) {
+            Resource componentRes = getResource(resourceType);
+            addClientLibraries(componentRes, libraries);
+
+            if (inherited && componentRes != null) {
+                addClientLibraries(getResource(componentRes.getResourceSuperType()), libraries);
+            }
+        }
+        for (ClientLibrary library : libraries) {
+            for (String category : library.getCategories()) {
+                if (pattern != null) {
+                    if (pattern.matcher(category).matches()) {
+                        categories.add(category);
+                    }
+                } else {
+                    categories.add(category);
+                }
+            }
+        }
+        return categories;
+    }
+
+    private void addClientLibraries(Resource componentRes, Collection<ClientLibrary> libraries) {
+        if (componentRes == null) {
+            return;
+        }
+        String componentType = componentRes.getResourceType();
+        if (StringUtils.equals(componentType, FMConstants.CQ_CLIENTLIBRARY_FOLDER)) {
+            ClientLibrary library = allLibraries.get(componentRes.getPath());
+            if (library != null) {
+                libraries.add(library);
+            }
+        }
+        Iterable<Resource> childComponents = componentRes.getChildren();
+        for (Resource child : childComponents) {
+            addClientLibraries(child, libraries);
+        }
+    }
+
+    private Resource getResource(String path) {
+        if (path == null) {
+            return null;
+        }
+        return resolver.getResource(path);
+
     }
 
     @NotNull

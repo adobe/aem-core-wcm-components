@@ -14,19 +14,18 @@
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
 <template data-sly-template.headlibs="${ @ page}">
-    <sly data-sly-use.componentClientlibs="${'com.adobe.cq.wcm.core.components.models.ComponentClientLibraries' @ resourceTypes = page.componentsResourceTypes, filter='.*\\.amp'}"
-         data-sly-use.componentFiles="${'com.adobe.cq.wcm.core.components.models.ComponentFiles' @ resourceTypes = page.componentsResourceTypes, filter='customheadlibs\\.amp\\.html'}"
-         data-sly-set.categories="cmp-examples.base.amp,${componentClientlibs.categories}"
-         data-sly-use.clientlibs="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ categories=categories}"></sly>
+    <sly data-sly-use.componentFiles="${'com.adobe.cq.wcm.core.components.models.ComponentFiles' @ resourceTypes = page.componentsResourceTypes, filter='customheadlibs\\.amp\\.html'}"
+         data-sly-repeat.toInclude="${componentFiles.paths}"
+         data-sly-include="${toInclude}"></sly>
+    <style amp-custom
+           data-sly-use.clientlibs="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ resourceTypes = page.componentsResourceTypes, filter='.*\\.amp'}">
+        ${clientlibs.cssInline @ context="unsafe"}
+    </style>
 <!--
 ${page.componentsResourceTypes}
 --
-${componentClientlibs.categories}
-------
 ${componentFiles.paths}
+----
+${clientlibs.categoriesFromComponents}
 -->
-    <sly data-sly-repeat.toInclude="${componentFiles.paths}" data-sly-include="${toInclude}"></sly>
-    <style amp-custom>
-        ${clientlibs.cssInline @ context="unsafe"}
-    </style>
 </template>

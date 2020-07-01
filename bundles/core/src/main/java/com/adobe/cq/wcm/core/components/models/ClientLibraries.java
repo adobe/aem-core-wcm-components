@@ -18,12 +18,43 @@ package com.adobe.cq.wcm.core.components.models;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Defines the {@code ClientLibraries} Sling Model used for all the components.
+ * Defines the {@code ClientLibraries} Sling Model used to collect and include client libraries.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.14.0
  */
 @ConsumerType
 public interface ClientLibraries {
+
+    /**
+     * Name of the option used to specify the {@link java.util.Collection}
+     * of resource types.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    String OPTION_RESOURCE_TYPES = "resourceTypes";
+
+    /**
+     * Name of the option used to specify the regular expression that
+     * needs to be matched by client library categories to be collected.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    String OPTION_FILTER_REGEX = "filter";
+
+    /**
+     * Name of the option used to specify if client libraries should be searched up
+     * the inheritance chain (using Sling resource supertype).
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    String OPTION_INHERITED = "inherited";
+
+    /**
+     * Default value for {@code OPTION_INHERITED}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    boolean OPTION_INHERITED_DEFAULT = true;
 
     /**
      * Name of the HTL option used to inject the clientlib categories.
