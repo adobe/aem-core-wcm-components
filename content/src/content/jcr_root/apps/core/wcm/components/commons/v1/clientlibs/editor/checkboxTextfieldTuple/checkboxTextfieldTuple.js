@@ -21,9 +21,6 @@
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple || {};
 
-    var CQ_RICHTEXT = ".cq-RichText";
-    var CQ_RICHTEXT_INPUT = "input[type=hidden][data-cq-richtext-input='true']";
-
     /**
      * Creates a tuple consisting of a checkbox and a text field located in the same dialog.
      *
