@@ -70,6 +70,22 @@
                 "jcr:title"              : "Accordion (v1)",
                 "sling:resourceSuperType": "core/wcm/components/accordion",
                 "componentGroup"         : ".core-wcm",
+                "customheadlibs.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/plain",
+                        "jcr:data": "<!--Test Accordion-->"
+                    }
+                },
+                "customheadlibs.amp.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/plain",
+                        "jcr:data": "<!--AMP Test Accordion-->"
+                    }
+                },
                 "clientlib"     : {
                     "jcr:primaryType": "cq:ClientLibraryFolder",
                     "allowProxy": true,
@@ -131,6 +147,14 @@
                 "jcr:title"              : "Carousel (v1)",
                 "sling:resourceSuperType": "core/wcm/components/carousel",
                 "componentGroup"         : ".core-wcm",
+                "customheadlibs.amp.html": {
+                    "jcr:primaryType": "nt:file",
+                    "jcr:content": {
+                        "jcr:primaryType": "nt:resource",
+                        "jcr:mimeType": "text/plain",
+                        "jcr:data": "<!--Test Carousel-->"
+                    }
+                },
                 "clientlib"     : {
                     "jcr:primaryType": "cq:ClientLibraryFolder",
                     "allowProxy": true,
@@ -176,6 +200,17 @@
                         }
                     }
                 }
+            }
+        },
+        "v2"              : {
+            "jcr:primaryType": "nt:unstructured",
+            "carousel"         : {
+                "cq:isContainer"         : "true",
+                "jcr:description"        : "Displays content as a carousel",
+                "jcr:primaryType"        : "cq:Component",
+                "jcr:title"              : "Carousel (v2)",
+                "sling:resourceSuperType": "core/wcm/components/carousel/v1/carousel",
+                "componentGroup"         : ".core-wcm"
             }
         }
     },
