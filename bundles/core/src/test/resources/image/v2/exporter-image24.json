@@ -30,6 +30,7 @@
             "alt": ""
         }
     ],
+    "lazyThreshold": 0,
     "widths": [],
     "lazyEnabled": false,
     "dataLayer": {

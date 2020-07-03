@@ -242,4 +242,12 @@ class ImageImplTest extends com.adobe.cq.wcm.core.components.internal.models.v1.
         assertEquals(0, image.getWidths().length);
     }
 
+
+    @Test
+    void testImageWithLazyThreshold() {
+        context.contentPolicyMapping(ImageImpl.RESOURCE_TYPE, Image.PN_DESIGN_LAZY_THRESHOLD, 100);
+        Image image = getImageUnderTest(AbstractImageTest.IMAGE3_PATH);
+        assertEquals(100, image.getLazyThreshold());
+        Utils.testJSONExport(image, Utils.getTestExporterJSONPath(TEST_BASE, AbstractImageTest.IMAGE3_PATH + "-with-lazy-threshold"));
+    }
 }
