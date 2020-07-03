@@ -18,12 +18,51 @@ package com.adobe.cq.wcm.core.components.models;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * Defines the {@code ClientLibraries} Sling Model used for all the components.
+ * Defines the {@code ClientLibraries} Sling Model used to collect and include client libraries.
  *
  * @since com.adobe.cq.wcm.core.components.models 12.14.0
  */
 @ConsumerType
 public interface ClientLibraries {
+
+    /**
+     * Name of the option used to specify the {@link java.util.Collection}
+     * of resource types.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    String OPTION_RESOURCE_TYPES = "resourceTypes";
+
+    /**
+     * Name of the option used to specify the regular expression that
+     * needs to be matched by client library categories to be collected.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    String OPTION_FILTER_REGEX = "filter";
+
+    /**
+     * Name of the option used to specify if client libraries should be searched up
+     * the inheritance chain (using Sling resource supertype).
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    String OPTION_INHERITED = "inherited";
+
+    /**
+     * Default value for {@code OPTION_INHERITED}.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     */
+    boolean OPTION_INHERITED_DEFAULT = true;
+
+    /**
+     * Name of the HTL option used to inject the clientlib categories.
+     *
+     * @since com.adobe.cq.wcm.core.components.models 12.14.0
+     *
+     */
+    String OPTION_CATEGORIES = "categories";
 
     /**
      * Name of the HTL option to inject the async attribute into the javascript script tag.
@@ -59,31 +98,6 @@ public interface ClientLibraries {
      * @since com.adobe.cq.wcm.core.components.models 12.14.0
      */
     String OPTION_MEDIA = "media";
-
-    /**
-     * Returns the clientlib categories of:
-     * - the requested resource and its descendants
-     * - the resource types and super resource types
-     * - the resource types used by the referenced experience fragments
-     * - the template content resource below template/structure and all its descendants, if the resource is a page or page content
-     * - the page policy and page design, if the resource is a page or page content
-     *
-     * Note: following HTL options can be injected into the ClientLibraries model:
-     * - resourceTypes: csv string to override the computed resource types
-     * - categories: csv string to override the computed categories
-     * - filter: regular expression to filter the categories based on their names
-     * - async: to inject async into the JS script tags. E.g.: async=true
-     * - defer: to inject defer into the JS script tags. E.g.: defer=true
-     * - crossorigin: to inject crossorigin and its value into the JS script tags. E.g.: crossorigin='anonymous'
-     * - onload: to inject onload and its value into the JS script tags. E.g.: onload='myFunction()'
-     * - media: to inject media and its value into the CSS link tags. E.g.: media='print'
-     *
-     * @return the clientlib categories
-     * @since com.adobe.cq.wcm.core.components.models 12.14.0
-     */
-    default String[] getCategories() {
-        throw new UnsupportedOperationException();
-    }
 
     /**
      * Returns a concatenation of all the JS libraries defined for the requested resource.

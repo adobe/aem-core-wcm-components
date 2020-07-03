@@ -31,6 +31,7 @@ import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.foundation.AllowedComponentList;
 
 public class Utils {
 
@@ -38,7 +39,6 @@ public class Utils {
      * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
      */
     public static final String ID_SEPARATOR = "-";
-    private static final String TEMPLATE_STRUCTURE_CONTENT_PATH = "/structure/jcr:content";
 
     private Utils() {
     }
@@ -117,46 +117,52 @@ public class Utils {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 
+    public static Set<String> getPageResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Set<String> resourceTypes = new HashSet<>();
+        resourceTypes.addAll(getResourceTypes(page.getContentResource(), request, modelFactory));
+        resourceTypes.addAll(getTemplateResourceTypes(page, request, modelFactory));
+        return resourceTypes;
+    }
+
     @NotNull
-    public static Set<String> getAllResourceTypes(@NotNull ResourceResolver resolver, @NotNull ModelFactory modelFactory, @NotNull PageManager pageManager,
-                                                  @NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
+    public static Set<String> getResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
         Set<String> resourceTypes = new HashSet<>();
         resourceTypes.add(resource.getResourceType());
-        resourceTypes.addAll(getSuperTypes(resolver, resource.getResourceType()));
-        resourceTypes.addAll(getXFResourceTypes(resolver, modelFactory, pageManager, request, resource));
-        resourceTypes.addAll(getTemplateResourceTypes(resolver, modelFactory, pageManager, request, resource));
+        //resourceTypes.addAll(getSuperTypes(resource.getResourceType(), resolver));
+        resourceTypes.addAll(getXFResourceTypes(resource, request, modelFactory));
         for (Resource child : resource.getChildren()) {
-            //TODO: check it's a cq:Component
-            resourceTypes.addAll(getAllResourceTypes(resolver, modelFactory, pageManager, request, child));
+            //TODO: check it's a cq:Component, used to be allowed node (filtered out by regex)
+            resourceTypes.addAll(getResourceTypes(child, request, modelFactory));
         }
         return resourceTypes;
     }
 
-    public static Set<String> getXFResourceTypes(@NotNull ResourceResolver resolver, @NotNull ModelFactory modelFactory, @NotNull PageManager pageManager,
-                                                 @NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
+    public static Set<String> getXFResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
         ExperienceFragment experienceFragment = modelFactory.getModelFromWrappedRequest(request, resource, ExperienceFragment.class);
         if (experienceFragment != null) {
             String fragmentPath = experienceFragment.getLocalizedFragmentVariationPath();
             if (StringUtils.isNotEmpty(fragmentPath)) {
-                Resource fragmentResource = resolver.getResource(fragmentPath);
-                if (fragmentResource != null) {
-                    return getAllResourceTypes(resolver, modelFactory, pageManager, request, fragmentResource);
+                ResourceResolver resolver = resource.getResourceResolver();
+                if (resolver != null) {
+                    Resource fragmentResource = resolver.getResource(fragmentPath);
+                    if (fragmentResource != null) {
+                        return getResourceTypes(fragmentResource, request, modelFactory);
+                    }
                 }
             }
         }
         return Collections.emptySet();
     }
 
-    public static Set<String> getTemplateResourceTypes(@NotNull ResourceResolver resolver, @NotNull ModelFactory modelFactory, @NotNull PageManager pageManager,
-                                                       @NotNull SlingHttpServletRequest request, @NotNull Resource resource) {
-        Page page = pageManager.getPage(resource.getPath());
-        if (page != null) {
-            Template template = page.getTemplate();
-            if (template != null) {
-                String templatePath = template.getPath() + TEMPLATE_STRUCTURE_CONTENT_PATH;
+    public static Set<String> getTemplateResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Template template = page.getTemplate();
+        if (template != null) {
+            String templatePath = template.getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
+            ResourceResolver resolver = page.getContentResource().getResourceResolver();
+            if (resolver != null) {
                 Resource templateResource = resolver.getResource(templatePath);
                 if (templateResource != null) {
-                    return getAllResourceTypes(resolver, modelFactory, pageManager, request, templateResource);
+                    return getResourceTypes(templateResource, request, modelFactory);
                 }
             }
         }
@@ -164,7 +170,7 @@ public class Utils {
     }
 
     @NotNull
-    public static Set<String> getSuperTypes(@NotNull ResourceResolver resolver, @NotNull String resourceType) {
+    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull ResourceResolver resolver) {
         Set<String> superTypes = new HashSet<>();
         Resource resource;
         while ((resource = resolver.getResource(resourceType)) != null) {
@@ -176,5 +182,4 @@ public class Utils {
         }
         return superTypes;
     }
-
 }

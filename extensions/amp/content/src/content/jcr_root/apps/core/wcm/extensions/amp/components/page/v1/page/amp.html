@@ -25,15 +25,8 @@
     <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
     <sly data-sly-include="ampboilerplate.html"></sly>
     <sly data-sly-include="head.socialmedia.html"></sly>
-
-    <sly data-sly-use.ampPage="com.adobe.cq.wcm.core.extensions.amp.models.AmpPage"></sly>
-    <link data-sly-attribute="${ampPage.pageLinkAttrs}">
-
-    <sly data-sly-list.toInclude="${ampPage.headlibIncludes}">
-        <sly data-sly-include="${toInclude}"></sly>
-    </sly>
-
-    <sly data-sly-include="ampheadlibs.html"></sly>
+    <link data-sly-use.ampPage="com.adobe.cq.wcm.core.extensions.amp.models.AmpPage" data-sly-attribute="${ampPage.pageLinkAttrs}">
+    <sly data-sly-use.headlibs="ampheadlibs.html" data-sly-call="${headlibs.headlibs @ page = page}"></sly>
 </head>
 <body class="${page.cssClassNames}">
     <sly data-sly-test="${!isRedirectPage}">

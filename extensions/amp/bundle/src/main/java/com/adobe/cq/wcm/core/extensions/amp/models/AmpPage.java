@@ -17,8 +17,12 @@ package com.adobe.cq.wcm.core.extensions.amp.models;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
 import org.osgi.annotation.versioning.ConsumerType;
+
+import com.adobe.cq.wcm.core.components.models.Page;
 
 /**
  * Defines the {@code AmpPage} Sling Model used for AMP extension for the {@code /apps/core/wcm/components/page/v2/page} component.
@@ -38,11 +42,11 @@ public interface AmpPage {
     }
 
     /**
-     * Getter for the list of customheadlibs.amp.html files in components on the page.
+     * Getter for whether the current request has the AMP selector
      *
-     * @return list of files to include
+     * @return {@code true} if the current request has the AMP selector, {@code false} otherwise
      */
-    default List<String> getHeadlibIncludes() {
+    default boolean isAmpSelector() {
         throw new UnsupportedOperationException();
     }
 

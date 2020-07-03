@@ -15,23 +15,17 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.extensions.amp.internal;
 
-import java.util.Set;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.policies.ContentPolicy;
 import com.day.cq.wcm.api.policies.ContentPolicyManager;
-import com.day.cq.wcm.foundation.AllowedComponentList;
 
 /**
  * Provides common value constants and methods used across AMP services.
@@ -51,8 +45,6 @@ public class AmpUtil {
     public static final String AMP_SELECTOR = "amp";
 
     public static final String DOT = ".";
-
-    public static final String CLIENTLIB_SUBSERVICE = "component-clientlib-service";
 
     /**
      * Resolves the resource at the given path. Supports relative and absolute paths.
@@ -77,111 +69,6 @@ public class AmpUtil {
         }
 
         return null;
-    }
-
-    public static Set<String> getTemplateResourceTypes(Page page, String resourceTypeRegex, SlingHttpServletRequest request,
-                                                       ModelFactory modelFactory, Set<String> resourceTypes) {
-        if (page.getTemplate() == null) {
-            return resourceTypes;
-        }
-
-        String templatePath = page.getTemplate().getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
-
-        Resource templateResource = request.getResourceResolver().getResource(templatePath);
-
-        if (templateResource != null) {
-            getResourceTypes(templateResource,resourceTypeRegex, resourceTypes, request, modelFactory);
-        }
-
-        return resourceTypes;
-    }
-
-
-    public static Set<String> getTemplateResourceTypes(Page page, String resourceTypeRegex, ResourceResolver resolver,
-                                                       Set<String> resourceTypes) {
-        if (page.getTemplate() == null) {
-            return resourceTypes;
-        }
-
-        String templatePath = page.getTemplate().getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
-
-        Resource templateResource = resolver.getResource(templatePath);
-
-        if (templateResource != null) {
-            getResourceTypes(templateResource,resourceTypeRegex, resourceTypes);
-        }
-
-        return resourceTypes;
-    }
-
-
-    /**
-     * Retrieves the resource types of the given resource and all of its child resources.
-     * @param resource The resource to start retrieving resources types from.
-     * @param resourceTypeRegex Regex used to filter the resource types collected. Gets all resource types if empty.
-     * @param resourceTypes String set to append resource type values to.
-     * @param request The current request
-     * @param modelFactory The ModelFactory to create the SlingModel
-     * @return String set of resource type values found.
-     */
-    public static Set<String> getResourceTypes(Resource resource, String resourceTypeRegex, Set<String> resourceTypes,
-                                               SlingHttpServletRequest request, ModelFactory modelFactory) {
-
-        if (resource == null) {
-            return resourceTypes;
-        }
-
-        ExperienceFragment experienceFragment = modelFactory.getModelFromWrappedRequest(request, resource, ExperienceFragment.class);
-        if (experienceFragment != null && StringUtils.isNotEmpty(experienceFragment.getLocalizedFragmentVariationPath())) {
-            Resource experienceResource = resource.getResourceResolver().getResource(experienceFragment.getLocalizedFragmentVariationPath());
-            if (experienceResource != null) {
-                getResourceTypes(experienceResource, resourceTypeRegex, resourceTypes, request, modelFactory);
-            }
-        }
-
-        // Add resource type to return set if allowed by the resource type regex.
-        String resourceType = resource.getResourceType();
-        if (StringUtils.isBlank(resourceTypeRegex)
-                || resourceType.matches(resourceTypeRegex)) {
-            resourceTypes.add(resourceType);
-        }
-
-        // Iterate through the resource's children and recurse through them for resource types.
-        for (Resource child : resource.getChildren()) {
-            getResourceTypes(child, resourceTypeRegex, resourceTypes, request, modelFactory);
-        }
-
-        return resourceTypes;
-    }
-
-
-    /**
-     * Retrieves the resource types of the given resource and all of its child resources.
-     * @param resource The resource to start retrieving resources types from.
-     * @param resourceTypeRegex Regex used to filter the resource types collected. Gets all resource types if empty.
-     * @param resourceTypes String set to append resource type values to.
-     * @return String set of resource type values found.
-     */
-    public static Set<String> getResourceTypes(Resource resource, String resourceTypeRegex, Set<String> resourceTypes) {
-
-        if (resource == null) {
-            return resourceTypes;
-        }
-
-
-        // Add resource type to return set if allowed by the resource type regex.
-        String resourceType = resource.getResourceType();
-        if (StringUtils.isBlank(resourceTypeRegex)
-                || resourceType.matches(resourceTypeRegex)) {
-            resourceTypes.add(resourceType);
-        }
-
-        // Iterate through the resource's children and recurse through them for resource types.
-        for (Resource child : resource.getChildren()) {
-            getResourceTypes(child, resourceTypeRegex, resourceTypes);
-        }
-
-        return resourceTypes;
     }
 
     /**
