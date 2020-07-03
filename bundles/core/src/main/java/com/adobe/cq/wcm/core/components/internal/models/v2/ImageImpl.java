@@ -41,25 +41,68 @@ import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
 
-@Model(adaptables = SlingHttpServletRequest.class, adapters = {Image.class, ComponentExporter.class}, resourceType = ImageImpl.RESOURCE_TYPE)
+/**
+ * V2 Image model implementation.
+ */
+@Model(adaptables = SlingHttpServletRequest.class,
+    adapters = {Image.class, ComponentExporter.class},
+    resourceType = ImageImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME, extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.v1.ImageImpl implements Image {
 
+    /**
+     * The resource type.
+     */
     public static final String RESOURCE_TYPE = "core/wcm/components/image/v2/image";
+
+    /**
+     * Standard logger.
+     */
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageImpl.class);
+
+    /**
+     * The width variable to use when building {@link #srcUriTemplate}.
+     */
     private static final String SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
+
+    /**
+     * The path of the delegated content policy.
+     */
     private static final String CONTENT_POLICY_DELEGATE_PATH = "contentPolicyDelegatePath";
 
+    /**
+     * Placeholder for the SRC URI template.
+     */
     private String srcUriTemplate;
+
+    /**
+     * Placeholder for the areas.
+     */
     private List<ImageArea> areas;
+
+    /**
+     * Placeholder for the number of pixels, in advance of becoming visible, at which point this image should load.
+     */
     private int lazyThreshold;
 
+    /**
+     * Placeholder for the referenced assed ID.
+     */
+    protected String uuid;
+
+    /**
+     * Construct the model.
+     *
+     * Note: Using this constructor does not imply constructor injection, it does not initialize the model.
+     * The model must be initialized via the {@link org.apache.sling.models.factory.ModelFactory}.
+     */
     public ImageImpl() {
         selector = AdaptiveImageServlet.CORE_DEFAULT_SELECTOR;
     }
 
-    protected String uuid;
-
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
     protected void initModel() {
         super.initModel();
