@@ -170,8 +170,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
         StringWriter sw = new StringWriter();
         try {
             if (categoriesArray == null || categoriesArray.length == 0)  {
-                LOG.error("'categories' option might be missing from the invocation of the /libs/granite/sightly/templates/clientlib.html" +
-                    "client libraries template library. Please provide a CSV list or an array of categories to include.");
+                LOG.error("No categories detected. Please either specify the categories as a CSV string or a set of resource types for looking them up!");
             } else {
                 PrintWriter out = new PrintWriter(sw);
                 if (type == LibraryType.JS) {

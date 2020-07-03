@@ -20,27 +20,36 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.scripting.SlingBindings;
+import org.apache.sling.models.factory.ModelFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.adobe.cq.wcm.core.components.context.CoreComponentTestContext;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
+import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.adobe.cq.wcm.core.components.testing.MockHtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibraryManager;
 import com.adobe.granite.ui.clientlibs.LibraryType;
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.PageManager;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyBoolean;
@@ -52,10 +61,19 @@ import static org.mockito.Mockito.when;
 @ExtendWith(AemContextExtension.class)
 class ClientLibrariesImplTest {
 
+    private static final String TEST_CONTENT_XF_JSON = "/test-content-xf.json";
+    private static final String TEST_CONF_TEMPLATES_JSON = "/test-conf-templates.json";
+
+    private static final String APPS_ROOT = "/apps/core/wcm/components";
+    private static final String XF_ROOT = "/content/experience-fragments";
+    private static final String TEMPLATES_ROOT = "/conf/templates";
+
     private static final String BASE = "/clientlibs";
     private static final String CONTENT_ROOT = "/content";
-    private static final String APPS_ROOT = "/apps/core/wcm/components";
     private static final String ROOT_PAGE = "/content/clientlibs";
+    private static final String PAGE_WITH_TEMPLATE = ROOT_PAGE + "/page-with-template";
+    private static final String ACCORDION_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/accordion-1";
+    private static final String EXPERIENCE_FRAGMENT_PATH = ROOT_PAGE + "/jcr:content/root/responsivegrid/experiencefragment-1";
 
     private static final String TEASER_CATEGORY = "core.wcm.components.teaser.v1";
     private static final String ACCORDION_CATEGORY = "core.wcm.components.accordion.v1";
@@ -70,17 +88,22 @@ class ClientLibrariesImplTest {
 
     private final AemContext context = CoreComponentTestContext.newAemContext();
 
-    private Map<String,ClientLibrary> allLibraries; // (path, library)
-    private Map<String,ClientLibrary> librariesMap; // (category, library)
-    private Map<String,String> jsIncludes;
-    private Map<String,String> cssIncludes;
-    private Map<String,String> jsIncludesWithAttributes;
-    private Map<String,String> cssIncludesWithAttributes;
-    private Map<String,String> jsInlines;
-    private Map<String,String> cssInlines;
+    private Map<String,ClientLibrary> allLibraries; // a map of (path, library) of all the libraries
+    private Map<String,ClientLibrary> librariesMap; // a map of (category, library) of all the libraries
+    private Map<String,String> jsIncludes; // expected js includes
+    private Map<String,String> cssIncludes; // expected css includes
+    private Map<String,String> jsIncludesWithAttributes; // expected js includes when injecting attributes
+    private Map<String,String> cssIncludesWithAttributes; // expected css includes when injecting attributes
+    private Map<String,String> jsInlines; // expected js inlines
+    private Map<String,String> cssInlines; // expected css inlines
 
     @BeforeEach
     void setUp() {
+        context.load().json(BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
+        context.load().json(BASE + CoreComponentTestContext.TEST_APPS_JSON, APPS_ROOT);
+        context.load().json(BASE + TEST_CONTENT_XF_JSON, XF_ROOT);
+        context.load().json(BASE + TEST_CONF_TEMPLATES_JSON, TEMPLATES_ROOT);
+
         jsIncludes = new HashMap<>();
         jsIncludes.put(TEASER_CATEGORY, "<script src=\"" + TEASER_CLIENTLIB_PATH + ".js\"></script>");
         jsIncludes.put(ACCORDION_CATEGORY, "<script src=\"" + ACCORDION_CLIENTLIB_PATH + ".js\"></script>");
@@ -111,9 +134,6 @@ class ClientLibrariesImplTest {
         cssInlines.put(TEASER_CATEGORY, "html, .teaser { \n box-sizing: border-box;\n font-size: 14px; \n}");
         cssInlines.put(ACCORDION_CATEGORY, "html, .accordion { \n box-sizing: border-box;\n font-size: 14px; \n}");
         cssInlines.put(CAROUSEL_CATEGORY, "html, .carousel { \n box-sizing: border-box;\n font-size: 14px; \n}");
-
-        context.load().json(BASE + CoreComponentTestContext.TEST_CONTENT_JSON, CONTENT_ROOT);
-        context.load().json(BASE + CoreComponentTestContext.TEST_APPS_JSON, APPS_ROOT);
 
         // Mock ClientLibrary
         ClientLibrary teaserClientLibrary = mock(ClientLibrary.class);
@@ -160,7 +180,7 @@ class ClientLibrariesImplTest {
             when(accordionCssHtmlLibrary.getInputStream(anyBoolean())).thenReturn(accordionCssClientLibResource.adaptTo(InputStream.class));
             when(carouselCssHtmlLibrary.getInputStream(anyBoolean())).thenReturn(carouselCssClientLibResource.adaptTo(InputStream.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to get input stream from the library: %s", e.getMessage()));
         }
 
         // Mock htmlLibraryManager.getLibraries()
@@ -204,7 +224,7 @@ class ClientLibrariesImplTest {
                 return null;
             }).when(htmlLibraryManager).writeJsInclude(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to write JS include: %s", e.getMessage()));
         }
 
         // Mock htmlLibraryManager.writeCssInclude
@@ -221,7 +241,7 @@ class ClientLibrariesImplTest {
                 return null;
             }).when(htmlLibraryManager).writeCssInclude(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to write CSS include: %s", e.getMessage()));
         }
 
         // Mock htmlLibraryManager.writeIncludes
@@ -243,13 +263,89 @@ class ClientLibrariesImplTest {
                 return null;
             }).when(htmlLibraryManager).writeIncludes(any(SlingHttpServletRequest.class), any(Writer.class), any(String.class));
         } catch (IOException e) {
-            e.printStackTrace();
+            fail(String.format("Unable to write include: %s", e.getMessage()));
         }
 
     }
 
     @Test
-    void testGetJsInline() {
+    void testGetCategories() {
+        PageManager pageManager = context.resourceResolver().adaptTo(PageManager.class);
+        Page page = pageManager.getPage(ROOT_PAGE);
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        Set<String> categories = new HashSet<>();
+        categories.add(TEASER_CATEGORY);
+        categories.add(ACCORDION_CATEGORY);
+        categories.add(CAROUSEL_CATEGORY);
+        assertEquals(categories, ((ClientLibrariesImpl)clientlibs).getCategoriesFromComponents());
+    }
+
+    @Test
+    void testGetCategoriesForComponent() {
+        Resource accordionResource = context.currentResource(ACCORDION_PATH);
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getResourceTypes(accordionResource, context.request(), mock(ModelFactory.class)));
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ACCORDION_PATH, attributes);
+        Set<String> categories = new HashSet<>();
+        categories.add(TEASER_CATEGORY);
+        categories.add(ACCORDION_CATEGORY);
+        assertEquals(categories, ((ClientLibrariesImpl)clientlibs).getCategoriesFromComponents());
+    }
+
+    @Test
+    void testGetCategoriesWithInjectedFilter() {
+        PageManager pageManager = context.resourceResolver().adaptTo(PageManager.class);
+        Page page = pageManager.getPage(ROOT_PAGE);
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put(ClientLibraries.OPTION_RESOURCE_TYPES, Utils.getPageResourceTypes(page, context.request(), mock(ModelFactory.class)));
+        attributes.put("filter", ".*teaser.*");
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        Set<String> categories = new HashSet<>();
+        categories.add(TEASER_CATEGORY);
+        assertEquals(categories, ((ClientLibrariesImpl)clientlibs).getCategoriesFromComponents());
+    }
+
+    @Test
+    void testGetCategoriesWithInjectedCategory() {
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories",  TEASER_CATEGORY);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        StringBuilder includes = new StringBuilder();
+        includes.append(jsIncludes.get(TEASER_CATEGORY));
+        includes.append(cssIncludes.get(TEASER_CATEGORY));
+        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
+    }
+
+    @Test
+    void testGetCategoriesWithInjectedCategories() {
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY);
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        StringBuilder includes = new StringBuilder();
+        includes.append(jsIncludes.get(TEASER_CATEGORY));
+        includes.append(jsIncludes.get(ACCORDION_CATEGORY));
+        includes.append(cssIncludes.get(TEASER_CATEGORY));
+        includes.append(cssIncludes.get(ACCORDION_CATEGORY));
+        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
+    }
+
+    @Test
+    void testGetCategoriesWithInjectedResourceType() {
+        Map<String,Object> attributes = new HashMap<>();
+        attributes.put("resourceTypes", new HashSet<String>() {{
+            add("core/wcm/components/accordion/v1/accordion");
+        }});
+        ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
+        StringBuilder includes = new StringBuilder();
+        includes.append(jsIncludes.get(ACCORDION_CATEGORY));
+        includes.append(cssIncludes.get(ACCORDION_CATEGORY));
+        assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
+    }
+
+    @Test
+    void testGetCategoriesWithInjectedResourceTypes() {
         Map<String,Object> attributes = new HashMap<>();
         attributes.put("categories", TEASER_CATEGORY + "," + ACCORDION_CATEGORY + "," + CAROUSEL_CATEGORY);
         ClientLibraries clientlibs = getClientLibrariesUnderTest(ROOT_PAGE, attributes);
@@ -329,6 +425,36 @@ class ClientLibrariesImplTest {
         includes.append(cssIncludesWithAttributes.get(ACCORDION_CATEGORY));
         includes.append(cssIncludesWithAttributes.get(CAROUSEL_CATEGORY));
         assertEquals(includes.toString(), clientlibs.getJsAndCssIncludes());
+    }
+
+    //
+    // Below are tests for the specific methods in com.adobe.cq.wcm.core.components.internal.Utils
+    //
+
+    @Test
+    void testUtilsGetXFResourceTypes() {
+        Resource xfResource = context.currentResource(EXPERIENCE_FRAGMENT_PATH);
+        ModelFactory modelFactory = mock(ModelFactory.class);
+        doAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            Resource resource = (Resource) args[1];
+            String fragmentPath = resource.getValueMap().get("fragmentVariationPath", String.class);
+            ExperienceFragment experienceFragment = mock(ExperienceFragment.class);
+            when(experienceFragment.getLocalizedFragmentVariationPath()).thenReturn(fragmentPath);
+            return experienceFragment;
+        }).when(modelFactory).getModelFromWrappedRequest(any(SlingHttpServletRequest.class), any(Resource.class), eq(ExperienceFragment.class));
+        Set<String> resourceTypes = Utils.getXFResourceTypes(xfResource, context.request(), modelFactory);
+        Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/page/v2/page", "cq:Page", "core/wcm/components/teaser/v1/teaser", "wcm/foundation/components/responsivegrid"));
+        assertEquals(expectedResourceTypes, resourceTypes);
+    }
+
+    @Test
+    void testUtilsGetTemplateResourceTypes() {
+        Resource pageResource = context.currentResource(PAGE_WITH_TEMPLATE);
+        ModelFactory modelFactory = mock(ModelFactory.class);
+        Set<String> resourceTypes = Utils.getTemplateResourceTypes(context.currentPage(), context.request(), modelFactory);
+        Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/page/v2/page", "wcm/foundation/components/responsivegrid", "core/wcm/components/text/v1/text"));
+        assertEquals(expectedResourceTypes, resourceTypes);
     }
 
     private ClientLibraries getClientLibrariesUnderTest(String path, Map<String,Object> attributes) {

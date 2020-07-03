@@ -1,6 +1,16 @@
 {
     "clientlibs": {
         "jcr:primaryType": "cq:Page",
+        "page-with-template": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType"   : "cq:PageContent",
+                "jcr:title"         : "Clientlibs Test",
+                "sling:resourceType": "core/wcm/components/page/v2/page",
+                "cq:template"       : "/conf/templates/content-page",
+                "jcr:description"   : "Clientlibs Test description"
+            }
+        },
         "jcr:content"    : {
             "jcr:primaryType"   : "cq:PageContent",
             "jcr:title"         : "Accordion Test",
@@ -15,6 +25,11 @@
                     "accordion-empty"          : {
                         "jcr:primaryType": "nt:unstructured",
                         "sling:resourceType": "core/wcm/components/accordion/v1/accordion"
+                    },
+                    "experiencefragment-1": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fragmentVariationPath" : "/content/experience-fragments/simple-experience-fragment/master",
+                        "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment"
                     },
                     "accordion-1"          : {
                         "jcr:primaryType"   : "nt:unstructured",
