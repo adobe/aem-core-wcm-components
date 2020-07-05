@@ -16,6 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder;
 
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
+import com.adobe.cq.wcm.core.components.models.datalayer.ImageData;
+import com.adobe.cq.wcm.core.components.models.datalayer.PageData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -131,6 +135,61 @@ public final class DataLayerSupplierImpl implements DataLayerSupplier {
      */
     public DataLayerSupplierImpl(@NotNull final DataLayerSupplier dataLayerSupplier) {
         this.wrappedSupplier = dataLayerSupplier;
+    }
+
+    /**
+     * Construct a DataLayerSupplier from existing ComponentData.
+     *
+     * @param data The existing component data.
+     * @return A new DataLayerSupplier that uses the field values from the provided component data.
+     */
+    public static DataLayerSupplier extend(@NotNull final ComponentData data) {
+        // set component field value suppliers
+        final DataLayerSupplierImpl supplier = new DataLayerSupplierImpl(DataLayerSupplier.EMPTY_SUPPLIER)
+            .setId(data::getId)
+            .setType(data::getType)
+            .setLastModifiedDate(data::getLastModifiedDate)
+            .setParentId(data::getParentId)
+            .setTitle(data::getTitle)
+            .setDescription(data::getDescription)
+            .setText(data::getText)
+            .setLinkUrl(data::getLinkUrl);
+
+        // set page field value suppliers
+        if (data instanceof PageData) {
+            PageData pageData = (PageData) data;
+            supplier.setUrl(pageData::getUrl)
+                .setTags(pageData::getTags)
+                .setTemplatePath(pageData::getTemplatePath)
+                .setLanguage(pageData::getLanguage);
+        }
+
+        // set container field value suppliers
+        if (data instanceof ContainerData) {
+            supplier.setShownItems(((ContainerData) data)::getShownItems);
+        }
+
+        // set image component field value suppliers
+        if (data instanceof ImageData) {
+            supplier.setAssetData(((ImageData) data)::getAssetData);
+        }
+
+        return supplier;
+    }
+
+    /**
+     * Construct a DataLayerSupplier from existing AssetData.
+     *
+     * @param data The existing asset data.
+     * @return A new DataLayerSupplier that uses the field values from the provided asset data.
+     */
+    public static DataLayerSupplier extend(@NotNull final AssetData data) {
+        return new DataLayerSupplierImpl(DataLayerSupplier.EMPTY_SUPPLIER)
+            .setId(data::getId)
+            .setUrl(data::getUrl)
+            .setFormat(data::getFormat)
+            .setTags(data::getTags)
+            .setLastModifiedDate(data::getLastModifiedDate);
     }
 
     @Override

@@ -15,6 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.supplier.DataLayerSupplierImpl;
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;
@@ -124,4 +125,23 @@ public final class DataLayerBuilder {
                     .toArray(String[]::new));
     }
 
+    /**
+     * Get a AssetDataBuilder that extends existing asset data.
+     *
+     * @param assetData The asset data to extend.
+     * @return A new AssetDataBuilder pre-initialized with the existing asset data.
+     */
+    public static AssetDataBuilder extending(@NotNull final AssetData assetData) {
+        return new AssetDataBuilder(DataLayerSupplierImpl.extend(assetData));
+    }
+
+    /**
+     * Extend an existing component data layer model.
+     *
+     * @param componentData The component data to extend.
+     * @return The component data layer extender.
+     */
+    public static ComponentDataLayerExtender extending(@NotNull final ComponentData componentData) {
+        return new ComponentDataLayerExtender(componentData);
+    }
 }

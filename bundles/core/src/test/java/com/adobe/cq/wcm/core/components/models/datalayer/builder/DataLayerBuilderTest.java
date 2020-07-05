@@ -130,6 +130,53 @@ public final class DataLayerBuilderTest {
             Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "component"));
         }
 
+        @Test
+        void extendingComponent() {
+            // construct an initial component data
+            ComponentData originalData = initialBuilder.build();
+
+            // wrap the component data without changing any values
+            ComponentData extendedDataNoOverlay = DataLayerBuilder.extending(initialBuilder.build())
+                .asComponent()
+                .build();
+
+            // assert unchanged
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getDescription());
+            Assertions.assertEquals(BAD_DATE, extendedDataNoOverlay.getLastModifiedDate());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getLinkUrl());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getText());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getParentId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getTitle());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getType());
+            Utils.testJSONDataLayer(extendedDataNoOverlay, Utils.getTestDataModelJSONPath(TEST_BASE, "bad-component"));
+
+
+            // wrap the component data and change every value
+            ComponentData componentData = DataLayerBuilder.extending(originalData)
+                .asComponent()
+                // the effective values
+                .withId(() -> TEST_ID)
+                .withDescription(() -> TEST_DESCRIPTION)
+                .withLastModifiedDate(() -> LAST_MODIFIED_DATE)
+                .withLinkUrl(() -> TEST_LINK_URL)
+                .withText(() -> TEST_TEXT)
+                .withParentId(() -> TEST_PARENT_ID)
+                .withTitle(() -> TEST_TITLE)
+                .withType(() -> TEST_TYPE)
+                .build();
+
+            // assert proper values returned
+            Assertions.assertEquals(TEST_ID, componentData.getId());
+            Assertions.assertEquals(TEST_DESCRIPTION, componentData.getDescription());
+            Assertions.assertEquals(LAST_MODIFIED_DATE, componentData.getLastModifiedDate());
+            Assertions.assertEquals(TEST_LINK_URL, componentData.getLinkUrl());
+            Assertions.assertEquals(TEST_TEXT, componentData.getText());
+            Assertions.assertEquals(TEST_PARENT_ID, componentData.getParentId());
+            Assertions.assertEquals(TEST_TITLE, componentData.getTitle());
+            Assertions.assertEquals(TEST_TYPE, componentData.getType());
+            Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "component"));
+        }
     }
 
     /**
@@ -196,6 +243,56 @@ public final class DataLayerBuilderTest {
             Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "container"));
         }
 
+        @Test
+        void extendingContainer() {
+            // construct an initial component data
+            ContainerData originalData = initialBuilder.build();
+
+            // wrap the component data without changing any values
+            ContainerData extendedDataNoOverlay = DataLayerBuilder.extending(initialBuilder.build())
+                .asContainer()
+                .build();
+
+            // assert unchanged
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getDescription());
+            Assertions.assertEquals(BAD_DATE, extendedDataNoOverlay.getLastModifiedDate());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getLinkUrl());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getText());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getParentId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getTitle());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getType());
+            Assertions.assertArrayEquals(BAD_SHOWN_ITEMS, extendedDataNoOverlay.getShownItems());
+            Utils.testJSONDataLayer(extendedDataNoOverlay, Utils.getTestDataModelJSONPath(TEST_BASE, "bad-container"));
+
+
+            // wrap the component data and change every value
+            ContainerData componentData = DataLayerBuilder.extending(originalData)
+                .asContainer()
+                // the effective values
+                .withId(() -> TEST_ID)
+                .withDescription(() -> TEST_DESCRIPTION)
+                .withLastModifiedDate(() -> LAST_MODIFIED_DATE)
+                .withLinkUrl(() -> TEST_LINK_URL)
+                .withText(() -> TEST_TEXT)
+                .withParentId(() -> TEST_PARENT_ID)
+                .withTitle(() -> TEST_TITLE)
+                .withType(() -> TEST_TYPE)
+                .withShownItems(() -> TEST_SHOWN_ITEMS)
+                .build();
+
+            // assert proper values returned
+            Assertions.assertEquals(TEST_ID, componentData.getId());
+            Assertions.assertEquals(TEST_DESCRIPTION, componentData.getDescription());
+            Assertions.assertEquals(LAST_MODIFIED_DATE, componentData.getLastModifiedDate());
+            Assertions.assertEquals(TEST_LINK_URL, componentData.getLinkUrl());
+            Assertions.assertEquals(TEST_TEXT, componentData.getText());
+            Assertions.assertEquals(TEST_PARENT_ID, componentData.getParentId());
+            Assertions.assertEquals(TEST_TITLE, componentData.getTitle());
+            Assertions.assertEquals(TEST_TYPE, componentData.getType());
+            Assertions.assertArrayEquals(TEST_SHOWN_ITEMS, componentData.getShownItems());
+            Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "container"));
+        }
     }
 
     /**
@@ -271,6 +368,63 @@ public final class DataLayerBuilderTest {
             Utils.testJSONDataLayer(imageData, Utils.getTestDataModelJSONPath(TEST_BASE, "image"));
         }
 
+        @Test
+        void extendingImage() {
+            // construct an initial component data
+            ImageData originalData = initialBuilder.build();
+
+            // wrap the component data without changing any values
+            ImageData extendedDataNoOverlay = DataLayerBuilder.extending(initialBuilder.build())
+                .asImageComponent()
+                .build();
+
+            // assert unchanged
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getDescription());
+            Assertions.assertEquals(BAD_DATE, extendedDataNoOverlay.getLastModifiedDate());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getLinkUrl());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getText());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getParentId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getTitle());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getType());
+            Assertions.assertNotNull(extendedDataNoOverlay.getAssetData());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getAssetData().getId());
+
+            Utils.testJSONDataLayer(extendedDataNoOverlay, Utils.getTestDataModelJSONPath(TEST_BASE, "bad-image"));
+
+            // wrap the component data and change every value
+            ImageData componentData = DataLayerBuilder.extending(originalData)
+                .asImageComponent()
+                // the effective values
+                .withId(() -> TEST_ID)
+                .withDescription(() -> TEST_DESCRIPTION)
+                .withLastModifiedDate(() -> LAST_MODIFIED_DATE)
+                .withLinkUrl(() -> TEST_LINK_URL)
+                .withText(() -> TEST_TEXT)
+                .withParentId(() -> TEST_PARENT_ID)
+                .withTitle(() -> TEST_TITLE)
+                .withType(() -> TEST_TYPE)
+                .withAssetData(() -> DataLayerBuilder.forAsset().withId(() -> TEST_ID)
+                    .withFormat(() -> TEST_FORMAT)
+                    .withLastModifiedDate(() -> LAST_MODIFIED_DATE)
+                    .withUrl(() -> TEST_LINK_URL)
+                    .withTags(() -> TEST_TAGS)
+                    .build())
+                .build();
+
+            // assert proper values returned
+            Assertions.assertEquals(TEST_ID, componentData.getId());
+            Assertions.assertEquals(TEST_DESCRIPTION, componentData.getDescription());
+            Assertions.assertEquals(LAST_MODIFIED_DATE, componentData.getLastModifiedDate());
+            Assertions.assertEquals(TEST_LINK_URL, componentData.getLinkUrl());
+            Assertions.assertEquals(TEST_TEXT, componentData.getText());
+            Assertions.assertEquals(TEST_PARENT_ID, componentData.getParentId());
+            Assertions.assertEquals(TEST_TITLE, componentData.getTitle());
+            Assertions.assertEquals(TEST_TYPE, componentData.getType());
+            Assertions.assertNotNull(componentData.getAssetData());
+            Assertions.assertEquals(TEST_ID, componentData.getAssetData().getId());
+            Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "image"));
+        }
     }
 
     /**
@@ -348,6 +502,65 @@ public final class DataLayerBuilderTest {
             Utils.testJSONDataLayer(pageData, Utils.getTestDataModelJSONPath(TEST_BASE, "page"));
         }
 
+
+        @Test
+        void extendingPage() {
+            // construct an initial component data
+            PageData originalData = initialBuilder.build();
+
+            // wrap the component data without changing any values
+            PageData extendedDataNoOverlay = DataLayerBuilder.extending(initialBuilder.build())
+                .asPage()
+                .build();
+
+            // assert unchanged
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getDescription());
+            Assertions.assertEquals(BAD_DATE, extendedDataNoOverlay.getLastModifiedDate());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getLinkUrl());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getText());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getParentId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getTitle());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getType());
+            Assertions.assertArrayEquals(BAD_TAGS, extendedDataNoOverlay.getTags());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getLanguage());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getUrl());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getTemplatePath());
+            Utils.testJSONDataLayer(extendedDataNoOverlay, Utils.getTestDataModelJSONPath(TEST_BASE, "bad-page"));
+
+            // wrap the component data and change every value
+            PageData componentData = DataLayerBuilder.extending(originalData)
+                .asPage()
+                // the effective values
+                .withId(() -> TEST_ID)
+                .withDescription(() -> TEST_DESCRIPTION)
+                .withLastModifiedDate(() -> LAST_MODIFIED_DATE)
+                .withLinkUrl(() -> TEST_LINK_URL)
+                .withText(() -> TEST_TEXT)
+                .withParentId(() -> TEST_PARENT_ID)
+                .withTitle(() -> TEST_TITLE)
+                .withType(() -> TEST_TYPE)
+                .withTags(() -> TEST_TAGS)
+                .withLanguage(() -> TEST_LANGUAGE)
+                .withUrl(() -> TEST_URL)
+                .withTemplatePath(() -> TEST_TEMPLATE_PATH)
+                .build();
+
+            // assert proper values returned
+            Assertions.assertEquals(TEST_ID, componentData.getId());
+            Assertions.assertEquals(TEST_DESCRIPTION, componentData.getDescription());
+            Assertions.assertEquals(LAST_MODIFIED_DATE, componentData.getLastModifiedDate());
+            Assertions.assertEquals(TEST_LINK_URL, componentData.getLinkUrl());
+            Assertions.assertEquals(TEST_TEXT, componentData.getText());
+            Assertions.assertEquals(TEST_PARENT_ID, componentData.getParentId());
+            Assertions.assertEquals(TEST_TITLE, componentData.getTitle());
+            Assertions.assertEquals(TEST_TYPE, componentData.getType());
+            Assertions.assertArrayEquals(TEST_TAGS, componentData.getTags());
+            Assertions.assertEquals(TEST_LANGUAGE, componentData.getLanguage());
+            Assertions.assertEquals(TEST_URL, componentData.getUrl());
+            Assertions.assertEquals(TEST_TEMPLATE_PATH, componentData.getTemplatePath());
+            Utils.testJSONDataLayer(componentData, Utils.getTestDataModelJSONPath(TEST_BASE, "page"));
+        }
     }
 
     /**
@@ -381,6 +594,40 @@ public final class DataLayerBuilderTest {
         @Test
         void forAsset() {
             AssetData assetData = initialBuilder
+                .withId(() -> TEST_ID)
+                .withFormat(() -> TEST_FORMAT)
+                .withLastModifiedDate(() -> LAST_MODIFIED_DATE)
+                .withUrl(() -> TEST_URL)
+                .withTags(() -> TEST_TAGS)
+                .build();
+
+            // assert proper values returned
+            Assertions.assertEquals(TEST_ID, assetData.getId());
+            Assertions.assertEquals(TEST_FORMAT, assetData.getFormat());
+            Assertions.assertEquals(LAST_MODIFIED_DATE, assetData.getLastModifiedDate());
+            Assertions.assertEquals(TEST_URL, assetData.getUrl());
+            Assertions.assertArrayEquals(TEST_TAGS, assetData.getTags());
+        }
+
+        @Test
+        void extendingAsset() {
+            // construct an initial component data
+            AssetData originalData = initialBuilder.build();
+
+            // wrap the component data without changing any values
+            AssetData extendedDataNoOverlay = DataLayerBuilder.extending(
+                initialBuilder.build()
+            ).build();
+
+            // assert unchanged
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getId());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getFormat());
+            Assertions.assertEquals(BAD_DATE, extendedDataNoOverlay.getLastModifiedDate());
+            Assertions.assertEquals(BAD_VALUE, extendedDataNoOverlay.getUrl());
+            Assertions.assertArrayEquals(BAD_TAGS, extendedDataNoOverlay.getTags());
+
+            // wrap the component data and change every value
+            AssetData assetData = DataLayerBuilder.extending(originalData)
                 .withId(() -> TEST_ID)
                 .withFormat(() -> TEST_FORMAT)
                 .withLastModifiedDate(() -> LAST_MODIFIED_DATE)
