@@ -27,10 +27,14 @@ import javax.inject.Named;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ComponentFiles;
 
 @Model(
@@ -38,6 +42,9 @@ import com.adobe.cq.wcm.core.components.models.ComponentFiles;
         adapters = ComponentFiles.class
 )
 public class ComponentFilesImpl implements ComponentFiles {
+
+    @Self
+    SlingHttpServletRequest request;
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)
@@ -52,9 +59,8 @@ public class ComponentFilesImpl implements ComponentFiles {
     @Default(booleanValues = OPTION_INHERITED_DEFAULT)
     boolean inherited;
 
-    @ScriptVariable
-    //TODO: will this resolver work on publish?
-    private ResourceResolver resolver;
+    @OSGiService
+    ResourceResolverFactory resolverFactory;
 
     private Pattern pattern;
     private List<String> paths;
@@ -95,6 +101,10 @@ public class ComponentFilesImpl implements ComponentFiles {
     private Resource getResource(String path) {
         if (path == null) {
             return null;
+        }
+        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
+        if (resolver == null) {
+            resolver = request.getResourceResolver();
         }
         return resolver.getResource(path);
     }

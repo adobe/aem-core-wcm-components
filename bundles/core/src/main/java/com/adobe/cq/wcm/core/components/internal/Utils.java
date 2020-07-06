@@ -22,10 +22,13 @@ import java.util.Set;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
@@ -39,6 +42,12 @@ public class Utils {
      * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
      */
     public static final String ID_SEPARATOR = "-";
+
+    /**
+     * Name of the subservice used to authenticate as in order to be able to read details about components and
+     * client libraries.
+     */
+    public static final String COMPONENTS_SERVICE = "components-service";
 
     private Utils() {
     }
@@ -181,5 +190,15 @@ public class Utils {
             }
         }
         return superTypes;
+    }
+
+    @Nullable
+    public static ResourceResolver getComponentsResolver(ResourceResolverFactory resolverFactory) {
+        try {
+            return resolverFactory.getServiceResourceResolver(
+                    Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE));
+        } catch (LoginException e) {
+            return null;
+        }
     }
 }

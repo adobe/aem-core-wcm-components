@@ -37,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
@@ -48,6 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.adobe.aem.formsndocuments.util.FMConstants;
+import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
 import com.adobe.granite.ui.clientlibs.HtmlLibrary;
@@ -111,9 +113,8 @@ public class ClientLibrariesImpl implements ClientLibraries {
     @OSGiService
     private HtmlLibraryManager htmlLibraryManager;
 
-    @ScriptVariable
-    //TODO: will this resolver work on publish?
-    private ResourceResolver resolver;
+    @OSGiService
+    ResourceResolverFactory resolverFactory;
 
     Map<String, ClientLibrary> allLibraries;
     private Pattern pattern;
@@ -282,6 +283,10 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private Resource getResource(String path) {
         if (path == null) {
             return null;
+        }
+        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
+        if (resolver == null) {
+            resolver = request.getResourceResolver();
         }
         return resolver.getResource(path);
 
