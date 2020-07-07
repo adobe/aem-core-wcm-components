@@ -21,9 +21,6 @@
     window.CQ.CoreComponents = window.CQ.CoreComponents || {};
     window.CQ.CoreComponents.CheckboxTextfieldTuple = window.CQ.CoreComponents.CheckboxTextfieldTuple || {};
 
-    var CQ_RICHTEXT = ".cq-RichText";
-    var CQ_RICHTEXT_INPUT = "input[type=hidden][data-cq-richtext-input='true']";
-
     /**
      * Creates a tuple consisting of a checkbox and a text field located in the same dialog.
      *
@@ -45,6 +42,9 @@
         self._textfieldSelector   = textfieldSelector;
         self._textfieldFoundation = $(self._textfield).adaptTo("foundation-field");
         self._isRichText          = isRichText;
+        if (self._isRichText) {
+            self._richTextInstance = $(self._textfield).data("rteinstance");
+        }
         if (self._checkbox && self._checkboxFoundation) {
             self._checkbox.setAttribute(self.ATTR_PREVIOUS_VALUE, self._checkboxFoundation.getValue());
             self._checkbox.addEventListener("change", function() {
@@ -76,10 +76,19 @@
             });
         }
         if (self._textfield) {
-            self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
-            self._textfield.addEventListener("change", function() {
+            if (self._isRichText) {
+                self._richTextInstance.$element.on('editing-start', function() {
+                    self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+                });
+                self._richTextInstance.$element.on('change', function() {
+                    self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+                });
+            } else {
                 self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
-            });
+                self._textfield.addEventListener("change", function() {
+                    self._textfield.setAttribute(self.ATTR_PREVIOUS_VALUE, self._getTextfieldValue());
+                });
+            }
             $(window).adaptTo("foundation-registry").register("foundation.adapters", {
                 type: "foundation-toggleable",
                 selector: self._textfieldSelector,
@@ -115,7 +124,12 @@
     CheckboxTextfieldTuple.prototype.update = function() {
         if (this._checkboxFoundation && (this._textfieldFoundation || this._isRichText) && this._textfield) {
             if (this._checkboxFoundation.getValue() === "true") {
-                this._setTextfieldValue(this._textfield.getAttribute(this.ATTR_SEEDED_VALUE));
+                var seededValue = this._textfield.getAttribute(this.ATTR_SEEDED_VALUE);
+                if (seededValue !== undefined && seededValue !== null && seededValue.trim() !== "") {
+                    this._setTextfieldValue(seededValue);
+                } else {
+                    this._setTextfieldValue("");
+                }
                 this._disableTextfield(true);
             } else {
                 var previousValue = this._textfield.getAttribute(this.ATTR_PREVIOUS_VALUE);
@@ -214,13 +228,7 @@
      */
     CheckboxTextfieldTuple.prototype._getTextfieldValue = function() {
         if (this._isRichText) {
-            var $richText = $(this._textfield).closest(CQ_RICHTEXT);
-            if ($richText.length) {
-                var $richTextInput = $richText.find(CQ_RICHTEXT_INPUT);
-                if ($richTextInput.length) {
-                    return $richTextInput.val();
-                }
-            }
+            return this._richTextInstance.getContent();
         } else {
             return this._textfield.value;
         }
@@ -234,7 +242,7 @@
      */
     CheckboxTextfieldTuple.prototype._setTextfieldValue = function(value) {
         if (this._isRichText) {
-            $(this._textfield).html(value);
+            this._richTextInstance.setContent(value);
         } else {
             this._textfieldFoundation.setValue(value);
         }
