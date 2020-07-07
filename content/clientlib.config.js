@@ -21,6 +21,7 @@ module.exports = {
             name: "core.wcm.components.commons.datalayer.v1",
             serializationFormat: "xml",
             allowProxy: true,
+            jsProcessor: ["default:none", "min:gcc;compilationLevel=whitespace"],
             assets: {
                 js: [
                     "src/scripts/datalayer/v1/polyfill.js",
