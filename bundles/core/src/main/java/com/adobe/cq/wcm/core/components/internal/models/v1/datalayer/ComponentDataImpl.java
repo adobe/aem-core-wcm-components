@@ -13,8 +13,9 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder;
+package com.adobe.cq.wcm.core.components.internal.models.v1.datalayer;
 
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplier;
 import com.adobe.cq.wcm.core.components.models.datalayer.AssetData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import com.adobe.cq.wcm.core.components.models.datalayer.ContainerData;

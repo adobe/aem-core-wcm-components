@@ -15,7 +15,7 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.models.datalayer.builder;
 
-import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.ComponentDataImpl;
+import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.ComponentDataImpl;
 import com.adobe.cq.wcm.core.components.internal.models.v1.datalayer.builder.DataLayerSupplier;
 import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
 import org.jetbrains.annotations.NotNull;
