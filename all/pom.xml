@@ -73,11 +73,6 @@
                             <artifactId>core.wcm.components.extensions.amp.content</artifactId>
                             <filter>true</filter>
                         </subPackage>
-                        <subPackage>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>core.wcm.components.extensions.amp.config</artifactId>
-                            <filter>true</filter>
-                        </subPackage>
                     </subPackages>
                     <packageType>container</packageType>
                 </configuration>
@@ -180,13 +175,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>core.wcm.components.extensions.amp.content</artifactId>
-            <type>zip</type>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>core.wcm.components.extensions.amp.config</artifactId>
             <type>zip</type>
             <version>${project.version}</version>
             <scope>provided</scope>
