@@ -142,7 +142,6 @@
                         <!-- Ignore Node and npm -->
                         <exclude>**/node/**</exclude>
                         <exclude>**/node_modules/**</exclude>
-                        <exclude>**/granite/sightly/templates/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

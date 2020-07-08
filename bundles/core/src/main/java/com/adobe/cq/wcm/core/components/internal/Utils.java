@@ -29,6 +29,8 @@ import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
@@ -37,6 +39,8 @@ import com.day.cq.wcm.api.Template;
 import com.day.cq.wcm.foundation.AllowedComponentList;
 
 public class Utils {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
 
     /**
      * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
@@ -137,7 +141,6 @@ public class Utils {
     public static Set<String> getResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
         Set<String> resourceTypes = new HashSet<>();
         resourceTypes.add(resource.getResourceType());
-        //resourceTypes.addAll(getSuperTypes(resource.getResourceType(), resolver));
         resourceTypes.addAll(getXFResourceTypes(resource, request, modelFactory));
         for (Resource child : resource.getChildren()) {
             //TODO: check it's a cq:Component, used to be allowed node (filtered out by regex)
@@ -198,6 +201,7 @@ public class Utils {
             return resolverFactory.getServiceResourceResolver(
                     Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE));
         } catch (LoginException e) {
+            LOG.error("Cannot login as a service user", e);
             return null;
         }
     }
