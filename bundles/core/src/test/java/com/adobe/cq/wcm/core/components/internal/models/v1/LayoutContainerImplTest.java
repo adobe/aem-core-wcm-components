@@ -70,10 +70,12 @@ public class LayoutContainerImplTest {
         LayoutContainer container = getContainerUnderTest(CONTAINER_1, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
             put(Container.PN_BACKGROUND_IMAGE_ENABLED, true);
             put(Container.PN_BACKGROUND_COLOR_ENABLED, true);
+            put(LayoutContainer.PN_LAYOUT, "simple");
         }})));
         assertEquals("Style mismatch",
                 "background-image:url(/content/dam/core-components-examples/library/sample-assets/mountain-range.jpg);background-size:cover;background-repeat:no-repeat;background-color:#000000;",
                 container.getBackgroundStyle());
+        // layout set in component properties
         assertEquals("Layout type mismatch",
                 LayoutContainer.LayoutType.RESPONSIVE_GRID,
                 container.getLayout());
@@ -89,6 +91,22 @@ public class LayoutContainerImplTest {
                 "core/wcm/components/container/v1/container",
                 container.getExportedType());
         Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container1"));
+    }
+
+    @Test
+    public void testContainerWithPropertiesAndLayoutInPolicy() {
+        Resource mockResource = mock(Resource.class);
+        LayoutContainer container = getContainerUnderTest(CONTAINER_2, new MockStyle(mockResource, new MockValueMap(mockResource, new HashMap() {{
+            put(LayoutContainer.PN_LAYOUT, "responsiveGrid");
+        }})));
+        // layout set in content policy
+        assertEquals("Layout type mismatch",
+                LayoutContainer.LayoutType.RESPONSIVE_GRID,
+                container.getLayout());
+        assertEquals("Exported type mismatch",
+                "core/wcm/components/container/v1/container",
+                container.getExportedType());
+        Utils.testJSONExport(container, Utils.getTestExporterJSONPath(TEST_BASE, "container2"));
     }
 
     @Test

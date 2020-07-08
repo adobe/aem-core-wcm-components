@@ -1,0 +1,14 @@
+{
+    "id": "container-2611f8dc62",
+    "layout": "RESPONSIVE_GRID",
+    "dataLayer": {
+        "container-2611f8dc62": {
+            "@type": "core/wcm/components/container/v1/container"
+        }
+    },
+    ":itemsOrder": [
+    ],
+    ":items": {
+    },
+    ":type": "core/wcm/components/container/v1/container"
+}
