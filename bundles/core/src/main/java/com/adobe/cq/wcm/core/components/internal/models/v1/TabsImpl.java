@@ -112,17 +112,15 @@ public class TabsImpl extends PanelContainerImpl implements Tabs {
     /*
      * DataLayerProvider implementation of field getters
      */
-
     @Override
     public String[] getDataLayerShownItems() {
         String activeItemName = getActiveItem();
         List<ListItem> items = getItems();
-        return Optional.ofNullable(
-            items.stream()
-                .filter(e -> StringUtils.equals(e.getName(), activeItemName))
-                .findFirst()
-                .orElse(items.get(0))
-                .getData())
+        return items.stream()
+            .filter(e -> StringUtils.equals(e.getName(), activeItemName))
+            .findFirst()
+            .map(item -> item != null ? item : (!items.isEmpty() ? items.get(0) : null))
+            .map(ListItem::getData)
             .map(ComponentData::getId)
             .map(item -> new String[]{item})
             .orElseGet(() -> new String[0]);
