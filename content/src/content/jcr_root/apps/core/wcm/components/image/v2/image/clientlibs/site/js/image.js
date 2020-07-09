@@ -20,7 +20,7 @@
     var IS = "image";
 
     var EMPTY_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-    var LAZY_THRESHOLD = 0;
+    var LAZY_THRESHOLD_DEFAULT = 0;
     var SRC_URI_TEMPLATE_WIDTH_VAR = "{.width}";
 
     var selectors = {
@@ -71,6 +71,25 @@
             "default": false,
             "transform": function(value) {
                 return !(value === null || typeof value === "undefined");
+            }
+        },
+        /**
+         * The lazy threshold.
+         * This is the number of pixels, in advance of becoming visible, when an lazy-loading image should begin
+         * to load.
+         *
+         * @memberof Image
+         * @type {Number}
+         * @default 0
+         */
+        "lazythreshold": {
+            "default": 0,
+            "transform": function(value) {
+                const val =  parseInt(value);
+                if (isNaN(val)) {
+                    return LAZY_THRESHOLD_DEFAULT;
+                }
+                return val;
             }
         },
         /**
@@ -255,7 +274,7 @@
             var et = that._elements.container.getBoundingClientRect().top + wt;
             var eb = et + that._elements.container.clientHeight;
 
-            return eb >= wt - LAZY_THRESHOLD && et <= wb + LAZY_THRESHOLD;
+            return eb >= wt - that._properties.lazythreshold && et <= wb + that._properties.lazythreshold;
         }
 
         function resizeAreas() {
