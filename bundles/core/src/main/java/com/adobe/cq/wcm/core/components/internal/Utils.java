@@ -130,6 +130,16 @@ public class Utils {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 
+    /**
+     * Returns a set of resource types for components used to render a given page, including those
+     * from the page template and embedded experience templates.
+     *
+     * @param page the {@link Page}
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     * @return
+     */
+    @NotNull
     public static Set<String> getPageResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
         Set<String> resourceTypes = new HashSet<>();
         resourceTypes.addAll(getResourceTypes(page.getContentResource(), request, modelFactory));
@@ -137,6 +147,16 @@ public class Utils {
         return resourceTypes;
     }
 
+    /**
+     * Returns a set of resource types for components used to render a given resource,
+     * including it's direct children
+     *
+     * @param resource the resource
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     *
+     * @return a set of resource types for components used to render the resource
+     */
     @NotNull
     public static Set<String> getResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
         Set<String> resourceTypes = new HashSet<>();
@@ -149,6 +169,16 @@ public class Utils {
         return resourceTypes;
     }
 
+    /**
+     * Returns a set of resource types for components included in the experience template
+     *
+     * @param resource the resource, will be tested to see if it's an experience template
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     *
+     * @return a set of resource types for components included in the experience template
+     */
+    @NotNull
     public static Set<String> getXFResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
         ExperienceFragment experienceFragment = modelFactory.getModelFromWrappedRequest(request, resource, ExperienceFragment.class);
         if (experienceFragment != null) {
@@ -166,6 +196,16 @@ public class Utils {
         return Collections.emptySet();
     }
 
+    /**
+     * Returns a set of resource types for components included in the page template
+     *
+     * @param page the page
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     *
+     * @return a set of resource types for components included in the page template
+     */
+    @NotNull
     public static Set<String> getTemplateResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
         Template template = page.getTemplate();
         if (template != null) {
@@ -181,20 +221,14 @@ public class Utils {
         return Collections.emptySet();
     }
 
-    @NotNull
-    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull ResourceResolver resolver) {
-        Set<String> superTypes = new HashSet<>();
-        Resource resource;
-        while ((resource = resolver.getResource(resourceType)) != null) {
-            resourceType = resource.getResourceSuperType();
-            if (resourceType == null ||
-                    !superTypes.add(resourceType)) { // avoid infinite loops
-                break;
-            }
-        }
-        return superTypes;
-    }
-
+    /**
+     * Returns a {@link ResourceResolver} that is able to read information from the components (scripts, client
+     * libraries).
+     *
+     * @param resolverFactory the {@link ResourceResolverFactory}
+     *
+     * @return a {@link ResourceResolver} that is able to read information from the components
+     */
     @Nullable
     public static ResourceResolver getComponentsResolver(ResourceResolverFactory resolverFactory) {
         try {
