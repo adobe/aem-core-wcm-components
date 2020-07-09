@@ -17,16 +17,57 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 
-public class ImageAreaImpl implements ImageArea {
+/**
+ * Image area implementation.
+ */
+public final class ImageAreaImpl implements ImageArea {
 
-    private String shape;
-    private String coordinates;
-    private String relativeCoordinates;
-    private String href;
-    private String target;
-    private String alt;
+    /**
+     * The shape of the area.
+     */
+    private final String shape;
 
-    public ImageAreaImpl(String shape, String coordinates, String relativeCoordinates, String href, String target, String alt) {
+    /**
+     * The coordinates of the area.
+     */
+    private final String coordinates;
+
+    /**
+     * a relative unit representation of the {@code coords}.
+     */
+    private final String relativeCoordinates;
+
+    /**
+     * The image area anchor {@code href} value.
+     */
+    private final String href;
+
+    /**
+     * The image area anchor {@code target} value.
+     */
+    private final String target;
+
+    /**
+     * The image area anchor {@code alt} value
+     */
+    private final String alt;
+
+    /**
+     * Construct an Image Area.
+     *
+     * @param shape The shape of the area.
+     * @param coordinates The coordinates of the area.
+     * @param relativeCoordinates The relative unit representation of the {@code coords}.
+     * @param href The image area anchor href.
+     * @param target The image area anchor target.
+     * @param alt The image area anchor alt text.
+     */
+    public ImageAreaImpl(final String shape,
+                         final String coordinates,
+                         final String relativeCoordinates,
+                         final String href,
+                         final String target,
+                         final String alt) {
         this.shape = shape;
         this.coordinates = coordinates;
         this.relativeCoordinates = relativeCoordinates;
