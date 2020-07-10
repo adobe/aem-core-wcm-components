@@ -87,9 +87,9 @@
             "showModificationDate": "true",
             "orderBy"             : "title",
             "pages"               : [
+                "/content/list/pages/page_2",
                 "/content/list/pages/page_1",
-                "/content/list/pages/page_5",
-                "/content/list/pages/page_2"
+                "/content/list/pages/page_5"
             ]
         },
         "staticOrderByModificationDateListType"    : {
