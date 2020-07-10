@@ -1,5 +1,5 @@
 <!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ Copyright 2019 Adobe
+  ~ Copyright 2020 Adobe Systems Incorporated
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,12 +13,3 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
-<template data-sly-template.headlibs="${ @ page}">
-    <sly data-sly-use.componentFiles="${'com.adobe.cq.wcm.core.components.models.ComponentFiles' @ resourceTypes = page.componentsResourceTypes, filter='customheadlibs\\.amp\\.html'}"
-         data-sly-repeat.toInclude="${componentFiles.paths}"
-         data-sly-include="${toInclude}"></sly>
-    <style amp-custom
-           data-sly-use.clientlibs="${'com.adobe.cq.wcm.core.components.models.ClientLibraries' @ resourceTypes = page.componentsResourceTypes, filter='.*\\.amp'}">
-        ${clientlibs.cssInline @ context="unsafe"}
-    </style>
-</template>

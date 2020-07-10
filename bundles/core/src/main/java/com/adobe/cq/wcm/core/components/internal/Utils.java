@@ -15,20 +15,43 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.LoginException;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.adobe.cq.wcm.core.components.models.ExperienceFragment;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.day.cq.wcm.api.Template;
+import com.day.cq.wcm.foundation.AllowedComponentList;
 
 public class Utils {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
 
     /**
      * Name of the separator character used between prefix and hash when generating an ID, e.g. image-5c7e0ef90d
      */
     public static final String ID_SEPARATOR = "-";
+
+    /**
+     * Name of the subservice used to authenticate as in order to be able to read details about components and
+     * client libraries.
+     */
+    public static final String COMPONENTS_SERVICE = "components-service";
 
     private Utils() {
     }
@@ -107,4 +130,113 @@ public class Utils {
         return StringUtils.join(prefix, ID_SEPARATOR, StringUtils.substring(DigestUtils.sha256Hex(path), 0, 10));
     }
 
+    /**
+     * Returns a set of resource types for components used to render a given page, including those
+     * from the page template and embedded experience templates.
+     *
+     * @param page the {@link Page}
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     * @return
+     */
+    @NotNull
+    public static Set<String> getPageResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Set<String> resourceTypes = new HashSet<>();
+        resourceTypes.addAll(getResourceTypes(page.getContentResource(), request, modelFactory));
+        resourceTypes.addAll(getTemplateResourceTypes(page, request, modelFactory));
+        return resourceTypes;
+    }
+
+    /**
+     * Returns a set of resource types for components used to render a given resource,
+     * including it's direct children
+     *
+     * @param resource the resource
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     *
+     * @return a set of resource types for components used to render the resource
+     */
+    @NotNull
+    public static Set<String> getResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Set<String> resourceTypes = new HashSet<>();
+        resourceTypes.add(resource.getResourceType());
+        resourceTypes.addAll(getXFResourceTypes(resource, request, modelFactory));
+        for (Resource child : resource.getChildren()) {
+            //TODO: check it's a cq:Component, used to be allowed node (filtered out by regex)
+            resourceTypes.addAll(getResourceTypes(child, request, modelFactory));
+        }
+        return resourceTypes;
+    }
+
+    /**
+     * Returns a set of resource types for components included in the experience template
+     *
+     * @param resource the resource, will be tested to see if it's an experience template
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     *
+     * @return a set of resource types for components included in the experience template
+     */
+    @NotNull
+    public static Set<String> getXFResourceTypes(@NotNull Resource resource, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        ExperienceFragment experienceFragment = modelFactory.getModelFromWrappedRequest(request, resource, ExperienceFragment.class);
+        if (experienceFragment != null) {
+            String fragmentPath = experienceFragment.getLocalizedFragmentVariationPath();
+            if (StringUtils.isNotEmpty(fragmentPath)) {
+                ResourceResolver resolver = resource.getResourceResolver();
+                if (resolver != null) {
+                    Resource fragmentResource = resolver.getResource(fragmentPath);
+                    if (fragmentResource != null) {
+                        return getResourceTypes(fragmentResource, request, modelFactory);
+                    }
+                }
+            }
+        }
+        return Collections.emptySet();
+    }
+
+    /**
+     * Returns a set of resource types for components included in the page template
+     *
+     * @param page the page
+     * @param request the current request
+     * @param modelFactory the {@link ModelFactory}
+     *
+     * @return a set of resource types for components included in the page template
+     */
+    @NotNull
+    public static Set<String> getTemplateResourceTypes(@NotNull Page page, @NotNull SlingHttpServletRequest request, @NotNull ModelFactory modelFactory) {
+        Template template = page.getTemplate();
+        if (template != null) {
+            String templatePath = template.getPath() + AllowedComponentList.STRUCTURE_JCR_CONTENT;
+            ResourceResolver resolver = page.getContentResource().getResourceResolver();
+            if (resolver != null) {
+                Resource templateResource = resolver.getResource(templatePath);
+                if (templateResource != null) {
+                    return getResourceTypes(templateResource, request, modelFactory);
+                }
+            }
+        }
+        return Collections.emptySet();
+    }
+
+    /**
+     * Returns a {@link ResourceResolver} that is able to read information from the components (scripts, client
+     * libraries).
+     *
+     * @param resolverFactory the {@link ResourceResolverFactory}
+     *
+     * @return a {@link ResourceResolver} that is able to read information from the components
+     */
+    @Nullable
+    public static ResourceResolver getComponentsResolver(ResourceResolverFactory resolverFactory) {
+        try {
+            return resolverFactory.getServiceResourceResolver(
+                    Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE));
+        } catch (LoginException e) {
+            LOG.error("Cannot login as a service user", e);
+            return null;
+        }
+    }
 }

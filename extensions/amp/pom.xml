@@ -35,7 +35,6 @@
 
     <modules>
         <module>bundle</module>
-        <module>config</module>
         <module>content</module>
     </modules>
 </project>

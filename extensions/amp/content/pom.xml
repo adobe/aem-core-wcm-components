@@ -247,6 +247,18 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Logging Dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- AEM APIs -->
         <dependency>
             <groupId>com.adobe.aem</groupId>

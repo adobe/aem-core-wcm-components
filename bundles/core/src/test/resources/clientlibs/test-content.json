@@ -1,0 +1,224 @@
+{
+    "clientlibs": {
+        "jcr:primaryType": "cq:Page",
+        "page-with-template": {
+            "jcr:primaryType": "cq:Page",
+            "jcr:content": {
+                "jcr:primaryType"   : "cq:PageContent",
+                "jcr:title"         : "Clientlibs Test",
+                "sling:resourceType": "core/wcm/components/page/v2/page",
+                "cq:template"       : "/conf/templates/content-page",
+                "jcr:description"   : "Clientlibs Test description"
+            }
+        },
+        "jcr:content"    : {
+            "jcr:primaryType"   : "cq:PageContent",
+            "jcr:title"         : "Accordion Test",
+            "sling:resourceType": "core/wcm/components/page/v2/page",
+            "jcr:description"   : "Accordion description",
+            "root"              : {
+                "jcr:primaryType"   : "nt:unstructured",
+                "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                "responsivegrid"    : {
+                    "jcr:primaryType"   : "nt:unstructured",
+                    "sling:resourceType": "wcm/foundation/components/responsivegrid",
+                    "accordion-empty"          : {
+                        "jcr:primaryType": "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/accordion/v1/accordion"
+                    },
+                    "experiencefragment-1": {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "fragmentVariationPath" : "/content/experience-fragments/simple-experience-fragment/master",
+                        "sling:resourceType": "core/wcm/components/experiencefragment/v1/experiencefragment"
+                    },
+                    "accordion-1"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/accordion/v1/accordion",
+                        "expandedItems"     : [
+                            "item_2"
+                        ],
+                        "item_1"          : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Accordion Item 1",
+                            "jcr:description"   : "Accordion Item 1 description",
+                            "sling:resourceType": "core/wcm/components/responsivegrid",
+                            "item_1_1": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 1",
+                                "jcr:description"   : "Teaser 1 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            },
+                            "item_1_2": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 2",
+                                "jcr:description"   : "Teaser 2 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            }
+                        },
+                        "item_2"          : {
+                            "cq:panelTitle"     : "Accordion Panel 2",
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Accordion Item 2",
+                            "jcr:description"   : "Accordion Item 2 description",
+                            "sling:resourceType": "core/wcm/components/responsivegrid",
+                            "item_2_1": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 1",
+                                "jcr:description"   : "Teaser 1 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            },
+                            "item_2_2": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 2",
+                                "jcr:description"   : "Teaser 2 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            }
+                        },
+                        "item_3": {}
+                    },
+                    "accordion-2"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/accordion/v1/accordion",
+                        "expandedItems"     : [
+                            "item_2"
+                        ],
+                        "item_1"          : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Accordion Item 1",
+                            "sling:resourceType": "core/wcm/components/responsivegrid",
+                            "item_1_1": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 1",
+                                "jcr:description"   : "Teaser 1 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            },
+                            "item_1_2": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "sling:resourceType": "core/wcm/components/accordion/v1/accordion",
+                                "expandedItems"     : [
+                                    "item_1_2_2"
+                                ],
+                                "item_1_2_1"          : {
+                                    "jcr:primaryType"   : "nt:unstructured",
+                                    "jcr:title"         : "Accordion Item 1.1",
+                                    "sling:resourceType": "core/wcm/components/responsivegrid",
+                                    "item_1_2_1_1": {
+                                        "jcr:primaryType"   : "nt:unstructured",
+                                        "jcr:title"         : "Teaser 1",
+                                        "jcr:description"   : "Teaser 1 description",
+                                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                                    },
+                                    "item_1_2_1_2": {
+                                        "jcr:primaryType"   : "nt:unstructured",
+                                        "jcr:title"         : "Teaser 2",
+                                        "jcr:description"   : "Teaser 2 description",
+                                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                                    }
+                                },
+                                "item_1_2_2"          : {
+                                    "jcr:primaryType"   : "nt:unstructured",
+                                    "jcr:title"         : "Accordion Item 1.2",
+                                    "sling:resourceType": "core/wcm/components/responsivegrid",
+                                    "item_1_2_2_1": {
+                                        "jcr:primaryType"   : "nt:unstructured",
+                                        "jcr:title"         : "Teaser 1",
+                                        "jcr:description"   : "Teaser 1 description",
+                                        "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                                    },
+                                    "item_1_2_2_2": {
+                                        "jcr:primaryType"   : "nt:unstructured",
+                                        "jcr:title"         : "Carousel 1",
+                                        "sling:resourceType": "core/wcm/components/carousel/v1/carousel",
+                                        "autoplay"          : "true",
+                                        "delay"             : "7000",
+                                        "item_1_2_2_2_1": {
+                                            "jcr:primaryType"   : "nt:unstructured",
+                                            "jcr:title"         : "Teaser 1",
+                                            "jcr:description"   : "Teaser 1 description",
+                                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                                        },
+                                        "item_1_2_2_2_2": {
+                                            "jcr:primaryType"   : "nt:unstructured",
+                                            "jcr:title"         : "Teaser 2",
+                                            "jcr:description"   : "Teaser 2 description",
+                                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                                        },
+                                        "item_1_2_2_2_3": {
+                                            "jcr:primaryType"   : "nt:unstructured",
+                                            "jcr:title"         : "Teaser 3",
+                                            "jcr:description"   : "Teaser 3 description",
+                                            "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "item_2"          : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Accordion Item 2",
+                            "sling:resourceType": "core/wcm/components/responsivegrid",
+                            "item_2_1": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 1",
+                                "jcr:description"   : "Teaser 1 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            },
+                            "item_2_2": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 2",
+                                "jcr:description"   : "Teaser 2 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            }
+                        }
+                    },
+                    "accordion-3"          : {
+                        "jcr:primaryType"   : "nt:unstructured",
+                        "sling:resourceType": "core/wcm/components/accordion/v1/accordion",
+                        "expandedItems"     : [
+                            "item_2"
+                        ],
+                        "singleExpansion" : "true",
+                        "item_1"          : {
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Accordion Item 1",
+                            "jcr:description"   : "Accordion Item 1 description",
+                            "sling:resourceType": "core/wcm/components/responsivegrid",
+                            "item_1_1": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 1",
+                                "jcr:description"   : "Teaser 1 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            },
+                            "item_1_2": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 2",
+                                "jcr:description"   : "Teaser 2 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            }
+                        },
+                        "item_2"          : {
+                            "cq:panelTitle"     : "Accordion Panel 2",
+                            "jcr:primaryType"   : "nt:unstructured",
+                            "jcr:title"         : "Accordion Item 2",
+                            "jcr:description"   : "Accordion Item 2 description",
+                            "sling:resourceType": "core/wcm/components/responsivegrid",
+                            "item_2_1": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 1",
+                                "jcr:description"   : "Teaser 1 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            },
+                            "item_2_2": {
+                                "jcr:primaryType"   : "nt:unstructured",
+                                "jcr:title"         : "Teaser 2",
+                                "jcr:description"   : "Teaser 2 description",
+                                "sling:resourceType": "core/wcm/components/teaser/v1/teaser"
+                            }
+                        },
+                        "item_3": {}
+                    }
+                }
+            }
+        }
+    }
+}
