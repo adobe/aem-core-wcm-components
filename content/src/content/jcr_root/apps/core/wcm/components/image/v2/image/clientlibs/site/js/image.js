@@ -145,6 +145,41 @@
 
             setupProperties(config.options);
             cacheElements(config.element);
+            //check image sorce contains "is/image" (DM asset); if true try to make req=set
+            if (that._elements.image.src.indexOf("is/image") !== -1) {
+                var request = new XMLHttpRequest();
+                var url = that._elements.image.src + "?req=set,json";
+
+                request.open("GET", url, true);
+                request.onload = function() {
+                    if (request.status >= 200 && request.status < 400) {
+                        // success status
+                        var responseText = request.responseText;
+						var rePayload = new RegExp(/^(?:\/\*jsonp\*\/)?\s*([^()]+)\(([\s\S]+),\s*"[0-9]*"\);?$/gmi);
+                        var rePayloadJSON = new RegExp(/^{[\s\S]*}$/gmi);
+						var resPayload = rePayload.exec(responseText);
+                        var smartcropList = "";
+                        if (resPayload) {
+                            var payload;
+                            var payloadStr = resPayload[2];
+                            if (rePayloadJSON.test(payloadStr)) {
+                                payload = JSON.parse(payloadStr);
+                            }
+
+                        }
+                        //check "relation" - only in case of smartcrop preset
+                        if (payload.set.relation && payload.set.relation.length > 0) {
+                            for(var i=0; i < payload.set.relation.length ; i++) {
+                                smartcropList += payload.set.relation[i].n +"\n";
+                            }
+                            alert (smartcropList);
+                        }
+                    } else {
+                        // error status
+                    }
+                };
+                request.send();                
+            }
 
             if (!that._elements.noscript) {
                 return;

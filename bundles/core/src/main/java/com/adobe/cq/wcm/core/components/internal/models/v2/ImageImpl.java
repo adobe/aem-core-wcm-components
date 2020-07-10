@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.jcr.RepositoryException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -40,6 +41,8 @@ import com.adobe.cq.wcm.core.components.models.Image;
 import com.adobe.cq.wcm.core.components.models.ImageArea;
 import com.day.cq.dam.api.Asset;
 import com.day.cq.dam.api.DamConstants;
+import com.day.cq.dam.scene7.api.constants.Scene7Constants;
+import com.day.cq.dam.api.s7dam.utils.PublishUtils;
 
 /**
  * V2 Image model implementation.
@@ -90,6 +93,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      */
     protected String uuid;
 
+    private PublishUtils publishUtils;
     /**
      * Construct the model.
      *
@@ -136,6 +140,30 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                             title = damTitle;
                         }
                     }
+                    //check DM asset - check for "dam:scene7File" metadata value 
+                    if(!StringUtils.isEmpty(asset.getMetadataValue(Scene7Constants.PN_S7_FILE))){
+                    	String productionImageUrl = "";
+                    	String[] productionImageUrls = {};
+                        //check for publish side
+                        boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
+                        try {
+                        	productionImageUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
+                        }
+    	                catch (RepositoryException e) {
+    						LOGGER.error("Unable to get DM URL for asset resource '{}'", fileReference);
+    					}   
+                        if(productionImageUrls.length > 1) {
+	                        if (!isWCMDisabled){
+	                        	//for Author
+	                        	productionImageUrl = "/is/image/" + productionImageUrls[1];
+	                        }
+	                        else {
+	                        	//for Publish
+	                        	productionImageUrl =  productionImageUrls[0] + "/is/image/" + productionImageUrls[1];
+	                        }
+                        }
+                        src = productionImageUrl;                    	
+                    }     
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
