@@ -18,7 +18,8 @@
      id="${tabs.id}"
      class="cmp-tabs"
      data-cmp-is="tabs"
-     data-cmp-data-layer="${tabs.data.json}">
+     data-cmp-data-layer="${tabs.data.json}"
+     data-placeholder-text="${wcmmode.edit && 'Please drag Tab component here' @ i18n}">
     <ol data-sly-test="${tabs.items && tabs.items.size > 0}"
         data-sly-list.tab="${tabs.items}"
         role="tablist"
