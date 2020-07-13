@@ -14,7 +14,7 @@
 # limitations under the License.
 ###############################################################################*/
 
-(function ($, ns, channel, window, undefined) {
+(function ($, ns, channel, window) {
 
     "use strict";
     var placeholderClass = 'cq-placeholder';
@@ -355,4 +355,4 @@
         return this.overlay.isDisabled();
     };
 
-}(jQuery, Granite.author, jQuery(document), this));
+}(jQuery, Granite.author, jQuery(document)));
