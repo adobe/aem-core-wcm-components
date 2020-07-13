@@ -15,15 +15,11 @@
 ###############################################################################*/
 
 (function ($, ns, channel, window) {
-
     "use strict";
     var placeholderClass = 'cq-placeholder';
     var newComponentClass = 'new';
     var sectionClass = 'section';
     var newComponentPlaceholderText = Granite.I18n.get('Drag components here');
-    var placeholderDataElementClass = "placeholder-text-"
-
-
 
     /**
      * Indicates if the Inspectable has a placeholder element
@@ -33,28 +29,18 @@
         if( !this.onPage() ) {
             return false;
         }
-
         // New component placeholder (drag components here)
         if (this.dom.hasClass(newComponentClass)) {
              //return newComponentPlaceholderText;
             var editableEl = this.dom.parents(".cq-Editable-dom[data-placeholder-text],.cq-Editable-dom [data-placeholder-text]").first();
         if(editableEl.length > 0) {
             var placeholderHint = editableEl.data('placeholder-text');
-            var elClasses = this.dom.attr("class").split(" ");
-            for(var i = 0; i < elClasses.length; i++) {
-                var placeholderHintSelector = editableEl.data(`placeholderDataElementClass ${elClasses[i]}` );
-                if(placeholderHintSelector) {
-                    placeholderHint = placeholderHintSelector;
-                    break;
-                }
-            }
-            if(placeholderHint) {
+             if(placeholderHint) {
                 return Granite.I18n.get(placeholderHint);
             }
         }
         return newComponentPlaceholderText;
         }
-
         // Placeholder for empty component
         var placeholder;
         if (this.dom.hasClass(placeholderClass)) {
@@ -65,7 +51,6 @@
             // when the inspectable is a drop target or is inplace editable
             if (this.config.editConfig &&
                 (this.config.editConfig.dropTarget || this.config.editConfig.inplaceEditingConfig)) {
-
                 var inspectable = this;
                 placeholder = inspectable.dom
                     .find(`.${placeholderClass}`)
@@ -79,10 +64,7 @@
                 placeholder = this.dom.find(`> .${placeholderClass}`);
             }
         }
-
         return placeholder && placeholder.length ?
             Granite.I18n.getVar(placeholder.data("emptytext")) : false;
     };
-
-
 }(jQuery, Granite.author, jQuery(document)));
