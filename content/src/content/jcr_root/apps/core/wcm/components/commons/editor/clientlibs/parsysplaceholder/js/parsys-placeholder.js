@@ -21,6 +21,7 @@
     var newComponentClass = 'new';
     var sectionClass = 'section';
     var newComponentPlaceholderText = Granite.I18n.get('Drag components here');
+    var placeholderDataElementClass = "placeholder-text-"
 
 
 
@@ -42,7 +43,7 @@
             var placeholderHint = editableEl.data('placeholder-text');
             var elClasses = this.dom.attr("class").split(" ");
             for(var i = 0; i < elClasses.length; i++) {
-                var placeholderHintSelector = editableEl.data("placeholder-text-" + elClasses[i]);
+                var placeholderHintSelector = editableEl.data(`placeholderDataElementClass ${elClasses[i]}` );
                 if(placeholderHintSelector) {
                     placeholderHint = placeholderHintSelector;
                     break;
@@ -68,7 +69,7 @@
 
                 var inspectable = this;
                 placeholder = inspectable.dom
-                    .find('.' + placeholderClass)
+                    .find(`.${placeholderClass}`)
                     .filter(function() {
                         // Filter out nested placeholders that are part of another inspectable
                         return inspectable.dom.is($(this).closest(".cq-Editable-dom"));
@@ -76,7 +77,7 @@
             } else {
                 // The inspectable can have a direct child as placeholder to allow user interaction
                 // (e.g., "allowed components" in template editor)
-                placeholder = this.dom.find("> ." + placeholderClass);
+                placeholder = this.dom.find(`> .${placeholderClass}`);
             }
         }
 
