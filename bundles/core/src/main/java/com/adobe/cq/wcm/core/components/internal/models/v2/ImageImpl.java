@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.jcr.RepositoryException;
+import javax.inject.Inject;                           
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -93,6 +94,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
      */
     protected String uuid;
 
+    @Inject
     private PublishUtils publishUtils;
     /**
      * Construct the model.
@@ -146,6 +148,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
                     	String[] productionImageUrls = {};
                         //check for publish side
                         boolean isWCMDisabled =  (com.day.cq.wcm.api.WCMMode.fromRequest(request) == com.day.cq.wcm.api.WCMMode.DISABLED);
+                        
                         try {
                         	productionImageUrls = publishUtils.externalizeImageDeliveryAsset(assetResource);
                         }
@@ -163,7 +166,7 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 	                        }
                         }
                         src = productionImageUrl;                    	
-                    }     
+                    }                    
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
                             request.getResource().getPath());
