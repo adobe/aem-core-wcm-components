@@ -18,7 +18,6 @@
     "use strict";
     var placeholderClass = 'cq-placeholder';
     var newComponentClass = 'new';
-    var sectionClass = 'section';
     var newComponentPlaceholderText = Granite.I18n.get('Drag components here');
 
     /**
