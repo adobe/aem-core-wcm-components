@@ -16,8 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -75,29 +77,44 @@ public class ComponentFilesImpl implements ComponentFiles {
         if (paths == null) {
             paths = new LinkedList<>();
 
+            Set<String> seenResourceTypes = new HashSet<>();
             for (String resourceType : resourceTypes) {
-                Resource componentResource = getResource(resourceType);
-                addPaths(componentResource, paths);
-
-                if (inherited && componentResource != null) {
-                    addPaths(getResource(componentResource.getResourceSuperType()), paths);
-                }
+                addPaths(resourceType, paths, seenResourceTypes);
             }
         }
         return paths;
     }
 
-    private void addPaths(Resource resource, Collection<String> paths) {
-        if (resource == null) {
-            return;
-        }
-        for (Resource child : resource.getChildren()) {
-            if (pattern.matcher(child.getName()).matches()) {
-                paths.add(child.getPath());
+    /**
+     * Adds file paths to a given collection, based on a resource type, filtered by the defined RegEx pattern.
+     *
+     * @param resourceType - the resource type of the component to look into for files matching the defined pattern
+     * @param paths - the given collection of file paths
+     * @param seenResourceTypes - a set of resource types that were previously searched into, to avoid inheritance loops
+     */
+    private void addPaths(String resourceType, Collection<String> paths, Set<String> seenResourceTypes) {
+        if (!seenResourceTypes.contains(resourceType)) {
+            Resource resource = getResource(resourceType);
+            if (resource != null) {
+                for (Resource child : resource.getChildren()) {
+                    if (pattern.matcher(child.getName()).matches()) {
+                        paths.add(child.getPath());
+                    }
+                }
+                if (inherited) {
+                    addPaths(resource.getResourceSuperType(), paths, seenResourceTypes);
+                }
             }
         }
     }
 
+    /**
+     * Gets the component resource for a given path
+     *
+     * @param path - the path
+     *
+     * @return the corresponding resource
+     */
     private Resource getResource(String path) {
         if (path == null) {
             return null;

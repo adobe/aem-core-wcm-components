@@ -163,7 +163,6 @@ public class Utils {
         resourceTypes.add(resource.getResourceType());
         resourceTypes.addAll(getXFResourceTypes(resource, request, modelFactory));
         for (Resource child : resource.getChildren()) {
-            //TODO: check it's a cq:Component, used to be allowed node (filtered out by regex)
             resourceTypes.addAll(getResourceTypes(child, request, modelFactory));
         }
         return resourceTypes;

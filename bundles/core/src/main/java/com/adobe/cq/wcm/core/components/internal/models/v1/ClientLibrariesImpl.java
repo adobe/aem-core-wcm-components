@@ -42,7 +42,6 @@ import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -167,6 +166,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return getLibIncludes(null);
     }
 
+    /**
+     * Returns the markup for including the client libraries into an HTML page
+     *
+     * @param type - the type of the client libraries
+     *
+     * @return Markup for including the client libraries
+     */
     private String getLibIncludes(LibraryType type) {
         StringWriter sw = new StringWriter();
         try {
@@ -191,6 +197,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return getHtmlWithInjectedAttributes(html);
     }
 
+    /**
+     * Gets the HTML markup with the injected JS/CSS attributes
+     *
+     * @param html - the input html
+     *
+     * @return HTML with injected JS/CSS attributes
+     */
     private String getHtmlWithInjectedAttributes(String html) {
         StringBuilder jsAttributes = new StringBuilder();
         jsAttributes.append(getHtmlAttr(OPTION_ASYNC, async));
@@ -203,6 +216,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }
 
+    /**
+     * Gets the fragment for an attribute, conditioned for include
+     *
+     * @param name - the name of the attribute
+     * @param include - should the attribute be included
+     *
+     * @return Fragment for the attribute
+     */
     private String getHtmlAttr(String name, boolean include) {
         if (include) {
             return name + " ";
@@ -210,6 +231,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return "";
     }
 
+    /**
+     * Gets the fragment for an attribute, give a name and a value
+     *
+     * @param name - the name of the attribute
+     * @param value - the value of the attribute
+     *
+     * @return Fragment for the attribute
+     */
     private String getHtmlAttr(String name, String value) {
         if (StringUtils.isNotEmpty(value)) {
             return name + "=\"" + value + "\" ";
@@ -217,6 +246,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return "";
     }
 
+    /**
+     * Returns the markup for inlining a client library into an HTML docuement.
+     *
+     * @param libraryType - the type of the library
+     *
+     * @return Markup for inlining client library
+     */
     private String getInline(LibraryType libraryType) {
         Collection<ClientLibrary> clientlibs = htmlLibraryManager.getLibraries(categoriesArray, libraryType, true, false);
         // Iterate through the clientlibs and aggregate their content.
@@ -235,20 +271,23 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return output.toString();
     }
 
+    /**
+     * Get the clientlib categories from the list of component resourceTypes, using the defined
+     * filter.
+     *
+     * @return {@link Set<String>} of clientlib categories
+     */
     public Set<String> getCategoriesFromComponents() {
         Set<String> categories = new HashSet<>();
 
         allLibraries = htmlLibraryManager.getLibraries();
         Collection<ClientLibrary> libraries = new LinkedList<>();
 
+        Set<String> seenResourceTypes = new HashSet<>();
         for (String resourceType : resourceTypes) {
-            Resource componentRes = getResource(resourceType);
-            addClientLibraries(componentRes, libraries);
-
-            if (inherited && componentRes != null) {
-                addClientLibraries(getResource(componentRes.getResourceSuperType()), libraries);
-            }
+            addClientLibraries(resourceType, libraries, seenResourceTypes);
         }
+
         for (ClientLibrary library : libraries) {
             for (String category : library.getCategories()) {
                 if (pattern != null) {
@@ -263,23 +302,58 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return categories;
     }
 
-    private void addClientLibraries(Resource componentRes, Collection<ClientLibrary> libraries) {
-        if (componentRes == null) {
+    /**
+     * Adds client libraries to the provided collection, starting for the resource type.
+     *
+     * @param resourceType - the resource type to look into for client libraries
+     * @param libraries - the provided collection of libraries to add to
+     * @param seenResourceTypes - a set of resource types that were previously searched into, to avoid inheritance loops
+     */
+    private void addClientLibraries(String resourceType, Collection<ClientLibrary> libraries, Set<String> seenResourceTypes) {
+        if (!seenResourceTypes.contains(resourceType)) {
+            seenResourceTypes.add(resourceType);
+            Resource resource = getResource(resourceType);
+            if (resource != null) {
+                for (Resource child : resource.getChildren()) {
+                    addClientLibraries(child, libraries);
+                }
+                if (inherited) {
+                    addClientLibraries(resource.getResourceSuperType(), libraries, seenResourceTypes);
+                }
+            }
+        }
+    }
+
+    /**
+     * Adds client libraries to the provided collection, starting from the given resource
+     * and diving into it's children.
+     *
+     * @param candidate - the given resource, which will be checked to see if it's a client library
+     * @param libraries - the provided collection of libraries to add to
+     */
+    private void addClientLibraries(Resource candidate, Collection<ClientLibrary> libraries) {
+        if (candidate == null) {
             return;
         }
-        String componentType = componentRes.getResourceType();
+        String componentType = candidate.getResourceType();
         if (StringUtils.equals(componentType, FMConstants.CQ_CLIENTLIBRARY_FOLDER)) {
-            ClientLibrary library = allLibraries.get(componentRes.getPath());
+            ClientLibrary library = allLibraries.get(candidate.getPath());
             if (library != null) {
                 libraries.add(library);
             }
         }
-        Iterable<Resource> childComponents = componentRes.getChildren();
-        for (Resource child : childComponents) {
+        for (Resource child : candidate.getChildren()) {
             addClientLibraries(child, libraries);
         }
     }
 
+    /**
+     * Gets the component resource for a given path
+     *
+     * @param path - the path
+     *
+     * @return the corresponding resource
+     */
     private Resource getResource(String path) {
         if (path == null) {
             return null;
@@ -289,9 +363,5 @@ public class ClientLibrariesImpl implements ClientLibraries {
             resolver = request.getResourceResolver();
         }
         return resolver.getResource(path);
-
     }
-
-
-
 }
