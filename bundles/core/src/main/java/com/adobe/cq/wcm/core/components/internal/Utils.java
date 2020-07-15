@@ -222,6 +222,54 @@ public class Utils {
     }
 
     /**
+     * Returns a set of the inherited resource types of a component defined by its resource type.
+     *
+     * @param resourceType the resource type of the component
+     * @param request the current request
+     * @param resolverFactory the {@link ResourceResolverFactory}
+     *
+     * @return a set of the inherited resource types
+     */
+    @NotNull
+    public static Set<String> getInheritedResourceTypes(@NotNull String resourceType, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+        Set<String> inheritedResourceTypes = new HashSet<>();
+        addInheritedResourceTypes(resourceType, inheritedResourceTypes, request, resolverFactory);
+        return inheritedResourceTypes;
+    }
+
+    private static void addInheritedResourceTypes(@NotNull String resourceType, @NotNull Set<String> inheritedResourceTypes, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+        Resource resource = getResource(resourceType, request, resolverFactory);
+        if (resource != null) {
+            String superType = resource.getResourceSuperType();
+            if (StringUtils.isNotEmpty(superType) && !inheritedResourceTypes.contains(superType)) {
+                inheritedResourceTypes.add(superType);
+                addInheritedResourceTypes(superType, inheritedResourceTypes, request, resolverFactory);
+            }
+        }
+    }
+
+    /**
+     * Returns the {@link Resource} defined by the given path.
+     *
+     * @param path the resource path
+     * @param request the {@link SlingHttpServletRequest}
+     * @param resolverFactory the {@link ResourceResolverFactory}
+     *
+     * @return a {@link ResourceResolver} that is able to read information from the components
+     */
+    @Nullable
+    public static Resource getResource(String path, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+        if (path == null) {
+            return null;
+        }
+        ResourceResolver resolver = getComponentsResolver(resolverFactory);
+        if (resolver == null) {
+            resolver = request.getResourceResolver();
+        }
+        return resolver.getResource(path);
+    }
+
+    /**
      * Returns a {@link ResourceResolver} that is able to read information from the components (scripts, client
      * libraries).
      *

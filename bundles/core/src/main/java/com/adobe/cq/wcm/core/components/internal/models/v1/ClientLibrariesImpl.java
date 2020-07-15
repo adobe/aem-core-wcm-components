@@ -36,13 +36,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -235,19 +233,19 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return output.toString();
     }
 
-    public Set<String> getCategoriesFromComponents() {
+    protected Set<String> getCategoriesFromComponents() {
         Set<String> categories = new HashSet<>();
 
         allLibraries = htmlLibraryManager.getLibraries();
         Collection<ClientLibrary> libraries = new LinkedList<>();
 
-        for (String resourceType : resourceTypes) {
-            Resource componentRes = getResource(resourceType);
-            addClientLibraries(componentRes, libraries);
+        Collection<String> allResourceTypes = new LinkedList<>();
+        allResourceTypes.addAll(resourceTypes);
+        allResourceTypes.addAll(getInheritedResourceTypes());
 
-            if (inherited && componentRes != null) {
-                addClientLibraries(getResource(componentRes.getResourceSuperType()), libraries);
-            }
+        for (String resourceType : allResourceTypes) {
+            Resource componentRes = Utils.getResource(resourceType, request, resolverFactory);
+            addClientLibraries(componentRes, libraries);
         }
         for (ClientLibrary library : libraries) {
             for (String category : library.getCategories()) {
@@ -261,6 +259,16 @@ public class ClientLibrariesImpl implements ClientLibraries {
             }
         }
         return categories;
+    }
+
+    private Set<String> getInheritedResourceTypes() {
+        Set<String> inheritedResourceTypes = new HashSet<>();
+        if (inherited) {
+            for (String resourceType : resourceTypes) {
+                inheritedResourceTypes.addAll(Utils.getInheritedResourceTypes(resourceType, request, resolverFactory));
+            }
+        }
+        return inheritedResourceTypes;
     }
 
     private void addClientLibraries(Resource componentRes, Collection<ClientLibrary> libraries) {
@@ -279,19 +287,5 @@ public class ClientLibrariesImpl implements ClientLibraries {
             addClientLibraries(child, libraries);
         }
     }
-
-    private Resource getResource(String path) {
-        if (path == null) {
-            return null;
-        }
-        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
-        if (resolver == null) {
-            resolver = request.getResourceResolver();
-        }
-        return resolver.getResource(path);
-
-    }
-
-
 
 }
