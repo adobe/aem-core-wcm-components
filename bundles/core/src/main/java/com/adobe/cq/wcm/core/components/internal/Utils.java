@@ -229,7 +229,7 @@ public class Utils {
      * @return a {@link ResourceResolver} that is able to read information from the components
      */
     @Nullable
-    public static ResourceResolver getComponentsResolver(ResourceResolverFactory resolverFactory) {
+    public static ResourceResolver getComponentsResolver(@NotNull ResourceResolverFactory resolverFactory) {
         try {
             return resolverFactory.getServiceResourceResolver(
                     Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE));
@@ -237,5 +237,26 @@ public class Utils {
             LOG.error("Cannot login as a service user", e);
             return null;
         }
+    }
+
+    /**
+     * Gets the component resource for a given path
+     *
+     * @param path - the path
+     * @param request - the request
+     * @param resolverFactory - the resolver factory
+     *
+     * @return the corresponding resource
+     */
+    @Nullable
+    public static Resource getResource(String path, @NotNull SlingHttpServletRequest request, @NotNull ResourceResolverFactory resolverFactory) {
+        if (path == null) {
+            return null;
+        }
+        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
+        if (resolver == null) {
+            resolver = request.getResourceResolver();
+        }
+        return resolver.getResource(path);
     }
 }

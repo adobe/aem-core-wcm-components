@@ -311,7 +311,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     private void addClientLibraries(String resourceType, Collection<ClientLibrary> libraries, Set<String> seenResourceTypes) {
         if (!seenResourceTypes.contains(resourceType)) {
             seenResourceTypes.add(resourceType);
-            Resource resource = getResource(resourceType);
+            Resource resource = Utils.getResource(resourceType, request, resolverFactory);
             if (resource != null) {
                 for (Resource child : resource.getChildren()) {
                     addClientLibraries(child, libraries);
@@ -346,21 +346,4 @@ public class ClientLibrariesImpl implements ClientLibraries {
         }
     }
 
-    /**
-     * Gets the component resource for a given path
-     *
-     * @param path - the path
-     *
-     * @return the corresponding resource
-     */
-    private Resource getResource(String path) {
-        if (path == null) {
-            return null;
-        }
-        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
-        if (resolver == null) {
-            resolver = request.getResourceResolver();
-        }
-        return resolver.getResource(path);
-    }
 }

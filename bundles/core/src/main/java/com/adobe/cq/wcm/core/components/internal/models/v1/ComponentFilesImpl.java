@@ -94,35 +94,20 @@ public class ComponentFilesImpl implements ComponentFiles {
      */
     private void addPaths(String resourceType, Collection<String> paths, Set<String> seenResourceTypes) {
         if (!seenResourceTypes.contains(resourceType)) {
-            Resource resource = getResource(resourceType);
+            Resource resource = Utils.getResource(resourceType, request, resolverFactory);
             if (resource != null) {
+                boolean matched = false;
                 for (Resource child : resource.getChildren()) {
                     if (pattern.matcher(child.getName()).matches()) {
                         paths.add(child.getPath());
+                        matched = true;
                     }
                 }
-                if (inherited) {
+                if (inherited && !matched) {
                     addPaths(resource.getResourceSuperType(), paths, seenResourceTypes);
                 }
             }
         }
     }
 
-    /**
-     * Gets the component resource for a given path
-     *
-     * @param path - the path
-     *
-     * @return the corresponding resource
-     */
-    private Resource getResource(String path) {
-        if (path == null) {
-            return null;
-        }
-        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
-        if (resolver == null) {
-            resolver = request.getResourceResolver();
-        }
-        return resolver.getResource(path);
-    }
 }
