@@ -125,7 +125,14 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             if (!actions.isEmpty()) {
                 ListItem firstAction = actions.get(0);
                 if (firstAction != null) {
-                    targetPage = pageManager.getPage(firstAction.getPath());
+                	LOGGER.debug("firstaction URL : "+firstAction.getURL());
+                	if(firstAction.getPath().startsWith("/content")) {
+                		LOGGER.debug("internal link");
+                		targetPage = pageManager.getPage(firstAction.getPath());
+                	} else if(firstAction.getPath().startsWith("https")) {
+                		LOGGER.debug("external link");
+                		linkURL=firstAction.getURL();
+                   	}
                 }
             }
         } else {
@@ -185,8 +192,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         if (hasImage) {
             setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
-        if (targetPage != null) {
+        if ((targetPage != null) && (targetPage.getPath().startsWith("/content"))) {
             linkURL = Utils.getURL(request, targetPage);
+            LOGGER.debug("internal link url : "+linkURL);
         }
     }
 
@@ -333,7 +341,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
             ctaUrl = ctaProperties.get(PN_ACTION_LINK, String.class);
             ctaPath = actionRes.getPath();
-            if (ctaUrl != null && ctaUrl.startsWith("/")) {
+            if (ctaUrl != null) {
+            	LOGGER.debug("Teaser ctaUrl is : "+ctaUrl.toString());
                 ctaPage = pageManager.getPage(ctaUrl);
             }
         }
