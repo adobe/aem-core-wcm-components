@@ -171,7 +171,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
      *
      * @param type - the type of the client libraries
      *
-     * @return Markup for including the client libraries
+     * @return Markup that includes the client libraries
      */
     private String getLibIncludes(LibraryType type) {
         StringWriter sw = new StringWriter();
@@ -217,10 +217,10 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Gets the fragment for an attribute, conditioned for include
+     * Gets the fragment for an attribute, based on its name and flag to include
      *
      * @param name - the name of the attribute
-     * @param include - should the attribute be included
+     * @param include - {@code true} to include, {@code false} otherwise
      *
      * @return Fragment for the attribute
      */
@@ -232,7 +232,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Gets the fragment for an attribute, give a name and a value
+     * Gets the fragment for an attribute, based on its name and value
      *
      * @param name - the name of the attribute
      * @param value - the value of the attribute
@@ -247,11 +247,11 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Returns the markup for inlining a client library into an HTML docuement.
+     * Returns a concatenation of the content of all the client libraries, given a library type.
      *
      * @param libraryType - the type of the library
      *
-     * @return Markup for inlining client library
+     * @return String concatenation of the content of all the client libraries
      */
     private String getInline(LibraryType libraryType) {
         Collection<ClientLibrary> clientlibs = htmlLibraryManager.getLibraries(categoriesArray, libraryType, true, false);
@@ -272,8 +272,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Get the clientlib categories from the list of component resourceTypes, using the defined
-     * filter.
+     * Gets the clientlib categories from the list of component resource types, filtered with the defined filter.
      *
      * @return {@link Set<String>} of clientlib categories
      */
