@@ -263,7 +263,7 @@ public class Utils {
     }
 
     /**
-     * Returns a set of the super-types of a component defined by its resource type.
+     * Returns all the super-types of a component defined by its resource type.
      *
      * @param resourceType the resource type of the component
      * @param request the current request
@@ -290,8 +290,7 @@ public class Utils {
     }
 
     /**
-     * Returns a set of strings based on the input, which can be either a {@link Collection},
-     * an array or a CSV.
+     * Converts the input into a set of strings. The input can be either a {@link Collection}, an array or a CSV.
      *
      * @param input - the input
      *
@@ -303,21 +302,21 @@ public class Utils {
         if (input != null) {
             Class clazz = input.getClass();
             if (Collection.class.isAssignableFrom(clazz)) {
-                // Try to convert to collection
+                // Try to convert from a collection
                 for (Object obj : (Collection)input) {
                     if (obj != null) {
                         strings.add(obj.toString());
                     }
                 }
             } else if (Object[].class.isAssignableFrom(clazz)) {
-                // Try to convert to array
+                // Try to convert from an array
                 for (Object obj : (Object[]) input) {
                     if (obj != null) {
                         strings.add(obj.toString());
                     }
                 }
             } else if (String.class.isAssignableFrom(clazz)) {
-                // Try to get as CSV
+                // Try to convert from a CSV string
                 for (String str : ((String)input).split(",")) {
                     if (StringUtils.isNotBlank(str)) {
                         strings.add(str.trim());

@@ -167,7 +167,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
      *
      * @param type - the type of the client libraries
      *
-     * @return Markup that includes the client libraries
+     * @return Markup to include the client libraries
      */
     private String getLibIncludes(LibraryType type) {
         StringWriter sw = new StringWriter();
@@ -194,7 +194,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Gets the HTML markup with the injected JS/CSS attributes
+     * Returns the HTML markup with the injected JS/CSS attributes
      *
      * @param html - the input html
      *
@@ -213,7 +213,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Gets the fragment for an attribute, based on its name and flag to include
+     * Returns the HTML fragment for an attribute, based on its name and a flag to include or not
      *
      * @param name - the name of the attribute
      * @param include - {@code true} to include, {@code false} otherwise
@@ -228,7 +228,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Gets the fragment for an attribute, based on its name and value
+     * Returns the HTML fragment for an attribute, based on its name and value
      *
      * @param name - the name of the attribute
      * @param value - the value of the attribute
@@ -243,11 +243,11 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Returns a concatenation of the content of all the client libraries, given a library type.
+     * Returns a concatenated string of the content of all the client libraries, given a library type.
      *
      * @param libraryType - the type of the library
      *
-     * @return String concatenation of the content of all the client libraries
+     * @return The concatenated string of the content of all the client libraries
      */
     private String getInline(LibraryType libraryType) {
         Collection<ClientLibrary> clientlibs = htmlLibraryManager.getLibraries(categoriesArray, libraryType, true, false);
@@ -268,7 +268,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Gets the clientlib categories from the list of component resource types, filtered with the defined filter.
+     * Returns the clientlib categories from the list of component resource types, filtered by the given filter.
      *
      * @return {@link Set<String>} of clientlib categories
      */
@@ -306,7 +306,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     /**
      * Adds client libraries to the provided collection, starting from the given resource
-     * and diving into it's children.
+     * and diving into its descendants.
      *
      * @param resource - the given resource, which will be checked to see if it's a client library
      * @param libraries - the provided collection of libraries to add to
