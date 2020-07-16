@@ -319,7 +319,7 @@ public class Utils {
             } else if (String.class.isAssignableFrom(clazz)) {
                 // Try to get as CSV
                 for (String str : ((String)input).split(",")) {
-                    if (str != null) {
+                    if (StringUtils.isNotBlank(str)) {
                         strings.add(str.trim());
                     }
                 }
