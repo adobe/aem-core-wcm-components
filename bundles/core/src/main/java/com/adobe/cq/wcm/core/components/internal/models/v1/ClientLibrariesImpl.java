@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +37,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -282,9 +282,16 @@ public class ClientLibrariesImpl implements ClientLibraries {
         allLibraries = htmlLibraryManager.getLibraries();
         Collection<ClientLibrary> libraries = new LinkedList<>();
 
-        Set<String> seenResourceTypes = new HashSet<>();
-        for (String resourceType : resourceTypes) {
-            addClientLibraries(resourceType, libraries, seenResourceTypes);
+        Set<String> allResourceTypes = new LinkedHashSet<>();
+        allResourceTypes.addAll(resourceTypes);
+        if (inherited) {
+            for (String resourceType : resourceTypes) {
+                allResourceTypes.addAll(Utils.getSuperTypes(resourceType, request, resolverFactory));
+            }
+        }
+        for (String resourceType : allResourceTypes) {
+            Resource componentResource = Utils.getResource(resourceType, request, resolverFactory);
+            addClientLibraries(componentResource, libraries);
         }
 
         for (ClientLibrary library : libraries) {
@@ -302,46 +309,24 @@ public class ClientLibrariesImpl implements ClientLibraries {
     }
 
     /**
-     * Adds client libraries to the provided collection, starting for the resource type.
-     *
-     * @param resourceType - the resource type to look into for client libraries
-     * @param libraries - the provided collection of libraries to add to
-     * @param seenResourceTypes - a set of resource types that were previously searched into, to avoid inheritance loops
-     */
-    private void addClientLibraries(String resourceType, Collection<ClientLibrary> libraries, Set<String> seenResourceTypes) {
-        if (!seenResourceTypes.contains(resourceType)) {
-            seenResourceTypes.add(resourceType);
-            Resource resource = Utils.getResource(resourceType, request, resolverFactory);
-            if (resource != null) {
-                for (Resource child : resource.getChildren()) {
-                    addClientLibraries(child, libraries);
-                }
-                if (inherited) {
-                    addClientLibraries(resource.getResourceSuperType(), libraries, seenResourceTypes);
-                }
-            }
-        }
-    }
-
-    /**
      * Adds client libraries to the provided collection, starting from the given resource
      * and diving into it's children.
      *
-     * @param candidate - the given resource, which will be checked to see if it's a client library
+     * @param resource - the given resource, which will be checked to see if it's a client library
      * @param libraries - the provided collection of libraries to add to
      */
-    private void addClientLibraries(Resource candidate, Collection<ClientLibrary> libraries) {
-        if (candidate == null) {
+    private void addClientLibraries(Resource resource, Collection<ClientLibrary> libraries) {
+        if (resource == null) {
             return;
         }
-        String componentType = candidate.getResourceType();
+        String componentType = resource.getResourceType();
         if (StringUtils.equals(componentType, FMConstants.CQ_CLIENTLIBRARY_FOLDER)) {
-            ClientLibrary library = allLibraries.get(candidate.getPath());
+            ClientLibrary library = allLibraries.get(resource.getPath());
             if (library != null) {
                 libraries.add(library);
             }
         }
-        for (Resource child : candidate.getChildren()) {
+        for (Resource child : resource.getChildren()) {
             addClientLibraries(child, libraries);
         }
     }

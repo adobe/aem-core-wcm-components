@@ -259,4 +259,31 @@ public class Utils {
         }
         return resolver.getResource(path);
     }
+
+    /**
+     * Returns a set of the super-types of a component defined by its resource type.
+     *
+     * @param resourceType the resource type of the component
+     * @param request the current request
+     * @param resolverFactory the {@link ResourceResolverFactory}
+     *
+     * @return a set of the inherited resource types
+     */
+    @NotNull
+    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+        Set<String> superTypes = new HashSet<>();
+        addSuperTypes(resourceType, superTypes, request, resolverFactory);
+        return superTypes;
+    }
+
+    private static void addSuperTypes(@NotNull String resourceType, @NotNull Set<String> superTypes, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+        Resource resource = getResource(resourceType, request, resolverFactory);
+        if (resource != null) {
+            String superType = resource.getResourceSuperType();
+            if (StringUtils.isNotEmpty(superType) && !superTypes.contains(superType)) {
+                superTypes.add(superType);
+                addSuperTypes(superType, superTypes, request, resolverFactory);
+            }
+        }
+    }
 }
