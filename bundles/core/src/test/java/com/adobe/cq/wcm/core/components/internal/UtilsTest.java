@@ -15,6 +15,11 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,5 +78,35 @@ class UtilsTest {
          .thenReturn("/fake/path/for/testing/");
 
         assertEquals("/fake/path/for/testing/testPage.html", Utils.getURL(this.slingHttpServletRequestMock, this.pageMock));
+    }
+
+    @Test
+    void testGetStrings() {
+        Set<String> reference = new HashSet<String>() {{
+            add("test1");
+            add("test2");
+        }};
+
+        // Test collection
+        List<String> list = new LinkedList<String>() {{
+            add("test1");
+            add("test2");
+            add("test1");
+        }};
+        assertEquals(reference, Utils.getStrings(list));
+
+        // Test array
+        String[] array = new String[] {"test2", "test2", "test1"};
+        assertEquals(reference, Utils.getStrings(array));
+
+        // Test CSV
+        String csv = "test1, test2,test1 ,test2";
+        assertEquals(reference, Utils.getStrings(csv));
+
+        // Test single string
+        reference = new HashSet<String>() {{
+            add("test");
+        }};
+        assertEquals(reference, Utils.getStrings("test"));
     }
 }

@@ -20,7 +20,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -69,7 +68,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)
-    Collection<String> resourceTypes;
+    Object resourceTypes;
 
     @Inject
     @Named(OPTION_FILTER_REGEX)
@@ -82,7 +81,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     @Inject
     @Named(OPTION_CATEGORIES)
-    private String categoriesCsv;
+    private Object categories;
 
     @Inject
     @Named(OPTION_ASYNC)
@@ -116,23 +115,19 @@ public class ClientLibrariesImpl implements ClientLibraries {
     ResourceResolverFactory resolverFactory;
 
     Map<String, ClientLibrary> allLibraries;
+    private Set<String> resourceTypeSet;
     private Pattern pattern;
     private String[] categoriesArray;
 
     @PostConstruct
     protected void initModel() {
+        resourceTypeSet = Utils.getStrings(resourceTypes);
         if (StringUtils.isNotEmpty(filterRegex)) {
             pattern = Pattern.compile(filterRegex);
         }
-        Set<String> categoriesSet = new HashSet<>();
 
-        if (StringUtils.isNotBlank(categoriesCsv)) {
-            if (categoriesCsv.contains(",")) {
-                Collections.addAll(categoriesSet, categoriesCsv.split(","));
-            } else {
-                categoriesSet.add(categoriesCsv);
-            }
-        } else {
+        Set<String> categoriesSet = Utils.getStrings(categories);
+        if (categoriesSet.isEmpty()) {
             categoriesSet = getCategoriesFromComponents();
         }
 
@@ -276,16 +271,16 @@ public class ClientLibrariesImpl implements ClientLibraries {
      *
      * @return {@link Set<String>} of clientlib categories
      */
-    public Set<String> getCategoriesFromComponents() {
+    protected Set<String> getCategoriesFromComponents() {
         Set<String> categories = new HashSet<>();
 
         allLibraries = htmlLibraryManager.getLibraries();
         Collection<ClientLibrary> libraries = new LinkedList<>();
 
         Set<String> allResourceTypes = new LinkedHashSet<>();
-        allResourceTypes.addAll(resourceTypes);
+        allResourceTypes.addAll(resourceTypeSet);
         if (inherited) {
-            for (String resourceType : resourceTypes) {
+            for (String resourceType : resourceTypeSet) {
                 allResourceTypes.addAll(Utils.getSuperTypes(resourceType, request, resolverFactory));
             }
         }

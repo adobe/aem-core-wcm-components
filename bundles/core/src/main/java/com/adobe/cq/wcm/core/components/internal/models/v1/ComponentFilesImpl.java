@@ -28,12 +28,10 @@ import javax.inject.Named;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
@@ -50,7 +48,7 @@ public class ComponentFilesImpl implements ComponentFiles {
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)
-    Collection<String> resourceTypes;
+    Object resourceTypes;
 
     @Inject
     @Named(OPTION_FILTER_REGEX)
@@ -64,11 +62,13 @@ public class ComponentFilesImpl implements ComponentFiles {
     @OSGiService
     ResourceResolverFactory resolverFactory;
 
+    private Set<String> resourceTypeSet;
     private Pattern pattern;
     private List<String> paths;
 
     @PostConstruct
     public void init() {
+        resourceTypeSet = Utils.getStrings(resourceTypes);
         pattern = Pattern.compile(filterRegex);
     }
 
@@ -78,7 +78,7 @@ public class ComponentFilesImpl implements ComponentFiles {
             paths = new LinkedList<>();
 
             Set<String> seenResourceTypes = new HashSet<>();
-            for (String resourceType : resourceTypes) {
+            for (String resourceType : resourceTypeSet) {
                 addPaths(resourceType, paths, seenResourceTypes);
             }
         }

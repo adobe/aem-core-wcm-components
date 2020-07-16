@@ -15,8 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -285,5 +287,40 @@ public class Utils {
                 addSuperTypes(superType, superTypes, request, resolverFactory);
             }
         }
+    }
+
+    /**
+     * Returns a set of strings based on the input, which can be either a {@link Collection},
+     * an array or a CSV.
+     *
+     * @param input - the input
+     *              
+     * @return Set of strings from input
+     */
+    @NotNull
+    public static Set<String> getStrings(Object input) {
+        Set<String> strings = new LinkedHashSet<>();
+        if (input != null) {
+            Class clazz = input.getClass();
+            if (Collection.class.isAssignableFrom(clazz)) {
+                // Try to convert to collection
+                strings.addAll((Collection)input);
+            } else if (Object[].class.isAssignableFrom(clazz)) {
+                // Try to convert to array
+                for (Object obj : (Object[]) input) {
+                    if (obj != null) {
+                        strings.add(obj.toString());
+                    }
+                }
+            } else if (String.class.isAssignableFrom(clazz)) {
+                // Try to get as CSV
+                for (String str : ((String)input).split(",")) {
+                    if (str != null) {
+                        strings.add(str.trim());
+                    }
+                }
+            }
+        }
+        return strings;
     }
 }
