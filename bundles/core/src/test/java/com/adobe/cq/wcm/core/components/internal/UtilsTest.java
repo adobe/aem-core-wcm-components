@@ -16,6 +16,7 @@
 package com.adobe.cq.wcm.core.components.internal;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +83,7 @@ class UtilsTest {
 
     @Test
     void testGetStrings() {
-        Set<String> reference = new HashSet<String>() {{
+        Set<String> reference = new LinkedHashSet<String>() {{
             add("test1");
             add("test2");
         }};
@@ -94,6 +95,23 @@ class UtilsTest {
             add("test1");
         }};
         assertEquals(reference, Utils.getStrings(list));
+
+
+        List<Object> objectList = new LinkedList<Object>() {{
+            add(new Object() {
+                @Override
+                public String toString() {
+                    return "test1";
+                }
+            });
+            add(new Object() {
+                @Override
+                public String toString() {
+                    return "test2";
+                }
+            });
+        }};
+        assertEquals(reference, Utils.getStrings(objectList));
 
         // Test array
         String[] array = new String[] {"test2", "test2", "test1"};

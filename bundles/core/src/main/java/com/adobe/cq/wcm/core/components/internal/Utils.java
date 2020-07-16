@@ -294,7 +294,7 @@ public class Utils {
      * an array or a CSV.
      *
      * @param input - the input
-     *              
+     *
      * @return Set of strings from input
      */
     @NotNull
@@ -304,7 +304,11 @@ public class Utils {
             Class clazz = input.getClass();
             if (Collection.class.isAssignableFrom(clazz)) {
                 // Try to convert to collection
-                strings.addAll((Collection)input);
+                for (Object obj : (Collection)input) {
+                    if (obj != null) {
+                        strings.add(obj.toString());
+                    }
+                }
             } else if (Object[].class.isAssignableFrom(clazz)) {
                 // Try to convert to array
                 for (Object obj : (Object[]) input) {
