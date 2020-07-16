@@ -46,7 +46,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.aem.formsndocuments.util.FMConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
@@ -62,6 +61,8 @@ import com.adobe.granite.ui.clientlibs.LibraryType;
 public class ClientLibrariesImpl implements ClientLibraries {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientLibrariesImpl.class);
+
+    private static final String CQ_CLIENTLIBRARY_FOLDER = "cq:ClientLibraryFolder";
 
     @Self
     private SlingHttpServletRequest request;
@@ -315,7 +316,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
             return;
         }
         String componentType = resource.getResourceType();
-        if (StringUtils.equals(componentType, FMConstants.CQ_CLIENTLIBRARY_FOLDER)) {
+        if (StringUtils.equals(componentType, CQ_CLIENTLIBRARY_FOLDER)) {
             ClientLibrary library = allLibraries.get(resource.getPath());
             if (library != null) {
                 libraries.add(library);
