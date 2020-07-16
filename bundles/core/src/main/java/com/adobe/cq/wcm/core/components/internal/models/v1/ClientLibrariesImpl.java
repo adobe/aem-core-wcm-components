@@ -20,8 +20,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -36,19 +36,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.adobe.aem.formsndocuments.util.FMConstants;
 import com.adobe.cq.wcm.core.components.internal.Utils;
 import com.adobe.cq.wcm.core.components.models.ClientLibraries;
 import com.adobe.granite.ui.clientlibs.ClientLibrary;
@@ -65,12 +62,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientLibrariesImpl.class);
 
+    private static final String CQ_CLIENTLIBRARY_FOLDER = "cq:ClientLibraryFolder";
+
     @Self
     private SlingHttpServletRequest request;
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)
-    Collection<String> resourceTypes;
+    Object resourceTypes;
 
     @Inject
     @Named(OPTION_FILTER_REGEX)
@@ -83,7 +82,7 @@ public class ClientLibrariesImpl implements ClientLibraries {
 
     @Inject
     @Named(OPTION_CATEGORIES)
-    private String categoriesCsv;
+    private Object categories;
 
     @Inject
     @Named(OPTION_ASYNC)
@@ -117,23 +116,19 @@ public class ClientLibrariesImpl implements ClientLibraries {
     ResourceResolverFactory resolverFactory;
 
     Map<String, ClientLibrary> allLibraries;
+    private Set<String> resourceTypeSet;
     private Pattern pattern;
     private String[] categoriesArray;
 
     @PostConstruct
     protected void initModel() {
+        resourceTypeSet = Utils.getStrings(resourceTypes);
         if (StringUtils.isNotEmpty(filterRegex)) {
             pattern = Pattern.compile(filterRegex);
         }
-        Set<String> categoriesSet = new HashSet<>();
 
-        if (StringUtils.isNotBlank(categoriesCsv)) {
-            if (categoriesCsv.contains(",")) {
-                Collections.addAll(categoriesSet, categoriesCsv.split(","));
-            } else {
-                categoriesSet.add(categoriesCsv);
-            }
-        } else {
+        Set<String> categoriesSet = Utils.getStrings(categories);
+        if (categoriesSet.isEmpty()) {
             categoriesSet = getCategoriesFromComponents();
         }
 
@@ -167,6 +162,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return getLibIncludes(null);
     }
 
+    /**
+     * Returns the markup for including the client libraries into an HTML page
+     *
+     * @param type - the type of the client libraries
+     *
+     * @return Markup to include the client libraries
+     */
     private String getLibIncludes(LibraryType type) {
         StringWriter sw = new StringWriter();
         try {
@@ -191,6 +193,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return getHtmlWithInjectedAttributes(html);
     }
 
+    /**
+     * Returns the HTML markup with the injected JS/CSS attributes
+     *
+     * @param html - the input html
+     *
+     * @return HTML with injected JS/CSS attributes
+     */
     private String getHtmlWithInjectedAttributes(String html) {
         StringBuilder jsAttributes = new StringBuilder();
         jsAttributes.append(getHtmlAttr(OPTION_ASYNC, async));
@@ -203,6 +212,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return StringUtils.replace(updatedHtml,"<link ", "<link " + cssAttributes.toString());
     }
 
+    /**
+     * Returns the HTML fragment for an attribute, based on its name and a flag to include or not
+     *
+     * @param name - the name of the attribute
+     * @param include - {@code true} to include, {@code false} otherwise
+     *
+     * @return Fragment for the attribute
+     */
     private String getHtmlAttr(String name, boolean include) {
         if (include) {
             return name + " ";
@@ -210,6 +227,14 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return "";
     }
 
+    /**
+     * Returns the HTML fragment for an attribute, based on its name and value
+     *
+     * @param name - the name of the attribute
+     * @param value - the value of the attribute
+     *
+     * @return Fragment for the attribute
+     */
     private String getHtmlAttr(String name, String value) {
         if (StringUtils.isNotEmpty(value)) {
             return name + "=\"" + value + "\" ";
@@ -217,6 +242,13 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return "";
     }
 
+    /**
+     * Returns a concatenated string of the content of all the client libraries, given a library type.
+     *
+     * @param libraryType - the type of the library
+     *
+     * @return The concatenated string of the content of all the client libraries
+     */
     private String getInline(LibraryType libraryType) {
         Collection<ClientLibrary> clientlibs = htmlLibraryManager.getLibraries(categoriesArray, libraryType, true, false);
         // Iterate through the clientlibs and aggregate their content.
@@ -235,20 +267,29 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return output.toString();
     }
 
-    public Set<String> getCategoriesFromComponents() {
+    /**
+     * Returns the clientlib categories from the list of component resource types, filtered by the given filter.
+     *
+     * @return {@link Set<String>} of clientlib categories
+     */
+    protected Set<String> getCategoriesFromComponents() {
         Set<String> categories = new HashSet<>();
 
         allLibraries = htmlLibraryManager.getLibraries();
         Collection<ClientLibrary> libraries = new LinkedList<>();
 
-        for (String resourceType : resourceTypes) {
-            Resource componentRes = getResource(resourceType);
-            addClientLibraries(componentRes, libraries);
-
-            if (inherited && componentRes != null) {
-                addClientLibraries(getResource(componentRes.getResourceSuperType()), libraries);
+        Set<String> allResourceTypes = new LinkedHashSet<>();
+        allResourceTypes.addAll(resourceTypeSet);
+        if (inherited) {
+            for (String resourceType : resourceTypeSet) {
+                allResourceTypes.addAll(Utils.getSuperTypes(resourceType, request, resolverFactory));
             }
         }
+        for (String resourceType : allResourceTypes) {
+            Resource componentResource = Utils.getResource(resourceType, request, resolverFactory);
+            addClientLibraries(componentResource, libraries);
+        }
+
         for (ClientLibrary library : libraries) {
             for (String category : library.getCategories()) {
                 if (pattern != null) {
@@ -263,35 +304,27 @@ public class ClientLibrariesImpl implements ClientLibraries {
         return categories;
     }
 
-    private void addClientLibraries(Resource componentRes, Collection<ClientLibrary> libraries) {
-        if (componentRes == null) {
+    /**
+     * Adds client libraries to the provided collection, starting from the given resource
+     * and diving into its descendants.
+     *
+     * @param resource - the given resource, which will be checked to see if it's a client library
+     * @param libraries - the provided collection of libraries to add to
+     */
+    private void addClientLibraries(Resource resource, Collection<ClientLibrary> libraries) {
+        if (resource == null) {
             return;
         }
-        String componentType = componentRes.getResourceType();
-        if (StringUtils.equals(componentType, FMConstants.CQ_CLIENTLIBRARY_FOLDER)) {
-            ClientLibrary library = allLibraries.get(componentRes.getPath());
+        String componentType = resource.getResourceType();
+        if (StringUtils.equals(componentType, CQ_CLIENTLIBRARY_FOLDER)) {
+            ClientLibrary library = allLibraries.get(resource.getPath());
             if (library != null) {
                 libraries.add(library);
             }
         }
-        Iterable<Resource> childComponents = componentRes.getChildren();
-        for (Resource child : childComponents) {
+        for (Resource child : resource.getChildren()) {
             addClientLibraries(child, libraries);
         }
     }
-
-    private Resource getResource(String path) {
-        if (path == null) {
-            return null;
-        }
-        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
-        if (resolver == null) {
-            resolver = request.getResourceResolver();
-        }
-        return resolver.getResource(path);
-
-    }
-
-
 
 }

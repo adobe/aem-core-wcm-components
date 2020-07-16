@@ -66,6 +66,51 @@ public class ComponentFilesImplTest {
     }
 
     @Test
+    void testGetPathWithOneResourceTypeAndInheritance() {
+        Map<String, Object> attributes = new HashMap<String, Object>() {{
+            put(ComponentFiles.OPTION_RESOURCE_TYPES, new LinkedHashSet<String>() {{
+                add("core/wcm/components/carousel/v2/carousel");
+            }});
+            put(ComponentFiles.OPTION_FILTER_REGEX, "customheadlibs\\.amp\\.html");
+        }};
+        ComponentFiles componentFiles = getComponentFilesUnderTest(ROOT_PAGE, attributes);
+        List<String> expected = new LinkedList<String>() {{
+            add("/apps/core/wcm/components/carousel/v1/carousel/customheadlibs.amp.html");
+        }};
+        assertEquals(expected, componentFiles.getPaths());
+    }
+
+    @Test
+    void testGetPathWithOneResourceTypeAndDoubleInheritance() {
+        Map<String, Object> attributes = new HashMap<String, Object>() {{
+            put(ComponentFiles.OPTION_RESOURCE_TYPES, new LinkedHashSet<String>() {{
+                add("core/wcm/components/carousel/v3/carousel");
+            }});
+            put(ComponentFiles.OPTION_FILTER_REGEX, "customheadlibs\\.amp\\.html");
+        }};
+        ComponentFiles componentFiles = getComponentFilesUnderTest(ROOT_PAGE, attributes);
+        List<String> expected = new LinkedList<String>() {{
+            add("/apps/core/wcm/components/carousel/v1/carousel/customheadlibs.amp.html");
+        }};
+        assertEquals(expected, componentFiles.getPaths());
+    }
+
+    @Test
+    void testGetPathWithOneResourceTypeMultipleInheritanceAndOverride() {
+        Map<String, Object> attributes = new HashMap<String, Object>() {{
+            put(ComponentFiles.OPTION_RESOURCE_TYPES, new LinkedHashSet<String>() {{
+                add("core/wcm/components/carousel/v4/carousel");
+            }});
+            put(ComponentFiles.OPTION_FILTER_REGEX, "customheadlibs\\.amp\\.html");
+        }};
+        ComponentFiles componentFiles = getComponentFilesUnderTest(ROOT_PAGE, attributes);
+        List<String> expected = new LinkedList<String>() {{
+            add("/apps/core/wcm/components/carousel/v4/carousel/customheadlibs.amp.html");
+        }};
+        assertEquals(expected, componentFiles.getPaths());
+    }
+
+    @Test
     void testGetPathWithMultipleResourceType() {
         Map<String, Object> attributes = new HashMap<String, Object>() {{
             put(ComponentFiles.OPTION_RESOURCE_TYPES, new LinkedHashSet() {{

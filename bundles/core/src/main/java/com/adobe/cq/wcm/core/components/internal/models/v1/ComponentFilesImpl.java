@@ -16,8 +16,10 @@
 package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
@@ -26,12 +28,10 @@ import javax.inject.Named;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
-import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import com.adobe.cq.wcm.core.components.internal.Utils;
@@ -48,7 +48,7 @@ public class ComponentFilesImpl implements ComponentFiles {
 
     @Inject
     @Named(OPTION_RESOURCE_TYPES)
-    Collection<String> resourceTypes;
+    Object resourceTypes;
 
     @Inject
     @Named(OPTION_FILTER_REGEX)
@@ -62,11 +62,13 @@ public class ComponentFilesImpl implements ComponentFiles {
     @OSGiService
     ResourceResolverFactory resolverFactory;
 
+    private Set<String> resourceTypeSet;
     private Pattern pattern;
     private List<String> paths;
 
     @PostConstruct
     public void init() {
+        resourceTypeSet = Utils.getStrings(resourceTypes);
         pattern = Pattern.compile(filterRegex);
     }
 
@@ -75,37 +77,37 @@ public class ComponentFilesImpl implements ComponentFiles {
         if (paths == null) {
             paths = new LinkedList<>();
 
-            for (String resourceType : resourceTypes) {
-                Resource componentResource = getResource(resourceType);
-                addPaths(componentResource, paths);
-
-                if (inherited && componentResource != null) {
-                    addPaths(getResource(componentResource.getResourceSuperType()), paths);
-                }
+            Set<String> seenResourceTypes = new HashSet<>();
+            for (String resourceType : resourceTypeSet) {
+                addPaths(resourceType, paths, seenResourceTypes);
             }
         }
         return paths;
     }
 
-    private void addPaths(Resource resource, Collection<String> paths) {
-        if (resource == null) {
-            return;
-        }
-        for (Resource child : resource.getChildren()) {
-            if (pattern.matcher(child.getName()).matches()) {
-                paths.add(child.getPath());
+    /**
+     * Adds file paths to a given collection, based on a resource type, filtered by the defined RegEx pattern.
+     *
+     * @param resourceType - the resource type of the component to look into for files matching the defined pattern
+     * @param paths - the given collection of file paths
+     * @param seenResourceTypes - a set of resource types that were previously searched into, to avoid inheritance loops
+     */
+    private void addPaths(String resourceType, Collection<String> paths, Set<String> seenResourceTypes) {
+        if (!seenResourceTypes.contains(resourceType)) {
+            Resource resource = Utils.getResource(resourceType, request, resolverFactory);
+            if (resource != null) {
+                boolean matched = false;
+                for (Resource child : resource.getChildren()) {
+                    if (pattern.matcher(child.getName()).matches()) {
+                        paths.add(child.getPath());
+                        matched = true;
+                    }
+                }
+                if (inherited && !matched) {
+                    addPaths(resource.getResourceSuperType(), paths, seenResourceTypes);
+                }
             }
         }
     }
 
-    private Resource getResource(String path) {
-        if (path == null) {
-            return null;
-        }
-        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
-        if (resolver == null) {
-            resolver = request.getResourceResolver();
-        }
-        return resolver.getResource(path);
-    }
 }

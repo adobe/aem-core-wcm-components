@@ -15,8 +15,10 @@
  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 package com.adobe.cq.wcm.core.components.internal;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -163,7 +165,6 @@ public class Utils {
         resourceTypes.add(resource.getResourceType());
         resourceTypes.addAll(getXFResourceTypes(resource, request, modelFactory));
         for (Resource child : resource.getChildren()) {
-            //TODO: check it's a cq:Component, used to be allowed node (filtered out by regex)
             resourceTypes.addAll(getResourceTypes(child, request, modelFactory));
         }
         return resourceTypes;
@@ -230,7 +231,7 @@ public class Utils {
      * @return a {@link ResourceResolver} that is able to read information from the components
      */
     @Nullable
-    public static ResourceResolver getComponentsResolver(ResourceResolverFactory resolverFactory) {
+    public static ResourceResolver getComponentsResolver(@NotNull ResourceResolverFactory resolverFactory) {
         try {
             return resolverFactory.getServiceResourceResolver(
                     Collections.singletonMap(ResourceResolverFactory.SUBSERVICE, COMPONENTS_SERVICE));
@@ -238,5 +239,91 @@ public class Utils {
             LOG.error("Cannot login as a service user", e);
             return null;
         }
+    }
+
+    /**
+     * Gets the component resource for a given path
+     *
+     * @param path - the path
+     * @param request - the request
+     * @param resolverFactory - the resolver factory
+     *
+     * @return the corresponding resource
+     */
+    @Nullable
+    public static Resource getResource(String path, @NotNull SlingHttpServletRequest request, @NotNull ResourceResolverFactory resolverFactory) {
+        if (path == null) {
+            return null;
+        }
+        ResourceResolver resolver = Utils.getComponentsResolver(resolverFactory);
+        if (resolver == null) {
+            resolver = request.getResourceResolver();
+        }
+        return resolver.getResource(path);
+    }
+
+    /**
+     * Returns all the super-types of a component defined by its resource type.
+     *
+     * @param resourceType the resource type of the component
+     * @param request the current request
+     * @param resolverFactory the {@link ResourceResolverFactory}
+     *
+     * @return a set of the inherited resource types
+     */
+    @NotNull
+    public static Set<String> getSuperTypes(@NotNull String resourceType, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+        Set<String> superTypes = new HashSet<>();
+        addSuperTypes(resourceType, superTypes, request, resolverFactory);
+        return superTypes;
+    }
+
+    private static void addSuperTypes(@NotNull String resourceType, @NotNull Set<String> superTypes, @NotNull SlingHttpServletRequest request, ResourceResolverFactory resolverFactory) {
+        Resource resource = getResource(resourceType, request, resolverFactory);
+        if (resource != null) {
+            String superType = resource.getResourceSuperType();
+            if (StringUtils.isNotEmpty(superType) && !superTypes.contains(superType)) {
+                superTypes.add(superType);
+                addSuperTypes(superType, superTypes, request, resolverFactory);
+            }
+        }
+    }
+
+    /**
+     * Converts the input into a set of strings. The input can be either a {@link Collection}, an array or a CSV.
+     *
+     * @param input - the input
+     *
+     * @return Set of strings from input
+     */
+    @NotNull
+    public static Set<String> getStrings(Object input) {
+        Set<String> strings = new LinkedHashSet<>();
+        if (input != null) {
+            Class clazz = input.getClass();
+            if (Collection.class.isAssignableFrom(clazz)) {
+                // Try to convert from a collection
+                for (Object obj : (Collection)input) {
+                    if (obj != null) {
+                        strings.add(obj.toString());
+                    }
+                }
+            } else if (Object[].class.isAssignableFrom(clazz)) {
+                // Try to convert from an array
+                for (Object obj : (Object[]) input) {
+                    if (obj != null) {
+                        strings.add(obj.toString());
+                    }
+                }
+            } else if (String.class.isAssignableFrom(clazz)) {
+                // Try to convert from a CSV string
+                for (String str : ((String)input).split(",")) {
+                    if (StringUtils.isNotBlank(str)) {
+                        strings.add(str.trim());
+                    }
+                }
+            }
+        }
+        return strings;
     }
 }
