@@ -23,11 +23,11 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.SlingHttpServletRequestWrapper;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
@@ -102,7 +102,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     private ModelFactory modelFactory;
 
     private Page targetPage;
-    private Image image;
+
+    /**
+     * The image src.
+     */
+    private String imageSrc;
 
     @PostConstruct
     private void initModel() {
@@ -218,25 +222,22 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         return linkURL;
     }
 
+    /**
+     * Get the image path.
+     *
+     * Note: This method exists only for JSON model.
+     *
+     * @return The image src path if it exists, null if it does not.
+     */
+    @JsonProperty(value = "imagePath")
     public String getImagePath() {
-        if (image != null) {
-            return image.getSrc();
+        if (imageSrc == null) {
+            this.imageSrc = Optional.ofNullable(this.getImageResource())
+                .map(imageResource -> this.modelFactory.getModelFromWrappedRequest(this.request, imageResource, Image.class))
+                .map(Image::getSrc)
+                .orElse(null);
         }
-        Resource imageResource = getImageResource();
-        if (imageResource != null) {
-            SlingHttpServletRequestWrapper wrappedRequest = new SlingHttpServletRequestWrapper(request) {
-                @NotNull
-                @Override
-                public Resource getResource() {
-                    return imageResource;
-                }
-            };
-            image = (Image) modelFactory.getModelFromRequest(wrappedRequest);
-            if (image != null) {
-                return image.getSrc();
-            }
-        }
-        return null;
+        return this.imageSrc;
     }
 
     @Override
