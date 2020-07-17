@@ -324,22 +324,21 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         private static final String CTA_ID_PREFIX = "cta";
 
+        @NotNull
         private final Resource ctaResource;
         private final String ctaTitle;
         private final String ctaUrl;
-        private final String ctaPath;
         private final Page ctaPage;
         private final String ctaParentId;
         private String ctaId;
 
-        private Action(final Resource actionRes, final String parentId) {
+        private Action(@NotNull final Resource actionRes, final String parentId) {
             super(parentId, actionRes);
             ctaParentId = parentId;
             ctaResource = actionRes;
             ValueMap ctaProperties = actionRes.getValueMap();
             ctaTitle = ctaProperties.get(PN_ACTION_TEXT, String.class);
             ctaUrl = ctaProperties.get(PN_ACTION_LINK, String.class);
-            ctaPath = actionRes.getPath();
             if (ctaUrl != null && ctaUrl.startsWith("/")) {
                 ctaPage = pageManager.getPage(ctaUrl);
             } else {
@@ -383,16 +382,12 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
         @Override
         public String getId() {
             if (ctaId == null) {
-                if (ctaResource != null) {
-                    ValueMap properties = ctaResource.getValueMap();
-                    ctaId = properties.get(com.adobe.cq.wcm.core.components.models.Component.PN_ID, String.class);
-                }
-                if (StringUtils.isEmpty(ctaId)) {
-                    String prefix = StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX);
-                    ctaId = Utils.generateId(prefix, ctaPath);
-                } else {
-                    ctaId = StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(ctaId)), " ", ID_SEPARATOR);
-                }
+                ctaId = Optional.ofNullable(ctaResource.getValueMap().get(com.adobe.cq.wcm.core.components.models.Component.PN_ID, String.class))
+                    .filter(StringUtils::isNotEmpty)
+                    .map(id -> StringUtils.replace(StringUtils.normalizeSpace(StringUtils.trim(id)), " ", ID_SEPARATOR))
+                    .orElseGet(() ->
+                        Utils.generateId(StringUtils.join(ctaParentId, ID_SEPARATOR, CTA_ID_PREFIX), this.ctaResource.getPath())
+                    );
             }
             return ctaId;
         }
