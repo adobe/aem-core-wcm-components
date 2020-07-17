@@ -24,13 +24,37 @@ import org.jetbrains.annotations.NotNull;
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
+/**
+ * Resource-backed list item implementation.
+ */
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
+    /**
+     * The title.
+     */
     protected String title;
+
+    /**
+     * The description.
+     */
     protected String description;
+
+    /**
+     * The last modified date.
+     */
     protected Calendar lastModified;
+
+    /**
+     * The name.
+     */
     protected String name;
 
+    /**
+     * Construct a resource-backed list item.
+     *
+     * @param resource The resource.
+     * @param parentId The ID of the containing component.
+     */
     public ResourceListItemImpl(@NotNull final Resource resource, final String parentId) {
         super(parentId, resource);
         ValueMap valueMap = resource.getValueMap();
