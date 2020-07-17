@@ -33,7 +33,6 @@ import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.Exporter;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
 import org.apache.sling.models.annotations.injectorspecific.Self;
@@ -54,7 +53,6 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.components.Component;
 import com.day.cq.wcm.api.designer.Style;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
@@ -93,9 +91,10 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @ScriptVariable
     private PageManager pageManager;
 
-    @ScriptVariable(injectionStrategy = InjectionStrategy.OPTIONAL)
-    @JsonIgnore
-    @Nullable
+    /**
+     * The current style.
+     */
+    @ScriptVariable
     protected Style currentStyle;
 
     @Self
@@ -114,22 +113,17 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
     @PostConstruct
     private void initModel() {
         ValueMap properties = resource.getValueMap();
-        actionsEnabled = properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled);
 
-        if (currentStyle != null) {
-            pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
-            titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
-            descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
-            titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
-            imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
-            titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
-            if (imageLinkHidden) {
-                hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            }
-            if (currentStyle.get(Teaser.PN_ACTIONS_DISABLED, false)) {
-                actionsEnabled = false;
-            }
+        pretitleHidden = currentStyle.get(Teaser.PN_PRETITLE_HIDDEN, pretitleHidden);
+        titleHidden = currentStyle.get(Teaser.PN_TITLE_HIDDEN, titleHidden);
+        descriptionHidden = currentStyle.get(Teaser.PN_DESCRIPTION_HIDDEN, descriptionHidden);
+        titleType = currentStyle.get(Teaser.PN_TITLE_TYPE, titleType);
+        imageLinkHidden = currentStyle.get(Teaser.PN_IMAGE_LINK_HIDDEN, imageLinkHidden);
+        titleLinkHidden = currentStyle.get(Teaser.PN_TITLE_LINK_HIDDEN, titleLinkHidden);
+        if (imageLinkHidden) {
+            hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
         }
+        actionsEnabled = !currentStyle.get(Teaser.PN_ACTIONS_DISABLED, !properties.get(Teaser.PN_ACTIONS_ENABLED, actionsEnabled));
 
         titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
