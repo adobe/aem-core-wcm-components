@@ -133,24 +133,18 @@ class TeaserImplTest {
     @Test
     void testInvalidFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_2);
-        assertThat(testLogger.getLoggingEvents(), hasItem(error(
-            "Asset /content/dam/core/images/Adobe_Systems_logo_and_wordmark configured for the teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-2 doesn't exist.")));
         assertNull(teaser.getImageResource());
     }
 
     @Test
     void testEmptyFileReference() {
         Teaser teaser = getTeaserUnderTest(TEASER_3);
-        assertThat(testLogger.getLoggingEvents(), hasItem(debug(
-            "Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-3 does not have an asset or an image file configured.")));
         assertNull(teaser.getImageResource());
     }
 
     @Test
     void testTeaserWithoutLink() {
         Teaser teaser = getTeaserUnderTest(TEASER_4);
-        assertThat(testLogger.getLoggingEvents(),
-            hasItem(debug("Teaser component from /content/teasers/jcr:content/root/responsivegrid/teaser-4 does not define a link.")));
         assertNull(teaser.getLinkURL());
     }
 
