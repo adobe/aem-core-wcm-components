@@ -135,37 +135,32 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
-        if (pretitleHidden) {
-            pretitle = null;
-        } else {
+        if (!pretitleHidden) {
             pretitle = properties.get("pretitle", String.class);
         }
-        if (titleHidden) {
-            title = null;
-        } else {
-            title = properties.get(JcrConstants.JCR_TITLE, String.class);
+
+        if (!titleHidden) {
             if (titleFromPage) {
                 if (targetPage != null) {
                     title = StringUtils.defaultIfEmpty(targetPage.getPageTitle(), targetPage.getTitle());
                 } else if (actionsEnabled && !actions.isEmpty()) {
                     title = actions.get(0).getTitle();
-                } else {
-                    title = null;
                 }
+            } else {
+                title = properties.get(JcrConstants.JCR_TITLE, String.class);
             }
         }
-        if (descriptionHidden) {
-            description = null;
-        } else {
-            description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
+
+        if (!descriptionHidden) {
             if (descriptionFromPage) {
                 if (targetPage != null) {
                     description = targetPage.getDescription();
-                } else {
-                    description = null;
                 }
+            } else {
+                description = properties.get(JcrConstants.JCR_DESCRIPTION, String.class);
             }
         }
+
         String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
         boolean hasImage = true;
         if (StringUtils.isEmpty(linkURL)) {
