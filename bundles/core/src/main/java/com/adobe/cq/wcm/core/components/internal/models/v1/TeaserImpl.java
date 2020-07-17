@@ -116,11 +116,9 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         titleFromPage = properties.get(Teaser.PN_TITLE_FROM_PAGE, titleFromPage);
         descriptionFromPage = properties.get(Teaser.PN_DESCRIPTION_FROM_PAGE, descriptionFromPage);
-        linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
 
         if (actionsEnabled) {
             hiddenImageResourceProperties.add(ImageResource.PN_LINK_URL);
-            linkURL = null;
             populateActions();
             if (!actions.isEmpty()) {
                 ListItem firstAction = actions.get(0);
@@ -130,10 +128,11 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
                 }
             }
         } else {
+            linkURL = properties.get(ImageResource.PN_LINK_URL, String.class);
             targetPage = pageManager.getPage(linkURL);
-        }
-        if (targetPage != null) {
-            linkURL = Utils.getURL(request, targetPage);
+            if (targetPage != null) {
+                linkURL = Utils.getURL(request, targetPage);
+            }
         }
 
         if (pretitleHidden) {
