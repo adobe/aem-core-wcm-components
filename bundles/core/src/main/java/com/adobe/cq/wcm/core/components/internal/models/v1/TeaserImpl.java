@@ -304,15 +304,15 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
 
         private static final String CTA_ID_PREFIX = "cta";
 
-        private Resource ctaResource;
-        private String ctaTitle;
-        private String ctaUrl;
-        private String ctaPath;
-        private Page ctaPage;
-        private String ctaParentId;
+        private final Resource ctaResource;
+        private final String ctaTitle;
+        private final String ctaUrl;
+        private final String ctaPath;
+        private final Page ctaPage;
+        private final String ctaParentId;
         private String ctaId;
 
-        private Action(Resource actionRes, String parentId) {
+        private Action(final Resource actionRes, final String parentId) {
             super(parentId, actionRes);
             ctaParentId = parentId;
             ctaResource = actionRes;
@@ -322,6 +322,8 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             ctaPath = actionRes.getPath();
             if (ctaUrl != null && ctaUrl.startsWith("/")) {
                 ctaPage = pageManager.getPage(ctaUrl);
+            } else {
+                ctaPage = null;
             }
         }
 
