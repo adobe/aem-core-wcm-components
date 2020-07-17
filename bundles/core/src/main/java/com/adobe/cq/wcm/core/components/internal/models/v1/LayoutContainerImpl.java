@@ -29,16 +29,31 @@ import org.jetbrains.annotations.NotNull;
 
 import com.adobe.cq.wcm.core.components.models.LayoutContainer;
 
+/**
+ * Layout container model implementation.
+ */
 @Model(adaptables = SlingHttpServletRequest.class, adapters = LayoutContainer.class, resourceType = LayoutContainerImpl.RESOURCE_TYPE_V1)
 public class LayoutContainerImpl extends AbstractContainerImpl implements LayoutContainer {
 
+    /**
+     * The resource type.
+     */
     protected static final String RESOURCE_TYPE_V1 = "core/wcm/components/container/v1/container";
 
+    /**
+     * The current resource.
+     */
     @ScriptVariable
     private Resource resource;
 
+    /**
+     * The layout type.
+     */
     private LayoutType layout;
 
+    /**
+     * Initialize the model.
+     */
     @PostConstruct
     protected void initModel() {
         // Note: this can be simplified using Optional.or() in JDK 11
