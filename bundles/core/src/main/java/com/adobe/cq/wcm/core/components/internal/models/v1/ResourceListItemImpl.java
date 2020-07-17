@@ -21,17 +21,12 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.wcm.core.components.models.ListItem;
 import com.day.cq.commons.jcr.JcrConstants;
 
 public class ResourceListItemImpl extends AbstractListItemImpl implements ListItem {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceListItemImpl.class);
-
-    protected String url;
     protected String title;
     protected String description;
     protected Calendar lastModified;
@@ -47,12 +42,11 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
         }
         path = resource.getPath();
         name = resource.getName();
-        url = null;
     }
 
     @Override
     public String getURL() {
-        return url;
+        return null;
     }
 
     @Override
