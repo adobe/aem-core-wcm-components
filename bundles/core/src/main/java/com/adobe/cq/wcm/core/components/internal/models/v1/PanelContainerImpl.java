@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
-public class PanelContainerImpl extends AbstractContainerImpl implements Container {
+public abstract class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
     @Override
     @NotNull
