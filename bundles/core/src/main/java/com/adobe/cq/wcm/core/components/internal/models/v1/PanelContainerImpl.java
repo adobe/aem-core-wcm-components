@@ -31,6 +31,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
+/**
+ * Abstract panel container model.
+ */
 public abstract class PanelContainerImpl extends AbstractContainerImpl implements Container {
 
     @Override
@@ -42,8 +45,8 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
     }
 
     @Override
-    protected Map<String, ComponentExporter> getItemModels(@NotNull SlingHttpServletRequest request,
-                                                           @NotNull Class<ComponentExporter> modelClass) {
+    protected Map<String, ComponentExporter> getItemModels(@NotNull final SlingHttpServletRequest request,
+                                                           @NotNull final Class<ComponentExporter> modelClass) {
         Map<String, ComponentExporter> models = super.getItemModels(request, modelClass);
         models.entrySet().forEach(entry ->
             getItems().stream()
@@ -57,20 +60,34 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
 
     /**
      * Wrapper class used to add specific properties of the container items to the JSON serialization of the underlying container item model
-     *
      */
     static class JsonWrapper implements ComponentExporter {
 
+        /**
+         * The wrapped ComponentExporter.
+         */
         @NotNull
         private final ComponentExporter inner;
+
+        /**
+         * The panel title.
+         */
         private final String panelTitle;
 
+        /**
+         * Construct the wrapper.
+         *
+         * @param inner The ComponentExporter to be wrapped.
+         * @param item The panel item.
+         */
         JsonWrapper(@NotNull final ComponentExporter inner, @NotNull final ListItem item) {
             this.inner = inner;
             this.panelTitle = item.getTitle();
         }
 
         /**
+         * Get the underlying ComponentExporter that is wrapped by this wrapper.
+         *
          * @return the underlying container item model
          */
         @JsonUnwrapped
@@ -80,6 +97,8 @@ public abstract class PanelContainerImpl extends AbstractContainerImpl implement
         }
 
         /**
+         * Get the panel title.
+         *
          * @return the container item title
          */
         @JsonProperty(PanelContainerItemImpl.PN_PANEL_TITLE)
