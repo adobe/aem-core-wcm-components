@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Optional;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,8 +27,8 @@ public class PanelContainerItemImpl extends ResourceListItemImpl implements List
 
     public static final String PN_PANEL_TITLE = "cq:panelTitle";
 
-    public PanelContainerItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource, String parentId) {
-        super(request, resource, parentId);
+    public PanelContainerItemImpl(@NotNull final Resource resource, final String parentId) {
+        super(resource, parentId);
         title = Optional.ofNullable(resource.getValueMap().get(PN_PANEL_TITLE, String.class))
             .orElseGet(() -> resource.getValueMap().get(JcrConstants.JCR_TITLE, String.class));
     }

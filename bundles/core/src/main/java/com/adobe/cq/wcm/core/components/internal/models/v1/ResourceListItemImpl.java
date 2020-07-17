@@ -17,7 +17,6 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 
 import java.util.Calendar;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +31,7 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
     protected Calendar lastModified;
     protected String name;
 
-    public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource, String parentId) {
+    public ResourceListItemImpl(@NotNull final Resource resource, final String parentId) {
         super(parentId, resource);
         ValueMap valueMap = resource.getValueMap();
         title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
