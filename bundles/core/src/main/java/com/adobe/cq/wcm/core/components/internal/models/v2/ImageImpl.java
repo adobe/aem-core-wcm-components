@@ -165,7 +165,8 @@ public class ImageImpl extends com.adobe.cq.wcm.core.components.internal.models.
 	                        	productionImageUrl =  productionImageUrls[0] + "/is/image/" + productionImageUrls[1];
 	                        }
                         }
-                        src = productionImageUrl;                    	
+                        src = productionImageUrl; 
+                        return;                        
                     }                    
                 } else {
                     LOGGER.error("Unable to adapt resource '{}' used by image '{}' to an asset.", fileReference,
