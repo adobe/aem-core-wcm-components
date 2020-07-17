@@ -96,7 +96,7 @@ For existing projects, take example from the [AEM Project Archetype](https://git
 
 Core Components | AEM as a Cloud Service | AEM 6.5 | AEM 6.4 | Java SE | Maven
 ----------------|------------------------|---------|---------|---------|---------
-[2.10.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.10.0) | Continual | 6.5.5.0+ | 6.4.8.1+ | 8, 11 | 3.3.9+
+[2.11.0](https://github.com/adobe/aem-core-wcm-components/releases/tag/core.wcm.components.reactor-2.11.0) | Continual | 6.5.5.0+ | 6.4.8.1+ | 8, 11 | 3.3.9+
 
 For the requirements from previous Core Component releases, see [Historical System Requirements](VERSIONS.md).
 
