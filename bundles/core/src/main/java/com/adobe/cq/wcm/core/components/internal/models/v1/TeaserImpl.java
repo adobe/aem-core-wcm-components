@@ -18,6 +18,7 @@ package com.adobe.cq.wcm.core.components.internal.models.v1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -36,8 +37,6 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.factory.ModelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.adobe.cq.export.json.ComponentExporter;
 import com.adobe.cq.export.json.ExporterConstants;
@@ -60,8 +59,6 @@ import static com.adobe.cq.wcm.core.components.internal.Utils.ID_SEPARATOR;
 @Model(adaptables = SlingHttpServletRequest.class, adapters = {Teaser.class, ComponentExporter.class}, resourceType = TeaserImpl.RESOURCE_TYPE)
 @Exporter(name = ExporterConstants.SLING_MODEL_EXPORTER_NAME , extensions = ExporterConstants.SLING_MODEL_EXTENSION)
 public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TeaserImpl.class);
 
     public final static String RESOURCE_TYPE = "core/wcm/components/teaser/v1/teaser";
 
@@ -161,27 +158,23 @@ public class TeaserImpl extends AbstractImageDelegatingModel implements Teaser {
             }
         }
 
-        String fileReference = properties.get(DownloadResource.PN_REFERENCE, String.class);
-        boolean hasImage = true;
-        if (StringUtils.isEmpty(linkURL)) {
-            LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not define a link.");
+        if (this.hasImage()) {
+            this.setImageResource(component, request.getResource(), hiddenImageResourceProperties);
         }
-        if (StringUtils.isEmpty(fileReference)) {
-            if (request.getResource().getChild(DownloadResource.NN_FILE) == null) {
-                LOGGER.debug("Teaser component from " + request.getResource().getPath() + " does not have an asset or an image file " +
-                        "configured.");
-                hasImage = false;
-            }
-        } else {
-            if (request.getResourceResolver().getResource(fileReference) == null) {
-                LOGGER.error("Asset " + fileReference + " configured for the teaser component from " + request.getResource().getPath() +
-                        " doesn't exist.");
-                hasImage = false;
-            }
-        }
-        if (hasImage) {
-            setImageResource(component, request.getResource(), hiddenImageResourceProperties);
-        }
+    }
+
+    /**
+     * Check if the teaser has an image.
+     *
+     * The teaser has an image if the `{@value DownloadResource#PN_REFERENCE}` property is set and the value
+     * resolves to a resource; or if the `{@value DownloadResource#NN_FILE} child resource exists.
+     *
+     * @return True if the teaser has an image, false if it does not.
+     */
+    private boolean hasImage() {
+        return Optional.ofNullable(this.resource.getValueMap().get(DownloadResource.PN_REFERENCE, String.class))
+            .map(request.getResourceResolver()::getResource)
+            .orElseGet(() -> request.getResource().getChild(DownloadResource.NN_FILE)) != null;
     }
 
     private void populateStyleProperties() {
