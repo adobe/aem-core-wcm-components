@@ -467,7 +467,7 @@
                         sling:resourceType="core-components-examples/components/teaser"
                         actionsEnabled="false"
                         descriptionFromPage="true"
-                        fileReference="/content/dam/core-components-examples/library/components/component.svg"
+                        fileReference="/content/dam/core-components-examples/library/components/pdf-viewer.svg"
                         linkURL="/content/core-components-examples/library/page-authoring/pdf-viewer"
                         textIsRich="true"
                         titleFromPage="true">
