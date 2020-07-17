@@ -481,9 +481,9 @@ class ClientLibrariesImplTest {
 
     @Test
     void testUtilsGetTemplateResourceTypes() {
-        Resource pageResource = context.currentResource(PAGE_WITH_TEMPLATE);
+        Page page = context.currentPage(PAGE_WITH_TEMPLATE);
         ModelFactory modelFactory = mock(ModelFactory.class);
-        Set<String> resourceTypes = Utils.getTemplateResourceTypes(context.currentPage(), context.request(), modelFactory);
+        Set<String> resourceTypes = Utils.getTemplateResourceTypes(page, context.request(), modelFactory);
         Set<String> expectedResourceTypes = new HashSet<>(Arrays.asList("core/wcm/components/page/v2/page", "wcm/foundation/components/responsivegrid", "core/wcm/components/text/v1/text"));
         assertEquals(expectedResourceTypes, resourceTypes);
     }
