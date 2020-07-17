@@ -60,10 +60,12 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
      *
      */
     static class JsonWrapper implements ComponentExporter {
-        private ComponentExporter inner;
-        private String panelTitle;
 
-        JsonWrapper(@NotNull ComponentExporter inner, ListItem item) {
+        @NotNull
+        private final ComponentExporter inner;
+        private final String panelTitle;
+
+        JsonWrapper(@NotNull final ComponentExporter inner, @NotNull final ListItem item) {
             this.inner = inner;
             this.panelTitle = item.getTitle();
         }
@@ -72,27 +74,24 @@ public class PanelContainerImpl extends AbstractContainerImpl implements Contain
          * @return the underlying container item model
          */
         @JsonUnwrapped
+        @NotNull
         public ComponentExporter getInner() {
-            return inner;
+            return this.inner;
         }
 
         /**
          * @return the container item title
          */
         @JsonProperty(PanelContainerItemImpl.PN_PANEL_TITLE)
-        @JsonInclude(JsonInclude.Include.ALWAYS)
+        @JsonInclude()
         public String getPanelTitle() {
-            return panelTitle;
+            return this.panelTitle;
         }
 
         @NotNull
         @Override
         public String getExportedType() {
-            if (inner != null) {
-                return inner.getExportedType();
-            } else {
-                return "";
-            }
+            return this.inner.getExportedType();
         }
     }
 }
