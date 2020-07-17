@@ -34,12 +34,10 @@ public class ResourceListItemImpl extends AbstractListItemImpl implements ListIt
 
     public ResourceListItemImpl(@NotNull SlingHttpServletRequest request, @NotNull Resource resource, String parentId) {
         super(parentId, resource);
-        ValueMap valueMap = resource.adaptTo(ValueMap.class);
-        if (valueMap != null) {
-            title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
-            description = valueMap.get(JcrConstants.JCR_DESCRIPTION, String.class);
-            lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
-        }
+        ValueMap valueMap = resource.getValueMap();
+        title = valueMap.get(JcrConstants.JCR_TITLE, String.class);
+        description = valueMap.get(JcrConstants.JCR_DESCRIPTION, String.class);
+        lastModified = valueMap.get(JcrConstants.JCR_LASTMODIFIED, Calendar.class);
         path = resource.getPath();
         name = resource.getName();
     }
