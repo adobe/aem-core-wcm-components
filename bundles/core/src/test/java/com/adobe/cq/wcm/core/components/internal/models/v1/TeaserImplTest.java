@@ -157,6 +157,12 @@ class TeaserImplTest {
     }
 
     @Test
+    void testTeaserWithExternalLinkFromAction() {
+        Teaser teaser = getTeaserUnderTest(TEASER_7);
+        assertEquals("http://www.adobe.com", teaser.getLinkURL());
+    }
+
+    @Test
     void testTeaserWithHiddenElements() {
         Teaser teaser = getTeaserUnderTest(TEASER_5,
             Teaser.PN_TITLE_HIDDEN, true,
