@@ -79,6 +79,8 @@ class NavigationImplTest {
     private static final String NAV_COMPONENT_15 = "/content/navigation-livecopy/jcr:content/root/navigation-component-15";
     private static final String NAV_COMPONENT_16 = TEST_ROOT + "/jcr:content/root/navigation-component-16";
     private static final String NAV_COMPONENT_17 = TEST_ROOT + "/jcr:content/root/navigation-component-17";
+    private static final String NAV_COMPONENT_18 = "/content/navigation-redirect-chain/jcr:content/root/navigation-component-18";
+
 
     @BeforeEach
     void setUp() throws WCMException {
@@ -315,6 +317,22 @@ class NavigationImplTest {
         Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation9"));
     }
 
+    /**
+     * Tests that a chain of redirects that eventually point to the current page are all marked active.
+     */
+    @Test
+    void activeRedirectChainTest() {
+        Navigation navigation = getNavigationUnderTest(NAV_COMPONENT_18);
+        Object[][] expectedPages = {
+            {"/content/navigation-redirect-chain", 0, true, "/content/navigation-redirect-chain.html"},
+            {"/content/navigation-redirect-chain", 1, true, "/content/navigation-redirect-chain.html"},
+            {"/content/navigation-redirect-chain", 2, true, "/content/navigation-redirect-chain.html"},
+            {"/content/navigation-redirect-chain", 1, true, "/content/navigation-redirect-chain.html"},
+            {"/content/navigation-redirect-chain", 1, true, "/content/navigation-redirect-chain.html"},
+        };
+        verifyNavigationItems(expectedPages, getNavigationItems(navigation));
+        Utils.testJSONExport(navigation, Utils.getTestExporterJSONPath(TEST_BASE, "navigation18"));
+    }
     /**
      * Test to verify #945: if shadowing is disabled Redirecting pages should be displayed instead of redirect targets
      */
